@@ -17,214 +17,274 @@
  */
 
 #include <gtk/gtk.h>
+#include <stdlib.h>
 #include "handlers.h"
 #include "db.h"
 #include "scan.h"
 #include "doc_editor.h"
+#include "utils.h"
 #include "debug.h"
 
 void shutdown_app (void) {
-    
+
+    GtkWidget *window;
+    window = g_hash_table_lookup(WIDGETS, "mainWindow");
+    gtk_widget_destroy(window);
+    g_hash_table_destroy(WIDGETS);
     close_db ();
     gtk_main_quit ();
-    
+
 }
 
+GList *filterDocsWithTags(GList *tags, GList *docs) {
+    char *docList, *sql, *tmp;
+    GList *li, *ta, *newDocList;
+
+    for(ta = tags; ta != NULL; ta = g_list_next(ta)) 
+        {
+        docList = g_strdup("");
+        for(li = docs; li != NULL; li = g_list_next(li)) 
+            {
+            if(li->data)
+                {
+                tmp = g_strdup(li->data);
+                conCat(&docList, tmp);
+                free(tmp);
+                }
+            if(li->next)
+                conCat(&docList, ", ");
+            }
+
+        sql = g_strdup("SELECT DISTINCT docs.docid \
+                FROM docs, doc_tags \
+                WHERE doc_tags.docid = docs.docid \
+                AND docs.docid IN (");
+        conCat(&sql, docList);
+        conCat(&sql, ") AND doc_tags.tagid = ");
+        conCat(&sql, ta->data);
+
+        newDocList = NULL;
+        if(runquery_db("1", sql))
+            {
+            do  {
+                newDocList = g_list_append(newDocList, g_strdup(readData_db("1", "docid")));
+                } while (nextRow("1"));
+            }
+
+        free_recordset("1");
+        free(sql);
+        free(docList);
+        docs = newDocList;
+        }
+    return docs;
+}
+
+extern GList *docsWithAllTags(GList *tags) {
+    GList *docs = NULL, *retVal, *li;
+    char *sql;
+
+    sql = g_strdup("SELECT * FROM docs");
+    if(runquery_db("1", sql))
+        {
+        do  {
+            docs = g_list_append(docs, g_strdup(readData_db("1", "docid")));
+            } while (nextRow("1"));
+        }
+    free_recordset("1");
+    free(sql);
+
+    retVal = filterDocsWithTags(tags, docs);
+
+    for(li = docs; li != NULL; li = g_list_next(li)) 
+        free(li->data);
+    g_list_free(docs);
+
+    return retVal;
+}
 
 void populate_selected (void) {
 
-	GtkListStore *store;
-	GtkTreeIter iter;
-	GList *selectedTag;
-	GtkWidget *filteredTags;
+    GtkListStore *store;
+    GtkTreeIter iter;
+    GList *selectedTag;
+    GtkWidget *filteredTags;
+    char *sql;
 
-	filteredTags = g_hash_table_lookup(WIDGETS, "filterTags");
+    filteredTags = g_hash_table_lookup(WIDGETS, "filterTags");
 
-	//free current dropdown store
+    //free current dropdown store
 
-	//Apply new data
-	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
-	for(selectedTag = SELECTEDTAGS ; selectedTag != NULL ; selectedTag = g_list_next(selectedTag))
-		{
-		runquery_db("1", g_strconcat ("SELECT tagname \
-                    	FROM tags \
-                    	WHERE tags.tagid = ", selectedTag->data, NULL));
-	    gtk_list_store_append (store, &iter);
-    	gtk_list_store_set (store, &iter,
-                                  TAG_ID, selectedTag->data,
-                                  TAG_NAME, readData_db("1", "tagname"),
-                                  -1);
-		free_recordset("1");
-		}
-	gtk_tree_view_set_model (GTK_TREE_VIEW (filteredTags), GTK_TREE_MODEL (store));
+    //Apply new data
+    store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+    for(selectedTag = SELECTEDTAGS ; selectedTag != NULL ; selectedTag = g_list_next(selectedTag))
+        {
+        sql = g_strdup("SELECT tagname \
+                    FROM tags \
+                    WHERE tags.tagid = ");
+        conCat(&sql, selectedTag->data);
+
+        if(runquery_db("1", sql))
+            {
+            gtk_list_store_append (store, &iter);
+            gtk_list_store_set (store, &iter,
+                                    TAG_ID, selectedTag->data,
+                                    TAG_NAME, readData_db("1", "tagname"),
+                                    -1);
+            }
+        free_recordset("1");
+        free(sql);
+        }
+
+    gtk_tree_view_set_model (GTK_TREE_VIEW (filteredTags), GTK_TREE_MODEL (store));
 
 }
 
 void populate_available (void) {
 
-	GtkListStore *store;
-	GtkTreeIter iter;
-	GtkWidget *availableTags;
-    GList *selectedTag;
-    char *sql, *list="";
+    GtkListStore *store;
+    GtkTreeIter iter;
+    GtkWidget *availableTags;
+    GList *tmpList, *docsWithSelectedTags;
+    char *tmp, *sql, *docList, *tagList;
 
-	availableTags = g_hash_table_lookup(WIDGETS, "availableTags");
-	store = gtk_list_store_new (TAG_NUM_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+    availableTags = g_hash_table_lookup(WIDGETS, "availableTags");
+    store = gtk_list_store_new (TAG_NUM_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+    docList = g_strdup("");
+    tagList = g_strdup("");
 
     if(SELECTEDTAGS)
         {
-	    for(selectedTag = SELECTEDTAGS ; selectedTag != NULL ; selectedTag = g_list_next(selectedTag))
-		    {
-            list = g_strconcat(list, g_strdup(selectedTag->data), NULL);
-            if(selectedTag->next)
-                {
-                list = g_strconcat(list, ", ", NULL);
-                }
+        docsWithSelectedTags = docsWithAllTags(SELECTEDTAGS);
+        for(tmpList = docsWithSelectedTags ; tmpList != NULL ; tmpList = g_list_next(tmpList))
+            {
+            tmp = g_strdup(tmpList->data);
+            conCat(&docList, tmp);
+            free(tmp);
+            free(tmpList->data);
+            if(tmpList->next)
+                conCat(&docList, ", ");
+            }
+        g_list_free(docsWithSelectedTags);
+
+        for(tmpList = SELECTEDTAGS ; tmpList != NULL ; tmpList = g_list_next(tmpList))
+            {
+            tmp = g_strdup(tmpList->data);
+            conCat(&tagList, tmp);
+            free(tmp);
+            if(tmpList->next)
+                conCat(&tagList, ", ");
             }
         }
 
-    sql = "SELECT tags.tagid, tagname, COUNT(dt.docid) cnt \
+    sql = g_strdup("SELECT tags.tagid, tagname, COUNT(dt.docid) cnt \
             FROM tags, (SELECT * \
-                        FROM doc_tags ";
+                        FROM doc_tags ");
 
     if(SELECTEDTAGS)
         {
-        sql = g_strconcat(sql, "WHERE tagid NOT IN (", list, ") ", NULL);
+        conCat(&sql, "WHERE docid IN (");
+        conCat(&sql, docList);
+        conCat(&sql, ") AND tagid NOT IN (");
+        conCat(&sql, tagList);
+        conCat(&sql, ") ");
         }
 
-    sql = g_strconcat(sql, ") dt, \
+    conCat(&sql, ") dt, \
                     (SELECT DISTINCT docs.* \
                      FROM docs, doc_tags\
-                     WHERE doc_tags.docid = docs.docid ", NULL);
+                     WHERE doc_tags.docid = docs.docid ");
 
     if(SELECTEDTAGS)
         {
-        sql = g_strconcat(sql, "AND tagid IN (", list, ") ", NULL);
+        conCat(&sql, "AND docs.docid IN (");
+        conCat(&sql, docList);
+        conCat(&sql, ") ");
         }
 
-    sql = g_strconcat(sql, ") d \
+    conCat(&sql, ") d \
             WHERE tags.tagid = dt.tagid \
             AND dt.docid = d.docid \
             GROUP BY tagname \
-            ORDER BY cnt DESC", NULL);
+            ORDER BY cnt DESC");
 
-    /////////////////////////////////
+    free(tagList);
+    free(docList);
 
     if(runquery_db("1", sql))
         {
         do  {
-    	    /* Append a row and fill in some data */
-    	    gtk_list_store_append (store, &iter);
-        	gtk_list_store_set (store, &iter,
-                                     TAG_ID, readData_db("1", "tags.tagid"),
-                                     TAG_NAME, readData_db("1", "tagname"),
-                                     TAG_COUNT, readData_db("1", "cnt"),
-                                     -1);
+            /* Append a row and fill in some data */
+            gtk_list_store_append (store, &iter);
+            gtk_list_store_set (store, &iter,
+                                    TAG_ID, readData_db("1", "tags.tagid"),
+                                    TAG_NAME, readData_db("1", "tagname"),
+                                    TAG_COUNT, readData_db("1", "cnt"),
+                                    -1);
             } while (nextRow("1"));
         }
 
     free_recordset("1");
+    free(sql);
 
-	gtk_tree_view_set_model (GTK_TREE_VIEW (availableTags), GTK_TREE_MODEL (store));
+    gtk_tree_view_set_model (GTK_TREE_VIEW (availableTags), GTK_TREE_MODEL (store));
 
 }
 
 void populate_doclist (void) {
 
-	GtkListStore *store;
-	GtkTreeIter iter;
-	GtkWidget *docList;
-    GList *selectedTag, *consolidatedDocs, *thisTagDocs, *tmp, *finalList;
-    char *sql, *list="";
+    GtkListStore *store;
+    GtkTreeIter iter;
+    GtkWidget *docList;
+    GList *docsWithSelectedTags, *tmpList;
+    char *sql, *docListc, *humanReadableDate, *tmp;
 
-	consolidatedDocs = NULL;
+    docListc = g_strdup("");
+    sql = g_strdup("SELECT DISTINCT docs.* ");
     if(SELECTEDTAGS)
         {
-		finalList = NULL;
-		thisTagDocs = NULL;
-	    for(selectedTag = SELECTEDTAGS ; selectedTag != NULL ; selectedTag = g_list_next(selectedTag))
-		    {
-            g_list_free(thisTagDocs);
-			thisTagDocs = NULL;
-            sql = g_strconcat("SELECT docid FROM doc_tags WHERE tagid = ", selectedTag->data, NULL);
-            if(runquery_db("1", sql))
-                {
-                do  {
-                    thisTagDocs = g_list_append(thisTagDocs, g_strdup(readData_db("1", "docid")));
-                    } while (nextRow("1"));
-                }
-            if(consolidatedDocs)
-                {
-                // only keep the docIds were they are in consolidatedDocs and thisTagDocs
-				if(finalList)
-					{
-					g_list_free(finalList);
-					finalList = NULL;
-					}
-                for(tmp = thisTagDocs ; tmp != NULL ; tmp = g_list_next(tmp))
-                    {
-                    if(g_list_find_custom(consolidatedDocs, tmp->data, g_str_equal ))
-                        {
-                        finalList = g_list_append(finalList, g_strdup(tmp->data));
-                        }
-                    }
-				g_list_free(consolidatedDocs);
-				consolidatedDocs = NULL;
-                for(tmp = finalList ; tmp != NULL ; tmp = g_list_next(tmp))
-                    {
-					consolidatedDocs = g_list_append(consolidatedDocs, tmp->data);
-					}
-                }
-            else
-                {
-                for(tmp = thisTagDocs ; tmp != NULL ; tmp = g_list_next(tmp))
-                    {
-					consolidatedDocs = g_list_append(consolidatedDocs, tmp->data);
-					}
-                }
-            }
-        }
-
-    list = "";
-    for(tmp = consolidatedDocs ; tmp != NULL ; tmp = g_list_next(tmp))
-        {
-        list = g_strconcat(list, tmp->data, NULL);
-        if(tmp->next)
+        docsWithSelectedTags = docsWithAllTags(SELECTEDTAGS);
+        for(tmpList = docsWithSelectedTags ; tmpList != NULL ; tmpList = g_list_next(tmpList))
             {
-            list = g_strconcat(list, ", ", NULL);
+            tmp = g_strdup(tmpList->data);
+            conCat(&docListc, tmp);
+            free(tmp);
+            if(tmpList->next)
+                conCat(&docListc, ", ");
             }
+        conCat(&sql, "FROM docs, doc_tags WHERE docs.docid IN (");
+        conCat(&sql, docListc);
+        conCat(&sql, ") ");
         }
-
-    sql = "SELECT DISTINCT docs.* ";
-	if(consolidatedDocs)
-		{
-		sql = g_strconcat(sql, "FROM docs, doc_tags WHERE docs.docid IN (", list, ") ", NULL);
-		}
     else
         {
-        sql = g_strconcat(sql, "FROM docs", NULL);
+        conCat(&sql, "FROM docs");
         }
+    free(docListc);
 
     //////////////////////////////////
 
-	store = gtk_list_store_new (DOC_NUM_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+    store = gtk_list_store_new (DOC_NUM_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
     if(runquery_db("1", sql))
         {
         do  {
-    	    /* Append a row and fill in some data */
-    	    gtk_list_store_append (store, &iter);
-        	gtk_list_store_set (store, &iter,
-                                     DOC_ID, readData_db("1", "docid"),
-                                     DOC_TITLE, readData_db("1", "title"),
-                                     DOC_TYPE, readData_db("1", "filetype"),
-                                     -1);
+            /* Append a row and fill in some data */
+            gtk_list_store_append (store, &iter);
+            humanReadableDate = dateHuman(readData_db("1", "docdated"), readData_db("1", "docdatem"), readData_db("1", "docdatey"));
+            gtk_list_store_set (store, &iter,
+                                    DOC_ID, readData_db("1", "docid"),
+                                    DOC_TITLE, readData_db("1", "title"),
+                                    DOC_TYPE, g_str_equal (readData_db("1", "filetype"),"1")?"ODF Doc":"Scaned Doc",
+                                    DOC_DATE, humanReadableDate,
+                                    -1);
+            free(humanReadableDate);
             } while (nextRow("1"));
         }
 
     free_recordset("1");
+    free(sql);
 
-	docList = g_hash_table_lookup(WIDGETS, "docList");
-	gtk_tree_view_set_model (GTK_TREE_VIEW (docList), GTK_TREE_MODEL (store));
+    docList = g_hash_table_lookup(WIDGETS, "docList");
+    gtk_tree_view_set_model (GTK_TREE_VIEW (docList), GTK_TREE_MODEL (store));
 
 }
 
@@ -236,6 +296,7 @@ void setDocInformation (GtkWidget *frame) {
     oldFrame = gtk_paned_get_child2(GTK_PANED (docEditArea));
     gtk_widget_destroy(oldFrame);
     gtk_paned_add2 (GTK_PANED (docEditArea), GTK_WIDGET(frame));
+    gtk_widget_set_size_request(GTK_WIDGET(frame), -1, 10);
     gtk_widget_show_all(frame);
 
 }
@@ -243,15 +304,16 @@ void setDocInformation (GtkWidget *frame) {
 extern void populate_docInformation (char * docId) {
 
     GtkWidget *frame;
-debug_message("create new frame", DEBUGM);
+
     frame = openDocEditor(docId);
     setDocInformation(frame);
+
 }
 
 void useTag (char *tagId) {
 
-	//Add this tag to list of used tags
-	SELECTEDTAGS = g_list_append(SELECTEDTAGS, g_strdup(tagId));
+    //Add this tag to list of used tags
+    SELECTEDTAGS = g_list_append(SELECTEDTAGS, g_strdup(tagId));
 
     populate_gui();
 }
@@ -260,34 +322,32 @@ void removeTag (char *tagId) {
 
     GList *selectedTag, *removeRef=NULL;
 
-	//Add this tag to list of used tags
+    //Add this tag to list of used tags
     for(selectedTag = SELECTEDTAGS ; selectedTag != NULL ; selectedTag = g_list_next(selectedTag))
         {
         if(g_str_equal(tagId, selectedTag->data))
-            {
             removeRef = selectedTag->data;
-            }
         }
 
     if(removeRef)
         {
         SELECTEDTAGS = g_list_remove(SELECTEDTAGS, removeRef);
+        free(removeRef);
         }
     else
-        {
         debug_message("Could not find reference for row to remove", WARNING);
-        }
 
-	populate_gui();
+    populate_gui();
 }
 
 void filterTags_dblClick (GtkTreeView *select, gpointer data) {
-	GtkTreeIter iter;
+
+    GtkTreeIter iter;
     GtkTreeModel *model;
     char *foundData;
-	GtkTreeSelection *selection;
+    GtkTreeSelection *selection;
 
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (select));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (select));
     if (gtk_tree_selection_get_selected (selection, &model, &iter))
         {
         gtk_tree_model_get (model, &iter, TAG_ID, &foundData, -1);
@@ -297,12 +357,13 @@ void filterTags_dblClick (GtkTreeView *select, gpointer data) {
 }
 
 void availableTags_dblClick (GtkTreeView *select, gpointer data) {
-	GtkTreeIter iter;
+
+    GtkTreeIter iter;
     GtkTreeModel *model;
     char *foundData;
-	GtkTreeSelection *selection;
+    GtkTreeSelection *selection;
 
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (select));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (select));
     if (gtk_tree_selection_get_selected (selection, &model, &iter))
         {
         gtk_tree_model_get (model, &iter, TAG_ID, &foundData, -1);
@@ -312,17 +373,18 @@ void availableTags_dblClick (GtkTreeView *select, gpointer data) {
 }
 
 void docList_dblClick (GtkTreeView *select, gpointer data) {
-	GtkTreeIter iter;
+
+    GtkTreeIter iter;
     GtkTreeModel *model;
     char *foundData;
-	GtkTreeSelection *selection;
+    GtkTreeSelection *selection;
 
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (select));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (select));
     if (gtk_tree_selection_get_selected (selection, &model, &iter))
         {
         gtk_tree_model_get (model, &iter, TAG_ID, &foundData, -1);
         populate_docInformation (foundData);
-        //g_free (foundData);
+        g_free (foundData);
         }
 }
 
@@ -336,24 +398,31 @@ extern void create_gui (void) {
     GtkObject *adj;
     GdkPixbuf *pixBuf;
     GtkCellRenderer *renderer;
+    char *img;
 
     WIDGETS = g_hash_table_new(g_str_hash, g_str_equal);
     SELECTEDTAGS = NULL;
+    img = g_strdup(PACKAGE_DATA_DIR);
+    conCat(&img, "/../share/opendias/openDIAS_64x64.ico");
 
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_hash_table_insert(WIDGETS, g_strdup("mainWindow"), window);
+    g_hash_table_insert(WIDGETS, "mainWindow", window);
     g_signal_connect (window, "delete_event", shutdown_app, NULL);
-    gtk_window_set_title (GTK_WINDOW (window), "Home Document Storage");
-    gtk_window_set_default_size (GTK_WINDOW (window), 835, 600);
+    gtk_window_set_title (GTK_WINDOW (window), "openDIAS");
+    gtk_window_set_default_size (GTK_WINDOW (window), 795, 640);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-    /*gtk_window_set_icon (GTK_WINDOW (window), "main.ico");*/
+    gtk_window_set_icon_from_file (GTK_WINDOW (window), img, NULL);
+    free(img);
 
     paned = gtk_hpaned_new ();
     gtk_paned_set_position (GTK_PANED (paned), 150);
 
     vbox = gtk_vbox_new (FALSE, 2);
 
-    pixBuf = gdk_pixbuf_new_from_file_at_scale("./openDIAS.png", 150, -1, TRUE, NULL);
+    img = g_strdup(PACKAGE_DATA_DIR);
+    conCat(&img, "/../share/opendias/openDIAS.png");
+    pixBuf = gdk_pixbuf_new_from_file_at_scale(img, 150, -1, TRUE, NULL);
+    free(img);
     image = gtk_image_new_from_pixbuf (pixBuf);
     gtk_box_pack_start (GTK_BOX (vbox), image, FALSE, FALSE, 2);
 
@@ -369,18 +438,20 @@ extern void create_gui (void) {
     adj = gtk_adjustment_new(0,0,0,0,0,0);
     gtk_tree_view_set_vadjustment(GTK_TREE_VIEW(filterTags), GTK_ADJUSTMENT (adj));
     scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(adj));
+    g_signal_connect(GTK_OBJECT (filterTags), "scroll-event",
+                                        G_CALLBACK(std_scrollEvent), GTK_RANGE(scrollbar));
     gtk_box_pack_start (GTK_BOX (hbox), filterTags, TRUE, TRUE, 0);
     gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);
  
-    g_hash_table_insert(WIDGETS, g_strdup("filterTags"), filterTags);
+    g_hash_table_insert(WIDGETS, "filterTags", filterTags);
 
     renderer = gtk_cell_renderer_text_new ();
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW (filterTags),
-                                       -1,      
-                                       "Tag",  
-                                       renderer,
-                                       "text", TAG_NAME,
-                                       NULL);
+                                    -1,      
+                                    "Tag",  
+                                    renderer,
+                                    "text", TAG_NAME,
+                                    NULL);
     g_signal_connect (GTK_OBJECT (filterTags), "row-activated",
                                         G_CALLBACK (filterTags_dblClick),
                                         NULL);
@@ -396,25 +467,27 @@ extern void create_gui (void) {
     adj = gtk_adjustment_new(0.0,0.0,0.0,0.0,0.0,0.0);
     gtk_tree_view_set_vadjustment(GTK_TREE_VIEW(availableTags), GTK_ADJUSTMENT (adj));
     scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(adj));
+    g_signal_connect(GTK_OBJECT (availableTags), "scroll-event",
+                                            G_CALLBACK(std_scrollEvent), GTK_RANGE(scrollbar));
     gtk_box_pack_start (GTK_BOX (hbox), availableTags, TRUE, TRUE, 0);
     gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);
 
-    g_hash_table_insert(WIDGETS, g_strdup("availableTags"), availableTags);
+    g_hash_table_insert(WIDGETS, "availableTags", availableTags);
 
     renderer = gtk_cell_renderer_text_new ();
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW (availableTags),
-                                       -1,      
-                                       "Tag",  
-                                       renderer,
-                                       "text", TAG_NAME,
-                                       NULL);
+                                    -1,      
+                                    "Tag",  
+                                    renderer,
+                                    "text", TAG_NAME,
+                                    NULL);
     renderer = gtk_cell_renderer_text_new ();
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW (availableTags),
-                                       -1,      
-                                       "Used",  
-                                       renderer,
-                                       "text", TAG_COUNT,
-                                       NULL);
+                                    -1,      
+                                    "Used",  
+                                    renderer,
+                                    "text", TAG_COUNT,
+                                    NULL);
 
     g_signal_connect (GTK_OBJECT (availableTags), "row-activated",
                                     G_CALLBACK (availableTags_dblClick),
@@ -431,12 +504,16 @@ extern void create_gui (void) {
     hbox = gtk_hbox_new (TRUE, 2);
 
     entry = gtk_entry_new ();
+    gtk_widget_set_tooltip_text(entry, "--not implemented yet--");
+    gtk_widget_set_sensitive(entry, FALSE);
     gtk_entry_set_width_chars (GTK_ENTRY (entry), 6);
     gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
 
     /*gtk_box_pack_start (GTK_BOX (hbox), hrule, FALSE, FALSE, 5);*/
 
     entry = gtk_entry_new ();
+    gtk_widget_set_tooltip_text(entry, "--not implemented yet--");
+    gtk_widget_set_sensitive(entry, FALSE);
     gtk_entry_set_width_chars (GTK_ENTRY (entry), 6);
     gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
 
@@ -449,6 +526,8 @@ extern void create_gui (void) {
     gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
 
     entry = gtk_entry_new ();
+    gtk_widget_set_tooltip_text(entry, "--not implemented yet--");
+    gtk_widget_set_sensitive(entry, FALSE);
     gtk_entry_set_width_chars (GTK_ENTRY (entry), 6);
     gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
 
@@ -467,30 +546,49 @@ extern void create_gui (void) {
     /* ------------------- */
 
     paned2 = gtk_vpaned_new ();
-    g_hash_table_insert(WIDGETS, g_strdup("docEditArea"), paned2);
+    g_hash_table_insert(WIDGETS, "docEditArea", paned2);
     gtk_paned_set_position (GTK_PANED (paned2), 150);
 
+    hbox = gtk_hbox_new (FALSE, 2);
+
     doclist = gtk_tree_view_new ();
-    g_hash_table_insert(WIDGETS, g_strdup("docList"), doclist);
+    //gtk_widget_set_size_request(GTK_WIDGET(availableTags), -1, 100);
+    g_hash_table_insert(WIDGETS, "docList", doclist);
     renderer = gtk_cell_renderer_text_new ();
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW (doclist),
-                                       -1,      
-                                       "Document Title",  
-                                       renderer,
-                                       "text", DOC_TITLE,
-                                       NULL);
+                                    -1,      
+                                    "Document Title",  
+                                    renderer,
+                                    "text", DOC_TITLE,
+                                    NULL);
     renderer = gtk_cell_renderer_text_new ();
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW (doclist),
-                                       -1,      
-                                       "Type",  
-                                       renderer,
-                                       "text", DOC_TYPE,
-                                       NULL);
+                                    -1,      
+                                    "Type",  
+                                    renderer,
+                                    "text", DOC_TYPE,
+                                    NULL);
+    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW (doclist),
+                                    -1,      
+                                    "Doc Date",  
+                                    renderer,
+                                    "text", DOC_DATE,
+                                    NULL);
     g_signal_connect (GTK_OBJECT (doclist), "row-activated",
                                     G_CALLBACK (docList_dblClick),
                                     NULL);
 
-    gtk_paned_add1 (GTK_PANED (paned2), doclist);
+    adj = gtk_adjustment_new(0.0,0.0,0.0,0.0,0.0,0.0);
+    gtk_tree_view_set_vadjustment(GTK_TREE_VIEW(doclist), GTK_ADJUSTMENT (adj));
+    scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(adj));
+    g_signal_connect(GTK_OBJECT (doclist), "scroll-event",
+                                            G_CALLBACK(std_scrollEvent), GTK_RANGE(scrollbar));
+
+    gtk_box_pack_start (GTK_BOX (hbox), doclist, FALSE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);
+    gtk_paned_add1 (GTK_PANED (paned2), hbox);
+
+    /* ------------------- */
 
     frame = gtk_frame_new (NULL);
     gtk_paned_add2 (GTK_PANED (paned2), frame);
@@ -498,22 +596,25 @@ extern void create_gui (void) {
     gtk_paned_add2 (GTK_PANED (paned), paned2);
     gtk_container_add (GTK_CONTAINER (window), paned);
     gtk_widget_show_all (window);
+    //gtk_tree_view_set_headers_clickable(GTK_TREE_VIEW(doclist), TRUE);
+    //gtk_tree_view_set_reorderable(GTK_TREE_VIEW(doclist), TRUE);
 
 }
 
 extern void populate_gui () {
 
-	//Update the "filterTags" dropdown
-	populate_selected ();
+    //Update the "filterTags" dropdown
+    populate_selected ();
 
-	//Recalc the "availableTags" dropdown
-	populate_available ();
+    //Recalc the "availableTags" dropdown
+    populate_available ();
 
-	//Recalc the "doclist" dropdown
-	populate_doclist ();
+    //Recalc the "doclist" dropdown
+    populate_doclist ();
 
     GtkWidget *frame = gtk_frame_new("");
     setDocInformation(frame);
 }
+
 
 

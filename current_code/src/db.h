@@ -19,12 +19,20 @@
 #ifndef DB
 #define DB
 
+enum {
+    DB_NULL = 0,
+    DB_TEXT,
+    DB_INT,
+    DB_DOUBLE
+    };
+
 extern void connect_db (void);
 extern void close_db (void);
 extern void free_recordset (char *);
 extern int last_insert(void);
+extern int runUpdate_db (char *, GList *);
 extern int runquery_db (char *, char *);
-extern char * readData_db (char *, char *);
+extern char *readData_db (char *, char *);
 extern int nextRow (char *);
 
 #endif /* DB */

@@ -20,6 +20,5 @@
 #define SPEAK
 
 extern void readText(GtkWidget *, char *);
-extern void stopRead(GtkWidget *, char *);
 
 #endif /* SPEAK */

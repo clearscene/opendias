@@ -31,7 +31,11 @@ opendias_SOURCES = \
 	speak.h    \
 	utils.c    \
 	utils.h    \
-	main.c
+	main.c    \
+	read_odf.c    \
+	read_odf.h    \
+	imageProcessing.c    \
+	imageProcessing.h
 
 opendias_LDFLAGS = 
 

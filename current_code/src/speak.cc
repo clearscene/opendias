@@ -17,27 +17,35 @@
  */
 
 #include "config.h"
-#ifdef HAVE_LIBESPEAK
+#ifdef CAN_SPEAK
 #include <espeak/speak_lib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include "debug.h"
+
+GtkWidget *but;
+int talking = 0;
+/* 0 = idle
+ * 1 = talking
+ * 2 = stop requested
+ * 3 = stop in progress
+ */
 
 static int SynthCallback(short *wav, int numsamples, espeak_EVENT *events) {
-    while(gtk_events_pending ())
-        gtk_main_iteration ();
+
+    if(talking == 1)
+        {
+        while(gtk_events_pending ())
+            gtk_main_iteration ();
+        }
+    else if(talking == 2)
+        {
+        talking = 3;
+        espeak_Cancel();
+        talking = 0;
+        }
 }
 
-extern "C" void stopRead (GtkWidget *button, char *inText) {
-
-    espeak_Cancel();
-    espeak_Synchronize();
-
-    gtk_button_set_label(GTK_BUTTON(button), "Read Aloud");
-/*    g_signal_connect(GTK_OBJECT (button), "clicked",
-                                    G_CALLBACK (readText),
-                                    (char *)inText);
-*/
-}
 
 extern "C" void readText(GtkWidget *button, char *inText) {
 
@@ -45,22 +53,29 @@ extern "C" void readText(GtkWidget *button, char *inText) {
     char voicename[40];
     int synth_flags = espeakCHARS_AUTO | espeakPHONEMES | espeakENDPAUSE;
 
-    gtk_button_set_label(GTK_BUTTON(button), "Stop");
-    g_signal_connect(GTK_OBJECT (button), "clicked",
-                                    G_CALLBACK (stopRead),
-                                    (char *)inText);
-    strcpy(voicename,"default");
-    size = strlen(inText);
-    espeak_Initialize(AUDIO_OUTPUT_PLAYBACK, 0, NULL, 0);
-    espeak_SetSynthCallback(SynthCallback);
-    espeak_SetVoiceByName(voicename);
-    espeak_Synth(inText, size+1, 0, POS_CHARACTER, 0, synth_flags, NULL, NULL);
-    espeak_Synchronize();
-
-    gtk_button_set_label(GTK_BUTTON(button), "Read Aloud");
-/*    g_signal_connect(GTK_OBJECT (button), "clicked",
-                                    G_CALLBACK (readText),
-                                    (char *)inText);
-*/
+    if(talking == 0) // were idle - so start talking
+        {
+        talking = 1;
+        but = button;
+        gtk_button_set_label(GTK_BUTTON(button), "Stop Reading");
+        strcpy(voicename,"default");
+        size = strlen(inText);
+        espeak_Initialize(AUDIO_OUTPUT_PLAYBACK, 0, NULL, 0);
+        espeak_SetSynthCallback(SynthCallback);
+        espeak_SetVoiceByName(voicename);
+        espeak_Synth(inText, size+1, 0, POS_CHARACTER, 0, synth_flags, NULL, NULL);
+        espeak_Synchronize();
+        espeak_Terminate();
+        talking = 0;
+        gtk_button_set_label(GTK_BUTTON(button), "Read Aloud");
+        gtk_widget_set_sensitive(but, TRUE);
+        }
+    else if (talking == 1)
+        {
+        // Were talking - so try a stop
+        gtk_widget_set_sensitive(button, FALSE);
+        gtk_button_set_label(GTK_BUTTON(button), "Stopping...");
+        talking = 2;
+        }
 }
-#endif // HAVE_LIBESPEAK //
+#endif // CAN_SPEAK //

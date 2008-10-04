@@ -24,81 +24,77 @@
 #include <unistd.h> // for getpid & readlink
 #include "main.h"
 #include "debug.h"
+#include "utils.h"
 
 static char *ItoaDigits = 
 "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 
-/*
-* ritoa
-* recursive itoa
-*/
-long int ritoa(long int val, long int topval, char *s, int base)
-	{
-	long int n = val / base;
-	if (n > 0)
-		topval = ritoa(n, topval, s+1, base);
-	else
-		*(s+1) = '\0';
-	*s = ItoaDigits[ topval % base ];
-	return(topval / base);
-	}
+/* ritoa - recursive itoa */
+long int ritoa(long int val, long int topval, char *s, int base) {
+    long int n = val / base;
+    if (n > 0)
+        topval = ritoa(n, topval, s+1, base);
+    else
+        *(s+1) = '\0';
+    *s = ItoaDigits[ topval % base ];
+    return(topval / base);
+}
 
 
+/* itoa - int to char
+ *- mallocs a string of the right length
+ * - calls ritoa to fill in the string for a given base
+ */
+extern char * itoa(long int val, int base) {
+    int len;
+    char *s,*buf;
+    long int t = val;
+    for (len=2; t; t /= base) len++ ; /* quickie log_base */
 
-/*
-* itoa
-* - mallocs a string of the right length
-* - calls ritoa to fill in the string for a given base
-*/
-extern char * itoa(long int val, int base)
-	{
-	int len;
-	char *s,*buf;	
-	long int t = val;
-	for (len=2; t; t /= base) len++ ; /* quickie log_base */
-/*	printf("len; %d\n", len); */
-
-	if((buf = (char *) malloc(len)) == NULL)
-		{debug_message("out of memory in itoa\n", ERROR); return "";}
-	s = buf;
-	if (val < 0)
-		{
-		*s++ = '-'; 
-		val = -val;
-		};
-	len = (int) ritoa(val, val, s, base);	
-	return(buf);
-	}
-
+    if((buf = (char *) malloc(len)) == NULL)
+        {
+        debug_message("out of memory in itoa\n", ERROR);
+        return "";
+        }
+    s = buf;
+    if (val < 0)
+        {
+        *s++ = '-'; 
+        val = -val;
+        };
+    len = (int) ritoa(val, val, s, base);
+    return(buf);
+}
 
 
-extern int load_file_to_memory(const char *filename, char **result) {
+/* load a file into a buffer */
+extern int load_file_to_memory(const char *filename, unsigned char **result) {
 
-	int size = 0;
-	FILE *f = fopen(filename, "r");
+    int size = 0;
+    FILE *f = fopen(filename, "r");
 
-	if (f == NULL) 
-    	{
-		*result = NULL;
+    if (f == NULL) 
+        {
+        *result = NULL;
         fprintf(stderr,"Count not open file '%s'.\n", filename);
-		return -1; // -1 means file opening fail
-	    }
+        return -1; // -1 means file opening fail
+        }
 
-	fseek(f, 0, SEEK_END);
-	size = ftell(f);
-	fseek(f, 0, SEEK_SET);
-	*result = (char *)malloc(size+1);
+    fseek(f, 0, SEEK_END);
+    size = ftell(f);
+    fseek(f, 0, SEEK_SET);
+    *result = (char *)malloc(size+1);
 
-	if (size != fread(*result, sizeof(char), size, f))
-    	{
-		free(*result);
-		return -2; // -2 means file reading fail
-	    }
+    if (size != fread(*result, sizeof(char), size, f))
+        {
+        free(*result);
+        return -2; // -2 means file reading fail
+        }
 
-	fclose(f);
-	(*result)[size] = 0;
-	return size;
+    fclose(f);
+    (*result)[size] = 0;
+    return size;
 }
 
 
@@ -121,13 +117,14 @@ extern void createDir_ifRequired(char *dir) {
 
 
 
-/******************* get_exe_name() ******************
-* Gets the path name where this exe is installed
-*
-* buffer = Where to format the path. Must be at least
-* PATH_MAX in size.
-*/
-extern void get_exe_name(char * buffer) {
+/* return the path where the executable is located
+ * Gets the path name where this exe is installed
+ * buffer = Where to format the path. Must be at least
+ * PATH_MAX in size.
+ */
+/*
+extern void get_exe_name(char *buffer) {
+
     char linkname[64];
     register pid_t pid;
     register unsigned long offset;
@@ -145,4 +142,93 @@ extern void get_exe_name(char * buffer) {
             --offset;
         }
     buffer[offset] = 0;
+}
+*/
+
+
+
+/* fcopy - copy a file contents to new location */
+extern void fcopy(char *fnsource, char *fntarget) {
+
+    FILE *fpin = fopen(fnsource, "rb");
+
+    if(fpin != NULL)
+        {
+        FILE *fpout = fopen(fntarget, "wb");
+        if(fpout != NULL)
+            {
+            int ch = 0;
+            while((ch = getc(fpin)) != EOF)
+                {
+                putc(ch, fpout);
+                }
+            fclose(fpin);
+            }
+        fclose(fpout);
+        }
+}
+
+extern gboolean std_scrollEvent (GtkWidget *widget, GdkEventScroll *event, GtkRange *range ) {
+
+    gboolean retval = FALSE;
+    GtkAdjustment *adj;
+
+    adj = gtk_range_get_adjustment(range);
+    switch (event->direction) 
+        {
+        case GDK_SCROLL_UP:
+            gtk_range_set_value(range, gtk_range_get_value(range)-adj->step_increment);
+            break;
+        case GDK_SCROLL_DOWN:
+            gtk_range_set_value(range, gtk_range_get_value(range)+adj->step_increment);
+            break;
+        default:
+            break;
+        }
+
+    return retval;
+}
+
+/*
+extern void std_setFontSize (GtkWidget *widget, relativeSize size) {
+
+    PangoContext *pangoContext;
+    PangoFontDescription *fontDesc;
+
+    pangoContext = gtk_widget_get_pango_context(GTK_WIDGET(filterTags));
+    fontDesc = pango_context_get_font_description(pangoContext);
+    pango_font_description_set_size(fontDesc, pango_font_description_get_size(fontDesc)*0.66);
+    gtk_widget_modify_font (GTK_WIDGET(filterTags), fontDesc);
+}*/
+
+extern int max(int a, int b) {
+    if(a >= b)
+        return a;
+    else
+        return b;
+}
+
+extern int min(int a, int b) {
+    if(a <= b)
+        return a;
+    else
+        return b;
+}
+
+extern char *dateHuman(char *d, char *m, char *y) {
+    //This will need to be converted, to use current machines LOCALE
+    return g_strconcat(d, "/", m, "/", y, NULL);
+}
+
+extern void conCat(char **mainStr, const char *addStr) {
+
+    char *tmp, *tmp2;
+
+    if(addStr && !g_str_equal(addStr, ""))
+        {
+        tmp2 = *mainStr;
+        tmp = g_strconcat(tmp2, addStr, NULL);
+        free(tmp2);
+        *mainStr = tmp;
+        }
 }

@@ -18,23 +18,27 @@
 
 #include <gtk/gtk.h>
 #include <glib.h>
+#include <stdlib.h>
 #include "main.h"
 #include "db.h" 
 #include "handlers.h"
 #include "utils.h"
 #include "debug.h"
 
-#include <unistd.h>
-
 void setup (void) {
 
-    VERBOSITY = 4;
-    DB_VERSION = 1;
-    BASE_DIR = g_strconcat(g_getenv("HOME"), "/.hdc/", NULL);
+    char *tmp, *scansDir;
+
+    tmp = g_getenv("HOME");
+    VERBOSITY = WARNING;
+    DB_VERSION = 2;
+    BASE_DIR = g_strconcat(tmp, "/.openDIAS/", NULL);
+    scansDir = g_strconcat(BASE_DIR, "scans/", NULL);
 
     // Check environment
     createDir_ifRequired(BASE_DIR);
-    createDir_ifRequired(g_strconcat(BASE_DIR, "scans/", NULL));
+    createDir_ifRequired(scansDir);
+    free(scansDir);
 
     // Open (& maybe update) the database.
     connect_db ();
@@ -43,13 +47,26 @@ void setup (void) {
 
 int main (int argc, char **argv) {
 
-  gtk_init (&argc, &argv);
+#ifdef CAN_THREAD
+    if( !g_thread_supported() )
+        {
+        g_thread_init(NULL);
+        gdk_threads_init();
+	}
+    gdk_threads_enter ();
+#endif // CAN_THREAD //
 
-  setup ();
-  create_gui ();
-  populate_gui ();
+    gtk_init (&argc, &argv);
+    setup ();
 
-  gtk_main ();
+    create_gui ();
+    populate_gui ();
 
-  return 0;
+    gtk_main ();
+
+#ifdef CAN_THREAD
+    gdk_threads_leave ();
+#endif // CAN_THREAD //
+
+    return 0;
 }

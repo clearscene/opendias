@@ -20,17 +20,18 @@
 #define HANDLER
 
 enum {
-  TAG_ID = 0,
-  TAG_NAME,
-  TAG_COUNT,
-  TAG_NUM_COLS
+    TAG_ID = 0,
+    TAG_NAME,
+    TAG_COUNT,
+    TAG_NUM_COLS
 };
 
 enum {
-  DOC_ID = 0,
-  DOC_TITLE,
-  DOC_TYPE,
-  DOC_NUM_COLS
+    DOC_ID = 0,
+    DOC_TITLE,
+    DOC_TYPE,
+    DOC_DATE,
+    DOC_NUM_COLS
 };
 
 GHashTable *WIDGETS;

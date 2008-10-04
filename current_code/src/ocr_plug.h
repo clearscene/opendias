@@ -16,10 +16,20 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OCR
-#define OCR
+#ifndef OCR_PLUG
+#define OCR_PLUG
+
+struct scanCallInfo {
+    const char* language;
+    const unsigned char* imagedata;
+    int bytes_per_pixel;
+    int bytes_per_line;
+    int width;
+    int height;
+    char *ret;
+};
 
 #define OCR_LANG_BRITISH   "eng"   /*International English */
-extern char* runocr(const char*, const unsigned char*, int, int, int, int);
+extern void runocr(struct scanCallInfo*);
 
-#endif /* OCR */
+#endif /* OCR_PLUG */

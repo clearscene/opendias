@@ -1,35 +1,29 @@
-/*
- * debug.h
+ /*
+ * read_odf.h
  * Copyright (C) Clearscene Ltd 2008 <wbooth@essentialcollections.co.uk>
  * 
- * debug.h is free software: you can redistribute it and/or modify it
+ * read_odf.h is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
- * debug.h is distributed in the hope that it will be useful, but
+ * read_odf.h is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * windation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
+ 
+#ifdef CAN_READODF
+#ifndef READ_ODF
+#define READ_ODF
 
-#ifndef DEBUG
-#define DEBUG
+#include <gdk-pixbuf/gdk-pixbuf.h>
 
-int VERBOSITY;
+extern char *get_odf_Text (const char *);
+extern GdkPixbuf *get_odf_Thumb (const char *);
 
-enum {
-    SILENT = 0,
-    ERROR,
-    WARNING,
-    INFORMATION,
-    DEBUGM
-};
-
-extern void debug_message(char *, const int);
-extern void userMessage(char *, const int);
-
-#endif /* DEBUG */
+#endif /* READ_ODF */
+#endif // CAN_READODF //
