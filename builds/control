@@ -1,0 +1,12 @@
+Source: opendias
+Section: office
+Priority: extra
+Maintainer: wbooth <wbooth@essentialcollections.co.uk>
+Build-Depends: debhelper (>= 5), autotools-dev, libsqlite3-dev, libgtk2.0-dev, libsane-dev, tesseract-ocr-dev, libespeak-dev, libxml2-dev, libzzip-dev
+Standards-Version: 3.7.2
+
+Package: opendias
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, tesseract-ocr, tesseract-ocr-eng, libespeak1, libsqlite3-0, libgtk2.0-0, libsane, libxml2, libzzip-0-13
+Description: Document Imaging Archive System (openDIAS).
+ Home document imaging, with OCR. Scan documents (with SANE) or import ODF documents, assign tags. Use openDIAS to store all our letters, bills, statements, etc in a convenient, safe and easily retrievable way.

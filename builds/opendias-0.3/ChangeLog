@@ -1,0 +1,25 @@
+ 0.3    Moved over to bind vars for db updates and inserts
+	Default the "should we OCR" to ON
+	Add image processing to allow paged views of scanned images
+	Add an icon to the application
+	Fix build failure bug if tesseract is not installed.
+	Auto crop of scanned image pages
+	Add scanned image zooming
+
+*0.2.6	Fix bug that stopped new users from creating a repository.
+
+*0.2.5	Various bug-fix. inc. available tags 'containing doc count' recalc error.
+
+ 0.2.4	Revamp the doc-editor UI layout
+
+ 0.2.3	Implement lots of "greyed-out" functionality
+
+ 0.2.2	Add multiple page scans
+
+*0.2.1	Bug fixes
+
+ 0.2	Added ODT document archival 
+
+ 0.1.1	Bug fixes on initial
+
+*0.1	Initial version 

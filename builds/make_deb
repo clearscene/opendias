@@ -1,0 +1,8 @@
+gunzip opendias-0.3.2.tar.gz 
+tar -xvf opendias-0.3.2.tar 
+bzip2 opendias-0.3.2.tar 
+cd opendias-0.3.2
+dh_make -e wbooth@essentialcollections.co.uk -f ../opendias-0.3.2.tar.bz2 
+cp ../control ./debian/
+cp ../copyright ./debian/
+dpkg-buildpackage 
