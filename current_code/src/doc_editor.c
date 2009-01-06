@@ -279,17 +279,26 @@ GdkPixbuf *getPixbufForThisImage(struct imageInformation *img, int width) {
         {
 #ifdef CAN_READODF
         conCat(&filename, ".odt");
-        pixBuf = get_odf_Thumb(filename);
+        if(g_file_test(&filename, G_FILE_TEST_EXISTS))
+            pixBuf = get_odf_Thumb(filename);
 #endif // CAN_READODF //
         }
     else
         {
         conCat(&filename, ".pnm");
-        pixBuf = getPagePixBuf_fromFile(filename, img->currentPage, img->ppl, img->lines, img->totPages, width, -1, img->sharpen, img->crop);
+        if(g_file_test(&filename, G_FILE_TEST_EXISTS))
+            pixBuf = getPagePixBuf_fromFile(filename, img->currentPage, img->ppl, img->lines, img->totPages, width, -1, img->sharpen, img->crop);
         }
     free(filename);
 
     return pixBuf;
+}
+
+int checkFileExists(const char *fileN) {
+    debug_message("Checking filename", WARNING);
+    debug_message(&fileN, WARNING);
+    debug_message("-----------------", WARNING);
+    return FALSE;
 }
 
 /*void imageDeleted (GtkImage *img) {
@@ -550,7 +559,7 @@ extern GtkWidget *openDocEditor (char *documentId) {
 #ifdef CAN_READODF
     char *filename;
 #endif // CAN_READODF //
-
+debug_message("enter", WARNING);
     EDITORWIDGETS = g_hash_table_new(g_str_hash, g_str_equal);
     frame = gtk_frame_new (NULL);
     g_hash_table_insert(EDITORWIDGETS, "frame", frame);
@@ -572,7 +581,7 @@ extern GtkWidget *openDocEditor (char *documentId) {
         gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 2);
         return frame;
         }
-
+debug_message("found record", WARNING);
     hbox = gtk_hbox_new(FALSE, 2);
     gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 2);
 
@@ -581,7 +590,7 @@ extern GtkWidget *openDocEditor (char *documentId) {
 
     spacerBox = gtk_vbox_new(FALSE, 2);
     gtk_box_pack_start (GTK_BOX (spacerBox), previewFrame, FALSE, FALSE, 2);
-
+debug_message("create basic", WARNING);
     imgData.documentId = g_strdup(documentId);
     imgData.totPages = atoi(readData_db("1", "pages"));
     imgData.currentPage = 1;
@@ -590,7 +599,9 @@ extern GtkWidget *openDocEditor (char *documentId) {
     imgData.lines = atoi(readData_db("1", "lines"));
     imgData.sharpen = 0;
     imgData.crop = 1;
+debug_message("before pixBuff", WARNING);
     pixBuf = getPixbufForThisImage(&imgData, 150);
+debug_message("0000", WARNING);
 
     if(pixBuf)
         {
@@ -640,6 +651,7 @@ extern GtkWidget *openDocEditor (char *documentId) {
 
     /* --------------- */
 
+debug_message("1111", WARNING);
     mainTable = gtk_table_new(7, 11, FALSE);
     gtk_box_pack_start (GTK_BOX (hbox), mainTable, FALSE, FALSE, 2);
 
@@ -650,10 +662,15 @@ extern GtkWidget *openDocEditor (char *documentId) {
     g_hash_table_insert(EDITORWIDGETS, "title", entry);
     tmp = readData_db("1", "title");
     if(g_str_equal (tmp, "NULL") )
-        tmp = "";
+        {
+        free(tmp);
+        tmp = g_strdup("---");
+        }
+debug_message("2222", WARNING);
     gtk_entry_set_text(GTK_ENTRY(entry), tmp);
     gtk_widget_set_size_request(GTK_WIDGET(entry), 150, -1);
     gtk_table_attach (GTK_TABLE (mainTable), entry, 1, 6, 0, 1, GTK_FILL, GTK_EXPAND, 2, 2);
+debug_message("3333", WARNING);
 
     lab = gtk_label_new ("Scaned:");
     gtk_misc_set_alignment (GTK_MISC(lab), 1, 0);

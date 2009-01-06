@@ -30,7 +30,7 @@ void setup (void) {
     char *tmp, *scansDir;
 
     tmp = g_getenv("HOME");
-    VERBOSITY = WARNING;
+    VERBOSITY = DEBUGM; // WARNING;
     DB_VERSION = 2;
     BASE_DIR = g_strconcat(tmp, "/.openDIAS/", NULL);
     scansDir = g_strconcat(BASE_DIR, "scans/", NULL);

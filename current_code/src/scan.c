@@ -204,6 +204,7 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Initialising....");
     while(gtk_events_pending ())
         gtk_main_iteration ();
+    debug_message("sane_open", DEBUGM);
     status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
     if(status != SANE_STATUS_GOOD)
         {
@@ -244,6 +245,7 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Initialising the scanner");
     while(gtk_events_pending ())
         gtk_main_iteration ();
+    debug_message("sane_start", DEBUGM);
     status = sane_start (openDeviceHandle);
     if(status == SANE_STATUS_GOOD)
         {
@@ -261,7 +263,7 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Reading data");
         while(gtk_events_pending ())
             gtk_main_iteration ();
-        debug_message("scan - start", DEBUGM);
+        debug_message("scan_read - start", DEBUGM);
 
         do
             {
@@ -278,12 +280,14 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
                     else
                         {
                         // Reset the scanner, ask fro user confirmation of readyness.
+                        debug_message("sane_cancel", DEBUGM);
                         sane_cancel (openDeviceHandle);
                         tmp = g_strdup("Insert page ");
                         tmp2 = itoa(pages, 10);
                         conCat(&tmp, tmp2);
                         userMessage(tmp, GTK_MESSAGE_QUESTION);
                         free(tmp);
+                        debug_message("sane_start", DEBUGM);
                         sane_start (openDeviceHandle);
                         }
                     }
@@ -309,15 +313,18 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
                 fwrite (buffer, 1, buff_len, file);
                 }
             } while (1);
+        debug_message("scan_read - end", DEBUGM);
         fclose(file);
 
         gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), 0 );
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "");
+        debug_message("sane_cancel", DEBUGM);
         sane_cancel(openDeviceHandle);
         scan_bpl = pars.bytes_per_line;
         scan_ppl = pars.pixels_per_line;
         scan_lines = pars.lines;
         }
+    debug_message("sane_close", DEBUGM);
     sane_close(openDeviceHandle);
 
 #ifdef CAN_OCR
@@ -431,6 +438,7 @@ extern void startAquireOperation(void) {
     gtk_widget_show_all (window);
 
 #ifdef CAN_SCAN
+    debug_message("sane_init", DEBUGM);
     status = sane_init(NULL, NULL);
     if(status == SANE_STATUS_GOOD)
         {
@@ -507,6 +515,7 @@ extern void startAquireOperation(void) {
         {
         for (i=0;device_list[i] && device_list[i]->model && device_list[i]->vendor && device_list[i]->name; i++)
             {
+            debug_message("sane_open", DEBUGM);
             status = sane_open (device_list[i]->name, (SANE_Handle)&openDeviceHandle);
             if(status != SANE_STATUS_GOOD)
                 {
@@ -671,6 +680,7 @@ extern void startAquireOperation(void) {
             while(gtk_events_pending ())
                 gtk_main_iteration ();
 
+            debug_message("sane_close", DEBUGM);
             sane_close(openDeviceHandle);
             }
         }
@@ -682,6 +692,7 @@ extern void startAquireOperation(void) {
 extern void finishAquireOperation(GtkWidget *window) {
 
 #ifdef CAN_SCAN
+    debug_message("sane_exit", DEBUGM);
     sane_exit();
 #endif // CAN_SCAN //
     gtk_widget_destroy (window);
