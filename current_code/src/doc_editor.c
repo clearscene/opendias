@@ -311,15 +311,19 @@ void placeImage (GdkPixbuf *pixBuf, GtkWidget *frame) {
     GtkWidget *image;
     GList *list;
 
-    image = gtk_image_new_from_pixbuf (pixBuf);
-    g_object_unref(pixBuf);
+    if(!pixBuf) 
+        {
+        image = gtk_image_new_from_pixbuf (pixBuf);
+        g_object_unref(pixBuf);
 
-    list = gtk_container_get_children(GTK_CONTAINER(frame));
-    if(list)
-        gtk_widget_destroy(list->data);
+        list = gtk_container_get_children(GTK_CONTAINER(frame));
+        if(list)
+            gtk_widget_destroy(list->data);
 
-    gtk_container_add (GTK_CONTAINER (frame), image);
-    g_list_free(list);
+        gtk_container_add (GTK_CONTAINER (frame), image);
+        g_list_free(list);
+        }
+
     gtk_widget_show_all(frame);
 
 }
