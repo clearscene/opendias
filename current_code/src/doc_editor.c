@@ -286,7 +286,7 @@ GdkPixbuf *getPixbufForThisImage(struct imageInformation *img, int width) {
     else
         {
         conCat(&filename, ".pnm");
-        if(g_file_test(&filename, G_FILE_TEST_EXISTS))
+        if(g_file_test(filename, G_FILE_TEST_EXISTS))
             pixBuf = getPagePixBuf_fromFile(filename, img->currentPage, img->ppl, img->lines, img->totPages, width, -1, img->sharpen, img->crop);
         }
     free(filename);
@@ -311,7 +311,7 @@ void placeImage (GdkPixbuf *pixBuf, GtkWidget *frame) {
     GtkWidget *image;
     GList *list;
 
-    if(!pixBuf) 
+    if(pixBuf != NULL) 
         {
         image = gtk_image_new_from_pixbuf (pixBuf);
         g_object_unref(pixBuf);
