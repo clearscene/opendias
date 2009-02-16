@@ -108,7 +108,7 @@ extern void createDir_ifRequired(char *dir) {
         if (!g_file_test(dir, G_FILE_TEST_EXISTS))
             {
             // Major error - do something!
-            debug_message("Could get to new directory.", ERROR);
+            debug_message("Could not get to new directory.", ERROR);
             exit(1);
             }
         }
