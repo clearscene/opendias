@@ -84,7 +84,12 @@ extern int load_file_to_memory(const char *filename, unsigned char **result) {
     fseek(f, 0, SEEK_END);
     size = ftell(f);
     fseek(f, 0, SEEK_SET);
-    *result = (char *)malloc(size+1);
+
+    if((*result = (char *)malloc(size+1)) == NULL)
+        {
+        debug_message("out of memory while reading file information\n", ERROR);
+        return "";
+        }
 
     if (size != fread(*result, sizeof(char), size, f))
         {
