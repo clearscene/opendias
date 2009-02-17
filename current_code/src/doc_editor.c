@@ -599,7 +599,7 @@ extern GtkWidget *openDocEditor (char *documentId) {
 
     pixBuf = getPixbufForThisImage(&imgData, 150);
 
-    if(pixBuf)
+    if(pixBuf != NULL)
         {
         placeImage(pixBuf, previewFrame);
         gtk_widget_set_size_request(GTK_WIDGET(previewFrame), 160, -1);
@@ -655,8 +655,7 @@ extern GtkWidget *openDocEditor (char *documentId) {
     gtk_table_attach (GTK_TABLE (mainTable), lab, 0, 1, 0, 1, GTK_FILL, GTK_EXPAND, 2, 2);
     entry = gtk_entry_new();
     g_hash_table_insert(EDITORWIDGETS, "title", entry);
-    tmp = readData_db("1", "title");
-//    if(tmp == NULL )
+    tmp = g_strdup(readData_db("1", "title"));
     if(g_str_equal (tmp, "NULL") )
         {
         free(tmp);
@@ -666,6 +665,7 @@ extern GtkWidget *openDocEditor (char *documentId) {
     gtk_entry_set_text(GTK_ENTRY(entry), tmp);
     gtk_widget_set_size_request(GTK_WIDGET(entry), 150, -1);
     gtk_table_attach (GTK_TABLE (mainTable), entry, 1, 6, 0, 1, GTK_FILL, GTK_EXPAND, 2, 2);
+    free(tmp);
 
     lab = gtk_label_new ("Scaned:");
     gtk_misc_set_alignment (GTK_MISC(lab), 1, 0);
