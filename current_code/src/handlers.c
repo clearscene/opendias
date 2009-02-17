@@ -236,7 +236,7 @@ void populate_doclist (void) {
     GtkTreeIter iter;
     GtkWidget *docList;
     GList *docsWithSelectedTags, *tmpList;
-    char *sql, *docListc, *humanReadableDate, *tmp;
+    char *sql, *docListc, *humanReadableDate, *tmp, *title;
 
     docListc = g_strdup("");
     sql = g_strdup("SELECT DISTINCT docs.* ");
@@ -269,10 +269,15 @@ void populate_doclist (void) {
         do  {
             /* Append a row and fill in some data */
             gtk_list_store_append (store, &iter);
+            title = readData_db("1", "title");
+            if(g_str_equal (title, "NULL") )
+                 {
+                 title = g_strdup("New (untitled) document.");
+                 }
             humanReadableDate = dateHuman(readData_db("1", "docdated"), readData_db("1", "docdatem"), readData_db("1", "docdatey"));
             gtk_list_store_set (store, &iter,
                                     DOC_ID, readData_db("1", "docid"),
-                                    DOC_TITLE, readData_db("1", "title"),
+                                    DOC_TITLE, title,
                                     DOC_TYPE, g_str_equal (readData_db("1", "filetype"),"1")?"ODF Doc":"Scaned Doc",
                                     DOC_DATE, humanReadableDate,
                                     -1);
@@ -306,6 +311,7 @@ extern void populate_docInformation (char * docId) {
     GtkWidget *frame;
 
     frame = openDocEditor(docId);
+
     setDocInformation(frame);
 
 }
