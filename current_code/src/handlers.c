@@ -128,7 +128,7 @@ void populate_selected (void) {
             gtk_list_store_append (store, &iter);
             gtk_list_store_set (store, &iter,
                                     TAG_ID, selectedTag->data,
-                                    TAG_NAME, readData_db("1", "tagname"),
+                                    TAG_NAME, g_strdup(readData_db("1", "tagname")),
                                     -1);
             }
         free_recordset("1");
@@ -216,14 +216,14 @@ void populate_available (void) {
             /* Append a row and fill in some data */
             gtk_list_store_append (store, &iter);
             gtk_list_store_set (store, &iter,
-                                    TAG_ID, readData_db("1", "tags.tagid"),
-                                    TAG_NAME, readData_db("1", "tagname"),
-                                    TAG_COUNT, readData_db("1", "cnt"),
+                                    TAG_ID, g_strdup(readData_db("1", "tags.tagid")),
+                                    TAG_NAME, g_strdup(readData_db("1", "tagname")),
+                                    TAG_COUNT, g_strdup(readData_db("1", "cnt")),
                                     -1);
             } while (nextRow("1"));
+        free_recordset("1");
         }
 
-    free_recordset("1");
     free(sql);
 
     gtk_tree_view_set_model (GTK_TREE_VIEW (availableTags), GTK_TREE_MODEL (store));
@@ -276,16 +276,16 @@ void populate_doclist (void) {
                  }
             humanReadableDate = dateHuman(readData_db("1", "docdated"), readData_db("1", "docdatem"), readData_db("1", "docdatey"));
             gtk_list_store_set (store, &iter,
-                                    DOC_ID, readData_db("1", "docid"),
+                                    DOC_ID, g_strdup(readData_db("1", "docid")),
                                     DOC_TITLE, title,
                                     DOC_TYPE, g_str_equal (readData_db("1", "filetype"),"1")?"ODF Doc":"Scaned Doc",
                                     DOC_DATE, humanReadableDate,
                                     -1);
             free(humanReadableDate);
             } while (nextRow("1"));
+        free_recordset("1");
         }
 
-    free_recordset("1");
     free(sql);
 
     docList = g_hash_table_lookup(WIDGETS, "docList");
