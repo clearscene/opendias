@@ -1,0 +1,11 @@
+.anjuta
+.tm_project2.cache
+Makefile.in
+aclocal.m4
+autom4te.cache
+config.h.in
+configure
+intltool-extract.in
+intltool-merge.in
+intltool-update.in
+mkinstalldirs
