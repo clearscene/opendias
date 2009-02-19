@@ -269,7 +269,7 @@ void readTextParser (GtkWidget *button, GtkWidget *entry) {
 
 GdkPixbuf *getPixbufForThisImage(struct imageInformation *img, int width) {
 
-    GdkPixbuf *pixBuf;
+    GdkPixbuf *pixBuf = NULL;
     char *filename;
 
     filename = g_strdup(BASE_DIR);

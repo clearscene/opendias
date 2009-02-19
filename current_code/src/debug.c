@@ -30,9 +30,8 @@ extern void debug_message(char *message, const int verbosity) {
             userMessage(message, GTK_MESSAGE_ERROR);
             }
         else
-            g_message(message);
+            g_message(message, NULL);
         }
-    //free(message);
 
 }
 
