@@ -18,6 +18,7 @@
 
 #include <gtk/gtk.h>
 #include <stdlib.h>
+#include "main.h"
 #include "handlers.h"
 #include "db.h"
 #include "scan.h"
@@ -32,9 +33,73 @@ void shutdown_app (void) {
     gtk_widget_destroy(window);
     g_hash_table_destroy(WIDGETS);
     close_db ();
-    free(scansDir);
     free(BASE_DIR);
     gtk_main_quit ();
+
+}
+
+
+void finishCredits(GtkWidget *window) {
+
+    gtk_widget_destroy (window);
+
+}
+
+void show_credits () {
+
+    GtkWidget *Cwindow, *vbox, *lab, *button, *image;
+    GdkPixbuf *pixBuf;
+    char *tmp;
+
+    Cwindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    g_signal_connect (Cwindow, "delete_event", 
+                        G_CALLBACK(finishCredits), NULL);
+    gtk_window_set_title (GTK_WINDOW (Cwindow), "openDIAS: Credits");
+    gtk_window_set_default_size (GTK_WINDOW (Cwindow), 300, 300);
+    gtk_window_set_modal (GTK_WINDOW (Cwindow), TRUE);
+    gtk_window_set_position(GTK_WINDOW(Cwindow), GTK_WIN_POS_CENTER);
+    /*gtk_window_set_icon (GTK_WINDOW (Cwindow), "main.ico");*/
+
+    vbox = gtk_vbox_new(FALSE, 2);
+
+    lab = gtk_label_new ("openDIAS: the 'Document Imaging & Archive System'.");
+    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
+
+    tmp = g_strdup(PACKAGE_DATA_DIR);
+    conCat(&tmp, "/../share/opendias/openDIAS.png");
+    pixBuf = gdk_pixbuf_new_from_file_at_scale(tmp, 150, -1, TRUE, NULL);
+    free(tmp);
+    image = gtk_image_new_from_pixbuf (pixBuf);
+    gtk_box_pack_start (GTK_BOX (vbox), image, FALSE, FALSE, 2);
+
+    lab = gtk_label_new ("by Wayne Booth");
+    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
+
+    lab = gtk_label_new ("see: http://essentialcollections.co.uk/opendias");
+    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
+
+    lab = gtk_label_new ("----------------------");
+    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
+
+    tmp = g_strdup("App Version: ");
+    conCat(&tmp, "0.3.3");
+    lab = gtk_label_new (tmp);
+    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
+    free(tmp);
+
+    tmp = g_strdup("Database Version: ");
+    conCat(&tmp, "2");
+    lab = gtk_label_new (tmp);
+    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
+    free(tmp);
+
+    button = gtk_button_new();
+    gtk_button_set_label(GTK_BUTTON(button), "OK");
+    g_signal_connect (GTK_OBJECT (button), "clicked",
+                                    G_CALLBACK (finishCredits), (gpointer) Cwindow);
+    gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+    gtk_container_add (GTK_CONTAINER (Cwindow), vbox);
+    gtk_widget_show_all (Cwindow);
 
 }
 
@@ -400,14 +465,12 @@ void docList_dblClick (GtkTreeView *select, gpointer data) {
 void connectToNewStore (char *newLocation) {
 
 	close_db();
-	free(scansDir);
 	free(BASE_DIR);
 
-	BASE_DIR = newLocation
-	scansDir = g_strconcat(BASE_DIR, "scans/", NULL);
+	BASE_DIR = newLocation;
 
-	connect_db()
-        populate_gui();
+	connect_db();
+    populate_gui();
 
 }
 
@@ -416,8 +479,8 @@ extern void create_gui (void) {
 
     GtkWidget *window, *paned, *vbox, *filterTags, 
         *availableTags, *paned2, *doclist, *frame,
-        *lab, *hbox, *hrule, *button, *image,
-        *entry, *scrollbar;
+        *lab, *hbox, *hrule, *button, *image, *menuMainBox,
+        *entry, *scrollbar, *menu_bar, *mainMenuItem, *menu, *menuitem;
     GtkObject *adj;
     GdkPixbuf *pixBuf;
     GtkCellRenderer *renderer;
@@ -435,16 +498,36 @@ extern void create_gui (void) {
     gtk_window_set_default_size (GTK_WINDOW (window), 795, 640);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_window_set_icon_from_file (GTK_WINDOW (window), img, NULL);
+    menuMainBox = gtk_vbox_new (FALSE, 2);
+    gtk_container_add( GTK_CONTAINER(window), menuMainBox);
     free(img);
 
-    //#
     //#
     //# Add menu bar
     //#
     //# link (change store location) = connectToNewStore(newLocation);
     //# link (credits) = credits();
     //#
-    //#
+	menu = gtk_menu_new ();
+
+
+	menuitem = gtk_menu_item_new_with_mnemonic ("_About");
+    g_signal_connect(G_OBJECT (menuitem), "activate",
+                                        GTK_SIGNAL_FUNC (show_credits), NULL);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+	menuitem = gtk_menu_item_new_with_mnemonic ("_Exit");
+    g_signal_connect(G_OBJECT (menuitem), "activate",
+                                        GTK_SIGNAL_FUNC (shutdown_app), NULL);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+    mainMenuItem = gtk_menu_item_new_with_label("File");
+    gtk_menu_item_set_submenu( GTK_MENU_ITEM(mainMenuItem), menu);
+
+    menu_bar = gtk_menu_bar_new();
+    gtk_box_pack_start(GTK_BOX(menuMainBox), menu_bar, FALSE, FALSE, 2);
+
+    gtk_menu_bar_append( GTK_MENU_BAR (menu_bar), mainMenuItem );
 
     paned = gtk_hpaned_new ();
     gtk_paned_set_position (GTK_PANED (paned), 150);
@@ -626,7 +709,7 @@ extern void create_gui (void) {
     gtk_paned_add2 (GTK_PANED (paned2), frame);
 
     gtk_paned_add2 (GTK_PANED (paned), paned2);
-    gtk_container_add (GTK_CONTAINER (window), paned);
+    gtk_box_pack_start (GTK_BOX(menuMainBox), paned, FALSE, FALSE, 2);
     gtk_widget_show_all (window);
     //gtk_tree_view_set_headers_clickable(GTK_TREE_VIEW(doclist), TRUE);
     //gtk_tree_view_set_reorderable(GTK_TREE_VIEW(doclist), TRUE);
@@ -648,70 +731,4 @@ extern void populate_gui () {
     setDocInformation(frame);
 }
 
-/*
- * Credits
- */
-void show_credits () {
 
-    GtkWidget *window, *vbox, *lab, *button, *image;
-    GdkPixbuf *pixBuf;
-    char *tmp;
-
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_signal_connect (window, "delete_event", G_CALLBACK(finishCredits), NULL);
-    gtk_window_set_title (GTK_WINDOW (window), "openDIAS: Credits");
-    gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
-    gtk_window_set_modal (GTK_WINDOW (window), TRUE);
-    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-    /*gtk_window_set_icon (GTK_WINDOW (window), "main.ico");*/
-
-    vbox = gtk_vbox_new(FALSE, 2);
-
-    lab = gtk_label_new ("openDIAS: the 'Document Imaging & Archive System'.");
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
-
-    tmp = g_strdup(PACKAGE_DATA_DIR);
-    conCat(&tmp, "/../share/opendias/openDIAS.png");
-    pixBuf = gdk_pixbuf_new_from_file_at_scale(img, 150, -1, TRUE, NULL);
-    free(tmp);
-    image = gtk_image_new_from_pixbuf (pixBuf);
-    gtk_box_pack_start (GTK_BOX (vbox), image, FALSE, FALSE, 2);
-
-    lab = gtk_label_new ("by Wayne Booth");
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
-
-    lab = gtk_label_new ("see: http://essentialcollections.co.uk/opendias");
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
-
-    lab = gtk_label_new ("----------------------");
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
-
-    tmp = g_strdup("App Version: ");
-    conCat(&tmp, PACKAGE_VERSION);
-    lab = gtk_label_new (tmp);
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
-    free(tmp);
-
-    tmp = g_strdup("Database Version: ");
-    conCat(&tmp, DB_VERSION);
-    lab = gtk_label_new (tmp);
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
-    free(tmp);
-
-    button = gtk_button_new();
-    gtk_button_set_label(GTK_BUTTON(button), "OK");
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                                    G_CALLBACK (finishCredits),
-                                    window);
-    gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-
-    gtk_container_add (GTK_CONTAINER (window), vbox);
-    gtk_widget_show_all (window);
-
-}
-
-void finishiCredits(GtkWidget *window) {
-
-    gtk_widget_destroy (window);
-
-}
