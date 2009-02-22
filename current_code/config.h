@@ -5,7 +5,7 @@
 #define CAN_OCR 
 
 /* Have everything that's needed to read ODF documents */
-/* #undef CAN_READODF */
+#define CAN_READODF 
 
 /* Have everything that's needed for scanning documents */
 #define CAN_SCAN 
