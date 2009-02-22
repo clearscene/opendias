@@ -283,6 +283,17 @@ extern void free_recordset (char *recordSetKey) {
 
 extern void close_db () {
 
+    GHashTableIter iter;
+    gpointer key, value;
+
+    // foreach record in the g_hash_table RECORDSET, loop and call 'free_recordset'
+    g_hash_table_iter_init (&iter, RECORDSET);
+    while (g_hash_table_iter_next (&iter, &key, &value))
+        {
+        free_recordset(key);
+        }
+    g_hash_table_destroy(RECORDSET);
+
     sqlite3_close(DBH);
 
 }
