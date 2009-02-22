@@ -70,7 +70,21 @@ unsigned char *zoomImage(unsigned char *pic,
     unsigned char *image, *insertPointer, *readPointer;
 
     newppl = (right-left)+1;
-    image = (unsigned char *)malloc(newppl*((end-start)+1));
+    if(newppl < 0)
+        {
+        // Image is most lickly all black
+        debug_message("Zooming in to a negative!\n", WARNING);
+        newppl = 2;
+	end = 2;
+	start = 1;
+        }
+
+    if((image = (unsigned char *)malloc(newppl*((end-start)+1))) == NULL)
+	{
+        debug_message("out of memory while preparing zoomed image\n", ERROR);
+        return pic;
+	}
+
     insertPointer = image;
     readPointer = pic;
 
@@ -215,7 +229,6 @@ extern unsigned char *autoCrop(unsigned char *pic, int *ppl, int *lines) {
         working_line++;
         readPointer += *ppl;
         }
-
 
     // Zoom image to new vals
     pic = zoomImage(pic, left, right, top, bottom, ppl, lines);
