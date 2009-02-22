@@ -13,5 +13,5 @@
 *.class
 *.pyc
 *.plugin
-Makefile
 Makefile.in
+Makefile
