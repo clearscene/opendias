@@ -39,9 +39,9 @@ void shutdown_app (void) {
 }
 
 
-void finishCredits(GtkWidget *window) {
+void finishCredits(GtkWidget *thisWindow) {
 
-    gtk_widget_destroy (window);
+    gtk_widget_destroy (thisWindow);
 
 }
 
@@ -53,9 +53,9 @@ void show_credits () {
 
     Cwindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     g_signal_connect (Cwindow, "delete_event", 
-                        G_CALLBACK(finishCredits), NULL);
+                        G_CALLBACK(finishCredits), Cwindow);
     gtk_window_set_title (GTK_WINDOW (Cwindow), "openDIAS: Credits");
-    gtk_window_set_default_size (GTK_WINDOW (Cwindow), 300, 300);
+//    gtk_window_set_default_size (GTK_WINDOW (Cwindow), 300, 300);
     gtk_window_set_modal (GTK_WINDOW (Cwindow), TRUE);
     gtk_window_set_position(GTK_WINDOW(Cwindow), GTK_WIN_POS_CENTER);
     /*gtk_window_set_icon (GTK_WINDOW (Cwindow), "main.ico");*/
@@ -82,13 +82,13 @@ void show_credits () {
     gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
 
     tmp = g_strdup("App Version: ");
-    conCat(&tmp, "0.3.3");
+    conCat(&tmp, "0.3.2");
     lab = gtk_label_new (tmp);
     gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
     free(tmp);
 
     tmp = g_strdup("Database Version: ");
-    conCat(&tmp, "2");
+    conCat(&tmp, "2.0");
     lab = gtk_label_new (tmp);
     gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
     free(tmp);
@@ -96,7 +96,8 @@ void show_credits () {
     button = gtk_button_new();
     gtk_button_set_label(GTK_BUTTON(button), "OK");
     g_signal_connect (GTK_OBJECT (button), "clicked",
-                                    G_CALLBACK (finishCredits), (gpointer) Cwindow);
+                                   G_CALLBACK (finishCredits),
+				   GTK_WINDOW (Cwindow));
     gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
     gtk_container_add (GTK_CONTAINER (Cwindow), vbox);
     gtk_widget_show_all (Cwindow);
@@ -461,19 +462,45 @@ void docList_dblClick (GtkTreeView *select, gpointer data) {
         }
 }
 
-
 void connectToNewStore (char *newLocation) {
 
-	close_db();
-	free(BASE_DIR);
+    // Free up the UI enrties.
 
-	BASE_DIR = newLocation;
+    close_db();
 
-	connect_db();
+    free(BASE_DIR);
+    BASE_DIR = newLocation;
+
+    connect_db();
     populate_gui();
 
 }
 
+void pickNewLocation () {
+
+    char *fileName;
+    GtkWidget *fileChooser;
+    GtkFileFilter *filter;
+
+    fileChooser = gtk_file_chooser_dialog_new("New Location", NULL, 
+				GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+				      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+				      NULL);
+
+    filter = gtk_file_filter_new( );
+    gtk_file_filter_set_name( filter, "openDIAS database");
+    gtk_file_filter_add_pattern( filter, "openDIAS.sqlite3" );
+    gtk_file_chooser_add_filter( GTK_FILE_CHOOSER(fileChooser), filter );
+
+    if (gtk_dialog_run (GTK_DIALOG (fileChooser)) == GTK_RESPONSE_ACCEPT)
+        {
+        fileName = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(fileChooser));
+        connectToNewStore(fileName);
+        }
+
+    gtk_widget_destroy (fileChooser);
+}
 
 extern void create_gui (void) {
 
@@ -502,32 +529,40 @@ extern void create_gui (void) {
     gtk_container_add( GTK_CONTAINER(window), menuMainBox);
     free(img);
 
-    //#
-    //# Add menu bar
-    //#
-    //# link (change store location) = connectToNewStore(newLocation);
-    //# link (credits) = credits();
-    //#
-	menu = gtk_menu_new ();
-
-
-	menuitem = gtk_menu_item_new_with_mnemonic ("_About");
-    g_signal_connect(G_OBJECT (menuitem), "activate",
-                                        GTK_SIGNAL_FUNC (show_credits), NULL);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-	menuitem = gtk_menu_item_new_with_mnemonic ("_Exit");
-    g_signal_connect(G_OBJECT (menuitem), "activate",
-                                        GTK_SIGNAL_FUNC (shutdown_app), NULL);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-    mainMenuItem = gtk_menu_item_new_with_label("File");
-    gtk_menu_item_set_submenu( GTK_MENU_ITEM(mainMenuItem), menu);
-
     menu_bar = gtk_menu_bar_new();
     gtk_box_pack_start(GTK_BOX(menuMainBox), menu_bar, FALSE, FALSE, 2);
 
+    mainMenuItem = gtk_menu_item_new_with_label("File");
     gtk_menu_bar_append( GTK_MENU_BAR (menu_bar), mainMenuItem );
+
+    menu = gtk_menu_new ();
+    gtk_menu_item_set_submenu( GTK_MENU_ITEM(mainMenuItem), menu);
+
+    menuitem = gtk_menu_item_new_with_mnemonic ("_Change Library");
+    g_signal_connect(G_OBJECT (menuitem), "activate",
+                                        GTK_SIGNAL_FUNC (pickNewLocation), NULL);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+    menuitem = gtk_menu_item_new_with_mnemonic ("_Aquire");
+    g_signal_connect(G_OBJECT (menuitem), "activate",
+                                        GTK_SIGNAL_FUNC (startAquireOperation), NULL);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+    menuitem = gtk_menu_item_new_with_mnemonic ("_Exit");
+    g_signal_connect(G_OBJECT (menuitem), "activate",
+                                        GTK_SIGNAL_FUNC (shutdown_app), NULL);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+    mainMenuItem = gtk_menu_item_new_with_label("Help");
+    gtk_menu_bar_append( GTK_MENU_BAR (menu_bar), mainMenuItem );
+
+    menu = gtk_menu_new ();
+    gtk_menu_item_set_submenu( GTK_MENU_ITEM(mainMenuItem), menu);
+
+    menuitem = gtk_menu_item_new_with_mnemonic ("_About");
+    g_signal_connect(G_OBJECT (menuitem), "activate",
+                                        GTK_SIGNAL_FUNC (show_credits), NULL);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
     paned = gtk_hpaned_new ();
     gtk_paned_set_position (GTK_PANED (paned), 150);
