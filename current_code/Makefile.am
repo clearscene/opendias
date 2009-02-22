@@ -6,12 +6,8 @@ SUBDIRS = src po \
 
 opendiasdocdir = ${prefix}/doc/opendias
 opendiasdoc_DATA = \
-	README\
-	COPYING\
-	AUTHORS\
-	ChangeLog\
-	INSTALL\
-	NEWS
+	ChangeLog
+
 
 EXTRA_DIST = $(opendiasdoc_DATA)
 
