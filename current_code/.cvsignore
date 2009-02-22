@@ -1,0 +1,11 @@
+.anjuta
+Makefile
+aclocal.m4
+autom4te.cache
+config.log
+config.status
+intltool-extract.in
+intltool-merge.in
+intltool-update.in
+mkinstalldirs
+stamp-h1
