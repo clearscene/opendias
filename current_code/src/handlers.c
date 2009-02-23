@@ -45,92 +45,35 @@ void finishCredits(GtkWidget *thisWindow) {
 
 }
 
-void launch_url () {
-}
+void launch_url(GtkAboutDialog* about, const gchar* link, gpointer data)
+                { /*gnome_url_show(link, NULL);*/ }
 
 void show_credits () {
-/*
-    GtkWidget *Cwindow, *vbox, *lab, *button, *image;
-    GdkPixbuf *pixBuf;
-    PangoFontDescription * bold;
+
     char *tmp;
-
-    Cwindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_signal_connect (Cwindow, "delete_event", 
-                        G_CALLBACK(finishCredits), Cwindow);
-    gtk_window_set_title (GTK_WINDOW (Cwindow), "openDIAS: Credits");
-    gtk_window_set_default_size (GTK_WINDOW (Cwindow), 300, 180);
-    gtk_window_set_modal (GTK_WINDOW (Cwindow), TRUE);
-    gtk_window_set_position(GTK_WINDOW(Cwindow), GTK_WIN_POS_CENTER);
-    /*gtk_window_set_icon (GTK_WINDOW (Cwindow), "main.ico");*/
-
-    vbox = gtk_vbox_new(FALSE, 2);
+    const gchar* authors[] = { "Wayne Booth", NULL };
+    const gchar* license = 
+		"This library is free software; you can redistribute it and/or\n"
+                "modify it under the terms of the GNU Library General Public License as\n"
+                "published by the Free Software Foundation; either version 2 of the\n"
+                "License, or (at your option) any later version.\n"
+                "\n"
+                "This software is distributed in the hope that it will be useful,\n"
+                "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+                "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
+                "Library General Public License for more details.\n"
+                "\n";
 
     tmp = g_strdup(PACKAGE_DATA_DIR);
     conCat(&tmp, "/../share/opendias/openDIAS.png");
-    pixBuf = gdk_pixbuf_new_from_file_at_scale(tmp, 150, -1, TRUE, NULL);
-    free(tmp);
-    image = gtk_image_new_from_pixbuf (pixBuf);
-    gtk_box_pack_start (GTK_BOX (vbox), image, FALSE, FALSE, 2);
+    GdkPixbuf *pixBuf = gdk_pixbuf_new_from_file_at_scale(tmp, 150, -1, TRUE, NULL);
 
-    bold = pango_font_description_new();
-    pango_font_description_set_weight(bold, PANGO_WEIGHT_BOLD);
-    lab = gtk_label_new ("openDIAS");
-    gtk_widget_modify_font(lab, bold); 
-
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
-
-    lab = gtk_label_new ("the 'Document Imaging & Archive System'.");
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
-
-    lab = gtk_label_new ("by Wayne Booth");
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
-
-    lab = gtk_label_new ("see: http://essentialcollections.co.uk/opendias");
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
-
-    lab = gtk_label_new ("----------------------");
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
-
-    tmp = g_strdup("App Version: ");
-    conCat(&tmp, "0.3.2");
-    lab = gtk_label_new (tmp);
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
-    free(tmp);
-
-    tmp = g_strdup("Database Version: ");
-    conCat(&tmp, "2.0");
-    lab = gtk_label_new (tmp);
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
-    free(tmp);
-
-    button = gtk_button_new();
-    gtk_button_set_label(GTK_BUTTON(button), "OK");
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                                   G_CALLBACK (finishCredits),
-				   GTK_WINDOW (Cwindow));
-    gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-    gtk_container_add (GTK_CONTAINER (Cwindow), vbox);
-    gtk_widget_show_all (Cwindow);
-*/
-    //######################################################
-
-//    GtkWidget *dialog;
-
-//    dialog = gtk_about_dialog_new();
-//    gtk_about_dialog_set_version(dialog, "0.3.3");
-//    gtk_about_dialog_set_license(dialog, "GNU General Public License v2.0");
-/*    gtk_about_dialog_set_comments(dialog, "openDIAS: the 'Document Imaging & Archive System'.");
-    gtk_about_dialog_set_website(dialog, "http://essentialcollections.co.uk/opendias/");
-    gtk_about_dialog_set_website_label(dialog, "see http://essentialcollections.co.uk/opendias");
-    //gtk_about_dialog_set_authors(dialog, "Wayne Booth", NULL);
-    gtk_about_dialog_set_logo(dialog, pixBuf);
-*/
+    gtk_about_dialog_set_url_hook(&launch_url, 0, 0);
     gtk_show_about_dialog(NULL, 
                             "version", "0.3.3",
-                            "license", "GNU General Public License v2.0",
+                            "license", license,
                             "comments", "openDIAS: the 'Document Imaging & Archive System'.",
-                            "url_hook", launch_url, NULL, NULL,
+			    "authors", authors,
                             "website", "http://essentialcollections.co.uk/opendias",
                             "website_label", "see http://essentialcollections.co.uk/opendias",
                             "logo", pixBuf,
@@ -139,6 +82,7 @@ void show_credits () {
 }
 
 GList *filterDocsWithTags(GList *tags, GList *docs) {
+
     char *docList, *sql, *tmp;
     GList *li, *ta, *newDocList;
 
