@@ -19,7 +19,7 @@
 #ifndef SCAN
 #define SCAN
 
-extern void startAquireOperation(void);
-extern void finishAquireOperation(GtkWidget *);
+extern void startAcquireOperation(void);
+extern void finishAcquireOperation(GtkWidget *);
 
 #endif /* SCAN */

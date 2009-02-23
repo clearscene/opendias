@@ -543,9 +543,9 @@ extern void create_gui (void) {
                                         GTK_SIGNAL_FUNC (pickNewLocation), NULL);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
-    menuitem = gtk_menu_item_new_with_mnemonic ("_Aquire");
+    menuitem = gtk_menu_item_new_with_mnemonic ("_Acquire");
     g_signal_connect(G_OBJECT (menuitem), "activate",
-                                        GTK_SIGNAL_FUNC (startAquireOperation), NULL);
+                                        GTK_SIGNAL_FUNC (startAcquireOperation), NULL);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
     menuitem = gtk_menu_item_new_with_mnemonic ("_Exit");
@@ -685,9 +685,9 @@ extern void create_gui (void) {
     gtk_box_pack_start (GTK_BOX (vbox), hrule, FALSE, FALSE, 10);
 
     button = gtk_button_new();
-    gtk_button_set_label(GTK_BUTTON(button), "Aquire New");
+    gtk_button_set_label(GTK_BUTTON(button), "Acquire New");
     g_signal_connect (GTK_OBJECT (button), "clicked",
-                                    G_CALLBACK (startAquireOperation),
+                                    G_CALLBACK (startAcquireOperation),
                                     NULL);
     gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 2);
 

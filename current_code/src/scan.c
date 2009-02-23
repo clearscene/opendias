@@ -149,7 +149,7 @@ void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
 
     // Open the document for editing.
     widget = g_hash_table_lookup(SCANWIDGETS, "window");
-    finishAquireOperation (widget);
+    finishAcquireOperation (widget);
     populate_gui();
     populate_docInformation(sql);
 
@@ -249,7 +249,7 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
     status = sane_start (openDeviceHandle);
     if(status == SANE_STATUS_GOOD)
         {
-        // Aquire Image & Save Document
+        // Acquire Image & Save Document
         if ((file = fopen("/tmp/tmp.pnm", "w")) == NULL)
             {
             debug_message("could not open file for output", ERROR);
@@ -398,7 +398,7 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
 
     // Open the document for editing.
     widget = g_hash_table_lookup(SCANWIDGETS, "window");
-    finishAquireOperation (widget);
+    finishAcquireOperation (widget);
     populate_gui();
     populate_docInformation(sql);
 
@@ -406,7 +406,7 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
 #endif // CAN_SCAN //
 
 
-extern void startAquireOperation(void) {
+extern void startAcquireOperation(void) {
 
     GtkWidget *window, *vbox, *lab, *notebook, *frame, *vvbox;
     char *instructionText;
@@ -430,8 +430,8 @@ extern void startAquireOperation(void) {
     SCANWIDGETS = g_hash_table_new(g_str_hash, g_str_equal);
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     g_hash_table_insert(SCANWIDGETS, "window", window);
-    g_signal_connect (window, "delete_event", GTK_SIGNAL_FUNC(finishAquireOperation), window);
-    gtk_window_set_title (GTK_WINDOW (window), "openDIAS: Aquire");
+    g_signal_connect (window, "delete_event", GTK_SIGNAL_FUNC(finishAcquireOperation), window);
+    gtk_window_set_title (GTK_WINDOW (window), "openDIAS: Acquire");
     gtk_window_set_default_size (GTK_WINDOW (window), 550, 300);
     gtk_window_set_modal (GTK_WINDOW (window), TRUE);
     gtk_window_set_position(GTK_WINDOW (window), GTK_WIN_POS_CENTER);
@@ -467,7 +467,7 @@ extern void startAquireOperation(void) {
     frame = gtk_frame_new (NULL);
     vvbox = gtk_vbox_new(FALSE, 2);
     gtk_container_add (GTK_CONTAINER (frame), vvbox);
-    lab = gtk_label_new ("Aquire a new document");
+    lab = gtk_label_new ("Acquire a new document");
     gtk_label_set_width_chars(GTK_LABEL(lab), 18);
     gtk_box_pack_start (GTK_BOX (vvbox), lab, FALSE, FALSE, 2);
     instructionText = g_strdup("Use this screen to add a new document to your arhive. \n");
@@ -480,7 +480,7 @@ extern void startAquireOperation(void) {
     lab = gtk_label_new (instructionText);
     free(instructionText);
     gtk_box_pack_start (GTK_BOX (vvbox), lab, FALSE, FALSE, 2);
-    lab = gtk_label_new ("Aquire a new document");
+    lab = gtk_label_new ("Acquire a new document");
     gtk_notebook_append_page(GTK_NOTEBOOK(notebook), frame, lab);
 
 #ifdef CAN_READODF
@@ -689,7 +689,7 @@ extern void startAquireOperation(void) {
 
 }
 
-extern void finishAquireOperation(GtkWidget *window) {
+extern void finishAcquireOperation(GtkWidget *window) {
 
 #ifdef CAN_SCAN
     debug_message("sane_exit", DEBUGM);
