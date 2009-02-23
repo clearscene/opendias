@@ -45,8 +45,11 @@ void finishCredits(GtkWidget *thisWindow) {
 
 }
 
-void show_credits () {
+void launch_url () {
+}
 
+void show_credits () {
+/*
     GtkWidget *Cwindow, *vbox, *lab, *button, *image;
     GdkPixbuf *pixBuf;
     PangoFontDescription * bold;
@@ -109,6 +112,29 @@ void show_credits () {
     gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
     gtk_container_add (GTK_CONTAINER (Cwindow), vbox);
     gtk_widget_show_all (Cwindow);
+*/
+    //######################################################
+
+//    GtkWidget *dialog;
+
+//    dialog = gtk_about_dialog_new();
+//    gtk_about_dialog_set_version(dialog, "0.3.3");
+//    gtk_about_dialog_set_license(dialog, "GNU General Public License v2.0");
+/*    gtk_about_dialog_set_comments(dialog, "openDIAS: the 'Document Imaging & Archive System'.");
+    gtk_about_dialog_set_website(dialog, "http://essentialcollections.co.uk/opendias/");
+    gtk_about_dialog_set_website_label(dialog, "see http://essentialcollections.co.uk/opendias");
+    //gtk_about_dialog_set_authors(dialog, "Wayne Booth", NULL);
+    gtk_about_dialog_set_logo(dialog, pixBuf);
+*/
+    gtk_show_about_dialog(NULL, 
+                            "version", "0.3.3",
+                            "license", "GNU General Public License v2.0",
+                            "comments", "openDIAS: the 'Document Imaging & Archive System'.",
+                            "url_hook", launch_url, NULL, NULL,
+                            "website", "http://essentialcollections.co.uk/opendias",
+                            "website_label", "see http://essentialcollections.co.uk/opendias",
+                            "logo", pixBuf,
+                            NULL);
 
 }
 
