@@ -49,21 +49,19 @@ void show_credits () {
 
     GtkWidget *Cwindow, *vbox, *lab, *button, *image;
     GdkPixbuf *pixBuf;
+    PangoFontDescription * bold;
     char *tmp;
 
     Cwindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     g_signal_connect (Cwindow, "delete_event", 
                         G_CALLBACK(finishCredits), Cwindow);
     gtk_window_set_title (GTK_WINDOW (Cwindow), "openDIAS: Credits");
-//    gtk_window_set_default_size (GTK_WINDOW (Cwindow), 300, 300);
+    gtk_window_set_default_size (GTK_WINDOW (Cwindow), 300, 180);
     gtk_window_set_modal (GTK_WINDOW (Cwindow), TRUE);
     gtk_window_set_position(GTK_WINDOW(Cwindow), GTK_WIN_POS_CENTER);
     /*gtk_window_set_icon (GTK_WINDOW (Cwindow), "main.ico");*/
 
     vbox = gtk_vbox_new(FALSE, 2);
-
-    lab = gtk_label_new ("openDIAS: the 'Document Imaging & Archive System'.");
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
 
     tmp = g_strdup(PACKAGE_DATA_DIR);
     conCat(&tmp, "/../share/opendias/openDIAS.png");
@@ -71,6 +69,16 @@ void show_credits () {
     free(tmp);
     image = gtk_image_new_from_pixbuf (pixBuf);
     gtk_box_pack_start (GTK_BOX (vbox), image, FALSE, FALSE, 2);
+
+    bold = pango_font_description_new();
+    pango_font_description_set_weight(bold, PANGO_WEIGHT_BOLD);
+    lab = gtk_label_new ("openDIAS");
+    gtk_widget_modify_font(lab, bold); 
+
+    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
+
+    lab = gtk_label_new ("the 'Document Imaging & Archive System'.");
+    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
 
     lab = gtk_label_new ("by Wayne Booth");
     gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
