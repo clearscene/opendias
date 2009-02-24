@@ -41,7 +41,7 @@ void setup (void) {
     free(scansDir);
 
     // Open (& maybe update) the database.
-    connect_db ();
+    connect_db (0);
 
 }
 

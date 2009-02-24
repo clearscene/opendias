@@ -28,7 +28,7 @@
 sqlite3 *DBH;
 GHashTable *RECORDSET;
 
-void open_db (char *db) {
+void open_db (char *db, int dontCreate) {
 
     int rc;
     rc = sqlite3_open(db, &DBH);
@@ -42,7 +42,7 @@ void open_db (char *db) {
     RECORDSET = g_hash_table_new(g_str_hash, g_str_equal);
 }
 
-extern void connect_db () {
+extern int connect_db (int dontCreate) {
 
     int version = 0, i;
     char *sql, *db, *tmp, *ver;
@@ -52,18 +52,28 @@ extern void connect_db () {
     conCat(&db, "openDIAS.sqlite3");
     if(g_file_test(db, G_FILE_TEST_EXISTS))
         {
-        open_db (db);
+        open_db (db, dontCreate);
+        debug_message("Connected to database.", INFORMATION);
         if(runquery_db("1", "SELECT version FROM version"))
             {
             version = atoi(readData_db("1", "version"));
             free_recordset("1");
             }
         }
-    else
+
+
+    if(!version && !dontCreate)
         {
         debug_message("Creating new database.", INFORMATION);
         open_db (db);
         }
+
+    if(!version)
+	{
+        debug_message("Could not connct to the database & have been asked not to create one.", WARNING);
+	free(db);
+	return 1;
+	}
     free(db);
 
     // Bring the DB up-2-date
@@ -88,6 +98,8 @@ extern void connect_db () {
         free(ver);
         free(tmp);
         }
+
+    return 0;
 
 }
 

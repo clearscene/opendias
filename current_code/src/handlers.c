@@ -39,18 +39,13 @@ void shutdown_app (void) {
 }
 
 
-void finishCredits(GtkWidget *thisWindow) {
-
-    gtk_widget_destroy (thisWindow);
-
-}
-
 void launch_url(GtkAboutDialog* about, const gchar* link, gpointer data)
                 { /*gnome_url_show(link, NULL);*/ }
 
 void show_credits () {
-
+    GdkPixbuf *pixBuf;
     char *tmp;
+
     const gchar* authors[] = { "Wayne Booth", NULL };
     const gchar* license = 
 		"This library is free software; you can redistribute it and/or\n"
@@ -440,7 +435,7 @@ void docList_dblClick (GtkTreeView *select, gpointer data) {
         }
 }
 
-void connectToNewStore (char *newLocation) {
+int connectToNewStore (char *newLocation) {
 
     // Free up the UI enrties.
 
@@ -449,8 +444,16 @@ void connectToNewStore (char *newLocation) {
     free(BASE_DIR);
     BASE_DIR = newLocation;
 
-    connect_db();
-    populate_gui();
+    if(connect_db(1))
+	{
+	debug_message("Could not find a data store at that location. Try again.", ERROR);
+	return 1;
+	}
+    else
+	{
+	populate_gui();
+	return 0;
+	}
 
 }
 
@@ -471,11 +474,12 @@ void pickNewLocation () {
     gtk_file_filter_add_pattern( filter, "openDIAS.sqlite3" );
     gtk_file_chooser_add_filter( GTK_FILE_CHOOSER(fileChooser), filter );
 
-    if (gtk_dialog_run (GTK_DIALOG (fileChooser)) == GTK_RESPONSE_ACCEPT)
-        {
-        fileName = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(fileChooser));
-        connectToNewStore(fileName);
-        }
+    do {
+	if (gtk_dialog_run (GTK_DIALOG (fileChooser)) == GTK_RESPONSE_ACCEPT)
+            {
+            fileName = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(fileChooser));
+            }
+	} while (connectToNewStore(fileName));
 
     gtk_widget_destroy (fileChooser);
 }
