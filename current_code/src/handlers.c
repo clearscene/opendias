@@ -26,12 +26,16 @@
 #include "utils.h"
 #include "debug.h"
 
-void shutdown_app (void) {
-
+void shutdown_interface (void) {
     GtkWidget *window;
     window = g_hash_table_lookup(WIDGETS, "mainWindow");
     gtk_widget_destroy(window);
     g_hash_table_destroy(WIDGETS);
+}
+
+void shutdown_app (void) {
+
+    shutdown_interface();
     close_db ();
     free(BASE_DIR);
     gtk_main_quit ();
@@ -61,7 +65,7 @@ void show_credits () {
 
     tmp = g_strdup(PACKAGE_DATA_DIR);
     conCat(&tmp, "/../share/opendias/openDIAS.png");
-    GdkPixbuf *pixBuf = gdk_pixbuf_new_from_file_at_scale(tmp, 150, -1, TRUE, NULL);
+    pixBuf = gdk_pixbuf_new_from_file_at_scale(tmp, 150, -1, TRUE, NULL);
 
     gtk_about_dialog_set_url_hook(&launch_url, 0, 0);
     gtk_show_about_dialog(NULL, 
@@ -151,6 +155,7 @@ void populate_selected (void) {
     GtkWidget *filteredTags;
     char *sql;
 
+    debug_message("Enter handlers::populate_selected()", DEBUGM);
     filteredTags = g_hash_table_lookup(WIDGETS, "filterTags");
 
     //free current dropdown store
@@ -255,6 +260,7 @@ void populate_available (void) {
         {
         do  {
             /* Append a row and fill in some data */
+	    debug_message(readData_db("1", "tagname"), DEBUGM);
             gtk_list_store_append (store, &iter);
             gtk_list_store_set (store, &iter,
                                     TAG_ID, g_strdup(readData_db("1", "tags.tagid")),
@@ -438,6 +444,7 @@ void docList_dblClick (GtkTreeView *select, gpointer data) {
 int connectToNewStore (char *newLocation) {
 
     // Free up the UI enrties.
+    //shutdown_interface();
 
     close_db();
 
@@ -451,6 +458,7 @@ int connectToNewStore (char *newLocation) {
 	}
     else
 	{
+	//create_gui();
 	populate_gui();
 	return 0;
 	}

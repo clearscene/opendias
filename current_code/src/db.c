@@ -28,7 +28,7 @@
 sqlite3 *DBH;
 GHashTable *RECORDSET;
 
-void open_db (char *db, int dontCreate) {
+void open_db (char *db) {
 
     int rc;
     rc = sqlite3_open(db, &DBH);
@@ -52,7 +52,7 @@ extern int connect_db (int dontCreate) {
     conCat(&db, "openDIAS.sqlite3");
     if(g_file_test(db, G_FILE_TEST_EXISTS))
         {
-        open_db (db, dontCreate);
+        open_db (db);
         debug_message("Connected to database.", INFORMATION);
         if(runquery_db("1", "SELECT version FROM version"))
             {
@@ -92,7 +92,6 @@ extern int connect_db (int dontCreate) {
             {
             debug_message(sql, INFORMATION);
             runquery_db("1", sql);
-            //free_recordset("1");
             free(sql);
             }
         free(ver);
@@ -108,6 +107,8 @@ static int callback(char *recordSetKey, int argc, char **argv, char **azColName)
     int i;
     GList *rSet;
     GHashTable *row;
+
+    debug_message("Reading row\n", DEBUGM);
 
     /* Create row continer */
     row = g_hash_table_new(g_str_hash, g_str_equal);
@@ -204,6 +205,11 @@ extern int runquery_db (char *recordSetKey, char *sql) {
     char *zErrMsg, *tmp;
     GList *rSet;
 
+    tmp = g_strdup("Running Query: ");
+    conCat(&tmp, sql);
+    debug_message(tmp, DEBUGM);
+    free(tmp);
+
     /*  Free the corrent recordset - were gonna overwrite_mode
         then, create a new container for the row data and pointers */
     rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
@@ -228,10 +234,18 @@ extern int runquery_db (char *recordSetKey, char *sql) {
             sqlite3_free(zErrMsg);
         }
 
+    debug_message("Checking for a valid key:", DEBUGM);
+    debug_message(recordSetKey, DEBUGM);
     if(g_hash_table_lookup(RECORDSET, recordSetKey))
+	{
+	debug_message("Recordset haad a value", WARNING);
         return 1;
+	}
     else
+	{
+	debug_message("Some SQL failure: Recordset not saved", WARNING);
         return 0;
+	}
 
 }
 
@@ -276,6 +290,8 @@ extern void free_recordset (char *recordSetKey) {
     GHashTableIter iter;
     gpointer key, value;
 
+    debug_message("Free recordset", DEBUGM);
+
     for(li = rSet; li != NULL; li = g_list_next(li)) 
         {
         g_hash_table_iter_init (&iter, li->data);
@@ -297,6 +313,8 @@ extern void close_db () {
 
     GHashTableIter iter;
     gpointer key, value;
+
+    debug_message("Closing database", DEBUGM);
 
     // foreach record in the g_hash_table RECORDSET, loop and call 'free_recordset'
     g_hash_table_iter_init (&iter, RECORDSET);
