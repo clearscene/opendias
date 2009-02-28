@@ -26,9 +26,7 @@ extern void debug_message(char *message, const int verbosity) {
     if(VERBOSITY >= verbosity)
         {
         if(verbosity == ERROR)
-            {
             userMessage(message, GTK_MESSAGE_ERROR);
-            }
         else
             g_message(message, NULL);
         }
