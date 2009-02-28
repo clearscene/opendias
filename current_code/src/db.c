@@ -53,14 +53,15 @@ extern int connect_db (int dontCreate) {
     if(g_file_test(db, G_FILE_TEST_EXISTS))
         {
         open_db (db);
+
         debug_message("Connected to database.", INFORMATION);
+
         if(runquery_db("1", "SELECT version FROM version"))
             {
             version = atoi(readData_db("1", "version"));
-            free_recordset("1");
             }
+        free_recordset("1");
         }
-
 
     if(!version && !dontCreate)
         {
@@ -119,8 +120,18 @@ static int callback(char *recordSetKey, int argc, char **argv, char **azColName)
 
     /* Save the new row away - for later retrieval */
     rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
-    rSet = g_list_append(rSet, row);
-    g_hash_table_replace(RECORDSET, recordSetKey, rSet);
+    if(rSet)
+        {
+        rSet = g_list_append(rSet, row);
+        g_hash_table_replace(RECORDSET, recordSetKey, rSet);
+        }
+    else
+        {
+        rSet = (GList*)NULL;
+        rSet = g_list_append(rSet, row);
+        g_hash_table_insert(RECORDSET, recordSetKey, rSet);
+        }
+
     return 0;
 }
 
@@ -215,8 +226,6 @@ extern int runquery_db (char *recordSetKey, char *sql) {
     rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
     if(rSet)
         free_recordset(recordSetKey);
-    rSet = NULL;
-    g_hash_table_insert(RECORDSET, recordSetKey, rSet);
 
     /* Execute the query */
     rc = sqlite3_exec(DBH, sql, (void*)callback, recordSetKey, &zErrMsg);
