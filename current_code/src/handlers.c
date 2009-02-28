@@ -26,6 +26,7 @@
 #include "utils.h"
 #include "debug.h"
 
+
 void shutdown_interface (void) {
     GtkWidget *window;
     window = g_hash_table_lookup(WIDGETS, "mainWindow");
@@ -43,8 +44,11 @@ void shutdown_app (void) {
 }
 
 
-void launch_url(GtkAboutDialog* about, const gchar* link, gpointer data)
-                { /*gnome_url_show(link, NULL);*/ }
+void launch_url(GtkAboutDialog* about, const gchar* link, gpointer data) {
+ 
+    //gnome_url_show(link, NULL);
+
+}
 
 void show_credits () {
     GdkPixbuf *pixBuf;
@@ -263,9 +267,9 @@ void populate_available (void) {
 	    debug_message(readData_db("1", "tagname"), DEBUGM);
             gtk_list_store_append (store, &iter);
             gtk_list_store_set (store, &iter,
-                                    TAG_ID, g_strdup(readData_db("1", "tags.tagid")),
-                                    TAG_NAME, g_strdup(readData_db("1", "tagname")),
-                                    TAG_COUNT, g_strdup(readData_db("1", "cnt")),
+                                    TAG_ID, readData_db("1", "tags.tagid"),
+                                    TAG_NAME, readData_db("1", "tagname"),
+                                    TAG_COUNT, readData_db("1", "cnt"),
                                     -1);
             } while (nextRow("1"));
         free_recordset("1");
