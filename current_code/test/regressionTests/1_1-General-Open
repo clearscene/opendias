@@ -1,0 +1,20 @@
+from ldtp import *
+#from ldtputils import *
+
+try:
+	logMsg = '1_1-General-Open: Open and close the application.'
+	log (logMsg, 'teststart')
+	log ('test test test', 'warning')
+	launchapp ('/bin/bash', ['test/runMe'])
+	guitimeout (90)
+	if waittillguiexist ("frmopenDIAS") == 0:
+		raise LdtpExecutionError ('Cannot open application')
+	log ('test 2 test 2 test', 'warning')
+	if waittillguinotexist ("frmopenDIAS") == 0:
+		raise LdtpExecutionError ('Cannot close application')
+	wait(10)
+	log (logMsg, 'pass')
+except LdtpExecutionError, msg:
+	log (msg, 'cause')
+	log (logMsg, 'fail')
+log (logMsg, 'testend')
