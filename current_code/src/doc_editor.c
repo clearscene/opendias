@@ -49,8 +49,15 @@ struct imageInformation {
 
 GHashTable *EDITORWIDGETS;
 
-extern void openDocEditor_window (char *documentId) {
+void closeDocEditor () {
 
+    if(EDITORWIDGETS && g_hash_table_size(EDITORWIDGETS))
+        g_hash_table_destroy(EDITORWIDGETS);
+
+}
+
+extern void openDocEditor_window (char *documentId) {
+/*
     GtkWidget *window, *content;
 
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -59,12 +66,13 @@ extern void openDocEditor_window (char *documentId) {
     gtk_window_set_default_size (GTK_WINDOW (window), 550, 400);
     gtk_window_set_modal (GTK_WINDOW (window), TRUE);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-    /*gtk_window_set_icon (GTK_WINDOW (window), "main.ico");*/
+    //gtk_window_set_icon (GTK_WINDOW (window), "main.ico");
 
     content = openDocEditor(documentId);
 
     gtk_container_add (GTK_CONTAINER (window), content);
     gtk_widget_show_all (window);
+*/
 }
 
 
@@ -78,6 +86,7 @@ void showHide_date (GObject *expander, GParamSpec *param, GtkWidget *cal) {
         {
         gtk_widget_hide(cal);
         }
+
 }
 
 void displayDate (GtkWidget *cal, GtkWidget *entry) {
@@ -92,9 +101,7 @@ void displayDate (GtkWidget *cal, GtkWidget *entry) {
     humanReadableDate = dateHuman(d, m, y);
     gtk_entry_set_text(GTK_ENTRY(entry), humanReadableDate);
     free(humanReadableDate);
-    free(d);
-    free(m);
-    free(y);
+
 }
 
 void addTag (GtkButton *button, GtkWidget *newTag) {
@@ -109,22 +116,24 @@ void addTag (GtkButton *button, GtkWidget *newTag) {
     sql = g_strconcat("INSERT INTO tags (tagname) VALUES ('",
                 gtk_entry_get_text(GTK_ENTRY(newTag)), "') ", NULL);
     runquery_db("1", sql);
+    free(sql);
+    free_recordset("1");
     lastInserted = last_insert();
     sql = itoa(lastInserted, 10);
-    gtk_entry_set_text(GTK_ENTRY(newTag), "");
 
     filterTags = g_hash_table_lookup(EDITORWIDGETS, "tags");
     store = GTK_LIST_STORE (gtk_tree_view_get_model(GTK_TREE_VIEW (filterTags)));
     selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(filterTags));
 
-    /* Append a row and fill in some data */
+    // Append a row and fill in some data
     gtk_list_store_append (store, &iter);
     gtk_list_store_set (store, &iter,
                              0, sql,
                              1, gtk_entry_get_text(GTK_ENTRY(newTag)),
                              -1);
     gtk_tree_selection_select_iter(selection, &iter);
-
+    free(sql);
+    gtk_entry_set_text(GTK_ENTRY(newTag), "");
 
 }
 
@@ -136,8 +145,10 @@ static void saveTag (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, 
     sql = g_strconcat("INSERT INTO doc_tags (docid, tagid) VALUES (",
                 documentId, ", ", foundData, ") ", NULL);
     runquery_db("1", sql);
+    free_recordset("1");
     free(sql);
     g_free (foundData);
+
 }
 
 void saveDoc (GtkWidget *button, char *documentId) {
@@ -153,6 +164,7 @@ void saveDoc (GtkWidget *button, char *documentId) {
     debug_message("save record", DEBUGM);
     widget = g_hash_table_lookup(EDITORWIDGETS, "docdate");
     gtk_calendar_get_date(GTK_CALENDAR(widget), &iy, &im, &id);
+    im = im+1;
     buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(g_hash_table_lookup(EDITORWIDGETS, "ocrtext")));
     gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(buffer), &start);
     gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(buffer), &end);
@@ -166,7 +178,7 @@ void saveDoc (GtkWidget *button, char *documentId) {
         WHERE docid = ?";
     vars = NULL;
     vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-    vars = g_list_append(vars, gtk_entry_get_text(GTK_ENTRY(g_hash_table_lookup(EDITORWIDGETS, "title"))));
+    vars = g_list_append(vars, g_strdup(gtk_entry_get_text(GTK_ENTRY(g_hash_table_lookup(EDITORWIDGETS, "title")))));
     vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
     vars = g_list_append(vars, gtk_text_buffer_get_text(GTK_TEXT_BUFFER(buffer),&start,&end,FALSE));
     vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
@@ -182,6 +194,7 @@ void saveDoc (GtkWidget *button, char *documentId) {
     debug_message("save tags - del", DEBUGM);
     sql = g_strconcat("DELETE FROM doc_tags WHERE docid=",documentId, NULL);
     runquery_db("1", sql);
+    free_recordset("1");
     free(sql);
 
     debug_message("save tags - add", DEBUGM);
@@ -189,10 +202,13 @@ void saveDoc (GtkWidget *button, char *documentId) {
     selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
     gtk_tree_selection_selected_foreach(GTK_TREE_SELECTION(selection), (GtkTreeSelectionForeachFunc)saveTag, documentId);
 
+    closeDocEditor();
     populate_gui();
+
 }
 
 void doDelete (GtkButton *button, char *documentId) {
+/*
     char *sql, *tmp, *tmp2;
 
     sql = g_strdup("SELECT * FROM docs WHERE docid = ");
@@ -200,6 +216,7 @@ void doDelete (GtkButton *button, char *documentId) {
     if(!runquery_db("1", sql))
         {
         debug_message("Could not select record.", ERROR);
+        free_recordset("1");
         return;
         }
 
@@ -214,20 +231,23 @@ void doDelete (GtkButton *button, char *documentId) {
     unlink(tmp);
     free(tmp2);
     free(tmp);
+    free_recordset("1");
     free(sql);
 
     sql = g_strdup("DELETE FROM doc_tags WHERE docid = ");
     conCat(&sql, documentId);
     runquery_db("1", sql);
+    free_recordset("1");
     free(sql);
 
     sql = g_strdup("DELETE FROM docs WHERE docid = ");
     conCat(&sql, documentId);
     runquery_db("1", sql);
+    free_recordset("1");
     free(sql);
 
     populate_gui();
-
+*/
 }
 
 void checkDelete (GtkButton *button, GtkWidget *checkBut) {
@@ -245,7 +265,7 @@ void checkDelete (GtkButton *button, GtkWidget *checkBut) {
 
 }
 
-
+#ifdef CAN_SPEAK
 void readTextParser (GtkWidget *button, GtkWidget *entry) {
 
     char *textToRead = "";
@@ -265,7 +285,10 @@ void readTextParser (GtkWidget *button, GtkWidget *entry) {
 
     textToRead = gtk_text_buffer_get_text(GTK_TEXT_BUFFER(buffer),&start,&end,FALSE);
     readText(button, textToRead);
+    free(textToRead);
+
 }
+#endif // CAN_SPEAK //
 
 GdkPixbuf *getPixbufForThisImage(struct imageInformation *img, int width) {
 
@@ -292,12 +315,8 @@ GdkPixbuf *getPixbufForThisImage(struct imageInformation *img, int width) {
     free(filename);
 
     return pixBuf;
-}
 
-/*void imageDeleted (GtkImage *img) {
-    GdkPixbuf *pb = gtk_image_get_pixbuf(img);
-    free(pb);
-}*/
+}
 
 void placeImage (GdkPixbuf *pixBuf, GtkWidget *frame) {
 
@@ -322,7 +341,7 @@ void placeImage (GdkPixbuf *pixBuf, GtkWidget *frame) {
 }
 
 void previousPage (GtkButton *button, struct imageInformation *img) {
-
+/*
     GtkWidget *wid;
     char *tmp, *tmp2;
 
@@ -345,11 +364,11 @@ void previousPage (GtkButton *button, struct imageInformation *img) {
     placeImage(getPixbufForThisImage(img, 150), g_hash_table_lookup(EDITORWIDGETS, "frame"));
     wid = g_hash_table_lookup(EDITORWIDGETS, "next");
     gtk_widget_set_sensitive(GTK_WIDGET(wid), TRUE);
-
+*/
 }
 
 void nextPage (GtkButton *button, struct imageInformation *img) {
-
+/*
     GtkWidget *wid;
     char *tmp, *tmp2;
 
@@ -372,7 +391,7 @@ void nextPage (GtkButton *button, struct imageInformation *img) {
     placeImage(getPixbufForThisImage(img, 150), g_hash_table_lookup(EDITORWIDGETS, "frame"));
     wid = g_hash_table_lookup(EDITORWIDGETS, "prev");
     gtk_widget_set_sensitive(GTK_WIDGET(wid), TRUE);
-
+*/
 }
 
 void rescale(GtkComboBox *box, struct imageInformation *img) {
@@ -425,6 +444,7 @@ void updateSharpen(GtkToggleButton *button, struct imageInformation *img) {
         img->sharpen = 0;
 
     rescale(g_hash_table_lookup(EDITORWIDGETS, "zoomRate"), img);
+
 }
 
 void updateCrop(GtkToggleButton *button, struct imageInformation *img) {
@@ -435,6 +455,7 @@ void updateCrop(GtkToggleButton *button, struct imageInformation *img) {
         img->crop = 0;
 
     rescale(g_hash_table_lookup(EDITORWIDGETS, "zoomRate"), img);
+
 }
 
 void doZoomImage (GtkButton *button, struct imageInformation *img) {
@@ -453,7 +474,6 @@ void doZoomImage (GtkButton *button, struct imageInformation *img) {
     imgData.lines = img->lines * img->totPages;
     imgData.sharpen = 0;
     imgData.crop = 0;
-    free_recordset("1");
     //pixBuf = getPixbufForThisImage(&imgData, img->ppl);
 
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -462,7 +482,7 @@ void doZoomImage (GtkButton *button, struct imageInformation *img) {
     gtk_window_set_default_size (GTK_WINDOW (window), 550, 400);
     gtk_window_set_modal (GTK_WINDOW (window), TRUE);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-    /*gtk_window_set_icon (GTK_WINDOW (window), "main.ico");*/
+    //gtk_window_set_icon (GTK_WINDOW (window), "main.ico");
 
     vbox = gtk_vbox_new(FALSE, 2);
 
@@ -489,7 +509,7 @@ void doZoomImage (GtkButton *button, struct imageInformation *img) {
 
     gtk_box_pack_start (GTK_BOX (vbox),imageArea, FALSE, FALSE, 2);
 
-    /* --------------- */
+    // ---------------
 
     hbox = gtk_hbox_new(FALSE, 2);
 
@@ -542,7 +562,7 @@ extern GtkWidget *openDocEditor (char *documentId) {
 
     GtkWidget *frame, *hbox, *lab, *vbox, *mainTable, *previewFrame, *entry,
             *filterTags, *button, *scrollbar, *spacerBox, *expander,
-            *cal, *sureButton, *hbox3, *v2box, *scrolled_window;
+            *cal, *sureButton, *hbox3, *v2box, *scrolled_window, *frame2;
     GtkTextBuffer *buffer;
     GtkCellRenderer *renderer;
     GtkListStore *store;
@@ -557,16 +577,19 @@ extern GtkWidget *openDocEditor (char *documentId) {
     char *filename;
 #endif // CAN_READODF //
 
+    closeDocEditor();
     EDITORWIDGETS = g_hash_table_new(g_str_hash, g_str_equal);
     frame = gtk_frame_new (NULL);
     g_hash_table_insert(EDITORWIDGETS, "frame", frame);
     vbox = gtk_vbox_new(FALSE, 2);
     gtk_container_add (GTK_CONTAINER (frame), vbox);
 
-/*  lab = gtk_label_new ("openDIAS");
-    gtk_misc_set_alignment (GTK_MISC(lab), 0, 0);
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 2);
-*/
+//  lab = gtk_label_new ("openDIAS");
+//  gtk_misc_set_alignment (GTK_MISC(lab), 0, 0);
+//  gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 2);
+
+    debug_message(documentId, DEBUGM);
+
     sql = g_strdup("SELECT * FROM docs WHERE docid = ");
     conCat(&sql, documentId);
     if(!runquery_db("1", sql))
@@ -645,7 +668,7 @@ extern GtkWidget *openDocEditor (char *documentId) {
 
     gtk_box_pack_start (GTK_BOX (hbox), spacerBox, FALSE, FALSE, 2);
 
-    /* --------------- */
+    // ---------------
 
     mainTable = gtk_table_new(7, 11, FALSE);
     gtk_box_pack_start (GTK_BOX (hbox), mainTable, FALSE, FALSE, 2);
@@ -723,25 +746,27 @@ extern GtkWidget *openDocEditor (char *documentId) {
     free_recordset("1");
     free(sql);
 
+    frame2 = gtk_frame_new(NULL);
     entry = gtk_text_view_new();
     scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_container_add (GTK_CONTAINER (scrolled_window), entry);
-    gtk_table_attach (GTK_TABLE (mainTable), scrolled_window, 1, 7, 4, 5, GTK_FILL, GTK_FILL, 2, 2);
+    gtk_container_add(GTK_CONTAINER (frame2), scrolled_window);
+    gtk_table_attach (GTK_TABLE (mainTable), frame2, 1, 7, 4, 5, GTK_FILL, GTK_FILL, 2, 2);
 
     //gtk_container_set_border_width(GTK_CONTAINER(entry), 2);
     g_hash_table_insert(EDITORWIDGETS, "ocrtext", entry);
-    gtk_widget_set_size_request(GTK_WIDGET(entry), 350, 80);
+    gtk_widget_set_size_request(GTK_WIDGET(entry), 250, 80);
     gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(entry), GTK_WRAP_WORD_CHAR);
     buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(entry));
     gtk_text_buffer_set_text(buffer, ocrText, strlen(ocrText));
-/*    adj = gtk_adjustment_new(0.0,0.0,0.0,0.0,0.0,0.0);
-    gtk_widget_set_scroll_adjustments (GTK_WIDGET(entry), NULL, GTK_ADJUSTMENT (adj));
-    scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(adj));
-    g_signal_connect(GTK_OBJECT (entry), "scroll-event",
-                                            G_CALLBACK(std_scrollEvent), GTK_RANGE(scrollbar)); 
-    hbox2 = gtk_hbox_new (FALSE, 2);
-    gtk_box_pack_start (GTK_BOX (hbox2), entry, FALSE, TRUE, 0);
-    gtk_box_pack_start (GTK_BOX (hbox2), scrollbar, FALSE, FALSE, 0); */
+//  adj = gtk_adjustment_new(0.0,0.0,0.0,0.0,0.0,0.0);
+//  gtk_widget_set_scroll_adjustments (GTK_WIDGET(entry), NULL, GTK_ADJUSTMENT (adj));
+//  scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(adj));
+//  g_signal_connect(GTK_OBJECT (entry), "scroll-event",
+//                                          G_CALLBACK(std_scrollEvent), GTK_RANGE(scrollbar)); 
+//  hbox2 = gtk_hbox_new (FALSE, 2);
+//  gtk_box_pack_start (GTK_BOX (hbox2), entry, FALSE, TRUE, 0);
+//  gtk_box_pack_start (GTK_BOX (hbox2), scrollbar, FALSE, FALSE, 0);
     free(ocrText);
 
 #ifdef CAN_SPEAK
@@ -766,7 +791,7 @@ extern GtkWidget *openDocEditor (char *documentId) {
     g_hash_table_insert(EDITORWIDGETS, "tags", filterTags);
     selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(filterTags));
     gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
-    gtk_widget_set_size_request(GTK_WIDGET(filterTags), -1, 200);
+    gtk_widget_set_size_request(GTK_WIDGET(filterTags), -1, 50);
     renderer = gtk_cell_renderer_text_new ();
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW (filterTags),
                                     -1,
@@ -774,7 +799,7 @@ extern GtkWidget *openDocEditor (char *documentId) {
                                     renderer,
                                     "text", 1,
                                     NULL);
-    //gtk_cell_renderer_set_fixed_size(renderer, -1, 9);
+    gtk_cell_renderer_set_fixed_size(renderer, -1, 9);
     
     gtk_tree_view_set_model (GTK_TREE_VIEW (filterTags), GTK_TREE_MODEL (store));
     sql = g_strdup(
@@ -791,7 +816,7 @@ extern GtkWidget *openDocEditor (char *documentId) {
     if(runquery_db("1", sql))
         {
         do  {
-            /* Append a row and fill in some data */
+            // Append a row and fill in some data
             gtk_list_store_append (store, &iter);
             gtk_list_store_set (store, &iter,
                                     0, readData_db("1", "tagid"),
@@ -810,10 +835,12 @@ extern GtkWidget *openDocEditor (char *documentId) {
     scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(adj));
     g_signal_connect(GTK_OBJECT (filterTags), "scroll-event",
                                             G_CALLBACK(std_scrollEvent), GTK_RANGE(scrollbar));
+    frame2 = gtk_frame_new(NULL);
     hbox3 = gtk_hbox_new (FALSE, 2);
     gtk_box_pack_start (GTK_BOX (hbox3), filterTags, TRUE, TRUE, 0);
     gtk_box_pack_start (GTK_BOX (hbox3), scrollbar, FALSE, FALSE, 0);
-    gtk_table_attach (GTK_TABLE (mainTable), hbox3, 1, 3, 6, 10, GTK_FILL, GTK_FILL, 2, 2);
+    gtk_container_add(GTK_CONTAINER (frame2), hbox3);
+    gtk_table_attach (GTK_TABLE (mainTable), frame2, 1, 3, 6, 10, GTK_FILL, GTK_FILL, 2, 2);
 
     entry = gtk_entry_new();
     g_hash_table_insert(EDITORWIDGETS, "newtags", entry);

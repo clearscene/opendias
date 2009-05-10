@@ -26,7 +26,8 @@ enum {
     ERROR,
     WARNING,
     INFORMATION,
-    DEBUGM
+    DEBUGM,
+    SQLDEBUG
 };
 
 extern void debug_message(char *, const int);

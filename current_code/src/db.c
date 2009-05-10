@@ -28,18 +28,23 @@
 sqlite3 *DBH;
 GHashTable *RECORDSET;
 
-void open_db (char *db) {
+int open_db (char *db) {
+
+    RECORDSET = g_hash_table_new(g_str_hash, g_str_equal);
 
     int rc;
     rc = sqlite3_open(db, &DBH);
     if ( rc )
         {
-        debug_message("Can't open database: ", ERROR);
-        debug_message(g_strdup(sqlite3_errmsg(DBH)), ERROR);
+        char *tmp = g_strdup("Can't open database: ");
+	conCat(&tmp, sqlite3_errmsg(DBH));
+        debug_message(tmp, ERROR);
+        free(tmp);
         close_db ();
+	return 1;
         }
 
-    RECORDSET = g_hash_table_new(g_str_hash, g_str_equal);
+    return 0;
 }
 
 extern int connect_db (int dontCreate) {
@@ -52,7 +57,12 @@ extern int connect_db (int dontCreate) {
     conCat(&db, "openDIAS.sqlite3");
     if(g_file_test(db, G_FILE_TEST_EXISTS))
         {
-        open_db (db);
+        if(open_db (db))
+		{
+		// Could not connect to db
+                free(db);
+		return 1;
+		}
 
         debug_message("Connected to database.", INFORMATION);
 
@@ -93,6 +103,7 @@ extern int connect_db (int dontCreate) {
             {
             debug_message(sql, INFORMATION);
             runquery_db("1", sql);
+            free_recordset("1");
             free(sql);
             }
         free(ver);
@@ -108,29 +119,28 @@ static int callback(char *recordSetKey, int argc, char **argv, char **azColName)
     int i;
     GList *rSet;
     GHashTable *row;
+    char *tmp;
 
-    debug_message("Reading row\n", DEBUGM);
+    debug_message("Reading row from database", SQLDEBUG);
 
-    /* Create row continer */
+    // Create row container
     row = g_hash_table_new(g_str_hash, g_str_equal);
     for(i=0; i<argc; i++)
         {
+/*	tmp = g_strdup("Saving rowdata: ");
+	conCat(&tmp, azColName[i]);
+	conCat(&tmp, " : ");
+	conCat(&tmp, argv[i]);
+	debug_message(tmp, SQLDEBUG);
+	free(tmp);
+*/
         g_hash_table_insert(row, g_strdup(azColName[i]), g_strdup(argv[i] ? argv[i]: "NULL"));
         }
 
-    /* Save the new row away - for later retrieval */
+    // Save the new row away - for later retrieval 
     rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
-    if(rSet)
-        {
-        rSet = g_list_append(rSet, row);
-        g_hash_table_replace(RECORDSET, recordSetKey, rSet);
-        }
-    else
-        {
-        rSet = (GList*)NULL;
-        rSet = g_list_append(rSet, row);
-        g_hash_table_insert(RECORDSET, recordSetKey, rSet);
-        }
+    rSet = g_list_append(rSet, row);
+    g_hash_table_replace(RECORDSET, recordSetKey, rSet);
 
     return 0;
 }
@@ -150,7 +160,7 @@ extern int runUpdate_db (char *sql, GList *vars) {
 
     sqlite3_prepare(DBH, sql, strlen(sql), &stmt, NULL);
 
-    debug_message(sql, DEBUGM);
+    debug_message(sql, SQLDEBUG);
     tmpList = vars;
     do
         {
@@ -164,13 +174,14 @@ extern int runUpdate_db (char *sql, GList *vars) {
                 break;
             case DB_TEXT:
                 sqlite3_bind_text(stmt, col, tmpList->data, strlen(tmpList->data), SQLITE_TRANSIENT );
+                free(tmpList->data);
                 break;
             case DB_INT:
                 sqlite3_bind_int(stmt, col, GPOINTER_TO_INT(tmpList->data));
                 break;
-/*            case DB_DOUBLE:
-                sqlite3_bind_double(stmt, col, tmpList->data);
-                break;*/
+//            case DB_DOUBLE:
+//                sqlite3_bind_double(stmt, col, tmpList->data);
+//                break;
             }
         tmpList = g_list_next(tmpList);
         } while (tmpList != NULL);
@@ -191,6 +202,7 @@ extern int runUpdate_db (char *sql, GList *vars) {
         }
 
     rc = sqlite3_finalize(stmt);
+    g_list_free(vars);
     if( rc != SQLITE_OK )
         {
         tmp = g_strdup("The following SQL gave an error: \n");
@@ -216,21 +228,28 @@ extern int runquery_db (char *recordSetKey, char *sql) {
     char *zErrMsg, *tmp;
     GList *rSet;
 
-    tmp = g_strdup("Running Query: ");
+    debug_message("Run Query", DEBUGM);
+
+    tmp = g_strdup("SQL = ");
     conCat(&tmp, sql);
-    debug_message(tmp, DEBUGM);
+    debug_message(tmp, SQLDEBUG);
     free(tmp);
 
-    /*  Free the corrent recordset - were gonna overwrite_mode
-        then, create a new container for the row data and pointers */
+    //  Free the corrent recordset - were gonna overwrite_mode
+    //  then, create a new container for the row data and pointers
     rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
     if(rSet)
+        {
+        debug_message("Overwritting an in-use recordset", WARNING);
         free_recordset(recordSetKey);
+        }
+    rSet = NULL;
+    g_hash_table_insert(RECORDSET, recordSetKey, rSet);
 
-    /* Execute the query */
+    // Execute the query
     rc = sqlite3_exec(DBH, sql, (void*)callback, recordSetKey, &zErrMsg);
 
-    /* Dump out on error */
+    // Dump out on error
     if( rc != SQLITE_OK )
         {
         tmp = g_strdup("The following SQL gave an error: \n");
@@ -243,18 +262,10 @@ extern int runquery_db (char *recordSetKey, char *sql) {
             sqlite3_free(zErrMsg);
         }
 
-    debug_message("Checking for a valid key:", DEBUGM);
-    debug_message(recordSetKey, DEBUGM);
     if(g_hash_table_lookup(RECORDSET, recordSetKey))
-	{
-	debug_message("Recordset haad a value", WARNING);
         return 1;
-	}
     else
-	{
-	debug_message("Some SQL failure: Recordset not saved", WARNING);
         return 0;
-	}
 
 }
 
@@ -263,16 +274,22 @@ extern char *readData_db (char *recordSetKey, char *field_db) {
 
     GList *rSet;
     GHashTable *row;
+    char *tmp;
 
     rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
     row = rSet->data;
     if(row)
         {
+        tmp = g_strdup(field_db);
+        conCat(&tmp, " : ");
+        conCat(&tmp, g_hash_table_lookup(row, field_db));
+        debug_message(tmp, SQLDEBUG);
+	free(tmp);
         return g_hash_table_lookup(row, field_db);
         }
 
     return "[Unable to get data]";
-    
+  
 }
 
 
@@ -281,6 +298,7 @@ extern int nextRow (char * recordSetKey) {
     GList *rSet;
     int ret = 0;
 
+    debug_message("Moving to next row", SQLDEBUG);
     rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
     rSet = g_list_next(rSet);
     if(rSet)
@@ -301,7 +319,8 @@ extern void free_recordset (char *recordSetKey) {
 
     debug_message("Free recordset", DEBUGM);
 
-    for(li = rSet; li != NULL; li = g_list_next(li)) 
+    rSet = g_list_first(rSet);
+    for(li = rSet ; li ; li = g_list_next(li)) 
         {
         g_hash_table_iter_init (&iter, li->data);
         while (g_hash_table_iter_next (&iter, &key, &value))

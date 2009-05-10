@@ -42,7 +42,7 @@ struct mydata {
 */
 
 void xmlAllNodeGetContent(xmlNode *parent, char **str) {
-
+/*
     char *buf;
     xmlNode *node = parent->children; //childs;
     char *text;
@@ -58,20 +58,22 @@ void xmlAllNodeGetContent(xmlNode *parent, char **str) {
         xmlAllNodeGetContent(node, str);
         node = node->next;
         }
+*/
 }
 
 char *xmlToText(char *xml, gint size) {
-
+/*
     char *text="";
     xmlDocPtr doc = xmlParseMemory(xml, size);
     xmlNodePtr root = xmlDocGetRootElement(doc);
     xmlAllNodeGetContent(root, &text);
 
     return text;
+*/
 }
 
 gint getEntry(const char *name, char *contentFile, char **ptr) {
-
+/*
     ZZIP_DIR *dir;
     ZZIP_DIRENT entry;
     char *buf;
@@ -99,6 +101,7 @@ gint getEntry(const char *name, char *contentFile, char **ptr) {
     zzip_file_close(file);
     zzip_dir_close(dir);
     return size;
+*/
 }
 
 /*
@@ -175,7 +178,7 @@ gint LIBARCHIVEgetEntry(const char *name, char *contentFile, char **ptr) {
 */
 
 extern char *get_odf_Text (const char *filename) {
-
+/*
     char *xml, *text="";
     gint size;
 
@@ -184,10 +187,11 @@ extern char *get_odf_Text (const char *filename) {
         text = xmlToText(xml, size);
 
     return text;
+*/
 }
 
 extern GdkPixbuf *get_odf_Thumb (const char *filename) {
-
+/*
     char *imageData;
     gint size;
     GdkPixbuf *image=NULL;
@@ -208,6 +212,7 @@ extern GdkPixbuf *get_odf_Thumb (const char *filename) {
         }
     debug_message("Got pixmap from ODT doc", DEBUGM);
     return image;
+*/
 
 }
 

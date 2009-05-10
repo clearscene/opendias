@@ -25,23 +25,35 @@
 #include "utils.h"
 #include "debug.h"
 
-void setup (void) {
+int setup (void) {
 
     char *tmp, *scansDir;
 
-    tmp = g_getenv("HOME");
     VERBOSITY = DEBUGM; // WARNING;
     DB_VERSION = 2;
-    BASE_DIR = g_strconcat(tmp, "/.openDIAS/", NULL);
-    scansDir = g_strconcat(BASE_DIR, "scans/", NULL);
 
-    // Check environment
+    tmp = g_strdup(g_getenv("HOME"));
+    conCat(&tmp, "/.openDIAS/");
+
+    BASE_DIR = g_strdup(tmp);
     createDir_ifRequired(BASE_DIR);
+
+    conCat(&tmp, "scans/");
+
+    scansDir = g_strdup(tmp);
     createDir_ifRequired(scansDir);
+
+    free(tmp);
     free(scansDir);
 
     // Open (& maybe update) the database.
-    connect_db (0);
+    if(connect_db (0))
+        {
+        free(BASE_DIR);
+        return 1;
+        }
+
+    return 0;
 
 }
 
@@ -57,12 +69,13 @@ int main (int argc, char **argv) {
 #endif // CAN_THREAD //
 
     gtk_init (&argc, &argv);
-    setup ();
+    if(!setup ())
+        {
+        create_gui ();
+        populate_gui ();
 
-    create_gui ();
-    populate_gui ();
-
-    gtk_main ();
+        gtk_main ();
+        }
 
 #ifdef CAN_THREAD
     gdk_threads_leave ();

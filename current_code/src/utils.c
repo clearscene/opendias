@@ -30,8 +30,9 @@ static char *ItoaDigits =
 "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 
-/* ritoa - recursive itoa */
+// ritoa - recursive itoa
 long int ritoa(long int val, long int topval, char *s, int base) {
+
     long int n = val / base;
     if (n > 0)
         topval = ritoa(n, topval, s+1, base);
@@ -39,6 +40,7 @@ long int ritoa(long int val, long int topval, char *s, int base) {
         *(s+1) = '\0';
     *s = ItoaDigits[ topval % base ];
     return(topval / base);
+
 }
 
 
@@ -47,10 +49,11 @@ long int ritoa(long int val, long int topval, char *s, int base) {
  * - calls ritoa to fill in the string for a given base
  */
 extern char * itoa(long int val, int base) {
+
     int len;
     char *s,*buf;
     long int t = val;
-    for (len=2; t; t /= base) len++ ; /* quickie log_base */
+    for (len=2; t; t /= base) len++ ; // quickie log_base
 
     if((buf = (char *) malloc(len)) == NULL)
         {
@@ -65,41 +68,43 @@ extern char * itoa(long int val, int base) {
         };
     len = (int) ritoa(val, val, s, base);
     return(buf);
+
 }
 
 
 /* load a file into a buffer */
-extern int load_file_to_memory(const char *filename, unsigned char **result) {
+extern int load_file_to_memory(const char *p_filename, unsigned char **result) {
 
     int size = 0;
-    FILE *f = fopen(filename, "r");
+    FILE *p_f = fopen(p_filename, "r");
 
-    if (f == NULL) 
+    if (p_f == NULL) 
         {
         *result = NULL;
-        fprintf(stderr,"Count not open file '%s'.\n", filename);
+        fprintf(stderr,"Count not open file '%s'.\n", p_filename);
         return -1; // -1 means file opening fail
         }
 
-    fseek(f, 0, SEEK_END);
-    size = ftell(f);
-    fseek(f, 0, SEEK_SET);
+    fseek(p_f, 0, SEEK_END);
+    size = ftell(p_f);
+    fseek(p_f, 0, SEEK_SET);
 
     if((*result = (char *)malloc(size+1)) == NULL)
         {
         debug_message("out of memory while reading file information\n", ERROR);
-        return "";
+        return 0;
         }
 
-    if (size != fread(*result, sizeof(char), size, f))
+    if (size != fread(*result, sizeof(char), size, p_f))
         {
         free(*result);
         return -2; // -2 means file reading fail
         }
 
-    fclose(f);
-    (*result)[size] = 0;
+    fclose(p_f);
+    (*result)[size] = NULL;
     return size;
+
 }
 
 
@@ -154,7 +159,7 @@ extern void get_exe_name(char *buffer) {
 
 /* fcopy - copy a file contents to new location */
 extern void fcopy(char *fnsource, char *fntarget) {
-
+/*
     FILE *fpin = fopen(fnsource, "rb");
 
     if(fpin != NULL)
@@ -171,10 +176,11 @@ extern void fcopy(char *fnsource, char *fntarget) {
             }
         fclose(fpout);
         }
+*/
 }
 
 extern gboolean std_scrollEvent (GtkWidget *widget, GdkEventScroll *event, GtkRange *range ) {
-
+/*
     gboolean retval = FALSE;
     GtkAdjustment *adj;
 
@@ -192,6 +198,7 @@ extern gboolean std_scrollEvent (GtkWidget *widget, GdkEventScroll *event, GtkRa
         }
 
     return retval;
+*/
 }
 
 /*
@@ -207,22 +214,44 @@ extern void std_setFontSize (GtkWidget *widget, relativeSize size) {
 }*/
 
 extern int max(int a, int b) {
+
     if(a >= b)
         return a;
     else
         return b;
+
 }
 
 extern int min(int a, int b) {
+
     if(a <= b)
         return a;
     else
         return b;
+
 }
 
 extern char *dateHuman(char *d, char *m, char *y) {
-    //This will need to be converted, to use current machines LOCALE
-    return g_strconcat(d, "/", m, "/", y, NULL);
+
+    // This will need to be converted, to use current machines LOCALE
+
+    if(!g_str_equal(d, "NULL") && !g_str_equal(m, "NULL") && !g_str_equal(y, "NULL"))
+        {
+        conCat(&d, "/");
+        conCat(&d, m);
+        conCat(&d, "/");
+        conCat(&d, y);
+        free(m);
+        free(y);
+        return d;
+        }
+    else
+        {
+        free(d);
+        free(m);
+        free(y);
+        return g_strdup("No date set");
+        }
 }
 
 extern void conCat(char **mainStr, const char *addStr) {
@@ -236,4 +265,5 @@ extern void conCat(char **mainStr, const char *addStr) {
         free(tmp2);
         *mainStr = tmp;
         }
+
 }

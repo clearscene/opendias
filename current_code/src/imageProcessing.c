@@ -36,6 +36,22 @@ GdkPixbuf *getPixBuf_fromData(unsigned char *pic, int ppl, int lines, int scaleX
     char *header, *tmp;
     GdkPixbuf *buf;
 
+tmp = g_strdup_printf("ppl = %d", ppl, NULL);
+debug_message(tmp, DEBUGM);
+free(tmp);
+
+tmp = g_strdup_printf("lines = %d", lines, NULL);
+debug_message(tmp, DEBUGM);
+free(tmp);
+
+tmp = g_strdup_printf("scaleX = %d", scaleX, NULL);
+debug_message(tmp, DEBUGM);
+free(tmp);
+
+tmp = g_strdup_printf("scaleY = %d", scaleY, NULL);
+debug_message(tmp, DEBUGM);
+free(tmp);
+
     if(scaleY == -1)
         scaleY = (lines*scaleX)/ppl;
     header = g_strdup("P5\n# SANE data follows\n");
@@ -50,6 +66,7 @@ GdkPixbuf *getPixBuf_fromData(unsigned char *pic, int ppl, int lines, int scaleX
     loader = gdk_pixbuf_loader_new();
     gdk_pixbuf_loader_write(loader, header, strlen(header), NULL);
     gdk_pixbuf_loader_set_size(loader, scaleX, scaleY);
+
     gdk_pixbuf_loader_write(loader, pic, ppl*lines, NULL);
     buf = gdk_pixbuf_loader_get_pixbuf(loader);
     if(buf)
@@ -60,6 +77,7 @@ GdkPixbuf *getPixBuf_fromData(unsigned char *pic, int ppl, int lines, int scaleX
     free(header);
 
     return buf;
+
 }
 
 unsigned char *zoomImage(unsigned char *pic, 
@@ -68,12 +86,20 @@ unsigned char *zoomImage(unsigned char *pic,
 
     int newppl, working_line = 1;
     unsigned char *image, *insertPointer, *readPointer;
+/*
+tmp = g_strdup_printf("ppl = %d", *ppl, NULL);
+debug_message(tmp, DEBUGM);
+free(tmp);
 
+tmp = g_strdup_printf("lines = %d", *lines, NULL);
+debug_message(tmp, DEBUGM);
+free(tmp);
+*/
     newppl = (right-left)+1;
     if(newppl < 0)
         {
-        // Image is most lickly all black
-        debug_message("Zooming in to a negative!\n", WARNING);
+        // Image is most lickly all an black image
+        debug_message("Zooming in to a negative!", WARNING);
         newppl = 2;
 	end = 2;
 	start = 1;
@@ -129,9 +155,12 @@ unsigned char *loadImageData(char *fileName, unsigned char **pic, int ppl, int l
     unsigned char *retVal;
 
     totpix = ppl * lines;
-    if(!(size = load_file_to_memory(fileName, pic)))
+    size = load_file_to_memory(fileName, pic);
+    if(size <= 0)
         {
-        free(*pic);
+        if(*pic)
+            free(*pic);
+        debug_message("loaded no data", DEBUGM);
         return NULL;
         }
     retVal = *pic;
@@ -141,6 +170,7 @@ unsigned char *loadImageData(char *fileName, unsigned char **pic, int ppl, int l
     *pic += offset;
 
     return retVal;
+
 }
 
 
@@ -157,12 +187,13 @@ void sharpen(unsigned char *pic, int ppl, int lines) {
             {
             if(readPointer[x] >= WHITE_THRESHOLD)
                 readPointer[x] = 255;
-/*            else
-                readPointer[x] = (char *)0; */
+            else
+                readPointer[x] = 0;
             }
         working_line++;
         readPointer += ppl;
         }
+
 }
 
 extern unsigned char *autoCrop(unsigned char *pic, int *ppl, int *lines) {
@@ -170,11 +201,16 @@ extern unsigned char *autoCrop(unsigned char *pic, int *ppl, int *lines) {
     int working_line = 1, left=*ppl, right=0, top=1, bottom=*lines, 
         intoImage = 0, x, nothingOnWholeLine = 0;
     unsigned char *readPointer;
+char *tmp;
 
     // parse image
     readPointer = pic;
-    while(working_line < *lines)
+    while(working_line < (*lines-2))
         {
+tmp = g_strdup_printf("working_line = %d", working_line, NULL);
+debug_message(tmp, DEBUGM);
+free(tmp);
+
         nothingOnWholeLine = 1;
         for(x = 0 ; x <= (*ppl-10) ; x++)
             {
@@ -227,13 +263,38 @@ extern unsigned char *autoCrop(unsigned char *pic, int *ppl, int *lines) {
             }
 
         working_line++;
-        readPointer += *ppl;
+        readPointer += (*ppl-1);
         }
+
+tmp = g_strdup_printf("ppl = %d", *ppl, NULL);
+debug_message(tmp, DEBUGM);
+free(tmp);
+
+tmp = g_strdup_printf("lines = %d", *lines, NULL);
+debug_message(tmp, DEBUGM);
+free(tmp);
+
+tmp = g_strdup_printf("left = %d", left, NULL);
+debug_message(tmp, DEBUGM);
+free(tmp);
+
+tmp = g_strdup_printf("right = %d", right, NULL);
+debug_message(tmp, DEBUGM);
+free(tmp);
+
+tmp = g_strdup_printf("top = %d", top, NULL);
+debug_message(tmp, DEBUGM);
+free(tmp);
+
+tmp = g_strdup_printf("bottom = %d", bottom, NULL);
+debug_message(tmp, DEBUGM);
+free(tmp);
 
     // Zoom image to new vals
     pic = zoomImage(pic, left, right, top, bottom, ppl, lines);
 
     return pic;
+
 }
 
 extern GdkPixbuf *getPagePixBuf_fromFile(char *fileName, int returnPage, 
@@ -243,16 +304,28 @@ extern GdkPixbuf *getPagePixBuf_fromFile(char *fileName, int returnPage,
 
     GdkPixbuf *pixBuf;
     int imageLines;
-    unsigned char *pic, *origPic, *tmpPic;
+    unsigned char *pic = NULL, *origPic = NULL, *tmpPic = NULL;
 
     if(returnPage > pages)
         debug_message("Asked to return page number higher than available", ERROR);
 
     imageLines = lines*pages;
     origPic = loadImageData(fileName, &pic, ppl, imageLines);
-    if(origPic == NULL)
-        return NULL;
 
+    if(origPic == NULL)
+        {
+        debug_message("no pic data", DEBUGM);
+        return NULL;
+        }
+
+/*    if(sizeof((char)*pic) < ((ppl-1)*(imageLines-1)))
+        {
+        debug_message(sizeof((char)*pic), DEBUGM);
+        debug_message((ppl-1)*(imageLines-1), DEBUGM);
+        debug_message("pic data smaller than expected", DEBUGM);
+        return NULL;
+        }
+*/
     if(pages != 1)
         pic = zoomImage(pic, 0, ppl, (lines*(returnPage-1))+1, lines*returnPage, &ppl, &imageLines);
 
@@ -274,4 +347,5 @@ extern GdkPixbuf *getPagePixBuf_fromFile(char *fileName, int returnPage,
         free(pic);
 
     return pixBuf;
+
 }

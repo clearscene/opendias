@@ -51,7 +51,7 @@ GHashTable *SCANWIDGETS;
 #ifdef CAN_THREAD
 gboolean progContinue;
 void pulseProg(char *devName) {
-
+/*
     GtkWidget *progress = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "progress", NULL));
     while(progContinue == TRUE) // Turned OFF by runocr_local
         {
@@ -61,17 +61,20 @@ void pulseProg(char *devName) {
         g_thread_yield();
         g_usleep(200);
         }
+*/
 }
 
 void runocr_local(struct scanCallInfo *info) {
+/*
     runocr(info);
     progContinue = FALSE;
+*/
 }
 #endif // CAN_THREAD //
 #endif // CAN_OCR //
 
 gboolean resolutionUpdate(GtkRange *resolution, GtkScrollType st, gdouble val, char *devName) {
-
+/*
     GtkWidget *estQuality;
     char *str = "";
     estQuality = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "estQuality", NULL));
@@ -106,11 +109,12 @@ gboolean resolutionUpdate(GtkRange *resolution, GtkScrollType st, gdouble val, c
         }
     gtk_label_set_text(GTK_LABEL(estQuality), g_strconcat("Estimated guality: ", str, NULL));
     return FALSE;
+*/
 }
 
 #ifdef CAN_READODF
 void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
-
+/*
     char *fileName, *sql, *tmp, *dateStr;
     int lastInserted;
     GtkWidget *widget;
@@ -152,13 +156,13 @@ void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
     finishAcquireOperation (widget);
     populate_gui();
     populate_docInformation(sql);
-
+*/
 }
 #endif // CAN_READODF //
 
 #ifdef CAN_SCAN
 void doScanningOperation(GtkWidget *noUsed, char *devName) {
-
+/*
     SANE_Status status;
     SANE_Handle *openDeviceHandle;
     SANE_Byte buffer[1024];
@@ -223,15 +227,15 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
     status = sane_control_option (openDeviceHandle, hlp, SANE_ACTION_SET_VALUE, &resolution, &paramSetRet);
 
 
-    //Get scanning params (from the scanner)
+    // Get scanning params (from the scanner)
     debug_message("Get scanning params", DEBUGM);
     status = sane_get_parameters (openDeviceHandle, &pars);
-    /*fprintf (stderr,
-        "Parm : stat=%s form=%d,lf=%d,bpl=%d,pixpl=%d,lin=%d,dep=%d\n",
-        sane_strstatus (status),
-        pars.format, pars.last_frame,
-        pars.bytes_per_line, pars.pixels_per_line,
-        pars.lines, pars.depth);*/
+//  fprintf (stderr,
+//      "Parm : stat=%s form=%d,lf=%d,bpl=%d,pixpl=%d,lin=%d,dep=%d\n",
+//      sane_strstatus (status),
+//      pars.format, pars.last_frame,
+//      pars.bytes_per_line, pars.pixels_per_line,
+//      pars.lines, pars.depth);
 
     totpix = pars.bytes_per_line * pars.lines * pageCount;
 #ifdef CAN_OCR
@@ -401,7 +405,7 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
     finishAcquireOperation (widget);
     populate_gui();
     populate_docInformation(sql);
-
+*/
 }
 #endif // CAN_SCAN //
 
@@ -409,7 +413,7 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
 extern void startAcquireOperation(void) {
 
     GtkWidget *window, *vbox, *lab, *notebook, *frame, *vvbox;
-    char *instructionText;
+    char *instructionText, *tmp;
 #ifdef CAN_READODF
     GtkWidget *filebox, *buttonodf, *fileSelector;
     GtkFileFilter *filter;
@@ -440,6 +444,7 @@ extern void startAcquireOperation(void) {
 #ifdef CAN_SCAN
     debug_message("sane_init", DEBUGM);
     status = sane_init(NULL, NULL);
+    device_list = NULL;
     if(status == SANE_STATUS_GOOD)
         {
         status = sane_get_devices (&device_list, SANE_FALSE);
@@ -513,10 +518,11 @@ extern void startAcquireOperation(void) {
 #ifdef CAN_SCAN
     if(scanOK)
         {
-        for (i=0;device_list[i] && device_list[i]->model && device_list[i]->vendor && device_list[i]->name; i++)
+        for (i=0 ; device_list[i] ; i++)
             {
             debug_message("sane_open", DEBUGM);
             status = sane_open (device_list[i]->name, (SANE_Handle)&openDeviceHandle);
+
             if(status != SANE_STATUS_GOOD)
                 {
                 debug_message(g_strconcat("Could not open: ",device_list[i]->vendor,
@@ -528,9 +534,11 @@ extern void startAcquireOperation(void) {
 
 
             // Title
-            lab = gtk_label_new (g_strconcat("From: ", device_list[i]->vendor,
+            tmp = g_strconcat("From: ", device_list[i]->vendor,
                                 " ", device_list[i]->model,
-                                " (", device_list[i]->type, ")", NULL));
+                                " (", device_list[i]->type, ")", NULL);
+            lab = gtk_label_new (tmp);
+            free(tmp);
             gtk_misc_set_alignment (GTK_MISC(lab), 0, 0);
             gtk_table_attach (GTK_TABLE (table), lab, 0, 6, 0, 1, GTK_EXPAND, GTK_EXPAND, 0, 0);
 
@@ -554,7 +562,7 @@ extern void startAcquireOperation(void) {
             gtk_table_attach (GTK_TABLE (table), lab, 0, 2, 2, 3, GTK_FILL, GTK_EXPAND, 0, 0);
             pagesSpin = gtk_spin_button_new_with_range(1, 10, 1);
             g_hash_table_insert(SCANWIDGETS, g_strconcat(device_list[i]->name, "pageCount", NULL), pagesSpin);
-            gtk_misc_set_alignment (GTK_MISC(pagesSpin), 0, 0);
+//            gtk_misc_set_alignment (GTK_MISC(pagesSpin), 0, 0);
             gtk_table_attach (GTK_TABLE (table), pagesSpin, 2, 4, 2, 3, GTK_EXPAND, GTK_EXPAND, 0, 0);
 
 
@@ -566,18 +574,18 @@ extern void startAcquireOperation(void) {
                 if (sod == NULL)
                     break;
 
-                /* Find resolution */
+                // Find resolutionn
                 if((sod->type == SANE_TYPE_FIXED) 
                 && (sod->unit == SANE_UNIT_DPI) 
                 && (sod->constraint_type == SANE_CONSTRAINT_RANGE))
                     {
                     g_hash_table_insert(SCANWIDGETS, g_strconcat(device_list[i]->name, "hlp", NULL), GINT_TO_POINTER(hlp));
-                    /* If l is the minimum value, u the maximum value and q the (non-zero) 
-                       quantization of a range, then the legal values are v=x*q+l for all 
-                       non-negative integer values of x such that v<=u.
-                           sod->constraint.range->min=3276800(l),
-                           sod->constraint.range->max=78643200(u),
-                           sod->constraint.range->quant=65536(q)                     */
+//                  If l is the minimum value, u the maximum value and q the (non-zero) 
+//                  quantization of a range, then the legal values are v=x*q+l for all 
+//                  non-negative integer values of x such that v<=u.
+//                         sod->constraint.range->min=3276800(l),
+//                         sod->constraint.range->max=78643200(u),
+//                         sod->constraint.range->quant=65536(q)
                     x = 0;
                     lastTry = 0;
                     q = sod->constraint.range->quant;
@@ -658,7 +666,9 @@ extern void startAcquireOperation(void) {
             // Scan now button
             button = gtk_button_new();
             gtk_button_set_label(GTK_BUTTON(button), "Scan");
-            g_hash_table_insert(SCANWIDGETS, g_strconcat(device_list[i]->name, "scanNow", NULL), button);
+            tmp =  g_strconcat(device_list[i]->name, "scanNow", NULL);
+            g_hash_table_insert(SCANWIDGETS, tmp, button);
+            free(tmp);
             g_signal_connect(GTK_OBJECT (button), "clicked",
                                     G_CALLBACK (doScanningOperation),
                                     (char *)device_list[i]->name);
@@ -670,8 +680,10 @@ extern void startAcquireOperation(void) {
             g_hash_table_insert(SCANWIDGETS, g_strconcat(device_list[i]->name, "progress", NULL), progress);
             gtk_table_attach (GTK_TABLE (table), progress, 2, 5, 6, 7, GTK_FILL, GTK_EXPAND, 0, 0);
 
-            lab = gtk_label_new (g_strconcat("From: ", device_list[i]->vendor, 
-                                " ", device_list[i]->model, NULL));
+            tmp = g_strconcat("From: ", device_list[i]->vendor,
+                                " ", device_list[i]->model, NULL);
+            lab = gtk_label_new (tmp);
+            free(tmp);
 
 
             // Make everything visiable and cleanup
@@ -684,6 +696,7 @@ extern void startAcquireOperation(void) {
             sane_close(openDeviceHandle);
             }
         }
+
 #endif // CAN_SCAN //
     gtk_widget_show_all (window);
 
@@ -696,5 +709,6 @@ extern void finishAcquireOperation(GtkWidget *window) {
     sane_exit();
 #endif // CAN_SCAN //
     gtk_widget_destroy (window);
+
 }
 

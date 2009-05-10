@@ -44,6 +44,7 @@ static int SynthCallback(short *wav, int numsamples, espeak_EVENT *events) {
         espeak_Cancel();
         talking = 0;
         }
+
 }
 
 
@@ -53,7 +54,7 @@ extern "C" void readText(GtkWidget *button, char *inText) {
     char voicename[40];
     int synth_flags = espeakCHARS_AUTO | espeakPHONEMES | espeakENDPAUSE;
 
-    if(talking == 0) // were idle - so start talking
+    if(talking == 0) // we're idle - so start talking
         {
         talking = 1;
         but = button;
@@ -77,5 +78,6 @@ extern "C" void readText(GtkWidget *button, char *inText) {
         gtk_button_set_label(GTK_BUTTON(button), "Stopping...");
         talking = 2;
         }
+
 }
 #endif // CAN_SPEAK //

@@ -28,10 +28,12 @@
 
 
 void shutdown_interface (void) {
+
     GtkWidget *window;
     window = g_hash_table_lookup(WIDGETS, "mainWindow");
     gtk_widget_destroy(window);
     g_hash_table_destroy(WIDGETS);
+
 }
 
 void shutdown_app (void) {
@@ -50,7 +52,8 @@ void launch_url(GtkAboutDialog* about, const gchar* link, gpointer data) {
 
 }
 
-void show_credits () {
+void show_credits (GtkWidget *forgetme, GtkWidget *wind) {
+
     GdkPixbuf *pixBuf;
     char *tmp;
 
@@ -70,9 +73,10 @@ void show_credits () {
     tmp = g_strdup(PACKAGE_DATA_DIR);
     conCat(&tmp, "/../share/opendias/openDIAS.png");
     pixBuf = gdk_pixbuf_new_from_file_at_scale(tmp, 150, -1, TRUE, NULL);
+    free(tmp);
 
     gtk_about_dialog_set_url_hook(&launch_url, 0, 0);
-    gtk_show_about_dialog(NULL, 
+    gtk_show_about_dialog(GTK_WINDOW (wind), 
                             "version", "0.3.3",
                             "license", license,
                             "comments", "openDIAS: the 'Document Imaging & Archive System'.",
@@ -82,12 +86,17 @@ void show_credits () {
                             "logo", pixBuf,
                             NULL);
 
+//    free(pixBuf);
+//    free(license);
+//    free(authors);
 }
 
 GList *filterDocsWithTags(GList *tags, GList *docs) {
 
     char *docList, *sql, *tmp;
-    GList *li, *ta, *newDocList;
+    GList *li, *ta, *newDocList = NULL;
+
+debug_message("Entered filterDocsWithTags", DEBUGM);
 
     for(ta = tags; ta != NULL; ta = g_list_next(ta)) 
         {
@@ -104,7 +113,7 @@ GList *filterDocsWithTags(GList *tags, GList *docs) {
                 conCat(&docList, ", ");
             }
 
-        sql = g_strdup("SELECT DISTINCT docs.docid \
+        sql = g_strdup("SELECT DISTINCT docs.docid as docid \
                 FROM docs, doc_tags \
                 WHERE doc_tags.docid = docs.docid \
                 AND docs.docid IN (");
@@ -126,11 +135,15 @@ GList *filterDocsWithTags(GList *tags, GList *docs) {
         docs = newDocList;
         }
     return docs;
+
 }
 
 extern GList *docsWithAllTags(GList *tags) {
+
     GList *docs = NULL, *retVal, *li;
     char *sql;
+
+debug_message("Entered docsWithAllTags", DEBUGM);
 
     sql = g_strdup("SELECT * FROM docs");
     if(runquery_db("1", sql))
@@ -149,6 +162,7 @@ extern GList *docsWithAllTags(GList *tags) {
     g_list_free(docs);
 
     return retVal;
+
 }
 
 void populate_selected (void) {
@@ -159,7 +173,6 @@ void populate_selected (void) {
     GtkWidget *filteredTags;
     char *sql;
 
-    debug_message("Enter handlers::populate_selected()", DEBUGM);
     filteredTags = g_hash_table_lookup(WIDGETS, "filterTags");
 
     //free current dropdown store
@@ -178,7 +191,7 @@ void populate_selected (void) {
             gtk_list_store_append (store, &iter);
             gtk_list_store_set (store, &iter,
                                     TAG_ID, selectedTag->data,
-                                    TAG_NAME, g_strdup(readData_db("1", "tagname")),
+                                    TAG_NAME, readData_db("1", "tagname"),
                                     -1);
             }
         free_recordset("1");
@@ -263,8 +276,7 @@ void populate_available (void) {
     if(runquery_db("1", sql))
         {
         do  {
-            /* Append a row and fill in some data */
-	    debug_message(readData_db("1", "tagname"), DEBUGM);
+            // Append a row and fill in some data
             gtk_list_store_append (store, &iter);
             gtk_list_store_set (store, &iter,
                                     TAG_ID, readData_db("1", "tags.tagid"),
@@ -272,8 +284,8 @@ void populate_available (void) {
                                     TAG_COUNT, readData_db("1", "cnt"),
                                     -1);
             } while (nextRow("1"));
-        free_recordset("1");
         }
+    free_recordset("1");
 
     free(sql);
 
@@ -318,24 +330,28 @@ void populate_doclist (void) {
     if(runquery_db("1", sql))
         {
         do  {
-            /* Append a row and fill in some data */
+            // Append a row and fill in some data
             gtk_list_store_append (store, &iter);
-            title = readData_db("1", "title");
+            title = g_strdup(readData_db("1", "title"));
             if(g_str_equal (title, "NULL") )
                  {
+                 free(title);
                  title = g_strdup("New (untitled) document.");
                  }
-            humanReadableDate = dateHuman(readData_db("1", "docdated"), readData_db("1", "docdatem"), readData_db("1", "docdatey"));
+            humanReadableDate = dateHuman(g_strdup(readData_db("1", "docdated")), 
+					g_strdup(readData_db("1", "docdatem")), 
+					g_strdup(readData_db("1", "docdatey")));
             gtk_list_store_set (store, &iter,
-                                    DOC_ID, g_strdup(readData_db("1", "docid")),
+                                    DOC_ID, readData_db("1", "docid"),
                                     DOC_TITLE, title,
                                     DOC_TYPE, g_str_equal (readData_db("1", "filetype"),"1")?"ODF Doc":"Scaned Doc",
                                     DOC_DATE, humanReadableDate,
                                     -1);
             free(humanReadableDate);
+            free(title);
             } while (nextRow("1"));
-        free_recordset("1");
         }
+    free_recordset("1");
 
     free(sql);
 
@@ -352,7 +368,8 @@ void setDocInformation (GtkWidget *frame) {
     oldFrame = gtk_paned_get_child2(GTK_PANED (docEditArea));
     gtk_widget_destroy(oldFrame);
     gtk_paned_add2 (GTK_PANED (docEditArea), GTK_WIDGET(frame));
-    gtk_widget_set_size_request(GTK_WIDGET(frame), -1, 10);
+//    gtk_widget_set_size_request(GTK_WIDGET(frame), -1, -1);
+//    gtk_widget_set_size_request(GTK_WIDGET(docEditArea), -1, -1);
     gtk_widget_show_all(frame);
 
 }
@@ -373,6 +390,7 @@ void useTag (char *tagId) {
     SELECTEDTAGS = g_list_append(SELECTEDTAGS, g_strdup(tagId));
 
     populate_gui();
+
 }
 
 void removeTag (char *tagId) {
@@ -395,6 +413,7 @@ void removeTag (char *tagId) {
         debug_message("Could not find reference for row to remove", WARNING);
 
     populate_gui();
+
 }
 
 void filterTags_dblClick (GtkTreeView *select, gpointer data) {
@@ -411,6 +430,7 @@ void filterTags_dblClick (GtkTreeView *select, gpointer data) {
         removeTag (foundData);
         g_free (foundData);
         }
+
 }
 
 void availableTags_dblClick (GtkTreeView *select, gpointer data) {
@@ -427,6 +447,7 @@ void availableTags_dblClick (GtkTreeView *select, gpointer data) {
         useTag (foundData);
         g_free (foundData);
         }
+
 }
 
 void docList_dblClick (GtkTreeView *select, gpointer data) {
@@ -443,57 +464,63 @@ void docList_dblClick (GtkTreeView *select, gpointer data) {
         populate_docInformation (foundData);
         g_free (foundData);
         }
+
 }
 
-int connectToNewStore (char *newLocation) {
+void connectToNewStore (char *newLocation) {
 
-    // Free up the UI enrties.
-    //shutdown_interface();
+    char *oldLocation;
 
     close_db();
 
+    oldLocation = g_strdup(BASE_DIR);
     free(BASE_DIR);
-    BASE_DIR = newLocation;
+    BASE_DIR = g_strdup(newLocation);
 
+    debug_message(BASE_DIR, DEBUGM);
     if(connect_db(1))
 	{
-	debug_message("Could not find a data store at that location. Try again.", ERROR);
-	return 1;
+	debug_message("Could not find a data store at that location.", ERROR);
+        free(BASE_DIR);
+	BASE_DIR = oldLocation;
+        if(connect_db(1))
+	    debug_message("Could not re-connect to the old database either!", ERROR);
 	}
     else
-	{
-	//create_gui();
+        {
+        free(oldLocation);
 	populate_gui();
-	return 0;
-	}
+        }
 
 }
 
-void pickNewLocation () {
+void pickNewLocation (GtkWidget *forgetme, GtkWidget *winc) {
 
     char *fileName;
     GtkWidget *fileChooser;
     GtkFileFilter *filter;
 
-    fileChooser = gtk_file_chooser_dialog_new("New Location", NULL, 
+    fileChooser = gtk_file_chooser_dialog_new("New Location", winc, 
 				GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
 				      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				      NULL);
 
-    filter = gtk_file_filter_new( );
+/*    filter = gtk_file_filter_new( );
     gtk_file_filter_set_name( filter, "openDIAS database");
     gtk_file_filter_add_pattern( filter, "openDIAS.sqlite3" );
     gtk_file_chooser_add_filter( GTK_FILE_CHOOSER(fileChooser), filter );
-
-    do {
+*/
 	if (gtk_dialog_run (GTK_DIALOG (fileChooser)) == GTK_RESPONSE_ACCEPT)
             {
             fileName = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(fileChooser));
+            conCat(&fileName, "/");
+	    connectToNewStore(fileName);
+            free(fileName);
             }
-	} while (connectToNewStore(fileName));
 
     gtk_widget_destroy (fileChooser);
+
 }
 
 extern void create_gui (void) {
@@ -503,38 +530,39 @@ extern void create_gui (void) {
         *lab, *hbox, *hrule, *button, *image, *menuMainBox,
         *entry, *scrollbar, *menu_bar, *mainMenuItem, *menu, *menuitem;
     GtkObject *adj;
+    AtkObject *objectNamer;
     GdkPixbuf *pixBuf;
     GtkCellRenderer *renderer;
     char *img;
 
     WIDGETS = g_hash_table_new(g_str_hash, g_str_equal);
     SELECTEDTAGS = NULL;
-    img = g_strdup(PACKAGE_DATA_DIR);
-    conCat(&img, "/../share/opendias/openDIAS_64x64.ico");
+///    img = g_strdup(PACKAGE_DATA_DIR);
+///    conCat(&img, "/../share/opendias/openDIAS_64x64.ico");
 
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     g_hash_table_insert(WIDGETS, "mainWindow", window);
     g_signal_connect (window, "delete_event", shutdown_app, NULL);
     gtk_window_set_title (GTK_WINDOW (window), "openDIAS");
-    gtk_window_set_default_size (GTK_WINDOW (window), 795, 640);
+//    gtk_container_set_border_width (GTK_CONTAINER (window), 5);
+//    gtk_widget_set_size_request (GTK_WINDOW (window), 795, 640);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-    gtk_window_set_icon_from_file (GTK_WINDOW (window), img, NULL);
+///    gtk_window_set_icon_from_file (GTK_WINDOW (window), img, NULL);
     menuMainBox = gtk_vbox_new (FALSE, 2);
+    objectNamer = gtk_widget_get_accessible(menuMainBox);
+    atk_object_set_name(objectNamer, "menuMainBox");
+
     gtk_container_add( GTK_CONTAINER(window), menuMainBox);
-    free(img);
-
-    menu_bar = gtk_menu_bar_new();
-    gtk_box_pack_start(GTK_BOX(menuMainBox), menu_bar, FALSE, FALSE, 2);
-
-    mainMenuItem = gtk_menu_item_new_with_label("File");
-    gtk_menu_bar_append( GTK_MENU_BAR (menu_bar), mainMenuItem );
+///    free(img);
 
     menu = gtk_menu_new ();
-    gtk_menu_item_set_submenu( GTK_MENU_ITEM(mainMenuItem), menu);
+    objectNamer = gtk_widget_get_accessible(menu);
+    atk_object_set_name(objectNamer, "menu");
+
 
     menuitem = gtk_menu_item_new_with_mnemonic ("_Change Library");
     g_signal_connect(G_OBJECT (menuitem), "activate",
-                                        GTK_SIGNAL_FUNC (pickNewLocation), NULL);
+                                        GTK_SIGNAL_FUNC (pickNewLocation), window);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
     menuitem = gtk_menu_item_new_with_mnemonic ("_Acquire");
@@ -547,28 +575,48 @@ extern void create_gui (void) {
                                         GTK_SIGNAL_FUNC (shutdown_app), NULL);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
-    mainMenuItem = gtk_menu_item_new_with_label("Help");
+
+    mainMenuItem = gtk_menu_item_new_with_label("File");
+    gtk_menu_item_set_submenu( GTK_MENU_ITEM(mainMenuItem), menu);
+
+    menu_bar = gtk_menu_bar_new();
     gtk_menu_bar_append( GTK_MENU_BAR (menu_bar), mainMenuItem );
 
+
+
     menu = gtk_menu_new ();
-    gtk_menu_item_set_submenu( GTK_MENU_ITEM(mainMenuItem), menu);
 
     menuitem = gtk_menu_item_new_with_mnemonic ("_About");
     g_signal_connect(G_OBJECT (menuitem), "activate",
-                                        GTK_SIGNAL_FUNC (show_credits), NULL);
+                                        GTK_SIGNAL_FUNC (show_credits), window);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
+
+    mainMenuItem = gtk_menu_item_new_with_label("Help");
+    gtk_menu_item_set_submenu( GTK_MENU_ITEM(mainMenuItem), menu);
+
+
+    gtk_menu_bar_append( GTK_MENU_BAR (menu_bar), mainMenuItem );
+
+
+    gtk_box_pack_start(GTK_BOX(menuMainBox), menu_bar, FALSE, FALSE, 2);
+
     paned = gtk_hpaned_new ();
-    gtk_paned_set_position (GTK_PANED (paned), 150);
+    objectNamer = gtk_widget_get_accessible(paned);
+    atk_object_set_name(objectNamer, "mainPaned");
+//    gtk_paned_set_position (GTK_PANED (paned), 150);
 
     vbox = gtk_vbox_new (FALSE, 2);
+    objectNamer = gtk_widget_get_accessible(vbox);
+    atk_object_set_name(objectNamer, "vbox");
 
-    img = g_strdup(PACKAGE_DATA_DIR);
+/*    img = g_strdup(PACKAGE_DATA_DIR);
     conCat(&img, "/../share/opendias/openDIAS.png");
     pixBuf = gdk_pixbuf_new_from_file_at_scale(img, 150, -1, TRUE, NULL);
     free(img);
     image = gtk_image_new_from_pixbuf (pixBuf);
     gtk_box_pack_start (GTK_BOX (vbox), image, FALSE, FALSE, 2);
+*/
 
     hrule = gtk_hseparator_new ();
     gtk_box_pack_start (GTK_BOX (vbox), hrule, FALSE, FALSE, 10);
@@ -576,6 +624,7 @@ extern void create_gui (void) {
     lab = gtk_label_new ("Filtered With Tags:");
     gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
 
+    frame = gtk_frame_new(NULL);
     hbox = gtk_hbox_new (FALSE, 0);
     filterTags = gtk_tree_view_new ();
     gtk_widget_set_size_request(GTK_WIDGET(filterTags), -1, 100);
@@ -586,6 +635,7 @@ extern void create_gui (void) {
                                         G_CALLBACK(std_scrollEvent), GTK_RANGE(scrollbar));
     gtk_box_pack_start (GTK_BOX (hbox), filterTags, TRUE, TRUE, 0);
     gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);
+    gtk_container_add(GTK_CONTAINER (frame), hbox);
  
     g_hash_table_insert(WIDGETS, "filterTags", filterTags);
 
@@ -600,7 +650,7 @@ extern void create_gui (void) {
                                         G_CALLBACK (filterTags_dblClick),
                                         NULL);
 
-    gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
     lab = gtk_label_new ("Available Tags:");
     gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
@@ -613,8 +663,10 @@ extern void create_gui (void) {
     scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(adj));
     g_signal_connect(GTK_OBJECT (availableTags), "scroll-event",
                                             G_CALLBACK(std_scrollEvent), GTK_RANGE(scrollbar));
+    frame = gtk_frame_new(NULL);
     gtk_box_pack_start (GTK_BOX (hbox), availableTags, TRUE, TRUE, 0);
     gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);
+    gtk_container_add(GTK_CONTAINER (frame), hbox);
 
     g_hash_table_insert(WIDGETS, "availableTags", availableTags);
 
@@ -637,7 +689,7 @@ extern void create_gui (void) {
                                     G_CALLBACK (availableTags_dblClick),
                                     NULL);
 
-    gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
     hrule = gtk_hseparator_new ();
     gtk_box_pack_start (GTK_BOX (vbox), hrule, FALSE, FALSE, 10);
@@ -653,7 +705,7 @@ extern void create_gui (void) {
     gtk_entry_set_width_chars (GTK_ENTRY (entry), 6);
     gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
 
-    /*gtk_box_pack_start (GTK_BOX (hbox), hrule, FALSE, FALSE, 5);*/
+//  gtk_box_pack_start (GTK_BOX (hbox), hrule, FALSE, FALSE, 5);
 
     entry = gtk_entry_new ();
     gtk_widget_set_tooltip_text(entry, "--not implemented yet--");
@@ -687,11 +739,12 @@ extern void create_gui (void) {
 
     gtk_paned_add1 (GTK_PANED (paned), vbox);
 
-    /* ------------------- */
+    // -------------------
 
     paned2 = gtk_vpaned_new ();
+
     g_hash_table_insert(WIDGETS, "docEditArea", paned2);
-    gtk_paned_set_position (GTK_PANED (paned2), 150);
+    //gtk_paned_set_position (GTK_PANED (paned2), 150);
 
     hbox = gtk_hbox_new (FALSE, 2);
 
@@ -727,17 +780,22 @@ extern void create_gui (void) {
     scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(adj));
     g_signal_connect(GTK_OBJECT (doclist), "scroll-event",
                                             G_CALLBACK(std_scrollEvent), GTK_RANGE(scrollbar));
-
-    gtk_box_pack_start (GTK_BOX (hbox), doclist, FALSE, TRUE, 0);
-    gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);
-    gtk_paned_add1 (GTK_PANED (paned2), hbox);
-
-    /* ------------------- */
+    gtk_widget_set_size_request(GTK_WIDGET(doclist), -1, 140);
 
     frame = gtk_frame_new (NULL);
-    gtk_paned_add2 (GTK_PANED (paned2), frame);
+    gtk_box_pack_start (GTK_BOX (hbox), doclist, FALSE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);
+    gtk_container_add(GTK_CONTAINER (frame), hbox);
+    gtk_paned_add1 (GTK_PANED (paned2), frame);
+
+    // -------------------
+
+    frame = gtk_frame_new (NULL);
+    lab = gtk_label_new ("No data");
+    gtk_container_add(GTK_CONTAINER (frame), lab);
 
     gtk_paned_add2 (GTK_PANED (paned), paned2);
+    gtk_paned_add2 (GTK_PANED (paned2), frame);
     gtk_box_pack_start (GTK_BOX(menuMainBox), paned, FALSE, FALSE, 2);
     gtk_widget_show_all (window);
     //gtk_tree_view_set_headers_clickable(GTK_TREE_VIEW(doclist), TRUE);
@@ -757,7 +815,10 @@ extern void populate_gui () {
     populate_doclist ();
 
     GtkWidget *frame = gtk_frame_new("");
+    GtkWidget *lab = gtk_label_new ("No data");
+    gtk_container_add(GTK_CONTAINER (frame), lab);
     setDocInformation(frame);
+
 }
 
 
