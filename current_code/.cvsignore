@@ -10,3 +10,4 @@ intltool-merge.in
 intltool-update.in
 mkinstalldirs
 stamp-h1
+testScript-dontBotherReCompilingMe
