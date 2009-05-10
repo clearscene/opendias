@@ -580,6 +580,9 @@ extern void create_gui (void) {
     gtk_menu_item_set_submenu( GTK_MENU_ITEM(mainMenuItem), menu);
 
     menu_bar = gtk_menu_bar_new();
+    objectNamer = gtk_widget_get_accessible(menu_bar);
+    atk_object_set_name(objectNamer, "AppMenuBar");
+
     gtk_menu_bar_append( GTK_MENU_BAR (menu_bar), mainMenuItem );
 
 
@@ -603,12 +606,12 @@ extern void create_gui (void) {
 
     paned = gtk_hpaned_new ();
     objectNamer = gtk_widget_get_accessible(paned);
-    atk_object_set_name(objectNamer, "mainPaned");
+    atk_object_set_name(objectNamer, "windowPaned");
 //    gtk_paned_set_position (GTK_PANED (paned), 150);
 
     vbox = gtk_vbox_new (FALSE, 2);
     objectNamer = gtk_widget_get_accessible(vbox);
-    atk_object_set_name(objectNamer, "vbox");
+    atk_object_set_name(objectNamer, "leftMainVbox");
 
 /*    img = g_strdup(PACKAGE_DATA_DIR);
     conCat(&img, "/../share/opendias/openDIAS.png");
@@ -625,12 +628,25 @@ extern void create_gui (void) {
     gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
 
     frame = gtk_frame_new(NULL);
+    objectNamer = gtk_widget_get_accessible(frame);
+    atk_object_set_name(objectNamer, "leftSideFrame");
+
     hbox = gtk_hbox_new (FALSE, 0);
+    objectNamer = gtk_widget_get_accessible(hbox);
+    atk_object_set_name(objectNamer, "leftSidehBox");
+
     filterTags = gtk_tree_view_new ();
+    objectNamer = gtk_widget_get_accessible(filterTags);
+    atk_object_set_name(objectNamer, "filteredByTags");
+
     gtk_widget_set_size_request(GTK_WIDGET(filterTags), -1, 100);
     adj = gtk_adjustment_new(0,0,0,0,0,0);
+
     gtk_tree_view_set_vadjustment(GTK_TREE_VIEW(filterTags), GTK_ADJUSTMENT (adj));
     scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(adj));
+    objectNamer = gtk_widget_get_accessible(scrollbar);
+    atk_object_set_name(objectNamer, "filteredByTags-scrollBar");
+
     g_signal_connect(GTK_OBJECT (filterTags), "scroll-event",
                                         G_CALLBACK(std_scrollEvent), GTK_RANGE(scrollbar));
     gtk_box_pack_start (GTK_BOX (hbox), filterTags, TRUE, TRUE, 0);
@@ -656,14 +672,27 @@ extern void create_gui (void) {
     gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
 
     hbox = gtk_hbox_new (FALSE, 0);
+    objectNamer = gtk_widget_get_accessible(hbox);
+    atk_object_set_name(objectNamer, "filterFromHBox");
+
     availableTags = gtk_tree_view_new ();
+    objectNamer = gtk_widget_get_accessible(availableTags);
+    atk_object_set_name(objectNamer, "filterByAvailableTags");
+
     gtk_widget_set_size_request(GTK_WIDGET(availableTags), -1, 100);
     adj = gtk_adjustment_new(0.0,0.0,0.0,0.0,0.0,0.0);
+
     gtk_tree_view_set_vadjustment(GTK_TREE_VIEW(availableTags), GTK_ADJUSTMENT (adj));
     scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(adj));
+    objectNamer = gtk_widget_get_accessible(scrollbar);
+    atk_object_set_name(objectNamer, "filterByAvailableTags-scrollBar");
+
     g_signal_connect(GTK_OBJECT (availableTags), "scroll-event",
                                             G_CALLBACK(std_scrollEvent), GTK_RANGE(scrollbar));
     frame = gtk_frame_new(NULL);
+    objectNamer = gtk_widget_get_accessible(frame);
+    atk_object_set_name(objectNamer, "filterByAvailableTagsFrame");
+
     gtk_box_pack_start (GTK_BOX (hbox), availableTags, TRUE, TRUE, 0);
     gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);
     gtk_container_add(GTK_CONTAINER (frame), hbox);
@@ -708,7 +737,7 @@ extern void create_gui (void) {
 //  gtk_box_pack_start (GTK_BOX (hbox), hrule, FALSE, FALSE, 5);
 
     entry = gtk_entry_new ();
-    gtk_widget_set_tooltip_text(entry, "--not implemented yet--");
+    gtk_widget_set_tooltip_text(entry, "--not implemented yet--from date");
     gtk_widget_set_sensitive(entry, FALSE);
     gtk_entry_set_width_chars (GTK_ENTRY (entry), 6);
     gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
@@ -722,7 +751,7 @@ extern void create_gui (void) {
     gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
 
     entry = gtk_entry_new ();
-    gtk_widget_set_tooltip_text(entry, "--not implemented yet--");
+    gtk_widget_set_tooltip_text(entry, "--not implemented yet--to date");
     gtk_widget_set_sensitive(entry, FALSE);
     gtk_entry_set_width_chars (GTK_ENTRY (entry), 6);
     gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
@@ -742,13 +771,20 @@ extern void create_gui (void) {
     // -------------------
 
     paned2 = gtk_vpaned_new ();
+    objectNamer = gtk_widget_get_accessible(paned2);
+    atk_object_set_name(objectNamer, "mainPanel");
 
     g_hash_table_insert(WIDGETS, "docEditArea", paned2);
     //gtk_paned_set_position (GTK_PANED (paned2), 150);
 
     hbox = gtk_hbox_new (FALSE, 2);
+    objectNamer = gtk_widget_get_accessible(hbox);
+    atk_object_set_name(objectNamer, "docList-hBox");
 
     doclist = gtk_tree_view_new ();
+    objectNamer = gtk_widget_get_accessible(doclist);
+    atk_object_set_name(objectNamer, "docList-treeView");
+
     //gtk_widget_set_size_request(GTK_WIDGET(availableTags), -1, 100);
     g_hash_table_insert(WIDGETS, "docList", doclist);
     renderer = gtk_cell_renderer_text_new ();
@@ -776,13 +812,20 @@ extern void create_gui (void) {
                                     NULL);
 
     adj = gtk_adjustment_new(0.0,0.0,0.0,0.0,0.0,0.0);
+
     gtk_tree_view_set_vadjustment(GTK_TREE_VIEW(doclist), GTK_ADJUSTMENT (adj));
     scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(adj));
+    objectNamer = gtk_widget_get_accessible(scrollbar);
+    atk_object_set_name(objectNamer, "docList-ScrollBar");
+
     g_signal_connect(GTK_OBJECT (doclist), "scroll-event",
                                             G_CALLBACK(std_scrollEvent), GTK_RANGE(scrollbar));
     gtk_widget_set_size_request(GTK_WIDGET(doclist), -1, 140);
 
     frame = gtk_frame_new (NULL);
+    objectNamer = gtk_widget_get_accessible(frame);
+    atk_object_set_name(objectNamer, "documentDetail-MainFrame");
+
     gtk_box_pack_start (GTK_BOX (hbox), doclist, FALSE, TRUE, 0);
     gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);
     gtk_container_add(GTK_CONTAINER (frame), hbox);
@@ -791,6 +834,9 @@ extern void create_gui (void) {
     // -------------------
 
     frame = gtk_frame_new (NULL);
+    objectNamer = gtk_widget_get_accessible(frame);
+    atk_object_set_name(objectNamer, "emptyMainDoc");
+
     lab = gtk_label_new ("No data");
     gtk_container_add(GTK_CONTAINER (frame), lab);
 
