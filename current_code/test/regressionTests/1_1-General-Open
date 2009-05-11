@@ -1,20 +1,41 @@
 from ldtp import *
-#from ldtputils import *
 
 try:
-	logMsg = '1_1-General-Open: Open and close the application.'
-	log (logMsg, 'teststart')
-	log ('test test test', 'warning')
-	launchapp ('/bin/bash', ['test/runMe'])
 	guitimeout (90)
+	log ('1_1-General-Open: Open and close the application.', 'warning')
+
+	testDesc = 'Test: Openning App'
+	log (testDesc, 'teststart')
+	launchapp ('/bin/bash', ['test/runMe'])
 	if waittillguiexist ("frmopenDIAS") == 0:
 		raise LdtpExecutionError ('Cannot open application')
-	log ('test 2 test 2 test', 'warning')
+	log (testDesc, 'pass')
+	log (testDesc, 'testend')
+
+	testDesc = 'Test: About page'
+	log (testDesc, 'teststart')
+	selectmenuitem('frmopenDIAS', 'Help;About')
+	if waittillguiexist('dlgAboutopendias', 'Close') == 0:
+		raise LdtpExecutionError ('Could not open About dialog')
+	wait(1)
+	click('dlgAboutopendias', 'Close')
+	if waittillguinotexist ("dlgAboutopendias") == 0:
+		raise LdtpExecutionError ('Could not close About dialog')
+	log (testDesc, 'pass')
+	log (testDesc, 'testend')
+
+	testDesc = 'Test: Closing App'
+	log (testDesc, 'teststart')
+	selectmenuitem('frmopenDIAS', 'File;Exit')
 	if waittillguinotexist ("frmopenDIAS") == 0:
 		raise LdtpExecutionError ('Cannot close application')
-	wait(10)
-	log (logMsg, 'pass')
+	log (testDesc, 'pass')
+	log (testDesc, 'testend')
+
 except LdtpExecutionError, msg:
 	log (msg, 'cause')
-	log (logMsg, 'fail')
-log (logMsg, 'testend')
+	log (testDesc, 'fail')
+	log (testDesc, 'testend')
+
+wait(6)
+

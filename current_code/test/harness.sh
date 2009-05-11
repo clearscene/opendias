@@ -56,8 +56,9 @@ for requested in $runTests; do
 
       diff -ydN ${TEST}.result/index.out $outputDir/$TEST/index.out > $outputDir/$TEST/diff.out
 
-      if [ ! -s $outputDir/$TEST/diff.out ]; then
+      if [ "$?" == "0" ]; then
         echo -en "<p>1 ......" >> $outputDir/index.html
+        rm $outputDir/$TEST/diff.out
         passCount="$passCount."
       else
         echo -en "<p>0 ......" >> $outputDir/index.html

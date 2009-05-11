@@ -3,7 +3,9 @@
 #
 # Cleanup
 #
-rm -rf src/*.gcda src/*.gcno test/valgrind.out test/lastCoverage/* test/lastRegression/*
+rm -rf src/*.gcda src/*.gcno test/valgrind.out test/lastCoverage test/lastRegression
+mkdir test/lastCoverage/
+mkdir test/lastRegression/
 
 
 #
@@ -42,9 +44,11 @@ echo Creating startup scripts ...
 CODENAME=`lsb_release -c | cut -f2`
 SUPPRESS=""
 for SUPP in `ls test/suppressions/$CODENAME/*`; do
-  SUPPRESS="$SUPPRESS --suppressions=$SUPP"
+  if [ -f $SUPP ]; then
+    SUPPRESS="$SUPPRESS --suppressions=$SUPP"
+  fi
 done
-VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=test/valgrind.out "
+VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=test/lastRegression/valgrind.out "
 echo G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind $SUPPRESS $VALGRINDOPTS src/opendias \&\> test/lastRegression/appLog.out > test/runMe
 chmod 755 test/runMe
 
