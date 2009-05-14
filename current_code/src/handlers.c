@@ -528,7 +528,7 @@ extern void create_gui (void) {
     GtkWidget *window, *paned, *vbox, *filterTags, 
         *availableTags, *paned2, *doclist, *frame,
         *lab, *hbox, *hrule, *button, *image, *menuMainBox,
-        *entry, *scrollbar, *menu_bar, *mainMenuItem, *menu, *menuitem;
+        *entry, *scrollbar, *menu_bar, *mainMenuItem, *dropDownArea, *menuitem;
     GtkObject *adj;
     AtkObject *objectNamer;
     GdkPixbuf *pixBuf;
@@ -555,55 +555,56 @@ extern void create_gui (void) {
     gtk_container_add( GTK_CONTAINER(window), menuMainBox);
 ///    free(img);
 
-    menu = gtk_menu_new ();
-    objectNamer = gtk_widget_get_accessible(menu);
-    atk_object_set_name(objectNamer, "menu");
-
-
-    menuitem = gtk_menu_item_new_with_mnemonic ("_Change Library");
-    g_signal_connect(G_OBJECT (menuitem), "activate",
-                                        GTK_SIGNAL_FUNC (pickNewLocation), window);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-    menuitem = gtk_menu_item_new_with_mnemonic ("_Acquire");
-    g_signal_connect(G_OBJECT (menuitem), "activate",
-                                        GTK_SIGNAL_FUNC (startAcquireOperation), NULL);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-    menuitem = gtk_menu_item_new_with_mnemonic ("_Exit");
-    g_signal_connect(G_OBJECT (menuitem), "activate",
-                                        GTK_SIGNAL_FUNC (shutdown_app), NULL);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-
-    mainMenuItem = gtk_menu_item_new_with_label("File");
-    gtk_menu_item_set_submenu( GTK_MENU_ITEM(mainMenuItem), menu);
-
+    //
+    // Create the menu
+    //
     menu_bar = gtk_menu_bar_new();
     objectNamer = gtk_widget_get_accessible(menu_bar);
     atk_object_set_name(objectNamer, "AppMenuBar");
 
+    // File dropdown
+    mainMenuItem = gtk_menu_item_new_with_mnemonic("_File");
     gtk_menu_bar_append( GTK_MENU_BAR (menu_bar), mainMenuItem );
 
+    dropDownArea = gtk_menu_new ();
+    objectNamer = gtk_widget_get_accessible(dropDownArea);
+    atk_object_set_name(objectNamer, "fileMenuDropDown");
+    gtk_menu_item_set_submenu( GTK_MENU_ITEM(mainMenuItem), dropDownArea);
 
+    menuitem = gtk_menu_item_new_with_mnemonic ("_Change Library");
+    g_signal_connect(G_OBJECT (menuitem), "activate",
+                                        GTK_SIGNAL_FUNC (pickNewLocation), window);
+    gtk_menu_shell_append (GTK_MENU_SHELL (dropDownArea), menuitem);
 
-    menu = gtk_menu_new ();
+    menuitem = gtk_menu_item_new_with_mnemonic ("_Acquire");
+    g_signal_connect(G_OBJECT (menuitem), "activate",
+                                        GTK_SIGNAL_FUNC (startAcquireOperation), NULL);
+    gtk_menu_shell_append (GTK_MENU_SHELL (dropDownArea), menuitem);
+
+    menuitem = gtk_menu_item_new_with_mnemonic ("_Exit");
+    g_signal_connect(G_OBJECT (menuitem), "activate",
+                                        GTK_SIGNAL_FUNC (shutdown_app), NULL);
+    gtk_menu_shell_append (GTK_MENU_SHELL (dropDownArea), menuitem);
+
+    // Help dropdown
+    mainMenuItem = gtk_menu_item_new_with_mnemonic("_Help");
+    gtk_menu_bar_append( GTK_MENU_BAR (menu_bar), mainMenuItem );
+
+    dropDownArea = gtk_menu_new ();
+    objectNamer = gtk_widget_get_accessible(dropDownArea);
+    atk_object_set_name(objectNamer, "fileMenuDropDown");
+    gtk_menu_item_set_submenu( GTK_MENU_ITEM(mainMenuItem), dropDownArea);
 
     menuitem = gtk_menu_item_new_with_mnemonic ("_About");
     g_signal_connect(G_OBJECT (menuitem), "activate",
                                         GTK_SIGNAL_FUNC (show_credits), window);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+    gtk_menu_shell_append (GTK_MENU_SHELL (dropDownArea), menuitem);
 
-
-    mainMenuItem = gtk_menu_item_new_with_label("Help");
-    gtk_menu_item_set_submenu( GTK_MENU_ITEM(mainMenuItem), menu);
-
-
-    gtk_menu_bar_append( GTK_MENU_BAR (menu_bar), mainMenuItem );
-
-
+    // Add menu bar to the main Window
     gtk_box_pack_start(GTK_BOX(menuMainBox), menu_bar, FALSE, FALSE, 2);
 
+
+    // Main App area
     paned = gtk_hpaned_new ();
     objectNamer = gtk_widget_get_accessible(paned);
     atk_object_set_name(objectNamer, "windowPaned");
@@ -622,6 +623,9 @@ extern void create_gui (void) {
 */
 
     hrule = gtk_hseparator_new ();
+    objectNamer = gtk_widget_get_accessible(hrule);
+    atk_object_set_name(objectNamer, "sep1");
+
     gtk_box_pack_start (GTK_BOX (vbox), hrule, FALSE, FALSE, 10);
 
     lab = gtk_label_new ("Filtered With Tags:");
@@ -721,14 +725,22 @@ extern void create_gui (void) {
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
     hrule = gtk_hseparator_new ();
+    objectNamer = gtk_widget_get_accessible(hrule);
+    atk_object_set_name(objectNamer, "sep2");
+
     gtk_box_pack_start (GTK_BOX (vbox), hrule, FALSE, FALSE, 10);
 
     lab = gtk_label_new ("Filter By Date:");
     gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
 
     hbox = gtk_hbox_new (TRUE, 2);
+    objectNamer = gtk_widget_get_accessible(hbox);
+    atk_object_set_name(objectNamer, "dateFilterBox");
 
     entry = gtk_entry_new ();
+    objectNamer = gtk_widget_get_accessible(entry);
+    atk_object_set_name(objectNamer, "fromDate");
+
     gtk_widget_set_tooltip_text(entry, "--not implemented yet--");
     gtk_widget_set_sensitive(entry, FALSE);
     gtk_entry_set_width_chars (GTK_ENTRY (entry), 6);
@@ -737,7 +749,10 @@ extern void create_gui (void) {
 //  gtk_box_pack_start (GTK_BOX (hbox), hrule, FALSE, FALSE, 5);
 
     entry = gtk_entry_new ();
-    gtk_widget_set_tooltip_text(entry, "--not implemented yet--from date");
+    objectNamer = gtk_widget_get_accessible(entry);
+    atk_object_set_name(objectNamer, "toDate");
+
+    gtk_widget_set_tooltip_text(entry, "--not implemented yet--");
     gtk_widget_set_sensitive(entry, FALSE);
     gtk_entry_set_width_chars (GTK_ENTRY (entry), 6);
     gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
@@ -745,18 +760,27 @@ extern void create_gui (void) {
     gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
     hrule = gtk_hseparator_new ();
+    objectNamer = gtk_widget_get_accessible(hrule);
+    atk_object_set_name(objectNamer, "sep3");
+
     gtk_box_pack_start (GTK_BOX (vbox), hrule, FALSE, FALSE, 10);
 
     lab = gtk_label_new ("Filter By:");
     gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 0);
 
     entry = gtk_entry_new ();
-    gtk_widget_set_tooltip_text(entry, "--not implemented yet--to date");
+    objectNamer = gtk_widget_get_accessible(entry);
+    atk_object_set_name(objectNamer, "filterBy");
+
+    gtk_widget_set_tooltip_text(entry, "--not implemented yet--");
     gtk_widget_set_sensitive(entry, FALSE);
     gtk_entry_set_width_chars (GTK_ENTRY (entry), 6);
     gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
 
     hrule = gtk_hseparator_new ();
+    objectNamer = gtk_widget_get_accessible(hrule);
+    atk_object_set_name(objectNamer, "sep4");
+
     gtk_box_pack_start (GTK_BOX (vbox), hrule, FALSE, FALSE, 10);
 
     button = gtk_button_new();
@@ -866,5 +890,4 @@ extern void populate_gui () {
     setDocInformation(frame);
 
 }
-
 

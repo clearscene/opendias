@@ -409,14 +409,20 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
 }
 #endif // CAN_SCAN //
 
+void finishAcquireOperation_button(GtkWidget *forgetMe, GtkWidget *window) {
+
+	finishAcquireOperation(window);
+
+}
 
 extern void startAcquireOperation(void) {
 
-    GtkWidget *window, *vbox, *lab, *notebook, *frame, *vvbox;
+    GtkWidget *window, *vbox, *lab, *notebook, *frame, *vvbox, *nbook, *hbox;
     char *instructionText, *tmp;
 #ifdef CAN_READODF
     GtkWidget *filebox, *buttonodf, *fileSelector;
     GtkFileFilter *filter;
+    AtkObject *objectNamer;
 #endif // CAN_READODF //
 #ifdef CAN_SCAN
     GtkWidget *progress, *resolutionBar, *box, 
@@ -436,7 +442,7 @@ extern void startAcquireOperation(void) {
     g_hash_table_insert(SCANWIDGETS, "window", window);
     g_signal_connect (window, "delete_event", GTK_SIGNAL_FUNC(finishAcquireOperation), window);
     gtk_window_set_title (GTK_WINDOW (window), "openDIAS: Acquire");
-    gtk_window_set_default_size (GTK_WINDOW (window), 550, 300);
+    //gtk_window_set_default_size (GTK_WINDOW (window), 550, 300);
     gtk_window_set_modal (GTK_WINDOW (window), TRUE);
     gtk_window_set_position(GTK_WINDOW (window), GTK_WIN_POS_CENTER);
     gtk_widget_show_all (window);
@@ -463,18 +469,15 @@ extern void startAcquireOperation(void) {
 #endif // CAN_SCAN //
 
     vbox = gtk_vbox_new (FALSE, 2);
+    objectNamer = gtk_widget_get_accessible(vbox);
+    atk_object_set_name(objectNamer, "AcquireMainVBox");
 
-    lab = gtk_label_new ("Select a document to store.");
-    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 2);
+    lab = gtk_label_new ("");
+    gtk_label_set_markup (lab, "<b>Select a document to store.</b>");
+    gtk_misc_set_alignment (GTK_MISC(lab), 0, 0);
+    gtk_misc_set_padding (GTK_MISC(lab), 20, 3);
+    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 1);
 
-    notebook = gtk_notebook_new();
-
-    frame = gtk_frame_new (NULL);
-    vvbox = gtk_vbox_new(FALSE, 2);
-    gtk_container_add (GTK_CONTAINER (frame), vvbox);
-    lab = gtk_label_new ("Acquire a new document");
-    gtk_label_set_width_chars(GTK_LABEL(lab), 18);
-    gtk_box_pack_start (GTK_BOX (vvbox), lab, FALSE, FALSE, 2);
     instructionText = g_strdup("Use this screen to add a new document to your arhive. \n");
 #ifdef CAN_OCR
     conCat(&instructionText, "The first tab is to select a ODF document from disk. \n");
@@ -483,33 +486,91 @@ extern void startAcquireOperation(void) {
     conCat(&instructionText, "Any additional tabs are connected to various SANE input devices.\n");
 #endif // CAN_SCAN //
     lab = gtk_label_new (instructionText);
+    gtk_misc_set_alignment (GTK_MISC(lab), 0, 0);
+    gtk_misc_set_padding (GTK_MISC(lab), 20, 1);
+    gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 1);
     free(instructionText);
-    gtk_box_pack_start (GTK_BOX (vvbox), lab, FALSE, FALSE, 2);
-    lab = gtk_label_new ("Acquire a new document");
-    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), frame, lab);
+
+    nbook = gtk_hbox_new (FALSE, 0);
+    objectNamer = gtk_widget_get_accessible(nbook);
+    atk_object_set_name(objectNamer, "tabAreaPadding");
+    lab = gtk_label_new ("");
+    gtk_misc_set_padding (GTK_MISC(lab), 10, 0);
+    gtk_box_pack_start (GTK_BOX (nbook), lab, FALSE, FALSE, 1);
+    notebook = gtk_notebook_new();
+    gtk_box_pack_start (GTK_BOX (nbook), notebook, FALSE, FALSE, 1);
+    lab = gtk_label_new ("");
+    gtk_misc_set_padding (GTK_MISC(lab), 10, 0);
+    gtk_box_pack_start (GTK_BOX (nbook), lab, FALSE, FALSE, 1);
+    objectNamer = gtk_widget_get_accessible(notebook);
+    atk_object_set_name(objectNamer, "AcquireNotebook");
 
 #ifdef CAN_READODF
     filebox = gtk_vbox_new (FALSE, 2);
+    objectNamer = gtk_widget_get_accessible(filebox);
+    atk_object_set_name(objectNamer, "AcquirefileSelectorBox");
+
+    // Title row
+    lab = gtk_label_new ("Select the file you wish to imnport.");
+    gtk_misc_set_alignment (GTK_MISC(lab), 0, 0);
+    gtk_misc_set_padding (GTK_MISC(lab), 46, 0); // includes padding that other lines have with their vbox padding
+    gtk_box_pack_start (GTK_BOX (filebox), lab, FALSE, FALSE, 2);
+
+    // Workhorse row
+    hbox = gtk_hbox_new (FALSE, 2);
+    lab = gtk_label_new ("File:");
+    gtk_misc_set_alignment (GTK_MISC(lab), 1, 0);
+    gtk_widget_set_size_request(GTK_WIDGET(lab), 40, -1);
+    gtk_box_pack_start (GTK_BOX (hbox), lab, FALSE, FALSE, 2);
+
     fileSelector = gtk_file_chooser_button_new ("document to import", GTK_FILE_CHOOSER_ACTION_OPEN);
-    gtk_file_chooser_button_set_width_chars(GTK_FILE_CHOOSER_BUTTON(fileSelector), 30);
-    gtk_box_pack_start (GTK_BOX (filebox), fileSelector, FALSE, FALSE, 2);
     filter = gtk_file_filter_new( ); 
     gtk_file_filter_set_name( filter, "Office Write Documents"); 
     gtk_file_filter_add_pattern( filter, "*.odt" ); 
     gtk_file_chooser_add_filter( GTK_FILE_CHOOSER(fileSelector), filter ); 
+    gtk_file_chooser_button_set_width_chars(GTK_FILE_CHOOSER_BUTTON(fileSelector), 30);
+    gtk_box_pack_start (GTK_BOX (hbox), fileSelector, FALSE, FALSE, 2);
+
+    gtk_box_pack_start (GTK_BOX (filebox), hbox, FALSE, FALSE, 2);
+
+    // new row (import button)
+    hbox = gtk_hbox_new (FALSE, 2);
     buttonodf = gtk_button_new();
     gtk_button_set_label(GTK_BUTTON(buttonodf), "Import File");
     gtk_widget_set_size_request(GTK_WIDGET(buttonodf), 100, -1);
     g_signal_connect(GTK_OBJECT (buttonodf), "clicked",
                               G_CALLBACK (importFile),
                               fileSelector);
-    gtk_box_pack_start (GTK_BOX (filebox), buttonodf, FALSE, FALSE, 2);
+
+    lab = gtk_label_new ("");
+    gtk_misc_set_padding (GTK_MISC(lab), 20, 0);
+    gtk_box_pack_start (GTK_BOX (hbox), lab, FALSE, FALSE, 2);
+    gtk_box_pack_start (GTK_BOX (hbox), buttonodf, FALSE, FALSE, 2);
+    lab = gtk_label_new ("");
+    gtk_misc_set_padding (GTK_MISC(lab), 20, 0);
+    gtk_box_pack_start (GTK_BOX (hbox), lab, FALSE, FALSE, 2);
+    gtk_box_pack_start (GTK_BOX (filebox), hbox, FALSE, FALSE, 2);
+
+    // Add the whole lot to a new notebook tab
     lab = gtk_label_new ("From: File");
     gtk_notebook_append_page(GTK_NOTEBOOK(notebook), filebox, lab);
 #endif // CAN_READODF //
 
-    gtk_box_pack_start (GTK_BOX (vbox), notebook, FALSE, FALSE, 2);
+    gtk_box_pack_start (GTK_BOX (vbox), nbook, FALSE, FALSE, 2);
     gtk_container_add (GTK_CONTAINER (window), vbox);
+
+    buttonodf = gtk_button_new();
+    gtk_button_set_label(GTK_BUTTON(buttonodf), "Cancel");
+    gtk_widget_set_size_request(GTK_WIDGET(buttonodf), 100, -1);
+    g_signal_connect(GTK_OBJECT (buttonodf), "clicked",
+			      GTK_SIGNAL_FUNC(finishAcquireOperation_button), 
+			      window);
+    hbox = gtk_hbox_new (FALSE, 2);
+    lab = gtk_label_new ("");
+    gtk_misc_set_padding (GTK_MISC(lab), 10, 0);
+    gtk_box_pack_start (GTK_BOX (hbox), lab, FALSE, TRUE, 2);
+    gtk_box_pack_start (GTK_BOX (hbox), buttonodf, FALSE, FALSE, 2);
+    gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 2);
 
     gtk_widget_show_all (window);
     while(gtk_events_pending ())
