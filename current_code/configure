@@ -9034,7 +9034,7 @@ $as_echo "$as_me: WARNING: You wll not be able to import any ODF document." >&2;
 fi
 
 
-rm -rf testScript-dontBotherReConfiguringMe
+rm -rf dontBotherReConfiguringMe-testScript
 
 
 ac_config_files="$ac_config_files Makefile src/Makefile sql/Makefile po/Makefile.in"

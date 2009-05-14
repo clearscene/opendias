@@ -155,7 +155,7 @@ fi
 
 dnl For testing: delete the "dontReConfigureMe" flag. So if 'configure' has been run on its own by a user
 dnl then the "test scripts" know we should recompile
-rm -rf testScript-dontBotherReConfiguringMe
+rm -rf dontBotherReConfiguringMe-testScript
 
 
 AC_OUTPUT([
