@@ -30,7 +30,7 @@ fi
 # Loop over each request.
 for requested in $runTests; do
   # Find all tests that match this request (eg. "1*", given "1_1_General" and "1_2_GeneralFiles")
-  for TEST in `eval find test/regressionTests/ -maxdepth 1 -type f -name $requested `; do
+  for TEST in `eval find test/regressionTests/ -maxdepth 1 -type f -name $requested | sort`; do
     # Create results area and cleanup any old test results
     mkdir -p $outputDir/$TEST
     rm -rf $outputDir/$TEST/*

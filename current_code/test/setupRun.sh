@@ -15,7 +15,7 @@ echo Cleaning ...
 make clean > test/lastRegression/buildLog.out
 # if the file is here, then last time configure was run was in this script
 # so no need to re-do it.
-if [ ! -f testScript-dontBotherReCompilingMe ]; then
+if [ ! -f dontBotherReCompilingMe-testScript ]; then
   echo Configuring ...
   ./configure CFLAGS='--coverage' LIBS='-lgcov' &> test/lastRegression/buildLog2.out
   # unfortunatly bash cannot support "&>>" - yet!
@@ -28,7 +28,7 @@ make &> test/lastRegression/buildLog2.out
 # unfortunatly bash cannot support "&>>" - yet!
 cat test/lastRegression/buildLog2.out >> test/lastRegression/buildLog.out
 rm test/lastRegression/buildLog2.out
-touch testScript-dontBotherReCompilingMe
+touch dontBotherReCompilingMe-testScript
 
 #
 # Generate baseline (coverage) information
@@ -49,7 +49,8 @@ for SUPP in `ls test/suppressions/$CODENAME/*`; do
   fi
 done
 VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=test/lastRegression/valgrind.out "
-echo G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind $SUPPRESS $VALGRINDOPTS src/opendias \&\> test/lastRegression/appLog.out > test/runMe
+GENSUPP="--gen-suppressions=all "
+echo G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind $SUPPRESS $VALGRINDOPTS $GENSUPP src/opendias \&\> test/lastRegression/appLog.out > test/runMe
 chmod 755 test/runMe
 
 
@@ -63,7 +64,6 @@ test/harness.sh $@
 #
 # Collect process and build coverage report
 #
-
 lcov -c -d src -o test/lastCoverage/app_test.info >> test/lastRegression/buildLog.out
 lcov -a test/lastCoverage/app_base.info -a test/lastCoverage/app_test.info -o test/lastCoverage/app_total.info >> test/lastRegression/buildLog.out
 genhtml -o test/lastCoverage test/lastCoverage/app_total.info >> test/lastRegression/buildLog.out

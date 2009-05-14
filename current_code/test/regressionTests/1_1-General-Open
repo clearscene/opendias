@@ -11,6 +11,7 @@ try:
 		raise LdtpExecutionError ('Cannot open application')
 	log (testDesc, 'pass')
 	log (testDesc, 'testend')
+	guitimeout (30)
 
 	testDesc = 'Test: About page'
 	log (testDesc, 'teststart')
