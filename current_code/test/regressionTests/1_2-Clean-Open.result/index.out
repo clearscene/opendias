@@ -1,0 +1,11 @@
+<ldtp>
+<warning>1_1-General-Open: Open and close the application.</warning>
+<test name="Test: Openning App">
+<pass>1</pass>
+</test>
+<test name="Test: About page">
+<pass>1</pass>
+</test>
+<test name="Test: Closing App">
+<pass>1</pass>
+</test>

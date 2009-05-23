@@ -39,10 +39,10 @@ make
 lcov -c -i -d src -o test/lastCoverage/app_base.info
 
 # Start the app with memory management reporting enabled.
-G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind --suppressions=/home/wbooth/.valgrind/gtk.suppression --suppressions=/home/wbooth/.valgrind/basic.suppression --leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=test/valgrind.out src/opendias
+# G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind --suppressions=/home/wbooth/.valgrind/gtk.suppression --suppressions=/home/wbooth/.valgrind/basic.suppression --leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=test/valgrind.out src/opendias
 
 # Run automated tests
-<XXXXXXXXXXXXXXXXXX> -t test/regressionTests/ -o test/lastRegression/
+./test/harness 
 
 # Collect process and build coverage report
 lcov -c -d src -o test/lastCoverage/app_test.info

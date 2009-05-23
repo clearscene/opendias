@@ -8,6 +8,7 @@ testCount="";
 passCount="";
 failCount="";
 outputDir="test/lastRegression";
+PYTHONPATH="..";
 
 # Are we generating the results files?
 FIRST=`echo $@ | cut -f1 -d' '`
@@ -37,6 +38,18 @@ for requested in $runTests; do
     rm -rf /tmp/ldtp-$USER/*
     DIFF=""
     ALL=""
+
+    # Create fixed startup environment
+    # backup current environment
+    mkdir -p /tmp/opendias-test-$USER/
+    rm /tmp/opendias-test-$USER/*
+    cp ~/.openDIAS/* /tmp/opendias-test-$USER/
+    # Build new environment
+    if [ -f $TEST.inputs/homeDir/ ]; then
+      cp $TEST.inputs/homeDir/* ~/.openDIAS/
+    else
+      rm -rf ~/.openDIAS
+    fi
 
     # Run the test
     echo Running ... $TEST
@@ -73,6 +86,11 @@ for requested in $runTests; do
     fi
     echo " <a href='$TEST/index.out'>$TEST</a>${DIFF}&nbsp;[<a href='../../${TEST}.result/index.out'>expected</a>]${ALL}</p>" >> $outputDir/index.html
     testCount="$testCount."
+
+    # Restore users real environment
+    rm -rf ~/.openDIAS
+    mkdir ~/.openDIAS
+    cp /tmp/opendias-test-$USER/* ~/.openDIAS
 
   done
 done

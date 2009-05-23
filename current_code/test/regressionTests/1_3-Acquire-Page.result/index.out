@@ -1,0 +1,10 @@
+<ldtp>
+<warning>1_2-Acquire-Page: Open and explore the acquire page.</warning>
+<test name="Test: Openning App">
+<pass>1</pass>
+</test>
+<test name="Test: Acquire page (from menu)">
+<warning>Window 'frmopenDIASAcquire' does not exist</warning>
+<cause>Could not open Acquire dialog</cause>
+<pass>0</pass>
+</test>

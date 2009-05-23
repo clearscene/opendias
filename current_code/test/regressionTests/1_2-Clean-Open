@@ -1,10 +1,17 @@
 from ldtp import *
-import utilsLib
 
 try:
+	guitimeout (90)
 	log ('1_1-General-Open: Open and close the application.', 'warning')
 
-	startAppTest();
+	testDesc = 'Test: Openning App'
+	log (testDesc, 'teststart')
+	launchapp ('/bin/bash', ['test/runMe'])
+	if waittillguiexist ("frmopenDIAS") == 0:
+		raise LdtpExecutionError ('Cannot open application')
+	log (testDesc, 'pass')
+	log (testDesc, 'testend')
+	guitimeout (30)
 
 	testDesc = 'Test: About page'
 	log (testDesc, 'teststart')
@@ -18,11 +25,18 @@ try:
 	log (testDesc, 'pass')
 	log (testDesc, 'testend')
 
-	closeAppTest();
+	testDesc = 'Test: Closing App'
+	log (testDesc, 'teststart')
+	selectmenuitem('frmopenDIAS', 'File;Exit')
+	if waittillguinotexist ("frmopenDIAS") == 0:
+		raise LdtpExecutionError ('Cannot close application')
+	log (testDesc, 'pass')
+	log (testDesc, 'testend')
 
 except LdtpExecutionError, msg:
 	log (msg, 'cause')
 	log (testDesc, 'fail')
 	log (testDesc, 'testend')
 
+wait(6)
 

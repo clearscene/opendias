@@ -1,0 +1,42 @@
+from ldtp import *
+
+try:
+	guitimeout (90)
+	log ('1_2-Acquire-Page: Open and explore the acquire page.', 'warning')
+
+	testDesc = 'Test: Openning App'
+	log (testDesc, 'teststart')
+	launchapp ('/bin/bash', ['test/runMe'])
+	if waittillguiexist ("frmopenDIAS") == 0:
+		raise LdtpExecutionError ('Cannot open application')
+	log (testDesc, 'pass')
+	log (testDesc, 'testend')
+	guitimeout (30)
+
+	testDesc = 'Test: Acquire page (from menu)'
+	log (testDesc, 'teststart')
+	selectmenuitem('frmopenDIAS', 'File;Acquire')
+	if waittillguiexist('frmopenDIASAcquire') == 0:
+		raise LdtpExecutionError ('Could not open Acquire dialog')
+	wait(1)
+	click('frmopenDIASAcquire', 'Cancel')
+	if waittillguinotexist ("frmopenDIASAcquire") == 0:
+		raise LdtpExecutionError ('Could not close Acquire dialog')
+	log (testDesc, 'pass')
+	log (testDesc, 'testend')
+
+	testDesc = 'Test: Closing App'
+	log (testDesc, 'teststart')
+	selectmenuitem('frmopenDIAS', 'File;Exit')
+	if waittillguinotexist ("frmopenDIAS") == 0:
+		raise LdtpExecutionError ('Cannot close application')
+	log (testDesc, 'pass')
+	log (testDesc, 'testend')
+
+except LdtpExecutionError, msg:
+	log (msg, 'cause')
+	log (testDesc, 'fail')
+	log (testDesc, 'testend')
+
+wait(6)
+
