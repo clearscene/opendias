@@ -3,12 +3,14 @@
 # Setup
 DATE=`date +%Y-%b-%d_%H:%M`
 echo -en "<html><body><h1>Regression Tests, last run: $DATE</h1><h2>Results</h2>\n" > test/lastRegression/index.html
+echo -en "<table><tr><th>Result</th><th>Test</th><th colspan=2>Memory</th><th colspan=2>Test Log</th><th colspan=2>App Log</th></tr>\n" >> test/lastRegression/index.html
+
 runTests="";
 testCount="";
 passCount="";
 failCount="";
 outputDir="test/lastRegression";
-PYTHONPATH="..";
+PYTHONPATH="test/regressionTests/";
 
 # Are we generating the results files?
 FIRST=`echo $@ | cut -f1 -d' '`
@@ -31,22 +33,21 @@ fi
 # Loop over each request.
 for requested in $runTests; do
   # Find all tests that match this request (eg. "1*", given "1_1_General" and "1_2_GeneralFiles")
-  for TEST in `eval find test/regressionTests/ -maxdepth 1 -type f -name $requested | sort`; do
+  for TEST in `eval find test/regressionTests/ -maxdepth 1 -type f -name $requested | grep -v utilsLib.py | sort`; do
     # Create results area and cleanup any old test results
     mkdir -p $outputDir/$TEST
     rm -rf $outputDir/$TEST/*
     rm -rf /tmp/ldtp-$USER/*
-    DIFF=""
-    ALL=""
+    echo -en "<tr>" >> $outputDir/index.html
 
     # Create fixed startup environment
     # backup current environment
-    mkdir -p /tmp/opendias-test-$USER/
-    rm /tmp/opendias-test-$USER/*
-    cp ~/.openDIAS/* /tmp/opendias-test-$USER/
+    rm -rf /tmp/opendias-test-$USER
+    mkdir -p /tmp/opendias-test-$USER
+    cp ~/.openDIAS/ /tmp/opendias-test-$USER/
     # Build new environment
     if [ -f $TEST.inputs/homeDir/ ]; then
-      cp $TEST.inputs/homeDir/* ~/.openDIAS/
+      cp $TEST.inputs/homeDir/ ~/.openDIAS/
     else
       rm -rf ~/.openDIAS
     fi
@@ -55,42 +56,93 @@ for requested in $runTests; do
     echo Running ... $TEST
     python $TEST
 
-    # Count the result
+    # Check for test crash
     if [ "$?" == "0" ]; then
+
+      RES=0;
+
+      # memory log
+      cp $outputDir/valgrind.out $outputDir/$TEST/valgrind.out
+      if [ "$GENERATE" == "Y" ]; then
+        if [ ! -e ${TEST}.result ]; then
+          mkdir -p ${TEST}.result
+        fi
+        cp $outputDir/$TEST/valgrind.out ${TEST}.result/valgrind.out
+      fi
+      diff -ydN ${TEST}.result/valgrind.out $outputDir/$TEST/valgrind.out > $outputDir/$TEST/valgrindDiff.out
+      MEM_RES="<td><a href='$TEST/valgrind.out'>actual</a></td>"
+      if [ "$?" == "0" ]; then
+        rm $outputDir/$TEST/valgrindDiff.out
+        MEM_RES="$MEM_RED<td>OK</td>"
+      else
+        MEM_RES="$MEM_RES<td><a href='$TEST/valgrind.out'>diff</a>|<a href='../../${TEST}.result/valgrind.out'>expected</a></td>"
+        RES=1
+      fi
+
+      # test log
       mv /tmp/ldtp-$USER/* $outputDir/$TEST/
       cp $outputDir/$TEST/*.xml $outputDir/$TEST/index.out
-
       if [ "$GENERATE" == "Y" ]; then
         if [ ! -e ${TEST}.result ]; then
           mkdir -p ${TEST}.result
         fi
         cp $outputDir/$TEST/index.out ${TEST}.result/index.out
       fi
-
-      diff -ydN ${TEST}.result/index.out $outputDir/$TEST/index.out > $outputDir/$TEST/diff.out
-
+      diff -ydN ${TEST}.result/index.out $outputDir/$TEST/index.out > $outputDir/$TEST/testLogDiff.out
+      TEST_RES="<td><a href='$TEST/index.out'>actual</a></td>"
       if [ "$?" == "0" ]; then
-        echo -en "<p>1 ......" >> $outputDir/index.html
-        rm $outputDir/$TEST/diff.out
+        rm $outputDir/$TEST/testLogDiff.out
+        TEST_RES="$TEST_RES<td>OK</td>"
+      else
+        TEST_RES="$TEST_RES<td><a href='$TEST/testLogDiff.out'>diff</a>|<a href='../../${TEST}.result/index.out'>expected</a></td>"
+        RES=1
+      fi
+
+      # app log
+      cp $outputDir/appLog.out $outputDir/$TEST/appLog.out
+      if [ "$GENERATE" == "Y" ]; then
+        if [ ! -e ${TEST}.result ]; then
+          mkdir -p ${TEST}.result
+        fi
+        cp $outputDir/$TEST/appLog.out ${TEST}.result/appLog.out
+      fi
+      diff -ydN ${TEST}.result/appLog.out $outputDir/$TEST/appLog.out > $outputDir/$TEST/appLogDiff.out
+      APP_RES="<td><a href='$TEST/appLog.out'>actual</a></td>"
+      if [ "$?" == "0" ]; then
+        rm $outputDir/$TEST/appLogDiff.out
+        APP_RES="$APP_RED<td>OK</td>"
+      else
+        APP_RES="$APP_RES<td><a href='$TEST/testLogDiff.out'>diff</a>|<a href='../../${TEST}.result/appLog.out'>expected</a></td>"
+        RES=1
+      fi
+
+      # Collate results
+      if [ "$RES" == "0" ]; then
+        echo -en "<td>PASS</td>" >> $outputDir/index.html
         passCount="$passCount."
       else
-        echo -en "<p>0 ......" >> $outputDir/index.html
-        DIFF="&nbsp;[<a href='$TEST/diff.out'>diff</a>]"
+        echo -en "<td>FAIL</td>" >> $outputDir/index.html
         failCount="$failCount."
       fi
-      ALL="&nbsp;[<a href='$TEST/'>all</a>]"
 
     else
-      echo -en "<p>Crash .." >> $outputDir/index.html
+      echo -en "<td>>CRASH</td>" >> $outputDir/index.html
       failCount="$failCount."
     fi
-    echo " <a href='$TEST/index.out'>$TEST</a>${DIFF}&nbsp;[<a href='../../${TEST}.result/index.out'>expected</a>]${ALL}</p>" >> $outputDir/index.html
+
+    # Output result line
+    echo "<td><a href='$TEST/'>$TEST</a></td>" >> $outputDir/index.html
+    echo $MEM_RES >> $outputDir/index.html
+    echo $TEST_RES >> $outputDir/index.html
+    echo $APP_RES >> $outputDir/index.html
     testCount="$testCount."
+
+    echo -en "</tr>" >> $outputDir/index.html
 
     # Restore users real environment
     rm -rf ~/.openDIAS
     mkdir ~/.openDIAS
-    cp /tmp/opendias-test-$USER/* ~/.openDIAS
+    cp /tmp/opendias-test-$USER/ ~/.openDIAS/
 
   done
 done

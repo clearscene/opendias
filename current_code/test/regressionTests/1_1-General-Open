@@ -4,7 +4,7 @@ import utilsLib
 try:
 	log ('1_1-General-Open: Open and close the application.', 'warning')
 
-	startAppTest();
+	utilsLib.startAppTest();
 
 	testDesc = 'Test: About page'
 	log (testDesc, 'teststart')
@@ -18,7 +18,7 @@ try:
 	log (testDesc, 'pass')
 	log (testDesc, 'testend')
 
-	closeAppTest();
+	utilsLib.closeAppTest();
 
 except LdtpExecutionError, msg:
 	log (msg, 'cause')
