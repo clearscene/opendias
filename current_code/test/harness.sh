@@ -2,8 +2,8 @@
 
 # Setup
 DATE=`date +%Y-%b-%d_%H:%M`
-echo -en "<html><body><h1>Regression Tests, last run: $DATE</h1><h2>Results</h2>\n" > test/lastRegression/index.html
-echo -en "<table><tr><th>Result</th><th>Test</th><th colspan=2>Memory</th><th colspan=2>Test Log</th><th colspan=2>App Log</th></tr>\n" >> test/lastRegression/index.html
+echo -en "<html><style>.none {background-color: none}\n .ok {background-color: #ccFFcc;}\n .fail {background-color: #FFCCCC;}</style><body><h1>Regression Tests, last run: $DATE</h1><h2>Results</h2>\n" > test/lastRegression/index.html
+echo -en "<table cellpadding=1 cellspacing=1 border=1><tr><th>Result</th><th>Test</th><th colspan=2>Memory</th><th colspan=2>Test Log</th><th colspan=2>App Log</th></tr>\n" >> test/lastRegression/index.html
 
 runTests="";
 testCount="";
@@ -16,7 +16,7 @@ PYTHONPATH="test/regressionTests/";
 FIRST=`echo $@ | cut -f1 -d' '`
 if [ "$FIRST" == "-r" ]; then
   GENERATE="Y"
-  echo Generating result files.
+  echo Will be generating result files.
   GIVEN=`echo $@ | cut -b 3-`
 else
   GIVEN=$@
@@ -33,24 +33,29 @@ fi
 # Loop over each request.
 for requested in $runTests; do
   # Find all tests that match this request (eg. "1*", given "1_1_General" and "1_2_GeneralFiles")
-  for TEST in `eval find test/regressionTests/ -maxdepth 1 -type f -name $requested | grep -v utilsLib.py | sort`; do
+  for TEST in `eval find test/regressionTests/ -maxdepth 1 -type f -name $requested | grep -v utilsLib.py | grep -v "cvsignore" | sort`; do
     # Create results area and cleanup any old test results
     mkdir -p $outputDir/$TEST
     rm -rf $outputDir/$TEST/*
     rm -rf /tmp/ldtp-$USER/*
-    echo -en "<tr>" >> $outputDir/index.html
 
     # Create fixed startup environment
     # backup current environment
     rm -rf /tmp/opendias-test-$USER
     mkdir -p /tmp/opendias-test-$USER
-    cp ~/.openDIAS/ /tmp/opendias-test-$USER/
+    cp -r ~/.openDIAS/* /tmp/opendias-test-$USER/
     # Build new environment
-    if [ -f $TEST.inputs/homeDir/ ]; then
-      cp $TEST.inputs/homeDir/ ~/.openDIAS/
-    else
-      rm -rf ~/.openDIAS
-    fi
+#    if [ -f $TEST.inputs/homeDir ]; then
+#      cp -r $TEST.inputs/homeDir/* ~/.openDIAS/
+#    else
+#      rm -rf ~/.openDIAS
+#    fi
+
+    # Reset test result vars
+    RES=0;
+    MEM_RES=""
+    TEST_RES=""
+    APP_RES=""
 
     # Run the test
     echo Running ... $TEST
@@ -59,7 +64,11 @@ for requested in $runTests; do
     # Check for test crash
     if [ "$?" == "0" ]; then
 
-      RES=0;
+      # Wait until the child process has finished.
+      while [ -f runningTest ]
+      do
+        sleep 1
+      done
 
       # memory log
       cp $outputDir/valgrind.out $outputDir/$TEST/valgrind.out
@@ -69,11 +78,11 @@ for requested in $runTests; do
         fi
         cp $outputDir/$TEST/valgrind.out ${TEST}.result/valgrind.out
       fi
+      MEM_RES="<td class='none'><a href='$TEST/valgrind.out'>actual</a></td>"
       diff -ydN ${TEST}.result/valgrind.out $outputDir/$TEST/valgrind.out > $outputDir/$TEST/valgrindDiff.out
-      MEM_RES="<td><a href='$TEST/valgrind.out'>actual</a></td>"
       if [ "$?" == "0" ]; then
         rm $outputDir/$TEST/valgrindDiff.out
-        MEM_RES="$MEM_RED<td>OK</td>"
+        MEM_RES="$MEM_RES<td class='ok'>OK</td>"
       else
         MEM_RES="$MEM_RES<td><a href='$TEST/valgrind.out'>diff</a>|<a href='../../${TEST}.result/valgrind.out'>expected</a></td>"
         RES=1
@@ -88,11 +97,11 @@ for requested in $runTests; do
         fi
         cp $outputDir/$TEST/index.out ${TEST}.result/index.out
       fi
+      TEST_RES="<td class='none'><a href='$TEST/index.out'>actual</a></td>"
       diff -ydN ${TEST}.result/index.out $outputDir/$TEST/index.out > $outputDir/$TEST/testLogDiff.out
-      TEST_RES="<td><a href='$TEST/index.out'>actual</a></td>"
       if [ "$?" == "0" ]; then
         rm $outputDir/$TEST/testLogDiff.out
-        TEST_RES="$TEST_RES<td>OK</td>"
+        TEST_RES="$TEST_RES<td class='ok'>OK</td>"
       else
         TEST_RES="$TEST_RES<td><a href='$TEST/testLogDiff.out'>diff</a>|<a href='../../${TEST}.result/index.out'>expected</a></td>"
         RES=1
@@ -106,11 +115,11 @@ for requested in $runTests; do
         fi
         cp $outputDir/$TEST/appLog.out ${TEST}.result/appLog.out
       fi
+      APP_RES="<td class='none'><a href='$TEST/appLog.out'>actual</a></td>"
       diff -ydN ${TEST}.result/appLog.out $outputDir/$TEST/appLog.out > $outputDir/$TEST/appLogDiff.out
-      APP_RES="<td><a href='$TEST/appLog.out'>actual</a></td>"
       if [ "$?" == "0" ]; then
         rm $outputDir/$TEST/appLogDiff.out
-        APP_RES="$APP_RED<td>OK</td>"
+        APP_RES="$APP_RES<td class='ok'>OK</td>"
       else
         APP_RES="$APP_RES<td><a href='$TEST/testLogDiff.out'>diff</a>|<a href='../../${TEST}.result/appLog.out'>expected</a></td>"
         RES=1
@@ -118,15 +127,19 @@ for requested in $runTests; do
 
       # Collate results
       if [ "$RES" == "0" ]; then
-        echo -en "<td>PASS</td>" >> $outputDir/index.html
+        echo -en "<tr>" >> $outputDir/index.html
+        echo -en "<td class='ok'>PASS</td>" >> $outputDir/index.html
         passCount="$passCount."
       else
+        echo -en "<tr class='fail'>" >> $outputDir/index.html
         echo -en "<td>FAIL</td>" >> $outputDir/index.html
         failCount="$failCount."
       fi
 
     else
-      echo -en "<td>>CRASH</td>" >> $outputDir/index.html
+      echo -en "<tr class='fail'>" >> $outputDir/index.html
+      echo -en "<td>CRASH</td>" >> $outputDir/index.html
+      TEST_RES="<td colspan=6>&nbsp;</td>"
       failCount="$failCount."
     fi
 
@@ -140,12 +153,13 @@ for requested in $runTests; do
     echo -en "</tr>" >> $outputDir/index.html
 
     # Restore users real environment
-    rm -rf ~/.openDIAS
-    mkdir ~/.openDIAS
-    cp /tmp/opendias-test-$USER/ ~/.openDIAS/
+#    rm -rf ~/.openDIAS
+#    mkdir ~/.openDIAS
+#    cp -r /tmp/opendias-test-$USER/* ~/.openDIAS/
 
   done
 done
+echo -en "</table>" >> $outputDir/index.html
 
 # Tot up the totals
 testCount=`echo -n $testCount | wc -m`

@@ -4,7 +4,8 @@
 <pass>1</pass>
 </test>
 <test name="Test: Acquire page (from menu)">
-<warning>Window 'frmopenDIASAcquire' does not exist</warning>
-<cause>Could not open Acquire dialog</cause>
-<pass>0</pass>
+<pass>1</pass>
+</test>
+<test name="Test: Closing App">
+<pass>1</pass>
 </test>

@@ -1,0 +1,27 @@
+==4775== Memcheck, a memory error detector.
+==4775== Copyright (C) 2002-2008, and GNU GPL'd, by Julian Seward et al.
+==4775== Using LibVEX rev 1884, a library for dynamic binary translation.
+==4775== Copyright (C) 2004-2008, and GNU GPL'd, by OpenWorks LLP.
+==4775== Using valgrind-3.4.1-Debian, a dynamic binary instrumentation framework.
+==4775== Copyright (C) 2000-2008, and GNU GPL'd, by Julian Seward et al.
+==4775== For more details, rerun with: -v
+==4775== 
+==4775== My PID = 4775, parent PID = 4774.  Prog and args are:
+==4775==    src/opendias
+==4775== 
+==4775== 
+==4775== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 166 from 2)
+==4775== malloc/free: in use at exit: 2,106,982 bytes in 23,866 blocks.
+==4775== malloc/free: 207,266 allocs, 183,400 frees, 11,278,372 bytes allocated.
+==4775== For counts of detected errors, rerun with: -v
+==4775== searching for pointers to 23,866 not-freed blocks.
+==4775== checked 2,662,668 bytes.
+==4736== 
+==4736== LEAK SUMMARY:
+==4736==    definitely lost: 1,156 bytes in 64 blocks.
+==4736==    indirectly lost: 60,888 bytes in 499 blocks.
+==4736==      possibly lost: 706 bytes in 29 blocks.
+==4736==    still reachable: 2,000,167 bytes in 22,778 blocks.
+==4736==         suppressed: 44,266 bytes in 503 blocks.
+==4736== Reachable blocks (those to which a pointer was found) are not shown.
+==4736== To see them, rerun with: --leak-check=full --show-reachable=yes

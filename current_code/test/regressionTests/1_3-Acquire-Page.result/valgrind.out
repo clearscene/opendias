@@ -1,0 +1,17 @@
+==4811== Memcheck, a memory error detector.
+==4811== Copyright (C) 2002-2008, and GNU GPL'd, by Julian Seward et al.
+==4811== Using LibVEX rev 1884, a library for dynamic binary translation.
+==4811== Copyright (C) 2004-2008, and GNU GPL'd, by OpenWorks LLP.
+==4811== Using valgrind-3.4.1-Debian, a dynamic binary instrumentation framework.
+==4811== Copyright (C) 2000-2008, and GNU GPL'd, by Julian Seward et al.
+==4811== For more details, rerun with: -v
+==4811== 
+==4811== My PID = 4811, parent PID = 4810.  Prog and args are:
+==4811==    src/opendias
+==4811== 
+==4811== ERROR SUMMARY: 6 errors from 5 contexts (suppressed: 349 from 3)
+==4811== malloc/free: in use at exit: 2,329,814 bytes in 29,940 blocks.
+==4811== malloc/free: 278,854 allocs, 248,914 frees, 14,414,272 bytes allocated.
+==4811== For counts of detected errors, rerun with: -v
+==4811== searching for pointers to 29,940 not-freed blocks.
+==4811== checked 19,638,772 bytes.

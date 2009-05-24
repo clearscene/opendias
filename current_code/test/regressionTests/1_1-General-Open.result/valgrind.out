@@ -1,0 +1,18 @@
+==4736== Memcheck, a memory error detector.
+==4736== Copyright (C) 2002-2008, and GNU GPL'd, by Julian Seward et al.
+==4736== Using LibVEX rev 1884, a library for dynamic binary translation.
+==4736== Copyright (C) 2004-2008, and GNU GPL'd, by OpenWorks LLP.
+==4736== Using valgrind-3.4.1-Debian, a dynamic binary instrumentation framework.
+==4736== Copyright (C) 2000-2008, and GNU GPL'd, by Julian Seward et al.
+==4736== For more details, rerun with: -v
+==4736== 
+==4736== My PID = 4736, parent PID = 4735.  Prog and args are:
+==4736==    src/opendias
+==4736== 
+==4736== 
+==4736== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 166 from 2)
+==4736== malloc/free: in use at exit: 2,107,183 bytes in 23,873 blocks.
+==4736== malloc/free: 207,631 allocs, 183,758 frees, 11,287,281 bytes allocated.
+==4736== For counts of detected errors, rerun with: -v
+==4736== searching for pointers to 23,873 not-freed blocks.
+==4736== checked 2,662,760 bytes.

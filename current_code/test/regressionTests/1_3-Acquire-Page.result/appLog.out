@@ -1,0 +1,16 @@
+GTK Accessibility Module initialized
+** Message: Connected to database.
+** Message: Run Query
+** Message: Free recordset
+** Message: Run Query
+** Message: Free recordset
+** Message: Run Query
+** Message: Free recordset
+** Message: sane_init
+** Message: No devices found
+** Message: sane_exit
+
+(opendias:4811): Gtk-CRITICAL **: gtk_button_leave: assertion `GTK_IS_BUTTON (button)' failed
+** Message: Closing database
+
+(opendias:4811): Gtk-CRITICAL **: gtk_widget_show_all: assertion `GTK_IS_WIDGET (widget)' failed

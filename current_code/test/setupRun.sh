@@ -50,13 +50,15 @@ for SUPP in `ls test/suppressions/$CODENAME/*`; do
 done
 VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=test/lastRegression/valgrind.out "
 GENSUPP="--gen-suppressions=all "
-echo G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind $SUPPRESS $VALGRINDOPTS $GENSUPP src/opendias \&\> test/lastRegression/appLog.out > test/runMe
+echo touch runningTest > test/runMe
+echo G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind $SUPPRESS $VALGRINDOPTS $GENSUPP src/opendias \&\> test/lastRegression/appLog.out >> test/runMe
+echo rm runningTest >> test/runMe
 chmod 755 test/runMe
 
 
 #######################################
 # Run automated tests
-echo Starting tests ...
+echo Starting test harness ...
 test/harness.sh $@
 
 
@@ -64,6 +66,7 @@ test/harness.sh $@
 #
 # Collect process and build coverage report
 #
+echo Creating run coverage information ...
 lcov -c -d src -o test/lastCoverage/app_test.info >> test/lastRegression/buildLog.out
 lcov -a test/lastCoverage/app_base.info -a test/lastCoverage/app_test.info -o test/lastCoverage/app_total.info >> test/lastRegression/buildLog.out
 genhtml -o test/lastCoverage test/lastCoverage/app_total.info >> test/lastRegression/buildLog.out

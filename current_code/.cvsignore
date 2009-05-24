@@ -11,3 +11,4 @@ intltool-update.in
 mkinstalldirs
 stamp-h1
 dontBotherReCompilingMe-testScript
+runningTest
