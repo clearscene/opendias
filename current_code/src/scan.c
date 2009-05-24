@@ -518,6 +518,8 @@ extern void startAcquireOperation(void) {
 
     // Workhorse row
     hbox = gtk_hbox_new (FALSE, 2);
+    objectNamer = gtk_widget_get_accessible(hbox);
+    atk_object_set_name(objectNamer, "workhorseRow");
     lab = gtk_label_new ("File:");
     gtk_misc_set_alignment (GTK_MISC(lab), 1, 0);
     gtk_widget_set_size_request(GTK_WIDGET(lab), 40, -1);
@@ -566,9 +568,11 @@ extern void startAcquireOperation(void) {
 			      GTK_SIGNAL_FUNC(finishAcquireOperation_button), 
 			      window);
     hbox = gtk_hbox_new (FALSE, 2);
+    objectNamer = gtk_widget_get_accessible(hbox);
+    atk_object_set_name(objectNamer, "CloseButtonPadding");
     lab = gtk_label_new ("");
     gtk_misc_set_padding (GTK_MISC(lab), 10, 0);
-    gtk_box_pack_start (GTK_BOX (hbox), lab, FALSE, TRUE, 2);
+    gtk_box_pack_start (GTK_BOX (hbox), lab, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX (hbox), buttonodf, FALSE, FALSE, 2);
     gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 2);
 
