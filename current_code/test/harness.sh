@@ -71,20 +71,22 @@ for requested in $runTests; do
       done
 
       # memory log
-      cp $outputDir/valgrind.out $outputDir/$TEST/valgrind.out
+      mv $outputDir/valgrind.out $outputDir/$TEST/valgrind.out
+      # parse out changeable content
+      sed -e 's/==[0123456789]*== /==XXXXX== /g' -e 's/My PID = [0123456789]*, parent PID = [0123456789]*./My PID = XXXXX, parent PID = XXXXX./' $outputDir/$TEST/valgrind.out > $outputDir/$TEST/valgrind4Compare.out
       if [ "$GENERATE" == "Y" ]; then
         if [ ! -e ${TEST}.result ]; then
           mkdir -p ${TEST}.result
         fi
-        cp $outputDir/$TEST/valgrind.out ${TEST}.result/valgrind.out
+        cp $outputDir/$TEST/valgrind4Compare.out ${TEST}.result/valgrind.out
       fi
       MEM_RES="<td class='none'><a href='$TEST/valgrind.out'>actual</a></td>"
-      diff -ydN ${TEST}.result/valgrind.out $outputDir/$TEST/valgrind.out > $outputDir/$TEST/valgrindDiff.out
+      diff -ydN ${TEST}.result/valgrind.out $outputDir/$TEST/valgrind4Compare.out > $outputDir/$TEST/valgrindDiff.out
       if [ "$?" == "0" ]; then
         rm $outputDir/$TEST/valgrindDiff.out
         MEM_RES="$MEM_RES<td class='ok'>OK</td>"
       else
-        MEM_RES="$MEM_RES<td><a href='$TEST/valgrind.out'>diff</a>|<a href='../../${TEST}.result/valgrind.out'>expected</a></td>"
+        MEM_RES="$MEM_RES<td><a href='$TEST/valgrindDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../${TEST}.result/valgrind.out'>expected</a></td>"
         RES=1
       fi
 
@@ -103,7 +105,7 @@ for requested in $runTests; do
         rm $outputDir/$TEST/testLogDiff.out
         TEST_RES="$TEST_RES<td class='ok'>OK</td>"
       else
-        TEST_RES="$TEST_RES<td><a href='$TEST/testLogDiff.out'>diff</a>|<a href='../../${TEST}.result/index.out'>expected</a></td>"
+        TEST_RES="$TEST_RES<td><a href='$TEST/testLogDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../${TEST}.result/index.out'>expected</a></td>"
         RES=1
       fi
 
@@ -121,7 +123,7 @@ for requested in $runTests; do
         rm $outputDir/$TEST/appLogDiff.out
         APP_RES="$APP_RES<td class='ok'>OK</td>"
       else
-        APP_RES="$APP_RES<td><a href='$TEST/testLogDiff.out'>diff</a>|<a href='../../${TEST}.result/appLog.out'>expected</a></td>"
+        APP_RES="$APP_RES<td><a href='$TEST/appLogDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../${TEST}.result/appLog.out'>expected</a></td>"
         RES=1
       fi
 

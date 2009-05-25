@@ -1,27 +1,3758 @@
-==4775== Memcheck, a memory error detector.
-==4775== Copyright (C) 2002-2008, and GNU GPL'd, by Julian Seward et al.
-==4775== Using LibVEX rev 1884, a library for dynamic binary translation.
-==4775== Copyright (C) 2004-2008, and GNU GPL'd, by OpenWorks LLP.
-==4775== Using valgrind-3.4.1-Debian, a dynamic binary instrumentation framework.
-==4775== Copyright (C) 2000-2008, and GNU GPL'd, by Julian Seward et al.
-==4775== For more details, rerun with: -v
-==4775== 
-==4775== My PID = 4775, parent PID = 4774.  Prog and args are:
-==4775==    src/opendias
-==4775== 
-==4775== 
-==4775== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 166 from 2)
-==4775== malloc/free: in use at exit: 2,106,982 bytes in 23,866 blocks.
-==4775== malloc/free: 207,266 allocs, 183,400 frees, 11,278,372 bytes allocated.
-==4775== For counts of detected errors, rerun with: -v
-==4775== searching for pointers to 23,866 not-freed blocks.
-==4775== checked 2,662,668 bytes.
-==4736== 
-==4736== LEAK SUMMARY:
-==4736==    definitely lost: 1,156 bytes in 64 blocks.
-==4736==    indirectly lost: 60,888 bytes in 499 blocks.
-==4736==      possibly lost: 706 bytes in 29 blocks.
-==4736==    still reachable: 2,000,167 bytes in 22,778 blocks.
-==4736==         suppressed: 44,266 bytes in 503 blocks.
-==4736== Reachable blocks (those to which a pointer was found) are not shown.
-==4736== To see them, rerun with: --leak-check=full --show-reachable=yes
+==XXXXX== Memcheck, a memory error detector.
+==XXXXX== Copyright (C) 2002-2008, and GNU GPL'd, by Julian Seward et al.
+==XXXXX== Using LibVEX rev 1884, a library for dynamic binary translation.
+==XXXXX== Copyright (C) 2004-2008, and GNU GPL'd, by OpenWorks LLP.
+==XXXXX== Using valgrind-3.4.1-Debian, a dynamic binary instrumentation framework.
+==XXXXX== Copyright (C) 2000-2008, and GNU GPL'd, by Julian Seward et al.
+==XXXXX== For more details, rerun with: -v
+==XXXXX== 
+==XXXXX== My PID = XXXXX, parent PID = XXXXX.  Prog and args are:
+==XXXXX==    src/opendias
+==XXXXX== 
+==XXXXX== 
+==XXXXX== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 166 from 2)
+==XXXXX== malloc/free: in use at exit: 2,114,650 bytes in 23,920 blocks.
+==XXXXX== malloc/free: 203,518 allocs, 179,598 frees, 10,613,691 bytes allocated.
+==XXXXX== For counts of detected errors, rerun with: -v
+==XXXXX== searching for pointers to 23,920 not-freed blocks.
+==XXXXX== checked 2,670,144 bytes.
+==XXXXX== 
+==XXXXX== 8 bytes in 1 blocks are possibly lost in loss record 1,728 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x4C7603B: __nss_lookup_function (nsswitch.c:312)
+==XXXXX==    by 0x5612FB7: ???
+==XXXXX==    by 0x5613CBE: ???
+==XXXXX==    by 0x4C1C811: getpwnam_r@@GLIBC_2.1.2 (getXXbyYY_r.c:253)
+==XXXXX==    by 0x47EBE71: g_get_any_init_do (gutils.c:1631)
+==XXXXX==    by 0x47ED924: g_get_home_dir (gutils.c:1782)
+==XXXXX==    by 0x423E467: gtk_rc_add_initial_default_files (gtkrc.c:557)
+==XXXXX==    by 0x424106A: _gtk_rc_init (gtkrc.c:896)
+==XXXXX==    by 0x41F10B4: post_parse_hook (gtkmain.c:719)
+==XXXXX==    by 0x47C5E04: g_option_context_parse (goption.c:1813)
+==XXXXX==    by 0x41F0D41: gtk_parse_args (gtkmain.c:918)
+==XXXXX==    by 0x41F0DC3: gtk_init_check (gtkmain.c:954)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:__nss_lookup_function
+   obj:*
+   obj:*
+   fun:getpwnam_r@@GLIBC_2.1.2
+   fun:g_get_any_init_do
+   fun:g_get_home_dir
+   fun:gtk_rc_add_initial_default_files
+   fun:_gtk_rc_init
+   fun:post_parse_hook
+   fun:g_option_context_parse
+   fun:gtk_parse_args
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,475 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565A06C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x56655BE: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450A48E: atk_object_ref_accessible_child (atkobject.c:800)
+==XXXXX==    by 0x56D530C: impl_accessibility_accessible_get_child_at_index (accessible.c:315)
+==XXXXX==    by 0x56D10B0: _ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex (Accessibility-common.c:120)
+==XXXXX==    by 0x5791536: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B44: ORBit_OAObject_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783E62: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,477 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565A2FC: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x5657C3F: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x44878FA: gdk_threads_dispatch (gdk.c:498)
+==XXXXX==    by 0x47B4C80: g_idle_dispatch (gmain.c:3922)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:gdk_threads_dispatch
+   fun:g_idle_dispatch
+   fun:g_main_context_dispatch
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,581 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565922C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x56655BE: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450A48E: atk_object_ref_accessible_child (atkobject.c:800)
+==XXXXX==    by 0x56D530C: impl_accessibility_accessible_get_child_at_index (accessible.c:315)
+==XXXXX==    by 0x56D10B0: _ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex (Accessibility-common.c:120)
+==XXXXX==    by 0x5791536: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B44: ORBit_OAObject_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783E62: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,631 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5659B2C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x567A752: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x475A872: signal_emit_unlocked_R (gsignal.c:3213)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x431B1CB: gtk_widget_show (gtkwidget.c:3006)
+==XXXXX==    by 0x431AF1B: gtk_widget_show_all (gtkwidget.c:3154)
+==XXXXX==    by 0x806635F: create_gui (handlers.c:870)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,655 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565922C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x8065A3F: create_gui (handlers.c:850)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,656 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658B6C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x80656D5: create_gui (handlers.c:842)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,658 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565A2FC: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x567BA1E: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x567CDC9: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450A48E: atk_object_ref_accessible_child (atkobject.c:800)
+==XXXXX==    by 0x560AFC2: spi_atk_bridge_signal_listener (bridge.c:1184)
+==XXXXX==    by 0x475A872: signal_emit_unlocked_R (gsignal.c:3213)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C7E2: g_signal_emit_by_name (gsignal.c:3074)
+==XXXXX==    by 0x567F588: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x47523A3: g_cclosure_marshal_VOID__VOID (gmarshal.c:77)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x42EEC9A: gtk_tree_view_insert_column (gtktreeview.c:11290)
+==XXXXX==    by 0x42EEF40: gtk_tree_view_insert_column_with_attributes (gtktreeview.c:11345)
+==XXXXX==    by 0x80652D9: create_gui (handlers.c:828)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:spi_atk_bridge_signal_listener
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,659 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565A2FC: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x567BA1E: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x567CDC9: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450A48E: atk_object_ref_accessible_child (atkobject.c:800)
+==XXXXX==    by 0x560AFC2: spi_atk_bridge_signal_listener (bridge.c:1184)
+==XXXXX==    by 0x475A872: signal_emit_unlocked_R (gsignal.c:3213)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C7E2: g_signal_emit_by_name (gsignal.c:3074)
+==XXXXX==    by 0x567F588: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x47523A3: g_cclosure_marshal_VOID__VOID (gmarshal.c:77)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x42EEC9A: gtk_tree_view_insert_column (gtktreeview.c:11290)
+==XXXXX==    by 0x42EEF40: gtk_tree_view_insert_column_with_attributes (gtktreeview.c:11345)
+==XXXXX==    by 0x80651D0: create_gui (handlers.c:822)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:spi_atk_bridge_signal_listener
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,660 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565A2FC: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x567BA1E: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x567CDC9: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450A48E: atk_object_ref_accessible_child (atkobject.c:800)
+==XXXXX==    by 0x560AFC2: spi_atk_bridge_signal_listener (bridge.c:1184)
+==XXXXX==    by 0x475A872: signal_emit_unlocked_R (gsignal.c:3213)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C7E2: g_signal_emit_by_name (gsignal.c:3074)
+==XXXXX==    by 0x567F588: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x47523A3: g_cclosure_marshal_VOID__VOID (gmarshal.c:77)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x42EEC9A: gtk_tree_view_insert_column (gtktreeview.c:11290)
+==XXXXX==    by 0x42EEF40: gtk_tree_view_insert_column_with_attributes (gtktreeview.c:11345)
+==XXXXX==    by 0x8065081: create_gui (handlers.c:815)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:spi_atk_bridge_signal_listener
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,663 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x56592EC: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x8064E84: create_gui (handlers.c:809)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,664 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658E6C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x8064DA2: create_gui (handlers.c:805)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,665 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658C2C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x8064C56: create_gui (handlers.c:798)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,666 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658F2C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x806467D: create_gui (handlers.c:781)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,667 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5659D6C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x8064320: create_gui (handlers.c:772)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,668 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658F2C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x8064000: create_gui (handlers.c:763)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,669 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5659D6C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x8063BAB: create_gui (handlers.c:752)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,705 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5659D6C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x8063850: create_gui (handlers.c:741)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,791 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658E6C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x806376E: create_gui (handlers.c:737)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,792 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658F2C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x806343E: create_gui (handlers.c:728)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,793 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565A2FC: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x567BA1E: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x567CDC9: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450A48E: atk_object_ref_accessible_child (atkobject.c:800)
+==XXXXX==    by 0x560AFC2: spi_atk_bridge_signal_listener (bridge.c:1184)
+==XXXXX==    by 0x475A872: signal_emit_unlocked_R (gsignal.c:3213)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C7E2: g_signal_emit_by_name (gsignal.c:3074)
+==XXXXX==    by 0x567F588: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x47523A3: g_cclosure_marshal_VOID__VOID (gmarshal.c:77)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x42EEC9A: gtk_tree_view_insert_column (gtktreeview.c:11290)
+==XXXXX==    by 0x42EEF40: gtk_tree_view_insert_column_with_attributes (gtktreeview.c:11345)
+==XXXXX==    by 0x80631B6: create_gui (handlers.c:714)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:spi_atk_bridge_signal_listener
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,794 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565A2FC: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x567BA1E: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x567CDC9: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450A48E: atk_object_ref_accessible_child (atkobject.c:800)
+==XXXXX==    by 0x560AFC2: spi_atk_bridge_signal_listener (bridge.c:1184)
+==XXXXX==    by 0x475A872: signal_emit_unlocked_R (gsignal.c:3213)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C7E2: g_signal_emit_by_name (gsignal.c:3074)
+==XXXXX==    by 0x567F588: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x47523A3: g_cclosure_marshal_VOID__VOID (gmarshal.c:77)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x42EEC9A: gtk_tree_view_insert_column (gtktreeview.c:11290)
+==XXXXX==    by 0x42EEF40: gtk_tree_view_insert_column_with_attributes (gtktreeview.c:11345)
+==XXXXX==    by 0x8063067: create_gui (handlers.c:707)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:spi_atk_bridge_signal_listener
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,795 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565922C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x8062B99: create_gui (handlers.c:697)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,796 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658B6C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x8062916: create_gui (handlers.c:691)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,800 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x56592EC: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x80624DF: create_gui (handlers.c:683)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,801 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658E6C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x80623FD: create_gui (handlers.c:679)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,802 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565A2FC: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x567BA1E: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x567CDC9: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450A48E: atk_object_ref_accessible_child (atkobject.c:800)
+==XXXXX==    by 0x560AFC2: spi_atk_bridge_signal_listener (bridge.c:1184)
+==XXXXX==    by 0x475A872: signal_emit_unlocked_R (gsignal.c:3213)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C7E2: g_signal_emit_by_name (gsignal.c:3074)
+==XXXXX==    by 0x567F588: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x47523A3: g_cclosure_marshal_VOID__VOID (gmarshal.c:77)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x42EEC9A: gtk_tree_view_insert_column (gtktreeview.c:11290)
+==XXXXX==    by 0x42EEF40: gtk_tree_view_insert_column_with_attributes (gtktreeview.c:11345)
+==XXXXX==    by 0x8062020: create_gui (handlers.c:663)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:spi_atk_bridge_signal_listener
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,833 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658B6C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x80619B8: create_gui (handlers.c:651)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,914 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658E6C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x806149F: create_gui (handlers.c:639)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,915 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565922C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x80613AE: create_gui (handlers.c:635)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,917 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658F2C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x8061086: create_gui (handlers.c:626)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,919 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658E6C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x8060FA4: create_gui (handlers.c:614)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,920 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658C2C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x8060EB2: create_gui (handlers.c:609)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,977 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5659CAC: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x805FF41: create_gui (handlers.c:562)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 16 bytes in 1 blocks are definitely lost in loss record 2,989 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658E6C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x805FD7E: create_gui (handlers.c:552)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 20 bytes in 1 blocks are possibly lost in loss record 3,481 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x578854C: ORBit_alloc_tcval (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5784AB8: ORBit_small_allocbuf (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57934E2: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579370D: PortableServer_POA_servant_to_reference (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5715AC8: (within /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x56D7BCE: spi_component_interface_new (component.c:245)
+==XXXXX==    by 0x56D48F1: spi_accessible_construct (accessible.c:585)
+==XXXXX==    by 0x56D4B62: spi_accessible_new_return (accessible.c:690)
+==XXXXX==    by 0x56D5323: impl_accessibility_accessible_get_child_at_index (accessible.c:317)
+==XXXXX==    by 0x56D10B0: _ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex (Accessibility-common.c:120)
+==XXXXX==    by 0x5791536: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B44: ORBit_OAObject_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783E62: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:spi_component_interface_new
+   fun:spi_accessible_construct
+   fun:spi_accessible_new_return
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_invoke
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 20 bytes in 1 blocks are possibly lost in loss record 3,483 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x578854C: ORBit_alloc_tcval (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5784AB8: ORBit_small_allocbuf (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57934E2: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579370D: PortableServer_POA_servant_to_reference (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5715AC8: (within /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x56D44D7: spi_accessible_construct (accessible.c:566)
+==XXXXX==    by 0x56D4B62: spi_accessible_new_return (accessible.c:690)
+==XXXXX==    by 0x56D5323: impl_accessibility_accessible_get_child_at_index (accessible.c:317)
+==XXXXX==    by 0x56D10B0: _ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex (Accessibility-common.c:120)
+==XXXXX==    by 0x5791536: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B44: ORBit_OAObject_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783E62: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:spi_accessible_construct
+   fun:spi_accessible_new_return
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_invoke
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 20 bytes in 1 blocks are possibly lost in loss record 3,855 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x578854C: ORBit_alloc_tcval (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5784AB8: ORBit_small_allocbuf (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57934E2: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579370D: PortableServer_POA_servant_to_reference (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5715AC8: (within /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x56D44D7: spi_accessible_construct (accessible.c:566)
+==XXXXX==    by 0x56D5A11: spi_application_new (application.c:295)
+==XXXXX==    by 0x560BA44: atk_bridge_init (bridge.c:225)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:spi_accessible_construct
+   fun:spi_application_new
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+   fun:gdk_display_manager_set_default_display
+   fun:gdk_display_open_default_libgtk_only
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 20 bytes in 1 blocks are possibly lost in loss record 3,864 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x578854C: ORBit_alloc_tcval (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5784AB8: ORBit_small_allocbuf (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57934E2: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579370D: PortableServer_POA_servant_to_reference (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5715AC8: (within /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x570C2D6: bonobo_event_source_new (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x571F93F: bonobo_running_context_new (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570BDF6: bonobo_context_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FDC6: bonobo_init_full (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FEDB: bonobo_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x560BA09: atk_bridge_init (bridge.c:217)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_event_source_new
+   fun:bonobo_running_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 20 bytes in 1 blocks are possibly lost in loss record 3,865 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x578854C: ORBit_alloc_tcval (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5784AB8: ORBit_small_allocbuf (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57934E2: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579370D: PortableServer_POA_servant_to_reference (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5715AC8: (within /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x571F934: bonobo_running_context_new (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570BDF6: bonobo_context_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FDC6: bonobo_init_full (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FEDB: bonobo_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x560BA09: atk_bridge_init (bridge.c:217)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_running_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 20 bytes in 1 blocks are possibly lost in loss record 3,866 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x578854C: ORBit_alloc_tcval (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5784AB8: ORBit_small_allocbuf (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57934E2: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579370D: PortableServer_POA_servant_to_reference (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5715AC8: (within /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x570A74B: bonobo_moniker_context_new (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570BDE6: bonobo_context_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FDC6: bonobo_init_full (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FEDB: bonobo_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x560BA09: atk_bridge_init (bridge.c:217)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_moniker_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 24 bytes in 1 blocks are possibly lost in loss record 4,055 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x466D200: pango_language_from_string (pango-language.c:296)
+==XXXXX==    by 0x466D56D: pango_language_get_default (pango-language.c:247)
+==XXXXX==    by 0x466988D: pango_context_init (pango-context.c:70)
+==XXXXX==    by 0x4765EF4: g_type_create_instance (gtype.c:1674)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x4669806: pango_context_new (pango-context.c:132)
+==XXXXX==    by 0x466AC05: pango_font_map_create_context (pango-fontmap.c:71)
+==XXXXX==    by 0x4562A9F: pango_cairo_font_map_create_context (pangocairo-fontmap.c:269)
+==XXXXX==    by 0x44919C4: gdk_pango_context_get_for_screen (gdkpango.c:1488)
+==XXXXX==    by 0x431611A: gtk_widget_create_pango_context (gtkwidget.c:6469)
+==XXXXX==    by 0x43161E7: gtk_widget_get_pango_context (gtkwidget.c:6400)
+==XXXXX==    by 0x431627F: gtk_widget_create_pango_layout (gtkwidget.c:6503)
+==XXXXX==    by 0x417145F: find_invisible_char (gtkentry.c:2158)
+==XXXXX==    by 0x417FF23: gtk_entry_init (gtkentry.c:2200)
+==XXXXX==    by 0x4765EF4: g_type_create_instance (gtype.c:1674)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x41767B6: gtk_entry_new (gtkentry.c:6512)
+==XXXXX==    by 0x8063804: create_gui (handlers.c:740)
+==XXXXX==    by 0x806EC34: main (main.c:74)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:pango_language_from_string
+   fun:pango_language_get_default
+   fun:pango_context_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:pango_context_new
+   fun:pango_font_map_create_context
+   fun:pango_cairo_font_map_create_context
+   fun:gdk_pango_context_get_for_screen
+   fun:gtk_widget_create_pango_context
+   fun:gtk_widget_get_pango_context
+   fun:gtk_widget_create_pango_layout
+   fun:find_invisible_char
+   fun:gtk_entry_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 28 bytes in 1 blocks are possibly lost in loss record 4,186 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x57884D5: ORBit_alloc_by_tc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578354C: ORBit_small_alloc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579429B: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B01: ORBit_OAObject_object_to_objkey (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5790784: IOP_generate_profiles (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5786A1E: ORBit_marshal_object (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578DCC3: ORBit_marshal_value (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578DE3A: ORBit_marshal_arg (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578472A: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_object_to_objkey
+   fun:IOP_generate_profiles
+   fun:ORBit_marshal_object
+   fun:ORBit_marshal_value
+   fun:ORBit_marshal_arg
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:g_main_context_dispatch
+   fun:g_main_context_iterate
+   fun:g_main_loop_run
+   fun:gtk_main
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 28 bytes in 1 blocks are possibly lost in loss record 4,187 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x57884D5: ORBit_alloc_by_tc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578354C: ORBit_small_alloc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57934BD: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579370D: PortableServer_POA_servant_to_reference (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5715AC8: (within /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x56D7BCE: spi_component_interface_new (component.c:245)
+==XXXXX==    by 0x56D48F1: spi_accessible_construct (accessible.c:585)
+==XXXXX==    by 0x56D4B62: spi_accessible_new_return (accessible.c:690)
+==XXXXX==    by 0x56D5323: impl_accessibility_accessible_get_child_at_index (accessible.c:317)
+==XXXXX==    by 0x56D10B0: _ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex (Accessibility-common.c:120)
+==XXXXX==    by 0x5791536: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B44: ORBit_OAObject_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783E62: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:spi_component_interface_new
+   fun:spi_accessible_construct
+   fun:spi_accessible_new_return
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_invoke
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 28 bytes in 1 blocks are possibly lost in loss record 4,189 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x57884D5: ORBit_alloc_by_tc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578354C: ORBit_small_alloc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57934BD: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579370D: PortableServer_POA_servant_to_reference (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5715AC8: (within /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x56D44D7: spi_accessible_construct (accessible.c:566)
+==XXXXX==    by 0x56D4B62: spi_accessible_new_return (accessible.c:690)
+==XXXXX==    by 0x56D5323: impl_accessibility_accessible_get_child_at_index (accessible.c:317)
+==XXXXX==    by 0x56D10B0: _ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex (Accessibility-common.c:120)
+==XXXXX==    by 0x5791536: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B44: ORBit_OAObject_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783E62: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:spi_accessible_construct
+   fun:spi_accessible_new_return
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_invoke
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 28 bytes in 1 blocks are possibly lost in loss record 4,702 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x57884D5: ORBit_alloc_by_tc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578354C: ORBit_small_alloc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579429B: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B01: ORBit_OAObject_object_to_objkey (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5790784: IOP_generate_profiles (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5786A1E: ORBit_marshal_object (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578DCC3: ORBit_marshal_value (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783244: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578482E: ORBit_small_invoke_stub (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5784A88: ORBit_small_invoke_stub_n (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57917B9: ORBit_c_stub_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x56BB803: Accessibility_Registry_registerApplication (Accessibility-stubs.c:1836)
+==XXXXX==    by 0x56098E3: spi_atk_bridge_register_application (bridge.c:332)
+==XXXXX==    by 0x5609F8A: spi_atk_bridge_do_registration (bridge.c:288)
+==XXXXX==    by 0x560BFE3: atk_bridge_init (bridge.c:248)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_object_to_objkey
+   fun:IOP_generate_profiles
+   fun:ORBit_marshal_object
+   fun:ORBit_marshal_value
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_small_invoke_stub
+   fun:ORBit_small_invoke_stub_n
+   fun:ORBit_c_stub_invoke
+   fun:Accessibility_Registry_registerApplication
+   fun:spi_atk_bridge_register_application
+   fun:spi_atk_bridge_do_registration
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 28 bytes in 1 blocks are possibly lost in loss record 4,704 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x57884D5: ORBit_alloc_by_tc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578354C: ORBit_small_alloc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57934BD: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579370D: PortableServer_POA_servant_to_reference (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5715AC8: (within /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x56D44D7: spi_accessible_construct (accessible.c:566)
+==XXXXX==    by 0x56D5A11: spi_application_new (application.c:295)
+==XXXXX==    by 0x560BA44: atk_bridge_init (bridge.c:225)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:spi_accessible_construct
+   fun:spi_application_new
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+   fun:gdk_display_manager_set_default_display
+   fun:gdk_display_open_default_libgtk_only
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 28 bytes in 1 blocks are possibly lost in loss record 4,766 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x57884D5: ORBit_alloc_by_tc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578354C: ORBit_small_alloc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57934BD: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579370D: PortableServer_POA_servant_to_reference (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5715AC8: (within /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x570C2D6: bonobo_event_source_new (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x571F93F: bonobo_running_context_new (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570BDF6: bonobo_context_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FDC6: bonobo_init_full (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FEDB: bonobo_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x560BA09: atk_bridge_init (bridge.c:217)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_event_source_new
+   fun:bonobo_running_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 28 bytes in 1 blocks are possibly lost in loss record 4,767 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x57884D5: ORBit_alloc_by_tc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578354C: ORBit_small_alloc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57934BD: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579370D: PortableServer_POA_servant_to_reference (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5715AC8: (within /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x571F934: bonobo_running_context_new (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570BDF6: bonobo_context_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FDC6: bonobo_init_full (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FEDB: bonobo_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x560BA09: atk_bridge_init (bridge.c:217)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_running_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 28 bytes in 1 blocks are possibly lost in loss record 4,768 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x57884D5: ORBit_alloc_by_tc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578354C: ORBit_small_alloc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57934BD: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579370D: PortableServer_POA_servant_to_reference (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5715AC8: (within /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x570A74B: bonobo_moniker_context_new (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570BDE6: bonobo_context_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FDC6: bonobo_init_full (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FEDB: bonobo_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x560BA09: atk_bridge_init (bridge.c:217)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_moniker_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 28 bytes in 1 blocks are possibly lost in loss record 4,769 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x57884D5: ORBit_alloc_by_tc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578354C: ORBit_small_alloc (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5757AE5: bonobo_activation_init_activation_env (in /usr/lib/libbonobo-activation.so.4.0.0)
+==XXXXX==    by 0x575BD83: bonobo_activation_orb_init (in /usr/lib/libbonobo-activation.so.4.0.0)
+==XXXXX==    by 0x575C1CD: bonobo_activation_init (in /usr/lib/libbonobo-activation.so.4.0.0)
+==XXXXX==    by 0x570FD2C: bonobo_init_full (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FEDB: bonobo_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x560BA09: atk_bridge_init (bridge.c:217)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   fun:bonobo_activation_init_activation_env
+   fun:bonobo_activation_orb_init
+   fun:bonobo_activation_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+   fun:gdk_display_manager_set_default_display
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 32 bytes in 2 blocks are definitely lost in loss record 4,918 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x567467C: gail_sub_menu_item_new (in /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x566CA6B: gail_menu_item_new (in /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x565A17C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x56655BE: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450A48E: atk_object_ref_accessible_child (atkobject.c:800)
+==XXXXX==    by 0x56D530C: impl_accessibility_accessible_get_child_at_index (accessible.c:315)
+==XXXXX==    by 0x56D10B0: _ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex (Accessibility-common.c:120)
+==XXXXX==    by 0x5791536: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B44: ORBit_OAObject_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783E62: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:gail_sub_menu_item_new
+   fun:gail_menu_item_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 32 bytes in 1 blocks are possibly lost in loss record 4,963 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x578854C: ORBit_alloc_tcval (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5784AB8: ORBit_small_allocbuf (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797BED: ORBit_adaptor_setup (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5794826: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57961AF: ORBit_POA_setup_root (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x577A925: ORBit_init_internals (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57821A1: CORBA_ORB_init (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x575BD6D: bonobo_activation_orb_init (in /usr/lib/libbonobo-activation.so.4.0.0)
+==XXXXX==    by 0x575C1CD: bonobo_activation_init (in /usr/lib/libbonobo-activation.so.4.0.0)
+==XXXXX==    by 0x570FD2C: bonobo_init_full (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FEDB: bonobo_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x560BA09: atk_bridge_init (bridge.c:217)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   fun:ORBit_adaptor_setup
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_POA_setup_root
+   fun:ORBit_init_internals
+   fun:CORBA_ORB_init
+   fun:bonobo_activation_orb_init
+   fun:bonobo_activation_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+   fun:gdk_display_manager_set_default_display
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 148 (36 direct, 112 indirect) bytes in 1 blocks are definitely lost in loss record 5,307 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x4C76548: nss_parse_service_list (nsswitch.c:547)
+==XXXXX==    by 0x4C76E25: __nss_database_lookup (nsswitch.c:134)
+==XXXXX==    by 0x5612F5B: ???
+==XXXXX==    by 0x5613CBE: ???
+==XXXXX==    by 0x4C1C811: getpwnam_r@@GLIBC_2.1.2 (getXXbyYY_r.c:253)
+==XXXXX==    by 0x47EBE71: g_get_any_init_do (gutils.c:1631)
+==XXXXX==    by 0x47ED924: g_get_home_dir (gutils.c:1782)
+==XXXXX==    by 0x423E467: gtk_rc_add_initial_default_files (gtkrc.c:557)
+==XXXXX==    by 0x424106A: _gtk_rc_init (gtkrc.c:896)
+==XXXXX==    by 0x41F10B4: post_parse_hook (gtkmain.c:719)
+==XXXXX==    by 0x47C5E04: g_option_context_parse (goption.c:1813)
+==XXXXX==    by 0x41F0D41: gtk_parse_args (gtkmain.c:918)
+==XXXXX==    by 0x41F0DC3: gtk_init_check (gtkmain.c:954)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:nss_parse_service_list
+   fun:__nss_database_lookup
+   obj:*
+   obj:*
+   fun:getpwnam_r@@GLIBC_2.1.2
+   fun:g_get_any_init_do
+   fun:g_get_home_dir
+   fun:gtk_rc_add_initial_default_files
+   fun:_gtk_rc_init
+   fun:post_parse_hook
+   fun:g_option_context_parse
+   fun:gtk_parse_args
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 40 bytes in 1 blocks are possibly lost in loss record 5,316 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x578854C: ORBit_alloc_tcval (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5784AB8: ORBit_small_allocbuf (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57942BD: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B01: ORBit_OAObject_object_to_objkey (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5790784: IOP_generate_profiles (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5786A1E: ORBit_marshal_object (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578DCC3: ORBit_marshal_value (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578DE3A: ORBit_marshal_arg (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578472A: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_object_to_objkey
+   fun:IOP_generate_profiles
+   fun:ORBit_marshal_object
+   fun:ORBit_marshal_value
+   fun:ORBit_marshal_arg
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:g_main_context_dispatch
+   fun:g_main_context_iterate
+   fun:g_main_loop_run
+   fun:gtk_main
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 40 bytes in 1 blocks are possibly lost in loss record 5,719 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x578854C: ORBit_alloc_tcval (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5784AB8: ORBit_small_allocbuf (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57942BD: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B01: ORBit_OAObject_object_to_objkey (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5790784: IOP_generate_profiles (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5786A1E: ORBit_marshal_object (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578DCC3: ORBit_marshal_value (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783244: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578482E: ORBit_small_invoke_stub (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5784A88: ORBit_small_invoke_stub_n (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57917B9: ORBit_c_stub_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x56BB803: Accessibility_Registry_registerApplication (Accessibility-stubs.c:1836)
+==XXXXX==    by 0x56098E3: spi_atk_bridge_register_application (bridge.c:332)
+==XXXXX==    by 0x5609F8A: spi_atk_bridge_do_registration (bridge.c:288)
+==XXXXX==    by 0x560BFE3: atk_bridge_init (bridge.c:248)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_object_to_objkey
+   fun:IOP_generate_profiles
+   fun:ORBit_marshal_object
+   fun:ORBit_marshal_value
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_small_invoke_stub
+   fun:ORBit_small_invoke_stub_n
+   fun:ORBit_c_stub_invoke
+   fun:Accessibility_Registry_registerApplication
+   fun:spi_atk_bridge_register_application
+   fun:spi_atk_bridge_do_registration
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 60 bytes in 1 blocks are possibly lost in loss record 6,560 of 8,398
+==XXXXX==    at 0x40270FC: realloc (vg_replace_malloc.c:429)
+==XXXXX==    by 0x47BF169: g_realloc (gmem.c:170)
+==XXXXX==    by 0x57886B0: ORBit_realloc_tcval (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578CC86: ORBit_sequence_append (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5757B31: bonobo_activation_init_activation_env (in /usr/lib/libbonobo-activation.so.4.0.0)
+==XXXXX==    by 0x575BD83: bonobo_activation_orb_init (in /usr/lib/libbonobo-activation.so.4.0.0)
+==XXXXX==    by 0x575C1CD: bonobo_activation_init (in /usr/lib/libbonobo-activation.so.4.0.0)
+==XXXXX==    by 0x570FD2C: bonobo_init_full (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FEDB: bonobo_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x560BA09: atk_bridge_init (bridge.c:217)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:g_realloc
+   fun:ORBit_realloc_tcval
+   fun:ORBit_sequence_append
+   fun:bonobo_activation_init_activation_env
+   fun:bonobo_activation_orb_init
+   fun:bonobo_activation_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+   fun:gdk_display_manager_set_default_display
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 80 (44 direct, 36 indirect) bytes in 1 blocks are definitely lost in loss record 6,617 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x5715990: (within /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x570A74B: bonobo_moniker_context_new (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570BDE6: bonobo_context_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FDC6: bonobo_init_full (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FEDB: bonobo_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x560BA09: atk_bridge_init (bridge.c:217)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_moniker_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 64 bytes in 4 blocks are definitely lost in loss record 7,286 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565A2FC: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x56655BE: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450A48E: atk_object_ref_accessible_child (atkobject.c:800)
+==XXXXX==    by 0x56D530C: impl_accessibility_accessible_get_child_at_index (accessible.c:315)
+==XXXXX==    by 0x56D10B0: _ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex (Accessibility-common.c:120)
+==XXXXX==    by 0x5791536: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B44: ORBit_OAObject_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783E62: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 64 bytes in 4 blocks are definitely lost in loss record 7,287 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x566CA8C: gail_menu_item_new (in /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x565A17C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x566D688: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450A48E: atk_object_ref_accessible_child (atkobject.c:800)
+==XXXXX==    by 0x56D530C: impl_accessibility_accessible_get_child_at_index (accessible.c:315)
+==XXXXX==    by 0x56D10B0: _ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex (Accessibility-common.c:120)
+==XXXXX==    by 0x5791536: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B44: ORBit_OAObject_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783E62: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:gail_menu_item_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:impl_accessibility_accessible_get_child_at_index
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 100 bytes in 3 blocks are definitely lost in loss record 7,510 of 8,398
+==XXXXX==    at 0x4025092: calloc (vg_replace_malloc.c:397)
+==XXXXX==    by 0x47BF20B: g_malloc0 (gmem.c:151)
+==XXXXX==    by 0x578854C: ORBit_alloc_tcval (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5784AB8: ORBit_small_allocbuf (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x56DB96E: impl_getStates (stateset.c:392)
+==XXXXX==    by 0x56D0EF5: _ORBIT_skel_small_Accessibility_StateSet_getStates (Accessibility-common.c:72)
+==XXXXX==    by 0x5791536: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B44: ORBit_OAObject_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783E62: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   fun:impl_getStates
+   fun:_ORBIT_skel_small_Accessibility_StateSet_getStates
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_invoke
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:g_main_context_dispatch
+   fun:g_main_context_iterate
+   fun:g_main_loop_run
+   fun:gtk_main
+   fun:main
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 132 bytes in 8 blocks are possibly lost in loss record 7,600 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x57887AF: ORBit_alloc_string (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5788478: CORBA_string_dup (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578CAC4: ORBit_copy_value_core (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578C92D: ORBit_copy_value_core (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x578CC4E: ORBit_sequence_append (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5757B31: bonobo_activation_init_activation_env (in /usr/lib/libbonobo-activation.so.4.0.0)
+==XXXXX==    by 0x575BD83: bonobo_activation_orb_init (in /usr/lib/libbonobo-activation.so.4.0.0)
+==XXXXX==    by 0x575C1CD: bonobo_activation_init (in /usr/lib/libbonobo-activation.so.4.0.0)
+==XXXXX==    by 0x570FD2C: bonobo_init_full (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x570FEDB: bonobo_init (in /usr/lib/libbonobo-2.so.0.0.0)
+==XXXXX==    by 0x560BA09: atk_bridge_init (bridge.c:217)
+==XXXXX==    by 0x420AB4C: default_display_notify_cb (gtkmodules.c:417)
+==XXXXX==    by 0x4751ABB: g_cclosure_marshal_VOID__PARAM (gmarshal.c:531)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x4749230: g_object_dispatch_properties_changed (gobject.c:770)
+==XXXXX==    by 0x47459DE: g_object_notify_dispatcher (gobject.c:312)
+==XXXXX==    by 0x474BB5C: g_object_notify (gobjectnotifyqueue.c:125)
+==XXXXX==    by 0x4489F57: gdk_display_manager_set_default_display (gdkdisplaymanager.c:241)
+==XXXXX==    by 0x4487C5B: gdk_display_open_default_libgtk_only (gdk.c:327)
+==XXXXX==    by 0x41F0DCE: gtk_init_check (gtkmain.c:957)
+==XXXXX==    by 0x41F0E03: gtk_init (gtkmain.c:992)
+==XXXXX==    by 0x806EBA0: main (main.c:71)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:ORBit_alloc_string
+   fun:CORBA_string_dup
+   fun:ORBit_copy_value_core
+   fun:ORBit_copy_value_core
+   fun:ORBit_sequence_append
+   fun:bonobo_activation_init_activation_env
+   fun:bonobo_activation_orb_init
+   fun:bonobo_activation_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+   fun:gdk_display_manager_set_default_display
+   fun:gdk_display_open_default_libgtk_only
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 160 bytes in 10 blocks are definitely lost in loss record 7,632 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x565976C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x56655BE: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450A48E: atk_object_ref_accessible_child (atkobject.c:800)
+==XXXXX==    by 0x56D530C: impl_accessibility_accessible_get_child_at_index (accessible.c:315)
+==XXXXX==    by 0x56D10B0: _ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex (Accessibility-common.c:120)
+==XXXXX==    by 0x5791536: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B44: ORBit_OAObject_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783E62: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 51,112 (52 direct, 51,060 indirect) bytes in 1 blocks are definitely lost in loss record 8,079 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B811: g_object_new_valist (gobject.c:1319)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x45494A1: gdk_pixbuf_new_from_data (gdk-pixbuf-data.c:65)
+==XXXXX==    by 0x4546EC4: gdk_pixbuf_new (gdk-pixbuf.c:273)
+==XXXXX==    by 0x454EB0A: gdk_pixbuf_scale_simple (gdk-pixbuf-scale.c:254)
+==XXXXX==    by 0x454F69E: get_scaled_pixbuf (gdk-pixbuf-scaled-anim.c:141)
+==XXXXX==    by 0x4548C8F: gdk_pixbuf_animation_get_static_image (gdk-pixbuf-animation.c:327)
+==XXXXX==    by 0x454ADCD: gdk_pixbuf_new_from_file_at_scale (gdk-pixbuf-io.c:1441)
+==XXXXX==    by 0x805BCBE: show_credits (handlers.c:75)
+==XXXXX==    by 0x47523A3: g_cclosure_marshal_VOID__VOID (gmarshal.c:77)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AE56: signal_emit_unlocked_R (gsignal.c:3247)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C935: g_signal_emit (gsignal.c:3037)
+==XXXXX==    by 0x43173F6: gtk_widget_activate (gtkwidget.c:4792)
+==XXXXX==    by 0x420540F: gtk_menu_shell_activate_item (gtkmenushell.c:1139)
+==XXXXX==    by 0x420600A: gtk_real_menu_shell_activate_current (gtkmenushell.c:1435)
+==XXXXX==    by 0x47522FB: g_cclosure_marshal_VOID__BOOLEAN (gmarshal.c:111)
+==XXXXX==    by 0x47433D8: g_type_class_meta_marshal (gclosure.c:878)
+==XXXXX==    by 0x4744C7A: g_closure_invoke (gclosure.c:767)
+==XXXXX==    by 0x475AAFE: signal_emit_unlocked_R (gsignal.c:3285)
+==XXXXX==    by 0x475C4B8: g_signal_emit_valist (gsignal.c:2980)
+==XXXXX==    by 0x475C7E2: g_signal_emit_by_name (gsignal.c:3074)
+==XXXXX==    by 0x566D218: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x44878FA: gdk_threads_dispatch (gdk.c:498)
+==XXXXX==    by 0x47B4C80: g_idle_dispatch (gmain.c:3922)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:gdk_pixbuf_new_from_data
+   fun:gdk_pixbuf_new
+   fun:gdk_pixbuf_scale_simple
+   fun:get_scaled_pixbuf
+   fun:gdk_pixbuf_animation_get_static_image
+   fun:gdk_pixbuf_new_from_file_at_scale
+   fun:show_credits
+   fun:g_cclosure_marshal_VOID__VOID
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:gtk_widget_activate
+   fun:gtk_menu_shell_activate_item
+   fun:gtk_real_menu_shell_activate_current
+}
+==XXXXX== 
+==XXXXX== 
+==XXXXX== 64 bytes in 4 blocks are definitely lost in loss record 8,110 of 8,398
+==XXXXX==    at 0x4026FDE: malloc (vg_replace_malloc.c:207)
+==XXXXX==    by 0x47BF283: g_malloc (gmem.c:131)
+==XXXXX==    by 0x47D5FB2: g_slice_alloc (gslice.c:824)
+==XXXXX==    by 0x47D62E4: g_slice_alloc0 (gslice.c:833)
+==XXXXX==    by 0x4765B4A: g_type_create_instance (gtype.c:1654)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x450D496: atk_relation_set_new (atkrelationset.c:75)
+==XXXXX==    by 0x450A6D4: atk_object_init (atkobject.c:663)
+==XXXXX==    by 0x4765CB9: g_type_create_instance (gtype.c:1666)
+==XXXXX==    by 0x474A3F4: g_object_constructor (gobject.c:1338)
+==XXXXX==    by 0x474AC25: g_object_newv (gobject.c:1215)
+==XXXXX==    by 0x474B7E6: g_object_new_valist (gobject.c:1278)
+==XXXXX==    by 0x474B95D: g_object_new (gobject.c:1060)
+==XXXXX==    by 0x5658E6C: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450BDDF: atk_object_factory_create_accessible (atkobjectfactory.c:85)
+==XXXXX==    by 0x431F7F8: gtk_widget_real_get_accessible (gtkwidget.c:9375)
+==XXXXX==    by 0x4312DC8: gtk_widget_get_accessible (gtkwidget.c:9357)
+==XXXXX==    by 0x56655BE: (within /usr/lib/gtk-2.0/modules/libgail.so)
+==XXXXX==    by 0x450A48E: atk_object_ref_accessible_child (atkobject.c:800)
+==XXXXX==    by 0x56D530C: impl_accessibility_accessible_get_child_at_index (accessible.c:315)
+==XXXXX==    by 0x56D10B0: _ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex (Accessibility-common.c:120)
+==XXXXX==    by 0x5791536: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797B44: ORBit_OAObject_invoke (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5783E62: ORBit_small_invoke_adaptor (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795648: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795D21: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5795ED8: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5797F91: ORBit_handle_request (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x5780154: giop_connection_handle_input (in /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x579F742: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x57A2015: (within /usr/lib/libORBit-2.so.0.1.0)
+==XXXXX==    by 0x47B6B87: g_main_context_dispatch (gmain.c:1814)
+==XXXXX==    by 0x47BA0EA: g_main_context_iterate (gmain.c:2448)
+==XXXXX==    by 0x47BA5B9: g_main_loop_run (gmain.c:2656)
+==XXXXX==    by 0x41F07D8: gtk_main (gtkmain.c:1205)
+==XXXXX==    by 0x806EC94: main (main.c:77)
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+}
+==XXXXX== 
+==XXXXX== LEAK SUMMARY:
+==XXXXX==    definitely lost: 1,160 bytes in 64 blocks.
+==XXXXX==    indirectly lost: 60,888 bytes in 499 blocks.
+==XXXXX==      possibly lost: 708 bytes in 29 blocks.
+==XXXXX==    still reachable: 2,006,092 bytes in 22,825 blocks.
+==XXXXX==         suppressed: 45,802 bytes in 503 blocks.
+==XXXXX== Reachable blocks (those to which a pointer was found) are not shown.
+==XXXXX== To see them, rerun with: --leak-check=full --show-reachable=yes
