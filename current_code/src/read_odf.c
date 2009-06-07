@@ -62,22 +62,24 @@ void xmlAllNodeGetContent(xmlNode *parent, char **str) {
 }
 
 char *xmlToText(char *xml, gint size) {
-/*
+
     char *text="";
+/*
     xmlDocPtr doc = xmlParseMemory(xml, size);
     xmlNodePtr root = xmlDocGetRootElement(doc);
     xmlAllNodeGetContent(root, &text);
 
-    return text;
 */
+    return text;
 }
 
 gint getEntry(const char *name, char *contentFile, char **ptr) {
+
+    gint size=0;
 /*
     ZZIP_DIR *dir;
     ZZIP_DIRENT entry;
     char *buf;
-    gint size;
 
     dir = zzip_dir_open(name, 0);
     if (!dir) 
@@ -100,8 +102,8 @@ gint getEntry(const char *name, char *contentFile, char **ptr) {
 
     zzip_file_close(file);
     zzip_dir_close(dir);
-    return size;
 */
+    return size;
 }
 
 /*
@@ -178,23 +180,26 @@ gint LIBARCHIVEgetEntry(const char *name, char *contentFile, char **ptr) {
 */
 
 extern char *get_odf_Text (const char *filename) {
+
+    char *text="";
 /*
-    char *xml, *text="";
+    char *xml;
     gint size;
 
     size = getEntry(filename, "content.xml", &xml);
     if(size > 0)
         text = xmlToText(xml, size);
 
-    return text;
 */
+    return text;
 }
 
 extern GdkPixbuf *get_odf_Thumb (const char *filename) {
+
+    GdkPixbuf *image=NULL;
 /*
     char *imageData;
     gint size;
-    GdkPixbuf *image=NULL;
 
     size = getEntry(filename, "Thumbnails/thumbnail.png", &imageData);
     if(size > 0)
@@ -211,8 +216,8 @@ extern GdkPixbuf *get_odf_Thumb (const char *filename) {
         g_unlink("/tmp/tmpImg.png");
         }
     debug_message("Got pixmap from ODT doc", DEBUGM);
-    return image;
 */
+    return image;
 
 }
 

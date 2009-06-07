@@ -89,7 +89,7 @@ extern int load_file_to_memory(const char *p_filename, unsigned char **result) {
     size = ftell(p_f);
     fseek(p_f, 0, SEEK_SET);
 
-    if((*result = (char *)malloc(size+1)) == NULL)
+    if((*result = (unsigned char *)malloc(size+1)) == NULL)
         {
         debug_message("out of memory while reading file information\n", ERROR);
         return 0;
@@ -102,7 +102,7 @@ extern int load_file_to_memory(const char *p_filename, unsigned char **result) {
         }
 
     fclose(p_f);
-    (*result)[size] = NULL;
+    (result)[size] = NULL;
     return size;
 
 }
@@ -180,8 +180,9 @@ extern void fcopy(char *fnsource, char *fntarget) {
 }
 
 extern gboolean std_scrollEvent (GtkWidget *widget, GdkEventScroll *event, GtkRange *range ) {
-/*
+
     gboolean retval = FALSE;
+/*
     GtkAdjustment *adj;
 
     adj = gtk_range_get_adjustment(range);
@@ -196,9 +197,8 @@ extern gboolean std_scrollEvent (GtkWidget *widget, GdkEventScroll *event, GtkRa
         default:
             break;
         }
-
-    return retval;
 */
+    return retval;
 }
 
 /*

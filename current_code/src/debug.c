@@ -40,7 +40,7 @@ extern void userMessage(char *message, const int type) {
     dialog = gtk_message_dialog_new (NULL,
                         GTK_DIALOG_DESTROY_WITH_PARENT,
                         (GtkMessageType)type|GTK_MESSAGE_ERROR,
-                        GTK_BUTTONS_CLOSE, (const gchar *)message);
+                        GTK_BUTTONS_CLOSE, (const gchar *)message, NULL);
     gtk_dialog_run (GTK_DIALOG (dialog));
     gtk_widget_destroy (GTK_WIDGET (dialog));
 

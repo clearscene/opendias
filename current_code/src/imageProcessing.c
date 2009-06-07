@@ -36,19 +36,19 @@ GdkPixbuf *getPixBuf_fromData(unsigned char *pic, int ppl, int lines, int scaleX
     char *header, *tmp;
     GdkPixbuf *buf;
 
-tmp = g_strdup_printf("ppl = %d", ppl, NULL);
+tmp = g_strdup_printf("ppl = %d", ppl);
 debug_message(tmp, DEBUGM);
 free(tmp);
 
-tmp = g_strdup_printf("lines = %d", lines, NULL);
+tmp = g_strdup_printf("lines = %d", lines);
 debug_message(tmp, DEBUGM);
 free(tmp);
 
-tmp = g_strdup_printf("scaleX = %d", scaleX, NULL);
+tmp = g_strdup_printf("scaleX = %d", scaleX);
 debug_message(tmp, DEBUGM);
 free(tmp);
 
-tmp = g_strdup_printf("scaleY = %d", scaleY, NULL);
+tmp = g_strdup_printf("scaleY = %d", scaleY);
 debug_message(tmp, DEBUGM);
 free(tmp);
 
@@ -64,7 +64,7 @@ free(tmp);
     free(tmp);
     conCat(&header, "\n255\n");
     loader = gdk_pixbuf_loader_new();
-    gdk_pixbuf_loader_write(loader, header, strlen(header), NULL);
+    gdk_pixbuf_loader_write(loader, (unsigned char *)header, strlen(header), NULL);
     gdk_pixbuf_loader_set_size(loader, scaleX, scaleY);
 
     gdk_pixbuf_loader_write(loader, pic, ppl*lines, NULL);
@@ -207,7 +207,7 @@ char *tmp;
     readPointer = pic;
     while(working_line < (*lines-2))
         {
-tmp = g_strdup_printf("working_line = %d", working_line, NULL);
+tmp = g_strdup_printf("working_line = %d", working_line);
 debug_message(tmp, DEBUGM);
 free(tmp);
 
@@ -266,27 +266,27 @@ free(tmp);
         readPointer += (*ppl-1);
         }
 
-tmp = g_strdup_printf("ppl = %d", *ppl, NULL);
+tmp = g_strdup_printf("ppl = %d", *ppl);
 debug_message(tmp, DEBUGM);
 free(tmp);
 
-tmp = g_strdup_printf("lines = %d", *lines, NULL);
+tmp = g_strdup_printf("lines = %d", *lines);
 debug_message(tmp, DEBUGM);
 free(tmp);
 
-tmp = g_strdup_printf("left = %d", left, NULL);
+tmp = g_strdup_printf("left = %d", left);
 debug_message(tmp, DEBUGM);
 free(tmp);
 
-tmp = g_strdup_printf("right = %d", right, NULL);
+tmp = g_strdup_printf("right = %d", right);
 debug_message(tmp, DEBUGM);
 free(tmp);
 
-tmp = g_strdup_printf("top = %d", top, NULL);
+tmp = g_strdup_printf("top = %d", top);
 debug_message(tmp, DEBUGM);
 free(tmp);
 
-tmp = g_strdup_printf("bottom = %d", bottom, NULL);
+tmp = g_strdup_printf("bottom = %d", bottom);
 debug_message(tmp, DEBUGM);
 free(tmp);
 

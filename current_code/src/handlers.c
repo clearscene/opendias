@@ -494,11 +494,11 @@ void connectToNewStore (char *newLocation) {
 
 }
 
-void pickNewLocation (GtkWidget *forgetme, GtkWidget *winc) {
+void pickNewLocation (GtkWidget *forgetme, GtkWindow *winc) {
 
     char *fileName;
     GtkWidget *fileChooser;
-    GtkFileFilter *filter;
+//    GtkFileFilter *filter;
 
     fileChooser = gtk_file_chooser_dialog_new("New Location", winc, 
 				GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
@@ -527,13 +527,15 @@ extern void create_gui (void) {
 
     GtkWidget *window, *paned, *vbox, *filterTags, 
         *availableTags, *paned2, *doclist, *frame,
-        *lab, *hbox, *hrule, *button, *image, *menuMainBox,
-        *entry, *scrollbar, *menu_bar, *mainMenuItem, *dropDownArea, *menuitem;
+        *lab, *hbox, *hrule, *button, *menuMainBox,
+        *entry, *scrollbar, *menu_bar, *mainMenuItem, 
+        *dropDownArea, *menuitem;
+//    GtkWidget *image;
     GtkObject *adj;
     AtkObject *objectNamer;
-    GdkPixbuf *pixBuf;
+//    GdkPixbuf *pixBuf;
     GtkCellRenderer *renderer;
-    char *img;
+//    char *img;
 
     WIDGETS = g_hash_table_new(g_str_hash, g_str_equal);
     SELECTEDTAGS = NULL;

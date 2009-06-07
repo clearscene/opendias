@@ -302,7 +302,7 @@ GdkPixbuf *getPixbufForThisImage(struct imageInformation *img, int width) {
         {
 #ifdef CAN_READODF
         conCat(&filename, ".odt");
-        if(g_file_test(&filename, G_FILE_TEST_EXISTS))
+        if(g_file_test((const gchar *) &filename, G_FILE_TEST_EXISTS))
             pixBuf = get_odf_Thumb(filename);
 #endif // CAN_READODF //
         }

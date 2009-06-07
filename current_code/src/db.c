@@ -50,7 +50,8 @@ int open_db (char *db) {
 extern int connect_db (int dontCreate) {
 
     int version = 0, i;
-    char *sql, *db, *tmp, *ver;
+    char *db, *tmp, *ver;
+    unsigned char *data;
 
     // Test to see if a DB file exsists
     db = g_strdup(BASE_DIR);
@@ -80,11 +81,11 @@ extern int connect_db (int dontCreate) {
         }
 
     if(!version)
-	{
+        {
         debug_message("Could not connct to the database & have been asked not to create one.", WARNING);
-	free(db);
-	return 1;
-	}
+        free(db);
+        return 1;
+        }
     free(db);
 
     // Bring the DB up-2-date
@@ -99,12 +100,12 @@ extern int connect_db (int dontCreate) {
         conCat(&tmp, "/../share/opendias/openDIAS.sqlite3.dmp.v");
         conCat(&tmp, ver);
         conCat(&tmp, ".sql");
-        if(load_file_to_memory(tmp, &sql))
+        if(load_file_to_memory(tmp, &data))
             {
-            debug_message(sql, INFORMATION);
-            runquery_db("1", sql);
+            debug_message((char *)data, INFORMATION);
+            runquery_db("1", (char *)data);
             free_recordset("1");
-            free(sql);
+            free(data);
             }
         free(ver);
         free(tmp);
@@ -119,7 +120,7 @@ static int callback(char *recordSetKey, int argc, char **argv, char **azColName)
     int i;
     GList *rSet;
     GHashTable *row;
-    char *tmp;
+//    char *tmp;
 
     debug_message("Reading row from database", SQLDEBUG);
 

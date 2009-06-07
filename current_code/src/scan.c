@@ -108,8 +108,8 @@ gboolean resolutionUpdate(GtkRange *resolution, GtkScrollType st, gdouble val, c
         str = "Exellent.";
         }
     gtk_label_set_text(GTK_LABEL(estQuality), g_strconcat("Estimated guality: ", str, NULL));
-    return FALSE;
 */
+    return FALSE;
 }
 
 #ifdef CAN_READODF
@@ -417,7 +417,8 @@ void finishAcquireOperation_button(GtkWidget *forgetMe, GtkWidget *window) {
 
 extern void startAcquireOperation(void) {
 
-    GtkWidget *window, *vbox, *lab, *notebook, *frame, *vvbox, *nbook, *hbox;
+    GtkWidget *window, *vbox, *notebook, *lab, *nbook, *hbox;
+//    GtkWidget *frame, *vvbox;
     char *instructionText, *tmp;
 #ifdef CAN_READODF
     GtkWidget *filebox, *buttonodf, *fileSelector;
@@ -473,7 +474,7 @@ extern void startAcquireOperation(void) {
     atk_object_set_name(objectNamer, "AcquireMainVBox");
 
     lab = gtk_label_new ("");
-    gtk_label_set_markup (lab, "<b>Select a document to store.</b>");
+    gtk_label_set_markup (GTK_LABEL(lab), "<b>Select a document to store.</b>");
     gtk_misc_set_alignment (GTK_MISC(lab), 0, 0);
     gtk_misc_set_padding (GTK_MISC(lab), 20, 3);
     gtk_box_pack_start (GTK_BOX (vbox), lab, FALSE, FALSE, 1);
