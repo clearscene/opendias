@@ -41,15 +41,15 @@ for requested in $runTests; do
 
     # Create fixed startup environment
     # backup current environment
-    rm -rf /tmp/opendias-test-$USER
-    mkdir -p /tmp/opendias-test-$USER
-    cp -r ~/.openDIAS/* /tmp/opendias-test-$USER/
+    if [ -d ~/.openDIAS/ ]; then
+      echo Too hot for me! directory $HOME/.openDIAS exists. Cowidly resusing to destroy it.
+      exit
+    fi
+
     # Build new environment
-#    if [ -f $TEST.inputs/homeDir ]; then
-#      cp -r $TEST.inputs/homeDir/* ~/.openDIAS/
-#    else
-#      rm -rf ~/.openDIAS
-#    fi
+    if [ -f $TEST.inputs/homeDir ]; then
+      cp -r $TEST.inputs/homeDir/* ~/.openDIAS/
+    fi
 
     # Reset test result vars
     RES=0;
@@ -155,9 +155,7 @@ for requested in $runTests; do
     echo -en "</tr>" >> $outputDir/index.html
 
     # Restore users real environment
-#    rm -rf ~/.openDIAS
-#    mkdir ~/.openDIAS
-#    cp -r /tmp/opendias-test-$USER/* ~/.openDIAS/
+    rm -rf ~/.openDIAS
 
   done
 done

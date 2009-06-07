@@ -56,11 +56,33 @@ echo rm runningTest >> test/runMe
 chmod 755 test/runMe
 
 
+#
+# Backup the data area
+#
+echo Backing up personal data ...
+DTE=`date +%Y%m%d%H%M%S`
+tar -czf ~/openDias_bkp.$DTE.tar.gz ~/.openDIAS
+rm -rf ~/.openDIAS
+
+
+
 #######################################
 # Run automated tests
 echo Starting test harness ...
 test/harness.sh $@
+#######################################
 
+
+
+#
+# Recover data area
+#
+echo Restoring personal data ...
+rm -rf ~/.openDIAS
+OP=`pwd`
+cd /
+tar -xf ~/openDias_bkp.$DTE.tar.gz
+cd $OP
 
 
 #
