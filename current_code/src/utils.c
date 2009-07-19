@@ -102,7 +102,7 @@ extern int load_file_to_memory(const char *p_filename, unsigned char **result) {
         }
 
     fclose(p_f);
-    (result)[size] = NULL;
+    (*result)[size] = 0;
     return size;
 
 }
