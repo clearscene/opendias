@@ -12,15 +12,28 @@ failCount="";
 outputDir="test/lastRegression";
 PYTHONPATH="test/regressionTests/";
 
-# Are we generating the results files?
-FIRST=`echo $@ | cut -f1 -d' '`
-if [ "$FIRST" == "-r" ]; then
-  GENERATE="Y"
-  echo Will be generating result files.
-  GIVEN=`echo $@ | cut -b 3-`
-else
-  GIVEN=$@
-fi
+RECORD=""
+SKIPMEMORY=""
+while getopts ":rm" flag 
+do
+  case $flag in
+#    h)
+#      usage;
+#      exit 1;
+#    ;;
+    r)
+      RECORD="-r";
+      GENERATE="Y"
+    ;;
+    m)
+      SKIPMEMORY="-m";
+    ;;
+  esac
+done
+
+shift $((OPTIND-1))
+GIVEN=$@
+
 
 # Format the request, add a generic "all", if nothing was given.
 for requested in $GIVEN; do
@@ -71,23 +84,27 @@ for requested in $runTests; do
       done
 
       # memory log
-      mv $outputDir/valgrind.out $outputDir/$TEST/valgrind.out
-      # parse out changeable content
-      sed -e 's/==[0123456789]*== /==XXXXX== /g' -e 's/My PID = [0123456789]*, parent PID = [0123456789]*./My PID = XXXXX, parent PID = XXXXX./' $outputDir/$TEST/valgrind.out > $outputDir/$TEST/valgrind4Compare.out
-      if [ "$GENERATE" == "Y" ]; then
-        if [ ! -e ${TEST}.result ]; then
-          mkdir -p ${TEST}.result
+      if [ $SKIPMEMORY == "" ]; then
+        mv $outputDir/valgrind.out $outputDir/$TEST/valgrind.out
+        # parse out changeable content
+        sed -f test/valgrindUnify.sed < $outputDir/$TEST/valgrind.out > $outputDir/$TEST/valgrind4Compare.out
+        if [ "$GENERATE" == "Y" ]; then
+          if [ ! -e ${TEST}.result ]; then
+            mkdir -p ${TEST}.result
+          fi
+          cp $outputDir/$TEST/valgrind4Compare.out ${TEST}.result/valgrind.out
         fi
-        cp $outputDir/$TEST/valgrind4Compare.out ${TEST}.result/valgrind.out
-      fi
-      MEM_RES="<td class='none'><a href='$TEST/valgrind.out'>actual</a></td>"
-      diff -ydN ${TEST}.result/valgrind.out $outputDir/$TEST/valgrind4Compare.out > $outputDir/$TEST/valgrindDiff.out
-      if [ "$?" == "0" ]; then
-        rm $outputDir/$TEST/valgrindDiff.out
-        MEM_RES="$MEM_RES<td class='ok'>OK</td>"
+        MEM_RES="<td class='none'><a href='$TEST/valgrind.out'>actual</a></td>"
+        diff -ydN ${TEST}.result/valgrind.out $outputDir/$TEST/valgrind4Compare.out > $outputDir/$TEST/valgrindDiff.out
+        if [ "$?" == "0" ]; then
+          rm $outputDir/$TEST/valgrindDiff.out
+          MEM_RES="$MEM_RES<td class='ok'>OK</td>"
+        else
+          MEM_RES="$MEM_RES<td><a href='$TEST/valgrindDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../${TEST}.result/valgrind.out'>expected</a></td>"
+          RES=1
+        fi
       else
-        MEM_RES="$MEM_RES<td><a href='$TEST/valgrindDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../${TEST}.result/valgrind.out'>expected</a></td>"
-        RES=1
+        MEM_RES="<td colspan=2 class='none'>-- SKIPPED --</td>"
       fi
 
       # test log
