@@ -152,7 +152,7 @@ void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
     free(tmp);
 
     // Open the document for editing.
-    widget = g_hash_table_lookup(SCANWIDGETS, "window");
+    widget = g_hash_table_lookup(SCANWIDGETS, "scanWindow");
     finishAcquireOperation (widget);
     populate_gui();
     populate_docInformation(sql);
@@ -401,7 +401,7 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
     rename("/tmp/tmp.pnm", g_strconcat(BASE_DIR,"scans/",sql,".pnm", NULL));
 
     // Open the document for editing.
-    widget = g_hash_table_lookup(SCANWIDGETS, "window");
+    widget = g_hash_table_lookup(SCANWIDGETS, "scanWindow");
     finishAcquireOperation (widget);
     populate_gui();
     populate_docInformation(sql);
@@ -409,19 +409,19 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
 }
 #endif // CAN_SCAN //
 
-void finishAcquireOperation_button(GtkWidget *forgetMe, GtkWidget *window) {
+void finishAcquireOperation_button(GtkWidget *forgetMe, GtkWidget *scanWindow) {
 
-	finishAcquireOperation(window);
+	finishAcquireOperation(scanWindow);
 
 }
 
 extern void startAcquireOperation(void) {
 
-    GtkWidget *window, *vbox, *notebook, *lab, *nbook, *hbox;
+    GtkWidget *scanWindow, *vbox, *notebook, *lab, *nbook, *hbox, *buttonodf;
 //    GtkWidget *frame, *vvbox;
     char *instructionText, *tmp;
 #ifdef CAN_READODF
-    GtkWidget *filebox, *buttonodf, *fileSelector;
+    GtkWidget *filebox, *fileSelector;
     GtkFileFilter *filter;
     AtkObject *objectNamer;
 #endif // CAN_READODF //
@@ -439,14 +439,14 @@ extern void startAcquireOperation(void) {
 #endif // CAN_SCAN //
 
     SCANWIDGETS = g_hash_table_new(g_str_hash, g_str_equal);
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_hash_table_insert(SCANWIDGETS, "window", window);
-    g_signal_connect (window, "delete_event", GTK_SIGNAL_FUNC(finishAcquireOperation), window);
-    gtk_window_set_title (GTK_WINDOW (window), "openDIAS: Acquire");
-    //gtk_window_set_default_size (GTK_WINDOW (window), 550, 300);
-    gtk_window_set_modal (GTK_WINDOW (window), TRUE);
-    gtk_window_set_position(GTK_WINDOW (window), GTK_WIN_POS_CENTER);
-    gtk_widget_show_all (window);
+    scanWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    g_hash_table_insert(SCANWIDGETS, "scanWindow", scanWindow);
+    g_signal_connect (scanWindow, "delete_event", GTK_SIGNAL_FUNC(finishAcquireOperation), NULL);
+    gtk_window_set_title (GTK_OBJECT (scanWindow), "openDIAS: Acquire");
+    gtk_window_set_default_size (GTK_WINDOW (scanWindow), 550, 300);
+    gtk_window_set_modal (GTK_WINDOW (scanWindow), TRUE);
+    gtk_window_set_position(GTK_WINDOW (scanWindow), GTK_WIN_POS_CENTER);
+    gtk_widget_show_all (scanWindow);
 
 #ifdef CAN_SCAN
     debug_message("sane_init", DEBUGM);
@@ -512,7 +512,7 @@ extern void startAcquireOperation(void) {
     atk_object_set_name(objectNamer, "AcquirefileSelectorBox");
 
     // Title row
-    lab = gtk_label_new ("Select the file you wish to imnport.");
+    lab = gtk_label_new ("Select the file you wish to import.");
     gtk_misc_set_alignment (GTK_MISC(lab), 0, 0);
     gtk_misc_set_padding (GTK_MISC(lab), 46, 0); // includes padding that other lines have with their vbox padding
     gtk_box_pack_start (GTK_BOX (filebox), lab, FALSE, FALSE, 2);
@@ -560,14 +560,13 @@ extern void startAcquireOperation(void) {
 #endif // CAN_READODF //
 
     gtk_box_pack_start (GTK_BOX (vbox), nbook, FALSE, FALSE, 2);
-    gtk_container_add (GTK_CONTAINER (window), vbox);
 
     buttonodf = gtk_button_new();
     gtk_button_set_label(GTK_BUTTON(buttonodf), "Cancel");
     gtk_widget_set_size_request(GTK_WIDGET(buttonodf), 100, -1);
     g_signal_connect(GTK_OBJECT (buttonodf), "clicked",
-			      GTK_SIGNAL_FUNC(finishAcquireOperation_button), 
-			      window);
+			      G_CALLBACK(finishAcquireOperation_button), 
+			      scanWindow);
     hbox = gtk_hbox_new (FALSE, 2);
     objectNamer = gtk_widget_get_accessible(hbox);
     atk_object_set_name(objectNamer, "CloseButtonPadding");
@@ -576,8 +575,11 @@ extern void startAcquireOperation(void) {
     gtk_box_pack_start (GTK_BOX (hbox), lab, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX (hbox), buttonodf, FALSE, FALSE, 2);
     gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 2);
+    gtk_box_pack_start (GTK_BOX (vbox), buttonodf, FALSE, TRUE, 2);
 
-    gtk_widget_show_all (window);
+    gtk_container_add (GTK_CONTAINER (scanWindow), vbox);
+
+    gtk_widget_show_all (scanWindow);
     while(gtk_events_pending ())
         gtk_main_iteration ();
 
@@ -764,17 +766,21 @@ extern void startAcquireOperation(void) {
         }
 
 #endif // CAN_SCAN //
-    gtk_widget_show_all (window);
+    gtk_widget_show_all (scanWindow);
 
 }
 
-extern void finishAcquireOperation(GtkWidget *window) {
+extern void finishAcquireOperation(GtkWidget *scanWindow) {
 
 #ifdef CAN_SCAN
     debug_message("sane_exit", DEBUGM);
     sane_exit();
 #endif // CAN_SCAN //
-    gtk_widget_destroy (window);
+
+//  gtk_widget_destroy (scanWindow);
+    gtk_widget_hide (scanWindow);
+    while(gtk_events_pending ())
+        gtk_main_iteration ();
 
 }
 
