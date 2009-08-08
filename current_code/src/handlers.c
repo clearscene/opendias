@@ -45,6 +45,18 @@ void shutdown_app (void) {
 
 }
 
+void shutdown_app_button (GtkWidget *forgetMe, gpointer data) {
+
+    shutdown_app();
+
+}
+
+void local_startAcquireOperation (GtkWidget *forgetMe, gpointer data) {
+
+    startAcquireOperation();
+	debug_message("After start", DEBUGM);
+
+}
 
 void launch_url(GtkAboutDialog* about, const gchar* link, gpointer data) {
  
@@ -96,7 +108,7 @@ GList *filterDocsWithTags(GList *tags, GList *docs) {
     char *docList, *sql, *tmp;
     GList *li, *ta, *newDocList = NULL;
 
-debug_message("Entered filterDocsWithTags", DEBUGM);
+    debug_message("Entered filterDocsWithTags", DEBUGM);
 
     for(ta = tags; ta != NULL; ta = g_list_next(ta)) 
         {
@@ -143,7 +155,7 @@ extern GList *docsWithAllTags(GList *tags) {
     GList *docs = NULL, *retVal, *li;
     char *sql;
 
-debug_message("Entered docsWithAllTags", DEBUGM);
+    debug_message("Entered docsWithAllTags", DEBUGM);
 
     sql = g_strdup("SELECT * FROM docs");
     if(runquery_db("1", sql))
@@ -160,7 +172,6 @@ debug_message("Entered docsWithAllTags", DEBUGM);
     for(li = docs; li != NULL; li = g_list_next(li)) 
         free(li->data);
     g_list_free(docs);
-
     return retVal;
 
 }
@@ -377,7 +388,6 @@ void setDocInformation (GtkWidget *frame) {
 extern void populate_docInformation (char * docId) {
 
     GtkWidget *frame;
-
     frame = openDocEditor(docId);
 
     setDocInformation(frame);
@@ -506,11 +516,11 @@ void pickNewLocation (GtkWidget *forgetme, GtkWindow *winc) {
 				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				      NULL);
 
-/*    filter = gtk_file_filter_new( );
-    gtk_file_filter_set_name( filter, "openDIAS database");
-    gtk_file_filter_add_pattern( filter, "openDIAS.sqlite3" );
-    gtk_file_chooser_add_filter( GTK_FILE_CHOOSER(fileChooser), filter );
-*/
+//    filter = gtk_file_filter_new( );
+//    gtk_file_filter_set_name( filter, "openDIAS database");
+//    gtk_file_filter_add_pattern( filter, "openDIAS.sqlite3" );
+//    gtk_file_chooser_add_filter( GTK_FILE_CHOOSER(fileChooser), filter );
+
 	if (gtk_dialog_run (GTK_DIALOG (fileChooser)) == GTK_RESPONSE_ACCEPT)
             {
             fileName = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(fileChooser));
@@ -544,7 +554,7 @@ extern void create_gui (void) {
 
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     g_hash_table_insert(WIDGETS, "mainWindow", window);
-    g_signal_connect (window, "delete_event", shutdown_app, NULL);
+    g_signal_connect (window, "delete_event", GTK_SIGNAL_FUNC (shutdown_app), NULL);
     gtk_window_set_title (GTK_WINDOW (window), "openDIAS");
 //    gtk_container_set_border_width (GTK_CONTAINER (window), 5);
 //    gtk_widget_set_size_request (GTK_WINDOW (window), 795, 640);
@@ -575,17 +585,17 @@ extern void create_gui (void) {
 
     menuitem = gtk_menu_item_new_with_mnemonic ("_Change Library");
     g_signal_connect(G_OBJECT (menuitem), "activate",
-                                        GTK_SIGNAL_FUNC (pickNewLocation), window);
+                                        G_CALLBACK (pickNewLocation), window);
     gtk_menu_shell_append (GTK_MENU_SHELL (dropDownArea), menuitem);
 
     menuitem = gtk_menu_item_new_with_mnemonic ("_Acquire");
     g_signal_connect(G_OBJECT (menuitem), "activate",
-                                        GTK_SIGNAL_FUNC (startAcquireOperation), NULL);
+                                        G_CALLBACK (local_startAcquireOperation), NULL);
     gtk_menu_shell_append (GTK_MENU_SHELL (dropDownArea), menuitem);
 
     menuitem = gtk_menu_item_new_with_mnemonic ("_Exit");
     g_signal_connect(G_OBJECT (menuitem), "activate",
-                                        GTK_SIGNAL_FUNC (shutdown_app), NULL);
+                                        G_CALLBACK (shutdown_app_button), NULL);
     gtk_menu_shell_append (GTK_MENU_SHELL (dropDownArea), menuitem);
 
     // Help dropdown
@@ -599,7 +609,7 @@ extern void create_gui (void) {
 
     menuitem = gtk_menu_item_new_with_mnemonic ("_About");
     g_signal_connect(G_OBJECT (menuitem), "activate",
-                                        GTK_SIGNAL_FUNC (show_credits), window);
+                                        G_CALLBACK (show_credits), window);
     gtk_menu_shell_append (GTK_MENU_SHELL (dropDownArea), menuitem);
 
     // Add menu bar to the main Window
@@ -623,6 +633,7 @@ extern void create_gui (void) {
     image = gtk_image_new_from_pixbuf (pixBuf);
     gtk_box_pack_start (GTK_BOX (vbox), image, FALSE, FALSE, 2);
 */
+
 
     hrule = gtk_hseparator_new ();
     objectNamer = gtk_widget_get_accessible(hrule);
@@ -788,7 +799,7 @@ extern void create_gui (void) {
     button = gtk_button_new();
     gtk_button_set_label(GTK_BUTTON(button), "Acquire New");
     g_signal_connect (GTK_OBJECT (button), "clicked",
-                                    G_CALLBACK (startAcquireOperation),
+                                    G_CALLBACK (local_startAcquireOperation),
                                     NULL);
     gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 2);
 
@@ -869,6 +880,7 @@ extern void create_gui (void) {
     gtk_paned_add2 (GTK_PANED (paned), paned2);
     gtk_paned_add2 (GTK_PANED (paned2), frame);
     gtk_box_pack_start (GTK_BOX(menuMainBox), paned, FALSE, FALSE, 2);
+
     gtk_widget_show_all (window);
     //gtk_tree_view_set_headers_clickable(GTK_TREE_VIEW(doclist), TRUE);
     //gtk_tree_view_set_reorderable(GTK_TREE_VIEW(doclist), TRUE);
