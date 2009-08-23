@@ -1,9 +1,10 @@
 
 usage() {
-  echo "Usage: [-h] [-r] [-m] [-c] [<tests>]"
+  echo "Usage: [-h] [-r] [-m] [-s] [-c] [<tests>]"
   echo "  -h       help (show this page)"
   echo "  -r       record results files (will distroy current results files of tests that are about to be run)"
   echo "  -m       don't do memory checking"
+  echo "  -s       don't use any memory checking suppressions (exclusive to -m flag)"
   echo "  -c       don't do coverage checking"
 #  echo "  -b       don't rebuild app (may override -c)"
   echo "  <tests>  The tests you wish to run. Default to all tests."
@@ -18,7 +19,7 @@ usage() {
 RECORD=""
 SKIPMEMORY=""
 SKIPCOVERAGE=""
-while getopts ":hrmc" flag 
+while getopts ":hrmcs" flag 
 do 
   case $flag in 
     h)
@@ -37,9 +38,20 @@ do
       SKIPCOVERAGE="-c";
       echo Will skip analysing code coverage.
     ;;
+    s)
+      NOSUPPRESSIONS="-s";
+    ;;
   esac 
 done 
-
+if [ "$NOSUPPRESSIONS" != "" ]; then
+  if [ "$SKIPMEMORY" == "" ]; then
+    echo No memory suppression clauses will be used.
+  else
+    echo eek - you asked for no memory checking - and - use no memory supressions. This does not seam right.
+    usage;
+    exit 1;
+  fi
+fi
 shift $((OPTIND-1))
 
 #
@@ -60,7 +72,7 @@ make clean > test/lastRegression/buildLog.out
 if [ ! -f dontBotherReCompilingMe-testScript ] || [ "$SKIPCOVERAGE" == "-c" ]; then
   echo Configuring ...
   if [ "$SKIPCOVERAGE" == "-c" ]; then
-    ./configure &> test/lastRegression/buildLog2.out
+    ./configure CFLAGS=' -g ' &> test/lastRegression/buildLog2.out
   else
     ./configure CFLAGS='--coverage' LIBS='-lgcov' &> test/lastRegression/buildLog2.out
   fi
@@ -92,14 +104,16 @@ echo Creating startup scripts ...
 if [ "$SKIPMEMORY" == "" ]; then
   CODENAME=`lsb_release -c | cut -f2`
   SUPPRESS=""
-  for SUPP in `ls test/suppressions/$CODENAME/*`; do
-    if [ -f $SUPP ]; then
-      SUPPRESS="$SUPPRESS --suppressions=$SUPP"
-    fi
-  done
+  if [ "$NOSUPPRESSIONS" == "" ]; then
+    for SUPP in `ls test/suppressions/$CODENAME/*`; do
+      if [ -f $SUPP ]; then
+        SUPPRESS="$SUPPRESS --suppressions=$SUPP"
+      fi
+    done
+  fi
   VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=test/lastRegression/valgrind.out "
   GENSUPP="--gen-suppressions=all "
-  VALGRIN="G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind "
+  VALGRIND="G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind "
 fi
 echo touch runningTest > test/runMe
 echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP src/opendias \&\> test/lastRegression/appLog.out >> test/runMe
@@ -111,7 +125,7 @@ chmod 755 test/runMe
 # Backup the data area
 #
 DTE=`date +%Y%m%d%H%M%S`
-if [ -f ~/.openDIAS ]; then
+if [ -d ~/.openDIAS ]; then
   echo Backing up personal data ...
   tar -czf ~/openDias_bkp.$DTE.tar.gz ~/.openDIAS
   rm -rf ~/.openDIAS
