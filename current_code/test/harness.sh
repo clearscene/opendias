@@ -61,7 +61,7 @@ for requested in $runTests; do
 
     # Build new environment
     if [ -f $TEST.inputs/homeDir ]; then
-      cp -r $TEST.inputs/homeDir/* ~/.openDIAS/
+      cp -r $TEST.inputs/homeDir ~/.openDIAS
     fi
 
     # Reset test result vars
@@ -84,7 +84,7 @@ for requested in $runTests; do
       done
 
       # memory log
-      if [ $SKIPMEMORY == "" ]; then
+      if [ "$SKIPMEMORY" == "" ]; then
         mv $outputDir/valgrind.out $outputDir/$TEST/valgrind.out
         # parse out changeable content
         sed -f test/valgrindUnify.sed < $outputDir/$TEST/valgrind.out > $outputDir/$TEST/valgrind4Compare.out
@@ -171,7 +171,7 @@ for requested in $runTests; do
 
     echo -en "</tr>" >> $outputDir/index.html
 
-    # Restore users real environment
+    # Cleanup
     rm -rf ~/.openDIAS
 
   done
