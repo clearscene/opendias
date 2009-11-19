@@ -1647,3 +1647,1802 @@
    obj:/usr/lib/libORBit-2.so.0.1.0
    obj:/usr/lib/libORBit-2.so.0.1.0
 }
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:gdk_threads_dispatch
+   fun:g_idle_dispatch
+   fun:g_main_context_dispatch
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:spi_atk_bridge_signal_listener
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:spi_atk_bridge_signal_listener
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:spi_atk_bridge_signal_listener
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:spi_atk_bridge_signal_listener
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:spi_atk_bridge_signal_listener
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:spi_atk_bridge_signal_listener
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   fun:create_gui
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:spi_component_interface_new
+   fun:spi_accessible_construct
+   fun:spi_accessible_new_return
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_invoke
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:spi_accessible_construct
+   fun:spi_accessible_new_return
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_invoke
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:spi_accessible_construct
+   fun:spi_application_new
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+   fun:gdk_display_manager_set_default_display
+   fun:gdk_display_open_default_libgtk_only
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_event_source_new
+   fun:bonobo_running_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_running_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_moniker_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:pango_language_from_string
+   fun:pango_language_get_default
+   fun:pango_context_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:pango_context_new
+   fun:pango_font_map_create_context
+   fun:pango_cairo_font_map_create_context
+   fun:gdk_pango_context_get_for_screen
+   fun:gtk_widget_create_pango_context
+   fun:gtk_widget_get_pango_context
+   fun:gtk_widget_create_pango_layout
+   fun:find_invisible_char
+   fun:gtk_entry_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_object_to_objkey
+   fun:IOP_generate_profiles
+   fun:ORBit_marshal_object
+   fun:ORBit_marshal_value
+   fun:ORBit_marshal_arg
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:g_main_context_dispatch
+   fun:g_main_context_iterate
+   fun:g_main_loop_run
+   fun:gtk_main
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:spi_component_interface_new
+   fun:spi_accessible_construct
+   fun:spi_accessible_new_return
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_invoke
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:spi_accessible_construct
+   fun:spi_accessible_new_return
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_invoke
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_object_to_objkey
+   fun:IOP_generate_profiles
+   fun:ORBit_marshal_object
+   fun:ORBit_marshal_value
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_small_invoke_stub
+   fun:ORBit_small_invoke_stub_n
+   fun:ORBit_c_stub_invoke
+   fun:Accessibility_Registry_registerApplication
+   fun:spi_atk_bridge_register_application
+   fun:spi_atk_bridge_do_registration
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:spi_accessible_construct
+   fun:spi_application_new
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+   fun:gdk_display_manager_set_default_display
+   fun:gdk_display_open_default_libgtk_only
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_event_source_new
+   fun:bonobo_running_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_running_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:PortableServer_POA_servant_to_reference
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_moniker_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_by_tc
+   fun:ORBit_small_alloc
+   fun:bonobo_activation_init_activation_env
+   fun:bonobo_activation_orb_init
+   fun:bonobo_activation_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+   fun:gdk_display_manager_set_default_display
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:gail_sub_menu_item_new
+   fun:gail_menu_item_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   fun:ORBit_adaptor_setup
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_POA_setup_root
+   fun:ORBit_init_internals
+   fun:CORBA_ORB_init
+   fun:bonobo_activation_orb_init
+   fun:bonobo_activation_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+   fun:gdk_display_manager_set_default_display
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:nss_parse_service_list
+   fun:__nss_database_lookup
+   obj:*
+   obj:*
+   fun:getpwnam_r@@GLIBC_2.1.2
+   fun:g_get_any_init_do
+   fun:g_get_home_dir
+   fun:gtk_rc_add_initial_default_files
+   fun:_gtk_rc_init
+   fun:post_parse_hook
+   fun:g_option_context_parse
+   fun:gtk_parse_args
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_object_to_objkey
+   fun:IOP_generate_profiles
+   fun:ORBit_marshal_object
+   fun:ORBit_marshal_value
+   fun:ORBit_marshal_arg
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:g_main_context_dispatch
+   fun:g_main_context_iterate
+   fun:g_main_loop_run
+   fun:gtk_main
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_object_to_objkey
+   fun:IOP_generate_profiles
+   fun:ORBit_marshal_object
+   fun:ORBit_marshal_value
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_small_invoke_stub
+   fun:ORBit_small_invoke_stub_n
+   fun:ORBit_c_stub_invoke
+   fun:Accessibility_Registry_registerApplication
+   fun:spi_atk_bridge_register_application
+   fun:spi_atk_bridge_do_registration
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:g_realloc
+   fun:ORBit_realloc_tcval
+   fun:ORBit_sequence_append
+   fun:bonobo_activation_init_activation_env
+   fun:bonobo_activation_orb_init
+   fun:bonobo_activation_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+   fun:gdk_display_manager_set_default_display
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   obj:/usr/lib/libbonobo-2.so.0.0.0
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:bonobo_moniker_context_new
+   fun:bonobo_context_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:gail_menu_item_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:impl_accessibility_accessible_get_child_at_index
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   fun:impl_getStates
+   fun:_ORBIT_skel_small_Accessibility_StateSet_getStates
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_invoke
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:g_main_context_dispatch
+   fun:g_main_context_iterate
+   fun:g_main_loop_run
+   fun:gtk_main
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:gdk_pixbuf_new_from_data
+   fun:gdk_pixbuf_new
+   fun:gdk_pixbuf_scale_simple
+   fun:get_scaled_pixbuf
+   fun:gdk_pixbuf_animation_get_static_image
+   fun:gdk_pixbuf_new_from_file_at_scale
+   fun:show_credits
+   fun:g_cclosure_marshal_VOID__VOID
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:gtk_widget_activate
+   fun:gtk_menu_shell_activate_item
+   fun:gtk_real_menu_shell_activate_current
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:ORBit_alloc_string
+   fun:CORBA_string_dup
+   fun:ORBit_copy_value_core
+   fun:ORBit_copy_value_core
+   fun:ORBit_sequence_append
+   fun:bonobo_activation_init_activation_env
+   fun:bonobo_activation_orb_init
+   fun:bonobo_activation_init
+   fun:bonobo_init_full
+   fun:bonobo_init
+   fun:atk_bridge_init
+   fun:default_display_notify_cb
+   fun:g_cclosure_marshal_VOID__PARAM
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:g_object_dispatch_properties_changed
+   fun:g_object_notify_dispatcher
+   fun:g_object_notify
+   fun:gdk_display_manager_set_default_display
+   fun:gdk_display_open_default_libgtk_only
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+   fun:atk_object_init
+   fun:g_type_create_instance
+   fun:g_object_constructor
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_factory_create_accessible
+   fun:gtk_widget_real_get_accessible
+   fun:gtk_widget_get_accessible
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:atk_object_ref_accessible_child
+   fun:impl_accessibility_accessible_get_child_at_index
+   fun:_ORBIT_skel_small_Accessibility_Accessible_getChildAtIndex
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_strconcat
+   fun:conCat
+   fun:connect_db
+   fun:setup
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_try_malloc
+   fun:gdk_pixbuf_new
+   fun:gdk_pixbuf_scale_simple
+   fun:get_scaled_pixbuf
+   fun:gdk_pixbuf_animation_get_static_image
+   fun:gdk_pixbuf_new_from_file_at_scale
+   fun:show_credits
+   fun:g_cclosure_marshal_VOID__VOID
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:gtk_widget_activate
+   fun:gtk_menu_shell_activate_item
+   fun:gtk_real_menu_shell_activate_current
+   fun:g_cclosure_marshal_VOID__BOOLEAN
+   fun:g_type_class_meta_marshal
+   fun:g_closure_invoke
+   fun:signal_emit_unlocked_R
+   fun:g_signal_emit_valist
+   fun:g_signal_emit_by_name
+   obj:/usr/lib/gtk-2.0/modules/libgail.so
+   fun:gdk_threads_dispatch
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:ORBit_alloc_tcval
+   fun:ORBit_small_allocbuf
+   fun:impl_getStates
+   fun:_ORBIT_skel_small_Accessibility_StateSet_getStates
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_OAObject_invoke
+   fun:ORBit_small_invoke_adaptor
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:ORBit_handle_request
+   fun:giop_connection_handle_input
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   obj:/usr/lib/libORBit-2.so.0.1.0
+   fun:g_main_context_dispatch
+   fun:g_main_context_iterate
+   fun:g_main_context_iteration
+   fun:link_main_iteration
+   fun:giop_recv_buffer_get
+   fun:ORBit_small_invoke_stub
+   fun:ORBit_small_invoke_stub_n
+   fun:ORBit_c_stub_invoke
+}
+

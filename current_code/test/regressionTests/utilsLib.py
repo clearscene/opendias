@@ -28,7 +28,6 @@ def closeAppTest():
 		log (testDesc, 'pass')
 		log (testDesc, 'testend')
 		guitimeout (30)
-		wait(6)
 
 	except LdtpExecutionError, msg:
 		log (msg, 'cause')

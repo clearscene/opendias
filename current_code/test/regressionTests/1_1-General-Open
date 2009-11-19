@@ -1,6 +1,10 @@
 from ldtp import *
 import utilsLib
 
+# Open the application with a everything that would normally be in place.
+# Check the "about page".
+# Close.
+
 try:
 	log ('1_1-General-Open: Open and close the application.', 'warning')
 

@@ -1,11 +1,16 @@
 <ldtp>
-<warning>1_2-Acquire-Page: Open and explore the acquire page.</warning>
+<warning>1_3-Acquire-Page: Open and explore the acquire page.</warning>
 <test name="Test: Openning App">
-<pass>1</pass>
+<warning>waittillguiexist failed: Server aborted</warning>
+<cause>Server aborted</cause>
+<pass>0</pass>
 </test>
 <test name="Test: Acquire page (from menu)">
 <pass>1</pass>
 </test>
 <test name="Test: Closing App">
-<pass>1</pass>
+<error>selectmenuitem failed: Select menu item failed</error>
+<screenshot>/tmp/ldtp-wbooth/screenshot-08-28-2009-14-43-1251467039.png</screenshot>
+<cause>Select menu item failed</cause>
+<pass>0</pass>
 </test>

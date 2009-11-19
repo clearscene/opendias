@@ -225,7 +225,7 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
     q = GPOINTER_TO_INT(g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "q", NULL)));
     resolution = resolution*q;
     status = sane_control_option (openDeviceHandle, hlp, SANE_ACTION_SET_VALUE, &resolution, &paramSetRet);
-
+    //
 
     // Get scanning params (from the scanner)
     debug_message("Get scanning params", DEBUGM);
@@ -442,7 +442,7 @@ extern void startAcquireOperation(void) {
     scanWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     g_hash_table_insert(SCANWIDGETS, "scanWindow", scanWindow);
     g_signal_connect (scanWindow, "delete_event", GTK_SIGNAL_FUNC(finishAcquireOperation), NULL);
-    gtk_window_set_title (GTK_OBJECT (scanWindow), "openDIAS: Acquire");
+    gtk_window_set_title (GTK_WINDOW (scanWindow), "openDIAS: Acquire");
     gtk_window_set_default_size (GTK_WINDOW (scanWindow), 550, 300);
     gtk_window_set_modal (GTK_WINDOW (scanWindow), TRUE);
     gtk_window_set_position(GTK_WINDOW (scanWindow), GTK_WIN_POS_CENTER);
@@ -457,8 +457,11 @@ extern void startAcquireOperation(void) {
         status = sane_get_devices (&device_list, SANE_FALSE);
         if(status == SANE_STATUS_GOOD)
             {
-            if (device_list && device_list[0])
+            if (device_list && device_list[0]) 
+		{
                 scanOK = TRUE;
+                debug_message("device(s) found", DEBUGM);
+		}
             else
                 debug_message("No devices found", INFORMATION);
             }
@@ -575,7 +578,6 @@ extern void startAcquireOperation(void) {
     gtk_box_pack_start (GTK_BOX (hbox), lab, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX (hbox), buttonodf, FALSE, FALSE, 2);
     gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 2);
-    gtk_box_pack_start (GTK_BOX (vbox), buttonodf, FALSE, TRUE, 2);
 
     gtk_container_add (GTK_CONTAINER (scanWindow), vbox);
 
@@ -634,7 +636,7 @@ extern void startAcquireOperation(void) {
             gtk_table_attach (GTK_TABLE (table), pagesSpin, 2, 4, 2, 3, GTK_EXPAND, GTK_EXPAND, 0, 0);
 
 
-
+/*
             // Find resolution ranges
             for (hlp = 0; hlp < 9999; hlp++)
                 {
@@ -683,6 +685,7 @@ extern void startAcquireOperation(void) {
                         }
                     }
                 }
+*/
 
             // Define a default
             resolution = 300;
@@ -764,8 +767,8 @@ extern void startAcquireOperation(void) {
             sane_close(openDeviceHandle);
             }
         }
-
 #endif // CAN_SCAN //
+
     gtk_widget_show_all (scanWindow);
 
 }
@@ -777,7 +780,6 @@ extern void finishAcquireOperation(GtkWidget *scanWindow) {
     sane_exit();
 #endif // CAN_SCAN //
 
-//  gtk_widget_destroy (scanWindow);
     gtk_widget_hide (scanWindow);
     while(gtk_events_pending ())
         gtk_main_iteration ();
