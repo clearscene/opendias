@@ -57,7 +57,7 @@ void closeDocEditor () {
 }
 
 extern void openDocEditor_window (char *documentId) {
-/*
+
     GtkWidget *window, *content;
 
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -72,7 +72,7 @@ extern void openDocEditor_window (char *documentId) {
 
     gtk_container_add (GTK_CONTAINER (window), content);
     gtk_widget_show_all (window);
-*/
+
 }
 
 
@@ -208,7 +208,7 @@ void saveDoc (GtkWidget *button, char *documentId) {
 }
 
 void doDelete (GtkButton *button, char *documentId) {
-/*
+
     char *sql, *tmp, *tmp2;
 
     sql = g_strdup("SELECT * FROM docs WHERE docid = ");
@@ -247,7 +247,7 @@ void doDelete (GtkButton *button, char *documentId) {
     free(sql);
 
     populate_gui();
-*/
+
 }
 
 void checkDelete (GtkButton *button, GtkWidget *checkBut) {
@@ -341,7 +341,7 @@ void placeImage (GdkPixbuf *pixBuf, GtkWidget *frame) {
 }
 
 void previousPage (GtkButton *button, struct imageInformation *img) {
-/*
+
     GtkWidget *wid;
     char *tmp, *tmp2;
 
@@ -364,11 +364,11 @@ void previousPage (GtkButton *button, struct imageInformation *img) {
     placeImage(getPixbufForThisImage(img, 150), g_hash_table_lookup(EDITORWIDGETS, "frame"));
     wid = g_hash_table_lookup(EDITORWIDGETS, "next");
     gtk_widget_set_sensitive(GTK_WIDGET(wid), TRUE);
-*/
+
 }
 
 void nextPage (GtkButton *button, struct imageInformation *img) {
-/*
+
     GtkWidget *wid;
     char *tmp, *tmp2;
 
@@ -391,7 +391,7 @@ void nextPage (GtkButton *button, struct imageInformation *img) {
     placeImage(getPixbufForThisImage(img, 150), g_hash_table_lookup(EDITORWIDGETS, "frame"));
     wid = g_hash_table_lookup(EDITORWIDGETS, "prev");
     gtk_widget_set_sensitive(GTK_WIDGET(wid), TRUE);
-*/
+
 }
 
 void rescale(GtkComboBox *box, struct imageInformation *img) {

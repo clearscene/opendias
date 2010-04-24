@@ -138,15 +138,21 @@ if test "$PKG_CONFIG" != "no"; then
         	 AC_MSG_WARN(You are missing the development headers for the gdk-picbuf libs))], 
 		AC_MSG_WARN(You are missing the gdk-pixbuf libs) )
 fi
+archive="no"
+AC_CHECK_LIB(archive, main, 
+	[AC_CHECK_HEADER(archive.h,
+        	archive=yes,
+        	AC_MSG_WARN(You are missing the development headers for the archive libs))], 
+	AC_MSG_WARN(You are missing the archive libs) )
 zzip="no"
 AC_CHECK_LIB(zzipwrap, main, 
 	[AC_CHECK_HEADER(zzip/lib.h,
         	zzip=yes,
         	AC_MSG_WARN(You are missing the development headers for the zzip libs))], 
 	AC_MSG_WARN(You are missing the zzip libs) )
-if test "x$xml" = "xyes" && test "x$zzip" = "xyes" && test "x$pixbuf" = "xyes" ; then
+if test "x$xml" = "xyes" && test "x$zzip" = "xyes" && test "x$pixbuf" = "xyes" && test "x$archive" = "xyes" ; then
 	AC_DEFINE([CAN_READODF],[],[Have everything that's needed to read ODF documents])
-	OPENDIAS_LIBS="$OPENDIAS_LIBS -lxml2 -lzzip $pixbuf_libs "
+	OPENDIAS_LIBS="$OPENDIAS_LIBS -larchive -lxml2 -lzzip $pixbuf_libs "
 	OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS $xml2_cflags $pixbuf_cflags " 
 else
 	AC_MSG_WARN(You wll not be able to import any ODF document.)
@@ -155,7 +161,7 @@ fi
 
 dnl For testing: delete the "dontReConfigureMe" flag. So if 'configure' has been run on its own by a user
 dnl then the "test scripts" know we should recompile
-rm -rf dontBotherReConfiguringMe-testScript
+dnl rm -rf dontBotherReConfiguringMe-testScript
 
 
 AC_OUTPUT([

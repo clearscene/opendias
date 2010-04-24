@@ -38,6 +38,7 @@ void shutdown_interface (void) {
 
 void shutdown_app (void) {
 
+debug_message("shutdown", DEBUGM);
     shutdown_interface();
     close_db ();
     free(BASE_DIR);
@@ -66,6 +67,7 @@ void launch_url(GtkAboutDialog* about, const gchar* link, gpointer data) {
 
 void show_credits (GtkWidget *forgetme, GtkWidget *wind) {
 
+debug_message("credits", DEBUGM);
     GdkPixbuf *pixBuf;
     char *tmp;
 
@@ -508,7 +510,7 @@ void pickNewLocation (GtkWidget *forgetme, GtkWindow *winc) {
 
     char *fileName;
     GtkWidget *fileChooser;
-//    GtkFileFilter *filter;
+    GtkFileFilter *filter;
 
     fileChooser = gtk_file_chooser_dialog_new("New Location", winc, 
 				GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
@@ -516,10 +518,10 @@ void pickNewLocation (GtkWidget *forgetme, GtkWindow *winc) {
 				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				      NULL);
 
-//    filter = gtk_file_filter_new( );
-//    gtk_file_filter_set_name( filter, "openDIAS database");
-//    gtk_file_filter_add_pattern( filter, "openDIAS.sqlite3" );
-//    gtk_file_chooser_add_filter( GTK_FILE_CHOOSER(fileChooser), filter );
+    filter = gtk_file_filter_new( );
+    gtk_file_filter_set_name( filter, "openDIAS database");
+    gtk_file_filter_add_pattern( filter, "openDIAS.sqlite3" );
+    gtk_file_chooser_add_filter( GTK_FILE_CHOOSER(fileChooser), filter );
 
 	if (gtk_dialog_run (GTK_DIALOG (fileChooser)) == GTK_RESPONSE_ACCEPT)
             {

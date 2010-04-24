@@ -29,7 +29,8 @@ int setup (void) {
 
     char *tmp, *scansDir;
 
-    VERBOSITY = DEBUGM; // WARNING;
+    VERBOSITY = DEBUGM;
+    //VERBOSITY = WARNING;
     DB_VERSION = 2;
 
     tmp = g_strdup(g_getenv("HOME"));

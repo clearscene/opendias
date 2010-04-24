@@ -1,8 +1,12 @@
 from ldtp import *
-import utilsLib
+from lib import utilsLib
+
+# Open the application with a everything that would normally be in place.
+# Check the "about page".
+# Close.
 
 try:
-	log ('1_2-Clean-Open: Open and close the application with no database.', 'warning')
+	log ('1_1-General-Open: Open and close the application.', 'warning')
 
 	utilsLib.startAppTest();
 

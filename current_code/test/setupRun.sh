@@ -54,46 +54,55 @@ if [ "$NOSUPPRESSIONS" != "" ]; then
 fi
 shift $((OPTIND-1))
 
+if [ ! -f "/usr/bin/lcov" ]; then
+  SKIPCOVERAGE="-c";
+  echo "Will skip analysing code coverage (package not available)."
+fi
+
 #
 # Cleanup
 #
-rm -rf src/*.gcda src/*.gcno test/valgrind.out test/lastCoverage test/lastRegression
-mkdir test/lastCoverage/
-mkdir test/lastRegression/
+rm -rf ../src/*.gcda ../src/*.gcno results/*
+mkdir results/coverage/
+mkdir results/resultsFiles/
 
 
 #
 # Compile, so that 'code coverage' analysis reports can be generated.
 #
 echo Cleaning ...
-make clean > test/lastRegression/buildLog.out
+cd ../
+make clean > test/results/buildLog.out
+cd test
 # if the file is here, then last time configure was run was in this script
 # so no need to re-do it.
-if [ ! -f dontBotherReCompilingMe-testScript ] || [ "$SKIPCOVERAGE" == "-c" ]; then
-  echo Configuring ...
-  if [ "$SKIPCOVERAGE" == "-c" ]; then
-    ./configure CFLAGS=' -g ' &> test/lastRegression/buildLog2.out
-  else
-    ./configure CFLAGS='--coverage' LIBS='-lgcov' &> test/lastRegression/buildLog2.out
-  fi
-  # unfortunatly bash cannot support "&>>" - yet!
-  cat test/lastRegression/buildLog2.out >> test/lastRegression/buildLog.out
-  rm test/lastRegression/buildLog2.out
+echo Configuring ...
+cd ../
+if [ "$SKIPCOVERAGE" == "-c" ]; then
+  ./configure CFLAGS=' -g ' &> test/results/buildLog2.out
+else
+  ./configure CFLAGS='--coverage' LIBS='-lgcov' &> test/results/buildLog2.out
 fi
+cd test
+# unfortunatly bash cannot support "&>>" - yet!
+cat results/buildLog2.out >> results/buildLog.out
+rm results/buildLog2.out
+
 # Will have to re-make, incase anything was changed in source.
 echo Making ...
-make &> test/lastRegression/buildLog2.out
+cd ../
+make &> test/results/buildLog2.out
+cd test
 # unfortunatly bash cannot support "&>>" - yet!
-cat test/lastRegression/buildLog2.out >> test/lastRegression/buildLog.out
-rm test/lastRegression/buildLog2.out
-touch dontBotherReCompilingMe-testScript
+cat results/buildLog2.out >> results/buildLog.out
+rm results/buildLog2.out
 
 #
 # Generate baseline (coverage) information
 #
 if [ "$SKIPCOVERAGE" == "" ]; then
   echo Getting baseline coverage information ...
-  lcov -c -i -d src -o test/lastCoverage/app_base.info >> test/lastRegression/buildLog.out
+  lcov -c -i -d ../src -o results/coverage/app_base.info >> results/buildLog.out
 fi
 
 
@@ -104,21 +113,21 @@ echo Creating startup scripts ...
 if [ "$SKIPMEMORY" == "" ]; then
   CODENAME=`lsb_release -c | cut -f2`
   SUPPRESS=""
-  if [ "$NOSUPPRESSIONS" == "" ]; then
-    for SUPP in `ls test/suppressions/$CODENAME/*`; do
-      if [ -f $SUPP ]; then
-        SUPPRESS="$SUPPRESS --suppressions=$SUPP"
-      fi
-    done
-  fi
-  VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=test/lastRegression/valgrind.out "
+#  for SUPP in `ls config/suppressions/$CODENAME/*`; do
+#    if [ -f $SUPP ]; then
+#      SUPPRESS="$SUPPRESS --suppressions=$SUPP"
+#    fi
+#  done
+  VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=results/resultsFiles/valgrind.out "
   GENSUPP="--gen-suppressions=all "
   VALGRIND="G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind "
+#else
+#  VALGRIND="strace "
 fi
-echo touch runningTest > test/runMe
-echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP src/opendias \&\> test/lastRegression/appLog.out >> test/runMe
-echo rm runningTest >> test/runMe
-chmod 755 test/runMe
+echo touch runningTest > config/startAppCommands
+echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP ../src/opendias \&\> results/resultsFiles/appLog.out >> config/startAppCommands
+echo rm runningTest >> config/startAppCommands
+chmod 755 config/startAppCommands
 
 
 #
@@ -127,7 +136,7 @@ chmod 755 test/runMe
 DTE=`date +%Y%m%d%H%M%S`
 if [ -d ~/.openDIAS ]; then
   echo Backing up personal data ...
-  tar -czf ~/openDias_bkp.$DTE.tar.gz ~/.openDIAS
+  tar -czf conf/openDias_bkp.$DTE.tar.gz ~/.openDIAS
   rm -rf ~/.openDIAS
 fi
 
@@ -135,7 +144,7 @@ fi
 #######################################
 # Run automated tests
 echo Starting test harness ...
-test/harness.sh $RECORD $SKIPMEMORY $@
+./harness.sh $RECORD $SKIPMEMORY $@
 #######################################
 
 
@@ -143,12 +152,12 @@ test/harness.sh $RECORD $SKIPMEMORY $@
 #
 # Recover data area
 #
-if [ -f /openDias_bkp.$DTE.tar.gz ]; then
+if [ -f conf/openDias_bkp.$DTE.tar.gz ]; then
   echo Restoring personal data ...
   rm -rf ~/.openDIAS
   OP=`pwd`
   cd /
-  tar -xf ~/openDias_bkp.$DTE.tar.gz
+  tar -xf conf/openDias_bkp.$DTE.tar.gz
   cd $OP
 fi
 
@@ -158,11 +167,12 @@ fi
 #
 if [ "$SKIPCOVERAGE" == "" ]; then
   echo Creating run coverage information ...
-  lcov -c -d src -o test/lastCoverage/app_test.info >> test/lastRegression/buildLog.out
-  lcov -a test/lastCoverage/app_base.info -a test/lastCoverage/app_test.info -o test/lastCoverage/app_total.info >> test/lastRegression/buildLog.out
-  genhtml -o test/lastCoverage test/lastCoverage/app_total.info >> test/lastRegression/buildLog.out
+  lcov -c -d ../src -o results/coverage/app_test.info >> results/buildLog.out
+  lcov -a results/coverage/app_base.info -a results/coverage/app_test.info -o results/coverage/app_total.info >> results/buildLog.out
+  genhtml -o results/coverage results/coverage/app_total.info >> results/buildLog.out
 fi
 
+rm config/startAppCommands
 
 
 

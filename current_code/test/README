@@ -23,7 +23,7 @@ The LDTP project is used to write (and run) scripts that interface to the applic
 
 
 
-3. How to run the tests.
+3. How to run the tests (by hand).
 ------------------------
 In general to run a test suit, you can do the following.
 
@@ -50,4 +50,6 @@ lcov -a test/lastCoverage/app_base.info -a test/lastCoverage/app_test.info -o te
 genhtml -o test/lastCoverage test/lastCoverage/app_total.info 
 
 
-4. 
+4. How to run the tests (automated).
+cd test
+./setupRun.sh

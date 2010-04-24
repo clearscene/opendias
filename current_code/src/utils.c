@@ -132,7 +132,6 @@ extern void createDir_ifRequired(char *dir) {
  * buffer = Where to format the path. Must be at least
  * PATH_MAX in size.
  */
-/*
 extern void get_exe_name(char *buffer) {
 
     char linkname[64];
@@ -153,13 +152,12 @@ extern void get_exe_name(char *buffer) {
         }
     buffer[offset] = 0;
 }
-*/
 
 
 
 /* fcopy - copy a file contents to new location */
 extern void fcopy(char *fnsource, char *fntarget) {
-/*
+
     FILE *fpin = fopen(fnsource, "rb");
 
     if(fpin != NULL)
@@ -176,13 +174,12 @@ extern void fcopy(char *fnsource, char *fntarget) {
             }
         fclose(fpout);
         }
-*/
+
 }
 
 extern gboolean std_scrollEvent (GtkWidget *widget, GdkEventScroll *event, GtkRange *range ) {
 
     gboolean retval = FALSE;
-/*
     GtkAdjustment *adj;
 
     adj = gtk_range_get_adjustment(range);
@@ -197,7 +194,7 @@ extern gboolean std_scrollEvent (GtkWidget *widget, GdkEventScroll *event, GtkRa
         default:
             break;
         }
-*/
+
     return retval;
 }
 
@@ -211,7 +208,8 @@ extern void std_setFontSize (GtkWidget *widget, relativeSize size) {
     fontDesc = pango_context_get_font_description(pangoContext);
     pango_font_description_set_size(fontDesc, pango_font_description_get_size(fontDesc)*0.66);
     gtk_widget_modify_font (GTK_WIDGET(filterTags), fontDesc);
-}*/
+}
+*/
 
 extern int max(int a, int b) {
 

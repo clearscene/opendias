@@ -51,7 +51,7 @@ GHashTable *SCANWIDGETS;
 #ifdef CAN_THREAD
 gboolean progContinue;
 void pulseProg(char *devName) {
-/*
+
     GtkWidget *progress = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "progress", NULL));
     while(progContinue == TRUE) // Turned OFF by runocr_local
         {
@@ -61,20 +61,18 @@ void pulseProg(char *devName) {
         g_thread_yield();
         g_usleep(200);
         }
-*/
 }
 
 void runocr_local(struct scanCallInfo *info) {
-/*
+
     runocr(info);
     progContinue = FALSE;
-*/
 }
 #endif // CAN_THREAD //
 #endif // CAN_OCR //
 
 gboolean resolutionUpdate(GtkRange *resolution, GtkScrollType st, gdouble val, char *devName) {
-/*
+
     GtkWidget *estQuality;
     char *str = "";
     estQuality = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "estQuality", NULL));
@@ -108,13 +106,13 @@ gboolean resolutionUpdate(GtkRange *resolution, GtkScrollType st, gdouble val, c
         str = "Exellent.";
         }
     gtk_label_set_text(GTK_LABEL(estQuality), g_strconcat("Estimated guality: ", str, NULL));
-*/
+
     return FALSE;
 }
 
 #ifdef CAN_READODF
 void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
-/*
+
     char *fileName, *sql, *tmp, *dateStr;
     int lastInserted;
     GtkWidget *widget;
@@ -156,13 +154,13 @@ void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
     finishAcquireOperation (widget);
     populate_gui();
     populate_docInformation(sql);
-*/
+
 }
 #endif // CAN_READODF //
 
 #ifdef CAN_SCAN
 void doScanningOperation(GtkWidget *noUsed, char *devName) {
-/*
+
     SANE_Status status;
     SANE_Handle *openDeviceHandle;
     SANE_Byte buffer[1024];
@@ -176,14 +174,14 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
     unsigned char *pic=NULL;
     int i=0;
     struct scanCallInfo infoData;
+#ifdef CAN_THREAD
+    pthread_t tid;
+#endif // CAN_THREAD //
 #endif // CAN_OCR //
     char *ocrText = "", *sql = "", *dateStr, *tmp, *tmp2;
     GtkWidget *resolutionBar, *progress, *widget;
     GTimeVal todaysDate;
     GList *vars = NULL;
-#ifdef CAN_THREAD
-    pthread_t tid;
-#endif // CAN_THREAD //
 
     //Disable the rest of the form
     widget = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "box", NULL));
@@ -405,25 +403,25 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
     finishAcquireOperation (widget);
     populate_gui();
     populate_docInformation(sql);
-*/
+
 }
 #endif // CAN_SCAN //
 
 void finishAcquireOperation_button(GtkWidget *forgetMe, GtkWidget *scanWindow) {
 
 	finishAcquireOperation(scanWindow);
-
+debug_message("finish caller", DEBUGM);
 }
 
 extern void startAcquireOperation(void) {
 
     GtkWidget *scanWindow, *vbox, *notebook, *lab, *nbook, *hbox, *buttonodf;
 //    GtkWidget *frame, *vvbox;
-    char *instructionText, *tmp;
+    char *instructionText;
+    AtkObject *objectNamer;
 #ifdef CAN_READODF
     GtkWidget *filebox, *fileSelector;
     GtkFileFilter *filter;
-    AtkObject *objectNamer;
 #endif // CAN_READODF //
 #ifdef CAN_SCAN
     GtkWidget *progress, *resolutionBar, *box, 
@@ -431,16 +429,17 @@ extern void startAcquireOperation(void) {
     SANE_Status status;
     SANE_Handle *openDeviceHandle;
     const SANE_Option_Descriptor *sod;
-    int scanOK=FALSE, i=0, hlp=0, x=0, resolution=0, paramSetRet=0, 
-        lastTry=1, minRes=9999999, maxRes=0, q;
+    int hlp=0, x=0, paramSetRet=0, lastTry=1, q;
+    int scanOK=FALSE, i=0, resolution=0, minRes=9999999, maxRes=0;
+    char *tmp;
 #ifdef CAN_OCR
     GtkWidget *estQuality;
 #endif // CAN_OCR //
 #endif // CAN_SCAN //
 
-    SCANWIDGETS = g_hash_table_new(g_str_hash, g_str_equal);
+//    SCANWIDGETS = g_hash_table_new(g_str_hash, g_str_equal);
     scanWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_hash_table_insert(SCANWIDGETS, "scanWindow", scanWindow);
+//    g_hash_table_insert(SCANWIDGETS, "scanWindow", scanWindow);
     g_signal_connect (scanWindow, "delete_event", GTK_SIGNAL_FUNC(finishAcquireOperation), NULL);
     gtk_window_set_title (GTK_WINDOW (scanWindow), "openDIAS: Acquire");
     gtk_window_set_default_size (GTK_WINDOW (scanWindow), 550, 300);
@@ -473,6 +472,7 @@ extern void startAcquireOperation(void) {
 #endif // CAN_SCAN //
 
     vbox = gtk_vbox_new (FALSE, 2);
+
     objectNamer = gtk_widget_get_accessible(vbox);
     atk_object_set_name(objectNamer, "AcquireMainVBox");
 
@@ -564,9 +564,10 @@ extern void startAcquireOperation(void) {
 
     gtk_box_pack_start (GTK_BOX (vbox), nbook, FALSE, FALSE, 2);
 
+
     buttonodf = gtk_button_new();
     gtk_button_set_label(GTK_BUTTON(buttonodf), "Cancel");
-    gtk_widget_set_size_request(GTK_WIDGET(buttonodf), 100, -1);
+//    gtk_widget_set_size_request(GTK_WIDGET(buttonodf), 100, -1);
     g_signal_connect(GTK_OBJECT (buttonodf), "clicked",
 			      G_CALLBACK(finishAcquireOperation_button), 
 			      scanWindow);
@@ -581,9 +582,9 @@ extern void startAcquireOperation(void) {
 
     gtk_container_add (GTK_CONTAINER (scanWindow), vbox);
 
-    gtk_widget_show_all (scanWindow);
-    while(gtk_events_pending ())
-        gtk_main_iteration ();
+//    gtk_widget_show_all (scanWindow);
+//    while(gtk_events_pending ())
+//        gtk_main_iteration ();
 
 #ifdef CAN_SCAN
     if(scanOK)
@@ -636,7 +637,7 @@ extern void startAcquireOperation(void) {
             gtk_table_attach (GTK_TABLE (table), pagesSpin, 2, 4, 2, 3, GTK_EXPAND, GTK_EXPAND, 0, 0);
 
 
-/*
+
             // Find resolution ranges
             for (hlp = 0; hlp < 9999; hlp++)
                 {
@@ -685,7 +686,7 @@ extern void startAcquireOperation(void) {
                         }
                     }
                 }
-*/
+
 
             // Define a default
             resolution = 300;
@@ -777,7 +778,7 @@ extern void finishAcquireOperation(GtkWidget *scanWindow) {
 
 #ifdef CAN_SCAN
     debug_message("sane_exit", DEBUGM);
-    sane_exit();
+//    sane_exit();
 #endif // CAN_SCAN //
 
     gtk_widget_hide (scanWindow);

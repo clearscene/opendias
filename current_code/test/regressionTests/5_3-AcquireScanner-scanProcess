@@ -1,0 +1,28 @@
+from ldtp import *
+from lib import utilsLib
+
+# Open the application with a everything that would normally be in place.
+# 
+# Close.
+
+try:
+	log ('2_1-MainWindow-display: Does the main window display correctly.', 'warning')
+
+	utilsLib.startAppTest();
+
+	testDesc = 'Test: XXXXXX'
+	log (testDesc, 'teststart')
+
+#
+
+	log (testDesc, 'pass')
+	log (testDesc, 'testend')
+
+	utilsLib.closeAppTest();
+
+except LdtpExecutionError, msg:
+	log (msg, 'cause')
+	log (testDesc, 'fail')
+	log (testDesc, 'testend')
+
+

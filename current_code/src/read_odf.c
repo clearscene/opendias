@@ -19,8 +19,8 @@
 #include "config.h"
 #ifdef CAN_READODF
 #include <unistd.h>
-/*#include <archive.h>
-#include <archive_entry.h>*/
+#include <archive.h>
+#include <archive_entry.h>
 #include <memory.h>
 #include <stdio.h>
 #include <string.h>
@@ -33,16 +33,16 @@
 #include "read_odf.h"
 #include "debug.h"
 
-/*
+
 struct mydata {
     char *name;
     int fd;
     char buff[10240];
 };
-*/
+
+
 
 void xmlAllNodeGetContent(xmlNode *parent, char **str) {
-/*
     char *buf;
     xmlNode *node = parent->children; //childs;
     char *text;
@@ -58,25 +58,23 @@ void xmlAllNodeGetContent(xmlNode *parent, char **str) {
         xmlAllNodeGetContent(node, str);
         node = node->next;
         }
-*/
 }
+
 
 char *xmlToText(char *xml, gint size) {
 
     char *text="";
-/*
+
     xmlDocPtr doc = xmlParseMemory(xml, size);
     xmlNodePtr root = xmlDocGetRootElement(doc);
     xmlAllNodeGetContent(root, &text);
 
-*/
     return text;
 }
 
 gint getEntry(const char *name, char *contentFile, char **ptr) {
 
     gint size=0;
-/*
     ZZIP_DIR *dir;
     ZZIP_DIRENT entry;
     char *buf;
@@ -102,11 +100,11 @@ gint getEntry(const char *name, char *contentFile, char **ptr) {
 
     zzip_file_close(file);
     zzip_dir_close(dir);
-*/
+
     return size;
 }
 
-/*
+
 ssize_t myread(struct archive *a, void *client_data, const void **buff) {
     struct mydata *mydata = client_data;
 
@@ -129,7 +127,7 @@ int myclose(struct archive *a, void *client_data) {
     return (ARCHIVE_OK);
 }
 
-gint LIBARCHIVEgetEntry(const char *name, char *contentFile, char **ptr) {
+gint LIBARCHIVEgetEntry(char *name, char *contentFile, char **ptr) {
     struct mydata *mydata;
     struct archive *a;
     struct archive_entry *entry;
@@ -153,9 +151,9 @@ gint LIBARCHIVEgetEntry(const char *name, char *contentFile, char **ptr) {
         {
         if(g_str_equal(archive_entry_pathname(entry), contentFile))
             {
-            debug_message(archive_compression_name(a), DEBUGM);
-            debug_message(archive_format_name(a), DEBUGM);
-            debug_message(archive_entry_pathname(entry), DEBUGM);
+            debug_message((char *)archive_compression_name(a), DEBUGM);
+            debug_message((char *)archive_format_name(a), DEBUGM);
+            debug_message((char *)archive_entry_pathname(entry), DEBUGM);
             size = archive_entry_size(entry);
             if(size <= 0)
                 debug_message("zero size", DEBUGM);
@@ -177,12 +175,11 @@ gint LIBARCHIVEgetEntry(const char *name, char *contentFile, char **ptr) {
     free(mydata);
     return size;
 }
-*/
+
 
 extern char *get_odf_Text (const char *filename) {
 
     char *text="";
-/*
     char *xml;
     gint size;
 
@@ -190,14 +187,12 @@ extern char *get_odf_Text (const char *filename) {
     if(size > 0)
         text = xmlToText(xml, size);
 
-*/
     return text;
 }
 
 extern GdkPixbuf *get_odf_Thumb (const char *filename) {
 
     GdkPixbuf *image=NULL;
-/*
     char *imageData;
     gint size;
 
@@ -216,7 +211,7 @@ extern GdkPixbuf *get_odf_Thumb (const char *filename) {
         g_unlink("/tmp/tmpImg.png");
         }
     debug_message("Got pixmap from ODT doc", DEBUGM);
-*/
+
     return image;
 
 }

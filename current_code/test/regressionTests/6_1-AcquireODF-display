@@ -1,0 +1,30 @@
+from ldtp import *
+from lib import utilsLib
+
+try:
+	log ('1_3-Acquire-Page: Open and explore the acquire page.', 'warning')
+
+	utilsLib.startAppTest();
+
+	testDesc = 'Test: Acquire page (from menu)'
+	log (testDesc, 'teststart')
+	selectmenuitem('frmopenDIAS', 'File;Acquire')
+	if waittillguiexist('frmopenDIAS:Acquire') == 0:
+		raise LdtpExecutionError ('Could not open Acquire dialog')
+	while(gettabcount('frmopenDIAS:Acquire','ptlAcquireNotebook') == "1L"): 
+		wait(1);
+	click('frmopenDIAS:Acquire', 'Cancel')
+	if waittillguinotexist ("frmopenDIAS:Acquire") == 0:
+		raise LdtpExecutionError ('Could not close Acquire dialog')
+	log (testDesc, 'pass')
+
+	log (testDesc, 'testend')
+
+	utilsLib.closeAppTest();
+
+except LdtpExecutionError, msg:
+	log (msg, 'cause')
+	log (testDesc, 'fail')
+	log (testDesc, 'testend')
+
+
