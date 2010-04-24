@@ -6,9 +6,9 @@ make distclean
 rm -rf Makefile Makefile.in src/Makefile src/Makefile.in  stamp-h1 po/POTFILES po/Makefile po/Makefile.i* po/stamp-it sql/Makefile sql/Makefile.in config.log config.status configure aclocal.m4 autom4te.cache intltool-*.in mkinstalldirs TODO.tasks config.h.in depcomp install-sh missing config.h .tm_project2.cache
 
 # Create things the automake needs
-ln -s /usr/share/automake-1.9/depcomp depcomp
-ln -s /usr/share/automake-1.9/install-sh install-sh
-ln -s /usr/share/automake-1.9/missing missing
+ln -s /usr/share/automake-1.11/depcomp depcomp
+ln -s /usr/share/automake-1.11/install-sh install-sh
+ln -s /usr/share/automake-1.11/missing missing
 
 # rebuild all the stuff we just deleted.
 ./autogen.sh
