@@ -12,3 +12,7 @@ mkinstalldirs
 stamp-h1
 dontBotherReCompilingMe-testScript
 runningTest
+depcomp
+INSTALL
+install-sh
+missing
