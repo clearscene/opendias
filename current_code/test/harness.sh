@@ -7,7 +7,7 @@ testCount="";
 passCount="";
 failCount="";
 outputDir="results/resultsFiles";
-PYTHONPATH="testCases\/";
+PYTHONPATH="regressionTests\/";
 echo -en "<html><style>.none {background-color: none}\n .ok {background-color: #ccFFcc;}\n .fail {background-color: #FFCCCC;}</style><body><h1>Regression Tests, last run: $DATE</h1><h2>Results</h2>\n" > $outputDir/index.html
 echo -en "<table cellpadding=1 cellspacing=1 border=1><tr><th>Result</th><th>Test</th><th colspan=2>Memory</th><th colspan=2>Test Log</th><th colspan=2>App Log</th></tr>\n" >> $outputDir/index.html
 

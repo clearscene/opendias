@@ -59,12 +59,18 @@ if [ ! -f "/usr/bin/lcov" ]; then
   echo "Will skip analysing code coverage (package not available)."
 fi
 
+grep "^test" /etc/sane.d/dll.conf
+if [ "$?" -ne "0" ]; then
+  echo enable sane testing by commenting in "test" in "/etc/sane.d/dll.conf"
+  exit
+fi
+
 #
 # Cleanup
 #
 rm -rf ../src/*.gcda ../src/*.gcno results/*
-mkdir results/coverage/
-mkdir results/resultsFiles/
+mkdir -p results/coverage/
+mkdir -p results/resultsFiles/
 
 
 #

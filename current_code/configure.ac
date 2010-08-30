@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(opendias, 0.3.2)
+AC_INIT(opendias, 0.4.0)
 
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
@@ -27,7 +27,7 @@ IT_PROG_INTLTOOL([0.35.0])
 
 
 
-PKG_CHECK_MODULES(OPENDIAS, [sqlite3 gtk+-2.0])
+PKG_CHECK_MODULES(OPENDIAS, [sqlite3 gtk+-2.0 libmicrohttpd])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
