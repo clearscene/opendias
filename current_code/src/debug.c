@@ -23,26 +23,9 @@
 
 extern void debug_message(char *message, const int verbosity) {
 
-    if(VERBOSITY >= verbosity)
-        {
-        if(verbosity == ERROR)
-            userMessage(message, GTK_MESSAGE_ERROR);
-        else
-            g_message(message, NULL);
-        }
+  if(VERBOSITY >= verbosity) 
+    fprintf(stderr,message,NULL);
 
 }
 
-
-extern void userMessage(char *message, const int type) {
-
-    GtkWidget *dialog;
-    dialog = gtk_message_dialog_new (NULL,
-                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                        (GtkMessageType)type|GTK_MESSAGE_ERROR,
-                        GTK_BUTTONS_CLOSE, (const gchar *)message, NULL);
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (GTK_WIDGET (dialog));
-
-}
 

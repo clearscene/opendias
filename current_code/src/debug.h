@@ -22,12 +22,12 @@
 int VERBOSITY;
 
 enum {
-    SILENT = 0,
-    ERROR,
-    WARNING,
-    INFORMATION,
-    DEBUGM,
-    SQLDEBUG
+  SILENT = 0,
+  ERROR,
+  WARNING,
+  INFORMATION,
+  DEBUGM,
+  SQLDEBUG
 };
 
 extern void debug_message(char *, const int);

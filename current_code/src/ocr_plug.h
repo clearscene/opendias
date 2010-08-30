@@ -20,13 +20,13 @@
 #define OCR_PLUG
 
 struct scanCallInfo {
-    const char* language;
-    const unsigned char* imagedata;
-    int bytes_per_pixel;
-    int bytes_per_line;
-    int width;
-    int height;
-    char *ret;
+  const char* language;
+  const unsigned char* imagedata;
+  int bytes_per_pixel;
+  int bytes_per_line;
+  int width;
+  int height;
+  char *ret;
 };
 
 #define OCR_LANG_BRITISH   "eng"   /*International English */

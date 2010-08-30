@@ -20,8 +20,10 @@ opendias_SOURCES = \
 	debug.h    \
 	doc_editor.c    \
 	doc_editor.h    \
-	handlers.c    \
-	handlers.h    \
+	web_handler.c    \
+	web_handler.h    \
+	pageRender.c    \
+	pageRender.h    \
 	main.h    \
 	ocr_plug.cc    \
 	ocr_plug.h    \

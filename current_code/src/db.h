@@ -20,11 +20,11 @@
 #define DB
 
 enum {
-    DB_NULL = 0,
-    DB_TEXT,
-    DB_INT,
-    DB_DOUBLE
-    };
+  DB_NULL = 0,
+  DB_TEXT,
+  DB_INT,
+  DB_DOUBLE
+  };
 
 extern int connect_db (int);
 extern void close_db (void);

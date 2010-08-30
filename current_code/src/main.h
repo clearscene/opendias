@@ -23,9 +23,9 @@ int DB_VERSION;
 char *BASE_DIR;
 
 enum {
-    PLACE_HOLDER = 0,
-    DOC_FILETYPE,
-    SCAN_FILETYPE,
+  PLACE_HOLDER = 0,
+  DOC_FILETYPE,
+  SCAN_FILETYPE,
 };
 
 #endif /* MAIN */

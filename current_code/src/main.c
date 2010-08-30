@@ -19,68 +19,85 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <stdlib.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdarg.h>
+
 #include "main.h"
 #include "db.h" 
-#include "handlers.h"
 #include "utils.h"
 #include "debug.h"
+#include "web_handler.h"
 
 int setup (void) {
 
-    char *tmp, *scansDir;
+  char *tmp, *scansDir;
 
-    VERBOSITY = DEBUGM;
-    //VERBOSITY = WARNING;
-    DB_VERSION = 2;
+  // 
+  // load config
+  //
+  
+  VERBOSITY = DEBUGM;
+  //VERBOSITY = WARNING;
+  DB_VERSION = 2;
 
-    tmp = g_strdup(g_getenv("HOME"));
-    conCat(&tmp, "/.openDIAS/");
+  tmp = g_strdup(g_getenv("HOME"));
+  conCat(&tmp, "/.openDIAS/");
 
-    BASE_DIR = g_strdup(tmp);
-    createDir_ifRequired(BASE_DIR);
+  BASE_DIR = g_strdup(tmp);
+  createDir_ifRequired(BASE_DIR);
 
-    conCat(&tmp, "scans/");
+  conCat(&tmp, "scans/");
 
-    scansDir = g_strdup(tmp);
-    createDir_ifRequired(scansDir);
+  scansDir = g_strdup(tmp);
+  createDir_ifRequired(scansDir);
 
-    free(tmp);
-    free(scansDir);
+  free(tmp);
+  free(scansDir);
 
-    // Open (& maybe update) the database.
-    if(connect_db (0))
-        {
-        free(BASE_DIR);
-        return 1;
-        }
+  // Open (& maybe update) the database.
+  if(connect_db (0)) {
+    free(BASE_DIR);
+    return 1;
+  }
 
-    return 0;
+  return 0;
 
 }
+
+void server_shutdown(struct MHD_Daemon *daemon) {
+  close_db ();
+  free(BASE_DIR);
+  MHD_stop_daemon (daemon);
+}
+
 
 int main (int argc, char **argv) {
 
-#ifdef CAN_THREAD
-    if( !g_thread_supported() )
-        {
-        g_thread_init(NULL);
-        gdk_threads_init();
-	}
-    gdk_threads_enter ();
-#endif // CAN_THREAD //
+  if(setup ())
+    return 1;
+  VERBOSITY = DEBUGM;
+ 
+  struct MHD_Daemon *daemon;
+  daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 
+    NULL, NULL, 
+    &answer_to_connection, NULL, 
+    MHD_OPTION_NOTIFY_COMPLETED, request_completed, NULL, 
+    MHD_OPTION_END);
+  if (NULL == daemon) {
+    server_shutdown(daemon);
+    return 1;
+  }
+  debug_message("ready to accept connectons\n", INFORMATION);
 
-    gtk_init (&argc, &argv);
-    if(!setup ())
-        {
-        create_gui ();
-        populate_gui ();
+  // just hang about for a bit
+  getchar ();
 
-        gtk_main ();
-        }
-
-#ifdef CAN_THREAD
-    gdk_threads_leave ();
-#endif // CAN_THREAD //
-
-    return 0;
+  server_shutdown(daemon);
+  return 0;
 }
+
