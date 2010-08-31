@@ -528,9 +528,10 @@ void doZoomImage (GtkButton *button, struct imageInformation *img) {
 
 
 
-extern GtkWidget *openDocEditor (char *documentId) {
 
-  char *sql, *title, *ad, *am, *ay, *ocrText;
+extern char *openDocEditor (char *documentId) {
+
+  char *sql, *title, *scanDate, *ad, *am, *ay, *ocrText, *ppl, *lines, *tags;
 
   // Get docinformation
   //
@@ -540,18 +541,32 @@ extern GtkWidget *openDocEditor (char *documentId) {
     debug_message("Could not select record.", ERROR);
     free_recordset("1");
     free(sql);
+    return NULL;
   }
 
+  // Build Human Readable
+  //
   title = g_strdup(readData_db("1", "title"));
   if(g_str_equal (title, "NULL") ) {
     free(title);
     title = g_strdup("New (untitled) document.");
   }
 
-  ay = readData_db("1", "docdatey");
-  am = readData_db("1", "docdatem");
-  ad = readData_db("1", "docdated");
+  scanDate = g_strdup(readData_db("1", "entrydate"));
+  ppl = g_strdup(readData_db("1", "ppl"));
+  lines = g_strdup(readData_db("1", "lines"));
 
+//  ay = g_strdup(readData_db("1", "docdatey"));
+//  am = g_strdup(readData_db("1", "docdatem"));
+//  ad = g_strdup("dome date"); //readData_db("1", "docdated"));
+//  conCat(&ad, "/");
+//  conCat(&ad, am);
+//  conCat(&ad, "/");
+//  conCat(&ad, ay);
+//  free(am);
+//  free(ay);
+
+/*
   if( readData_db("1", "") == DOC_FILETYPE) {
 #ifdef CAN_READODF
     char *filename = g_strdup(BASE_DIR);
@@ -563,21 +578,15 @@ extern GtkWidget *openDocEditor (char *documentId) {
 #endif // CAN_READODF //
   }
   else
+*/
     ocrText = g_strdup(readData_db("1", "ocrtext"));
 
   free_recordset("1");
   free(sql);
 
-  char *returnXML = g_strdup("<docDetail>\
-<docid>%s</docid>\
-<title>%s</title>\
-<scanDate>%s</scanDate>\
-<docDate>%s</docDate>\
-<extractedText>%s</extractedText>\
-<tags>%s</tags>\
-</docDetail>");
-
-
+/*
+  // Get a list of tags
+  //
   sql = g_strdup(
     "SELECT tags.tagid, tagname, dt.tagid selected \
     FROM tags LEFT JOIN \
@@ -598,5 +607,33 @@ extern GtkWidget *openDocEditor (char *documentId) {
   }
   free_recordset("1");
   free(sql);
+*/
+  tags = g_strdup("tags");
 
+  // Build Response
+  //
+  char *returnXMLtemplate = g_strdup("<docDetail><docid>%s</docid><title>%s</title><scanDate>%s</scanDate><docDate>%s</docDate><extractedText><![CDATA[%s]]></extractedText><x>%s</x><y>%s</y><tags>%s</tags></docDetail>");
+
+  int size = strlen(returnXMLtemplate);
+  size += strlen(documentId);
+  size += strlen(title);
+  size += strlen(scanDate);
+//+ strlen(ad) 
+  size += strlen(ocrText);
+  size += strlen(ppl);
+  size += strlen(lines);
+  size += strlen(tags);
+  char *returnXML = malloc(size+8);
+  sprintf(returnXML, returnXMLtemplate, documentId, title, scanDate, "somedate", ocrText, ppl, lines, tags);
+
+  free(returnXMLtemplate);
+  free(title);
+  free(scanDate);
+//  free(ad);
+  free(ocrText);
+  free(ppl);
+  free(lines);
+  free(tags);
+
+  return returnXML;
 }

@@ -20,6 +20,6 @@
 #define DOCEDITOR
 
 extern void openDocEditor_window (char *);
-extern GtkWidget *openDocEditor (char *);
+extern char *openDocEditor (char *);
 
 #endif /* DOCEDITOR */
