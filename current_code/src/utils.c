@@ -19,6 +19,7 @@
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <unistd.h> // for getpid & readlink
@@ -273,3 +274,19 @@ extern void conCat(char **mainStr, const char *addStr) {
   }
 
 }
+
+extern void chop( char *s ) {
+    s[strcspn ( s, "\n" )] = '\0';
+}
+
+extern char *getTimeStr() {
+  time_t ttime;
+  char *out;
+
+  time(&ttime);
+  out = ctime(&ttime);
+  chop(out);
+
+  return out;
+}
+

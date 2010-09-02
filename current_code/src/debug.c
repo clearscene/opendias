@@ -20,11 +20,37 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include "debug.h"
+#include "utils.h"
 
 extern void debug_message(char *message, const int verbosity) {
 
-  if(VERBOSITY >= verbosity) 
-    fprintf(stderr,message,NULL);
+  if(VERBOSITY >= verbosity) {
+
+    char *mesg = g_strdup("%s : %s : %s\n");
+    char *ltime = getTimeStr();
+    char *vb;
+    if(verbosity == 1) {
+      vb = g_strdup("ERROR   ");
+    }
+    else if(verbosity == 2) {
+      vb = g_strdup("WARNING ");
+    }
+    else if(verbosity == 3) {
+      vb = g_strdup("INFO    ");
+    }
+    else if(verbosity == 4) {
+      vb = g_strdup("DEBUGM  ");
+    }
+    else if(verbosity == 5) {
+      vb = g_strdup("SQLDEBUG");
+    }
+    else 
+      vb = g_strdup(" ------ ");
+
+    fprintf(stderr,mesg,ltime,vb,message);
+    free(mesg);
+    free(vb);
+  }
 
 }
 

@@ -531,7 +531,9 @@ void doZoomImage (GtkButton *button, struct imageInformation *img) {
 
 extern char *openDocEditor (char *documentId) {
 
-  char *sql, *title, *scanDate, *ad, *am, *ay, *ocrText, *ppl, *lines, *tags;
+  char *sql, *tagid, *tagname, *selected, *tagTemp,
+       *title, *scanDate, *type, *humanReadableDate, *ocrText, *ppl, *lines, *tags;
+  int size;
 
   // Get docinformation
   //
@@ -555,18 +557,11 @@ extern char *openDocEditor (char *documentId) {
   scanDate = g_strdup(readData_db("1", "entrydate"));
   ppl = g_strdup(readData_db("1", "ppl"));
   lines = g_strdup(readData_db("1", "lines"));
+  type = g_strdup(g_str_equal (readData_db("1", "filetype"),"1")?"ODF Doc":"Scaned Doc");
+  humanReadableDate = dateHuman( g_strdup(readData_db("1", "docdatey")),
+                                 g_strdup(readData_db("1", "docdatem")),
+                                 g_strdup(readData_db("1", "docdated")) );
 
-//  ay = g_strdup(readData_db("1", "docdatey"));
-//  am = g_strdup(readData_db("1", "docdatem"));
-//  ad = g_strdup("dome date"); //readData_db("1", "docdated"));
-//  conCat(&ad, "/");
-//  conCat(&ad, am);
-//  conCat(&ad, "/");
-//  conCat(&ad, ay);
-//  free(am);
-//  free(ay);
-
-/*
   if( readData_db("1", "") == DOC_FILETYPE) {
 #ifdef CAN_READODF
     char *filename = g_strdup(BASE_DIR);
@@ -578,15 +573,17 @@ extern char *openDocEditor (char *documentId) {
 #endif // CAN_READODF //
   }
   else
-*/
     ocrText = g_strdup(readData_db("1", "ocrtext"));
 
   free_recordset("1");
   free(sql);
 
-/*
+
+  char *tagsTemplate = g_strdup("<tag><tagid>%s</tagid><tagname>%s</tagname><selected>%s</selected></tag>");
+
   // Get a list of tags
   //
+  tags = g_strdup("");
   sql = g_strdup(
     "SELECT tags.tagid, tagname, dt.tagid selected \
     FROM tags LEFT JOIN \
@@ -598,38 +595,51 @@ extern char *openDocEditor (char *documentId) {
     ON tags.tagid = dt.tagid \
     ORDER BY selected DESC, tagname");
 
-  if(runquery_db("1", sql))
-  {
-  do  {
-    // Append a row and fill in some data
+  if(runquery_db("1", sql)) {
+    do  {
+      // Append a row and fill in some data
+      tagid = g_strdup(readData_db("1", "tagid"));
+      tagname = g_strdup(readData_db("1", "tagname"));
+      selected = g_strdup(readData_db("1", "selected"));
 
+      size = strlen(tagsTemplate) + strlen(tagid) + strlen(tagname) + strlen(selected);
+      tagTemp = malloc(size);
+      sprintf(tagTemp, tagsTemplate, tagid, tagname, selected);
+      conCat(&tags, tagTemp);
+
+      free(tagTemp);
+      free(tagid);
+      free(tagname);
+      free(selected);
     } while (nextRow("1"));
   }
   free_recordset("1");
   free(sql);
-*/
-  tags = g_strdup("tags");
+  free(tagsTemplate);
+
 
   // Build Response
   //
-  char *returnXMLtemplate = g_strdup("<docDetail><docid>%s</docid><title>%s</title><scanDate>%s</scanDate><docDate>%s</docDate><extractedText><![CDATA[%s]]></extractedText><x>%s</x><y>%s</y><tags>%s</tags></docDetail>");
+  char *returnXMLtemplate = g_strdup("<docDetail><docid>%s</docid><title>%s</title><scanDate>%s</scanDate><type>%s</type><docDate>%s</docDate><extractedText><![CDATA[%s]]></extractedText><x>%s</x><y>%s</y><tags>%s</tags></docDetail>");
 
-  int size = strlen(returnXMLtemplate);
+  size = strlen(returnXMLtemplate);
   size += strlen(documentId);
   size += strlen(title);
   size += strlen(scanDate);
-//+ strlen(ad) 
+  size += strlen(type);
+  size += strlen(humanReadableDate);
   size += strlen(ocrText);
   size += strlen(ppl);
   size += strlen(lines);
   size += strlen(tags);
-  char *returnXML = malloc(size+8);
-  sprintf(returnXML, returnXMLtemplate, documentId, title, scanDate, "somedate", ocrText, ppl, lines, tags);
+  char *returnXML = malloc(size);
+  sprintf(returnXML, returnXMLtemplate, documentId, title, scanDate, type, humanReadableDate, ocrText, ppl, lines, tags);
 
   free(returnXMLtemplate);
   free(title);
   free(scanDate);
-//  free(ad);
+  free(type);
+  free(humanReadableDate);
   free(ocrText);
   free(ppl);
   free(lines);

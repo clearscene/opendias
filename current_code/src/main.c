@@ -92,7 +92,7 @@ int main (int argc, char **argv) {
     server_shutdown(daemon);
     return 1;
   }
-  debug_message("ready to accept connectons\n", INFORMATION);
+  debug_message("ready to accept connectons", INFORMATION);
 
   // just hang about for a bit
   getchar ();
