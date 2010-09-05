@@ -35,7 +35,6 @@
 #include "db.h"
 #include "doc_editor.h"
 #include "utils.h"
-#include "handlers.h"
 #ifdef CAN_READODF
 #include "read_odf.h"
 #endif // CAN_READODF //
@@ -47,68 +46,6 @@ const SANE_Device **device_list;
 #endif // CAN_SCAN //
 GHashTable *SCANWIDGETS;
 
-#ifdef CAN_OCR
-#ifdef CAN_THREAD
-gboolean progContinue;
-void pulseProg(char *devName) {
-
-  GtkWidget *progress = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "progress", NULL));
-  while(progContinue == TRUE) // Turned OFF by runocr_local
-  {
-  gtk_progress_bar_pulse(GTK_PROGRESS_BAR(progress));
-  while(gtk_events_pending ())
-    gtk_main_iteration ();
-  g_thread_yield();
-  g_usleep(200);
-  }
-}
-
-void runocr_local(struct scanCallInfo *info) {
-
-  runocr(info);
-  progContinue = FALSE;
-}
-#endif // CAN_THREAD //
-#endif // CAN_OCR //
-
-gboolean resolutionUpdate(GtkRange *resolution, GtkScrollType st, gdouble val, char *devName) {
-
-  GtkWidget *estQuality;
-  char *str = "";
-  estQuality = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "estQuality", NULL));
-
-  if(val < 100)
-  {
-  str = "Mainly Garbage.";
-  }
-  else if (val < 150)
-  {
-  str = "Poor.";
-  }
-  else if (val < 250)
-  {
-  str = "Good.";
-  }
-  else if (val > 1000)
-  {
-  str = "Bound to fail.";
-  }
-  else if (val > 700)
-  {
-  str = "Very slow.";
-  }
-  else if (val > 400)
-  {
-  str = "Slow.";
-  }
-  else
-  {
-  str = "Exellent.";
-  }
-  gtk_label_set_text(GTK_LABEL(estQuality), g_strconcat("Estimated guality: ", str, NULL));
-
-  return FALSE;
-}
 
 #ifdef CAN_READODF
 void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
@@ -174,9 +111,6 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
   unsigned char *pic=NULL;
   int i=0;
   struct scanCallInfo infoData;
-#ifdef CAN_THREAD
-  pthread_t tid;
-#endif // CAN_THREAD //
 #endif // CAN_OCR //
   char *ocrText = "", *sql = "", *dateStr, *tmp, *tmp2;
   GtkWidget *resolutionBar, *progress, *widget;
@@ -346,14 +280,7 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
     infoData.width = scan_ppl;
     infoData.height = scan_lines*pageCount;
 
-#ifdef CAN_THREAD
-    progContinue = TRUE;
-    pthread_create(&tid, NULL, (void *)runocr_local, &infoData);
-    pulseProg(devName);
-    pthread_join(tid, 0);
-#else
     runocr(&infoData);
-#endif // CAN_THREAD //
     ocrText = infoData.ret;
     free(pic);
 

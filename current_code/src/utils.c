@@ -246,9 +246,9 @@ extern char *dateHuman(char *a, char *b, char *c) {
       free(c);
       c = m;
     }
-    conCat(&a, " / ");
+    conCat(&a, "/");
     conCat(&a, b);
-    conCat(&a, " / ");
+    conCat(&a, "/");
     conCat(&a, c);
     free(b);
     free(c);
