@@ -10,7 +10,7 @@
 <div id="tabs">
   <ul id='tabList'>
     <li><a href="#info">Information</a></li>
-    <li><a href="#office">Office  Document</a></li>
+    <li><a href="#office">Office Document</a></li>
   </ul>
   <div id="info">
     <h3>Aciring a new document</h3>
@@ -22,13 +22,58 @@
     <h3>ODF Document</h3>
     <p>Select an ODF document for upload into your achive.</p>
     <div class='row'>
-      <div class='label'>Fileanem to upload:</div>
+      <div class='label'>Filename to upload:</div>
       <div class='data'><input name='' type='file' /></div>
     </div>
     <div class='row'>
       <div class='label'>&nbsp;</div>
       <div class='data'><input name='' type='submit' /></div>
     </div>
+  </div>
+  <div id='scannerTemplate'>
+    <form action='/dynamic' method='POST'>
+    <input name='action' type='hidden' value='doScan' />
+    <input name='device' type='hidden' value='' id='deviceid_DEVICE' />
+    <div class='row'>
+      <div class='label'>&nbsp;</div>
+      <div class='data'>
+        <h3 id='title_DEVICE'>scanner title</h3>
+        <p>details of blah blah</p>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='label'>Format:</div>
+      <div class='data'><select id='format_DEVICE' name='format'></select></div>
+    </div>
+    <div class='row'>
+      <div class='label'>Pages:</div>
+      <div class='data'>
+        <input id='pages_DEVICE' name='pages' type='hidden' />
+        <div id='pagesDisplay_DEVICE' class='innerLeftDisplay'>1 pages</div>
+        <div class='innerRightDisplay'><div id='pagesSlider_DEVICE'></div></div>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='label'>Resolution:</div>
+      <div class='data'>
+        <input id='resolution_DEVICE' name='resolution' type='hidden' />
+        <div id='resolutionDisplay_DEVICE' class='innerLeftDisplay'>x dpi</div>
+        <div class='innerRightDisplay'><div id='resolutionSlider_DEVICE'></div></div>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='label'>OCR:</div>
+      <div class='data'><input name='format' type='checkbox' /></div>
+    </div>
+    <div class='row'>
+      <div class='label'>&nbsp;</div>
+      <div class='data'><input type='submit' value='Scan' /></div>
+    </div>
+    <div class='row'>
+      <div class='label'>&nbsp;</div>
+      <div class='data'><div id="progressbar_DEVICE"></div></div>
+    </div>
+    </form>
   </div>
 </div>
 
