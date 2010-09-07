@@ -4,6 +4,7 @@ sql_SCRIPTS =
 sql_DATA = \
 	openDIAS.sqlite3.dmp.v1.sql \
 	openDIAS.sqlite3.dmp.v2.sql \
+	openDIAS.sqlite3.dmp.v3.sql
 
 sqldir = \
 	$(pkgdatadir)

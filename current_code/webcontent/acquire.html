@@ -17,6 +17,7 @@
     <p>Use this screen to add a new document to your archive.</p>
     <p>In the first tab, you can add ODF documents.</p>
     <p>Any additional tabs are connected to SANE imput devices.</p>
+    <p id='scanning'>Scanning for devices</p>
   </div>
   <div id="office">
     <h3>ODF Document</h3>
@@ -31,24 +32,22 @@
     </div>
   </div>
   <div id='scannerTemplate'>
-    <form action='/dynamic' method='POST'>
-    <input name='action' type='hidden' value='doScan' />
-    <input name='device' type='hidden' value='' id='deviceid_DEVICE' />
     <div class='row'>
       <div class='label'>&nbsp;</div>
       <div class='data'>
         <h3 id='title_DEVICE'>scanner title</h3>
         <p>details of blah blah</p>
+        <input id='deviceid_DEVICE' type='hidden' />
       </div>
     </div>
     <div class='row'>
       <div class='label'>Format:</div>
-      <div class='data'><select id='format_DEVICE' name='format'></select></div>
+      <div class='data'><select id='format_DEVICE'></select></div>
     </div>
     <div class='row'>
       <div class='label'>Pages:</div>
       <div class='data'>
-        <input id='pages_DEVICE' name='pages' type='hidden' />
+        <input id='pages_DEVICE' type='hidden' value='1' />
         <div id='pagesDisplay_DEVICE' class='innerLeftDisplay'>1 pages</div>
         <div class='innerRightDisplay'><div id='pagesSlider_DEVICE'></div></div>
       </div>
@@ -56,24 +55,23 @@
     <div class='row'>
       <div class='label'>Resolution:</div>
       <div class='data'>
-        <input id='resolution_DEVICE' name='resolution' type='hidden' />
+        <input id='resolution_DEVICE' type='hidden' />
         <div id='resolutionDisplay_DEVICE' class='innerLeftDisplay'>x dpi</div>
         <div class='innerRightDisplay'><div id='resolutionSlider_DEVICE'></div></div>
       </div>
     </div>
     <div class='row'>
       <div class='label'>OCR:</div>
-      <div class='data'><input name='format' type='checkbox' /></div>
+      <div class='data'><input id='ocr_DEVICE' type='checkbox' /></div>
     </div>
     <div class='row'>
       <div class='label'>&nbsp;</div>
-      <div class='data'><input type='submit' value='Scan' /></div>
+      <div class='data'><button id='scanButton_DEVICE'>Scan</button></div>
     </div>
     <div class='row'>
       <div class='label'>&nbsp;</div>
       <div class='data'><div id="progressbar_DEVICE"></div></div>
     </div>
-    </form>
   </div>
 </div>
 

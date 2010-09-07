@@ -43,7 +43,7 @@ int setup (void) {
   
   VERBOSITY = DEBUGM;
   //VERBOSITY = WARNING;
-  DB_VERSION = 2;
+  DB_VERSION = 3;
 
   tmp = g_strdup(g_getenv("HOME"));
   conCat(&tmp, "/.openDIAS/");

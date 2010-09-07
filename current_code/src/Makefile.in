@@ -46,10 +46,10 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_opendias_OBJECTS = db.$(OBJEXT) debug.$(OBJEXT) \
-	doc_editor.$(OBJEXT) web_handler.$(OBJEXT) pageRender.$(OBJEXT) \
-	ocr_plug.$(OBJEXT) scan.$(OBJEXT) speak.$(OBJEXT) \
-	utils.$(OBJEXT) main.$(OBJEXT) read_odf.$(OBJEXT) \
-	imageProcessing.$(OBJEXT)
+	doc_editor.$(OBJEXT) web_handler.$(OBJEXT) \
+	pageRender.$(OBJEXT) ocr_plug.$(OBJEXT) scan.$(OBJEXT) \
+	speak.$(OBJEXT) utils.$(OBJEXT) main.$(OBJEXT) \
+	read_odf.$(OBJEXT) imageProcessing.$(OBJEXT)
 opendias_OBJECTS = $(am_opendias_OBJECTS)
 am__DEPENDENCIES_1 =
 opendias_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -312,10 +312,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/db.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/doc_editor.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pageRender.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/imageProcessing.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ocr_plug.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pageRender.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/read_odf.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scan.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speak.Po@am__quote@

@@ -19,7 +19,11 @@
 #ifndef SCAN
 #define SCAN
 
-extern void startAcquireOperation(void);
+struct scanParams {
+  char *devName;
+  char *uuid;
+};
+extern void doScanningOperation(struct scanParams *scanParam);
 extern void finishAcquireOperation(GtkWidget *);
 
 #endif /* SCAN */

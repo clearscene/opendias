@@ -27,7 +27,7 @@ IT_PROG_INTLTOOL([0.35.0])
 
 
 
-PKG_CHECK_MODULES(OPENDIAS, [sqlite3 gtk+-2.0 libmicrohttpd])
+PKG_CHECK_MODULES(OPENDIAS, [sqlite3 gtk+-2.0 libmicrohttpd uuid])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
@@ -35,32 +35,32 @@ AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
 
 
 
-gthreading="no"
-if test "$PKG_CONFIG" != "no"; then
-	gthread_cflags=`$PKG_CONFIG --cflags gthread-2.0`
-	CFLAGS="$CFLAGS $gthread_cflags"
-	CPPFLAGS="$CPPFLAGS $gthread_cflags"
-	gthread_libs=`$PKG_CONFIG --libs gthread-2.0`
-	LIBS="$LIBS $gthread_libs"
-	AC_CHECK_LIB(gthread-2.0, g_thread_init,
-		[AC_CHECK_HEADER(glib/gthread.h,
-			gthreading=yes,
-			AC_MSG_WARN(You are missing the development headers for the gthread libs))],
-		 AC_MSG_WARN(You are missing the gthread libs) )
-fi
-pthreading="no"
-AC_CHECK_LIB(pthread, pthread_create,
-	[AC_CHECK_HEADER(pthread.h,
-		pthreading=yes,
-		AC_MSG_WARN(You are missing the development headers for the pthread libs))],
-	 AC_MSG_WARN(You are missing the pthread libs) )
-if test "x$gthreading" = "xyes" && test "x$pthreading" = "xyes" ; then
-	AC_DEFINE([CAN_THREAD],[],[Have everything that's needed for multi-threading])
-	OPENDIAS_LIBS="$OPENDIAS_LIBS $gthread_libs -lpthread "
-	OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS $gthread_cflags " 
-else
-	AC_MSG_WARN(A single threaded version will be built.)
-fi
+dnl gthreading="no"
+dnl if test "$PKG_CONFIG" != "no"; then
+dnl 	gthread_cflags=`$PKG_CONFIG --cflags gthread-2.0`
+dnl 	CFLAGS="$CFLAGS $gthread_cflags"
+dnl 	CPPFLAGS="$CPPFLAGS $gthread_cflags"
+dnl 	gthread_libs=`$PKG_CONFIG --libs gthread-2.0`
+dnl 	LIBS="$LIBS $gthread_libs"
+dnl 	AC_CHECK_LIB(gthread-2.0, g_thread_init,
+dnl 		[AC_CHECK_HEADER(glib/gthread.h,
+dnl 			gthreading=yes,
+dnl 			AC_MSG_WARN(You are missing the development headers for the gthread libs))],
+dnl 		 AC_MSG_WARN(You are missing the gthread libs) )
+dnl fi
+dnl pthreading="no"
+dnl AC_CHECK_LIB(pthread, pthread_create,
+dnl 	[AC_CHECK_HEADER(pthread.h,
+dnl 		pthreading=yes,
+dnl 		AC_MSG_WARN(You are missing the development headers for the pthread libs))],
+dnl 	 AC_MSG_WARN(You are missing the pthread libs) )
+dnl if test "x$gthreading" = "xyes" && test "x$pthreading" = "xyes" ; then
+dnl 	AC_DEFINE([CAN_THREAD],[],[Have everything that's needed for multi-threading])
+dnl 	OPENDIAS_LIBS="$OPENDIAS_LIBS $gthread_libs -lpthread "
+dnl 	OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS $gthread_cflags " 
+dnl else
+dnl 	AC_MSG_WARN(A single threaded version will be built.)
+dnl fi
 
 
 

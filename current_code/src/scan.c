@@ -87,16 +87,14 @@ void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
   free(tmp);
 
   // Open the document for editing.
-  widget = g_hash_table_lookup(SCANWIDGETS, "scanWindow");
-  finishAcquireOperation (widget);
-  //populate_gui();
-  //populate_docInformation(sql);
 
 }
 #endif // CAN_READODF //
 
 #ifdef CAN_SCAN
-void doScanningOperation(GtkWidget *noUsed, char *devName) {
+extern void doScanningOperation(struct scanParams *scanParam) {
+
+  debug_message("made it to the Scanning Code", DEBUGM);
 
   SANE_Status status;
   SANE_Handle *openDeviceHandle;
@@ -112,52 +110,30 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
   int i=0;
   struct scanCallInfo infoData;
 #endif // CAN_OCR //
-  char *ocrText = "", *sql = "", *dateStr, *tmp, *tmp2;
-  GtkWidget *resolutionBar, *progress, *widget;
+  char *ocrText, *sql, *dateStr, *tmp, *tmp2;
   GTimeVal todaysDate;
   GList *vars = NULL;
+  char *devName, *uuid;
 
-  //Disable the rest of the form
-  widget = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "box", NULL));
-  gtk_widget_set_sensitive(widget, FALSE);
-  widget = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "pageCount", NULL));
-  gtk_widget_set_sensitive(widget, FALSE);
-  pageCount = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
-  widget = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "resolutionBar", NULL));
-  gtk_widget_set_sensitive(widget, FALSE);
-#ifdef CAN_OCR
-  widget = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "shoulddoocr", NULL));
-  gtk_widget_set_sensitive(widget, FALSE);
-  shoulddoocr = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget));
-#endif // CAN_OCR //
-  gtk_widget_set_sensitive(widget, FALSE);
-  widget = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "scanNow", NULL));
-  gtk_widget_set_sensitive(widget, FALSE);
+  devName = scanParam->devName;
+  uuid = scanParam->uuid;
 
-  // Setup the progress bar
-  debug_message("Start the progess bar", DEBUGM);
-  progress = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "progress", NULL));
-  gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Initialising....");
-  while(gtk_events_pending ())
-  gtk_main_iteration ();
   debug_message("sane_open", DEBUGM);
   status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
-  if(status != SANE_STATUS_GOOD)
-  {
-  debug_message("Cannot open device", ERROR);
-  return;
+  if(status != SANE_STATUS_GOOD) {
+    debug_message("Cannot open device", ERROR);
+    return;
   }
 
 
   // Set Resolution 
   debug_message("Set resolution", DEBUGM);
-  resolutionBar = g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "resolutionBar", NULL));
-  resolution = gtk_range_get_value(GTK_RANGE(resolutionBar));
+  resolution = 300; //gtk_range_get_value(GTK_RANGE(resolutionBar));
   hlp = GPOINTER_TO_INT(g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "hlp", NULL)));
   q = GPOINTER_TO_INT(g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "q", NULL)));
   resolution = resolution*q;
   status = sane_control_option (openDeviceHandle, hlp, SANE_ACTION_SET_VALUE, &resolution, &paramSetRet);
-  //
+
 
   // Get scanning params (from the scanner)
   debug_message("Get scanning params", DEBUGM);
@@ -169,130 +145,67 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
 //    pars.bytes_per_line, pars.pixels_per_line,
 //    pars.lines, pars.depth);
 
-  totpix = pars.bytes_per_line * pars.lines * pageCount;
-#ifdef CAN_OCR
-  if(shoulddoocr)
-  {
-  pic=(unsigned char *)malloc( totpix );
-  for (i=0;i<totpix;i++) pic[i]=255;
-  }
-#endif // CAN_OCR //
 
-  gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Initialising the scanner");
-  while(gtk_events_pending ())
-  gtk_main_iteration ();
   debug_message("sane_start", DEBUGM);
   status = sane_start (openDeviceHandle);
-  if(status == SANE_STATUS_GOOD)
-  {
-  // Acquire Image & Save Document
-  if ((file = fopen("/tmp/tmp.pnm", "w")) == NULL)
-    {
-    debug_message("could not open file for output", ERROR);
-    }
-  fprintf (file, "P5\n# SANE data follows\n%d %d\n%d\n", 
-      pars.pixels_per_line, pars.lines*pageCount,
-      (pars.depth <= 8) ? 255 : 65535);
+  if(status == SANE_STATUS_GOOD) {
+    // Acquire Image & Save Document
+    if ((file = fopen("/tmp/tmp.pnm", "w")) == NULL)
+      debug_message("could not open file for output", ERROR);
+    //fprintf (file, "P5\n# SANE data follows\n%d %d\n%d\n", 
+    //  pars.pixels_per_line, pars.lines*pageCount,
+    //  (pars.depth <= 8) ? 255 : 65535);
 
-  pages = 1;
-  c = 0;
-  gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Reading data");
-  while(gtk_events_pending ())
-    gtk_main_iteration ();
-  debug_message("scan_read - start", DEBUGM);
+    pages = 1;
+    c = 0;
+    debug_message("scan_read - start", DEBUGM);
 
-  do
-    {
-    status = sane_read (openDeviceHandle, buffer, sizeof (buffer), &buff_len);
-    if (status != SANE_STATUS_GOOD)
-    {
-    if (status == SANE_STATUS_EOF)
-      {
-      pages++;
-      if(pages > pageCount)
-      {
-      break;
+    do {
+      status = sane_read (openDeviceHandle, buffer, sizeof (buffer), &buff_len);
+      if (status != SANE_STATUS_GOOD) {
+        if (status == SANE_STATUS_EOF) {
+          pages++;
+          if(pages > pageCount) 
+            break;
+          else {
+            // Reset the scanner, ask for user confirmation of readyness.
+            debug_message("sane_cancel", DEBUGM);
+            sane_cancel (openDeviceHandle);
+            tmp = g_strdup("Insert page ");
+            tmp2 = itoa(pages, 10);
+            conCat(&tmp, tmp2);
+            debug_message(tmp, ERROR);
+            free(tmp);
+            debug_message("sane_start", DEBUGM);
+            sane_start (openDeviceHandle);
+          }
+        }
       }
-      else
-      {
-      // Reset the scanner, ask fro user confirmation of readyness.
-      debug_message("sane_cancel", DEBUGM);
-      sane_cancel (openDeviceHandle);
-      tmp = g_strdup("Insert page ");
-      tmp2 = itoa(pages, 10);
-      conCat(&tmp, tmp2);
-      debug_message(tmp, ERROR);
-      free(tmp);
-      debug_message("sane_start", DEBUGM);
-      sane_start (openDeviceHandle);
+
+      if(buff_len != 0) {
+        c += buff_len;
+        fraction = (double) c/totpix;
+        if(fraction > 1)
+          fraction = 1;
+        fwrite (buffer, 1, buff_len, file);
       }
-      }
-    }
-    if(buff_len != 0)
-    {
-    c=c+buff_len;
-    fraction = (double) c/totpix;
-    if(fraction > 1)
-      fraction = 1;
-    gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), (gdouble) fraction );
-    while(gtk_events_pending ())
-      gtk_main_iteration ();
-#ifdef CAN_OCR
-    if(shoulddoocr)
-      {
-      for(i=0; i<=buff_len; i++)
-      {
-      pic[(c-buff_len)+i] = (int)buffer[i];
-      }
-      }
-#endif // CAN_OCR //
-    fwrite (buffer, 1, buff_len, file);
-    }
     } while (1);
-  debug_message("scan_read - end", DEBUGM);
-  fclose(file);
+    debug_message("scan_read - end", DEBUGM);
+    fclose(file);
 
-  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), 0 );
-  gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "");
-  debug_message("sane_cancel", DEBUGM);
-  sane_cancel(openDeviceHandle);
-  scan_bpl = pars.bytes_per_line;
-  scan_ppl = pars.pixels_per_line;
-  scan_lines = pars.lines;
+    debug_message("sane_cancel", DEBUGM);
+    sane_cancel(openDeviceHandle);
+    scan_bpl = pars.bytes_per_line;
+    scan_ppl = pars.pixels_per_line;
+    scan_lines = pars.lines;
   }
   debug_message("sane_close", DEBUGM);
   sane_close(openDeviceHandle);
 
-#ifdef CAN_OCR
-  if(shoulddoocr)
-  {
-  debug_message("Extracting text from image.", DEBUGM);
-  if(scan_bpl && scan_ppl && scan_lines)
-    {
-    gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Extracting text");
-    while(gtk_events_pending ())
-    gtk_main_iteration ();
-    gtk_progress_bar_set_pulse_step (GTK_PROGRESS_BAR(progress), 0.01);
-    infoData.language = (const char*)OCR_LANG_BRITISH;
-    infoData.imagedata = (const unsigned char*)pic;
-    infoData.bytes_per_pixel = 1;
-    infoData.bytes_per_line = scan_bpl;
-    infoData.width = scan_ppl;
-    infoData.height = scan_lines*pageCount;
 
-    runocr(&infoData);
-    ocrText = infoData.ret;
-    free(pic);
-
-    gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), 0 );
-    gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "");
-    while(gtk_events_pending ())
-    gtk_main_iteration ();
-    }
-  }
-#endif // CAN_OCR //
 
   // Save Record
+  //
   debug_message("Saving record", DEBUGM);
   g_get_current_time (&todaysDate);
   dateStr = g_time_val_to_iso8601 (&todaysDate);
@@ -325,31 +238,9 @@ void doScanningOperation(GtkWidget *noUsed, char *devName) {
   debug_message(g_strconcat(BASE_DIR,"scans/",sql,".pnm", NULL), DEBUGM);
   rename("/tmp/tmp.pnm", g_strconcat(BASE_DIR,"scans/",sql,".pnm", NULL));
 
-  // Open the document for editing.
-  widget = g_hash_table_lookup(SCANWIDGETS, "scanWindow");
-  finishAcquireOperation (widget);
-  //populate_gui();
-  //populate_docInformation(sql);
-
-}
-#endif // CAN_SCAN //
-
-void finishAcquireOperation_button(GtkWidget *forgetMe, GtkWidget *scanWindow) {
-
-  finishAcquireOperation(scanWindow);
-debug_message("finish caller", DEBUGM);
-}
-
-extern void finishAcquireOperation(GtkWidget *scanWindow) {
-
-#ifdef CAN_SCAN
   debug_message("sane_exit", DEBUGM);
-//  sane_exit();
-#endif // CAN_SCAN //
-
-  gtk_widget_hide (scanWindow);
-  while(gtk_events_pending ())
-  gtk_main_iteration ();
+  sane_exit();
 
 }
+#endif // CAN_SCAN //
 
