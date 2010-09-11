@@ -1,3 +1,27 @@
+function updateProgressBar (progressId, device) {
+
+  $.ajax({ url: "dynamic",
+	 dataType: "xml",
+	 data: {action: "getScanningProgress", 
+		scanprogressid: progressId,
+	       },
+	 cache: false,
+	 type: "POST",
+	 success: function(dta){
+           prog = parseInt( $(dta).find('progress').text() );
+	   $("#progressbar_"+device).progressbar({
+	     value: prog,
+	   });
+           if(prog != 100) {
+             setTimeout("updateProgressBar('"+progressId+"','"+device+"')", 100);
+           } else {
+             alert("doc done.");
+           }
+	 }
+       });
+}
+
+
 $(document).ready(function() {
 
   $("#tabs").tabs();
@@ -21,7 +45,9 @@ $(document).ready(function() {
              var div = document.createElement("div");
              div.setAttribute('id','deviceTab_'+device);
              var newTabHtml = document.getElementById('scannerTemplate').innerHTML;
-             idchange = new Array('title', 'deviceid', 'format', 'pages', 'pagesSlider', 'resolution', 'resolutionSlider', 'ocr', 'progressbar', 'resolutionDisplay', 'pagesDisplay', 'scanButton');
+             idchange = new Array('title', 'deviceid', 'format', 'pages', 'pagesSlider', 'resolution', 
+                        'resolutionSlider', 'ocr', 'progressbar', 'resolutionDisplay', 'pagesDisplay', 
+                        'scanButton', 'hlp', 'q');
              for (change in idchange) {
                //alert("replace: '" + idchange[change]+"_DEVICE'   with    '" + idchange[change]+"_"+device + "'.");
                newTabHtml = newTabHtml.replace(new RegExp(idchange[change]+"_DEVICE","g"), idchange[change]+"_"+device);
@@ -39,9 +65,9 @@ $(document).ready(function() {
              $('#title_'+device).text( $(this).find("type").text() + ": " +
                                       $(this).find("vendor").text() + " - " +
                                       $(this).find("model").text() );
-             $('#deviceid_'+device).val( $(this).find("type").text() + ":" +
-                                      $(this).find("vendor").text() + ":" +
-                                      $(this).find("model").text() );
+             $('#deviceid_'+device).val( $(this).find("name").text() );
+             $('#hlp_'+device).val( $(this).find("hlp").text() );
+             $('#q_'+device).val( $(this).find("q").text() );
              $('#format_'+device).append('<option>'+$(this).find("format").text()+'</option>');
              $("#resolutionSlider_"+device).slider({
                value: parseInt($(this).find("default").text()),
@@ -73,12 +99,15 @@ $(document).ready(function() {
                                format: $("#format_"+device).val(),
                                pages: $("#pages_"+device).val(),
                                resolution: $("#resolution_"+device).val(),
-                               ocr: "11111" + $("#ocr_"+device).val()
+                               ocr: $("#ocr_"+device).val(),
+                               hlp: $("#hlp_"+device).val(),
+                               q: $("#q_"+device).val(),
                               },
                         cache: false,
                         type: "POST",
                         success: function(data){
-                          alert( $(data).text() );
+                          scanuuid = $(data).find('scanuuid').text();
+                          updateProgressBar(scanuuid, device);
                         }
                       });
              });

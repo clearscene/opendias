@@ -41,7 +41,8 @@ int setup (void) {
   // load config
   //
   
-  VERBOSITY = DEBUGM;
+  VERBOSITY = SQLDEBUG;
+  //VERBOSITY = DEBUGM;
   //VERBOSITY = WARNING;
   DB_VERSION = 3;
 

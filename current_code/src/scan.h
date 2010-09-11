@@ -20,10 +20,16 @@
 #define SCAN
 
 struct scanParams {
-  char *devName;
   char *uuid;
+  char *devName;
+  char *format;
+  char *ocr;
+  int pages;
+  int resolution;
+  int hlp;
+  int q;
 };
 extern void doScanningOperation(struct scanParams *scanParam);
-extern void finishAcquireOperation(GtkWidget *);
+//extern void finishAcquireOperation(GtkWidget *);
 
 #endif /* SCAN */

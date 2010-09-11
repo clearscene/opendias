@@ -180,9 +180,9 @@ extern int runUpdate_db (char *sql, GList *vars) {
   int col = 0, type, rc;
   char *tmp, *tmp2;
 
+  debug_message(sql, SQLDEBUG);
   sqlite3_prepare(DBH, sql, strlen(sql), &stmt, NULL);
 
-  debug_message(sql, SQLDEBUG);
   tmpList = vars;
   do {
     col++;

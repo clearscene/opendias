@@ -102,35 +102,36 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   SANE_Int buff_len;
   SANE_Parameters pars;
   FILE *file;
-  gdouble fraction = 0;
   int c=0, totpix=0, q=0, hlp=0, resolution=0, paramSetRet=0, pages=0, pageCount=0,
-  scan_bpl=0L, scan_ppl=0L, scan_lines=0, lastInserted=0, shoulddoocr=0;
+  scan_bpl=0L, scan_ppl=0L, scan_lines=0, lastInserted=0, shoulddoocr=0, progress=0;
 #ifdef CAN_OCR
   unsigned char *pic=NULL;
   int i=0;
   struct scanCallInfo infoData;
 #endif // CAN_OCR //
-  char *ocrText, *sql, *dateStr, *tmp, *tmp2;
+  char *ocrText, *sql, *progressUpdate, *dateStr, *tmp, *tmp2, *id;
   GTimeVal todaysDate;
   GList *vars = NULL;
   char *devName, *uuid;
 
   devName = scanParam->devName;
   uuid = scanParam->uuid;
+  resolution = scanParam->resolution;
+  hlp = scanParam->hlp;
+  q = scanParam->q;
+  pageCount = scanParam->pages;
 
+  // Open the device
   debug_message("sane_open", DEBUGM);
   status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {
     debug_message("Cannot open device", ERROR);
+    debug_message(devName, ERROR);
     return;
   }
 
-
   // Set Resolution 
   debug_message("Set resolution", DEBUGM);
-  resolution = 300; //gtk_range_get_value(GTK_RANGE(resolutionBar));
-  hlp = GPOINTER_TO_INT(g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "hlp", NULL)));
-  q = GPOINTER_TO_INT(g_hash_table_lookup(SCANWIDGETS, g_strconcat(devName, "q", NULL)));
   resolution = resolution*q;
   status = sane_control_option (openDeviceHandle, hlp, SANE_ACTION_SET_VALUE, &resolution, &paramSetRet);
 
@@ -152,13 +153,16 @@ extern void doScanningOperation(struct scanParams *scanParam) {
     // Acquire Image & Save Document
     if ((file = fopen("/tmp/tmp.pnm", "w")) == NULL)
       debug_message("could not open file for output", ERROR);
-    //fprintf (file, "P5\n# SANE data follows\n%d %d\n%d\n", 
-    //  pars.pixels_per_line, pars.lines*pageCount,
-    //  (pars.depth <= 8) ? 255 : 65535);
+    fprintf (file, "P5\n# SANE data follows\n%d %d\n%d\n", 
+      pars.pixels_per_line, pars.lines*pageCount,
+      (pars.depth <= 8) ? 255 : 65535);
 
+    totpix = pars.bytes_per_line * pars.lines * pageCount;
     pages = 1;
     c = 0;
     debug_message("scan_read - start", DEBUGM);
+
+    progressUpdate = g_strdup("UPDATE scanprogress SET progress = ? WHERE client_id = ? ");
 
     do {
       status = sane_read (openDeviceHandle, buffer, sizeof (buffer), &buff_len);
@@ -184,14 +188,28 @@ extern void doScanningOperation(struct scanParams *scanParam) {
 
       if(buff_len != 0) {
         c += buff_len;
-        fraction = (double) c/totpix;
-        if(fraction > 1)
-          fraction = 1;
+
+        // Update the progress info
+        progress = 100*c/totpix;
+        if(progress > 100)
+          progress = 100;
+        vars = NULL;
+        vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
+        vars = g_list_append(vars, GINT_TO_POINTER(progress));
+        vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
+        vars = g_list_append(vars, g_strdup(uuid));
+        runUpdate_db(progressUpdate, vars);
+
+        // TESTING ONLY - REMOVE ME
+       // sleep(1);
+        // TESTING ONLY - REMOVE ME
+
         fwrite (buffer, 1, buff_len, file);
       }
     } while (1);
     debug_message("scan_read - end", DEBUGM);
     fclose(file);
+    free(progressUpdate);
 
     debug_message("sane_cancel", DEBUGM);
     sane_cancel(openDeviceHandle);
@@ -210,10 +228,13 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   g_get_current_time (&todaysDate);
   dateStr = g_time_val_to_iso8601 (&todaysDate);
 
-  sql = "INSERT INTO docs \
-    (doneocr, ocrtext, depth, lines, ppl, resolution, pages, entrydate, filetype) \
-    VALUES (?, ?, 8, ?, ?, ?, ?, ?, ?)";
+  ocrText = g_strdup("");
 
+  sql = g_strdup("INSERT INTO docs \
+    (doneocr, ocrtext, depth, lines, ppl, resolution, pages, entrydate, filetype) \
+    VALUES (?, ?, 8, ?, ?, ?, ?, ?, ?)");
+
+  vars = NULL;
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
   vars = g_list_append(vars, GINT_TO_POINTER(shoulddoocr?1:0));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
@@ -232,11 +253,14 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   vars = g_list_append(vars, GINT_TO_POINTER(SCAN_FILETYPE));
 
   runUpdate_db(sql, vars);
+  g_list_free(vars);
+//  free(ocrText);
+//  free(dateStr);
   lastInserted = last_insert();
-  sql = itoa(lastInserted, 10);
+  id = itoa(lastInserted, 10);
 
-  debug_message(g_strconcat(BASE_DIR,"scans/",sql,".pnm", NULL), DEBUGM);
-  rename("/tmp/tmp.pnm", g_strconcat(BASE_DIR,"scans/",sql,".pnm", NULL));
+  debug_message(g_strconcat(BASE_DIR,"scans/",id,".pnm", NULL), DEBUGM);
+  rename("/tmp/tmp.pnm", g_strconcat(BASE_DIR,"scans/",id,".pnm", NULL));
 
   debug_message("sane_exit", DEBUGM);
   sane_exit();
