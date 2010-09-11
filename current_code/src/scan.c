@@ -16,6 +16,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <FreeImage.h>
+
 #include "config.h"
 #include <gtk/gtk.h>
 #include <glib.h>
@@ -98,11 +100,12 @@ extern void doScanningOperation(struct scanParams *scanParam) {
 
   SANE_Status status;
   SANE_Handle *openDeviceHandle;
-  SANE_Byte buffer[1024];
+  SANE_Byte *buffer;
   SANE_Int buff_len;
   SANE_Parameters pars;
   FILE *file;
-  int c=0, totpix=0, q=0, hlp=0, resolution=0, paramSetRet=0, pages=0, pageCount=0,
+  double c=0, totbytes=0, progress_d=0; 
+  int q=0, hlp=0, resolution=0, paramSetRet=0, pages=0, pageCount=0,
   scan_bpl=0L, scan_ppl=0L, scan_lines=0, lastInserted=0, shoulddoocr=0, progress=0;
 #ifdef CAN_OCR
   unsigned char *pic=NULL;
@@ -134,17 +137,22 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   debug_message("Set resolution", DEBUGM);
   resolution = resolution*q;
   status = sane_control_option (openDeviceHandle, hlp, SANE_ACTION_SET_VALUE, &resolution, &paramSetRet);
+  if(status != SANE_STATUS_GOOD) {
+    debug_message("Cannot set resolution", ERROR);
+    printf("sane error = %d (%s), return code = %d\n", status, sane_strstatus(status), paramSetRet);
+    return;
+  }
 
 
   // Get scanning params (from the scanner)
   debug_message("Get scanning params", DEBUGM);
   status = sane_get_parameters (openDeviceHandle, &pars);
-//  fprintf (stderr,
-//    "Parm : stat=%s form=%d,lf=%d,bpl=%d,pixpl=%d,lin=%d,dep=%d\n",
-//    sane_strstatus (status),
-//    pars.format, pars.last_frame,
-//    pars.bytes_per_line, pars.pixels_per_line,
-//    pars.lines, pars.depth);
+  fprintf (stderr,
+    "Parm : stat=%s form=%d,lf=%d,bpl=%d,pixpl=%d,lin=%d,dep=%d\n",
+    sane_strstatus (status),
+    pars.format, pars.last_frame,
+    pars.bytes_per_line, pars.pixels_per_line,
+    pars.lines, pars.depth);
 
 
   debug_message("sane_start", DEBUGM);
@@ -157,15 +165,17 @@ extern void doScanningOperation(struct scanParams *scanParam) {
       pars.pixels_per_line, pars.lines*pageCount,
       (pars.depth <= 8) ? 255 : 65535);
 
-    totpix = pars.bytes_per_line * pars.lines * pageCount;
+    totbytes = pars.bytes_per_line * pars.lines * pageCount;
     pages = 1;
     c = 0;
     debug_message("scan_read - start", DEBUGM);
 
     progressUpdate = g_strdup("UPDATE scanprogress SET progress = ? WHERE client_id = ? ");
+    int buffer_s = q;
+    buffer = malloc(buffer_s);
 
     do {
-      status = sane_read (openDeviceHandle, buffer, sizeof (buffer), &buff_len);
+      status = sane_read (openDeviceHandle, buffer, buffer_s, &buff_len);
       if (status != SANE_STATUS_GOOD) {
         if (status == SANE_STATUS_EOF) {
           pages++;
@@ -186,13 +196,15 @@ extern void doScanningOperation(struct scanParams *scanParam) {
         }
       }
 
-      if(buff_len != 0) {
+      if(buff_len > 0) {
         c += buff_len;
 
         // Update the progress info
-        progress = 100*c/totpix;
+        progress_d = 100 * (c / totbytes);
+        progress = progress_d;
         if(progress > 100)
           progress = 100;
+
         vars = NULL;
         vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
         vars = g_list_append(vars, GINT_TO_POINTER(progress));
@@ -200,16 +212,13 @@ extern void doScanningOperation(struct scanParams *scanParam) {
         vars = g_list_append(vars, g_strdup(uuid));
         runUpdate_db(progressUpdate, vars);
 
-        // TESTING ONLY - REMOVE ME
-       // sleep(1);
-        // TESTING ONLY - REMOVE ME
-
         fwrite (buffer, 1, buff_len, file);
       }
     } while (1);
     debug_message("scan_read - end", DEBUGM);
     fclose(file);
     free(progressUpdate);
+    free(buffer);
 
     debug_message("sane_cancel", DEBUGM);
     sane_cancel(openDeviceHandle);
@@ -219,7 +228,8 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   }
   debug_message("sane_close", DEBUGM);
   sane_close(openDeviceHandle);
-
+  debug_message("sane_exit", DEBUGM);
+  sane_exit();
 
 
   // Save Record
@@ -253,17 +263,25 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   vars = g_list_append(vars, GINT_TO_POINTER(SCAN_FILETYPE));
 
   runUpdate_db(sql, vars);
-  g_list_free(vars);
-//  free(ocrText);
-//  free(dateStr);
   lastInserted = last_insert();
   id = itoa(lastInserted, 10);
 
-  debug_message(g_strconcat(BASE_DIR,"scans/",id,".pnm", NULL), DEBUGM);
-  rename("/tmp/tmp.pnm", g_strconcat(BASE_DIR,"scans/",id,".pnm", NULL));
 
-  debug_message("sane_exit", DEBUGM);
-  sane_exit();
+  // Convert Raw into JPEG
+  debug_message(g_strconcat(BASE_DIR,"scans/",id,".pnm", NULL), DEBUGM);
+
+  FreeImage_Initialise(TRUE);
+
+  char *outFilename = g_strconcat(BASE_DIR,"scans/",id,".jpg", NULL);
+  FIBITMAP *bitmap = FreeImage_Load(FIF_PGM, "/tmp/tmp.pnm", 0);
+  FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90);
+
+  FreeImage_DeInitialise();
+
+  debug_message(outFilename, DEBUGM);
+  free(outFilename);
+
+  debug_message("Sanning All done.", DEBUGM);
 
 }
 #endif // CAN_SCAN //

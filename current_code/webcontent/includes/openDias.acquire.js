@@ -13,7 +13,7 @@ function updateProgressBar (progressId, device) {
 	     value: prog,
 	   });
            if(prog != 100) {
-             setTimeout("updateProgressBar('"+progressId+"','"+device+"')", 400);
+             setTimeout("updateProgressBar('"+progressId+"','"+device+"')", 5400);
            } else {
              alert("doc done.");
            }

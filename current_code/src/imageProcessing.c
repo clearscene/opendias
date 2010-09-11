@@ -53,7 +53,8 @@ debug_message(tmp, DEBUGM);
 free(tmp);
 
   if(scaleY == -1)
-  scaleY = (lines*scaleX)/ppl;
+    scaleY = (lines*scaleX)/ppl;
+
   header = g_strdup("P5\n# SANE data follows\n");
   tmp = itoa(ppl, 10);
   conCat(&header, tmp);
@@ -63,14 +64,17 @@ free(tmp);
   conCat(&header, tmp);
   free(tmp);
   conCat(&header, "\n255\n");
+
   loader = gdk_pixbuf_loader_new();
   gdk_pixbuf_loader_write(loader, (unsigned char *)header, strlen(header), NULL);
   gdk_pixbuf_loader_set_size(loader, scaleX, scaleY);
 
   gdk_pixbuf_loader_write(loader, pic, ppl*lines, NULL);
   buf = gdk_pixbuf_loader_get_pixbuf(loader);
+
   if(buf)
-  g_object_ref(G_OBJECT(buf));
+    g_object_ref(G_OBJECT(buf));
+
   gdk_pixbuf_loader_close(loader, NULL);
   g_object_unref(G_OBJECT(loader));
 

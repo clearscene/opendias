@@ -27,7 +27,7 @@ IT_PROG_INTLTOOL([0.35.0])
 
 
 
-PKG_CHECK_MODULES(OPENDIAS, [sqlite3 gtk+-2.0 libmicrohttpd uuid])
+PKG_CHECK_MODULES(OPENDIAS, [sqlite3 gtk+-2.0 libmicrohttpd uuid libconfig])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
@@ -63,6 +63,19 @@ dnl 	AC_MSG_WARN(A single threaded version will be built.)
 dnl fi
 
 
+
+freeimage="no"
+AC_CHECK_LIB(sane, main, 
+	[AC_CHECK_HEADER(FreeImage.h,
+        	freeimage=yes,
+        	AC_MSG_WARN(You are missing the development headers for the FreeImage libs))], 
+	AC_MSG_WARN(You are missing the FreeImage libs) )
+if test "x$freeimage" = "xyes" ; then
+	AC_DEFINE([CAN_IMAGE],[],[Have everything that's needed for scanning documents])
+	OPENDIAS_LIBS="$OPENDIAS_LIBS -lfreeimage "
+else
+	AC_MSG_WARN(You wll not be able to save and load scanned images.)
+fi
 
 
 scanning="no"

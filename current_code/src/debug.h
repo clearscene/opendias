@@ -19,8 +19,6 @@
 #ifndef DEBUG
 #define DEBUG
 
-int VERBOSITY;
-
 enum {
   SILENT = 0,
   ERROR,
@@ -29,6 +27,11 @@ enum {
   DEBUGM,
   SQLDEBUG
 };
+
+/*
+ * a VERBOSITY setting of INFORMATION, will throw 'information, warning, error'
+ */
+int VERBOSITY;
 
 extern void debug_message(char *, const int);
 extern void userMessage(char *, const int);

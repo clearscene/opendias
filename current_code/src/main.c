@@ -41,9 +41,9 @@ int setup (void) {
   // load config
   //
   
-  VERBOSITY = SQLDEBUG;
+  //VERBOSITY = SQLDEBUG;
   //VERBOSITY = DEBUGM;
-  //VERBOSITY = WARNING;
+  VERBOSITY = INFORMATION;
   DB_VERSION = 3;
 
   tmp = g_strdup(g_getenv("HOME"));
@@ -81,7 +81,6 @@ int main (int argc, char **argv) {
 
   if(setup ())
     return 1;
-  VERBOSITY = DEBUGM;
  
   struct MHD_Daemon *daemon;
   daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 

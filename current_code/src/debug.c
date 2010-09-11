@@ -24,28 +24,28 @@
 
 extern void debug_message(char *message, const int verbosity) {
 
-  if(VERBOSITY >= verbosity) {
+  if( verbosity <= VERBOSITY) {
 
     char *mesg = g_strdup("%s : %s : %s : %s\n");
     char *ltime = getTimeStr();
     char *vb;
     if(verbosity == 1) {
-      vb = g_strdup("ERR  ");
+      vb = g_strdup("ERR");
     }
     else if(verbosity == 2) {
-      vb = g_strdup("WARN ");
+      vb = g_strdup("WRN");
     }
     else if(verbosity == 3) {
-      vb = g_strdup("INFO ");
+      vb = g_strdup("INF");
     }
     else if(verbosity == 4) {
-      vb = g_strdup("DBUG ");
+      vb = g_strdup("DBG");
     }
     else if(verbosity == 5) {
-      vb = g_strdup("SQLD ");
+      vb = g_strdup("SQL");
     }
     else 
-      vb = g_strdup(" --- ");
+      vb = g_strdup("---");
 
     char *thread = itoa(pthread_self(),10);
     fprintf(stderr,mesg,ltime,thread,vb,message);

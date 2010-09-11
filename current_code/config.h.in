@@ -1,5 +1,8 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
+/* Have everything that's needed for scanning documents */
+#undef CAN_IMAGE
+
 /* Have everything that's needed to OCR documents */
 #undef CAN_OCR
 
@@ -11,9 +14,6 @@
 
 /* Have everything that's needed speak aloud */
 #undef CAN_SPEAK
-
-/* Have everything that's needed for multi-threading */
-#undef CAN_THREAD
 
 /* always defined to indicate that i18n is enabled */
 #undef ENABLE_NLS

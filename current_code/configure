@@ -5904,12 +5904,12 @@ if test -n "$PKG_CONFIG"; then
         pkg_cv_OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS"
     else
         if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"sqlite3 gtk+-2.0 libmicrohttpd uuid\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "sqlite3 gtk+-2.0 libmicrohttpd uuid") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"sqlite3 gtk+-2.0 libmicrohttpd uuid libconfig\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "sqlite3 gtk+-2.0 libmicrohttpd uuid libconfig") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_OPENDIAS_CFLAGS=`$PKG_CONFIG --cflags "sqlite3 gtk+-2.0 libmicrohttpd uuid" 2>/dev/null`
+  pkg_cv_OPENDIAS_CFLAGS=`$PKG_CONFIG --cflags "sqlite3 gtk+-2.0 libmicrohttpd uuid libconfig" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -5922,12 +5922,12 @@ if test -n "$PKG_CONFIG"; then
         pkg_cv_OPENDIAS_LIBS="$OPENDIAS_LIBS"
     else
         if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"sqlite3 gtk+-2.0 libmicrohttpd uuid\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "sqlite3 gtk+-2.0 libmicrohttpd uuid") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"sqlite3 gtk+-2.0 libmicrohttpd uuid libconfig\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "sqlite3 gtk+-2.0 libmicrohttpd uuid libconfig") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_OPENDIAS_LIBS=`$PKG_CONFIG --libs "sqlite3 gtk+-2.0 libmicrohttpd uuid" 2>/dev/null`
+  pkg_cv_OPENDIAS_LIBS=`$PKG_CONFIG --libs "sqlite3 gtk+-2.0 libmicrohttpd uuid libconfig" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -5946,14 +5946,14 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        OPENDIAS_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "sqlite3 gtk+-2.0 libmicrohttpd uuid"`
+	        OPENDIAS_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "sqlite3 gtk+-2.0 libmicrohttpd uuid libconfig"`
         else
-	        OPENDIAS_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "sqlite3 gtk+-2.0 libmicrohttpd uuid"`
+	        OPENDIAS_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "sqlite3 gtk+-2.0 libmicrohttpd uuid libconfig"`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$OPENDIAS_PKG_ERRORS" >&5
 
-	as_fn_error "Package requirements (sqlite3 gtk+-2.0 libmicrohttpd uuid) were not met:
+	as_fn_error "Package requirements (sqlite3 gtk+-2.0 libmicrohttpd uuid libconfig) were not met:
 
 $OPENDIAS_PKG_ERRORS
 
@@ -6031,129 +6031,64 @@ fi
 
 
 
-gthreading="no"
-if test "$PKG_CONFIG" != "no"; then
-	gthread_cflags=`$PKG_CONFIG --cflags gthread-2.0`
-	CFLAGS="$CFLAGS $gthread_cflags"
-	CPPFLAGS="$CPPFLAGS $gthread_cflags"
-	gthread_libs=`$PKG_CONFIG --libs gthread-2.0`
-	LIBS="$LIBS $gthread_libs"
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for g_thread_init in -lgthread-2.0" >&5
-$as_echo_n "checking for g_thread_init in -lgthread-2.0... " >&6; }
-if test "${ac_cv_lib_gthread_2_0_g_thread_init+set}" = set; then :
+
+
+
+freeimage="no"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lsane" >&5
+$as_echo_n "checking for main in -lsane... " >&6; }
+if test "${ac_cv_lib_sane_main+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lgthread-2.0  $LIBS"
+LIBS="-lsane  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char g_thread_init ();
+
 int
 main ()
 {
-return g_thread_init ();
+return main ();
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_gthread_2_0_g_thread_init=yes
+  ac_cv_lib_sane_main=yes
 else
-  ac_cv_lib_gthread_2_0_g_thread_init=no
+  ac_cv_lib_sane_main=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_gthread_2_0_g_thread_init" >&5
-$as_echo "$ac_cv_lib_gthread_2_0_g_thread_init" >&6; }
-if test "x$ac_cv_lib_gthread_2_0_g_thread_init" = x""yes; then :
-  ac_fn_c_check_header_mongrel "$LINENO" "glib/gthread.h" "ac_cv_header_glib_gthread_h" "$ac_includes_default"
-if test "x$ac_cv_header_glib_gthread_h" = x""yes; then :
-  gthreading=yes
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_sane_main" >&5
+$as_echo "$ac_cv_lib_sane_main" >&6; }
+if test "x$ac_cv_lib_sane_main" = x""yes; then :
+  ac_fn_c_check_header_mongrel "$LINENO" "FreeImage.h" "ac_cv_header_FreeImage_h" "$ac_includes_default"
+if test "x$ac_cv_header_FreeImage_h" = x""yes; then :
+  freeimage=yes
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You are missing the development headers for the gthread libs" >&5
-$as_echo "$as_me: WARNING: You are missing the development headers for the gthread libs" >&2;}
-fi
-
-
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You are missing the gthread libs" >&5
-$as_echo "$as_me: WARNING: You are missing the gthread libs" >&2;}
-fi
-
-fi
-pthreading="no"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_create in -lpthread" >&5
-$as_echo_n "checking for pthread_create in -lpthread... " >&6; }
-if test "${ac_cv_lib_pthread_pthread_create+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpthread  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char pthread_create ();
-int
-main ()
-{
-return pthread_create ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_pthread_pthread_create=yes
-else
-  ac_cv_lib_pthread_pthread_create=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_pthread_pthread_create" >&5
-$as_echo "$ac_cv_lib_pthread_pthread_create" >&6; }
-if test "x$ac_cv_lib_pthread_pthread_create" = x""yes; then :
-  ac_fn_c_check_header_mongrel "$LINENO" "pthread.h" "ac_cv_header_pthread_h" "$ac_includes_default"
-if test "x$ac_cv_header_pthread_h" = x""yes; then :
-  pthreading=yes
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You are missing the development headers for the pthread libs" >&5
-$as_echo "$as_me: WARNING: You are missing the development headers for the pthread libs" >&2;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You are missing the development headers for the FreeImage libs" >&5
+$as_echo "$as_me: WARNING: You are missing the development headers for the FreeImage libs" >&2;}
 fi
 
 
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You are missing the pthread libs" >&5
-$as_echo "$as_me: WARNING: You are missing the pthread libs" >&2;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You are missing the FreeImage libs" >&5
+$as_echo "$as_me: WARNING: You are missing the FreeImage libs" >&2;}
 fi
 
-if test "x$gthreading" = "xyes" && test "x$pthreading" = "xyes" ; then
+if test "x$freeimage" = "xyes" ; then
 
-$as_echo "#define CAN_THREAD /**/" >>confdefs.h
+$as_echo "#define CAN_IMAGE /**/" >>confdefs.h
 
-	OPENDIAS_LIBS="$OPENDIAS_LIBS $gthread_libs -lpthread "
-	OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS $gthread_cflags "
+	OPENDIAS_LIBS="$OPENDIAS_LIBS -lfreeimage "
 else
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: A single threaded version will be built." >&5
-$as_echo "$as_me: WARNING: A single threaded version will be built." >&2;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You wll not be able to save and load scanned images." >&5
+$as_echo "$as_me: WARNING: You wll not be able to save and load scanned images." >&2;}
 fi
-
-
 
 
 scanning="no"
