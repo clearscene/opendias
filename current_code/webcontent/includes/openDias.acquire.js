@@ -13,7 +13,7 @@ function updateProgressBar (progressId, device) {
 	     value: prog,
 	   });
            if(prog != 100) {
-             setTimeout("updateProgressBar('"+progressId+"','"+device+"')", 100);
+             setTimeout("updateProgressBar('"+progressId+"','"+device+"')", 400);
            } else {
              alert("doc done.");
            }
@@ -26,6 +26,8 @@ $(document).ready(function() {
 
   $("#tabs").tabs();
 
+  $('#loading').canvasLoader({'radius':20, 'dotRadius':2});
+
   $.ajax({ url: "dynamic",
          dataType: "xml",
          data: {action: "getScannerList"},
@@ -36,10 +38,11 @@ $(document).ready(function() {
              alert("Error in fetching details.");
              return 1;
            }
-           var device=0;
+           var deviceid=0;
            $(data).find('device').each( function() {
 
-             device++;
+             deviceid++;
+             var device=deviceid;
 
              // Create scan doc
              var div = document.createElement("div");
@@ -112,7 +115,8 @@ $(document).ready(function() {
                       });
              });
            });
-
+         $('#loading').canvasLoaderHalt();
+         $('#scanning').hide();
          }
   });
 

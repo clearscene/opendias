@@ -1,5 +1,6 @@
 
 <script type="text/javascript" src="/includes/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/includes/jquery.canvas-loader.js"></script>
 <link rel="stylesheet" href="/style/jquery-ui.css" type="text/css" media="screen" /> 
 <style>
   .ui-progressbar-value { background-image: url(/images/jquery-ui/pbar-ani.png); }
@@ -18,7 +19,7 @@
     <p>Use this screen to add a new document to your archive.</p>
     <p>In the first tab, you can add ODF documents.</p>
     <p>Any additional tabs are connected to SANE imput devices.</p>
-    <p id='scanning'>Scanning for devices</p>
+    <p id='scanning'><span id='loading'></span>&nbsp;Scanning for devices...</p>
   </div>
   <div id="office">
     <h3>ODF Document</h3>
