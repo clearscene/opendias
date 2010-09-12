@@ -94,20 +94,37 @@ void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
 #endif // CAN_READODF //
 
 
-/**
-FreeImage error handler
-@param fif Format / Plugin responsible for the error
-@param message Error message
-*/
+/*
+ *
+ * FreeImage error handler
+ * @param fif Format / Plugin responsible for the error
+ * @param message Error message
+ */
 void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
-printf("\n*** ");
-if(fif != FIF_UNKNOWN) {
-printf("%s Format\n", FreeImage_GetFormatFromFIF(fif));
-}
-printf(message);
-printf(" ***\n");
+  if(fif != FIF_UNKNOWN)
+    printf("%s Format\n", FreeImage_GetFormatFromFIF(fif));
+  printf(message);
 }
 
+void updateScanProgress (char *uuid, int status, int value) {
+
+  GList *vars = NULL;
+  char *progressUpdate = g_strdup("UPDATE scanprogress \
+                                   SET status = ?, \
+                                       value = ? \
+                                   WHERE client_id = ? ");
+
+  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
+  vars = g_list_append(vars, GINT_TO_POINTER(status));
+  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
+  vars = g_list_append(vars, GINT_TO_POINTER(value));
+  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
+  vars = g_list_append(vars, g_strdup(uuid));
+
+  runUpdate_db(progressUpdate, vars);
+  free(progressUpdate);
+
+}
 
 #ifdef CAN_SCAN
 extern void doScanningOperation(struct scanParams *scanParam) {
@@ -143,10 +160,12 @@ extern void doScanningOperation(struct scanParams *scanParam) {
 
   // Open the device
   debug_message("sane_open", DEBUGM);
+  updateScanProgress(uuid, SCAN_WAITING_ON_SCANNER, 0);
   status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {
     debug_message("Cannot open device", ERROR);
     debug_message(devName, ERROR);
+    updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
     return;
   }
 
@@ -157,6 +176,7 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   if(status != SANE_STATUS_GOOD) {
     debug_message("Cannot set resolution", ERROR);
     printf("sane error = %d (%s), return code = %d\n", status, sane_strstatus(status), paramSetRet);
+    updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
     return;
   }
 
@@ -187,7 +207,6 @@ extern void doScanningOperation(struct scanParams *scanParam) {
     c = 0;
     debug_message("scan_read - start", DEBUGM);
 
-    progressUpdate = g_strdup("UPDATE scanprogress SET progress = ? WHERE client_id = ? ");
     int buffer_s = q;
     buffer = malloc(buffer_s);
 
@@ -222,13 +241,7 @@ extern void doScanningOperation(struct scanParams *scanParam) {
         if(progress > 100)
           progress = 100;
 
-        vars = NULL;
-        vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-        vars = g_list_append(vars, GINT_TO_POINTER(progress));
-        vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-        vars = g_list_append(vars, g_strdup(uuid));
-        runUpdate_db(progressUpdate, vars);
-
+        updateScanProgress(uuid, SCAN_SCANNING, progress);
         fwrite (buffer, 1, buff_len, file);
       }
     } while (1);
@@ -245,8 +258,6 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   }
   debug_message("sane_close", DEBUGM);
   sane_close(openDeviceHandle);
-  debug_message("sane_exit", DEBUGM);
-  sane_exit();
 
 
   // Save Record
@@ -282,9 +293,12 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   runUpdate_db(sql, vars);
   lastInserted = last_insert();
   id = itoa(lastInserted, 10);
-  free(lastInserted);
+  free(sql);
+
 
   // Convert Raw into JPEG
+  //
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 0);
   resultMessage = g_strconcat(BASE_DIR,"scans/",id,".pnm", NULL);
   debug_message(resultMessage, DEBUGM);
   free(resultMessage);
@@ -295,20 +309,29 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   char *outFilename = g_strconcat(BASE_DIR,"scans/",id,".jpg", NULL);
   FIBITMAP *bitmap = FreeImage_Load(FIF_PGM, "/tmp/tmp.pnm", 0);
   if(FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90)) {
-    resultMessage = s_strdup("Saved JPEG output of scan");
+    resultMessage = g_strdup("Saved JPEG output of scan");
     resultVerbosity = INFORMATION;
     debug_message(outFilename, DEBUGM);
   } else {
     resultMessage = g_strdup("Error saving jpeg of scan");
     resultVerbosity = ERROR;
+    updateScanProgress(uuid, SCAN_ERROR_CONVERTING_FORMAT, 0);
   }
   debug_message(resultMessage, resultVerbosity);
   free(resultMessage);
+  free(id);
 
   FreeImage_DeInitialise();
 
   debug_message(outFilename, DEBUGM);
+  updateScanProgress(uuid, SCAN_FINISHED, lastInserted);
+
   free(outFilename);
+  free(scanParam->uuid);
+  free(scanParam->devName);
+  free(scanParam->format);
+  free(scanParam->ocr);
+  free(scanParam);
 
   debug_message("Sanning All done.", DEBUGM);
 

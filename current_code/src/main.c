@@ -16,9 +16,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <stdlib.h>
+
+#ifdef CAN_SCAN
+#include <sane/sane.h>
+#endif // CAN_SCAN //
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,6 +41,9 @@
 int setup (void) {
 
   char *tmp, *scansDir;
+#ifdef CAN_SCAN
+  SANE_Status status;
+#endif // CAN_SCAN //
 
   // 
   // load config
@@ -66,14 +74,25 @@ int setup (void) {
     return 1;
   }
 
+#ifdef CAN_SCAN
+  debug_message("sane_init", DEBUGM);
+  status = sane_init(NULL, NULL);
+  if(status != SANE_STATUS_GOOD) {
+    debug_message("sane did not start", ERROR);
+    return 1;
+  }
+#endif // CAN_SCAN //
+
   return 0;
 
 }
 
 void server_shutdown(struct MHD_Daemon *daemon) {
+  MHD_stop_daemon (daemon);
+  debug_message("sane_exit", DEBUGM);
+  sane_exit();
   close_db ();
   free(BASE_DIR);
-  MHD_stop_daemon (daemon);
 }
 
 

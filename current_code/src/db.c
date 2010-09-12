@@ -33,7 +33,7 @@ int open_db (char *db) {
   RECORDSET = g_hash_table_new(g_str_hash, g_str_equal);
 
   int rc;
-  rc = sqlite3_open(db, &DBH);
+  rc = sqlite3_open_v2(db, &DBH, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX, NULL);
   if ( rc ) {
     char *tmp = g_strdup("Can't open database: ");
     conCat(&tmp, sqlite3_errmsg(DBH));
