@@ -126,6 +126,7 @@ extern int connect_db (int dontCreate) {
     tmp2 = g_strdup("Reading SQL code from file: ");
     conCat(&tmp2, tmp);
     debug_message(tmp2, DEBUGM);
+    free(tmp2);
     if(load_file_to_memory(tmp, &data)) {
       debug_message((char *)data, INFORMATION);
       runquery_db("1", (char *)data);

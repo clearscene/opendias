@@ -93,6 +93,22 @@ void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
 }
 #endif // CAN_READODF //
 
+
+/**
+FreeImage error handler
+@param fif Format / Plugin responsible for the error
+@param message Error message
+*/
+void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
+printf("\n*** ");
+if(fif != FIF_UNKNOWN) {
+printf("%s Format\n", FreeImage_GetFormatFromFIF(fif));
+}
+printf(message);
+printf(" ***\n");
+}
+
+
 #ifdef CAN_SCAN
 extern void doScanningOperation(struct scanParams *scanParam) {
 
@@ -112,7 +128,8 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   int i=0;
   struct scanCallInfo infoData;
 #endif // CAN_OCR //
-  char *ocrText, *sql, *progressUpdate, *dateStr, *tmp, *tmp2, *id;
+  char *ocrText, *sql, *progressUpdate, *dateStr, *tmp, *tmp2, *id, *resultMessage;
+  int resultVerbosity;
   GTimeVal todaysDate;
   GList *vars = NULL;
   char *devName, *uuid;
@@ -265,16 +282,28 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   runUpdate_db(sql, vars);
   lastInserted = last_insert();
   id = itoa(lastInserted, 10);
-
+  free(lastInserted);
 
   // Convert Raw into JPEG
-  debug_message(g_strconcat(BASE_DIR,"scans/",id,".pnm", NULL), DEBUGM);
+  resultMessage = g_strconcat(BASE_DIR,"scans/",id,".pnm", NULL);
+  debug_message(resultMessage, DEBUGM);
+  free(resultMessage);
 
   FreeImage_Initialise(TRUE);
+  FreeImage_SetOutputMessage(FreeImageErrorHandler);
 
   char *outFilename = g_strconcat(BASE_DIR,"scans/",id,".jpg", NULL);
   FIBITMAP *bitmap = FreeImage_Load(FIF_PGM, "/tmp/tmp.pnm", 0);
-  FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90);
+  if(FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90)) {
+    resultMessage = s_strdup("Saved JPEG output of scan");
+    resultVerbosity = INFORMATION;
+    debug_message(outFilename, DEBUGM);
+  } else {
+    resultMessage = g_strdup("Error saving jpeg of scan");
+    resultVerbosity = ERROR;
+  }
+  debug_message(resultMessage, resultVerbosity);
+  free(resultMessage);
 
   FreeImage_DeInitialise();
 
