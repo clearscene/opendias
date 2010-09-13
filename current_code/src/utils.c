@@ -23,6 +23,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <unistd.h> // for getpid & readlink
+#include <ctype.h>
 #include "main.h"
 #include "debug.h"
 #include "utils.h"
@@ -290,3 +291,20 @@ extern char *getTimeStr() {
   return out;
 }
 
+extern void propper(char *inStr) {
+
+  char *ptr = inStr;
+  debug_message(inStr, ERROR);
+
+  /* first letter of string */
+  *ptr = toupper(*ptr);
+ 
+  /* going thru string */
+  while(*ptr) {
+    if( isspace(*ptr) ) {
+            *(++ptr) = toupper(*ptr);
+    }
+    ++ptr;
+  }
+  debug_message(inStr, ERROR);
+}

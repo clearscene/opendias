@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #ifdef CAN_SCAN
 #include <sane/sane.h>
+#include <pthread.h>
 #endif // CAN_SCAN //
 #include <stdio.h>
 #include <memory.h>
@@ -54,7 +55,6 @@ void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
 
   char *fileName, *sql, *tmp, *dateStr;
   int lastInserted;
-  GtkWidget *widget;
   GTimeVal todaysDate;
 
   fileName = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(fileChooser));
@@ -142,10 +142,10 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   scan_bpl=0L, scan_ppl=0L, scan_lines=0, lastInserted=0, shoulddoocr=0, progress=0;
 #ifdef CAN_OCR
   unsigned char *pic=NULL;
-  int i=0;
-  struct scanCallInfo infoData;
+	int i=0;
+	struct scanCallInfo infoData;
 #endif // CAN_OCR //
-  char *ocrText, *sql, *progressUpdate, *dateStr, *tmp, *tmp2, *id, *resultMessage;
+  char *ocrText, *sql, *dateStr, *tmp, *tmp2, *id, *resultMessage;
   int resultVerbosity;
   GTimeVal todaysDate;
   GList *vars = NULL;
@@ -247,7 +247,6 @@ extern void doScanningOperation(struct scanParams *scanParam) {
     } while (1);
     debug_message("scan_read - end", DEBUGM);
     fclose(file);
-    free(progressUpdate);
     free(buffer);
 
     debug_message("sane_cancel", DEBUGM);
@@ -307,7 +306,7 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   FreeImage_SetOutputMessage(FreeImageErrorHandler);
 
   char *outFilename = g_strconcat(BASE_DIR,"scans/",id,".jpg", NULL);
-  FIBITMAP *bitmap = FreeImage_Load(FIF_PGM, "/tmp/tmp.pnm", 0);
+  FIBITMAP *bitmap = FreeImage_Load(FIF_PGMRAW, "/tmp/tmp.pnm", 0);
   if(FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90)) {
     resultMessage = g_strdup("Saved JPEG output of scan");
     resultVerbosity = INFORMATION;
@@ -334,6 +333,7 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   free(scanParam);
 
   debug_message("Sanning All done.", DEBUGM);
+  pthread_exit(NULL);
 
 }
 #endif // CAN_SCAN //

@@ -32,5 +32,6 @@ extern int min(int, int);
 extern char *dateHuman(char *, char *, char *);
 extern void conCat(char **, const char *);
 extern char *getTimeStr();
+extern void propper(char *);
 
 #endif /* UTILS */

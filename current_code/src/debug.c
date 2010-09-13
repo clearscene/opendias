@@ -19,6 +19,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include "debug.h"
 #include "utils.h"
 

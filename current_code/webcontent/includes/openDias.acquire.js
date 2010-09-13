@@ -117,7 +117,7 @@ $(document).ready(function() {
              var newTabHtml = document.getElementById('scannerTemplate').innerHTML;
              idchange = new Array('title', 'deviceid', 'format', 'pages', 'pagesSlider', 'resolution', 
                         'resolutionSlider', 'ocr', 'progressbar', 'resolutionDisplay', 'pagesDisplay', 
-                        'scanButton', 'status', 'hlp', 'q');
+                        'scanButton', 'status', 'hlp', 'q', 'resolutionGood');
              for (change in idchange) {
                //alert("replace: '" + idchange[change]+"_DEVICE'   with    '" + idchange[change]+"_"+device + "'.");
                newTabHtml = newTabHtml.replace(new RegExp(idchange[change]+"_DEVICE","g"), idchange[change]+"_"+device);
@@ -150,6 +150,11 @@ $(document).ready(function() {
                  $("#resolutionDisplay_"+device).text( ui.value + " dpi" );
                }
              });
+             var bestLow = 300;
+             var bestHigh = 800;
+             var resFactor = 215 / (parseInt($(this).find("max").text()) - parseInt($(this).find("min").text()) );
+             $("#resolutionGood_"+device).css( { 'left': resFactor * bestLow,
+                                                 'width': (bestHigh - bestLow) * resFactor } );
              $("#resolution_"+device).val( $(this).find("default").text() );
              $("#resolutionDisplay_"+device).text( $(this).find("default").text() + " dpi" );
              $("#pagesSlider_"+device).slider({

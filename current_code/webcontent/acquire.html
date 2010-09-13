@@ -15,7 +15,7 @@
     <li><a href="#office">Office Document</a></li>
   </ul>
   <div id="info">
-    <h3>Aciring a new document</h3>
+    <h3>Acquiring a new document</h3>
     <p>Use this screen to add a new document to your archive.</p>
     <p>In the first tab, you can add ODF documents.</p>
     <p>Any additional tabs are connected to SANE imput devices.</p>
@@ -61,7 +61,12 @@
       <div class='data'>
         <input id='resolution_DEVICE' type='hidden' />
         <div id='resolutionDisplay_DEVICE' class='innerLeftDisplay'>x dpi</div>
-        <div class='innerRightDisplay'><div id='resolutionSlider_DEVICE'></div></div>
+        <div class='innerRightDisplay'>
+          <div id='resolutionSlider_DEVICE'></div>
+          <div class='resolutionQuality'>
+            <div id='resolutionGood_DEVICE' class='resolutionQualityGood'></div>
+          </div>
+        </div>
       </div>
     </div>
     <div class='row'>
@@ -70,11 +75,15 @@
     </div>
     <div class='row'>
       <div class='label'>&nbsp;</div>
-      <div class='data'><button id='scanButton_DEVICE'>Scan</button></div>
-    </div>
-    <div class='row'>
-      <div class='label'>&nbsp;</div>
-      <div class='data'><div id="status_DEVICE"></div><div id="progressbar_DEVICE"></div></div>
+      <div class='data'>
+        <div class='innerLeftDisplay'>
+          <button id='scanButton_DEVICE'>Scan</button>
+        </div>
+        <div class='innerRightDisplay'>
+          <div id="status_DEVICE"></div>
+          <div id="progressbar_DEVICE"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

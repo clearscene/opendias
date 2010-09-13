@@ -50,7 +50,8 @@ void addTag (GtkButton *button, GtkWidget *newTag) {
 
 }
 
-static void saveTag (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, char *documentId) {
+/*
+ static void saveTag (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, char *documentId) {
 
   char *foundData, *sql = "";
 
@@ -63,15 +64,12 @@ static void saveTag (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, 
   g_free (foundData);
 
 }
+*/
 
 void saveDoc (GtkWidget *button, char *documentId) {
 
-  GtkWidget *widget;
-  GtkTreeSelection *selection;
   char *sql;
-  guint iy, im, id;
-  GtkTextIter start, end;
-  GtkTextBuffer *buffer;
+  guint iy=0, im=0, id=0;
   GList *vars;
 
   debug_message("save record", DEBUGM);
@@ -217,17 +215,17 @@ extern char *openDocEditor (char *documentId) {
                                  g_strdup(readData_db("1", "docdatem")),
                                  g_strdup(readData_db("1", "docdated")) );
 
-  if( readData_db("1", "") == DOC_FILETYPE) {
-#ifdef CAN_READODF
-    char *filename = g_strdup(BASE_DIR);
-    conCat(&filename, "scans/");
-    //conCat(&filename, imgData.documentId);
-    conCat(&filename, ".odt");
-    ocrText = get_odf_Text(filename);
-    free(filename);
-#endif // CAN_READODF //
-  }
-  else
+//  if( atoi(readData_db("1", "")) == DOC_FILETYPE) {
+//#ifdef CAN_READODF
+//    char *filename = g_strdup(BASE_DIR);
+//    conCat(&filename, "scans/");
+//    //conCat(&filename, imgData.documentId);
+//    conCat(&filename, ".odt");
+//    ocrText = get_odf_Text(filename);
+//    free(filename);
+//#endif // CAN_READODF //
+//  }
+//  else
     ocrText = g_strdup(readData_db("1", "ocrtext"));
 
   free_recordset("1");
@@ -276,7 +274,6 @@ extern char *openDocEditor (char *documentId) {
   // Build Response
   //
   char *returnXMLtemplate = g_strdup("<docDetail><docid>%s</docid><title>%s</title><scanDate>%s</scanDate><type>%s</type><docDate>%s</docDate><extractedText><![CDATA[%s]]></extractedText><x>%s</x><y>%s</y><tags>%s</tags></docDetail>");
-
   size = strlen(returnXMLtemplate);
   size += strlen(documentId);
   size += strlen(title);
