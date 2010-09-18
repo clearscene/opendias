@@ -50,8 +50,8 @@ int setup (void) {
   //
   
   //VERBOSITY = SQLDEBUG;
-  //VERBOSITY = DEBUGM;
-  VERBOSITY = INFORMATION;
+  VERBOSITY = DEBUGM;
+  //VERBOSITY = INFORMATION;
   DB_VERSION = 3;
 
   tmp = g_strdup(g_getenv("HOME"));

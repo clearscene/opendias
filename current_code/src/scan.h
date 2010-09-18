@@ -33,6 +33,8 @@ struct scanParams {
 enum {					// Value indicate ...
   SCAN_IDLE = 0,
   SCAN_INTERNAL_ERROR,
+  SCAN_DB_WORKING,
+  SCAN_DB_ERROR,			// DB error code
   SCAN_WAITING_ON_SCANNER,
   SCAN_ERRO_FROM_SCANNER,		// SANE error code
   SCAN_SCANNING,			// Current progress
@@ -45,8 +47,6 @@ enum {					// Value indicate ...
   SCAN_RESERVED_1,
   SCAN_RESERVED_2,
   SCAN_RESERVED_3,
-  SCAN_RESERVED_4,
-  SCAN_RESERVED_5,
   SCAN_FINISHED				// id of the saved doc
 };
 

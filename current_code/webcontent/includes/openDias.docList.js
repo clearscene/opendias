@@ -2,6 +2,7 @@ var sorting = [[3,1]]; // sort by date desc
 var count = 0;
 var totalRows = 0;
 var dta;
+var allDocs = new Array();
 
 $(document).ready(function() {
 
@@ -76,6 +77,7 @@ $(document).ready(function() {
         value: parseInt( (count*100)/totalRows ),
       });
 
+      allDocs.push(docid);
       setTimeout("processData()", 1); // give the ui a chance to catchup
     }
 

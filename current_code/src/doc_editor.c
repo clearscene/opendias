@@ -273,7 +273,7 @@ extern char *openDocEditor (char *documentId) {
 
   // Build Response
   //
-  char *returnXMLtemplate = g_strdup("<docDetail><docid>%s</docid><title>%s</title><scanDate>%s</scanDate><type>%s</type><docDate>%s</docDate><extractedText><![CDATA[%s]]></extractedText><x>%s</x><y>%s</y><tags>%s</tags></docDetail>");
+  char *returnXMLtemplate = g_strdup("<docDetail><docid>%s</docid><title><![CDATA[%s]]></title><scanDate>%s</scanDate><type>%s</type><docDate>%s</docDate><extractedText><![CDATA[%s]]></extractedText><x>%s</x><y>%s</y><tags>%s</tags></docDetail>");
   size = strlen(returnXMLtemplate);
   size += strlen(documentId);
   size += strlen(title);
@@ -299,3 +299,112 @@ extern char *openDocEditor (char *documentId) {
 
   return returnXML;
 }
+
+int updateDocValue(char *docid, char *kkey, char *vvalue) {
+
+  char *sql_t, *sql;
+  int size = 0, rc = 0;
+  GList *vars = NULL;
+
+  sql_t = g_strdup("UPDATE docs SET %s = ? WHERE docid = ?");
+  size = strlen(sql_t) + strlen(kkey);
+  sql = malloc(size);
+  sprintf(sql, sql_t, kkey);
+  free(sql_t);
+  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
+  vars = g_list_append(vars, g_strdup(vvalue));
+  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
+  vars = g_list_append(vars, g_strdup(docid));
+  rc = runUpdate_db(sql, vars);
+  free(sql);
+
+  return rc;
+}
+
+extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
+
+  int rc = 0;
+
+  if( 0 == strcmp(kkey, "docDate") ) {
+
+    char *d, *field;
+
+    // Save Year
+    d = (char*) malloc(5);
+    strncpy(d, (char *)vvalue, 4);
+    d[4] = (char *)NULL;
+    field = g_strdup("docdatey");
+    rc = updateDocValue(docid, field, d);
+    free(field);
+    free(d);
+
+    // Save Month
+    if(rc==0) {
+      d = (char*) malloc(3);
+      strncpy(d, (char *)vvalue+5, 2);
+      d[2] = (char *)NULL;
+      field = g_strdup("docdatem");
+      rc = updateDocValue(docid, field, d);
+      free(field);
+      free(d);
+    }
+
+    // Save Day
+    if(rc==0) {
+      d = (char*) malloc(3);
+      strncpy(d, (char *)vvalue+8, 2);
+      d[2] = (char *)NULL;
+      field = g_strdup("docdated");
+      rc = updateDocValue(docid, field, d);
+      free(field);
+      free(d);
+    }
+
+  } else {
+    rc = updateDocValue(docid, kkey, vvalue);
+
+  }
+
+  if(rc) {
+    return NULL;
+  } else {
+    return g_strdup("<doc>OK</doc>");;
+  }
+}
+
+extern char *updateTagLinkage(char *docid, char *tagid, char *add_remove) {
+
+  char *sql;
+  GList *vars = NULL;
+  int rc;
+
+  if(0 == strcmp(add_remove, "add")) {
+    sql = g_strdup("INSERT INTO doc_tags (docid, tagid) VALUES (?, ?) ");
+  }
+
+  else if(0 == strcmp(add_remove, "remove")) {
+    sql = g_strdup("DELETE FROM doc_tags WHERE docid = ? AND tagid = ? ");
+  }
+
+  else {
+    return NULL;
+  }
+
+  debug_message(sql, DEBUGM);
+
+  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
+  vars = g_list_append(vars, g_strdup(docid));
+  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
+  vars = g_list_append(vars, g_strdup(tagid));
+  rc = runUpdate_db(sql, vars);
+
+  free(sql);
+
+  if(rc) {
+    return NULL;
+  } else {
+    return g_strdup("<doc>OK</doc>");;
+  }
+}
+
+

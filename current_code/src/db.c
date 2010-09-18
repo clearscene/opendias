@@ -220,6 +220,7 @@ extern int runUpdate_db (char *sql, GList *vars) {
     conCat(&tmp, sql);
     debug_message(tmp, ERROR);
     free(tmp);
+    return 1;
   }
 
   rc = sqlite3_finalize(stmt);
@@ -236,10 +237,10 @@ extern int runUpdate_db (char *sql, GList *vars) {
     conCat(&tmp, sql);
     debug_message(tmp, ERROR);
     free(tmp);
-    return 0;
+    return 1;
   }
   else
-    return 1;
+    return 0;
 }
 
 extern int runquery_db (char *recordSetKey, char *sql) {

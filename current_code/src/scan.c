@@ -191,10 +191,39 @@ extern void doScanningOperation(struct scanParams *scanParam) {
     pars.bytes_per_line, pars.pixels_per_line,
     pars.lines, pars.depth);
 
-
   debug_message("sane_start", DEBUGM);
   status = sane_start (openDeviceHandle);
+
   if(status == SANE_STATUS_GOOD) {
+
+    // Save Record
+    //
+    debug_message("Saving record", DEBUGM);
+    updateScanProgress(uuid, SCAN_DB_WORKING, 0);
+    g_get_current_time (&todaysDate);
+    dateStr = g_time_val_to_iso8601 (&todaysDate);
+    sql = g_strdup("INSERT INTO docs \
+      (depth, lines, ppl, resolution, pages, entrydate, filetype) \
+      VALUES (8, ?, ?, ?, ?, ?, ?)");
+    vars = NULL;
+    vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
+    vars = g_list_append(vars, GINT_TO_POINTER(pars.lines));
+    vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
+    vars = g_list_append(vars, GINT_TO_POINTER(pars.pixels_per_line));
+    vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
+    vars = g_list_append(vars, GINT_TO_POINTER(resolution/q));
+    vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
+    vars = g_list_append(vars, GINT_TO_POINTER(pageCount));
+    vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
+    vars = g_list_append(vars, dateStr);
+    vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
+    vars = g_list_append(vars, GINT_TO_POINTER(SCAN_FILETYPE));
+    runUpdate_db(sql, vars);
+    lastInserted = last_insert();
+    id = itoa(lastInserted, 10);
+    free(sql);
+
+
     // Acquire Image & Save Document
     if ((file = fopen("/tmp/tmp.pnm", "w")) == NULL)
       debug_message("could not open file for output", ERROR);
@@ -202,15 +231,16 @@ extern void doScanningOperation(struct scanParams *scanParam) {
       pars.pixels_per_line, pars.lines*pageCount,
       (pars.depth <= 8) ? 255 : 65535);
 
+    debug_message("scan_read - start", DEBUGM);
     totbytes = pars.bytes_per_line * pars.lines * pageCount;
     pages = 1;
     c = 0;
-    debug_message("scan_read - start", DEBUGM);
-
+    progress = 0;
     int buffer_s = q;
     buffer = malloc(buffer_s);
 
     do {
+      updateScanProgress(uuid, SCAN_SCANNING, progress);
       status = sane_read (openDeviceHandle, buffer, buffer_s, &buff_len);
       if (status != SANE_STATUS_GOOD) {
         if (status == SANE_STATUS_EOF) {
@@ -221,11 +251,8 @@ extern void doScanningOperation(struct scanParams *scanParam) {
             // Reset the scanner, ask for user confirmation of readyness.
             debug_message("sane_cancel", DEBUGM);
             sane_cancel (openDeviceHandle);
-            tmp = g_strdup("Insert page ");
-            tmp2 = itoa(pages, 10);
-            conCat(&tmp, tmp2);
-            debug_message(tmp, ERROR);
-            free(tmp);
+            updateScanProgress(uuid, SCAN_WAITING_ON_NEW_PAGE, pthread_self());
+            
             debug_message("sane_start", DEBUGM);
             sane_start (openDeviceHandle);
           }
@@ -241,7 +268,6 @@ extern void doScanningOperation(struct scanParams *scanParam) {
         if(progress > 100)
           progress = 100;
 
-        updateScanProgress(uuid, SCAN_SCANNING, progress);
         fwrite (buffer, 1, buff_len, file);
       }
     } while (1);
@@ -252,52 +278,34 @@ extern void doScanningOperation(struct scanParams *scanParam) {
     debug_message("sane_cancel", DEBUGM);
     sane_cancel(openDeviceHandle);
     scan_bpl = pars.bytes_per_line;
-    scan_ppl = pars.pixels_per_line;
-    scan_lines = pars.lines;
   }
   debug_message("sane_close", DEBUGM);
   sane_close(openDeviceHandle);
 
 
-  // Save Record
-  //
-  debug_message("Saving record", DEBUGM);
-  g_get_current_time (&todaysDate);
-  dateStr = g_time_val_to_iso8601 (&todaysDate);
 
+  // Do OCR
+  //
   ocrText = g_strdup("");
 
-  sql = g_strdup("INSERT INTO docs \
-    (doneocr, ocrtext, depth, lines, ppl, resolution, pages, entrydate, filetype) \
-    VALUES (?, ?, 8, ?, ?, ?, ?, ?, ?)");
 
+  // update record
+  // 
+  updateScanProgress(uuid, SCAN_DB_WORKING, 0);
+  sql = g_strdup("UPDATE docs SET pages = ? WHERE docid = ?");
   vars = NULL;
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(shoulddoocr?1:0));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, ocrText);
+  vars = g_list_append(vars, GINT_TO_POINTER(pages));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(scan_lines));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(scan_ppl));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(resolution/q));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(pageCount));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, dateStr);
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(SCAN_FILETYPE));
-
+  vars = g_list_append(vars, GINT_TO_POINTER(id));
   runUpdate_db(sql, vars);
-  lastInserted = last_insert();
-  id = itoa(lastInserted, 10);
   free(sql);
+
 
 
   // Convert Raw into JPEG
   //
-  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 0);
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
   resultMessage = g_strconcat(BASE_DIR,"scans/",id,".pnm", NULL);
   debug_message(resultMessage, DEBUGM);
   free(resultMessage);
@@ -307,6 +315,7 @@ extern void doScanningOperation(struct scanParams *scanParam) {
 
   char *outFilename = g_strconcat(BASE_DIR,"scans/",id,".jpg", NULL);
   FIBITMAP *bitmap = FreeImage_Load(FIF_PGMRAW, "/tmp/tmp.pnm", 0);
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 70);
   if(FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90)) {
     resultMessage = g_strdup("Saved JPEG output of scan");
     resultVerbosity = INFORMATION;
@@ -316,6 +325,7 @@ extern void doScanningOperation(struct scanParams *scanParam) {
     resultVerbosity = ERROR;
     updateScanProgress(uuid, SCAN_ERROR_CONVERTING_FORMAT, 0);
   }
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   debug_message(resultMessage, resultVerbosity);
   free(resultMessage);
   free(id);
