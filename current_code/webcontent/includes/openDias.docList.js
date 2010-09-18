@@ -3,6 +3,7 @@ var count = 0;
 var totalRows = 0;
 var dta;
 var allDocs = new Array();
+var showingDocs = new Array();
 
 $(document).ready(function() {
 
@@ -78,6 +79,7 @@ $(document).ready(function() {
       });
 
       allDocs.push(docid);
+      showingDocs.push(docid);
       setTimeout("processData()", 1); // give the ui a chance to catchup
     }
 
