@@ -346,5 +346,39 @@ extern void doScanningOperation(struct scanParams *scanParam) {
   pthread_exit(NULL);
 
 }
+
+extern char *nextPageReady(scanid) {
+
+  char *sql, *status=0, *value=0;
+
+  sql = g_strdup("SELECT status, value \
+      FROM scanprogress \
+      WHERE client_id = '");
+  conCat(&sql, scanid);
+  conCat(&sql, "'");
+
+  if(runquery_db("1", sql)) {
+    do {
+      status = g_strdup(readData_db("1", "status"));
+      value = g_strdup(readData_db("1", "value"));
+    } while (nextRow("1"));
+  }
+  free_recordset("1");
+  free(sql);
+
+  // Build a response, to tell the client about the uuid (so they can query the progress)
+  //
+/*  if(status == SCAN_WAITING_ON_NEW_PAGE) {
+    if( ! pthread_signal(value) ) {
+      debug_message("thread id does not exist or has already died.", ERROR);
+      return NULL;
+    }
+  } else {
+    debug_message("scan id indicates a status not waiting for a new page signal.", WARNING);
+    return NULL;
+  }
+*/
+  return g_strdup("<result>OK</result>");
+}
 #endif // CAN_SCAN //
 

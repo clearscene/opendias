@@ -42,7 +42,10 @@ $(document).ready(function() {
         .trigger("update") 
         .trigger("appendCache")
         .trigger("sorton",[sorting]) 
-        .tablesorterPager({size: 5, container: $("#pager"), positionFixed: false}); 
+        .tablesorterPager({size: 5, container: $("#pager"), positionFixed: false})
+        .bind("addRow",function(event,newRow){ addRow(this,newRow); })
+        .bind("removeRow",function(event,rowId,moveTo){ removeRow(this,rowId,moveTo); });
+
       $('#docList_table').fadeIn();
       $('#pager').fadeIn();
     }

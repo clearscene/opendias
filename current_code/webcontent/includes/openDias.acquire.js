@@ -49,8 +49,22 @@ function getScanProgress (progressId, device) {
 
            } else if( status == 7 ) { // SCAN_WAITING_ON_NEW_PAGE,// Waiting for page [x]
 	     $("#progressbar_"+device).progressbar( "destroy" );
-             $('#status_'+device).text("Please insert page "+vvalue+".");
-             alert("Please insert page "+vvalue+".");
+             $('#status_'+device).text("Please insert the next page.");
+             alert("Please insert the next page.");
+             $.ajax({ url: "dynamic",
+                      dataType: "xml",
+                      data: {action: "nextPageReady",
+                             scanprogressid: progressId,
+                             },
+                      cache: false,
+                      type: "POST",
+                      success: function(dta2) {
+                        if( $(dta2).find('error').text() ){
+                          alert("Error signalling the scanner to restart for the next page.");
+                          return 1;
+                        }
+                      }
+                    });
 
            } else if( status == 8 ) { // SCAN_TIMEOUT_WAITING_ON_NEW_PAGE,
              $('#status_'+device).text("Timeout while waiting for the next page.");
