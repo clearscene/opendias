@@ -44,7 +44,8 @@ $(document).ready(function() {
         .trigger("sorton",[sorting]) 
         .tablesorterPager({size: 5, container: $("#pager"), positionFixed: false})
         .bind("addRow",function(event,newRow){ addRow(this,newRow); })
-        .bind("removeRow",function(event,rowId,moveTo){ removeRow(this,rowId,moveTo); });
+        .bind("removeRow",function(event,rowId){ removeRow(this,rowId); })
+        .bind("rebuild",function(event){ rebuild(this); });
 
       $('#docList_table').fadeIn();
       $('#pager').fadeIn();

@@ -49,8 +49,8 @@ function getScanProgress (progressId, device) {
 
            } else if( status == 7 ) { // SCAN_WAITING_ON_NEW_PAGE,// Waiting for page [x]
 	     $("#progressbar_"+device).progressbar( "destroy" );
-             $('#status_'+device).text("Please insert the next page.");
-             alert("Please insert the next page.");
+             $('#status_'+device).text("Please insert page "+vvalue+".");
+             alert("Please insert page "+vvalue+".");
              $.ajax({ url: "dynamic",
                       dataType: "xml",
                       data: {action: "nextPageReady",
@@ -105,7 +105,7 @@ function getScanProgress (progressId, device) {
            }
 
            if(finish == 0) {
-             setTimeout("getScanProgress('"+progressId+"','"+device+"')", 1000);
+             setTimeout("getScanProgress('"+progressId+"','"+device+"')", 400);
            }
 
 	 }
@@ -141,7 +141,7 @@ $(document).ready(function() {
              var newTabHtml = document.getElementById('scannerTemplate').innerHTML;
              idchange = new Array('title', 'deviceid', 'format', 'pages', 'pagesSlider', 'resolution', 
                         'resolutionSlider', 'ocr', 'progressbar', 'resolutionDisplay', 'pagesDisplay', 
-                        'scanButton', 'status', 'hlp', 'q', 'resolutionGood');
+                        'scanButton', 'status', 'resolutionGood');
              for (change in idchange) {
                //alert("replace: '" + idchange[change]+"_DEVICE'   with    '" + idchange[change]+"_"+device + "'.");
                newTabHtml = newTabHtml.replace(new RegExp(idchange[change]+"_DEVICE","g"), idchange[change]+"_"+device);
@@ -160,8 +160,6 @@ $(document).ready(function() {
                                       $(this).find("vendor").text() + " - " +
                                       $(this).find("model").text() );
              $('#deviceid_'+device).val( $(this).find("name").text() );
-             $('#hlp_'+device).val( $(this).find("hlp").text() );
-             $('#q_'+device).val( $(this).find("q").text() );
              $('#format_'+device).append('<option>'+$(this).find("format").text()+'</option>');
              $("#resolutionSlider_"+device).slider({
                range: "min",
@@ -200,8 +198,6 @@ $(document).ready(function() {
                                pages: $("#pages_"+device).val(),
                                resolution: $("#resolution_"+device).val(),
                                ocr: $("#ocr_"+device).val(),
-                               hlp: $("#hlp_"+device).val(),
-                               q: $("#q_"+device).val(),
                               },
                         cache: false,
                         type: "POST",

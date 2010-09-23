@@ -19,15 +19,27 @@
 #ifndef SCAN
 #define SCAN
 
+/*
 struct scanParams {
   char *uuid;
   char *devName;
   char *format;
   char *ocr;
-  int pages;
+  int pageCount;
+  int page;
   int resolution;
-  int hlp;
-  int q;
+  int id;
+};
+*/
+enum {
+  SCAN_PARAM_do_not_use = 0,
+  SCAN_PARAM_DEVNAME,
+  SCAN_PARAM_FORMAT,
+  SCAN_PARAM_DO_OCR,
+  SCAN_PARAM_REQUESTED_PAGES,
+  SCAN_PARAM_REQUESTED_RESOLUTION,
+  SCAN_PARAM_DOCID,
+  SCAN_PARAM_ON_PAGE,
 };
 
 enum {					// Value indicate ...
@@ -50,7 +62,7 @@ enum {					// Value indicate ...
   SCAN_FINISHED				// id of the saved doc
 };
 
-extern void doScanningOperation(struct scanParams *scanParam);
-//extern void finishAcquireOperation(GtkWidget *);
+extern void doScanningOperation(char *);
+extern void setScanParam(char *, int, char *);
 
 #endif /* SCAN */
