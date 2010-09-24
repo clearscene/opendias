@@ -1,0 +1,30 @@
+#slider{}	
+#slider ul, #slider li{
+	margin:0;
+	padding:0;
+	list-style:none;
+	}
+#slider li{ 
+	width:300px;
+	overflow:hidden; 
+	}	
+#prevBtn, #nextBtn{ 
+	display:block;
+	width:30px;
+	height:77px;
+	position:absolute;
+	left:-28px;
+	top:71px;
+	}	
+#nextBtn{ 
+	left:322px;
+	}														
+#prevBtn a, #nextBtn a{  
+	display:block;
+	width:30px;
+	height:77px;
+	background:url(/images/easySlider/btn_prev.png) no-repeat 0 0;	
+	}	
+#nextBtn a{ 
+	background:url(/images/easySlider/btn_next.png) no-repeat 0 0;	
+	}
