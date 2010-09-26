@@ -31,7 +31,6 @@
 #include <string.h>
 #ifdef CAN_OCR
 #include "ocr_plug.h"
-#include <pthread.h>
 #endif // CAN_OCR //
 #include "main.h"
 #include "scan.h"
@@ -195,7 +194,7 @@ extern void doScanningOperation(char *uuid) {
 #endif // CAN_OCR //
   char *ocrText, *sql, *dateStr, *tmp, *tmp2, *id, *resultMessage, 
        *pageCount_s, *resolution_s, *shoulddoocr_s, *page_s, *devName, *docid_s;
-  int resultVerbosity;
+  int resultVerbosity, docid;
   GTimeVal todaysDate;
   GList *vars = NULL;
 
@@ -206,7 +205,7 @@ extern void doScanningOperation(char *uuid) {
   shoulddoocr_s = getScanParam(uuid, SCAN_PARAM_DO_OCR);
   resolution = atoi(resolution_s);
   pageCount = atoi(pageCount_s);
-  shoulddoocr = atoi(shoulddoocr_s);
+  shoulddoocr = 1; //atoi(shoulddoocr_s);
   free(resolution_s);
   free(pageCount_s);
 
@@ -315,6 +314,8 @@ extern void doScanningOperation(char *uuid) {
       page_s = g_strdup("1");
       setScanParam(uuid, SCAN_PARAM_ON_PAGE, page_s);
       page = 1;
+
+      docid = atoi(docid_s);
     }
     else {
       page_s = getScanParam(uuid, SCAN_PARAM_ON_PAGE);
@@ -322,6 +323,7 @@ extern void doScanningOperation(char *uuid) {
       free(page_s);
       page++;
       page_s = itoa(page, 10);
+      docid = atoi(docid_s);
     }
 
     // Acquire Image & Save Document
@@ -337,6 +339,13 @@ extern void doScanningOperation(char *uuid) {
     progress = 0;
     int buffer_s = q;
     buffer = malloc(buffer_s);
+#ifdef CAN_OCR
+    if(shoulddoocr==1)
+        {
+        pic=(unsigned char *)malloc( totbytes );
+        for (i=0;i<totbytes;i++) pic[i]=255;
+        }
+#endif // CAN_OCR //
 
     do {
       updateScanProgress(uuid, SCAN_SCANNING, progress);
@@ -349,9 +358,16 @@ extern void doScanningOperation(char *uuid) {
       }
 
       if(buff_len > 0) {
-        c += buff_len;
+
+#ifdef CAN_OCR
+        if(shoulddoocr==1) {
+          for(i=0; i<=buff_len; i++)
+            pic[(int)(c+i)] = (int)buffer[(int)i];
+        }
+#endif // CAN_OCR //
 
         // Update the progress info
+        c += buff_len;
         progress_d = 100 * (c / totbytes);
         progress = progress_d;
         if(progress > 100)
@@ -370,6 +386,35 @@ extern void doScanningOperation(char *uuid) {
   }
   debug_message("sane_close", DEBUGM);
   sane_close(openDeviceHandle);
+
+
+
+  // Do OCR - on this page
+  //
+  if(shoulddoocr==1) {
+    debug_message("attempting OCR", DEBUGM);
+    updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
+
+    infoData.language = (const char*)OCR_LANG_BRITISH;
+    infoData.imagedata = (const unsigned char*)pic;
+    infoData.bytes_per_pixel = 1;
+    infoData.bytes_per_line = pars.bytes_per_line;
+    infoData.width = pars.pixels_per_line;
+    infoData.height = pars.lines;
+
+    runocr(&infoData);
+    char *thisPageOCR = infoData.ret;
+    debug_message(thisPageOCR, DEBUGM);
+    ocrText = g_strdup("-------------------- \
+page ");
+    conCat(&ocrText, page_s);
+    conCat(&ocrText, "--------------------");
+    conCat(&ocrText, thisPageOCR);
+    free(thisPageOCR);
+    free(pic);
+  }
+  else
+    ocrText = g_strdup("");
 
 
 
@@ -394,27 +439,12 @@ extern void doScanningOperation(char *uuid) {
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   debug_message(resultMessage, resultVerbosity);
   free(resultMessage);
+  free(bitmap);
   free(id);
 
   FreeImage_DeInitialise();
   debug_message(outFilename, DEBUGM);
   free(outFilename);
-
-
-
-  // Do OCR - on this page
-  //
-  if(shoulddoocr != NULL) {
-    char *thisPageOCR = g_strdup("some page data");
-    ocrText = g_strdup("-------------------- \
-page ");
-    conCat(&ocrText, page_s);
-    conCat(&ocrText, "--------------------");
-    conCat(&ocrText, thisPageOCR);
-    free(thisPageOCR);
-  }
-  else
-    ocrText = g_strdup("");
 
 
 
@@ -436,8 +466,9 @@ page ");
 
   // cleaup && What should we do next
   //
+  debug_message("mostly done.", DEBUGM);
   if(page >= pageCount)
-    updateScanProgress(uuid, SCAN_FINISHED, docid_s);
+    updateScanProgress(uuid, SCAN_FINISHED, docid);
   else
     updateScanProgress(uuid, SCAN_WAITING_ON_NEW_PAGE, page++);
 
@@ -445,6 +476,7 @@ page ");
   free(page_s);
   free(docid_s);
   free(shoulddoocr_s);
+  free(ocrText);
   debug_message("Page scan done.", DEBUGM);
   pthread_exit(NULL);
 
