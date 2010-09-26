@@ -73,22 +73,24 @@ function getScanProgress (progressId, device) {
 
            } else if( status == 9 ) { // SCAN_CONVERTING_FORMAT,
              $('#status_'+device).text("Converting scanned image format.");
-	     $("#progressbar_"+device).progressbar({
-	       value: vvalue,
-	     });
+	     $("#progressbar_"+device).progressbar( "destroy" );
+             $("#progressbar_"+device).canvasLoader({'radius':20, 'dotRadius':2});
 
            } else if( status == 10 ) { // SCAN_ERROR_CONVERTING_FORMAT,// FreeImage error code
 	     $("#progressbar_"+device).progressbar( "destroy" );
+	     $("#progressbar_"+device).canvasLoaderHalt();
              $('#status_'+device).text("Error while converting scanned image format.");
              alert("Image Processing Error: " + vvalue);
              finish = 1;
 
            } else if( status == 11 ) { // SCAN_PERFORMING_OCR,
 	     $("#progressbar_"+device).progressbar( "destroy" );
+             $("#progressbar_"+device).canvasLoader({'radius':20, 'dotRadius':2});
              $('#status_'+device).text("Performing OCR on scanned image.");
 
            } else if( status == 12 ) { // SCAN_ERROR_PERFORMING_OCR,// xxxxxx error code
 	     $("#progressbar_"+device).progressbar( "destroy" );
+	     $("#progressbar_"+device).canvasLoaderHalt();
              $('#status_'+device).text("Error while performing OCR operation.");
              alert("OCR Error: " + vvalue);
              finish = 1;
@@ -98,6 +100,7 @@ function getScanProgress (progressId, device) {
            } else if( status == 15 ) { // SCAN_RESERVED_3,
            } else if( status == 16 ) { // SCAN_FINISHED
 	     $("#progressbar_"+device).progressbar( "destroy" );
+	     $("#progressbar_"+device).canvasLoaderHalt();
              $('#status_'+device).text("Scan operation complete.");
              document.location.href = "/docDetail.html?docid="+vvalue;
              finish = 1;

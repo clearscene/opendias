@@ -200,14 +200,19 @@ extern void doScanningOperation(char *uuid) {
 
   devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
   docid_s = getScanParam(uuid, SCAN_PARAM_DOCID);
+
   resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
-  pageCount_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_PAGES);
-  shoulddoocr_s = getScanParam(uuid, SCAN_PARAM_DO_OCR);
   resolution = atoi(resolution_s);
-  pageCount = atoi(pageCount_s);
-  shoulddoocr = 1; //atoi(shoulddoocr_s);
   free(resolution_s);
+
+  pageCount_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_PAGES);
+  pageCount = atoi(pageCount_s);
   free(pageCount_s);
+
+  shoulddoocr_s = getScanParam(uuid, SCAN_PARAM_DO_OCR);
+  if(shoulddoocr_s && 0 == strcmp(shoulddoocr_s, "on") )
+    shoulddoocr = 1;
+  free(shoulddoocr_s);
 
   // Open the device
   debug_message("sane_open", DEBUGM);
@@ -391,6 +396,7 @@ extern void doScanningOperation(char *uuid) {
 
   // Do OCR - on this page
   //
+#ifdef CAN_OCR
   if(shoulddoocr==1) {
     debug_message("attempting OCR", DEBUGM);
     updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
@@ -403,17 +409,17 @@ extern void doScanningOperation(char *uuid) {
     infoData.height = pars.lines;
 
     runocr(&infoData);
-    char *thisPageOCR = infoData.ret;
-    debug_message(thisPageOCR, DEBUGM);
-    ocrText = g_strdup("-------------------- \
-page ");
+    debug_message(infoData.ret, DEBUGM);
+    ocrText = g_strdup("-------------------- page ");
     conCat(&ocrText, page_s);
-    conCat(&ocrText, "--------------------");
-    conCat(&ocrText, thisPageOCR);
-    free(thisPageOCR);
+    conCat(&ocrText, " --------------------\n");
+    conCat(&ocrText, infoData.ret);
+    conCat(&ocrText, "\n");
+    free(infoData.ret);
     free(pic);
   }
   else
+#endif // CAN_OCR //
     ocrText = g_strdup("");
 
 
@@ -440,7 +446,7 @@ page ");
   debug_message(resultMessage, resultVerbosity);
   free(resultMessage);
   free(bitmap);
-  free(id);
+  free(page_s);
 
   FreeImage_DeInitialise();
   debug_message(outFilename, DEBUGM);
@@ -451,16 +457,17 @@ page ");
   // update record
   // 
   updateScanProgress(uuid, SCAN_DB_WORKING, 0);
-  sql = g_strdup("UPDATE docs SET pages = ?, ocrText = ? WHERE docid = ?");
+  sql = g_strdup("UPDATE docs SET pages = ?, ocrText = ocrText || ? WHERE docid = ?");
   vars = NULL;
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
   vars = g_list_append(vars, GINT_TO_POINTER(page));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, ocrText);
+  vars = g_list_append(vars, ocrText);//we're not using again - so no need to copy tring
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
   vars = g_list_append(vars, GINT_TO_POINTER(atoi(docid_s)));
   runUpdate_db(sql, vars);
   free(sql);
+  free(docid_s);
 
 
 
@@ -473,10 +480,6 @@ page ");
     updateScanProgress(uuid, SCAN_WAITING_ON_NEW_PAGE, page++);
 
   free(uuid);
-  free(page_s);
-  free(docid_s);
-  free(shoulddoocr_s);
-  free(ocrText);
   debug_message("Page scan done.", DEBUGM);
   pthread_exit(NULL);
 
