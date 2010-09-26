@@ -62,7 +62,7 @@ enum {					// Value indicate ...
   SCAN_FINISHED				// id of the saved doc
 };
 
-extern void doScanningOperation(char *);
-extern void setScanParam(char *, int, char *);
+extern void doScanningOperation(void *);
+extern int setScanParam(char *, int, char *);
 
 #endif /* SCAN */

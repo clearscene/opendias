@@ -49,7 +49,7 @@ am_opendias_OBJECTS = db.$(OBJEXT) debug.$(OBJEXT) \
 	doc_editor.$(OBJEXT) web_handler.$(OBJEXT) \
 	pageRender.$(OBJEXT) ocr_plug.$(OBJEXT) scan.$(OBJEXT) \
 	speak.$(OBJEXT) utils.$(OBJEXT) main.$(OBJEXT) \
-	read_odf.$(OBJEXT) imageProcessing.$(OBJEXT)
+	read_odf.$(OBJEXT) dbaccess.$(OBJEXT)
 opendias_OBJECTS = $(am_opendias_OBJECTS)
 am__DEPENDENCIES_1 =
 opendias_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -223,8 +223,8 @@ opendias_SOURCES = \
 	main.c    \
 	read_odf.c    \
 	read_odf.h    \
-	imageProcessing.c    \
-	imageProcessing.h
+	dbaccess.c    \
+	dbaccess.h
 
 opendias_LDFLAGS = 
 opendias_LDADD = $(OPENDIAS_LIBS)
@@ -310,9 +310,9 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/db.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbaccess.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/doc_editor.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/imageProcessing.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ocr_plug.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pageRender.Po@am__quote@

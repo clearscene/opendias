@@ -102,10 +102,10 @@ void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
 void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
   if(fif != FIF_UNKNOWN)
     printf("%s Format\n", FreeImage_GetFormatFromFIF(fif));
-  printf(message);
+  printf("%s", message);
 }
 
-extern void setScanParam(char *uuid, int param, char *vvalue) {
+extern int setScanParam(char *uuid, int param, char *vvalue) {
 
   GList *vars = NULL;
   char *sql = g_strdup("INSERT OR REPLACE \
@@ -128,8 +128,7 @@ extern void setScanParam(char *uuid, int param, char *vvalue) {
 
 char *getScanParam(char *scanid, int param_option) {
 
-  char *sql, *vvalue=NULL, *param_option_s, *ret_t, *ret;
-  int s;
+  char *sql, *vvalue=NULL, *param_option_s;
 
   sql = g_strdup("SELECT param_value \
                   FROM scan_params \
@@ -172,7 +171,7 @@ void updateScanProgress (char *uuid, int status, int value) {
 }
 
 #ifdef CAN_SCAN
-extern void doScanningOperation(char *uuid) {
+extern void doScanningOperation(void *uuid) {
 
   debug_message("made it to the Scanning Code", DEBUGM);
 
@@ -186,13 +185,13 @@ extern void doScanningOperation(char *uuid) {
   int x=0, lastTry=1, minRes=9999999, maxRes=0;
   double c=0, totbytes=0, progress_d=0; 
   int q=0, hlp=0, res=0, resolution=0, paramSetRet=0, page=0, pageCount=0,
-  scan_bpl=0L, scan_ppl=0L, scan_lines=0, lastInserted=0, shoulddoocr=0, progress=0;
+  scan_bpl=0L, lastInserted=0, shoulddoocr=0, progress=0;
 #ifdef CAN_OCR
   unsigned char *pic=NULL;
   int i=0;
   struct scanCallInfo infoData;
 #endif // CAN_OCR //
-  char *ocrText, *sql, *dateStr, *tmp, *tmp2, *id, *resultMessage, 
+  char *ocrText, *sql, *dateStr, *resultMessage, 
        *pageCount_s, *resolution_s, *shoulddoocr_s, *page_s, *devName, *docid_s;
   int resultVerbosity, docid;
   GTimeVal todaysDate;
@@ -295,8 +294,8 @@ extern void doScanningOperation(char *uuid) {
       g_get_current_time (&todaysDate);
       dateStr = g_time_val_to_iso8601 (&todaysDate);
       sql = g_strdup("INSERT INTO docs \
-        (depth, lines, ppl, resolution, pages, entrydate, filetype) \
-        VALUES (8, ?, ?, ?, ?, ?, ?)");
+        (depth, lines, ppl, resolution, ocrText, pages, entrydate, filetype) \
+        VALUES (8, ?, ?, ?, ?, ?, ?, ?)");
       vars = NULL;
       vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
       vars = g_list_append(vars, GINT_TO_POINTER(pars.lines));
@@ -304,6 +303,8 @@ extern void doScanningOperation(char *uuid) {
       vars = g_list_append(vars, GINT_TO_POINTER(pars.pixels_per_line));
       vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
       vars = g_list_append(vars, GINT_TO_POINTER(resolution/q));
+      vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
+      vars = g_list_append(vars, g_strdup(""));
       vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
       vars = g_list_append(vars, GINT_TO_POINTER(pageCount));
       vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
@@ -410,9 +411,9 @@ extern void doScanningOperation(char *uuid) {
 
     runocr(&infoData);
     debug_message(infoData.ret, DEBUGM);
-    ocrText = g_strdup("-------------------- page ");
+    ocrText = g_strdup("---------------- page ");
     conCat(&ocrText, page_s);
-    conCat(&ocrText, " --------------------\n");
+    conCat(&ocrText, " ----------------\n");
     conCat(&ocrText, infoData.ret);
     conCat(&ocrText, "\n");
     free(infoData.ret);

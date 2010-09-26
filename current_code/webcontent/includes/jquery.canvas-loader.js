@@ -22,7 +22,7 @@
  *   		'radius':10,
  *   		'color':'rgb(255,0,0),
  *  		'dotRadius':10,
- *			'backgroundColor':'transparent'
+ *		'backgroundColor':'transparent'
  *   		'className':'canvasLoader',   
  *   		'id':'canvasLoader1',
  *   		'fps':10
@@ -172,7 +172,8 @@
 				// simple feature detection, needs work
 				if (!!ctx) {
 					loaders[loaders.length+1] = new CanvasLoader(ctx, opts.radius, opts.color, opts.dotRadius);
-					$(this).replaceWith(canvas);
+					//$(this).replaceWith(canvas);
+					$(this).html(canvas);
 				}
 			}
 		
@@ -181,5 +182,7 @@
 	}
 	$.fn.canvasLoaderHalt = function() {
           clearInterval(intervalId);
+          alert(this.attr("id") + "     " + $(this).attr("id") + "            " + $(this).html() );
+          $(this).html("<div id='"+this.attr("id")+"'></div>");
         }
 })(jQuery);

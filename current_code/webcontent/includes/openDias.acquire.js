@@ -14,29 +14,39 @@ function getScanProgress (progressId, device) {
 
            if( status == 0 ) { // SCAN_IDLE,
              $('#status_'+device).text("Setting up.");
+	     $("#progressbar_"+device).progressbar( "destroy" );
+	     $("#progressbar_"+device).canvasLoaderHalt();
              // Give us a chance ....
 
            } else if( status == 1 ) { // SCAN_INTERNAL_ERROR,
              $('#status_'+device).text("Internal Error.");
+	     $("#progressbar_"+device).progressbar( "destroy" );
+	     $("#progressbar_"+device).canvasLoaderHalt();
              alert("Internal Error: " + vvalue);
              finish = 1;
 
            } else if( status == 2 ) { // SCAN_DB_WORKING,
              $('#status_'+device).text("Waiting on the database.");
+	     $("#progressbar_"+device).progressbar( "destroy" );
+	     $("#progressbar_"+device).canvasLoaderHalt();
              // Give us a chance ....
 
            } else if( status == 5 ) { // SCAN_DB_ERROR // DB error code
 	     $("#progressbar_"+device).progressbar( "destroy" );
+	     $("#progressbar_"+device).canvasLoaderHalt();
              $('#status_'+device).text("Error while scanning.");
              alert("Database Error: " + vvalue);
              finish = 1;
 
            } else if( status == 4 ) { // SCAN_WAITING_ON_SCANNER,
+	     $("#progressbar_"+device).progressbar( "destroy" );
+	     $("#progressbar_"+device).canvasLoaderHalt();
              $('#status_'+device).text("Setting up the scanner.");
              // Give us a chance ....
 
            } else if( status == 5 ) { // SCAN_ERRO_FROM_SCANNER,// SANE error code
 	     $("#progressbar_"+device).progressbar( "destroy" );
+	     $("#progressbar_"+device).canvasLoaderHalt();
              $('#status_'+device).text("Error while scanning.");
              alert("Scanner Error: " + vvalue);
              finish = 1;
@@ -49,6 +59,7 @@ function getScanProgress (progressId, device) {
 
            } else if( status == 7 ) { // SCAN_WAITING_ON_NEW_PAGE,// Waiting for page [x]
 	     $("#progressbar_"+device).progressbar( "destroy" );
+	     $("#progressbar_"+device).canvasLoaderHalt();
              $('#status_'+device).text("Please insert page "+vvalue+".");
              alert("Please insert page "+vvalue+".");
              $.ajax({ url: "dynamic",
@@ -67,6 +78,8 @@ function getScanProgress (progressId, device) {
                     });
 
            } else if( status == 8 ) { // SCAN_TIMEOUT_WAITING_ON_NEW_PAGE,
+	     $("#progressbar_"+device).progressbar( "destroy" );
+	     $("#progressbar_"+device).canvasLoaderHalt();
              $('#status_'+device).text("Timeout while waiting for the next page.");
              alert("Timeout waiting on the new page insert.");
              finish = 1;

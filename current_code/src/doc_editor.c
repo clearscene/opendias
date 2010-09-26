@@ -32,7 +32,6 @@
 #ifdef CAN_READODF
 #include "read_odf.h"
 #endif // CAN_READODF //
-#include "imageProcessing.h"
 
 
 void addTag (GtkButton *button, GtkWidget *newTag) {
@@ -184,8 +183,8 @@ void readTextParser (GtkWidget *button, GtkWidget *entry) {
 
 extern char *openDocEditor (char *documentId) {
 
-  char *sql, *tagid, *tagname, *selected, *tagTemp,
-       *title, *scanDate, *type, *humanReadableDate, *ocrText, *ppl, *lines, *tags;
+  char *sql, *tagid, *tagname, *selected, *tagTemp, *pages, *title, 
+       *scanDate, *type, *humanReadableDate, *ocrText, *ppl, *lines, *tags;
   int size;
 
   // Get docinformation
@@ -209,6 +208,7 @@ extern char *openDocEditor (char *documentId) {
 
   scanDate = g_strdup(readData_db("1", "entrydate"));
   ppl = g_strdup(readData_db("1", "ppl"));
+  pages = g_strdup(readData_db("1", "pages"));
   lines = g_strdup(readData_db("1", "lines"));
   type = g_strdup(g_str_equal (readData_db("1", "filetype"),"1")?"ODF Doc":"Scaned Doc");
   humanReadableDate = dateHuman( g_strdup(readData_db("1", "docdatey")),
@@ -273,25 +273,27 @@ extern char *openDocEditor (char *documentId) {
 
   // Build Response
   //
-  char *returnXMLtemplate = g_strdup("<docDetail><docid>%s</docid><title><![CDATA[%s]]></title><scanDate>%s</scanDate><type>%s</type><docDate>%s</docDate><extractedText><![CDATA[%s]]></extractedText><x>%s</x><y>%s</y><tags>%s</tags></docDetail>");
+  char *returnXMLtemplate = g_strdup("<docDetail><docid>%s</docid><title><![CDATA[%s]]></title><scanDate>%s</scanDate><type>%s</type><docDate>%s</docDate><pages>%s</pages><extractedText><![CDATA[%s]]></extractedText><x>%s</x><y>%s</y><tags>%s</tags></docDetail>");
   size = strlen(returnXMLtemplate);
   size += strlen(documentId);
   size += strlen(title);
   size += strlen(scanDate);
   size += strlen(type);
   size += strlen(humanReadableDate);
+  size += strlen(pages);
   size += strlen(ocrText);
   size += strlen(ppl);
   size += strlen(lines);
   size += strlen(tags);
   char *returnXML = malloc(size);
-  sprintf(returnXML, returnXMLtemplate, documentId, title, scanDate, type, humanReadableDate, ocrText, ppl, lines, tags);
+  sprintf(returnXML, returnXMLtemplate, documentId, title, scanDate, type, humanReadableDate, pages, ocrText, ppl, lines, tags);
 
   free(returnXMLtemplate);
   free(title);
   free(scanDate);
   free(type);
   free(humanReadableDate);
+  free(pages);
   free(ocrText);
   free(ppl);
   free(lines);
@@ -332,7 +334,7 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
     // Save Year
     d = (char*) malloc(5);
     strncpy(d, (char *)vvalue, 4);
-    d[4] = (char *)NULL;
+    d[4] = 0L;
     field = g_strdup("docdatey");
     rc = updateDocValue(docid, field, d);
     free(field);
@@ -342,7 +344,7 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
     if(rc==0) {
       d = (char*) malloc(3);
       strncpy(d, (char *)vvalue+5, 2);
-      d[2] = (char *)NULL;
+      d[2] = 0L;
       field = g_strdup("docdatem");
       rc = updateDocValue(docid, field, d);
       free(field);
@@ -353,7 +355,7 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
     if(rc==0) {
       d = (char*) malloc(3);
       strncpy(d, (char *)vvalue+8, 2);
-      d[2] = (char *)NULL;
+      d[2] = 0L;
       field = g_strdup("docdated");
       rc = updateDocValue(docid, field, d);
       free(field);
