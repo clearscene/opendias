@@ -172,9 +172,13 @@ $(document).ready(function() {
                                       $(this).find("model").text() );
 
              // Bring the tab contents up-2-date
+             var host = "";
+             if( $(this).find("host").text() != "" ) {
+               host = " (on host '" + $(this).find("host").text() + "')";
+             }
              $('#title_'+device).text( $(this).find("type").text() + ": " +
                                       $(this).find("vendor").text() + " - " +
-                                      $(this).find("model").text() );
+                                      $(this).find("model").text() + host);
              $('#deviceid_'+device).val( $(this).find("name").text() );
              $('#format_'+device).append('<option>'+$(this).find("format").text()+'</option>');
              $("#resolutionSlider_"+device).slider({

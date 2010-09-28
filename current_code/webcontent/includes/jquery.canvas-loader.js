@@ -182,7 +182,6 @@
 	}
 	$.fn.canvasLoaderHalt = function() {
           clearInterval(intervalId);
-          alert(this.attr("id") + "     " + $(this).attr("id") + "            " + $(this).html() );
           $(this).html("<div id='"+this.attr("id")+"'></div>");
         }
 })(jQuery);

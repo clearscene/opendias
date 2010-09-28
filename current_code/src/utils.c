@@ -176,40 +176,6 @@ extern void fcopy(char *fnsource, char *fntarget) {
 
 }
 
-extern gboolean std_scrollEvent (GtkWidget *widget, GdkEventScroll *event, GtkRange *range ) {
-
-  gboolean retval = FALSE;
-  GtkAdjustment *adj;
-
-  adj = gtk_range_get_adjustment(range);
-  switch (event->direction) 
-  {
-  case GDK_SCROLL_UP:
-    gtk_range_set_value(range, gtk_range_get_value(range)-adj->step_increment);
-    break;
-  case GDK_SCROLL_DOWN:
-    gtk_range_set_value(range, gtk_range_get_value(range)+adj->step_increment);
-    break;
-  default:
-    break;
-  }
-
-  return retval;
-}
-
-/*
-extern void std_setFontSize (GtkWidget *widget, relativeSize size) {
-
-  PangoContext *pangoContext;
-  PangoFontDescription *fontDesc;
-
-  pangoContext = gtk_widget_get_pango_context(GTK_WIDGET(filterTags));
-  fontDesc = pango_context_get_font_description(pangoContext);
-  pango_font_description_set_size(fontDesc, pango_font_description_get_size(fontDesc)*0.66);
-  gtk_widget_modify_font (GTK_WIDGET(filterTags), fontDesc);
-}
-*/
-
 extern int max(int a, int b) {
 
   if(a >= b)
@@ -302,7 +268,7 @@ extern void propper(char *inStr) {
   /* going thru string */
   while(*ptr) {
     if( isspace(*ptr) ) {
-            *(++ptr) = toupper(*ptr);
+      *(++ptr) = toupper(*ptr);
     }
     ++ptr;
   }
