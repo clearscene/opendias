@@ -63,7 +63,7 @@ void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
   g_get_current_time (&todaysDate);
   dateStr = g_time_val_to_iso8601 (&todaysDate);
 
-  sql = g_strdup("INSERT INTO docs \
+  sql = strdup("INSERT INTO docs \
     (doneocr, ocrtext, entrydate, filetype) \
     VALUES (0, '--fromDoc--', '");
   tmp = g_strconcat(dateStr, "', ", NULL);
@@ -79,7 +79,7 @@ void importFile(GtkWidget *noUsed, GtkWidget *fileChooser) {
   free(sql);
   sql = itoa(lastInserted, 10);
 
-  tmp = g_strdup(BASE_DIR);
+  tmp = strdup(BASE_DIR);
   conCat(&tmp, "scans/");
   conCat(&tmp, sql);
   conCat(&tmp, ".odt");
@@ -108,17 +108,17 @@ void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
 extern int setScanParam(char *uuid, int param, char *vvalue) {
 
   GList *vars = NULL;
-  char *sql = g_strdup("INSERT OR REPLACE \
+  char *sql = strdup("INSERT OR REPLACE \
                         INTO scan_params \
                         (client_id, param_option, param_value) \
                         VALUES (?, ?, ?);");
 
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, g_strdup(uuid));
+  vars = g_list_append(vars, strdup(uuid));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
   vars = g_list_append(vars, GINT_TO_POINTER(param));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, g_strdup(vvalue));
+  vars = g_list_append(vars, strdup(vvalue));
 
   int rc = runUpdate_db(sql, vars);
   free(sql);
@@ -130,7 +130,7 @@ char *getScanParam(char *scanid, int param_option) {
 
   char *sql, *vvalue=NULL, *param_option_s;
 
-  sql = g_strdup("SELECT param_value \
+  sql = strdup("SELECT param_value \
                   FROM scan_params \
                   WHERE client_id = '");
   conCat(&sql, scanid);
@@ -141,7 +141,7 @@ char *getScanParam(char *scanid, int param_option) {
 
   if(runquery_db("2", sql)) {
     do {
-      vvalue = g_strdup(readData_db("2", "param_value"));
+      vvalue = strdup(readData_db("2", "param_value"));
     } while (nextRow("1"));
   }
   free_recordset("2");
@@ -153,7 +153,7 @@ char *getScanParam(char *scanid, int param_option) {
 void updateScanProgress (char *uuid, int status, int value) {
 
   GList *vars = NULL;
-  char *progressUpdate = g_strdup("UPDATE scan_progress \
+  char *progressUpdate = strdup("UPDATE scan_progress \
                                    SET status = ?, \
                                        value = ? \
                                    WHERE client_id = ? ");
@@ -163,7 +163,7 @@ void updateScanProgress (char *uuid, int status, int value) {
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
   vars = g_list_append(vars, GINT_TO_POINTER(value));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, g_strdup(uuid));
+  vars = g_list_append(vars, strdup(uuid));
 
   runUpdate_db(progressUpdate, vars);
   free(progressUpdate);
@@ -293,7 +293,7 @@ extern void doScanningOperation(void *uuid) {
       updateScanProgress(uuid, SCAN_DB_WORKING, 0);
       g_get_current_time (&todaysDate);
       dateStr = g_time_val_to_iso8601 (&todaysDate);
-      sql = g_strdup("INSERT INTO docs \
+      sql = strdup("INSERT INTO docs \
         (depth, lines, ppl, resolution, ocrText, pages, entrydate, filetype) \
         VALUES (8, ?, ?, ?, ?, ?, ?, ?)");
       vars = NULL;
@@ -304,7 +304,7 @@ extern void doScanningOperation(void *uuid) {
       vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
       vars = g_list_append(vars, GINT_TO_POINTER(resolution/q));
       vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-      vars = g_list_append(vars, g_strdup(""));
+      vars = g_list_append(vars, strdup(""));
       vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
       vars = g_list_append(vars, GINT_TO_POINTER(pageCount));
       vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
@@ -317,7 +317,7 @@ extern void doScanningOperation(void *uuid) {
       free(sql);
 
       setScanParam(uuid, SCAN_PARAM_DOCID, docid_s);
-      page_s = g_strdup("1");
+      page_s = strdup("1");
       setScanParam(uuid, SCAN_PARAM_ON_PAGE, page_s);
       page = 1;
 
@@ -411,7 +411,7 @@ extern void doScanningOperation(void *uuid) {
 
     runocr(&infoData);
     debug_message(infoData.ret, DEBUGM);
-    ocrText = g_strdup("---------------- page ");
+    ocrText = strdup("---------------- page ");
     conCat(&ocrText, page_s);
     conCat(&ocrText, " ----------------\n");
     conCat(&ocrText, infoData.ret);
@@ -421,7 +421,7 @@ extern void doScanningOperation(void *uuid) {
   }
   else
 #endif // CAN_OCR //
-    ocrText = g_strdup("");
+    ocrText = strdup("");
 
 
 
@@ -435,11 +435,11 @@ extern void doScanningOperation(void *uuid) {
   FIBITMAP *bitmap = FreeImage_Load(FIF_PGMRAW, "/tmp/tmp.pnm", 0);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 70);
   if(FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90)) {
-    resultMessage = g_strdup("Saved JPEG output of scan");
+    resultMessage = strdup("Saved JPEG output of scan");
     resultVerbosity = INFORMATION;
     debug_message(outFilename, DEBUGM);
   } else {
-    resultMessage = g_strdup("Error saving jpeg of scan");
+    resultMessage = strdup("Error saving jpeg of scan");
     resultVerbosity = ERROR;
     updateScanProgress(uuid, SCAN_ERROR_CONVERTING_FORMAT, 0);
   }
@@ -458,7 +458,7 @@ extern void doScanningOperation(void *uuid) {
   // update record
   // 
   updateScanProgress(uuid, SCAN_DB_WORKING, 0);
-  sql = g_strdup("UPDATE docs SET pages = ?, ocrText = ocrText || ? WHERE docid = ?");
+  sql = strdup("UPDATE docs SET pages = ?, ocrText = ocrText || ? WHERE docid = ?");
   vars = NULL;
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
   vars = g_list_append(vars, GINT_TO_POINTER(page));

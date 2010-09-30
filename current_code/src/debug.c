@@ -19,37 +19,52 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <pthread.h>
 #include "debug.h"
 #include "utils.h"
 
 extern void debug_message(char *message, const int verbosity) {
 
+  FILE *fp;
+  char *logFile;
+
   if( verbosity <= VERBOSITY) {
 
-    char *mesg = g_strdup("%s : %s : %s : %s\n");
+    char *mesg = strdup("%s : %s : %s : %s\n");
     char *ltime = getTimeStr();
     char *vb;
     if(verbosity == 1) {
-      vb = g_strdup("ERR");
+      vb = strdup("ERR");
     }
     else if(verbosity == 2) {
-      vb = g_strdup("WRN");
+      vb = strdup("WRN");
     }
     else if(verbosity == 3) {
-      vb = g_strdup("INF");
+      vb = strdup("INF");
     }
     else if(verbosity == 4) {
-      vb = g_strdup("DBG");
+      vb = strdup("DBG");
     }
     else if(verbosity == 5) {
-      vb = g_strdup("SQL");
+      vb = strdup("SQL");
     }
     else 
-      vb = g_strdup("---");
+      vb = strdup("---");
 
     char *thread = itoa(pthread_self(),10);
-    fprintf(stderr,mesg,ltime,thread,vb,message);
+
+    // Output to file
+    logFile = strdup(LOG_DIR);
+    conCat(&logFile, "/opendias.log");
+    if((fp = fopen(logFile, "a"))==NULL) {
+      fprintf(stderr,"Cannot open log file.\n");
+      exit(1);
+    }
+    fprintf(fp,mesg,ltime,thread,vb,message);
+    fclose(fp);
+
+    free(logFile);
     free(mesg);
     free(vb);
     free(thread);

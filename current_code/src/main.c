@@ -17,9 +17,8 @@
  */
 
 #include "config.h"
-#include <gtk/gtk.h>
+//#include <gtk/gtk.h>
 #include <glib.h>
-#include <stdlib.h>
 
 #ifdef CAN_SCAN
 #include <sane/sane.h>
@@ -40,39 +39,64 @@
 
 int setup (void) {
 
-  char *tmp, *scansDir;
+  char *location, *sql, *config_option, *config_value;
 #ifdef CAN_SCAN
   SANE_Status status;
 #endif // CAN_SCAN //
 
-  // 
-  // load config
-  //
-  
-  //VERBOSITY = SQLDEBUG;
+  // Defaults
   VERBOSITY = DEBUGM;
-  //VERBOSITY = INFORMATION;
   DB_VERSION = 3;
+  PORT = 8988;
+  LOG_DIR = strdup("/var/log/opendias");
 
-  tmp = g_strdup(g_getenv("HOME"));
-  conCat(&tmp, "/.openDIAS/");
+  // Get 'var' location
+  if( ! load_file_to_memory("/etc/opendias/opendias.conf", &location) ) {
+    debug_message("Cannot find main config file.", ERROR);
+    return 1;
+  }
 
-  BASE_DIR = g_strdup(tmp);
-  createDir_ifRequired(BASE_DIR);
-
-  conCat(&tmp, "scans/");
-
-  scansDir = g_strdup(tmp);
-  createDir_ifRequired(scansDir);
-
-  free(tmp);
-  free(scansDir);
+  chop(location);
+  BASE_DIR = strdup(location);
 
   // Open (& maybe update) the database.
-  if(connect_db (0)) {
+  if(connect_db (1)) { // 1 = create if required
     free(BASE_DIR);
     return 1;
   }
+
+  sql = strdup("SELECT config_option, config_value FROM config");
+  if( runquery_db("1", sql) ) {
+    do {
+      config_option = strdup(readData_db("1", "config_option"));
+      config_value = strdup(readData_db("1", "config_value"));
+      if( 0 == strcmp(config_option, "log_verbosity") ) {
+        VERBOSITY = atoi(config_value);
+      }
+      else if ( 0 == strcmp(config_option, "scan_driectory") ) {
+        free(location);
+        free(BASE_DIR);
+        BASE_DIR = strdup(config_value);
+        location = strdup(BASE_DIR);
+      }
+      else if ( 0 == strcmp(config_option, "port") ) {
+        PORT = (unsigned short) atoi(config_value);
+      }
+      else if ( 0 == strcmp(config_option, "log_directory") ) {
+        free(LOG_DIR);
+        LOG_DIR = strdup(config_value);
+      }
+      free(config_option);
+      free(config_value);
+    } while (nextRow("1"));
+  }
+  free_recordset("1");
+  free(sql);
+
+  createDir_ifRequired(BASE_DIR);
+  conCat(&location, "/scans");
+  createDir_ifRequired(location);
+  free(location);
 
 #ifdef CAN_SCAN
   debug_message("sane_init", DEBUGM);

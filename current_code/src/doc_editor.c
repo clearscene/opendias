@@ -84,7 +84,7 @@ void saveDoc (GtkWidget *button, char *documentId) {
   WHERE docid = ?";
   vars = NULL;
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  //vars = g_list_append(vars, g_strdup(gtk_entry_get_text(GTK_ENTRY(g_hash_table_lookup(EDITORWIDGETS, "title")))));
+  //vars = g_list_append(vars, strdup(gtk_entry_get_text(GTK_ENTRY(g_hash_table_lookup(EDITORWIDGETS, "title")))));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
   //vars = g_list_append(vars, gtk_text_buffer_get_text(GTK_TEXT_BUFFER(buffer),&start,&end,FALSE));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
@@ -111,7 +111,7 @@ void doDelete (GtkButton *button, char *documentId) {
 
   char *sql, *tmp, *tmp2;
 
-  sql = g_strdup("SELECT * FROM docs WHERE docid = ");
+  sql = strdup("SELECT * FROM docs WHERE docid = ");
   conCat(&sql, documentId);
   if(!runquery_db("1", sql))
   {
@@ -120,7 +120,7 @@ void doDelete (GtkButton *button, char *documentId) {
   return;
   }
 
-  tmp = g_strdup(BASE_DIR);
+  tmp = strdup(BASE_DIR);
   conCat(&tmp ,"scans/");
   conCat(&tmp ,documentId);
   tmp2 = itoa(DOC_FILETYPE, 10);
@@ -134,13 +134,13 @@ void doDelete (GtkButton *button, char *documentId) {
   free_recordset("1");
   free(sql);
 
-  sql = g_strdup("DELETE FROM doc_tags WHERE docid = ");
+  sql = strdup("DELETE FROM doc_tags WHERE docid = ");
   conCat(&sql, documentId);
   runquery_db("1", sql);
   free_recordset("1");
   free(sql);
 
-  sql = g_strdup("DELETE FROM docs WHERE docid = ");
+  sql = strdup("DELETE FROM docs WHERE docid = ");
   conCat(&sql, documentId);
   runquery_db("1", sql);
   free_recordset("1");
@@ -189,7 +189,7 @@ extern char *openDocEditor (char *documentId) {
 
   // Get docinformation
   //
-  sql = g_strdup("SELECT * FROM docs WHERE docid = ");
+  sql = strdup("SELECT * FROM docs WHERE docid = ");
   conCat(&sql, documentId);
   if(!runquery_db("1", sql)) {
     debug_message("Could not select record.", ERROR);
@@ -200,24 +200,24 @@ extern char *openDocEditor (char *documentId) {
 
   // Build Human Readable
   //
-  title = g_strdup(readData_db("1", "title"));
+  title = strdup(readData_db("1", "title"));
   if(g_str_equal (title, "NULL") ) {
     free(title);
-    title = g_strdup("New (untitled) document.");
+    title = strdup("New (untitled) document.");
   }
 
-  scanDate = g_strdup(readData_db("1", "entrydate"));
-  ppl = g_strdup(readData_db("1", "ppl"));
-  pages = g_strdup(readData_db("1", "pages"));
-  lines = g_strdup(readData_db("1", "lines"));
-  type = g_strdup(g_str_equal (readData_db("1", "filetype"),"1")?"ODF Doc":"Scaned Doc");
-  humanReadableDate = dateHuman( g_strdup(readData_db("1", "docdatey")),
-                                 g_strdup(readData_db("1", "docdatem")),
-                                 g_strdup(readData_db("1", "docdated")) );
+  scanDate = strdup(readData_db("1", "entrydate"));
+  ppl = strdup(readData_db("1", "ppl"));
+  pages = strdup(readData_db("1", "pages"));
+  lines = strdup(readData_db("1", "lines"));
+  type = strdup(g_str_equal (readData_db("1", "filetype"),"1")?"ODF Doc":"Scaned Doc");
+  humanReadableDate = dateHuman( strdup(readData_db("1", "docdatey")),
+                                 strdup(readData_db("1", "docdatem")),
+                                 strdup(readData_db("1", "docdated")) );
 
 //  if( atoi(readData_db("1", "")) == DOC_FILETYPE) {
 //#ifdef CAN_READODF
-//    char *filename = g_strdup(BASE_DIR);
+//    char *filename = strdup(BASE_DIR);
 //    conCat(&filename, "scans/");
 //    //conCat(&filename, imgData.documentId);
 //    conCat(&filename, ".odt");
@@ -226,18 +226,18 @@ extern char *openDocEditor (char *documentId) {
 //#endif // CAN_READODF //
 //  }
 //  else
-    ocrText = g_strdup(readData_db("1", "ocrtext"));
+    ocrText = strdup(readData_db("1", "ocrtext"));
 
   free_recordset("1");
   free(sql);
 
 
-  char *tagsTemplate = g_strdup("<tag><tagid>%s</tagid><tagname>%s</tagname><selected>%s</selected></tag>");
+  char *tagsTemplate = strdup("<tag><tagid>%s</tagid><tagname>%s</tagname><selected>%s</selected></tag>");
 
   // Get a list of tags
   //
-  tags = g_strdup("");
-  sql = g_strdup(
+  tags = strdup("");
+  sql = strdup(
     "SELECT tags.tagid, tagname, dt.tagid selected \
     FROM tags LEFT JOIN \
     (SELECT * \
@@ -251,9 +251,9 @@ extern char *openDocEditor (char *documentId) {
   if(runquery_db("1", sql)) {
     do  {
       // Append a row and fill in some data
-      tagid = g_strdup(readData_db("1", "tagid"));
-      tagname = g_strdup(readData_db("1", "tagname"));
-      selected = g_strdup(readData_db("1", "selected"));
+      tagid = strdup(readData_db("1", "tagid"));
+      tagname = strdup(readData_db("1", "tagname"));
+      selected = strdup(readData_db("1", "selected"));
 
       size = strlen(tagsTemplate) + strlen(tagid) + strlen(tagname) + strlen(selected);
       tagTemp = malloc(size);
@@ -273,7 +273,7 @@ extern char *openDocEditor (char *documentId) {
 
   // Build Response
   //
-  char *returnXMLtemplate = g_strdup("<docDetail><docid>%s</docid><title><![CDATA[%s]]></title><scanDate>%s</scanDate><type>%s</type><docDate>%s</docDate><pages>%s</pages><extractedText><![CDATA[%s]]></extractedText><x>%s</x><y>%s</y><tags>%s</tags></docDetail>");
+  char *returnXMLtemplate = strdup("<docDetail><docid>%s</docid><title><![CDATA[%s]]></title><scanDate>%s</scanDate><type>%s</type><docDate>%s</docDate><pages>%s</pages><extractedText><![CDATA[%s]]></extractedText><x>%s</x><y>%s</y><tags>%s</tags></docDetail>");
   size = strlen(returnXMLtemplate);
   size += strlen(documentId);
   size += strlen(title);
@@ -308,15 +308,15 @@ int updateDocValue(char *docid, char *kkey, char *vvalue) {
   int size = 0, rc = 0;
   GList *vars = NULL;
 
-  sql_t = g_strdup("UPDATE docs SET %s = ? WHERE docid = ?");
+  sql_t = strdup("UPDATE docs SET %s = ? WHERE docid = ?");
   size = strlen(sql_t) + strlen(kkey);
   sql = malloc(size);
   sprintf(sql, sql_t, kkey);
   free(sql_t);
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, g_strdup(vvalue));
+  vars = g_list_append(vars, strdup(vvalue));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, g_strdup(docid));
+  vars = g_list_append(vars, strdup(docid));
   rc = runUpdate_db(sql, vars);
   free(sql);
 
@@ -335,7 +335,7 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
     d = (char*) malloc(5);
     strncpy(d, (char *)vvalue, 4);
     d[4] = 0L;
-    field = g_strdup("docdatey");
+    field = strdup("docdatey");
     rc = updateDocValue(docid, field, d);
     free(field);
     free(d);
@@ -345,7 +345,7 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
       d = (char*) malloc(3);
       strncpy(d, (char *)vvalue+5, 2);
       d[2] = 0L;
-      field = g_strdup("docdatem");
+      field = strdup("docdatem");
       rc = updateDocValue(docid, field, d);
       free(field);
       free(d);
@@ -356,7 +356,7 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
       d = (char*) malloc(3);
       strncpy(d, (char *)vvalue+8, 2);
       d[2] = 0L;
-      field = g_strdup("docdated");
+      field = strdup("docdated");
       rc = updateDocValue(docid, field, d);
       free(field);
       free(d);
@@ -370,7 +370,7 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
   if(rc) {
     return NULL;
   } else {
-    return g_strdup("<doc>OK</doc>");;
+    return strdup("<doc>OK</doc>");;
   }
 }
 
@@ -381,11 +381,11 @@ extern char *updateTagLinkage(char *docid, char *tagid, char *add_remove) {
   int rc;
 
   if(0 == strcmp(add_remove, "add")) {
-    sql = g_strdup("INSERT INTO doc_tags (docid, tagid) VALUES (?, ?) ");
+    sql = strdup("INSERT INTO doc_tags (docid, tagid) VALUES (?, ?) ");
   }
 
   else if(0 == strcmp(add_remove, "remove")) {
-    sql = g_strdup("DELETE FROM doc_tags WHERE docid = ? AND tagid = ? ");
+    sql = strdup("DELETE FROM doc_tags WHERE docid = ? AND tagid = ? ");
   }
 
   else {
@@ -395,9 +395,9 @@ extern char *updateTagLinkage(char *docid, char *tagid, char *add_remove) {
   debug_message(sql, DEBUGM);
 
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, g_strdup(docid));
+  vars = g_list_append(vars, strdup(docid));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, g_strdup(tagid));
+  vars = g_list_append(vars, strdup(tagid));
   rc = runUpdate_db(sql, vars);
 
   free(sql);
@@ -405,7 +405,7 @@ extern char *updateTagLinkage(char *docid, char *tagid, char *add_remove) {
   if(rc) {
     return NULL;
   } else {
-    return g_strdup("<doc>OK</doc>");;
+    return strdup("<doc>OK</doc>");;
   }
 }
 

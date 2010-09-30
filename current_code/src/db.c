@@ -35,7 +35,7 @@ int open_db (char *db) {
   int rc;
   rc = sqlite3_open_v2(db, &DBH, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX, NULL);
   if ( rc ) {
-    char *tmp = g_strdup("Can't open database: ");
+    char *tmp = strdup("Can't open database: ");
     conCat(&tmp, sqlite3_errmsg(DBH));
     debug_message(tmp, ERROR);
     free(tmp);
@@ -73,15 +73,15 @@ int get_db_version() {
   return version;
 }
 
-extern int connect_db (int dontCreate) {
+extern int connect_db (int createIfRequired) {
 
   int version = 0, i;
   char *db, *tmp, *tmp2, *ver;
   unsigned char *data;
 
   // Test to see if a DB file exsists
-  db = g_strdup(BASE_DIR);
-  conCat(&db, "openDIAS.sqlite3");
+  db = strdup(BASE_DIR);
+  conCat(&db, "/openDIAS.sqlite3");
   if(g_file_test(db, G_FILE_TEST_EXISTS)) {
     debug_message("Dir structure is in-plce, database should exist", DEBUGM);
     if(open_db (db)) {
@@ -92,18 +92,19 @@ extern int connect_db (int dontCreate) {
     version = get_db_version();
   }
 
-  if(!version && !dontCreate) {
+  if( !version && createIfRequired ) {
     debug_message("Creating new database", INFORMATION);
     if(open_db (db)) {
       debug_message("Could not create/connect to new database", WARNING);
+      debug_message(db, WARNING);
       free(db);
       return 1;
     }
     version = get_db_version();
   }
 
-  if(dontCreate) {
-    debug_message("Could not connct to the database & have been asked not to create one", WARNING);
+  if( !version && !createIfRequired ) {
+    debug_message("Could not connect to the database & have been asked not to create one", WARNING);
     free(db);
     return 1;
   }
@@ -115,15 +116,15 @@ extern int connect_db (int dontCreate) {
   // Bring the DB up-2-date
   for(i=version+1 ; i <= DB_VERSION ; i++) {
     ver = itoa(i, 10);
-    tmp = g_strdup("Bringing BD upto version: ");
+    tmp = strdup("Bringing BD upto version: ");
     conCat(&tmp, ver);
     debug_message(tmp, INFORMATION);
     free(tmp);
-    tmp = g_strdup(PACKAGE_DATA_DIR);
+    tmp = strdup(PACKAGE_DATA_DIR);
     conCat(&tmp, "/opendias/openDIAS.sqlite3.dmp.v");
     conCat(&tmp, ver);
     conCat(&tmp, ".sql");
-    tmp2 = g_strdup("Reading SQL code from file: ");
+    tmp2 = strdup("Reading SQL code from file: ");
     conCat(&tmp2, tmp);
     debug_message(tmp2, DEBUGM);
     free(tmp2);
@@ -152,13 +153,13 @@ static int callback(char *recordSetKey, int argc, char **argv, char **azColName)
   // Create row container
   row = g_hash_table_new(g_str_hash, g_str_equal);
   for(i=0; i<argc; i++) {
-/*  tmp = g_strdup("Saving rowdata: ");
+/*  tmp = strdup("Saving rowdata: ");
     conCat(&tmp, azColName[i]);
     conCat(&tmp, " : ");
     conCat(&tmp, argv[i]);
     debug_message(tmp, SQLDEBUG);
     free(tmp);  */
-    g_hash_table_insert(row, g_strdup(azColName[i]), g_strdup(argv[i] ? argv[i]: "NULL"));
+    g_hash_table_insert(row, strdup(azColName[i]), strdup(argv[i] ? argv[i]: "NULL"));
   }
 
   // Save the new row away - for later retrieval 
@@ -209,7 +210,7 @@ extern int runUpdate_db (char *sql, GList *vars) {
 
   rc = sqlite3_step(stmt);
   if( rc != SQLITE_DONE ) {
-    tmp = g_strdup("An SQL error has been produced. \n");
+    tmp = strdup("An SQL error has been produced. \n");
     conCat(&tmp, "The return code was: ");
     tmp2 = itoa(rc, 10);
     conCat(&tmp, tmp2);
@@ -226,7 +227,7 @@ extern int runUpdate_db (char *sql, GList *vars) {
   rc = sqlite3_finalize(stmt);
   g_list_free(vars);
   if( rc != SQLITE_OK ) {
-    tmp = g_strdup("An SQL error has been produced. \n");
+    tmp = strdup("An SQL error has been produced. \n");
     conCat(&tmp, "The return code was: ");
     tmp2 = itoa(rc, 10);
     conCat(&tmp, tmp2);
@@ -251,7 +252,7 @@ extern int runquery_db (char *recordSetKey, char *sql) {
 
   debug_message("Run Query", DEBUGM);
 
-  tmp = g_strdup("SQL = ");
+  tmp = strdup("SQL = ");
   conCat(&tmp, sql);
   debug_message(tmp, SQLDEBUG);
   free(tmp);
@@ -271,7 +272,7 @@ extern int runquery_db (char *recordSetKey, char *sql) {
 
   // Dump out on error
   if( rc != SQLITE_OK ) {
-    tmp = g_strdup("An SQL error has been produced. \n");
+    tmp = strdup("An SQL error has been produced. \n");
     conCat(&tmp, "The return code was: ");
     tmp2 = itoa(rc, 10);
     conCat(&tmp, tmp2);
@@ -304,7 +305,7 @@ extern char *readData_db (char *recordSetKey, char *field_db) {
   rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
   row = rSet->data;
   if(row) {
-    tmp = g_strdup(field_db);
+    tmp = strdup(field_db);
     conCat(&tmp, " : ");
     conCat(&tmp, g_hash_table_lookup(row, field_db));
     debug_message(tmp, SQLDEBUG);

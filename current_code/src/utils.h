@@ -33,5 +33,7 @@ extern char *dateHuman(char *, char *, char *);
 extern void conCat(char **, const char *);
 extern char *getTimeStr();
 extern void propper(char *);
+extern void chop(char *);
+extern char *strdup(const char *);
 
 #endif /* UTILS */

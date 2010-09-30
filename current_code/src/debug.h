@@ -32,8 +32,8 @@ enum {
  * a VERBOSITY setting of INFORMATION, will throw 'information, warning, error'
  */
 int VERBOSITY;
+char *LOG_DIR;
 
 extern void debug_message(char *, const int);
-extern void userMessage(char *, const int);
 
 #endif /* DEBUG */
