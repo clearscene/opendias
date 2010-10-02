@@ -29,7 +29,6 @@
 #include <glib/gstdio.h>
 #include <libxml/parser.h>
 #include <zzip/lib.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include "read_odf.h"
 #include "debug.h"
 
@@ -190,9 +189,9 @@ extern char *get_odf_Text (const char *filename) {
   return text;
 }
 
-extern GdkPixbuf *get_odf_Thumb (const char *filename) {
+extern char *get_odf_Thumb (const char *filename) {
 
-  GdkPixbuf *image=NULL;
+  char *image=NULL;
   char *imageData;
   gint size;
 
@@ -204,11 +203,11 @@ extern GdkPixbuf *get_odf_Thumb (const char *filename) {
   // were stuck writing a file, then reading a file 
   // for a new picbuf.
   //g_message(imageData);
-  int tmpFile = open("/tmp/tmpImg.png", O_CREAT|O_WRONLY, 775);
-  write(tmpFile, imageData, size);
-  close(tmpFile);
-  image = gdk_pixbuf_new_from_file_at_scale("/tmp/tmpImg.png", 150, -1, TRUE, NULL);
-  g_unlink("/tmp/tmpImg.png");
+  //int tmpFile = open("/tmp/tmpImg.png", O_CREAT|O_WRONLY, 775);
+  //write(tmpFile, imageData, size);
+  //close(tmpFile);
+  //image = gdk_pixbuf_new_from_file_at_scale("/tmp/tmpImg.png", 150, -1, TRUE, NULL);
+  //g_unlink("/tmp/tmpImg.png");
   }
   debug_message("Got pixmap from ODT doc", DEBUGM);
 

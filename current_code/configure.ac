@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(opendias, 0.4.0)
+AC_INIT(opendias, 0.5.0)
 
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
@@ -27,40 +27,11 @@ IT_PROG_INTLTOOL([0.35.0])
 
 
 
-PKG_CHECK_MODULES(OPENDIAS, [sqlite3 gtk+-2.0 libmicrohttpd uuid])
+PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid glib-2.0])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
 
-
-
-
-dnl gthreading="no"
-dnl if test "$PKG_CONFIG" != "no"; then
-dnl 	gthread_cflags=`$PKG_CONFIG --cflags gthread-2.0`
-dnl 	CFLAGS="$CFLAGS $gthread_cflags"
-dnl 	CPPFLAGS="$CPPFLAGS $gthread_cflags"
-dnl 	gthread_libs=`$PKG_CONFIG --libs gthread-2.0`
-dnl 	LIBS="$LIBS $gthread_libs"
-dnl 	AC_CHECK_LIB(gthread-2.0, g_thread_init,
-dnl 		[AC_CHECK_HEADER(glib/gthread.h,
-dnl 			gthreading=yes,
-dnl 			AC_MSG_WARN(You are missing the development headers for the gthread libs))],
-dnl 		 AC_MSG_WARN(You are missing the gthread libs) )
-dnl fi
-dnl pthreading="no"
-dnl AC_CHECK_LIB(pthread, pthread_create,
-dnl 	[AC_CHECK_HEADER(pthread.h,
-dnl 		pthreading=yes,
-dnl 		AC_MSG_WARN(You are missing the development headers for the pthread libs))],
-dnl 	 AC_MSG_WARN(You are missing the pthread libs) )
-dnl if test "x$gthreading" = "xyes" && test "x$pthreading" = "xyes" ; then
-dnl 	AC_DEFINE([CAN_THREAD],[],[Have everything that's needed for multi-threading])
-dnl 	OPENDIAS_LIBS="$OPENDIAS_LIBS $gthread_libs -lpthread "
-dnl 	OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS $gthread_cflags " 
-dnl else
-dnl 	AC_MSG_WARN(A single threaded version will be built.)
-dnl fi
 
 
 
@@ -138,19 +109,6 @@ AC_CHECK_LIB(xml2, xmlParseExternalEntity,
         	xml=yes,
         	AC_MSG_WARN(You are missing the development headers for the xml libs))], 
 	AC_MSG_WARN(You are missing the xml libs) )
-pixbuf="no"
-if test "$PKG_CONFIG" != "no"; then
-	pixbuf_cflags=`$PKG_CONFIG --cflags gdk-pixbuf-2.0`
-	CFLAGS="$CFLAGS $pixbuf_cflags"
-	CPPFLAGS="$CPPFLAGS $pixbuf_cflags"
-	pixbuf_libs=`$PKG_CONFIG --libs gdk-pixbuf-2.0`
-	LIBS="$LIBS $pixbuf_libs"
-	AC_CHECK_LIB(gdk_pixbuf-2.0, gdk_pixbuf_new, 
-		[AC_CHECK_HEADER(gdk-pixbuf/gdk-pixbuf.h,
-       		 pixbuf=yes,
-        	 AC_MSG_WARN(You are missing the development headers for the gdk-picbuf libs))], 
-		AC_MSG_WARN(You are missing the gdk-pixbuf libs) )
-fi
 archive="no"
 AC_CHECK_LIB(archive, main, 
 	[AC_CHECK_HEADER(archive.h,
@@ -163,18 +121,13 @@ AC_CHECK_LIB(zzipwrap, main,
         	zzip=yes,
         	AC_MSG_WARN(You are missing the development headers for the zzip libs))], 
 	AC_MSG_WARN(You are missing the zzip libs) )
-if test "x$xml" = "xyes" && test "x$zzip" = "xyes" && test "x$pixbuf" = "xyes" && test "x$archive" = "xyes" ; then
+if test "x$xml" = "xyes" && test "x$zzip" = "xyes" && test "x$archive" = "xyes" ; then
 	AC_DEFINE([CAN_READODF],[],[Have everything that's needed to read ODF documents])
-	OPENDIAS_LIBS="$OPENDIAS_LIBS -larchive -lxml2 -lzzip $pixbuf_libs "
-	OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS $xml2_cflags $pixbuf_cflags " 
+	OPENDIAS_LIBS="$OPENDIAS_LIBS -larchive -lxml2 -lzzip "
+	OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS $xml2_cflags " 
 else
 	AC_MSG_WARN(You wll not be able to import any ODF document.)
 fi
-
-
-dnl For testing: delete the "dontReConfigureMe" flag. So if 'configure' has been run on its own by a user
-dnl then the "test scripts" know we should recompile
-dnl rm -rf dontBotherReConfiguringMe-testScript
 
 
 AC_OUTPUT([

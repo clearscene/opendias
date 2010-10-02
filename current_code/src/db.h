@@ -19,6 +19,8 @@
 #ifndef DB
 #define DB
 
+#include <glib.h>
+
 enum {
   DB_NULL = 0,
   DB_TEXT,

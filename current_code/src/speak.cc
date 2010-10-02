@@ -20,64 +20,28 @@
 #ifdef CAN_SPEAK
 #include <espeak/speak_lib.h>
 #include <string.h>
-#include <gtk/gtk.h>
 #include "debug.h"
-
-GtkWidget *but;
-int talking = 0;
-/* 0 = idle
- * 1 = talking
- * 2 = stop requested
- * 3 = stop in progress
- */
 
 static int SynthCallback(short *wav, int numsamples, espeak_EVENT *events) {
 
-    if(talking == 1)
-        {
-        while(gtk_events_pending ())
-            gtk_main_iteration ();
-        }
-    else if(talking == 2)
-        {
-        talking = 3;
-        espeak_Cancel();
-        talking = 0;
-        }
 
 }
 
 
-extern "C" void readText(GtkWidget *button, char *inText) {
+extern "C" void readText(char *inText) {
 
     int size;
     char voicename[40];
     int synth_flags = espeakCHARS_AUTO | espeakPHONEMES | espeakENDPAUSE;
 
-    if(talking == 0) // we're idle - so start talking
-        {
-        talking = 1;
-        but = button;
-        gtk_button_set_label(GTK_BUTTON(button), "Stop Reading");
-        strcpy(voicename,"default");
-        size = strlen(inText);
-        espeak_Initialize(AUDIO_OUTPUT_PLAYBACK, 0, NULL, 0);
-        espeak_SetSynthCallback(SynthCallback);
-        espeak_SetVoiceByName(voicename);
-        espeak_Synth(inText, size+1, 0, POS_CHARACTER, 0, synth_flags, NULL, NULL);
-        espeak_Synchronize();
-        espeak_Terminate();
-        talking = 0;
-        gtk_button_set_label(GTK_BUTTON(button), "Read Aloud");
-        gtk_widget_set_sensitive(but, TRUE);
-        }
-    else if (talking == 1)
-        {
-        // Were talking - so try a stop
-        gtk_widget_set_sensitive(button, FALSE);
-        gtk_button_set_label(GTK_BUTTON(button), "Stopping...");
-        talking = 2;
-        }
+    strcpy(voicename,"default");
+    size = strlen(inText);
+    espeak_Initialize(AUDIO_OUTPUT_PLAYBACK, 0, NULL, 0);
+    espeak_SetSynthCallback(SynthCallback);
+    espeak_SetVoiceByName(voicename);
+    espeak_Synth(inText, size+1, 0, POS_CHARACTER, 0, synth_flags, NULL, NULL);
+    espeak_Synchronize();
+    espeak_Terminate();
 
 }
 #endif // CAN_SPEAK //

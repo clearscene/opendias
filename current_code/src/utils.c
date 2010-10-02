@@ -202,13 +202,13 @@ extern char *dateHuman(char *a, char *b, char *c) {
 
   if(!g_str_equal(a, "NULL") && !g_str_equal(b, "NULL") && !g_str_equal(c, "NULL")) {
     if(strlen(b) == 1) {
-      m = strdup("0");
+      m = o_strdup("0");
       conCat(&m, b);
       free(b);
       b = m;
     }
     if(strlen(c) == 1) {
-      m = strdup("0");
+      m = o_strdup("0");
       conCat(&m, c);
       free(c);
       c = m;
@@ -225,11 +225,11 @@ extern char *dateHuman(char *a, char *b, char *c) {
     free(a);
     free(b);
     free(c);
-    return strdup(" - No date set -");
+    return o_strdup(" - No date set -");
   }
 }
 
-extern char *strdup(const char *source) {
+extern char *o_strdup(const char *source) {
 
   int size = strlen(source);
   char *newArea = malloc(size + 1);

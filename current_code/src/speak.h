@@ -19,6 +19,6 @@
 #ifndef SPEAK
 #define SPEAK
 
-extern void readText(GtkWidget *, char *);
+extern void readText(char *);
 
 #endif /* SPEAK */

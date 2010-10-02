@@ -17,7 +17,6 @@
  */
 
 #include <glib.h>
-#include <gtk/gtk.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
@@ -31,31 +30,31 @@ extern void debug_message(char *message, const int verbosity) {
 
   if( verbosity <= VERBOSITY) {
 
-    char *mesg = strdup("%s : %s : %s : %s\n");
+    char *mesg = o_strdup("%s : %s : %s : %s\n");
     char *ltime = getTimeStr();
     char *vb;
     if(verbosity == 1) {
-      vb = strdup("ERR");
+      vb = o_strdup("ERR");
     }
     else if(verbosity == 2) {
-      vb = strdup("WRN");
+      vb = o_strdup("WRN");
     }
     else if(verbosity == 3) {
-      vb = strdup("INF");
+      vb = o_strdup("INF");
     }
     else if(verbosity == 4) {
-      vb = strdup("DBG");
+      vb = o_strdup("DBG");
     }
     else if(verbosity == 5) {
-      vb = strdup("SQL");
+      vb = o_strdup("SQL");
     }
     else 
-      vb = strdup("---");
+      vb = o_strdup("---");
 
     char *thread = itoa(pthread_self(),10);
 
     // Output to file
-    logFile = strdup(LOG_DIR);
+    logFile = o_strdup(LOG_DIR);
     conCat(&logFile, "/opendias.log");
     if((fp = fopen(logFile, "a"))==NULL) {
       fprintf(stderr,"Cannot open log file.\n");

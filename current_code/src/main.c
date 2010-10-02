@@ -17,7 +17,6 @@
  */
 
 #include "config.h"
-//#include <gtk/gtk.h>
 #include <glib.h>
 
 #ifdef CAN_SCAN
@@ -37,7 +36,7 @@
 #include "debug.h"
 #include "web_handler.h"
 
-int setup (void) {
+int setup (char *configFile) {
 
   char *location, *sql, *config_option, *config_value;
 #ifdef CAN_SCAN
@@ -48,16 +47,16 @@ int setup (void) {
   VERBOSITY = DEBUGM;
   DB_VERSION = 3;
   PORT = 8988;
-  LOG_DIR = strdup("/var/log/opendias");
+  LOG_DIR = o_strdup("/var/log/opendias");
 
-  // Get 'var' location
+  // Get '' location
   if( ! load_file_to_memory("/etc/opendias/opendias.conf", &location) ) {
     debug_message("Cannot find main config file.", ERROR);
     return 1;
   }
 
   chop(location);
-  BASE_DIR = strdup(location);
+  BASE_DIR = o_strdup(location);
 
   // Open (& maybe update) the database.
   if(connect_db (1)) { // 1 = create if required
@@ -65,26 +64,27 @@ int setup (void) {
     return 1;
   }
 
-  sql = strdup("SELECT config_option, config_value FROM config");
+  sql = o_strdup("SELECT config_option, config_value FROM config");
   if( runquery_db("1", sql) ) {
     do {
-      config_option = strdup(readData_db("1", "config_option"));
-      config_value = strdup(readData_db("1", "config_value"));
+      config_option = o_strdup(readData_db("1", "config_option"));
+      config_value = o_strdup(readData_db("1", "config_value"));
       if( 0 == strcmp(config_option, "log_verbosity") ) {
         VERBOSITY = atoi(config_value);
       }
       else if ( 0 == strcmp(config_option, "scan_driectory") ) {
         free(location);
         free(BASE_DIR);
-        BASE_DIR = strdup(config_value);
-        location = strdup(BASE_DIR);
+        BASE_DIR = o_strdup(config_value);
+        location = o_strdup(BASE_DIR);
       }
       else if ( 0 == strcmp(config_option, "port") ) {
         PORT = (unsigned short) atoi(config_value);
       }
       else if ( 0 == strcmp(config_option, "log_directory") ) {
         free(LOG_DIR);
-        LOG_DIR = strdup(config_value);
+        LOG_DIR = o_strdup(config_value);
+        createDir_ifRequired(LOG_DIR);
       }
       free(config_option);
       free(config_value);
@@ -122,7 +122,14 @@ void server_shutdown(struct MHD_Daemon *daemon) {
 
 int main (int argc, char **argv) {
 
-  if(setup ())
+  char *configFile = NULL;
+  if(argc > 1) {
+    fprintf(stderr, "Usage: ..............");
+  }
+  else {
+    configFile = argv[1];
+  }
+  if(setup (configFile))
     return 1;
  
   struct MHD_Daemon *daemon;

@@ -20,10 +20,8 @@
 #ifndef READ_ODF
 #define READ_ODF
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
-
 extern char *get_odf_Text (const char *);
-extern GdkPixbuf *get_odf_Thumb (const char *);
+extern char *get_odf_Thumb (const char *);
 
 #endif /* READ_ODF */
 #endif // CAN_READODF //

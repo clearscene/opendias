@@ -19,14 +19,12 @@
 #ifndef UTILS
 #define UTILS
 
-#include <gtk/gtk.h>
-
+extern char *o_strdup(const char *);
 extern char *itoa(long int, int);
 extern int load_file_to_memory(const char *, unsigned char **);
 extern void createDir_ifRequired(char *);
 extern void get_exe_name(char * buffer);
 extern void fcopy(char *, char *);
-extern gboolean std_scrollEvent(GtkWidget *, GdkEventScroll *, GtkRange *);
 extern int max(int, int);
 extern int min(int, int);
 extern char *dateHuman(char *, char *, char *);
@@ -34,6 +32,5 @@ extern void conCat(char **, const char *);
 extern char *getTimeStr();
 extern void propper(char *);
 extern void chop(char *);
-extern char *strdup(const char *);
 
 #endif /* UTILS */
