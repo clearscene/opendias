@@ -51,7 +51,8 @@ GHashTable *SCANWIDGETS;
 #ifdef CAN_READODF
 void importFile() {
 
-  char *fileName, *sql, *tmp, *dateStr;
+  //char *fileName;
+  char *sql, *tmp, *dateStr;
   int lastInserted;
   GTimeVal todaysDate;
 
@@ -170,11 +171,11 @@ void updateScanProgress (char *uuid, int status, int value) {
 #ifdef CAN_SCAN
 void handleSaneErrors(char *defaultMessage, SANE_Status st, int retCode) {
 
-  char *errorMessage_t = o_strdup("%s: sane error = %d (%s), return code = %d\n";
-  char *returnCode = itoa(paramSetRet, 10);
+  char *errorMessage_t = o_strdup("%s: sane error = %d (%s), return code = %d\n");
+  char *returnCode = itoa(retCode, 10);
   int s = strlen(errorMessage_t) + strlen(defaultMessage) + 3 + strlen(sane_strstatus(st)) + strlen(retCode) + 1;
   char *errorMessage = malloc(s);
-  sprintf(errorMessage, errorMessage_t, defaultMessage, st, sane_strstatus(status), retCode);
+  sprintf(errorMessage, errorMessage_t, defaultMessage, st, sane_strstatus(st), retCode);
   debug_message(errorMessage, ERROR);
   free(errorMessage_t);
   free(errorMessage);
