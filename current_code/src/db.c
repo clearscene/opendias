@@ -77,7 +77,7 @@ extern int connect_db (int createIfRequired) {
 
   int version = 0, i;
   char *db, *tmp, *tmp2, *ver;
-  unsigned char *data;
+  char *data;
 
   // Test to see if a DB file exsists
   db = o_strdup(BASE_DIR);
@@ -129,8 +129,8 @@ extern int connect_db (int createIfRequired) {
     debug_message(tmp2, DEBUGM);
     free(tmp2);
     if(load_file_to_memory(tmp, &data)) {
-      debug_message((char *)data, INFORMATION);
-      runquery_db("1", (char *)data);
+      debug_message(data, INFORMATION);
+      runquery_db("1", data);
       free_recordset("1");
       free(data);
     }

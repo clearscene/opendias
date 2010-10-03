@@ -75,14 +75,18 @@ extern char * itoa(long int val, int base) {
 
 
 /* load a file into a buffer */
-extern int load_file_to_memory(const char *p_filename, unsigned char **result) {
+extern int load_file_to_memory(const char *p_filename, char **result) {
 
   int size = 0;
   FILE *p_f = fopen(p_filename, "r");
+  char *m;
 
   if (p_f == NULL) {
     *result = NULL;
-    fprintf(stderr,"Count not open file '%s'.\n", p_filename);
+    m = strdup("Count not open file: ");
+    conCat(&m, p_filename);
+    debug_message(m, ERROR);
+    free(m);
     return -1; // -1 means file opening fail
   }
 
@@ -90,8 +94,8 @@ extern int load_file_to_memory(const char *p_filename, unsigned char **result) {
   size = ftell(p_f);
   fseek(p_f, 0, SEEK_SET);
 
-  if((*result = (unsigned char *)malloc(size+1)) == NULL) {
-    debug_message("out of memory while reading file information\n", ERROR);
+  if((*result = (char *)malloc(size+1)) == NULL) {
+    debug_message("Out of memory while reading file information", ERROR);
     return 0;
   }
 
@@ -269,7 +273,6 @@ extern char *getTimeStr() {
 extern void propper(char *inStr) {
 
   char *ptr = inStr;
-  debug_message(inStr, ERROR);
 
   /* first letter of string */
   *ptr = toupper(*ptr);
@@ -281,5 +284,4 @@ extern void propper(char *inStr) {
     }
     ++ptr;
   }
-  debug_message(inStr, ERROR);
 }

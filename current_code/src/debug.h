@@ -34,6 +34,6 @@ enum {
 int VERBOSITY;
 char *LOG_DIR;
 
-extern void debug_message(char *, const int);
+extern void debug_message(const char *, const int);
 
 #endif /* DEBUG */

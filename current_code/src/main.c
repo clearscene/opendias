@@ -38,7 +38,7 @@
 
 int setup (char *configFile) {
 
-  char *location, *sql, *config_option, *config_value;
+  char *location, *conf, *sql, *config_option, *config_value;
 #ifdef CAN_SCAN
   SANE_Status status;
 #endif // CAN_SCAN //
@@ -49,10 +49,14 @@ int setup (char *configFile) {
   PORT = 8988;
   LOG_DIR = o_strdup("/var/log/opendias");
 
-  // Get '' location
-  if( ! load_file_to_memory("/etc/opendias/opendias.conf", &location) ) {
+  // Get 'DB' location
+  if (configFile != NULL)
+    conf = configFile;
+  else
+    conf = "/etc/opendias/opendias.conf";
+  if( ! load_file_to_memory(conf, &location) ) {
     debug_message("Cannot find main config file.", ERROR);
-    return 1;
+    return ;
   }
 
   chop(location);
@@ -122,17 +126,18 @@ void server_shutdown(struct MHD_Daemon *daemon) {
 
 int main (int argc, char **argv) {
 
+  struct MHD_Daemon *daemon;
   char *configFile = NULL;
-  if(argc > 1) {
-    fprintf(stderr, "Usage: ..............");
-  }
-  else {
+
+  if(argc >= 2) 
+    fprintf(stderr, "Usage: opendias <configfile>\n");
+  else 
     configFile = argv[1];
-  }
+
   if(setup (configFile))
     return 1;
- 
-  struct MHD_Daemon *daemon;
+
+  debug_message("... Starting up the openDias service.", INFORMATION);
   daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 
     NULL, NULL, 
     &answer_to_connection, NULL, 
@@ -148,6 +153,7 @@ int main (int argc, char **argv) {
   getchar ();
 
   server_shutdown(daemon);
+  debug_message("openDias service is shutdown....", INFORMATION);
   return 0;
 }
 

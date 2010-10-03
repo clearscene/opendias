@@ -100,7 +100,7 @@ void importFile() {
 void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
   if(fif != FIF_UNKNOWN)
     printf("%s Format\n", FreeImage_GetFormatFromFIF(fif));
-  printf("%s", message);
+  debug_message(message, ERROR);
 }
 
 extern int setScanParam(char *uuid, int param, char *vvalue) {
@@ -173,7 +173,7 @@ void handleSaneErrors(char *defaultMessage, SANE_Status st, int retCode) {
 
   char *errorMessage_t = o_strdup("%s: sane error = %d (%s), return code = %d\n");
   char *returnCode = itoa(retCode, 10);
-  int s = strlen(errorMessage_t) + strlen(defaultMessage) + 3 + strlen(sane_strstatus(st)) + strlen(retCode) + 1;
+  int s = strlen(errorMessage_t) + strlen(defaultMessage) + 3 + strlen(sane_strstatus(st)) + strlen(returnCode) + 1;
   char *errorMessage = malloc(s);
   sprintf(errorMessage, errorMessage_t, defaultMessage, st, sane_strstatus(st), retCode);
   debug_message(errorMessage, ERROR);
@@ -445,7 +445,7 @@ extern void doScanningOperation(void *uuid) {
   FreeImage_Initialise(TRUE);
   FreeImage_SetOutputMessage(FreeImageErrorHandler);
 
-  char *outFilename = g_strconcat(BASE_DIR,"scans/",docid_s,"_",page_s,".jpg", NULL);
+  char *outFilename = g_strconcat(BASE_DIR,"/scans/",docid_s,"_",page_s,".jpg", NULL);
   FIBITMAP *bitmap = FreeImage_Load(FIF_PGMRAW, "/tmp/tmp.pnm", 0);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 70);
   if(FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90)) {
@@ -453,7 +453,8 @@ extern void doScanningOperation(void *uuid) {
     resultVerbosity = INFORMATION;
     debug_message(outFilename, DEBUGM);
   } else {
-    resultMessage = o_strdup("Error saving jpeg of scan");
+    resultMessage = o_strdup("Error saving jpeg of scan, to: ");
+    conCat(&resultMessage, outFilename);
     resultVerbosity = ERROR;
     updateScanProgress(uuid, SCAN_ERROR_CONVERTING_FORMAT, 0);
   }

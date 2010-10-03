@@ -131,42 +131,37 @@ gint LIBARCHIVEgetEntry(char *name, char *contentFile, char **ptr) {
   struct archive *a;
   struct archive_entry *entry;
   char *buf;
-  gint size;
+  gint size = 0;
 
   mydata = (struct mydata*)malloc(sizeof(struct mydata));
   a = archive_read_new();
   mydata->name = name;
   archive_read_support_format_all(a);
   archive_read_support_compression_all(a);
-  if (archive_read_open(a, mydata, myopen, myread, myclose) == ARCHIVE_FATAL) 
-  {
-  fprintf(stderr, "failed to open %s\n", mydata->name);
-  free(mydata->name);
-  free(mydata);
-  return 0;
+  if (archive_read_open(a, mydata, myopen, myread, myclose) == ARCHIVE_FATAL) {
+    fprintf(stderr, "failed to open %s\n", mydata->name);
+    free(mydata->name);
+    free(mydata);
+    return 0;
   }
 
-  while (archive_read_next_header(a, &entry) == ARCHIVE_OK) 
-  {
-  if(g_str_equal(archive_entry_pathname(entry), contentFile))
-    {
-    debug_message((char *)archive_compression_name(a), DEBUGM);
-    debug_message((char *)archive_format_name(a), DEBUGM);
-    debug_message((char *)archive_entry_pathname(entry), DEBUGM);
-    size = archive_entry_size(entry);
-    if(size <= 0)
-    debug_message("zero size", DEBUGM);
-    if ((buf = (char *)malloc(size+1)) == NULL)
-    debug_message("cannot allocate memory", DEBUGM);
-    if (archive_read_data(a, buf, size) != size)
-    debug_message("cannot read data", DEBUGM);
-    buf[size] = '\0';
-    *ptr = buf;
+  while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
+    if(g_str_equal(archive_entry_pathname(entry), contentFile)) {
+      debug_message((char *)archive_compression_name(a), DEBUGM);
+      debug_message((char *)archive_format_name(a), DEBUGM);
+      debug_message((char *)archive_entry_pathname(entry), DEBUGM);
+      size = archive_entry_size(entry);
+      if(size <= 0)
+        debug_message("zero size", DEBUGM);
+      if ((buf = (char *)malloc(size+1)) == NULL)
+        debug_message("cannot allocate memory", DEBUGM);
+      if (archive_read_data(a, buf, size) != size)
+        debug_message("cannot read data", DEBUGM);
+      buf[size] = '\0';
+      *ptr = buf;
     }
-  else
-    {
-    archive_read_data_skip(a);
-    }
+    else
+      archive_read_data_skip(a);
   }
 
   archive_read_close(a);

@@ -23,7 +23,7 @@
 #include "debug.h"
 #include "utils.h"
 
-extern void debug_message(char *message, const int verbosity) {
+extern void debug_message(const char *message, const int verbosity) {
 
   FILE *fp;
   char *logFile;
