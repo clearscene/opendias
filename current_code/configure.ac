@@ -135,4 +135,5 @@ Makefile
 src/Makefile
 sql/Makefile
 po/Makefile.in
+webcontent/Makefile
 ])
