@@ -344,6 +344,7 @@ extern void doScanningOperation(void *uuid) {
     free(page_s);
     page++;
     page_s = itoa(page, 10);
+    setScanParam(uuid, SCAN_PARAM_ON_PAGE, page_s);
     docid = atoi(docid_s);
   }
 
@@ -493,7 +494,7 @@ extern void doScanningOperation(void *uuid) {
   if(page >= pageCount)
     updateScanProgress(uuid, SCAN_FINISHED, docid);
   else
-    updateScanProgress(uuid, SCAN_WAITING_ON_NEW_PAGE, page++);
+    updateScanProgress(uuid, SCAN_WAITING_ON_NEW_PAGE, ++page);
 
   free(uuid);
   debug_message("Page scan done.", DEBUGM);

@@ -33,33 +33,64 @@
 #include "read_odf.h"
 #endif // CAN_READODF //
 
+#include <sys/types.h>
+#include <sys/dir.h>
+#include <sys/param.h>
+ 
+#define FALSE 0
+#define TRUE !FALSE
 
-void doDelete (char *documentId) {
+/*
+int delete () {
+  int count,i;
+  struct direct **files;
+  int file_select();
+ 
+  if ( getwd(pathname) == NULL ) { 
+    printf("Error getting path\n");
+    return 1;
+  }
+  printf("Current Working Directory = %sn",pathname);
+  count = scandir(pathname, &files, file_select, alphasort);
+ 
+  printf(``Number of files = %dn'',count);
+  for (i=1;i<count+1;++i)
+    printf(``%s  '',files[i-1]->d_name);
 
-  char *sql, *tmp, *tmp2;
+}
+
+int file_select(struct direct *entry) {
+  if ((strcmp(entry->d_name, ``.'') == 0) || (strcmp(entry->d_name, ``..'') == 0))
+    return (FALSE);
+  else
+    return (TRUE);
+}
+*/
+
+extern char *doDelete (char *documentId) {
+
+  char *sql, *tmp;
 
   sql = o_strdup("SELECT * FROM docs WHERE docid = ");
   conCat(&sql, documentId);
-  if(!runquery_db("1", sql))
-  {
-  debug_message("Could not select record.", ERROR);
-  free_recordset("1");
-  return;
+  if(!runquery_db("1", sql)) {
+    debug_message("Could not select record.", ERROR);
+    free_recordset("1");
+    return NULL;
   }
-
-  tmp = o_strdup(BASE_DIR);
-  conCat(&tmp ,"scans/");
-  conCat(&tmp ,documentId);
-  tmp2 = itoa(DOC_FILETYPE, 10);
-  if(g_str_equal (readData_db("1", "filetype"), tmp2))
-  conCat(&tmp ,".odt");
-  else
-  conCat(&tmp ,".pnm");
-  unlink(tmp);
-  free(tmp2);
-  free(tmp);
   free_recordset("1");
   free(sql);
+
+  char *debug = o_strdup("Deleting Docs: ");
+  tmp = o_strdup(BASE_DIR);
+  conCat(&tmp ,"/scans/");
+  conCat(&tmp ,documentId);
+  conCat(&tmp ,"_*");
+  conCat(&debug, tmp);
+  debug_message(debug, INFORMATION);
+  unlink(tmp);
+  free(tmp);
+  free(debug);
 
   sql = o_strdup("DELETE FROM doc_tags WHERE docid = ");
   conCat(&sql, documentId);
@@ -73,8 +104,7 @@ void doDelete (char *documentId) {
   free_recordset("1");
   free(sql);
 
-  //populate_gui();
-
+  return o_strdup("<doc>OK</doc>");;
 }
 
 

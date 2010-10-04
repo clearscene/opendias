@@ -4,6 +4,7 @@ var totalRows = 0;
 var dta;
 var allDocs = new Array();
 var showingDocs = new Array();
+var cc = 0;
 
 $(document).ready(function() {
 
@@ -26,6 +27,7 @@ $(document).ready(function() {
             dta = data;
             $('#docList_table').css({ display: 'none' });
             $('#pager').css({ display: 'none' });
+            cc = 0;
             processData();
          }
        });
@@ -84,7 +86,13 @@ $(document).ready(function() {
 
       allDocs.push(docid);
       showingDocs.push(docid);
-      setTimeout("processData()", 1); // give the ui a chance to catchup
+      cc++;
+      if(cc>=4) {
+        cc = 0;
+        setTimeout("processData()", 1); // give the ui a chance to catchup
+      } else {
+        processData();
+      }
     }
 
   }

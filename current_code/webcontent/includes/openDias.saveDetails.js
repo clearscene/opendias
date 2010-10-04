@@ -109,5 +109,22 @@ $(document).ready(function() {
     });
   }
 
+  $('#delete').click( function() {
+    var answer = confirm("Delete this document. Are you sure?");
+    if (answer){
+      $.ajax({ url: "dynamic",
+             dataType: "xml",
+             data: {action: "deletedoc", 
+                    docid: $('#docid').text(),
+                   },
+             cache: false,
+             type: "POST",
+             success: function(data){
+               document.location.href = "/";
+             },
+      });
+    }
+  });
+
 });
 

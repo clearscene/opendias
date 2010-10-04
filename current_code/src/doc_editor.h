@@ -23,5 +23,6 @@ extern void openDocEditor_window (char *);
 extern char *openDocEditor (char *);
 extern char *updateDocDetails(char *, char *, char *);
 extern char *updateTagLinkage(char *, char *, char *);
+extern char *doDelete (char *);
 
 #endif /* DOCEDITOR */

@@ -134,6 +134,6 @@ AC_OUTPUT([
 Makefile
 src/Makefile
 sql/Makefile
-po/Makefile.in
+po/Makefile
 webcontent/Makefile
 ])
