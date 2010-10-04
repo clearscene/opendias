@@ -1,0 +1,67 @@
+/* tables */
+table.tablesorter {
+	font-family:arial;
+	background-color: #CDCDCD;
+	margin:10px 0pt 15px;
+	font-size: 8pt;
+	width: 100%;
+	text-align: left;
+}
+table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+	background-color: #e6EEEE;
+	border: 1px solid #FFF;
+	font-size: 8pt;
+	padding: 4px;
+}
+table.tablesorter thead tr .header {
+	background-image: url(/images/tablesorter/bg.png);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+table.tablesorter tbody td {
+	color: #3D3D3D;
+	padding: 4px;
+	background-color: #FFF;
+	vertical-align: top;
+}
+table.tablesorter tbody tr.odd td {
+	background-color:#F0F0F6;
+}
+table.tablesorter tbody tr:hover td {
+	background-color:#F0F030;
+	cursor: pointer;
+}
+table.tablesorter thead tr .headerSortUp {
+	background-image: url(/images/tablesorter/asc.png);
+}
+table.tablesorter thead tr .headerSortDown {
+	background-image: url(/images/tablesorter/desc.png);
+}
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
+	background-color: #8dbdd8;
+}
+
+div.tablesorterPager {
+	padding: 10px 0 10px 0;
+	background-color: #D6D2C2;
+	text-align: center;
+}
+div.tablesorterPager span {
+	padding: 0 5px 0 5px;
+}
+div.tablesorterPager input.prev {
+	width: auto;
+	margin-right: 10px;
+}
+div.tablesorterPager input.next {
+	width: auto;
+	margin-left: 10px;
+}
+div.tablesorterPager input {
+	font-size: 8px;
+	width: 50px;
+	border: 1px solid #330000;
+	text-align: center;
+}
+

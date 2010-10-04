@@ -1,0 +1,116 @@
+
+<script type="text/javascript" src="/includes/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="/style/jquery-ui.css" type="text/css" />
+<script type="text/javascript" src="/includes/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="/includes/jquery.tablesorter.pager.js"></script>
+<script type="text/javascript" src="/includes/openDias.tablesorter.pager.addRemove.js"></script>
+<link rel="stylesheet" href="/style/tablesorter.css" type="text/css" />
+
+<style>
+.ui-progressbar-value { background-image: url(/images/jquery-ui/pbar-ani.png); }
+#doclist_table { display: none; }
+#pager{ display: none; }
+</style>
+
+<div id='filter'>
+  <div id='filterOptions'>
+    <div id='filterInner'>
+      <h3>Filter By:</h3>
+      <div class='row'>
+        <div class='label'>
+          Title or OCR Text:
+        </div>
+        <div class='data'>
+          <input id='textSearch' />
+        </div>
+      </div>
+      <div class='row'>
+        <div class='label'>
+          Document Date:
+        </div>
+        <div class='data'>
+            <input id='startDate' /> - <input id='endDate' />
+        </div>
+      </div>
+      <div class='row'>
+        <div class='label'>
+          Docuemnt Tags:
+        </div>
+        <div class='data'>
+          Tag Filter - coming soon...
+        </div>
+      </div>
+      <div class='row'>
+        <div class='label'>
+          &nbsp;
+        </div>
+        <div class='data'>
+          <div class='innerLeftDisplay'>
+            <button id='doFilter'>Filter</button>
+          </div>
+          <div class='innerRightDisplay'>
+            <div id="filterProgress"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id='filterTab'>
+    Filter and Search
+  </div>
+</div>
+
+<script type="text/javascript" src="/includes/openDias.filter.js"></script>
+<div id='doclist'>
+  <h2>Document List</h2>
+  <table id='docList_table' class='tablesorter'>
+   <thead>
+    <tr>
+     <th>Doc Id</th>
+     <th>Title</th>
+     <th>Type</th>
+     <th>Date</th>
+    </tr>
+   </thead>
+   <tfoot>
+    <tr>
+     <th>Doc Id</th>
+     <th>Title</th>
+     <th>Type</th>
+     <th>Date</th>
+    </tr>
+   </tfoot>
+   <tbody>
+   </tbody>
+  </table>
+
+  <div id='progressContainer'>
+    <p>Loading Document List ...</p>
+    <div id="progressbar"></div>
+  </div>
+
+  <div id="pager" class="tablesorterPager">
+    <form>
+      <img src="/images/tablesorter/first.png" class="first"/>
+      <img src="/images/tablesorter/prev.png" class="prev"/>
+      <input type="text" class="pagedisplay" size=3 />
+      <img src="/images/tablesorter/next.png" class="next"/>
+      <img src="/images/tablesorter/last.png" class="last"/>
+      <select class="pagesize">
+        <option selected="selected" value="5">5 rows per page</option>
+        <option value="10">10 rows per page</option>
+        <option value="20">20 rows per page</option>
+        <option value="50">50 rows per page</option>
+        <option value="100">100 rows per page</option>
+      </select>
+    </form>
+  </div>
+</div>
+
+<table id='safeKeeping'>
+ <tbody>
+ </tbody>
+</table>
+
+<script type="text/javascript" src="/includes/openDias.docList.js"></script>
+

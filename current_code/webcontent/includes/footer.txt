@@ -1,0 +1,13 @@
+
+    </div>
+  </div>
+
+  <div id='footerpadding'></div>
+
+  <div id='footer'>
+      <p>Copyright Clearscene Ltd 2010</p>
+  </div>
+
+</div>
+</body>
+</html>
