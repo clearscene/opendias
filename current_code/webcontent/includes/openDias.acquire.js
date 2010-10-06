@@ -220,6 +220,10 @@ $(document).ready(function() {
                }
              });
              $("#scanButton_"+device).click( function() {
+               var ocr = "-";
+               if($("#ocr_"+device).is(':checked')) {
+                 ocr = "on";
+               }
                $.ajax({ url: "dynamic",
                         dataType: "xml",
                         data: {action: "doScan", 
@@ -227,7 +231,7 @@ $(document).ready(function() {
                                format: $("#format_"+device).val(),
                                pages: $("#pages_"+device).val(),
                                resolution: $("#resolution_"+device).val(),
-                               ocr: $("#ocr_"+device).val(),
+                               ocr: ocr,
                               },
                         cache: false,
                         type: "POST",

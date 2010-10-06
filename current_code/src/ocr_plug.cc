@@ -36,6 +36,7 @@ struct scanCallInfo {
 };
 
 extern "C" void runocr(struct scanCallInfo *info) {
+
     // Language is the code of the language for which the data will be loaded.
     // (Codes follow ISO 639-2.) If it is NULL, english (eng) will be loaded.
     TessBaseAPI::InitWithLanguage(NULL, NULL, info->language, NULL, false, 0, NULL);

@@ -286,12 +286,12 @@ extern void doScanningOperation(void *uuid) {
   // Get scanning params (from the scanner)
   debug_message("Got scanning params", DEBUGM);
   status = sane_get_parameters (openDeviceHandle, &pars);
-//  fprintf (stderr,
-//    "Parm : stat=%s form=%d,lf=%d,bpl=%d,pixpl=%d,lin=%d,dep=%d\n",
-//    sane_strstatus (status),
-//    pars.format, pars.last_frame,
-//    pars.bytes_per_line, pars.pixels_per_line,
-//    pars.lines, pars.depth);
+  fprintf (stderr,
+    "Parm : stat=%s form=%d,lf=%d,bpl=%d,pixpl=%d,lin=%d,dep=%d\n",
+    sane_strstatus (status),
+    pars.format, pars.last_frame,
+    pars.bytes_per_line, pars.pixels_per_line,
+    pars.lines, pars.depth);
 
   debug_message("sane_start", DEBUGM);
   status = sane_start (openDeviceHandle);
@@ -363,7 +363,7 @@ extern void doScanningOperation(void *uuid) {
   buffer = malloc(buffer_s);
 #ifdef CAN_OCR
   if(shoulddoocr==1) {
-    pic=(unsigned char *)malloc( totbytes );
+    pic=(unsigned char *)malloc( totbytes+1 );
     for (i=0;i<totbytes;i++) pic[i]=255;
   }
 #endif // CAN_OCR //
@@ -431,7 +431,7 @@ extern void doScanningOperation(void *uuid) {
     conCat(&ocrText, " ----------------\n");
     conCat(&ocrText, infoData.ret);
     conCat(&ocrText, "\n");
-    free(infoData.ret);
+    cleanup(&infoData);
     free(pic);
   }
   else
@@ -448,7 +448,7 @@ extern void doScanningOperation(void *uuid) {
 
   char *outFilename = g_strconcat(BASE_DIR,"/scans/",docid_s,"_",page_s,".jpg", NULL);
   FIBITMAP *bitmap = FreeImage_Load(FIF_PGMRAW, "/tmp/tmp.pnm", 0);
-  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 70);
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 60);
   if(FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90)) {
     resultMessage = o_strdup("Saved JPEG output of scan");
     resultVerbosity = INFORMATION;
@@ -459,10 +459,12 @@ extern void doScanningOperation(void *uuid) {
     resultVerbosity = ERROR;
     updateScanProgress(uuid, SCAN_ERROR_CONVERTING_FORMAT, 0);
   }
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 90);
+  FreeImage_Unload(bitmap);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   debug_message(resultMessage, resultVerbosity);
   free(resultMessage);
-  free(bitmap);
+  //free(bitmap);
   free(page_s);
 
   FreeImage_DeInitialise();
