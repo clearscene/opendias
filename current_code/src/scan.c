@@ -431,7 +431,7 @@ extern void doScanningOperation(void *uuid) {
     conCat(&ocrText, " ----------------\n");
     conCat(&ocrText, infoData.ret);
     conCat(&ocrText, "\n");
-    free(infoData->ret);
+    free(infoData.ret);
     free(pic);
   }
   else

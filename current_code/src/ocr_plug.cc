@@ -21,7 +21,7 @@
 //#include "ocr_plug.h"
 #include <tesseract/baseapi.h>
 #include <utils.h>
-#include <stdio.h>
+#include <string.h>
 
 #ifndef NULL
 #define NULL 0L
