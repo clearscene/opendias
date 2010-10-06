@@ -1,0 +1,1 @@
+rm src/ocrTest src/ocrTest.o && gcc -I. -I.. -g -c -o src/ocrTest.o src/ocrTest.c && g++ -g -o src/ocrTest src/ocrTest.o src/ocr_plug.o -lsqlite3 -lmicrohttpd -luuid -lglib-2.0   -lfreeimage  -lsane  -ltesseract_full -ltiff  -lespeak  -larchive -lxml2 -lzzip

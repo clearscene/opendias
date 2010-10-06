@@ -20,6 +20,8 @@
 #ifdef CAN_OCR
 //#include "ocr_plug.h"
 #include <tesseract/baseapi.h>
+#include <utils.h>
+#include <stdio.h>
 
 #ifndef NULL
 #define NULL 0L
@@ -37,15 +39,20 @@ struct scanCallInfo {
 
 extern "C" void runocr(struct scanCallInfo *info) {
 
+    char *ret;
+    TessBaseAPI *a = new TessBaseAPI();
+
     // Language is the code of the language for which the data will be loaded.
     // (Codes follow ISO 639-2.) If it is NULL, english (eng) will be loaded.
-    TessBaseAPI::InitWithLanguage(NULL, NULL, info->language, NULL, false, 0, NULL);
+    a->InitWithLanguage("/usr/share/tesseract-ocr/tessdata", NULL, info->language, NULL, false, 0, NULL);
 
-    info->ret = TessBaseAPI::TesseractRect(info->imagedata, info->bytes_per_pixel,
-                                        info->bytes_per_line, 0, 0,
-                                        info->width, info->height);
+    ret = a->TesseractRect(info->imagedata, info->bytes_per_pixel, info->bytes_per_line,
+                                        2, 2, info->width -2, info->height -2);
+    info->ret = strdup(ret);
 
-    TessBaseAPI::End();
+    delete [] info->ret;
+    a->ClearAdaptiveClassifier();
+    a->End();
 
 }
 
