@@ -40,6 +40,7 @@ enum {
   SCAN_PARAM_REQUESTED_RESOLUTION,
   SCAN_PARAM_DOCID,
   SCAN_PARAM_ON_PAGE,
+  SCAN_PARAM_CORRECT_FOR_SKEW,
 };
 
 enum {					// Value indicate ...
@@ -56,9 +57,9 @@ enum {					// Value indicate ...
   SCAN_ERROR_CONVERTING_FORMAT,		// FreeImage error code
   SCAN_PERFORMING_OCR,
   SCAN_ERROR_PERFORMING_OCR,		// xxxxxx error code
+  SCAN_FIXING_SKEW,
   SCAN_RESERVED_1,
   SCAN_RESERVED_2,
-  SCAN_RESERVED_3,
   SCAN_FINISHED				// id of the saved doc
 };
 

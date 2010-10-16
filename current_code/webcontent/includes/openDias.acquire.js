@@ -20,6 +20,10 @@ function showStatus(dev, canv, prog) {
   }
 }
 
+function drawSkew (div, val) {
+  div.text(val);
+}
+
 function getScanProgress (progressId, device) {
 
   $.ajax({ url: "dynamic",
@@ -119,9 +123,12 @@ function getScanProgress (progressId, device) {
              alert("OCR Error: " + vvalue);
              finish = 1;
 
-           } else if( status == 13 ) { // SCAN_RESERVED_1,
-           } else if( status == 14 ) { // SCAN_RESERVED_2,
-           } else if( status == 15 ) { // SCAN_RESERVED_3,
+           } else if( status == 13 ) { // SCAN_FIXING_SKEW,
+             showStatus(device, 1, undefined);
+             $('#status_'+device).text("Fixing 'skew' in image.");
+
+           } else if( status == 14 ) { // SCAN_RESERVED_1,
+           } else if( status == 15 ) { // SCAN_RESERVED_2,
            } else if( status == 16 ) { // SCAN_FINISHED
              showStatus(device, undefined, undefined);
              $('#status_'+device).text("Scan operation complete.");
@@ -167,7 +174,7 @@ $(document).ready(function() {
              var newTabHtml = document.getElementById('scannerTemplate').innerHTML;
              idchange = new Array('title', 'deviceid', 'format', 'pages', 'pagesSlider', 'resolution', 
                         'resolutionSlider', 'ocr', 'progressbar', 'resolutionDisplay', 'pagesDisplay', 
-                        'scanButton', 'status', 'resolutionGood');
+                        'skew', 'skewDisplay', 'skewSlider', 'scanButton', 'status', 'resolutionGood');
              for (change in idchange) {
                //alert("replace: '" + idchange[change]+"_DEVICE'   with    '" + idchange[change]+"_"+device + "'.");
                newTabHtml = newTabHtml.replace(new RegExp(idchange[change]+"_DEVICE","g"), idchange[change]+"_"+device);
@@ -219,6 +226,16 @@ $(document).ready(function() {
                  $("#pagesDisplay_"+device).text( ui.value + " pages" );
                }
              });
+             $("#skewSlider_"+device).slider({
+               value: 0,
+               min: -50,
+               max: 50,
+               step: 1,
+               slide: function(event, ui) {
+                 $("#skew_"+device).val( ui.value );
+                 drawSkew($("#skewDisplay_"+device), ui.value);
+               }
+             });
              $("#scanButton_"+device).click( function() {
                var ocr = "-";
                if($("#ocr_"+device).is(':checked')) {
@@ -230,6 +247,7 @@ $(document).ready(function() {
                                deviceid: $("#deviceid_"+device).val(),
                                format: $("#format_"+device).val(),
                                pages: $("#pages_"+device).val(),
+                               skew: $("#skew_"+device).val(),
                                resolution: $("#resolution_"+device).val(),
                                ocr: ocr,
                               },

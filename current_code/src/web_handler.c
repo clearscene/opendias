@@ -375,10 +375,11 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           debug_message("Processing request for: doScan", INFORMATION);
           char *deviceid = getPostData(con_info->post_data, "deviceid");
           char *format = getPostData(con_info->post_data, "format");
+          char *skew = getPostData(con_info->post_data, "skew");
           char *resolution = getPostData(con_info->post_data, "resolution");
           char *pages = getPostData(con_info->post_data, "pages");
           char *ocr = getPostData(con_info->post_data, "ocr");
-          content = doScan(deviceid, format, resolution, pages, ocr); // pageRender.c
+          content = doScan(deviceid, format, skew, resolution, pages, ocr); // pageRender.c
           if(content == (void *)NULL) {
             content = o_strdup(errorxml);
           }

@@ -194,13 +194,13 @@ extern void doScanningOperation(void *uuid) {
   int x=0, lastTry=1, minRes=9999999, maxRes=0;
   double c=0, totbytes=0, progress_d=0; 
   int q=0, hlp=0, res=0, resolution=0, paramSetRet=0, page=0, pageCount=0,
-  scan_bpl=0L, lastInserted=0, shoulddoocr=0, progress=0;
+  scan_bpl=0L, lastInserted=0, shoulddoocr=0, progress=0, skew=0;
 #ifdef CAN_OCR
   unsigned char *pic=NULL;
   int i=0;
   struct scanCallInfo infoData;
 #endif // CAN_OCR //
-  char *ocrText, *sql, *dateStr, *resultMessage, 
+  char *ocrText, *sql, *dateStr, *resultMessage, *skew_s,
        *pageCount_s, *resolution_s, *shoulddoocr_s, *page_s, *devName, *docid_s;
   int resultVerbosity, docid;
   GTimeVal todaysDate;
@@ -361,12 +361,12 @@ extern void doScanningOperation(void *uuid) {
   progress = 0;
   int buffer_s = q;
   buffer = malloc(buffer_s);
-#ifdef CAN_OCR
-  if(shoulddoocr==1) {
+//#ifdef CAN_OCR
+//  if(shoulddoocr==1) {
     pic=(unsigned char *)malloc( totbytes+1 );
     for (i=0;i<totbytes;i++) pic[i]=255;
-  }
-#endif // CAN_OCR //
+//  }
+//#endif // CAN_OCR //
 
   do {
     updateScanProgress(uuid, SCAN_SCANNING, progress);
@@ -380,12 +380,12 @@ extern void doScanningOperation(void *uuid) {
 
     if(buff_len > 0) {
 
-#ifdef CAN_OCR
-      if(shoulddoocr==1) {
+//#ifdef CAN_OCR
+//      if(shoulddoocr==1) {
         for(i=0; i<=buff_len; i++)
           pic[(int)(c+i)] = (int)buffer[(int)i];
-      }
-#endif // CAN_OCR //
+//      }
+//#endif // CAN_OCR //
 
       // Update the progress info
       c += buff_len;
@@ -394,11 +394,11 @@ extern void doScanningOperation(void *uuid) {
       if(progress > 100)
         progress = 100;
 
-      fwrite (buffer, 1, buff_len, file);
+//      fwrite (buffer, 1, buff_len, file);
     }
   } while (1);
   debug_message("scan_read - end", DEBUGM);
-  fclose(file);
+//  fclose(file);
   free(buffer);
 
   debug_message("sane_cancel", DEBUGM);
@@ -408,6 +408,34 @@ extern void doScanningOperation(void *uuid) {
   debug_message("sane_close", DEBUGM);
   sane_close(openDeviceHandle);
 
+
+  // Fix skew - for this page
+  //
+  skew_s = getScanParam(uuid, SCAN_PARAM_CORRECT_FOR_SKEW);
+  skew = atoi(skew_s);
+  free(skew_s);
+  if(skew != 0) {
+    int col, row;
+    // Calculate the skew angle
+    double ang = 0.0397; // (double)(skew / pars.pixels_per_line);
+    for(col=1 ; col <= pars.pixels_per_line ; col++) {
+fprintf(stderr, "new col = %d\n", col);
+      // Calculate the drop (or rise) for this col
+      int drop = ang * (pars.pixels_per_line - col);
+      // Move all pix in this column up (or down) 'drop' pixs
+      for(row=0 ; row < (pars.lines-(drop+1)) ; row++) {
+//fprintf(stderr, "to = %d     from = %d\n", (int)(col*row), (int)(col*(row+drop)) );
+        pic[(int)(col+(pars.pixels_per_line*row))] = 
+        pic[(int)(col+(pars.pixels_per_line*row)+(drop*pars.pixels_per_line)+1)];
+      }
+      // Clean up
+//      for(row=pars.lines-drop ; row <= pars.lines ; row++) {
+//        pic[(int)(col*row)] = 0;
+//      }
+    }
+  }
+  fwrite (pic, 1, totbytes+1, file);
+  fclose(file);
 
 
   // Do OCR - on this page

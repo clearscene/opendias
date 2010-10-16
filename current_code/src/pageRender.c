@@ -332,7 +332,7 @@ extern char *getScannerList() {
 
 // Start the scanning process
 //
-extern char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *ocr) {
+extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, char *pages, char *ocr) {
 
   pthread_t thread;
   pthread_attr_t attr;
@@ -353,6 +353,7 @@ extern char *doScan(char *deviceid, char *format, char *resolution, char *pages,
   setScanParam(scanUuid, SCAN_PARAM_DO_OCR, ocr);
   setScanParam(scanUuid, SCAN_PARAM_REQUESTED_PAGES, pages);
   setScanParam(scanUuid, SCAN_PARAM_REQUESTED_RESOLUTION, resolution);
+  setScanParam(scanUuid, SCAN_PARAM_CORRECT_FOR_SKEW, skew);
 
   // save scan progress db record
   sql = o_strdup("INSERT INTO scan_progress (client_id, status, value) VALUES (?, ?, 0);");
