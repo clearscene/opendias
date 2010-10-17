@@ -1,5 +1,4 @@
-ocr_plug.o ocr_plug.o: ocr_plug.cc ../config.h \
-  /usr/include/tesseract/baseapi.h
+ocr_plug.o: ocr_plug.cc ../config.h /usr/include/tesseract/baseapi.h
 
 ../config.h:
 

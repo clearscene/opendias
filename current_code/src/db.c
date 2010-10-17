@@ -33,7 +33,7 @@ int open_db (char *db) {
   RECORDSET = g_hash_table_new(g_str_hash, g_str_equal);
 
   int rc;
-  rc = sqlite3_open_v2(db, &DBH, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX, NULL);
+  rc = sqlite3_open_v2(db, &DBH, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_CREATE, NULL);
   if ( rc ) {
     char *tmp = o_strdup("Can't open database: ");
     conCat(&tmp, sqlite3_errmsg(DBH));
@@ -54,19 +54,16 @@ int get_db_version() {
 
   runquery_db("1", "pragma table_info('version')");
   rSet = g_hash_table_lookup(RECORDSET, rs);
-  if(rSet)
-  {
-  // We have a version table - so interogate!
+  if(rSet) {
+    // We have a version table - so interogate!
     free_recordset("1");
-    if(runquery_db("1", "SELECT version FROM version"))
-      {
+    if(runquery_db("1", "SELECT version FROM version")) {
       version = atoi(readData_db("1", "version"));
     }
   }
-  else
-  {
-  // No 'version' table. Assume 'zero'
-  version = 0;
+  else {
+    // No 'version' table. Assume 'zero'
+    version = 0;
   }
   free_recordset("1");
 

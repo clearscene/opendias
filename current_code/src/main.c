@@ -56,6 +56,7 @@ int setup (char *configFile) {
     conf = "/etc/opendias/opendias.conf";
   if( ! load_file_to_memory(conf, &location) ) {
     debug_message("Cannot find main config file.", ERROR);
+    free(location);
     return ;
   }
 
@@ -65,6 +66,7 @@ int setup (char *configFile) {
   // Open (& maybe update) the database.
   if(connect_db (1)) { // 1 = create if required
     free(BASE_DIR);
+    free(location);
     return 1;
   }
 

@@ -382,7 +382,7 @@ extern void doScanningOperation(void *uuid) {
 
 //#ifdef CAN_OCR
 //      if(shoulddoocr==1) {
-        for(i=0; i<=buff_len; i++)
+        for(i=1; i<=buff_len; i++)
           pic[(int)(c+i)] = (int)buffer[(int)i];
 //      }
 //#endif // CAN_OCR //
@@ -417,24 +417,26 @@ extern void doScanningOperation(void *uuid) {
   if(skew != 0) {
     int col, row;
     // Calculate the skew angle
-    double ang = 0.0397; // (double)(skew / pars.pixels_per_line);
+    //double ang = 0.0397; // (double)(skew / pars.pixels_per_line);
+    double ang = ((double)skew / (double)pars.pixels_per_line);
     for(col=1 ; col <= pars.pixels_per_line ; col++) {
-fprintf(stderr, "new col = %d\n", col);
+//fprintf(stderr, "new col = %d\n", col);
       // Calculate the drop (or rise) for this col
       int drop = ang * (pars.pixels_per_line - col);
       // Move all pix in this column up (or down) 'drop' pixs
       for(row=0 ; row < (pars.lines-(drop+1)) ; row++) {
 //fprintf(stderr, "to = %d     from = %d\n", (int)(col*row), (int)(col*(row+drop)) );
-        pic[(int)(col+(pars.pixels_per_line*row))] = 
-        pic[(int)(col+(pars.pixels_per_line*row)+(drop*pars.pixels_per_line)+1)];
+        int lines_offset = pars.pixels_per_line * row;
+        pic[(int)(col+lines_offset)] = 
+        pic[(int)(col+lines_offset+(drop*pars.pixels_per_line)+1)];
       }
       // Clean up
-//      for(row=pars.lines-drop ; row <= pars.lines ; row++) {
-//        pic[(int)(col*row)] = 0;
-//      }
+      for(row=pars.lines-drop ; row <= pars.lines ; row++) {
+        pic[(int)(col + (pars.pixels_per_line * row))] = 0;
+      }
     }
   }
-  fwrite (pic, 1, totbytes+1, file);
+  fwrite (pic, 1, totbytes, file);
   fclose(file);
 
 

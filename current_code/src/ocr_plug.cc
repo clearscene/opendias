@@ -51,7 +51,7 @@ extern "C" void runocr(struct scanCallInfo *info) {
                                         2, 2, info->width -2, info->height -2);
     info->ret = strdup(ret);
 
-    delete [] info->ret;
+    delete [] ret;
     a->ClearAdaptiveClassifier();
     a->End();
 
