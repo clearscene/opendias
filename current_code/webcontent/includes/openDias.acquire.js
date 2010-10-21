@@ -1,6 +1,32 @@
 var baron = 0;
 var canon = 0;
 
+function drawSkew(co, p, val) {
+  // CANVAS - transform
+  //   scaleX,      skewY_r,      
+  //   skewX_b      scaleY,    
+  //   translate_x, translate_y
+  tr = 0;
+  boxSize = 15;
+  range = 50;
+  p.text(val+" px");
+  val = (-0.8*val) / range;
+  if(val < 0) {
+    tr = -boxSize*val;
+  }
+  co.clearRect(0,0,boxSize,boxSize*2);
+  co.transform(1,  val,
+               0,  1,
+               0,  tr);
+  co.fillStyle = '#9999dd';
+  co.fillRect(0,0,boxSize,boxSize);
+  co.strokeStyle = '#000';
+  co.strokeRect(0,0,boxSize,boxSize);
+  co.transform(1,  val*(-1),
+               0,  1,
+               0,  tr*(-1));
+}
+
 function showStatus(dev, canv, prog) {
   if(canv == 1 && canon == 0) {
     $("#progressbar_"+dev).canvasLoader({'radius':20, 'dotRadius':2});
@@ -20,9 +46,6 @@ function showStatus(dev, canv, prog) {
   }
 }
 
-function drawSkew (div, val) {
-  div.text(val);
-}
 
 function getScanProgress (progressId, device) {
 
@@ -174,7 +197,7 @@ $(document).ready(function() {
              var newTabHtml = document.getElementById('scannerTemplate').innerHTML;
              idchange = new Array('title', 'deviceid', 'format', 'pages', 'pagesSlider', 'resolution', 
                         'resolutionSlider', 'ocr', 'progressbar', 'resolutionDisplay', 'pagesDisplay', 
-                        'skew', 'skewDisplay', 'skewSlider', 'scanButton', 'status', 'resolutionGood');
+                        'skew', 'skewDisplay_c', 'skewDisplay_p', 'skewSlider', 'scanButton', 'status', 'resolutionGood');
              for (change in idchange) {
                //alert("replace: '" + idchange[change]+"_DEVICE'   with    '" + idchange[change]+"_"+device + "'.");
                newTabHtml = newTabHtml.replace(new RegExp(idchange[change]+"_DEVICE","g"), idchange[change]+"_"+device);
@@ -207,15 +230,28 @@ $(document).ready(function() {
                slide: function(event, ui) {
                  $("#resolution_"+device).val( ui.value );
                  $("#resolutionDisplay_"+device).text( ui.value + " dpi" );
+                 if(ui.value >= bestLow && ui.value <= bestHigh) {
+                   $("#resolutionGood_"+device).addClass("sweetResolution");
+                   $("#resolutionGood_"+device).parent().removeClass("poorResolution");
+                 } else {
+                   $("#resolutionGood_"+device).parent().addClass("poorResolution");
+                   $("#resolutionGood_"+device).removeClass("sweetResolution");
+                 }
                }
              });
              var bestLow = 300;
-             var bestHigh = 800;
+             var bestHigh = 450;
              var resFactor = 215 / (parseInt($(this).find("max").text()) - parseInt($(this).find("min").text()) );
              $("#resolutionGood_"+device).css( { 'left': resFactor * bestLow,
                                                  'width': (bestHigh - bestLow) * resFactor } );
              $("#resolution_"+device).val( $(this).find("default").text() );
              $("#resolutionDisplay_"+device).text( $(this).find("default").text() + " dpi" );
+             if(parseInt($(this).find("default").text()) >= bestLow && parseInt($(this).find("default").text()) <= bestHigh) {
+               $("#resolutionGood_"+device).addClass("sweetResolution");
+             } else {
+               $("#resolutionGood_"+device).parent().addClass("poorResolution");
+             }
+
              $("#pagesSlider_"+device).slider({
                range: "min",
                value: 1,
@@ -233,9 +269,10 @@ $(document).ready(function() {
                step: 1,
                slide: function(event, ui) {
                  $("#skew_"+device).val( ui.value );
-                 drawSkew($("#skewDisplay_"+device), ui.value);
+                 drawSkew(document.getElementById("skewDisplay_c_"+device).getContext("2d"), $("#skewDisplay_p_"+device), ui.value);
                }
              });
+             drawSkew(document.getElementById("skewDisplay_c_"+device).getContext("2d"), $("#skewDisplay_p_"+device), 0);
              $("#scanButton_"+device).click( function() {
                var ocr = "-";
                if($("#ocr_"+device).is(':checked')) {

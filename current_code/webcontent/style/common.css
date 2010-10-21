@@ -60,11 +60,25 @@
     float: left;
     width: 80px;
   }
+  .innerLeftDisplay div {
+    float: left;
+    width: 38px;
+    position: relative;
+  }
   .innerRightDisplay {
     float: left;
+    position: relative;
     width: 215px;
   }
-
+/*  .innerLeftDisplay canvas {
+    display: inline-block;
+    top: -15px;
+  }
+*/
+  .innerLeftDisplay div p {
+    position: absolute;
+    top: -10px;
+  }
 
   #menu {
    position: relative;
@@ -228,6 +242,9 @@
     -moz-border-radius:3px;
     -webkit-border-radius:3px;
   }
+  .poorResolution {
+    background-color: rgba(255, 0, 0, 0.10);
+  }
   .resolutionQualityGood {
     min-height: 10px;
     background-color: rgba(0, 255, 0, 0.35);
@@ -236,6 +253,9 @@
     position: absolute;
     -moz-border-radius:3px;
     -webkit-border-radius:3px;
+  }
+  .sweetResolution {
+    background-color: rgba(0, 255, 0, 0.90);
   }
   #saveAlert {
     display: none;

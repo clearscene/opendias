@@ -47,7 +47,7 @@
       <div class='data'><select id='format_DEVICE'></select></div>
     </div>
     <div class='row'>
-      <div class='label'>Pages:</div>
+      <div class='label' title='The number of pages that make up the document you are going to scan'>Pages:</div>
       <div class='data'>
         <input id='pages_DEVICE' type='hidden' value='1' />
         <div id='pagesDisplay_DEVICE' class='innerLeftDisplay'>1 pages</div>
@@ -55,31 +55,44 @@
       </div>
     </div>
     <div class='row'>
-      <div class='label'>Resolution:</div>
+      <div class='label' title='The resolution the scanner should use when scanning your document. The higher, the better quality. But also, the higher, the larger file and slower operations will be.'>Resolution:</div>
       <div class='data'>
         <input id='resolution_DEVICE' type='hidden' />
         <div id='resolutionDisplay_DEVICE' class='innerLeftDisplay'>x dpi</div>
         <div class='innerRightDisplay'>
           <div id='resolutionSlider_DEVICE'></div>
-          <div class='resolutionQuality'>
-            <div id='resolutionGood_DEVICE' class='resolutionQualityGood'></div>
+        </div>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='label' title='Check this to get opendias to read the scanned image and return the text of the document. You will then be able to search on this text later.'>OCR:</div>
+      <div class='data'>
+        <div class='innerLeftDisplay'>
+          <input id='ocr_DEVICE' type='checkbox' />
+        </div>
+        <div class='innerRightDisplay'>
+          <div class='resolutionQuality' title='Indication of the best resolution for OCRing. Stay within the green area for best results.'>
+            <div id='resolutionGood_DEVICE' class='resolutionQualityGood' title='The ideal scanning resolution zone for OCRing.'></div>
           </div>
         </div>
       </div>
     </div>
     <div class='row'>
-      <div class='label'>Fix Skew:</div>
+      <div class='label' title='Sometimes scanners will have an inbuild skew (due to ware or other faults). This can be corrected. The graphic to the right represents what the image would look like without skew correction.'>Fix Skew:</div>
       <div class='data'>
-        <input id='skew_DEVICE' type='hidden' />
-        <div id='skewDisplay_DEVICE' class='innerLeftDisplay'>&nbsp;</div>
+        <input id='skew_DEVICE' type='hidden' value='0' />
+        <div class='innerLeftDisplay'>
+          <div>
+            <canvas id='skewDisplay_c_DEVICE' width='15px' height='25px'></canvas>
+          </div>
+          <div>
+            <p id='skewDisplay_p_DEVICE'>0 px</p>
+          </div>
+        </div>
         <div class='innerRightDisplay'>
           <div id='skewSlider_DEVICE'></div>
         </div>
       </div>
-    </div>
-    <div class='row'>
-      <div class='label'>OCR:</div>
-      <div class='data'><input id='ocr_DEVICE' type='checkbox' /></div>
     </div>
     <div class='row'>
       <div class='label'>&nbsp;</div>

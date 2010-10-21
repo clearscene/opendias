@@ -361,12 +361,8 @@ extern void doScanningOperation(void *uuid) {
   progress = 0;
   int buffer_s = q;
   buffer = malloc(buffer_s);
-//#ifdef CAN_OCR
-//  if(shoulddoocr==1) {
-    pic=(unsigned char *)malloc( totbytes+1 );
-    for (i=0;i<totbytes;i++) pic[i]=255;
-//  }
-//#endif // CAN_OCR //
+  pic=(unsigned char *)malloc( totbytes+1 );
+  for (i=0;i<totbytes;i++) pic[i]=255;
 
   do {
     updateScanProgress(uuid, SCAN_SCANNING, progress);
@@ -380,12 +376,12 @@ extern void doScanningOperation(void *uuid) {
 
     if(buff_len > 0) {
 
-//#ifdef CAN_OCR
-//      if(shoulddoocr==1) {
-        for(i=1; i<=buff_len; i++)
-          pic[(int)(c+i)] = (int)buffer[(int)i];
-//      }
-//#endif // CAN_OCR //
+      if(c+buff_len > totbytes)
+        debug_message("scann has read more than expected", ERROR);
+
+      for(i=0; i<buff_len; i++)
+        pic[(int)(c+i)] = 
+          (int)buffer[(int)i];
 
       // Update the progress info
       c += buff_len;
@@ -394,11 +390,9 @@ extern void doScanningOperation(void *uuid) {
       if(progress > 100)
         progress = 100;
 
-//      fwrite (buffer, 1, buff_len, file);
     }
   } while (1);
   debug_message("scan_read - end", DEBUGM);
-//  fclose(file);
   free(buffer);
 
   debug_message("sane_cancel", DEBUGM);
@@ -417,26 +411,41 @@ extern void doScanningOperation(void *uuid) {
   if(skew != 0) {
     int col, row;
     // Calculate the skew angle
-    //double ang = 0.0397; // (double)(skew / pars.pixels_per_line);
     double ang = ((double)skew / (double)pars.pixels_per_line);
-    for(col=1 ; col <= pars.pixels_per_line ; col++) {
-//fprintf(stderr, "new col = %d\n", col);
+    for(col=0 ; col < pars.pixels_per_line ; col++) {
       // Calculate the drop (or rise) for this col
-      int drop = ang * (pars.pixels_per_line - col);
-      // Move all pix in this column up (or down) 'drop' pixs
+      int drop = (int)(ang * (pars.pixels_per_line - col));
       for(row=0 ; row < (pars.lines-(drop+1)) ; row++) {
-//fprintf(stderr, "to = %d     from = %d\n", (int)(col*row), (int)(col*(row+drop)) );
         int lines_offset = pars.pixels_per_line * row;
-        pic[(int)(col+lines_offset)] = 
-        pic[(int)(col+lines_offset+(drop*pars.pixels_per_line)+1)];
+
+        if((int)(col+lines_offset) >= totbytes || (int)(col+lines_offset) < 0) {
+//          fprintf(stderr, "from = %d     to = %d    ang = %6f1    drop = %d    col = %d    row = %d\n", 
+//                  (int)(col+lines_offset+(drop*pars.pixels_per_line)+1), 
+//                  (int)(col+lines_offset), ang, drop, col, row);
+        } 
+        else {
+          if((double)(col+lines_offset+(drop*pars.pixels_per_line)+1) < 0
+          || (double)(col+lines_offset+(drop*pars.pixels_per_line)+1) >= totbytes ) {
+            pic[(int)(col+lines_offset)] = 0;
+          } 
+          else {
+            pic[(int)(col+lines_offset)] = 
+              pic[(int)(col+lines_offset+(drop*pars.pixels_per_line)+1)];
+          }
+        }
       }
       // Clean up
-      for(row=pars.lines-drop ; row <= pars.lines ; row++) {
-        pic[(int)(col + (pars.pixels_per_line * row))] = 0;
+      for(row=pars.lines-drop ; row < pars.lines ; row++) {
+        if((double)(col + (pars.pixels_per_line * row)) >= totbytes || (int)(col + (pars.pixels_per_line * row)) < 0) {
+//          fprintf(stderr, "blanking %d, when max is %8f\n", (int)(col + (pars.pixels_per_line * row)), totbytes);
+        }
+        else {
+          pic[(int)(col + (pars.pixels_per_line * row))] = 0;
+        }
       }
     }
   }
-  fwrite (pic, 1, totbytes, file);
+  fwrite (pic, pars.pixels_per_line, (int)(totbytes/pars.pixels_per_line), file);
   fclose(file);
 
 
