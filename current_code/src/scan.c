@@ -191,7 +191,7 @@ extern void doScanningOperation(void *uuid) {
   SANE_Parameters pars;
   FILE *file;
   const SANE_Option_Descriptor *sod;
-  int x=0, lastTry=1, minRes=9999999, maxRes=0;
+  int x=0, lastTry=1, minRes=9999999, maxRes=0, safeToOcr=0;
   double c=0, totbytes=0, progress_d=0; 
   int q=0, hlp=0, res=0, resolution=0, paramSetRet=0, page=0, pageCount=0,
   scan_bpl=0L, lastInserted=0, shoulddoocr=0, progress=0, skew=0;
@@ -211,6 +211,8 @@ extern void doScanningOperation(void *uuid) {
 
   resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
   resolution = atoi(resolution_s);
+  if(resolution >= 300 && resolution <= 400)
+    safeToOcr = 1;
   free(resolution_s);
 
   pageCount_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_PAGES);
@@ -409,6 +411,9 @@ extern void doScanningOperation(void *uuid) {
   skew = atoi(skew_s);
   free(skew_s);
   if(skew != 0) {
+    debug_message("fixing skew", DEBUGM);
+    updateScanProgress(uuid, SCAN_FIXING_SKEW, 0);
+
     int col, row;
     // Calculate the skew angle
     double ang = ((double)skew / (double)pars.pixels_per_line);
@@ -419,13 +424,17 @@ extern void doScanningOperation(void *uuid) {
         int lines_offset = pars.pixels_per_line * row;
 
         if((int)(col+lines_offset) >= totbytes || (int)(col+lines_offset) < 0) {
-//          fprintf(stderr, "from = %d     to = %d    ang = %6f1    drop = %d    col = %d    row = %d\n", 
-//                  (int)(col+lines_offset+(drop*pars.pixels_per_line)+1), 
-//                  (int)(col+lines_offset), ang, drop, col, row);
+            // Writing to outside the bounds of the image. 
+            // Apart from being a silly thing to do, would 
+            // cause from memeory issues.
+            // fprintf(stderr, "from = %d     to = %d    ang = %6f1    drop = %d    col = %d    row = %d\n", 
+            //         (int)(col+lines_offset+(drop*pars.pixels_per_line)+1), 
+            //         (int)(col+lines_offset), ang, drop, col, row);
         } 
         else {
           if((double)(col+lines_offset+(drop*pars.pixels_per_line)+1) < 0
           || (double)(col+lines_offset+(drop*pars.pixels_per_line)+1) >= totbytes ) {
+            // Reading from outside the image bounds, so save just "black";
             pic[(int)(col+lines_offset)] = 0;
           } 
           else {
@@ -437,7 +446,8 @@ extern void doScanningOperation(void *uuid) {
       // Clean up
       for(row=pars.lines-drop ; row < pars.lines ; row++) {
         if((double)(col + (pars.pixels_per_line * row)) >= totbytes || (int)(col + (pars.pixels_per_line * row)) < 0) {
-//          fprintf(stderr, "blanking %d, when max is %8f\n", (int)(col + (pars.pixels_per_line * row)), totbytes);
+          // Belt and braces to prevent memeory issues.
+          // fprintf(stderr, "blanking %d, when max is %8f\n", (int)(col + (pars.pixels_per_line * row)), totbytes);
         }
         else {
           pic[(int)(col + (pars.pixels_per_line * row))] = 0;
@@ -453,25 +463,35 @@ extern void doScanningOperation(void *uuid) {
   //
 #ifdef CAN_OCR
   if(shoulddoocr==1) {
-    debug_message("attempting OCR", DEBUGM);
-    updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
+    if(safeToOcr==1) {
+      debug_message("attempting OCR", DEBUGM);
+      updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
-    infoData.language = (const char*)OCR_LANG_BRITISH;
-    infoData.imagedata = (const unsigned char*)pic;
-    infoData.bytes_per_pixel = 1;
-    infoData.bytes_per_line = pars.bytes_per_line;
-    infoData.width = pars.pixels_per_line;
-    infoData.height = pars.lines;
+      infoData.language = (const char*)OCR_LANG_BRITISH;
+      infoData.imagedata = (const unsigned char*)pic;
+      infoData.bytes_per_pixel = 1;
+      infoData.bytes_per_line = pars.bytes_per_line;
+      infoData.width = pars.pixels_per_line;
+      infoData.height = pars.lines;
 
-    runocr(&infoData);
-    debug_message(infoData.ret, DEBUGM);
-    ocrText = o_strdup("---------------- page ");
-    conCat(&ocrText, page_s);
-    conCat(&ocrText, " ----------------\n");
-    conCat(&ocrText, infoData.ret);
-    conCat(&ocrText, "\n");
-    free(infoData.ret);
-    free(pic);
+      runocr(&infoData);
+      debug_message(infoData.ret, DEBUGM);
+      ocrText = o_strdup("---------------- page ");
+      conCat(&ocrText, page_s);
+      conCat(&ocrText, " ----------------\n");
+      conCat(&ocrText, infoData.ret);
+      conCat(&ocrText, "\n");
+      free(infoData.ret);
+      free(pic);
+    }
+    else {
+      debug_message("OCR was requested, but the specified resolution means it's not safe to be attempted", DEBUGM);
+      ocrText = o_strdup("---------------- page ");
+      conCat(&ocrText, page_s);
+      conCat(&ocrText, " ----------------\n");
+      conCat(&ocrText, "Resolution set outside safe range to attempt OCR.");
+      conCat(&ocrText, "\n");
+    }
   }
   else
 #endif // CAN_OCR //

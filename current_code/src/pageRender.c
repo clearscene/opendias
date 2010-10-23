@@ -287,7 +287,7 @@ extern char *getScannerList() {
 
 
       // Define a default
-      resolution = 400;
+      resolution = 300;
       if(resolution >= maxRes)
         resolution = maxRes;
       if(resolution <= minRes)

@@ -65,19 +65,20 @@
     width: 38px;
     position: relative;
   }
+  .innerLeftDisplay canvas {
+    display: inline-block;
+    position: absolute;
+    top: -10px;
+  }
+  .innerLeftDisplay div p {
+    position: relative;
+    top: -11px;
+    left: 20px;
+  }
   .innerRightDisplay {
     float: left;
     position: relative;
     width: 215px;
-  }
-/*  .innerLeftDisplay canvas {
-    display: inline-block;
-    top: -15px;
-  }
-*/
-  .innerLeftDisplay div p {
-    position: absolute;
-    top: -10px;
   }
 
   #menu {
@@ -143,6 +144,10 @@
   #footer p {
    margin-top: 4px;
    color: #ccc;
+  }
+
+  .alert {
+    color: #cc0000;
   }
 
   /*  ------- Page Elements ------ */

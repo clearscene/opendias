@@ -10,29 +10,48 @@
 <h2>Acquire new Document</h2>
 
 <div id="tabs">
+
   <ul id='tabList'>
     <li><a href="#info">Information</a></li>
-    <li><a href="#office">Office Document</a></li>
+    <li><a href="#office">Document Import</a></li>
   </ul>
+
   <div id="info">
     <h3>Acquiring a new document</h3>
     <p>Use this screen to add a new document to your archive.</p>
-    <p>In the first tab, you can add ODF documents.</p>
-    <p>Any additional tabs are connected to SANE imput devices.</p>
+    <p>In the first tab, you can add files to your store. 
+      Including: PDF or ODF documents and images, perhaps that you 
+      have scanned in independently from opendias.</p>
+    <p>Any additional tabs represent various scanning imput devices.</p>
     <p id='scanning'><span id='loading'></span>&nbsp;Scanning for devices...</p>
   </div>
+
   <div id="office">
-    <h3>ODF Document</h3>
-    <p>Select an ODF document for upload into your achive.</p>
+    <h3>Document Import</h3>
+    <p>Select a PDF, ODF document or JPEG image for upload into your achive.</p>
+    <p class='alert'>** Experimental functionality **</p>
     <div class='row'>
       <div class='label'>Filename to upload:</div>
-      <div class='data'><input name='' type='file' /></div>
+      <div class='data'><input name='filename' type='file' /></div>
+    </div>
+    <div class='row'>
+      <div class='label'>PDF Document</div>
+      <div class='data'><input type='radio' name='type' value='PDF' /></div>
+    </div>
+    <div class='row'>
+      <div class='label'>ODF Document</div>
+      <div class='data'><input type='radio' name='type' value='ODF' /></div>
+    </div>
+    <div class='row'>
+      <div class='label'>JPEG Image</div>
+      <div class='data'><input type='radio' name='type' value='jpg' /></div>
     </div>
     <div class='row'>
       <div class='label'>&nbsp;</div>
       <div class='data'><input name='' type='submit' /></div>
     </div>
   </div>
+
   <div id='scannerTemplate'>
     <div class='row'>
       <div class='label'>&nbsp;</div>
@@ -83,7 +102,7 @@
         <input id='skew_DEVICE' type='hidden' value='0' />
         <div class='innerLeftDisplay'>
           <div>
-            <canvas id='skewDisplay_c_DEVICE' width='15px' height='25px'></canvas>
+            <canvas id='skewDisplay_c_DEVICE' width='15px' height='30px'></canvas>
           </div>
           <div>
             <p id='skewDisplay_p_DEVICE'>0 px</p>

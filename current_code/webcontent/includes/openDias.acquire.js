@@ -11,17 +11,15 @@ function drawSkew(co, p, val) {
   range = 50;
   p.text(val+" px");
   val = (-0.8*val) / range;
-  if(val < 0) {
-    tr = -boxSize*val;
-  }
+  tr = (-boxSize*val)/2;
   co.clearRect(0,0,boxSize,boxSize*2);
   co.transform(1,  val,
                0,  1,
                0,  tr);
   co.fillStyle = '#9999dd';
-  co.fillRect(0,0,boxSize,boxSize);
+  co.fillRect(0,8,boxSize,boxSize);
   co.strokeStyle = '#000';
-  co.strokeRect(0,0,boxSize,boxSize);
+  co.strokeRect(0,8,boxSize,boxSize);
   co.transform(1,  val*(-1),
                0,  1,
                0,  tr*(-1));
@@ -233,23 +231,28 @@ $(document).ready(function() {
                  if(ui.value >= bestLow && ui.value <= bestHigh) {
                    $("#resolutionGood_"+device).addClass("sweetResolution");
                    $("#resolutionGood_"+device).parent().removeClass("poorResolution");
+                   $("#ocr_"+device).removeAttr('disabled');
                  } else {
                    $("#resolutionGood_"+device).parent().addClass("poorResolution");
                    $("#resolutionGood_"+device).removeClass("sweetResolution");
+                   $("#ocr_"+device).attr('disabled', 'disabled');
+                   $("#ocr_"+device).removeAttr('checked');
                  }
                }
              });
              var bestLow = 300;
-             var bestHigh = 450;
+             var bestHigh = 400;
              var resFactor = 215 / (parseInt($(this).find("max").text()) - parseInt($(this).find("min").text()) );
-             $("#resolutionGood_"+device).css( { 'left': resFactor * bestLow,
-                                                 'width': (bestHigh - bestLow) * resFactor } );
+             $("#resolutionGood_"+device).css( { 'left': resFactor * (bestLow - parseInt($(this).find("min").text()) ),
+                                                 'width': (bestHigh - bestLow) * resFactor*1.05 } );
              $("#resolution_"+device).val( $(this).find("default").text() );
              $("#resolutionDisplay_"+device).text( $(this).find("default").text() + " dpi" );
              if(parseInt($(this).find("default").text()) >= bestLow && parseInt($(this).find("default").text()) <= bestHigh) {
                $("#resolutionGood_"+device).addClass("sweetResolution");
+               $("#ocr_"+device).removeAttr('disabled');
              } else {
                $("#resolutionGood_"+device).parent().addClass("poorResolution");
+               $("#ocr_"+device).attr('disabled', 'disabled');
              }
 
              $("#pagesSlider_"+device).slider({
@@ -278,6 +281,14 @@ $(document).ready(function() {
                if($("#ocr_"+device).is(':checked')) {
                  ocr = "on";
                }
+               // Stop the form from being changed after submittion
+               $("#format_"+device).attr('disabled', 'disabled');
+               $("#pagesSlider_"+device).slider('disable');
+               $("#resolutionSlider_"+device).slider('disable');
+               $("#ocr_"+device).attr('disabled', 'disabled');
+               $("#skewSlider_"+device).slider('disable');
+               $("#scanButton_"+device).attr('disabled', 'disabled');
+
                $.ajax({ url: "dynamic",
                         dataType: "xml",
                         data: {action: "doScan", 
