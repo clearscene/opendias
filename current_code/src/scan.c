@@ -194,15 +194,15 @@ extern void doScanningOperation(void *uuid) {
   int x=0, lastTry=1, minRes=9999999, maxRes=0, safeToOcr=0;
   double c=0, totbytes=0, progress_d=0; 
   int q=0, hlp=0, res=0, resolution=0, paramSetRet=0, page=0, pageCount=0,
-  scan_bpl=0L, lastInserted=0, shoulddoocr=0, progress=0, skew=0;
+  scan_bpl=0L, lastInserted=0, shoulddoocr=0, progress=0, skew=0, pagelength=0;
 #ifdef CAN_OCR
   unsigned char *pic=NULL;
   int i=0;
   struct scanCallInfo infoData;
 #endif // CAN_OCR //
-  char *ocrText, *sql, *dateStr, *resultMessage, *skew_s,
+  char *ocrText, *sql, *dateStr, *resultMessage, *skew_s, *length_s,
        *pageCount_s, *resolution_s, *shoulddoocr_s, *page_s, *devName, *docid_s;
-  int resultVerbosity, docid;
+  int resultVerbosity, docid, getLines=0;
   GTimeVal todaysDate;
   GList *vars = NULL;
 
@@ -288,12 +288,19 @@ extern void doScanningOperation(void *uuid) {
   // Get scanning params (from the scanner)
   debug_message("Got scanning params", DEBUGM);
   status = sane_get_parameters (openDeviceHandle, &pars);
+  getLines = pars.lines;
+  length_s = getScanParam(uuid, SCAN_PARAM_LENGTH);
+  pagelength = atoi(length_s);
+  if(pagelength && pagelength >= 20 && pagelength < 100)
+    getLines = (int)(getLines * pagelength / 100);
+  free(length_s);
+
   fprintf (stderr,
-    "Parm : stat=%s form=%d,lf=%d,bpl=%d,pixpl=%d,lin=%d,dep=%d\n",
+    "Parm : stat=%s form=%d,lf=%d,bpl=%d,pixpl=%d,lin=%d,get=%d,dep=%d\n",
     sane_strstatus (status),
     pars.format, pars.last_frame,
     pars.bytes_per_line, pars.pixels_per_line,
-    pars.lines, pars.depth);
+    pars.lines, getLines, pars.depth);
 
   debug_message("sane_start", DEBUGM);
   status = sane_start (openDeviceHandle);
@@ -315,7 +322,7 @@ extern void doScanningOperation(void *uuid) {
     VALUES (8, ?, ?, ?, ?, ?, ?, ?)");
     vars = NULL;
     vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-    vars = g_list_append(vars, GINT_TO_POINTER(pars.lines));
+    vars = g_list_append(vars, GINT_TO_POINTER(getLines));
     vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
     vars = g_list_append(vars, GINT_TO_POINTER(pars.pixels_per_line));
     vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
@@ -354,11 +361,11 @@ extern void doScanningOperation(void *uuid) {
   if ((file = fopen("/tmp/tmp.pnm", "w")) == NULL)
     debug_message("could not open file for output", ERROR);
   fprintf (file, "P5\n# SANE data follows\n%d %d\n%d\n", 
-    pars.pixels_per_line, pars.lines,
+    pars.pixels_per_line, getLines,
     (pars.depth <= 8) ? 255 : 65535);
 
   debug_message("scan_read - start", DEBUGM);
-  totbytes = pars.bytes_per_line * pars.lines;
+  totbytes = pars.bytes_per_line * getLines;
   c = 0;
   progress = 0;
   int buffer_s = q;
@@ -367,19 +374,23 @@ extern void doScanningOperation(void *uuid) {
   for (i=0;i<totbytes;i++) pic[i]=255;
 
   do {
+    int noMoreReads = 0;
     updateScanProgress(uuid, SCAN_SCANNING, progress);
     status = sane_read (openDeviceHandle, buffer, buffer_s, &buff_len);
     if (status != SANE_STATUS_GOOD) {
       if (status == SANE_STATUS_EOF)
-        break;
+        noMoreReads = 1;
       else
         debug_message("something wrong while scanning", ERROR);
     }
 
     if(buff_len > 0) {
 
-      if(c+buff_len > totbytes)
+      if(c+buff_len > totbytes) {
         debug_message("scann has read more than expected", ERROR);
+        buff_len = totbytes-c;
+        noMoreReads = 1;
+      }
 
       for(i=0; i<buff_len; i++)
         pic[(int)(c+i)] = 
@@ -393,6 +404,10 @@ extern void doScanningOperation(void *uuid) {
         progress = 100;
 
     }
+
+    if(noMoreReads==1)
+      break;
+
   } while (1);
   debug_message("scan_read - end", DEBUGM);
   free(buffer);
@@ -420,7 +435,7 @@ extern void doScanningOperation(void *uuid) {
     for(col=0 ; col < pars.pixels_per_line ; col++) {
       // Calculate the drop (or rise) for this col
       int drop = (int)(ang * (pars.pixels_per_line - col));
-      for(row=0 ; row < (pars.lines-(drop+1)) ; row++) {
+      for(row=0 ; row < (getLines-(drop+1)) ; row++) {
         int lines_offset = pars.pixels_per_line * row;
 
         if((int)(col+lines_offset) >= totbytes || (int)(col+lines_offset) < 0) {
@@ -444,7 +459,7 @@ extern void doScanningOperation(void *uuid) {
         }
       }
       // Clean up
-      for(row=pars.lines-drop ; row < pars.lines ; row++) {
+      for(row=getLines-drop ; row < getLines ; row++) {
         if((double)(col + (pars.pixels_per_line * row)) >= totbytes || (int)(col + (pars.pixels_per_line * row)) < 0) {
           // Belt and braces to prevent memeory issues.
           // fprintf(stderr, "blanking %d, when max is %8f\n", (int)(col + (pars.pixels_per_line * row)), totbytes);
@@ -472,7 +487,7 @@ extern void doScanningOperation(void *uuid) {
       infoData.bytes_per_pixel = 1;
       infoData.bytes_per_line = pars.bytes_per_line;
       infoData.width = pars.pixels_per_line;
-      infoData.height = pars.lines;
+      infoData.height = getLines;
 
       runocr(&infoData);
       debug_message(infoData.ret, DEBUGM);

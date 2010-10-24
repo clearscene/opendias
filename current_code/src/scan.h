@@ -41,6 +41,7 @@ enum {
   SCAN_PARAM_DOCID,
   SCAN_PARAM_ON_PAGE,
   SCAN_PARAM_CORRECT_FOR_SKEW,
+  SCAN_PARAM_LENGTH,
 };
 
 enum {					// Value indicate ...

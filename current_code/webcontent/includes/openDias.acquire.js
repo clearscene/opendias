@@ -195,7 +195,8 @@ $(document).ready(function() {
              var newTabHtml = document.getElementById('scannerTemplate').innerHTML;
              idchange = new Array('title', 'deviceid', 'format', 'pages', 'pagesSlider', 'resolution', 
                         'resolutionSlider', 'ocr', 'progressbar', 'resolutionDisplay', 'pagesDisplay', 
-                        'skew', 'skewDisplay_c', 'skewDisplay_p', 'skewSlider', 'scanButton', 'status', 'resolutionGood');
+                        'skew', 'skewDisplay_c', 'skewDisplay_p', 'skewSlider', 'scanButton', 'status', 
+                        'resolutionGood', 'length', 'lengthDisplay', 'lengthSlider');
              for (change in idchange) {
                //alert("replace: '" + idchange[change]+"_DEVICE'   with    '" + idchange[change]+"_"+device + "'.");
                newTabHtml = newTabHtml.replace(new RegExp(idchange[change]+"_DEVICE","g"), idchange[change]+"_"+device);
@@ -255,6 +256,16 @@ $(document).ready(function() {
                $("#ocr_"+device).attr('disabled', 'disabled');
              }
 
+             $("#lengthSlider_"+device).slider({
+               range: "min",
+               value: 100,
+               min: 20,
+               max: 100,
+               slide: function(event, ui) {
+                 $("#length_"+device).val( ui.value );
+                 $("#lengthDisplay_"+device).text( ui.value + " %" );
+               }
+             });
              $("#pagesSlider_"+device).slider({
                range: "min",
                value: 1,
@@ -298,6 +309,7 @@ $(document).ready(function() {
                                skew: $("#skew_"+device).val(),
                                resolution: $("#resolution_"+device).val(),
                                ocr: ocr,
+                               pagelength: $("#length_"+device).val(),
                               },
                         cache: false,
                         type: "POST",

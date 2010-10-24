@@ -379,7 +379,8 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           char *resolution = getPostData(con_info->post_data, "resolution");
           char *pages = getPostData(con_info->post_data, "pages");
           char *ocr = getPostData(con_info->post_data, "ocr");
-          content = doScan(deviceid, format, skew, resolution, pages, ocr); // pageRender.c
+          char *pagelength = getPostData(con_info->post_data, "pagelength");
+          content = doScan(deviceid, format, skew, resolution, pages, ocr, pagelength); // pageRender.c
           if(content == (void *)NULL) {
             content = o_strdup(errorxml);
           }

@@ -22,7 +22,7 @@
 extern char *populate_doclist();
 extern char *getScannerList();
 extern char *getScanProgress(char *);
-extern char *doScan(char *, char *, char *, char *, char *, char *);
+extern char *doScan(char *, char *, char *, char *, char *, char *, char *);
 extern char *docFilter(char *, char *, char *);
 extern char *nextPageReady(char *);
 
