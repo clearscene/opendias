@@ -102,8 +102,8 @@ function getScanProgress (progressId, device) {
            } else if( status == 7 ) { // SCAN_WAITING_ON_NEW_PAGE,// Waiting for page [x]
              showStatus(device, undefined, undefined);
              $('#status_'+device).text("Please insert page "+vvalue+".");
-             alert("Please insert page "+vvalue+".");
-             $.ajax({ url: "dynamic",
+             if(confirm("Please insert page "+vvalue+".")) {
+               $.ajax({ url: "dynamic",
                       dataType: "xml",
                       data: {action: "nextPageReady",
                              scanprogressid: progressId,
@@ -117,6 +117,7 @@ function getScanProgress (progressId, device) {
                         }
                       }
                     });
+             }
 
            } else if( status == 8 ) { // SCAN_TIMEOUT_WAITING_ON_NEW_PAGE,
              showStatus(device, undefined, undefined);
@@ -298,6 +299,7 @@ $(document).ready(function() {
                $("#resolutionSlider_"+device).slider('disable');
                $("#ocr_"+device).attr('disabled', 'disabled');
                $("#skewSlider_"+device).slider('disable');
+               $("#lengthSlider_"+device).slider('disable');
                $("#scanButton_"+device).attr('disabled', 'disabled');
 
                $.ajax({ url: "dynamic",
