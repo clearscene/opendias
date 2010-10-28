@@ -57,7 +57,7 @@ int setup (char *configFile) {
   if( ! load_file_to_memory(conf, &location) ) {
     debug_message("Cannot find main config file.", ERROR);
     free(location);
-    return ;
+    return 1;
   }
 
   chop(location);

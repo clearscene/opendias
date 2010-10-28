@@ -37,17 +37,6 @@
 
 //static unsigned int nr_of_uploading_clients = 0;
 
-struct connection_info_struct {
-  int connectiontype;
-  struct MHD_PostProcessor *postprocessor;
-  GHashTable *post_data;
-};
-
-struct post_data_struct {
-  size_t size;
-  char *data;
-};
-
 extern int answer_to_connection (void *, struct MHD_Connection *, const char *, const char *, const char *, const char *, size_t *, void **);
 extern void request_completed (void *, struct MHD_Connection *, void **, enum MHD_RequestTerminationCode );
 

@@ -28,147 +28,20 @@
 #include <memory.h>
 #include <string.h>
 #include <FreeImage.h>
+
 #ifdef CAN_OCR
 #include "ocr_plug.h"
 #endif // CAN_OCR //
-#include "main.h"
 #include "scan.h"
 #include "db.h"
-#include "doc_editor.h"
+#include "imageProcessing.h"
+#include "dbaccess.h"
+#include "main.h"
 #include "utils.h"
-#ifdef CAN_READODF
-#include "read_odf.h"
-#endif // CAN_READODF //
 #include "debug.h"
-#include "config.h"
 
 #ifdef CAN_SCAN
-const SANE_Device **device_list;
-#endif // CAN_SCAN //
-GHashTable *SCANWIDGETS;
 
-
-#ifdef CAN_READODF
-void importFile() {
-
-  //char *fileName;
-  char *sql, *tmp, *dateStr;
-  int lastInserted;
-  GTimeVal todaysDate;
-
-  // Save Record
-  debug_message("Saving record", DEBUGM);
-  g_get_current_time (&todaysDate);
-  dateStr = g_time_val_to_iso8601 (&todaysDate);
-
-  sql = o_strdup("INSERT INTO docs \
-    (doneocr, ocrtext, entrydate, filetype) \
-    VALUES (0, '--fromDoc--', '");
-  tmp = g_strconcat(dateStr, "', ", NULL);
-  conCat(&sql, tmp);
-  free(tmp);
-  tmp = itoa(DOC_FILETYPE, 10);
-  conCat(&sql, tmp);
-  free(tmp);
-  conCat(&sql, ") ");
-  debug_message(sql, DEBUGM);
-  runquery_db("1", sql);
-  lastInserted = last_insert();
-  free(sql);
-  sql = itoa(lastInserted, 10);
-
-  tmp = o_strdup(BASE_DIR);
-  conCat(&tmp, "scans/");
-  conCat(&tmp, sql);
-  conCat(&tmp, ".odt");
-  debug_message(tmp, DEBUGM);
-//  fcopy(fileName, tmp);
-  free(tmp);
-
-  // Open the document for editing.
-
-}
-#endif // CAN_READODF //
-
-
-/*
- *
- * FreeImage error handler
- * @param fif Format / Plugin responsible for the error
- * @param message Error message
- */
-void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
-  if(fif != FIF_UNKNOWN)
-    printf("%s Format\n", FreeImage_GetFormatFromFIF(fif));
-  debug_message(message, ERROR);
-}
-
-extern int setScanParam(char *uuid, int param, char *vvalue) {
-
-  GList *vars = NULL;
-  char *sql = o_strdup("INSERT OR REPLACE \
-                        INTO scan_params \
-                        (client_id, param_option, param_value) \
-                        VALUES (?, ?, ?);");
-
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(uuid));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(param));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(vvalue));
-
-  int rc = runUpdate_db(sql, vars);
-  free(sql);
-
-  return rc;
-}
-
-char *getScanParam(char *scanid, int param_option) {
-
-  char *sql, *vvalue=NULL, *param_option_s;
-
-  sql = o_strdup("SELECT param_value \
-                  FROM scan_params \
-                  WHERE client_id = '");
-  conCat(&sql, scanid);
-  conCat(&sql, "' AND param_option = ");
-  param_option_s = itoa(param_option, 10);
-  conCat(&sql, param_option_s);
-  free(param_option_s);
-
-  if(runquery_db("2", sql)) {
-    do {
-      vvalue = o_strdup(readData_db("2", "param_value"));
-    } while (nextRow("1"));
-  }
-  free_recordset("2");
-  free(sql);
-
-  return vvalue;
-}
-
-void updateScanProgress (char *uuid, int status, int value) {
-
-  GList *vars = NULL;
-  char *progressUpdate = o_strdup("UPDATE scan_progress \
-                                   SET status = ?, \
-                                       value = ? \
-                                   WHERE client_id = ? ");
-
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(status));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(value));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(uuid));
-
-  runUpdate_db(progressUpdate, vars);
-  free(progressUpdate);
-
-}
-
-#ifdef CAN_SCAN
 void handleSaneErrors(char *defaultMessage, SANE_Status st, int retCode) {
 
   char *errorMessage_t = o_strdup("%s: sane error = %d (%s), return code = %d\n");
@@ -189,40 +62,19 @@ extern void doScanningOperation(void *uuid) {
   SANE_Byte *buffer;
   SANE_Int buff_len;
   SANE_Parameters pars;
-  FILE *file;
   const SANE_Option_Descriptor *sod;
-  int x=0, lastTry=1, minRes=9999999, maxRes=0, safeToOcr=0;
-  double c=0, totbytes=0, progress_d=0; 
-  int q=0, hlp=0, res=0, resolution=0, paramSetRet=0, page=0, pageCount=0,
-  scan_bpl=0L, lastInserted=0, shoulddoocr=0, progress=0, skew=0, pagelength=0;
-#ifdef CAN_OCR
-  unsigned char *pic=NULL;
-  int i=0;
-  struct scanCallInfo infoData;
-#endif // CAN_OCR //
-  char *ocrText, *sql, *dateStr, *resultMessage, *skew_s, *length_s,
-       *pageCount_s, *resolution_s, *shoulddoocr_s, *page_s, *devName, *docid_s;
-  int resultVerbosity, docid, getLines=0;
-  GTimeVal todaysDate;
-  GList *vars = NULL;
+  int q=0, hlp=0, res=0, paramSetRet=0, scan_bpl=0L;
+  char *resultMessage;
 
-  devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
-  docid_s = getScanParam(uuid, SCAN_PARAM_DOCID);
+  char *skew_s, *resolution_s, *page_s;
+  int skew=0, resolution=0, page=0;
 
-  resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
-  resolution = atoi(resolution_s);
-  if(resolution >= 300 && resolution <= 400)
-    safeToOcr = 1;
-  free(resolution_s);
+  char *devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
+  char *docid_s = getScanParam(uuid, SCAN_PARAM_DOCID);
 
-  pageCount_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_PAGES);
-  pageCount = atoi(pageCount_s);
+  char *pageCount_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_PAGES);
+  int pageCount = atoi(pageCount_s);
   free(pageCount_s);
-
-  shoulddoocr_s = getScanParam(uuid, SCAN_PARAM_DO_OCR);
-  if(shoulddoocr_s && 0 == strcmp(shoulddoocr_s, "on") )
-    shoulddoocr = 1;
-  free(shoulddoocr_s);
 
   // Open the device
   debug_message("sane_open", DEBUGM);
@@ -245,11 +97,12 @@ extern void doScanningOperation(void *uuid) {
     if((sod->type == SANE_TYPE_FIXED)
     && (sod->unit == SANE_UNIT_DPI)
     && (sod->constraint_type == SANE_CONSTRAINT_RANGE)) {
-      x = 0;
-      lastTry = 0;
+      int counter = 0;
+      int lastTry = 0;
+      int minRes=9999999, maxRes=0;
       q = sod->constraint.range->quant;
       while(1) {
-        res = (q*x)+sod->constraint.range->min;
+        res = (q*counter)+sod->constraint.range->min;
         if(res <= sod->constraint.range->max) {
           status = sane_control_option (openDeviceHandle, hlp, SANE_ACTION_SET_VALUE, &res, &paramSetRet);
           if(status != SANE_STATUS_GOOD) {
@@ -268,7 +121,7 @@ extern void doScanningOperation(void *uuid) {
         }
         else
           break;
-        x++;
+        counter++;
       }
       break; // we have the resolution we need
     }
@@ -276,6 +129,9 @@ extern void doScanningOperation(void *uuid) {
 
   // Set Resolution 
   debug_message("Set resolution", DEBUGM);
+  resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
+  resolution = atoi(resolution_s);
+  free(resolution_s);
   resolution = resolution*q;
   status = sane_control_option (openDeviceHandle, hlp, SANE_ACTION_SET_VALUE, &resolution, &paramSetRet);
   if(status != SANE_STATUS_GOOD) {
@@ -288,9 +144,9 @@ extern void doScanningOperation(void *uuid) {
   // Get scanning params (from the scanner)
   debug_message("Got scanning params", DEBUGM);
   status = sane_get_parameters (openDeviceHandle, &pars);
-  getLines = pars.lines;
-  length_s = getScanParam(uuid, SCAN_PARAM_LENGTH);
-  pagelength = atoi(length_s);
+  int getLines = pars.lines;
+  char *length_s = getScanParam(uuid, SCAN_PARAM_LENGTH);
+  int pagelength = atoi(length_s);
   if(pagelength && pagelength >= 20 && pagelength < 100)
     getLines = (int)(getLines * pagelength / 100);
   free(length_s);
@@ -312,33 +168,11 @@ extern void doScanningOperation(void *uuid) {
 
   // Save Record
   //
+  int docid;
   if( docid_s == NULL ) {
     debug_message("Saving record", DEBUGM);
     updateScanProgress(uuid, SCAN_DB_WORKING, 0);
-    g_get_current_time (&todaysDate);
-    dateStr = g_time_val_to_iso8601 (&todaysDate);
-    sql = o_strdup("INSERT INTO docs \
-    (depth, lines, ppl, resolution, ocrText, pages, entrydate, filetype) \
-    VALUES (8, ?, ?, ?, ?, ?, ?, ?)");
-    vars = NULL;
-    vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-    vars = g_list_append(vars, GINT_TO_POINTER(getLines));
-    vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-    vars = g_list_append(vars, GINT_TO_POINTER(pars.pixels_per_line));
-    vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-    vars = g_list_append(vars, GINT_TO_POINTER(resolution/q));
-    vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-    vars = g_list_append(vars, o_strdup(""));
-    vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-    vars = g_list_append(vars, GINT_TO_POINTER(pageCount));
-    vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-    vars = g_list_append(vars, dateStr);
-    vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-    vars = g_list_append(vars, GINT_TO_POINTER(SCAN_FILETYPE));
-    runUpdate_db(sql, vars);
-    lastInserted = last_insert();
-    docid_s = itoa(lastInserted, 10);
-    free(sql);
+    docid_s = addNewScannedDoc(getLines, pars.pixels_per_line, resolution/q, pageCount); 
 
     setScanParam(uuid, SCAN_PARAM_DOCID, docid_s);
     page_s = o_strdup("1");
@@ -358,20 +192,22 @@ extern void doScanningOperation(void *uuid) {
   }
 
   // Acquire Image & Save Document
-  if ((file = fopen("/tmp/tmp.pnm", "w")) == NULL)
+  FILE *scanOutFile;
+  if ((scanOutFile = fopen("/tmp/tmp.pnm", "w")) == NULL)
     debug_message("could not open file for output", ERROR);
-  fprintf (file, "P5\n# SANE data follows\n%d %d\n%d\n", 
+  fprintf (scanOutFile, "P5\n# SANE data follows\n%d %d\n%d\n", 
     pars.pixels_per_line, getLines,
     (pars.depth <= 8) ? 255 : 65535);
 
   debug_message("scan_read - start", DEBUGM);
-  totbytes = pars.bytes_per_line * getLines;
-  c = 0;
-  progress = 0;
-  int buffer_s = q;
+  double totbytes = pars.bytes_per_line * getLines;
+  double readSoFar = 0;
+  int progress = 0;
+  int buffer_s = q; // q seam to be the best buffer size to use!
   buffer = malloc(buffer_s);
-  pic=(unsigned char *)malloc( totbytes+1 );
-  for (i=0;i<totbytes;i++) pic[i]=255;
+  unsigned char *pic=(unsigned char *)malloc( totbytes+1 );
+  int counter;
+  for (counter = 0 ; counter < totbytes ; counter++) pic[counter]=255;
 
   do {
     int noMoreReads = 0;
@@ -386,19 +222,20 @@ extern void doScanningOperation(void *uuid) {
 
     if(buff_len > 0) {
 
-      if(c+buff_len > totbytes) {
+      if(readSoFar + buff_len > totbytes) {
         debug_message("scann has read more than expected", ERROR);
-        buff_len = totbytes-c;
+        buff_len = totbytes - readSoFar;
         noMoreReads = 1;
       }
 
-      for(i=0; i<buff_len; i++)
-        pic[(int)(c+i)] = 
-          (int)buffer[(int)i];
+      int counter;
+      for(counter = 0; counter < buff_len; counter++)
+        pic[(int)(readSoFar + counter)] = 
+          (int)buffer[(int)counter];
 
       // Update the progress info
-      c += buff_len;
-      progress_d = 100 * (c / totbytes);
+      readSoFar += buff_len;
+      double progress_d = 100 * (readSoFar / totbytes);
       progress = progress_d;
       if(progress > 100)
         progress = 100;
@@ -429,58 +266,41 @@ extern void doScanningOperation(void *uuid) {
     debug_message("fixing skew", DEBUGM);
     updateScanProgress(uuid, SCAN_FIXING_SKEW, 0);
 
-    int col, row;
-    // Calculate the skew angle
-    double ang = ((double)skew / (double)pars.pixels_per_line);
-    for(col=0 ; col < pars.pixels_per_line ; col++) {
-      // Calculate the drop (or rise) for this col
-      int drop = (int)(ang * (pars.pixels_per_line - col));
-      for(row=0 ; row < (getLines-(drop+1)) ; row++) {
-        int lines_offset = pars.pixels_per_line * row;
-
-        if((int)(col+lines_offset) >= totbytes || (int)(col+lines_offset) < 0) {
-            // Writing to outside the bounds of the image. 
-            // Apart from being a silly thing to do, would 
-            // cause from memeory issues.
-            // fprintf(stderr, "from = %d     to = %d    ang = %6f1    drop = %d    col = %d    row = %d\n", 
-            //         (int)(col+lines_offset+(drop*pars.pixels_per_line)+1), 
-            //         (int)(col+lines_offset), ang, drop, col, row);
-        } 
-        else {
-          if((double)(col+lines_offset+(drop*pars.pixels_per_line)+1) < 0
-          || (double)(col+lines_offset+(drop*pars.pixels_per_line)+1) >= totbytes ) {
-            // Reading from outside the image bounds, so save just "black";
-            pic[(int)(col+lines_offset)] = 0;
-          } 
-          else {
-            pic[(int)(col+lines_offset)] = 
-              pic[(int)(col+lines_offset+(drop*pars.pixels_per_line)+1)];
-          }
-        }
-      }
-      // Clean up
-      for(row=getLines-drop ; row < getLines ; row++) {
-        if((double)(col + (pars.pixels_per_line * row)) >= totbytes || (int)(col + (pars.pixels_per_line * row)) < 0) {
-          // Belt and braces to prevent memeory issues.
-          // fprintf(stderr, "blanking %d, when max is %8f\n", (int)(col + (pars.pixels_per_line * row)), totbytes);
-        }
-        else {
-          pic[(int)(col + (pars.pixels_per_line * row))] = 0;
-        }
-      }
-    }
+    deSkew(pic, totbytes, (double)skew, (double)pars.pixels_per_line, getLines);
   }
-  fwrite (pic, pars.pixels_per_line, (int)(totbytes/pars.pixels_per_line), file);
-  fclose(file);
+
+
+  // Write the image to disk now
+  //
+  fwrite (pic, pars.pixels_per_line, (int)(totbytes/pars.pixels_per_line), scanOutFile);
+  fclose(scanOutFile);
 
 
   // Do OCR - on this page
   //
+  char *ocrText;
 #ifdef CAN_OCR
+  char *shoulddoocr_s = getScanParam(uuid, SCAN_PARAM_DO_OCR);
+  int shoulddoocr=0;
+  if(shoulddoocr_s && 0 == strcmp(shoulddoocr_s, "on") )
+    shoulddoocr = 1;
+  free(shoulddoocr_s);
+
   if(shoulddoocr==1) {
+
+    int safeToOcr=0;
+    resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
+    resolution = atoi(resolution_s);
+    if(resolution >= 300 && resolution <= 400)
+      safeToOcr = 1;
+    free(resolution_s);
+
     if(safeToOcr==1) {
       debug_message("attempting OCR", DEBUGM);
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
+
+      //struct scanCallInfo *infoData; //= malloc(sizeof(struct scanCallInfo));
+      struct scanCallInfo infoData; //= malloc(sizeof(struct scanCallInfo));
 
       infoData.language = (const char*)OCR_LANG_BRITISH;
       infoData.imagedata = (const unsigned char*)pic;
@@ -523,6 +343,7 @@ extern void doScanningOperation(void *uuid) {
   char *outFilename = g_strconcat(BASE_DIR,"/scans/",docid_s,"_",page_s,".jpg", NULL);
   FIBITMAP *bitmap = FreeImage_Load(FIF_PGMRAW, "/tmp/tmp.pnm", 0);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 60);
+  int resultVerbosity;
   if(FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90)) {
     resultMessage = o_strdup("Saved JPEG output of scan");
     resultVerbosity = INFORMATION;
@@ -550,18 +371,7 @@ extern void doScanningOperation(void *uuid) {
   // update record
   // 
   updateScanProgress(uuid, SCAN_DB_WORKING, 0);
-  sql = o_strdup("UPDATE docs SET pages = ?, ocrText = ocrText || ? WHERE docid = ?");
-  vars = NULL;
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(page));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, ocrText);//we're not using again - so no need to copy tring
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(atoi(docid_s)));
-  runUpdate_db(sql, vars);
-  free(sql);
-  free(docid_s);
-
+  updateNewScannedPage(docid_s, ocrText, page); // Frees both chars
 
 
   // cleaup && What should we do next

@@ -42,20 +42,19 @@ struct mydata {
 
 
 void xmlAllNodeGetContent(xmlNode *parent, char **str) {
+
   char *buf;
   xmlNode *node = parent->children; //childs;
   char *text;
 
-  while(node != 0) 
-  {
-  if (node->type == XML_TEXT_NODE)
-    {
-    text = g_strconcat((char *)xmlNodeGetContent(node), " ", NULL);
-    buf = g_strconcat (*str, text, NULL);
-    *str = buf;
+  while(node != 0) {
+    if (node->type == XML_TEXT_NODE) {
+      text = g_strconcat((char *)xmlNodeGetContent(node), " ", NULL);
+      buf = g_strconcat (*str, text, NULL);
+      *str = buf;
     }
-  xmlAllNodeGetContent(node, str);
-  node = node->next;
+    xmlAllNodeGetContent(node, str);
+    node = node->next;
   }
 }
 
@@ -79,10 +78,9 @@ gint getEntry(const char *name, char *contentFile, char **ptr) {
   char *buf;
 
   dir = zzip_dir_open(name, 0);
-  if (!dir) 
-  {
-  fprintf(stderr, "failed to open %s\n", name);
-  return 0;
+  if (!dir) {
+    fprintf(stderr, "failed to open %s\n", name);
+    return 0;
   }
 
   zzip_dir_read(dir, &entry);
@@ -154,7 +152,7 @@ gint LIBARCHIVEgetEntry(char *name, char *contentFile, char **ptr) {
       if(size <= 0)
         debug_message("zero size", DEBUGM);
       if ((buf = (char *)malloc(size+1)) == NULL)
-        debug_message("cannot allocate memory", DEBUGM);
+        debug_message("cannot allocate memory", ERROR);
       if (archive_read_data(a, buf, size) != size)
         debug_message("cannot read data", DEBUGM);
       buf[size] = '\0';

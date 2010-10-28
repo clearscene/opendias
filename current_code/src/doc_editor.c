@@ -22,6 +22,7 @@
 #include <string.h>
 #include "config.h"
 #include "db.h"
+#include "dbaccess.h"
 #include "doc_editor.h"
 #ifdef CAN_SPEAK
 #include "speak.h"
@@ -37,35 +38,8 @@
 #include <sys/dir.h>
 #include <sys/param.h>
  
-#define FALSE 0
-#define TRUE !FALSE
-
-/*
-int delete () {
-  int count,i;
-  struct direct **files;
-  int file_select();
- 
-  if ( getwd(pathname) == NULL ) { 
-    printf("Error getting path\n");
-    return 1;
-  }
-  printf("Current Working Directory = %sn",pathname);
-  count = scandir(pathname, &files, file_select, alphasort);
- 
-  printf(``Number of files = %dn'',count);
-  for (i=1;i<count+1;++i)
-    printf(``%s  '',files[i-1]->d_name);
-
-}
-
-int file_select(struct direct *entry) {
-  if ((strcmp(entry->d_name, ``.'') == 0) || (strcmp(entry->d_name, ``..'') == 0))
-    return (FALSE);
-  else
-    return (TRUE);
-}
-*/
+//#define FALSE 0
+//#define TRUE !FALSE
 
 extern char *doDelete (char *documentId) {
 
@@ -246,27 +220,6 @@ extern char *openDocEditor (char *documentId) {
   return returnXML;
 }
 
-int updateDocValue(char *docid, char *kkey, char *vvalue) {
-
-  char *sql_t, *sql;
-  int size = 0, rc = 0;
-  GList *vars = NULL;
-
-  sql_t = o_strdup("UPDATE docs SET %s = ? WHERE docid = ?");
-  size = strlen(sql_t) + strlen(kkey);
-  sql = malloc(size);
-  sprintf(sql, sql_t, kkey);
-  free(sql_t);
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(vvalue));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(docid));
-  rc = runUpdate_db(sql, vars);
-  free(sql);
-
-  return rc;
-}
-
 extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
 
   int rc = 0;
@@ -274,37 +227,24 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
   if( 0 == strcmp(kkey, "docDate") ) {
 
     char *d, *field;
+    struct dateParts *dp = dateStringToDateParts(vvalue);
 
     // Save Year
-    d = (char*) malloc(5);
-    strncpy(d, (char *)vvalue, 4);
-    d[4] = 0L;
-    field = o_strdup("docdatey");
-    rc = updateDocValue(docid, field, d);
-    free(field);
-    free(d);
+    rc = updateDocValue(docid, "docdatey", dp->year);
+    free(dp->year);
 
     // Save Month
     if(rc==0) {
-      d = (char*) malloc(3);
-      strncpy(d, (char *)vvalue+5, 2);
-      d[2] = 0L;
-      field = o_strdup("docdatem");
-      rc = updateDocValue(docid, field, d);
-      free(field);
-      free(d);
+      rc = updateDocValue(docid, "docdatem", dp->month);
+      free(dp->month);
     }
 
     // Save Day
     if(rc==0) {
-      d = (char*) malloc(3);
-      strncpy(d, (char *)vvalue+8, 2);
-      d[2] = 0L;
-      field = o_strdup("docdated");
-      rc = updateDocValue(docid, field, d);
-      free(field);
-      free(d);
+      rc = updateDocValue(docid, "docdated", dp->day);
+      free(dp->day);
     }
+    free(dp);
 
   } else {
     rc = updateDocValue(docid, kkey, vvalue);

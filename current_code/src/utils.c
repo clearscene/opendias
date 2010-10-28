@@ -183,18 +183,18 @@ extern void fcopy(char *fnsource, char *fntarget) {
 extern int max(int a, int b) {
 
   if(a >= b)
-  return a;
+    return a;
   else
-  return b;
+    return b;
 
 }
 
 extern int min(int a, int b) {
 
   if(a <= b)
-  return a;
+    return a;
   else
-  return b;
+    return b;
 
 }
 
@@ -285,3 +285,26 @@ extern void propper(char *inStr) {
     ++ptr;
   }
 }
+
+extern struct dateParts *dateStringToDateParts(char *dateString) {
+
+  struct dateParts *dp = malloc(sizeof(struct dateParts));
+
+  // Get Year
+  dp->year = (char*) malloc(5);
+  strncpy(dp->year, (char *)dateString, 4);
+  dp->year[4] = 0L;
+
+  // Save Month
+  dp->month = (char*) malloc(3);
+  strncpy(dp->month, (char *)dateString+5, 2);
+  dp->month[2] = 0L;
+
+  // Save Day
+  dp->day = (char*) malloc(3);
+  strncpy(dp->month, (char *)dateString+8, 2);
+  dp->month[2] = 0L;
+
+  return dp;
+}
+

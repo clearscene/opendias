@@ -37,7 +37,11 @@ opendias_SOURCES = \
 	read_odf.c    \
 	read_odf.h    \
 	dbaccess.c    \
-	dbaccess.h
+	dbaccess.h    \
+	imageProcessing.h    \
+	imageProcessing.c    \
+	validation.c    \
+	validation.h
 
 opendias_LDFLAGS = 
 

@@ -35,6 +35,7 @@
 #include "main.h"
 #include "pageRender.h"
 #include "db.h"
+#include "dbaccess.h"
 #ifdef CAN_SCAN
 #include <sane/sane.h>
 #endif // CAN_SCAN //
@@ -242,13 +243,18 @@ extern char *getScannerList() {
         (void) strncpy(ip,ipandmore,l);
         ip[l] = '\0';
         addr = inet_addr(ip);
-        free(ip);
         if ((hp = gethostbyaddr(&addr, sizeof(addr), AF_INET)) != NULL) {
           free(scannerHost);
           scannerHost = o_strdup(hp->h_name);
           //free(hp);
-        }
+        } 
+        else
+          scannerHost = o_strdup(ip);
+        free(ip);
       }
+      else
+        scannerHost = o_strdup("opendias server");
+
 
       // Find resolution ranges
       for (hlp = 0; hlp < 9999; hlp++) {
@@ -339,8 +345,7 @@ extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, 
   int rc=0;
   uuid_t uu;
   char *scanUuid;
-  char *ret, *sql;
-  GList *vars = NULL;
+  char *ret;
 
   // Generate a uuid and scanning params object
   scanUuid = malloc(36+1);
@@ -357,13 +362,7 @@ extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, 
   setScanParam(scanUuid, SCAN_PARAM_LENGTH, pagelength);
 
   // save scan progress db record
-  sql = o_strdup("INSERT INTO scan_progress (client_id, status, value) VALUES (?, ?, 0);");
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(scanUuid));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(SCAN_IDLE));
-  runUpdate_db(sql, vars);
-  free(sql);
+  addScanProgress(scanUuid);
 
   // Create a new thread to start the scan process
   pthread_attr_init(&attr);

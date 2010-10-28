@@ -19,4 +19,32 @@
 #ifndef DBACCESS
 #define DBACCESS
 
+enum {                                  // Value indicate ...
+  SCAN_IDLE = 0,
+  SCAN_INTERNAL_ERROR,
+  SCAN_DB_WORKING,
+  SCAN_DB_ERROR,                        // DB error code
+  SCAN_WAITING_ON_SCANNER,
+  SCAN_ERRO_FROM_SCANNER,               // SANE error code
+  SCAN_SCANNING,                        // Current progress
+  SCAN_WAITING_ON_NEW_PAGE,             // Waiting for page [x]
+  SCAN_TIMEOUT_WAITING_ON_NEW_PAGE,
+  SCAN_CONVERTING_FORMAT,
+  SCAN_ERROR_CONVERTING_FORMAT,         // FreeImage error code
+  SCAN_PERFORMING_OCR,
+  SCAN_ERROR_PERFORMING_OCR,            // xxxxxx error code
+  SCAN_FIXING_SKEW,
+  SCAN_RESERVED_1,
+  SCAN_RESERVED_2,
+  SCAN_FINISHED                         // id of the saved doc
+};
+
+extern int setScanParam(char *, int, char *);
+extern char *getScanParam(char *, int);
+extern void addScanProgress (char *);
+extern void updateScanProgress(char *, int, int);
+extern void updateNewScannedPage (char *, char *, int); // Frees both chars
+extern char *addNewScannedDoc (int, int, int, int);
+extern int updateDocValue (char *, char *, char *);
+
 #endif /* DBACCESS */

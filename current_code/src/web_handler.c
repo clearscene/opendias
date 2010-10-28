@@ -29,6 +29,7 @@
 #include "main.h"
 #include "utils.h"
 #include "debug.h"
+#include "validation.h"
 #include "pageRender.h"
 #include "doc_editor.h"
 
@@ -141,14 +142,6 @@ static GDestroyNotify post_data_free(struct post_data_struct *d ) {
   free(d->data);
   free(d);
   return (GDestroyNotify)1;
-}
-
-static char *getPostData(gpointer post_hash, char *key) {
-  struct post_data_struct *data_struct = (struct post_data_struct *)g_hash_table_lookup(post_hash, key);
-  if(data_struct == NULL || data_struct->data == NULL)
-    return NULL;
-  else
-    return data_struct->data;
 }
 
 static void postDumper(GHashTable *table) {
@@ -340,22 +333,30 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
       }
       else {
         // Main post branch point
-        char *action = getPostData(con_info->post_data, "action");
+        basicValidation(con_info->post_data);
         postDumper(con_info->post_data);
+
+        char *action = getPostData(con_info->post_data, "action");
 
         if ( action && 0 == strcmp(action, "getDocList") ) {
           debug_message("Processing request for: get doc list", INFORMATION);
-          content = populate_doclist(); // pageRender.c
+          if ( validate( con_info->post_data, action ) ) 
+            content = o_strdup(errorxml);
+          else
+            content = populate_doclist(); // pageRender.c
           mimetype = MIMETYPE_XML;
           size = strlen(content);
         }
 
         else if ( action && 0 == strcmp(action, "getDocDetail") ) {
           debug_message("Processing request for: document details", INFORMATION);
-          char *docid = getPostData(con_info->post_data, "docid");
-          content = openDocEditor(docid); //doc_editor.c
-          if(content == (void *)NULL) {
+          if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
+          else {
+            char *docid = getPostData(con_info->post_data, "docid");
+            content = openDocEditor(docid); //doc_editor.c
+            if(content == (void *)NULL)
+              content = o_strdup(errorxml);
           }
           mimetype = MIMETYPE_XML;
           size = strlen(content);
@@ -363,9 +364,13 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "getScannerList") ) {
           debug_message("Processing request for: getScannerList", INFORMATION);
-          content = getScannerList(); // pageRender.c
-          if(content == (void *)NULL) {
+          if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
+          else {
+            content = getScannerList(); // pageRender.c
+            if(content == (void *)NULL) {
+              content = o_strdup(errorxml);
+            }
           }
           mimetype = MIMETYPE_XML;
           size = strlen(content);
@@ -373,16 +378,20 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "doScan") ) {
           debug_message("Processing request for: doScan", INFORMATION);
-          char *deviceid = getPostData(con_info->post_data, "deviceid");
-          char *format = getPostData(con_info->post_data, "format");
-          char *skew = getPostData(con_info->post_data, "skew");
-          char *resolution = getPostData(con_info->post_data, "resolution");
-          char *pages = getPostData(con_info->post_data, "pages");
-          char *ocr = getPostData(con_info->post_data, "ocr");
-          char *pagelength = getPostData(con_info->post_data, "pagelength");
-          content = doScan(deviceid, format, skew, resolution, pages, ocr, pagelength); // pageRender.c
-          if(content == (void *)NULL) {
+          if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
+          else {
+            char *deviceid = getPostData(con_info->post_data, "deviceid");
+            char *format = getPostData(con_info->post_data, "format");
+            char *skew = getPostData(con_info->post_data, "skew");
+            char *resolution = getPostData(con_info->post_data, "resolution");
+            char *pages = getPostData(con_info->post_data, "pages");
+            char *ocr = getPostData(con_info->post_data, "ocr");
+            char *pagelength = getPostData(con_info->post_data, "pagelength");
+            content = doScan(deviceid, format, skew, resolution, pages, ocr, pagelength); // pageRender.c
+            if(content == (void *)NULL) {
+              content = o_strdup(errorxml);
+            }
           }
           mimetype = MIMETYPE_XML;
           size = strlen(content);
@@ -390,10 +399,14 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "getScanningProgress") ) {
           debug_message("Processing request for: getScanning Progress", INFORMATION);
-          char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
-          content = getScanProgress(scanprogressid); //scan.c
-          if(content == (void *)NULL) {
+          if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
+          else {
+            char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
+            content = getScanProgress(scanprogressid); //scan.c
+            if(content == (void *)NULL) {
+              content = o_strdup(errorxml);
+            }
           }
           mimetype = MIMETYPE_XML;
           size = strlen(content);
@@ -401,10 +414,14 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "nextPageReady") ) {
           debug_message("Processing request for: restart scan after page change", INFORMATION);
-          char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
-          content = nextPageReady(scanprogressid); //pageRender.c
-          if(content == (void *)NULL) {
+          if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
+          else {
+            char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
+            content = nextPageReady(scanprogressid); //pageRender.c
+            if(content == (void *)NULL) {
+              content = o_strdup(errorxml);
+            }
           }
           mimetype = MIMETYPE_XML;
           size = strlen(content);
@@ -412,12 +429,16 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "updateDocDetails") ) {
           debug_message("Processing request for: update doc details", INFORMATION);
-          char *docid = getPostData(con_info->post_data, "docid");
-          char *key = getPostData(con_info->post_data, "kkey");
-          char *value = getPostData(con_info->post_data, "vvalue");
-          content = updateDocDetails(docid, key, value); //doc_editor.c
-          if(content == (void *)NULL) {
+          if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
+          else {
+            char *docid = getPostData(con_info->post_data, "docid");
+            char *key = getPostData(con_info->post_data, "kkey");
+            char *value = getPostData(con_info->post_data, "vvalue");
+            content = updateDocDetails(docid, key, value); //doc_editor.c
+            if(content == (void *)NULL) {
+              content = o_strdup(errorxml);
+            }
           }
           mimetype = MIMETYPE_XML;
           size = strlen(content);
@@ -425,12 +446,16 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "moveTag") ) {
           debug_message("Processing request for: Move Tag", INFORMATION);
-          char *docid = getPostData(con_info->post_data, "docid");
-          char *tagid = getPostData(con_info->post_data, "tagid");
-          char *add_remove = getPostData(con_info->post_data, "add_remove");
-          content = updateTagLinkage(docid, tagid, add_remove); //doc_editor.c
-          if(content == (void *)NULL) {
+          if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
+          else {
+            char *docid = getPostData(con_info->post_data, "docid");
+            char *tagid = getPostData(con_info->post_data, "tagid");
+            char *add_remove = getPostData(con_info->post_data, "add_remove");
+            content = updateTagLinkage(docid, tagid, add_remove); //doc_editor.c
+            if(content == (void *)NULL) {
+              content = o_strdup(errorxml);
+            }
           }
           mimetype = MIMETYPE_XML;
           size = strlen(content);
@@ -438,12 +463,16 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "filter") ) {
           debug_message("Processing request for: Doc List Filter", INFORMATION);
-          char *textSearch = getPostData(con_info->post_data, "textSearch");
-          char *startDate = getPostData(con_info->post_data, "startDate");
-          char *endDate = getPostData(con_info->post_data, "endDate");
-          content = docFilter(textSearch, startDate, endDate); //pageRender.c
-          if(content == (void *)NULL) {
+          if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
+          else {
+            char *textSearch = getPostData(con_info->post_data, "textSearch");
+            char *startDate = getPostData(con_info->post_data, "startDate");
+            char *endDate = getPostData(con_info->post_data, "endDate");
+            content = docFilter(textSearch, startDate, endDate); //pageRender.c
+            if(content == (void *)NULL) {
+              content = o_strdup(errorxml);
+            }
           }
           mimetype = MIMETYPE_XML;
           size = strlen(content);
@@ -451,10 +480,14 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "deletedoc") ) {
           debug_message("Processing request for: delete document", INFORMATION);
-          char *docid = getPostData(con_info->post_data, "docid");
-          content = doDelete(docid);
-          if(content == (void *)NULL) {
+          if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
+          else {
+            char *docid = getPostData(con_info->post_data, "docid");
+            content = doDelete(docid);
+            if(content == (void *)NULL) {
+              content = o_strdup(errorxml);
+            }
           }
           mimetype = MIMETYPE_XML;
           size = strlen(content);
@@ -462,7 +495,11 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "getAudio") ) {
           debug_message("Processing request for: getAudio", INFORMATION);
-          content = o_strdup("<filename>BabyBeat.ogg</filename>");
+          if ( validate( con_info->post_data, action ) ) 
+            content = o_strdup(errorxml);
+          else {
+            content = o_strdup("<filename>BabyBeat.ogg</filename>");
+          }
           mimetype = MIMETYPE_XML;
           size = strlen(content);
         }
