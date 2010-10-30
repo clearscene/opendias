@@ -19,18 +19,6 @@
 #ifndef SCAN
 #define SCAN
 
-/*
-struct scanParams {
-  char *uuid;
-  char *devName;
-  char *format;
-  char *ocr;
-  int pageCount;
-  int page;
-  int resolution;
-  int id;
-};
-*/
 enum {
   SCAN_PARAM_do_not_use = 0,
   SCAN_PARAM_DEVNAME,

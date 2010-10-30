@@ -16,29 +16,27 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "config.h"
-#include <glib.h>
-#include <stdlib.h>
-#ifdef CAN_SCAN
-#include <sane/sane.h>
-#include <pthread.h>
-#endif // CAN_SCAN //
-#include <stdio.h>
-#include <memory.h>
-#include <string.h>
-#include <FreeImage.h>
 
-#ifdef CAN_OCR
-#include "ocr_plug.h"
-#endif // CAN_OCR //
+#include <glib.h>       // REMOVE ME (and the g_strconcat)
+#include <stdlib.h>
+#include <stdio.h>      // printf, file operations
+#include <string.h>     // compares
+#include <FreeImage.h>  // 
+#ifdef CAN_SCAN
+#include <sane/sane.h>  // Scanner Interface
+#include <pthread.h>    // Return from this thread
+#endif // CAN_SCAN //
+
 #include "scan.h"
-#include "db.h"
 #include "imageProcessing.h"
 #include "dbaccess.h"
 #include "main.h"
 #include "utils.h"
 #include "debug.h"
+#ifdef CAN_OCR
+#include "ocr_plug.h"
+#endif // CAN_OCR //
 
 #ifdef CAN_SCAN
 
@@ -57,18 +55,6 @@ void handleSaneErrors(char *defaultMessage, SANE_Status st, int retCode) {
 
 extern void doScanningOperation(void *uuid) {
 
-  SANE_Status status;
-  SANE_Handle *openDeviceHandle;
-  SANE_Byte *buffer;
-  SANE_Int buff_len;
-  SANE_Parameters pars;
-  const SANE_Option_Descriptor *sod;
-  int q=0, hlp=0, res=0, paramSetRet=0, scan_bpl=0L;
-  char *resultMessage;
-
-  char *skew_s, *resolution_s, *page_s;
-  int skew=0, resolution=0, page=0;
-
   char *devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
   char *docid_s = getScanParam(uuid, SCAN_PARAM_DOCID);
 
@@ -76,10 +62,12 @@ extern void doScanningOperation(void *uuid) {
   int pageCount = atoi(pageCount_s);
   free(pageCount_s);
 
+
   // Open the device
   debug_message("sane_open", DEBUGM);
   updateScanProgress(uuid, SCAN_WAITING_ON_SCANNER, 0);
-  status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
+  SANE_Handle *openDeviceHandle;
+  SANE_Status status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {
     handleSaneErrors("Cannot open device", status, 0);
     updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -88,7 +76,9 @@ extern void doScanningOperation(void *uuid) {
   }
   free(devName);
 
+  int q=0, hlp=0, paramSetRet=0;
   for (hlp = 0; hlp < 9999; hlp++) {
+    const SANE_Option_Descriptor *sod;
     sod = sane_get_option_descriptor (openDeviceHandle, hlp);
     if (sod == NULL)
       break;
@@ -102,7 +92,7 @@ extern void doScanningOperation(void *uuid) {
       int minRes=9999999, maxRes=0;
       q = sod->constraint.range->quant;
       while(1) {
-        res = (q*counter)+sod->constraint.range->min;
+        int res = (q*counter)+sod->constraint.range->min;
         if(res <= sod->constraint.range->max) {
           status = sane_control_option (openDeviceHandle, hlp, SANE_ACTION_SET_VALUE, &res, &paramSetRet);
           if(status != SANE_STATUS_GOOD) {
@@ -127,13 +117,14 @@ extern void doScanningOperation(void *uuid) {
     }
   }
 
+
   // Set Resolution 
   debug_message("Set resolution", DEBUGM);
-  resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
-  resolution = atoi(resolution_s);
-  free(resolution_s);
-  resolution = resolution*q;
-  status = sane_control_option (openDeviceHandle, hlp, SANE_ACTION_SET_VALUE, &resolution, &paramSetRet);
+  char *request_resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
+  int request_resolution = atoi(request_resolution_s);
+  free(request_resolution_s);
+  int sane_resolution = request_resolution * q;
+  status = sane_control_option (openDeviceHandle, hlp, SANE_ACTION_SET_VALUE, &sane_resolution, &paramSetRet);
   if(status != SANE_STATUS_GOOD) {
     handleSaneErrors("Cannot set resolution", status, paramSetRet);
     updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -143,6 +134,7 @@ extern void doScanningOperation(void *uuid) {
 
   // Get scanning params (from the scanner)
   debug_message("Got scanning params", DEBUGM);
+  SANE_Parameters pars;
   status = sane_get_parameters (openDeviceHandle, &pars);
   int getLines = pars.lines;
   char *length_s = getScanParam(uuid, SCAN_PARAM_LENGTH);
@@ -168,11 +160,12 @@ extern void doScanningOperation(void *uuid) {
 
   // Save Record
   //
-  int docid;
+  int docid, page;
+  char *page_s;
   if( docid_s == NULL ) {
     debug_message("Saving record", DEBUGM);
     updateScanProgress(uuid, SCAN_DB_WORKING, 0);
-    docid_s = addNewScannedDoc(getLines, pars.pixels_per_line, resolution/q, pageCount); 
+    docid_s = addNewScannedDoc(getLines, pars.pixels_per_line, request_resolution, pageCount); 
 
     setScanParam(uuid, SCAN_PARAM_DOCID, docid_s);
     page_s = o_strdup("1");
@@ -203,8 +196,8 @@ extern void doScanningOperation(void *uuid) {
   double totbytes = pars.bytes_per_line * getLines;
   double readSoFar = 0;
   int progress = 0;
-  int buffer_s = q; // q seam to be the best buffer size to use!
-  buffer = malloc(buffer_s);
+  int buffer_len = q; // q seam to be the best buffer size to use!
+  SANE_Byte *buffer = malloc(buffer_len);
   unsigned char *pic=(unsigned char *)malloc( totbytes+1 );
   int counter;
   for (counter = 0 ; counter < totbytes ; counter++) pic[counter]=255;
@@ -212,7 +205,8 @@ extern void doScanningOperation(void *uuid) {
   do {
     int noMoreReads = 0;
     updateScanProgress(uuid, SCAN_SCANNING, progress);
-    status = sane_read (openDeviceHandle, buffer, buffer_s, &buff_len);
+    SANE_Int buff_len;
+    status = sane_read (openDeviceHandle, buffer, buffer_len, &buff_len);
     if (status != SANE_STATUS_GOOD) {
       if (status == SANE_STATUS_EOF)
         noMoreReads = 1;
@@ -251,7 +245,6 @@ extern void doScanningOperation(void *uuid) {
 
   debug_message("sane_cancel", DEBUGM);
   sane_cancel(openDeviceHandle);
-  scan_bpl = pars.bytes_per_line;
 
   debug_message("sane_close", DEBUGM);
   sane_close(openDeviceHandle);
@@ -259,8 +252,8 @@ extern void doScanningOperation(void *uuid) {
 
   // Fix skew - for this page
   //
-  skew_s = getScanParam(uuid, SCAN_PARAM_CORRECT_FOR_SKEW);
-  skew = atoi(skew_s);
+  char *skew_s = getScanParam(uuid, SCAN_PARAM_CORRECT_FOR_SKEW);
+  int skew = atoi(skew_s);
   free(skew_s);
   if(skew != 0) {
     debug_message("fixing skew", DEBUGM);
@@ -284,23 +277,14 @@ extern void doScanningOperation(void *uuid) {
   int shoulddoocr=0;
   if(shoulddoocr_s && 0 == strcmp(shoulddoocr_s, "on") )
     shoulddoocr = 1;
-  free(shoulddoocr_s);
 
   if(shoulddoocr==1) {
 
-    int safeToOcr=0;
-    resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
-    resolution = atoi(resolution_s);
-    if(resolution >= 300 && resolution <= 400)
-      safeToOcr = 1;
-    free(resolution_s);
-
-    if(safeToOcr==1) {
+    if(request_resolution >= 300 && request_resolution <= 400) {
       debug_message("attempting OCR", DEBUGM);
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
-      //struct scanCallInfo *infoData; //= malloc(sizeof(struct scanCallInfo));
-      struct scanCallInfo infoData; //= malloc(sizeof(struct scanCallInfo));
+      struct scanCallInfo infoData;
 
       infoData.language = (const char*)OCR_LANG_BRITISH;
       infoData.imagedata = (const unsigned char*)pic;
@@ -340,6 +324,7 @@ extern void doScanningOperation(void *uuid) {
   FreeImage_Initialise(TRUE);
   FreeImage_SetOutputMessage(FreeImageErrorHandler);
 
+  char *resultMessage;
   char *outFilename = g_strconcat(BASE_DIR,"/scans/",docid_s,"_",page_s,".jpg", NULL);
   FIBITMAP *bitmap = FreeImage_Load(FIF_PGMRAW, "/tmp/tmp.pnm", 0);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 60);
@@ -359,7 +344,6 @@ extern void doScanningOperation(void *uuid) {
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   debug_message(resultMessage, resultVerbosity);
   free(resultMessage);
-  //free(bitmap);
   free(page_s);
 
   FreeImage_DeInitialise();

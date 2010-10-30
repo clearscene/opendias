@@ -66,17 +66,8 @@ extern char *doDelete (char *documentId) {
   free(tmp);
   free(debug);
 
-  sql = o_strdup("DELETE FROM doc_tags WHERE docid = ");
-  conCat(&sql, documentId);
-  runquery_db("1", sql);
-  free_recordset("1");
-  free(sql);
-
-  sql = o_strdup("DELETE FROM docs WHERE docid = ");
-  conCat(&sql, documentId);
-  runquery_db("1", sql);
-  free_recordset("1");
-  free(sql);
+  removeDocTags(documentId);
+  removeDocTags(documentId);
 
   return o_strdup("<doc>OK</doc>");;
 }
@@ -226,7 +217,6 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
 
   if( 0 == strcmp(kkey, "docDate") ) {
 
-    char *d, *field;
     struct dateParts *dp = dateStringToDateParts(vvalue);
 
     // Save Year
@@ -246,51 +236,23 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
     }
     free(dp);
 
-  } else {
+  } else 
     rc = updateDocValue(docid, kkey, vvalue);
 
-  }
-
-  if(rc) {
-    return NULL;
-  } else {
-    return o_strdup("<doc>OK</doc>");;
-  }
+  if(rc) return NULL;
+  else return o_strdup("<doc>OK</doc>");;
 }
 
 extern char *updateTagLinkage(char *docid, char *tagid, char *add_remove) {
 
-  char *sql;
-  GList *vars = NULL;
   int rc;
 
-  if(0 == strcmp(add_remove, "add")) {
-    sql = o_strdup("INSERT INTO doc_tags (docid, tagid) VALUES (?, ?) ");
-  }
+  if(0 == strcmp(add_remove, "add")) rc = addTagToDoc(docid, tagid);
+  else if(0 == strcmp(add_remove, "remove")) rc = removeTagFromDoc (docid, tagid);
+  else return NULL;
 
-  else if(0 == strcmp(add_remove, "remove")) {
-    sql = o_strdup("DELETE FROM doc_tags WHERE docid = ? AND tagid = ? ");
-  }
-
-  else {
-    return NULL;
-  }
-
-  debug_message(sql, DEBUGM);
-
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(docid));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(tagid));
-  rc = runUpdate_db(sql, vars);
-
-  free(sql);
-
-  if(rc) {
-    return NULL;
-  } else {
-    return o_strdup("<doc>OK</doc>");;
-  }
+  if(rc) return NULL;
+  else return o_strdup("<doc>OK</doc>");;
 }
 
 

@@ -44,14 +44,15 @@
 #include "debug.h"
 #include "scan.h"
 
-GList *SELECTEDTAGS;
+//GList *SELECTEDTAGS;
 
 /*
  *
  * Helper Functions
  *
  */
-GList *filterDocsWithTags(GList *tags, GList *docs) {
+
+/*GList *filterDocsWithTags(GList *tags, GList *docs) {
 
   char *docList, *sql, *tmp;
   GList *li, *ta, *newDocList = NULL;
@@ -117,7 +118,7 @@ extern GList *docsWithAllTags(GList *tags) {
   g_list_free(docs);
   return retVal;
 }
-
+*/
 
 
 

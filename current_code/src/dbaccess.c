@@ -168,3 +168,45 @@ extern int updateDocValue (char *docid, char *kkey, char *vvalue) {
   return rc;
 }
 
+static int addRemoveTagOnDocument (char *sql, char *docid, char *tagid) {
+
+  GList *vars = NULL;
+  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
+  vars = g_list_append(vars, o_strdup(docid));
+  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
+  vars = g_list_append(vars, o_strdup(tagid));
+  int rc = runUpdate_db(sql, vars);
+  free(sql);
+  return rc;
+}
+
+extern int addTagToDoc (char *docid, char *tagid) {
+
+  char *sql = o_strdup("DELETE FROM doc_tags WHERE docid = ? AND tagid = ? ");
+  return addRemoveTagOnDocument(sql, docid, tagid);
+}
+
+extern int removeTagFromDoc (char *docid, char *tagid) {
+
+  char *sql = o_strdup("DELETE FROM doc_tags WHERE docid = ? AND tagid = ? ");
+  return addRemoveTagOnDocument(sql, docid, tagid);
+}
+
+extern void removeDocTags (char *docid) {
+  char *sql = o_strdup("DELETE FROM doc_tags WHERE docid = ?");
+  GList *vars = NULL;
+  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
+  vars = g_list_append(vars, GINT_TO_POINTER(atoi(docid)));
+  runUpdate_db(sql, vars);
+  free(sql);
+}
+
+extern void removeDoc (char *docid) {
+  char *sql = o_strdup("DELETE FROM docs WHERE docid = ?");
+  GList *vars = NULL;
+  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
+  vars = g_list_append(vars, GINT_TO_POINTER(atoi(docid)));
+  runUpdate_db(sql, vars);
+  free(sql);
+}
+
