@@ -245,13 +245,13 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
 
 extern char *updateTagLinkage(char *docid, char *tagid, char *add_remove) {
 
-  int rc;
+  int rc = 0;
 
   if(0 == strcmp(add_remove, "add")) rc = addTagToDoc(docid, tagid);
   else if(0 == strcmp(add_remove, "remove")) rc = removeTagFromDoc (docid, tagid);
   else return NULL;
 
-  if(rc) return NULL;
+  if(rc == 1) return NULL;
   else return o_strdup("<doc>OK</doc>");;
 }
 

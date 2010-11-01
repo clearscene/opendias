@@ -277,6 +277,7 @@ extern void doScanningOperation(void *uuid) {
   int shoulddoocr=0;
   if(shoulddoocr_s && 0 == strcmp(shoulddoocr_s, "on") )
     shoulddoocr = 1;
+  free(shoulddoocr_s);
 
   if(shoulddoocr==1) {
 
@@ -301,7 +302,6 @@ extern void doScanningOperation(void *uuid) {
       conCat(&ocrText, infoData.ret);
       conCat(&ocrText, "\n");
       free(infoData.ret);
-      free(pic);
     }
     else {
       debug_message("OCR was requested, but the specified resolution means it's not safe to be attempted", DEBUGM);
@@ -316,6 +316,7 @@ extern void doScanningOperation(void *uuid) {
 #endif // CAN_OCR //
     ocrText = o_strdup("");
 
+  free(pic);
 
 
   // Convert Raw into JPEG

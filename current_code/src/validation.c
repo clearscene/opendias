@@ -73,9 +73,9 @@ extern int basicValidation(GHashTable *postdata) {
   }
 
   // Check the main request param vitals
-  if ( checkVitals( action, 1, 1 ) ) {
-    return 1;
-  }
+//  if ( checkVitals( action, 1, 1 ) ) {
+//    return 1;
+//  }
 
   // Check the main request param is sane
   if ( 0 != strcmp(action, "getDocList") 
@@ -93,13 +93,13 @@ extern int basicValidation(GHashTable *postdata) {
     return 1;
   }
 
-  g_hash_table_iter_init (&iter, postdata);
-  while (g_hash_table_iter_next (&iter, &key, &value)) {
-    if( checkVitals( key, 1, 0 )  
-     || checkVitals( getPostData(postdata, key), 0, 0 ) ) {
-      return 1;
-    }
-  }
+//  g_hash_table_iter_init (&iter, postdata);
+//  while (g_hash_table_iter_next (&iter, &key, &value)) {
+//    if( checkVitals( key, 1, 0 )  
+//     || checkVitals( getPostData(postdata, key), 0, 0 ) ) {
+//      return 1;
+//    }
+//  }
 
   return 0;
 }

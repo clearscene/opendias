@@ -236,7 +236,6 @@ extern char *getScannerList() {
       propper(type);
 
       // Find location of the device
-      scannerHost = o_strdup("");
       if( name && name == strstr(name, "net:") ) {
         ipandmore = name + 4;
         int l = strstr(ipandmore, ":") - ipandmore;
@@ -245,9 +244,7 @@ extern char *getScannerList() {
         ip[l] = '\0';
         addr = inet_addr(ip);
         if ((hp = gethostbyaddr(&addr, sizeof(addr), AF_INET)) != NULL) {
-          free(scannerHost);
           scannerHost = o_strdup(hp->h_name);
-          //free(hp);
         } 
         else
           scannerHost = o_strdup(ip);

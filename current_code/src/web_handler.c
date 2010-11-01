@@ -551,9 +551,8 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
             char *tagid = getPostData(con_info->post_data, "tagid");
             char *add_remove = getPostData(con_info->post_data, "add_remove");
             content = updateTagLinkage(docid, tagid, add_remove); //doc_editor.c
-            if(content == (void *)NULL) {
+            if(content == (void *)NULL) 
               content = o_strdup(errorxml);
-            }
           }
           mimetype = MIMETYPE_XML;
           size = strlen(content);

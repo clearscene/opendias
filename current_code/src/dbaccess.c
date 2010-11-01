@@ -182,7 +182,7 @@ static int addRemoveTagOnDocument (char *sql, char *docid, char *tagid) {
 
 extern int addTagToDoc (char *docid, char *tagid) {
 
-  char *sql = o_strdup("DELETE FROM doc_tags WHERE docid = ? AND tagid = ? ");
+  char *sql = o_strdup("INSERT INTO doc_tags (docid, tagid) VALUES (?, ?) ");
   return addRemoveTagOnDocument(sql, docid, tagid);
 }
 
