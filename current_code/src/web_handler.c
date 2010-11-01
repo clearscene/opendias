@@ -24,11 +24,13 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <microhttpd.h>
+#include <arpa/inet.h>
 
 #include "web_handler.h"
 #include "main.h"
 #include "utils.h"
 #include "debug.h"
+#include "db.h"
 #include "validation.h"
 #include "pageRender.h"
 #include "doc_editor.h"
@@ -37,6 +39,7 @@ char *busypage = "<html><body>This server is busy, please try again later.</body
 char *servererrorpage = "<html><body>An internal server error has occured.</body></html>";
 char *fileexistspage = "<html><body>File exists</body></html>";
 char *completepage = "<html><body>All Done</body></html>";
+char *denied = "<h1>Access Denied</hj";
 char *errorxml= "<error>Your request could not be processed</error>";
 
 static int getFromFile_fullPath(const char *url, char **data) {
@@ -144,6 +147,82 @@ static GDestroyNotify post_data_free(struct post_data_struct *d ) {
   return (GDestroyNotify)1;
 }
 
+static char *accessChecks(struct MHD_Connection *connection, const char *url) {
+
+  int locationLimited = 0, userLimited = 0, locationAccess = 0, userAccess = 0;
+  char client_address[INET6_ADDRSTRLEN+14];
+
+  // Check if there are any restrictions
+  char *sql = o_strdup("SELECT 'location' as type, role FROM location_access UNION SELECT 'user' as type, role FROM user_access");
+  if(runquery_db("1", sql)) {
+    do  {
+      char *type = o_strdup(readData_db("1", "type"));
+      if(0 == strcmp(type, "location")) {
+        locationLimited = 1;
+      }
+      else if (0 == strcmp(type, "user")) {
+        userLimited = 1;
+      }
+      free(type);
+    } while (nextRow("1"));
+  }
+  free_recordset("1");
+  free(sql);
+
+
+  if ( locationLimited == 1 ) {
+    const union MHD_ConnectionInfo *c_info;
+    // Get the client address
+    c_info = MHD_get_connection_info(connection, MHD_CONNECTION_INFO_CLIENT_ADDRESS );
+    if ( AF_INET == c_info->client_addr->sin_family) {
+      inet_ntop(c_info->client_addr->sin_family, &(c_info->client_addr->sin_addr), client_address, INET_ADDRSTRLEN);
+    }
+
+    char *sql = o_strdup("SELECT * FROM location_access WHERE '");
+    conCat(&sql, client_address);
+    conCat(&sql, "' like location");
+    if(runquery_db("1", sql)) {
+      do  {
+        locationAccess = 1;
+        //char *type = o_strdup(readData_db("1", "type"));
+        //free(type);
+      } while (nextRow("1"));
+    }
+    free_recordset("1");
+    free(sql);
+    //free(client_address);
+  }
+
+  // username / password is a fallcack to location access
+  if ( userLimited == 1 && locationAccess == 0 ) {
+    // TODO - fetch username/password and process
+  }
+
+  if ( locationLimited == 1 || userLimited == 1 ) {
+    // requires some access grant
+    if ( locationAccess == 1 || userAccess == 1 ) {
+      char *msg = o_strdup("Access 'granted' to user on ");
+      conCat(&msg, client_address);
+      conCat(&msg, " for request: ");
+      conCat(&msg, url);
+      debug_message(msg, DEBUGM);
+      free(msg);
+      return NULL; // User has access
+    }
+    char *msg = o_strdup("Access 'DENIED' to user on ");
+    conCat(&msg, client_address);
+    conCat(&msg, " for request: ");
+    conCat(&msg, url);
+    debug_message(msg, DEBUGM);
+    free(msg);
+    return o_strdup(denied); // Requires access, but none found
+  }
+  else {
+    debug_message("access OPEN", DEBUGM);
+    return NULL; // No limitation
+  }
+}
+
 static void postDumper(GHashTable *table) {
 
   GHashTableIter iter;
@@ -178,7 +257,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
   if (NULL == *con_cls) {
     struct connection_info_struct *con_info;
 //    if (nr_of_uploading_clients >= MAXCLIENTS)
-//      return send_page_bin (connection, build_page(busypage), MHD_HTTP_SERVICE_UNAVAILABLE, MIMETYPE_HTML);
+//      return send_page_bin (connection, build_page(o_strdup(busypage)), MHD_HTTP_SERVICE_UNAVAILABLE, MIMETYPE_HTML);
     con_info = malloc (sizeof (struct connection_info_struct));
     if (NULL == con_info)
       return MHD_NO;
@@ -203,6 +282,21 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
   char *content, *mimetype, *dir;
   int size = 0;
   int status = MHD_HTTP_OK;
+
+  if (0 == strcmp (method, "GET") 
+  && ((0 != strstr(url,"/images/") && 0 != strstr(url,".png") )
+    || 0 != strstr(url,"/style/") 
+    || 0 != strstr(url,".css") ) ) {
+      // No need to do access checks - simple flat files.
+  } 
+  else {
+    char *accessError = accessChecks(connection, url);
+    if(accessError != NULL) {
+      char *accessErrorPage = build_page(accessError);
+      size = strlen(accessErrorPage);
+      return send_page (connection, accessErrorPage, MHD_HTTP_UNAUTHORIZED, MIMETYPE_HTML, size);
+    }
+  }
 
   if (0 == strcmp (method, "GET")) {
     char *mes = o_strdup("Serving request: ");
@@ -333,6 +427,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
       }
       else {
         // Main post branch point
+
         basicValidation(con_info->post_data);
         postDumper(con_info->post_data);
 
@@ -342,8 +437,11 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           debug_message("Processing request for: get doc list", INFORMATION);
           if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
-          else
+          else {
             content = populate_doclist(); // pageRender.c
+            if(content == (void *)NULL)
+              content = o_strdup(errorxml);
+          }
           mimetype = MIMETYPE_XML;
           size = strlen(content);
         }

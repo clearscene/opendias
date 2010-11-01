@@ -297,7 +297,7 @@ extern int validate(GHashTable *postdata, char *action) {
   }
 
   if ( 0 == strcmp(action, "moveTag") ) {
-    ret += checkOnlyKeys(postdata, "docid,kkey,vvalue");
+    ret += checkOnlyKeys(postdata, "docid,tagid,add_remove");
     ret += checkDocId(getPostData(postdata, "docid"));
     ret += checkTag(getPostData(postdata, "tagid"));
     ret += checkAddRemove(getPostData(postdata, "add_remove"));

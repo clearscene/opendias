@@ -301,6 +301,9 @@ $(document).ready(function() {
                $("#skewSlider_"+device).slider('disable');
                $("#lengthSlider_"+device).slider('disable');
                $("#scanButton_"+device).attr('disabled', 'disabled');
+               $("#resolutionGood_"+device).parent().addClass("greyResolution");
+               $("#resolutionGood_"+device).removeClass("sweetResolution");
+               $("#resolutionGood_"+device).addClass("greySweetResolution");
 
                $.ajax({ url: "dynamic",
                         dataType: "xml",

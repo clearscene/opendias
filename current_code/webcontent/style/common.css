@@ -250,6 +250,9 @@
   .poorResolution {
     background-color: rgba(255, 0, 0, 0.10);
   }
+  .greyResolution {
+    background-color: rgba(255, 0, 0, 0.03);
+  }
   .resolutionQualityGood {
     min-height: 10px;
     background-color: rgba(0, 255, 0, 0.35);
@@ -261,6 +264,9 @@
   }
   .sweetResolution {
     background-color: rgba(0, 255, 0, 0.90);
+  }
+  .greySweetResolution {
+    background-color: rgba(0, 255, 0, 0.1);
   }
   #saveAlert {
     display: none;

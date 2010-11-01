@@ -22,6 +22,10 @@ $(document).ready(function() {
          cache: false,
          type: "POST",
          success: function(data){
+            if( $(data).find('error').text() ){
+              alert($(data).find('error').text());
+              return 1;
+            }
             totalRows = $(data).find('count').text();
             count = 0;
             dta = data;

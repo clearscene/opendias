@@ -302,8 +302,8 @@ extern struct dateParts *dateStringToDateParts(char *dateString) {
 
   // Save Day
   dp->day = (char*) malloc(3);
-  strncpy(dp->month, (char *)dateString+8, 2);
-  dp->month[2] = 0L;
+  strncpy(dp->day, (char *)dateString+8, 2);
+  dp->day[2] = 0L;
 
   return dp;
 }
