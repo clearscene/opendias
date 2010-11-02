@@ -283,3 +283,33 @@
   #safeKeeping {
     display: none;
   }
+
+  .accessControl h3 {
+    background-color: #9999ee;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    padding-top: 3px;
+  }
+  .accessControl h4 {
+    border-bottom: 3px solid black;
+    margin-left: 30px;
+  }
+  .accessControl table thead {
+    background-color: #9999ee;
+  }
+  .accessControl table tbody {
+    background-color: #bbbbff;
+    border: 1px solid #9999ee;
+  }
+  .accessControl table tbody td {
+    padding: 3px;
+  }
+  .accessControl div {
+    margin-left: 30px;
+  }
+  .accessControl div.row, .accessControl div.label, .accessControl div.data {
+    margin-left: 0px;;
+  }
+  .accessControl .label {
+    width: 100px;
+  }

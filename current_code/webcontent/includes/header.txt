@@ -30,7 +30,7 @@
         <li><a href='/'>Document List</a></li>
         <li><a href='/acquire.html'>Acquire New</a></li>
         <li><a href='/acquire.html'>Reports</a></li>
-        <li><a href='/acquire.html'>User Admin</a></li>
+        <li><a href='/accessControls.html'>Access Controls</a></li>
         <li><a href='/acquire.html'>System Config</a></li>
       </ul>
     </div>

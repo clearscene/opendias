@@ -25,8 +25,7 @@
 #include "read_odf.h"
 #endif // CAN_READODF //
 
-#ifdef CAN_READODF
-void importFile() {
+extern char *uploadfile(char *filename, char *ftype) {
 
   //char *fileName;
   char *sql, *tmp, *dateStr;
@@ -63,8 +62,7 @@ void importFile() {
   free(tmp);
 
   // Open the document for editing.
-
+  return "";
 }
-#endif // CAN_READODF //
 
 

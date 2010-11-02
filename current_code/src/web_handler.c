@@ -34,6 +34,7 @@
 #include "validation.h"
 #include "pageRender.h"
 #include "doc_editor.h"
+#include "import_doc.h"
 
 char *busypage = "<html><body>This server is busy, please try again later.</body></html>";
 char *servererrorpage = "<html><body>An internal server error has occured.</body></html>";
@@ -598,6 +599,21 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
             content = o_strdup("<filename>BabyBeat.ogg</filename>");
           }
           mimetype = MIMETYPE_XML;
+          size = strlen(content);
+        }
+
+        else if ( action && 0 == strcmp(action, "uploadfile") ) {
+          debug_message("Processing request for: uploadfile", INFORMATION);
+          if ( validate( con_info->post_data, action ) ) 
+            content = o_strdup(errorxml);
+          else {
+            char *filename = getPostData(con_info->post_data, "filename");
+            char *ftype = getPostData(con_info->post_data, "ftype");
+            //content = uploadfile(filename, ftype); // import_doc.c
+            if(content == (void *)NULL)
+              content = o_strdup(servererrorpage);
+          }
+          mimetype = MIMETYPE_HTML;
           size = strlen(content);
         }
 
