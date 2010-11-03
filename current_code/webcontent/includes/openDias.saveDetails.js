@@ -101,6 +101,27 @@ function physicallyMoveTag(tagid) {
 
 }
 
+function oncloseEvent() {
+  var notComplete = 0;
+  var msg = "";
+  if(document.getElementById('title').value == "New (untitled) document.") {
+    notComplete = 1;
+    msg += "Document Title is still the default. ";
+  }
+  if(document.getElementById('docDate').value == " - No date set -") {
+    notComplete = 1;
+    msg += "Document Date is still the default. ";
+  }
+  if(document.getElementById('selected').getElementsByTagName('tr').length == 1) {
+    notComplete = 1;
+    msg += "Document has not assigned tags. ";
+  }
+
+  if(notComplete == 1) {
+    return "Document details are incomplete: "+msg;
+  }
+}
+
 $(document).ready(function() {
 
   for ( var key in formFields ) {
@@ -128,3 +149,4 @@ $(document).ready(function() {
 
 });
 
+window.onbeforeunload = oncloseEvent;

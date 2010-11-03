@@ -43,31 +43,43 @@
 
 extern char *doDelete (char *documentId) {
 
-  char *sql, *tmp;
+  int pages;
 
-  sql = o_strdup("SELECT * FROM docs WHERE docid = ");
+  char *sql = o_strdup("SELECT * FROM docs WHERE docid = ");
   conCat(&sql, documentId);
-  if(!runquery_db("1", sql)) {
+  if(runquery_db("1", sql)) {
+    char *pages_s = o_strdup(readData_db("1", "pages"));
+    pages = atoi(pages_s);
+    debug_message(pages_s, INFORMATION);
+    free(pages_s);
+  } else {
     debug_message("Could not select record.", ERROR);
     free_recordset("1");
+    free(sql);
     return NULL;
   }
   free_recordset("1");
   free(sql);
 
-  char *debug = o_strdup("Deleting Docs: ");
-  tmp = o_strdup(BASE_DIR);
-  conCat(&tmp ,"/scans/");
-  conCat(&tmp ,documentId);
-  conCat(&tmp ,"_*");
-  conCat(&debug, tmp);
-  debug_message(debug, INFORMATION);
-  unlink(tmp);
-  free(tmp);
-  free(debug);
+  char *docPrefix = o_strdup(BASE_DIR);
+  conCat(&docPrefix ,"/scans/");
+  conCat(&docPrefix ,documentId);
+  conCat(&docPrefix ,"_");
+  int i;
+  for(i = 1 ; i <= pages ; i++) {
+    char *docPath = o_strdup(docPrefix);
+    char *page_num = itoa(i, 10);
+    conCat(&docPath, page_num);
+    conCat(&docPath, ".jpg");
+    debug_message(docPath, INFORMATION);
+    unlink(docPath);
+    free(docPath);
+    free(page_num);
+  }
+  free(docPrefix);
 
   removeDocTags(documentId);
-  removeDocTags(documentId);
+  removeDoc(documentId);
 
   return o_strdup("<doc>OK</doc>");;
 }

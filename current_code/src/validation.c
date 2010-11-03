@@ -306,9 +306,15 @@ extern int validate(GHashTable *postdata, char *action) {
 
   if ( 0 == strcmp(action, "filter") ) {
     ret += checkOnlyKeys(postdata, "textSearch,startDate,endDate");
-    ret += checkVal(getPostData(postdata, "textSearch"));
-    ret += checkDate(getPostData(postdata, "startDate"));
-    ret += checkDate(getPostData(postdata, "endDate"));
+
+    char *data = getPostData(postdata, "textSearch");
+    if(data != NULL) ret += checkVal(data);
+
+    data = getPostData(postdata, "startDate");
+    if(data != NULL) ret += checkDate(data);
+
+    data = getPostData(postdata, "endDate");
+    if(data != NULL) ret += checkDate(data);
   }
 
   if ( 0 == strcmp(action, "deletedoc") ) {
