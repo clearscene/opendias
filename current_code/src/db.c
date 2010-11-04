@@ -150,12 +150,18 @@ static int callback(char *recordSetKey, int argc, char **argv, char **azColName)
   // Create row container
   row = g_hash_table_new(g_str_hash, g_str_equal);
   for(i=0; i<argc; i++) {
-/*  tmp = o_strdup("Saving rowdata: ");
+
+/*
+    // -------------------------------------------
+    char *tmp = o_strdup("Saving rowdata: ");
     conCat(&tmp, azColName[i]);
     conCat(&tmp, " : ");
     conCat(&tmp, argv[i]);
     debug_message(tmp, SQLDEBUG);
-    free(tmp);  */
+    free(tmp);  
+    // -------------------------------------------
+*/
+
     g_hash_table_insert(row, o_strdup(azColName[i]), o_strdup(argv[i] ? argv[i]: "NULL"));
   }
 

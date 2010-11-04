@@ -78,9 +78,15 @@ function physicallyMoveTag(tagid) {
   if(list=="available") {
     document.getElementById('available').getElementsByTagName('tbody')[0].removeChild(tr);
     document.getElementById('selected').getElementsByTagName('tbody')[0].appendChild(tr);
+    $('#'+tagid).one('dblclick', function() {
+      moveTag( $(this).attr('id'), 'remove' );
+    });
   } else {
     document.getElementById('selected').getElementsByTagName('tbody')[0].removeChild(tr);
     document.getElementById('available').getElementsByTagName('tbody')[0].appendChild(tr);
+    $('#'+tagid).one('dblclick', function() {
+      moveTag( $(this).attr('id'), 'add' );
+    });
   }
 
   $("#available")

@@ -27,11 +27,10 @@
   <div id='menu'>
     <div class="container">
       <ul>
-        <li><a href='/'>Document List</a></li>
+        <li><a href='/'>Home</a></li>
+        <li><a href='/docList.html'>Document List</a></li>
         <li><a href='/acquire.html'>Acquire New</a></li>
-        <li><a href='/acquire.html'>Reports</a></li>
         <li><a href='/accessControls.html'>Access Controls</a></li>
-        <li><a href='/acquire.html'>System Config</a></li>
       </ul>
     </div>
   </div>

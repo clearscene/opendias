@@ -15,13 +15,13 @@ $(document).ready(function(){
              data: {action: "filter",
                     textSearch: $('#textSearch').val(),
                     startDate: $('#startDate').val(),
-                    endDate: $('#endDate').val(),
+                    endDate: $('#endDate').val()
                    },
              cache: false,
              type: "POST",
              success: function(data){
                if( $(data).find('error').text() ) {
-                 alert("An error occured while updating the information.");
+                 alert("Unable to get a filtered list:."+$(data).find('error').text());
                } else {
                  $('#docList_table').fadeOut("fast");
                  filteredDocs = new Array();

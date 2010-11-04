@@ -26,7 +26,7 @@
 
 extern char *getPostData(gpointer post_hash, char *key) {
   struct post_data_struct *data_struct = (struct post_data_struct *)g_hash_table_lookup(post_hash, key);
-  if(data_struct == NULL && data_struct->data == NULL)
+  if(data_struct == NULL || data_struct->data == NULL)
     return NULL;
   else
     return data_struct->data;
@@ -308,13 +308,13 @@ extern int validate(GHashTable *postdata, char *action) {
     ret += checkOnlyKeys(postdata, "textSearch,startDate,endDate");
 
     char *data = getPostData(postdata, "textSearch");
-    if(data != NULL) ret += checkVal(data);
+    if(data != NULL && strcmp(data,"")) ret += checkVal(data);
 
     data = getPostData(postdata, "startDate");
-    if(data != NULL) ret += checkDate(data);
+    if(data != NULL && strcmp(data,"")) ret += checkDate(data);
 
     data = getPostData(postdata, "endDate");
-    if(data != NULL) ret += checkDate(data);
+    if(data != NULL && strcmp(data,"")) ret += checkDate(data);
   }
 
   if ( 0 == strcmp(action, "deletedoc") ) {

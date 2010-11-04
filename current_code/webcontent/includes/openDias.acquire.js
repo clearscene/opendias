@@ -55,6 +55,11 @@ function getScanProgress (progressId, device) {
 	 cache: false,
 	 type: "POST",
 	 success: function(dta) {
+           if( $(dta).find('error').text() ){
+             alert("Error getting scan progress: "+$(dta).find('error').text());
+             return 1;
+           }
+
            var finish = 0;
            status = parseInt( $(dta).find('status').text() );
            vvalue = parseInt( $(dta).find('value').text() );
@@ -112,7 +117,7 @@ function getScanProgress (progressId, device) {
                       type: "POST",
                       success: function(dta2) {
                         if( $(dta2).find('error').text() ){
-                          alert("Error signalling the scanner to restart for the next page.");
+                          alert("Error signalling the scanner to restart for the next page: "+$(dta2).find('error').text());
                           return 1;
                         }
                       }
@@ -181,7 +186,7 @@ $(document).ready(function() {
          type: "POST",
          success: function(data){
            if( $(data).find('error').text() ){
-             alert("Error in fetching details.");
+             alert("Unable to fetch a list of available scanners: "+$(data).find('error').text());
              return 1;
            }
            var deviceid=0;
@@ -319,6 +324,10 @@ $(document).ready(function() {
                         cache: false,
                         type: "POST",
                         success: function(data){
+                          if( $(data).find('error').text() ){
+                            alert("Unable to start the scaning process: "+$(data).find('error').text());
+                            return 1;
+                          }
                           scanuuid = $(data).find('scanuuid').text();
                           getScanProgress(scanuuid, device);
                         }

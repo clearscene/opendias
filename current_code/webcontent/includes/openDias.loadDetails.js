@@ -23,12 +23,12 @@ function applyNewRow(tagid, tag, selected) {
 
   if(selected=="NULL") {
     document.getElementById('available').getElementsByTagName('tbody')[0].appendChild(tr);
-    $('#tagid_'+tagid).dblclick(function() {
+    $('#tagid_'+tagid).one('dblclick', function() {
       moveTag( $(this).attr('id'), 'add' );
     });
   } else {
     document.getElementById('selected').getElementsByTagName('tbody')[0].appendChild(tr);
-    $('#tagid_'+tagid).dblclick(function() {
+    $('#tagid_'+tagid).one('dblclick', function() {
       moveTag( $(this).attr('id'), 'remove' );
     });
   }
@@ -44,6 +44,10 @@ $(document).ready(function() {
                                         cache: false,
                                         type: "POST",
                                         success: function(data){
+                                                  if($(data).find('error').text()) {
+                                                    alert("Unable to get the audio: "+$(data).find('error').text());
+                                                    return 1;
+                                                  }
                                                  id = $(data).find('filename').text();
                                                  $('#audio').attr('src','/audio/'+id);
                                                  }
@@ -58,7 +62,7 @@ $(document).ready(function() {
          type: "POST",
          success: function(data){
            if( $(data).find('error').text() ){
-             alert("Error in fetching details.");
+             alert("Unable to get document details: "+$(data).find('error').text());
              return 1;
            }
            officialDocId = $(data).find('docid').text();

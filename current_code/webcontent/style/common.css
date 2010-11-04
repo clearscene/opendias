@@ -286,7 +286,7 @@
 
   .accessControl h3 {
     background-color: #9999ee;
-    padding-left: 3px;
+    padding-left: 7px;
     padding-bottom: 3px;
     padding-top: 3px;
   }
@@ -312,4 +312,17 @@
   }
   .accessControl .label {
     width: 100px;
+  }
+
+  #home h3 {
+    background-color: #9999ee;
+    padding-left: 7px;
+    padding-bottom: 3px;
+    padding-top: 3px;
+  }
+  #home li {
+    margin-left: 35px;
+  }
+  #home p {
+    margin-left: 15px;
   }

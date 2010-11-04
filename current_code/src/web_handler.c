@@ -41,7 +41,17 @@ char *servererrorpage = "<html><body>An internal server error has occured.</body
 char *fileexistspage = "<html><body>File exists</body></html>";
 char *completepage = "<html><body>All Done</body></html>";
 char *denied = "<h1>Access Denied</hj";
+char *noaccessxml = "<error>You do not have permissions to complete the request</error>";
 char *errorxml= "<error>Your request could not be processed</error>";
+
+struct priverlage {
+  int update_access;
+  int view_doc;
+  int edit_doc;
+  int delete_doc;
+  int add_import;
+  int add_scan;
+};
 
 static int getFromFile_fullPath(const char *url, char **data) {
 
@@ -148,7 +158,7 @@ static GDestroyNotify post_data_free(struct post_data_struct *d ) {
   return (GDestroyNotify)1;
 }
 
-static char *accessChecks(struct MHD_Connection *connection, const char *url) {
+static char *accessChecks(struct MHD_Connection *connection, const char *url, struct priverlage *privs) {
 
   int locationLimited = 0, userLimited = 0, locationAccess = 0, userAccess = 0;
   char client_address[INET6_ADDRSTRLEN+14];
@@ -179,19 +189,22 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url) {
       inet_ntop(c_info->client_addr->sin_family, &(c_info->client_addr->sin_addr), client_address, INET_ADDRSTRLEN);
     }
 
-    char *sql = o_strdup("SELECT * FROM location_access WHERE '");
+    char *sql = o_strdup("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan FROM location_access LEFT JOIN access_role ON location_access.role = access_role.role WHERE '");
     conCat(&sql, client_address);
     conCat(&sql, "' like location");
     if(runquery_db("1", sql)) {
       do  {
         locationAccess = 1;
-        //char *type = o_strdup(readData_db("1", "type"));
-        //free(type);
+        privs->update_access = atoi(readData_db("1", "update_access"));
+        privs->view_doc = atoi(readData_db("1", "view_doc"));
+        privs->edit_doc = atoi(readData_db("1", "edit_doc"));
+        privs->delete_doc = atoi(readData_db("1", "delete_doc"));
+        privs->add_import = atoi(readData_db("1", "add_import"));
+        privs->add_scan = atoi(readData_db("1", "add_scan"));
       } while (nextRow("1"));
     }
     free_recordset("1");
     free(sql);
-    //free(client_address);
   }
 
   // username / password is a fallcack to location access
@@ -220,6 +233,12 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url) {
   }
   else {
     debug_message("access OPEN", DEBUGM);
+    privs->update_access=1;
+    privs->view_doc=1;
+    privs->edit_doc=1;
+    privs->delete_doc=1;
+    privs->add_import=1;
+    privs->add_scan=1;
     return NULL; // No limitation
   }
 }
@@ -283,6 +302,13 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
   char *content, *mimetype, *dir;
   int size = 0;
   int status = MHD_HTTP_OK;
+  struct priverlage accessPrivs;
+  accessPrivs.update_access=0;
+  accessPrivs.view_doc=0;
+  accessPrivs.edit_doc=0;
+  accessPrivs.delete_doc=0;
+  accessPrivs.add_import=0;
+  accessPrivs.add_scan=0;
 
   if (0 == strcmp (method, "GET") 
   && ((0 != strstr(url,"/images/") && 0 != strstr(url,".png") )
@@ -291,7 +317,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
       // No need to do access checks - simple flat files.
   } 
   else {
-    char *accessError = accessChecks(connection, url);
+    char *accessError = accessChecks(connection, url, &accessPrivs);
     if(accessError != NULL) {
       char *accessErrorPage = build_page(accessError);
       size = strlen(accessErrorPage);
@@ -436,7 +462,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         if ( action && 0 == strcmp(action, "getDocList") ) {
           debug_message("Processing request for: get doc list", INFORMATION);
-          if ( validate( con_info->post_data, action ) ) 
+          if ( accessPrivs.view_doc != 1 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
             content = populate_doclist(); // pageRender.c
@@ -449,7 +477,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "getDocDetail") ) {
           debug_message("Processing request for: document details", INFORMATION);
-          if ( validate( con_info->post_data, action ) ) 
+          if ( accessPrivs.view_doc != 1 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
             char *docid = getPostData(con_info->post_data, "docid");
@@ -463,7 +493,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "getScannerList") ) {
           debug_message("Processing request for: getScannerList", INFORMATION);
-          if ( validate( con_info->post_data, action ) ) 
+          if ( accessPrivs.add_scan != 1 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
             content = getScannerList(); // pageRender.c
@@ -477,7 +509,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "doScan") ) {
           debug_message("Processing request for: doScan", INFORMATION);
-          if ( validate( con_info->post_data, action ) ) 
+          if ( accessPrivs.add_scan != 1 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
             char *deviceid = getPostData(con_info->post_data, "deviceid");
@@ -498,7 +532,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "getScanningProgress") ) {
           debug_message("Processing request for: getScanning Progress", INFORMATION);
-          if ( validate( con_info->post_data, action ) ) 
+          if ( accessPrivs.add_scan != 1 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
             char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
@@ -513,7 +549,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "nextPageReady") ) {
           debug_message("Processing request for: restart scan after page change", INFORMATION);
-          if ( validate( con_info->post_data, action ) ) 
+          if ( accessPrivs.add_scan != 1 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
             char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
@@ -528,7 +566,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "updateDocDetails") ) {
           debug_message("Processing request for: update doc details", INFORMATION);
-          if ( validate( con_info->post_data, action ) ) 
+          if ( accessPrivs.edit_doc != 1 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
             char *docid = getPostData(con_info->post_data, "docid");
@@ -545,7 +585,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "moveTag") ) {
           debug_message("Processing request for: Move Tag", INFORMATION);
-          if ( validate( con_info->post_data, action ) ) 
+          if ( accessPrivs.edit_doc != 1 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
             char *docid = getPostData(con_info->post_data, "docid");
@@ -561,7 +603,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "filter") ) {
           debug_message("Processing request for: Doc List Filter", INFORMATION);
-          if ( validate( con_info->post_data, action ) ) 
+          if ( accessPrivs.view_doc != 1 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
             char *textSearch = getPostData(con_info->post_data, "textSearch");
@@ -578,7 +622,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "deletedoc") ) {
           debug_message("Processing request for: delete document", INFORMATION);
-          if ( validate( con_info->post_data, action ) ) 
+          if ( accessPrivs.delete_doc != 1 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
             char *docid = getPostData(con_info->post_data, "docid");
@@ -593,7 +639,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "getAudio") ) {
           debug_message("Processing request for: getAudio", INFORMATION);
-          if ( validate( con_info->post_data, action ) ) 
+          if ( accessPrivs.view_doc != 1 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
             content = o_strdup("<filename>BabyBeat.ogg</filename>");
@@ -604,7 +652,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         else if ( action && 0 == strcmp(action, "uploadfile") ) {
           debug_message("Processing request for: uploadfile", INFORMATION);
-          if ( validate( con_info->post_data, action ) ) 
+          if ( accessPrivs.add_import != 1 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
             char *filename = getPostData(con_info->post_data, "filename");
