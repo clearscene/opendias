@@ -1,116 +1,39 @@
 
-<script type="text/javascript" src="/includes/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="/style/jquery-ui.css" type="text/css" />
-<script type="text/javascript" src="/includes/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="/includes/jquery.tablesorter.pager.js"></script>
-<script type="text/javascript" src="/includes/openDias.tablesorter.pager.addRemove.js"></script>
-<link rel="stylesheet" href="/style/tablesorter.css" type="text/css" />
+<h2>Home</h2>
 
-<style>
-.ui-progressbar-value { background-image: url(/images/jquery-ui/pbar-ani.png); }
-#doclist_table { display: none; }
-#pager{ display: none; }
-</style>
+ <div id='home'>
 
-<div id='filter'>
-  <div id='filterOptions'>
-    <div id='filterInner'>
-      <h3>Filter By:</h3>
-      <div class='row'>
-        <div class='label'>
-          Title or OCR Text:
-        </div>
-        <div class='data'>
-          <input id='textSearch' />
-        </div>
-      </div>
-      <div class='row'>
-        <div class='label'>
-          Document Date:
-        </div>
-        <div class='data'>
-            <input id='startDate' /> - <input id='endDate' />
-        </div>
-      </div>
-      <div class='row'>
-        <div class='label'>
-          Docuemnt Tags:
-        </div>
-        <div class='data'>
-          Tag Filter - coming soon...
-        </div>
-      </div>
-      <div class='row'>
-        <div class='label'>
-          &nbsp;
-        </div>
-        <div class='data'>
-          <div class='innerLeftDisplay'>
-            <button id='doFilter'>Filter</button>
-          </div>
-          <div class='innerRightDisplay'>
-            <div id="filterProgress"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div id='filterTab'>
-    Filter and Search
-  </div>
-</div>
+  <h3>Welcome</h3>
+  <p><strong>Welcome</strong> to opendias. The <strong>D</strong>ocument <strong>I</strong>maging <strong>A</strong>rchive <strong>S</strong>ystem.</p>
+  <p>Opendias has been developed to help every household move 'paperless'. Use it to store corespondants that you would normal receive in a paper format - eg Statements, Bills, Letters, Pay Slips, etc...</p>
 
-<script type="text/javascript" src="/includes/openDias.filter.js"></script>
-<div id='doclist'>
-  <h2>Document List</h2>
-  <table id='docList_table' class='tablesorter'>
-   <thead>
-    <tr>
-     <th>Doc Id</th>
-     <th>Title</th>
-     <th>Type</th>
-     <th>Date</th>
-    </tr>
-   </thead>
-   <tfoot>
-    <tr>
-     <th>Doc Id</th>
-     <th>Title</th>
-     <th>Type</th>
-     <th>Date</th>
-    </tr>
-   </tfoot>
-   <tbody>
-   </tbody>
-  </table>
+  <h3>Key Features</h3>
+  <p>There are a number of ways to help you keep track of your documents once they are archived:</p>
+  <ul>
+    <li>OCR (optical character recognition) of the documents contents, that can be search on;</li>
+    <li>Assign documents with multiple 'Tags', making it easier to fing and group documents;</li>
+    <li>Search by document date;</li>
+  </ul>
 
-  <div id='progressContainer'>
-    <p>Loading Document List ...</p>
-    <div id="progressbar"></div>
-  </div>
+  <p>By also, we have added some useful features once while you're viewing or editing your document:</p>
+  <ul>
+    <li>Have the OCR'ed text read to you;</li>
+    <li>Zoom in on a sliding multiple pages view of your document;</li>
+    <li>Live saves back to the database (no 'save button');</li>
+  </ul>
 
-  <div id="pager" class="tablesorterPager">
-    <form>
-      <img src="/images/tablesorter/first.png" class="first"/>
-      <img src="/images/tablesorter/prev.png" class="prev"/>
-      <input type="text" class="pagedisplay" size=3 />
-      <img src="/images/tablesorter/next.png" class="next"/>
-      <img src="/images/tablesorter/last.png" class="last"/>
-      <select id='pageSizeSelect' class="pagesize">
-        <option value="5">5 rows per page</option>
-        <option value="10">10 rows per page</option>
-        <option value="20">20 rows per page</option>
-        <option value="50">50 rows per page</option>
-        <option value="100">100 rows per page</option>
-      </select>
-    </form>
-  </div>
-</div>
+  <h3>Coming soon...</h3>
+  <p>We are planning on adding more features just as soonas we can. See a selection below. If there is
+    anything that you feel would help, do let us know.</p>
+  <ul>
+    <li>Document printing direct from the view page;</li>
+    <li>A 'For Attension' flag that can be used in searches, and shows in document lists;</li>
+    <li>Location based and/or username/passowrd access provitions;</li>
+    <li>Document encryption, to keep your data safe;</li>
+  </ul>
 
-<table id='safeKeeping'>
- <tbody>
- </tbody>
-</table>
+  <br />
+  <br />
+  <br />
 
-<script type="text/javascript" src="/includes/openDias.docList.js"></script>
-
+ </div>
