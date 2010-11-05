@@ -41,7 +41,9 @@ opendias_SOURCES = \
 	imageProcessing.h    \
 	imageProcessing.c    \
 	validation.c    \
-	validation.h
+	validation.h    \
+	import_doc.c    \
+	import_doc.h
 
 opendias_LDFLAGS = 
 

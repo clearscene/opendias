@@ -25,9 +25,6 @@ extern char *getScanProgress(char *);
 extern char *doScan(char *, char *, char *, char *, char *, char *, char *);
 extern char *docFilter(char *, char *, char *);
 extern char *nextPageReady(char *);
-
-//extern void create_gui (void);
-//extern void populate_gui ();
-//extern void populate_docInformation (char *);
+extern char *getAccessDetails();
 
 #endif /* PAGERENDER */

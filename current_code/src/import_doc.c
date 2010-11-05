@@ -18,12 +18,15 @@
 
 
 #include "config.h"
+#include "main.h"
 #include "dbaccess.h"
 #include "utils.h"
 #include "debug.h"
 #ifdef CAN_READODF
 #include "read_odf.h"
 #endif // CAN_READODF //
+#include <glib.h>
+#include <stdlib.h>
 
 extern char *uploadfile(char *filename, char *ftype) {
 

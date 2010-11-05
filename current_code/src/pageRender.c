@@ -46,82 +46,6 @@
 
 //GList *SELECTEDTAGS;
 
-/*
- *
- * Helper Functions
- *
- */
-
-/*GList *filterDocsWithTags(GList *tags, GList *docs) {
-
-  char *docList, *sql, *tmp;
-  GList *li, *ta, *newDocList = NULL;
-
-  debug_message("Entered filterDocsWithTags", DEBUGM);
-
-  for(ta = tags; ta != NULL; ta = g_list_next(ta)) {
-    docList = o_strdup("");
-    for(li = docs; li != NULL; li = g_list_next(li)) {
-      if(li->data) {
-        tmp = o_strdup(li->data);
-        conCat(&docList, tmp);
-        free(tmp);
-      }
-      if(li->next)
-        conCat(&docList, ", ");
-    }
-
-    sql = o_strdup("SELECT DISTINCT docs.docid as docid \
-      FROM docs, doc_tags \
-      WHERE doc_tags.docid = docs.docid \
-      AND docs.docid IN (");
-    conCat(&sql, docList);
-    conCat(&sql, ") AND doc_tags.tagid = ");
-    conCat(&sql, ta->data);
-
-    newDocList = NULL;
-    if(runquery_db("1", sql)) {
-      do {
-        newDocList = g_list_append(newDocList, o_strdup(readData_db("1", "docid")));
-      } while (nextRow("1"));
-    }
-
-    free_recordset("1");
-    free(sql);
-    free(docList);
-    docs = newDocList;
-  }
-
-  return docs;
-}
-
-extern GList *docsWithAllTags(GList *tags) {
-
-  GList *docs = NULL, *retVal, *li;
-  char *sql;
-
-  debug_message("Entered docsWithAllTags", DEBUGM);
-
-  sql = o_strdup("SELECT * FROM docs");
-  if(runquery_db("1", sql)) {
-    do {
-      docs = g_list_append(docs, o_strdup(readData_db("1", "docid")));
-    } while (nextRow("1"));
-  }
-  free_recordset("1");
-  free(sql);
-
-  retVal = filterDocsWithTags(tags, docs);
-
-  for(li = docs; li != NULL; li = g_list_next(li)) 
-    free(li->data);
-  g_list_free(docs);
-  return retVal;
-}
-*/
-
-
-
 
 
 /*
@@ -540,5 +464,49 @@ extern char *docFilter(char *textSearch, char *startDate, char *endDate) {
   return docList;
 }
 
+extern char *getAccessDetails() {
 
+  char *access = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>");
+
+  // Access by location
+  conCat(&access, "<accesschecks><locationaccess>");
+  char *sql = o_strdup("SELECT * FROM location_access a left join access_role r on a.role = r.role");
+  if(runquery_db("1", sql)) {
+    do {
+      char *location = o_strdup(readData_db("1", "location"));
+      char *role = o_strdup(readData_db("1", "rolename"));
+      char *row = malloc(52+strlen(location)+strlen(role));
+      sprintf(row, "<access><location>%s</location><role>%s</role></access>", location, role);
+      conCat(&access, row);
+      free(location);
+      free(role);
+      free(row);
+    } while (nextRow("1"));
+  }
+  free_recordset("1");
+  free(sql);
+  conCat(&access, "</locationaccess>");
+
+  // Access by user
+  conCat(&access, "<useraccess>");
+  sql = o_strdup("SELECT * FROM user_access a left join access_role r on a.role = r.role");
+  if(runquery_db("1", sql)) {
+    do {
+      char *user = o_strdup(readData_db("1", "username"));
+      char *role = o_strdup(readData_db("1", "rolename"));
+      char *row = malloc(46+strlen(user)+strlen(role));
+      sprintf(row, "<access><user>%s</user><role>%s</role></access>", user, role);
+      conCat(&access, row);
+      free(user);
+      free(role);
+      free(row);
+    } while (nextRow("1"));
+  }
+  free_recordset("1");
+  free(sql);
+  conCat(&access, "</useraccess>");
+  conCat(&access, "</accesschecks>");
+
+  return access;
+}
 
