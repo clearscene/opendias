@@ -117,5 +117,39 @@ $(document).ready(function() {
          }
   });
 
+  $('#title').autocomplete({
+      source: function( request, response ) {
+        $.ajax({
+          url: "/dynamic",
+          dataType: "json",
+          type: "POST",
+          data: {
+            action: "titleAutoComplete",
+            startsWith: request.term
+          },
+          success: function( data ) {
+            response( $.map( data.results, function( item ) {
+              return {
+                label: item.title,
+                value: item.title
+              }
+            }));
+          }
+        });
+      },
+      minLength: 2,
+      select: function( event, ui ) {
+      //  log( ui.item ?
+      //    "Selected: " + ui.item.label :
+      //    "Nothing selected, input was " + this.value);
+      },
+      open: function() {
+        $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+      },
+      close: function() {
+        $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+      }
+    });
+
 });
 

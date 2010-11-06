@@ -26,5 +26,6 @@ extern char *doScan(char *, char *, char *, char *, char *, char *, char *);
 extern char *docFilter(char *, char *, char *);
 extern char *nextPageReady(char *);
 extern char *getAccessDetails();
+extern char *titleAutoComplete(char *);
 
 #endif /* PAGERENDER */

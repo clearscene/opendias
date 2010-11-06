@@ -34,6 +34,7 @@
 #define MIMETYPE_JS "application/javascript"
 #define MIMETYPE_XML "text/xml"
 #define MIMETYPE_OGG "audio/ogg"
+#define MIMETYPE_JSON "text/x-json"
 
 //static unsigned int nr_of_uploading_clients = 0;
 

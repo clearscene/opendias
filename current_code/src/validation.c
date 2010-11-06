@@ -90,7 +90,8 @@ extern int basicValidation(GHashTable *postdata) {
     && 0 != strcmp(action, "deletedoc") 
     && 0 != strcmp(action, "getAudio")
     && 0 != strcmp(action, "uploadfile")
-    && 0 != strcmp(action, "getAccessDetails") ) {
+    && 0 != strcmp(action, "getAccessDetails")
+    && 0 != strcmp(action, "titleAutoComplete") ) {
     debug_message( "requested 'action' is not available.", ERROR);
     return 1;
   }
@@ -332,6 +333,10 @@ extern int validate(GHashTable *postdata, char *action) {
   }
 
   if ( 0 == strcmp(action, "getAccessDetails") ) {
+    ret += checkOnlyKeys(postdata, "");
+  }
+
+  if ( 0 == strcmp(action, "titleAutoComplete") ) {
     ret += checkOnlyKeys(postdata, "");
   }
 

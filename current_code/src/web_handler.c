@@ -678,6 +678,22 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           size = strlen(content);
         }
 
+        else if ( action && 0 == strcmp(action, "titleAutoComplete") ) {
+          debug_message("Processing request for: titleAutoComplete", INFORMATION);
+          if ( accessPrivs.view_doc == 0 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
+            content = o_strdup(errorxml);
+          else {
+            char *startsWith = getPostData(con_info->post_data, "startsWith");
+            content = titleAutoComplete(startsWith); // pageRender.c
+            if(content == (void *)NULL)
+              content = o_strdup(servererrorpage);
+          }
+          mimetype = MIMETYPE_JSON;
+          size = strlen(content);
+        }
+
         else {
           // unknown post request - should have been picked up by validation!
           debug_message("disallowed content", WARNING);

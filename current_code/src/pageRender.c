@@ -510,3 +510,32 @@ extern char *getAccessDetails() {
   return access;
 }
 
+extern char *titleAutoComplete(char *startsWith) {
+
+  int notFirst = 0;
+  char *result = o_strdup("{\"results\":[");
+  char *line = o_strdup("{\"title\":\"%s\"}");
+  char *sql = o_strdup("SELECT DISTINCT title FROM docs WHERE title like '");
+  conCat(&sql, startsWith);
+  conCat(&sql, "%'");
+
+  if(runquery_db("1", sql)) {
+    do {
+      if(notFirst==1) 
+        conCat(&result, ",");
+      notFirst = 1;
+      char *title = o_strdup(readData_db("1", "title"));
+      char *data = malloc(13+strlen(title));
+      sprintf(data, line, title);
+      conCat(&result, data);
+      free(data);
+      free(title);
+    } while (nextRow("1"));
+  }
+  free_recordset("1");
+  free(sql);
+  free(line);
+  conCat(&result, "]}");
+
+  return result;
+}
