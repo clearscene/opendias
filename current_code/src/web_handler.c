@@ -365,6 +365,19 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
         mimetype = MIMETYPE_PNG;
     }
 
+    else if( 0!=strstr(url,"/images/") && 0!=strstr(url,".jpg") ) {
+      size = getFromFile(url, &content);
+      if(size < 0) {
+        free(content);
+        content = o_strdup("");
+        status = MHD_HTTP_NOT_FOUND;
+      	mimetype = MIMETYPE_HTML;
+        size = 0;
+      }
+      else
+        mimetype = MIMETYPE_JPG;
+    }
+
     // Serve 'scans' content
     else if( 0!=strstr(url,"/scans/") && 0!=strstr(url,".jpg") ) {
       dir = o_strdup(BASE_DIR);
