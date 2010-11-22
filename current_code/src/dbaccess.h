@@ -45,10 +45,12 @@ extern void addScanProgress (char *);
 extern void updateScanProgress(char *, int, int);
 extern void updateNewScannedPage (char *, char *, int); // Frees both chars
 extern char *addNewScannedDoc (int, int, int, int);
+extern char *addNewFileDoc (int, char *);
 extern int updateDocValue (char *, char *, char *);
 extern int addTagToDoc (char *, char *);
 extern int removeTagFromDoc (char *, char *);
 extern void removeDocTags (char *);
 extern void removeDoc (char *);
+extern void addLocation(char *, int);
 
 #endif /* DBACCESS */

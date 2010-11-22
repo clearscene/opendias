@@ -182,29 +182,18 @@ extern char *get_odf_Text (const char *filename) {
   return text;
 }
 
-extern char *get_odf_Thumb (const char *filename) {
+extern void get_odf_Thumb (const char *filename) {
 
   char *image=NULL;
   char *imageData;
   gint size;
 
   size = getEntry(filename, "Thumbnails/thumbnail.png", &imageData);
-  if(size > 0)
-  {
-  // Until we can read a stream into a new pixbuf,
-  //  >>  image = gdk_pixbuf_new_from_stream_at_scale((GInputStream *)imageData, 150, -1, TRUE, NULL, NULL);
-  // were stuck writing a file, then reading a file 
-  // for a new picbuf.
-  //g_message(imageData);
-  //int tmpFile = open("/tmp/tmpImg.png", O_CREAT|O_WRONLY, 775);
-  //write(tmpFile, imageData, size);
-  //close(tmpFile);
-  //image = gdk_pixbuf_new_from_file_at_scale("/tmp/tmpImg.png", 150, -1, TRUE, NULL);
-  //g_unlink("/tmp/tmpImg.png");
+  if(size > 0) {
+    int tmpFile = open("/tmp/tmpImg.png", O_CREAT|O_WRONLY, 775);
+    write(tmpFile, imageData, size);
+    close(tmpFile);
   }
-  debug_message("Got pixmap from ODT doc", DEBUGM);
-
-  return image;
 
 }
 

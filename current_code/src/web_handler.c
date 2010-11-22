@@ -25,6 +25,7 @@
 #include <stdarg.h>
 #include <microhttpd.h>
 #include <arpa/inet.h>
+#include <uuid/uuid.h>
 
 #include "web_handler.h"
 #include "main.h"
@@ -40,7 +41,7 @@ char *busypage = "<html><body>This server is busy, please try again later.</body
 char *servererrorpage = "<html><body>An internal server error has occured.</body></html>";
 char *fileexistspage = "<html><body>File exists</body></html>";
 char *completepage = "<html><body>All Done</body></html>";
-char *denied = "<h1>Access Denied</hj";
+char *denied = "<h1>Access Denied</h1>";
 char *noaccessxml = "<error>You do not have permissions to complete the request</error>";
 char *errorxml= "<error>Your request could not be processed</error>";
 
@@ -118,17 +119,55 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
   struct connection_info_struct *con_info = coninfo_cls;
   struct post_data_struct *data_struct = (struct post_data_struct *)g_hash_table_lookup(con_info->post_data, key);
 
-  // Do we have some data already?
-  if(NULL == data_struct) {
-    struct post_data_struct *data_struct = malloc (sizeof (struct post_data_struct));
-    data_struct->data = o_strdup(data);
-    data_struct->size = size;
-    g_hash_table_insert(con_info->post_data, o_strdup(key), data_struct);
-  }
-  else {
-    conCat(&(data_struct->data), data);
-    data_struct->size += size;
-    g_hash_table_replace(con_info->post_data, (gpointer)key, (gpointer)data_struct);
+  if(size > 0) {
+    char *trimedData = calloc(size+1, sizeof(char));
+    strncat(trimedData, data, size);
+    //trimedData[size] = NULL; // Add on the trailing NULL
+
+    if(NULL == data_struct) {
+      data_struct = (struct post_data_struct *) malloc (sizeof (struct post_data_struct));
+      data_struct->size = size;
+      if(0 == strcmp(key, "uploadfile")) {
+          uuid_t uu;
+          char *fileid = malloc(36+1);
+          uuid_generate(uu);
+          uuid_unparse(uu, fileid);
+          data_struct->data = o_strdup(fileid);
+          free(fileid);
+      }
+      else {
+        data_struct->data = o_strdup(trimedData);
+      }
+      g_hash_table_insert(con_info->post_data, o_strdup(key), data_struct);
+    }
+
+    else if(0 != strcmp(key, "uploadfile")) {
+      conCat(&(data_struct->data), trimedData);
+      data_struct->size += size;
+      g_hash_table_replace(con_info->post_data, (gpointer)key, (gpointer)data_struct);
+    }
+
+    if(0 == strcmp(key, "uploadfile")) {
+      FILE *fp;
+      char *filename_template = o_strdup("/tmp/%s.dat");
+      char *filename = malloc(10+strlen(data_struct->data));
+      sprintf(filename, filename_template, data_struct->data);
+      free(filename_template);
+      if ((fp = fopen(filename, "ab")) == NULL)
+        debug_message("could not open http post binary data file for output", ERROR);
+      else {
+        fseek(fp, 0, SEEK_END);
+        fwrite (data, size, sizeof (char), fp);
+        fclose(fp);
+/*        if( data_struct->size != size ) {
+          data_struct->size += size;
+          g_hash_table_replace(con_info->post_data, (gpointer)key, (gpointer)data_struct);
+        }
+*/      }
+      free(filename);
+    }
+
+    free(trimedData);
   }
 
   return MHD_YES;
@@ -142,11 +181,19 @@ extern void request_completed (void *cls, struct MHD_Connection *connection, voi
   if (con_info->connectiontype == POST) {
     if (NULL != con_info->postprocessor) {
       MHD_destroy_post_processor (con_info->postprocessor);
-//      nr_of_uploading_clients--;
+      nr_of_clients--;
+    }
+    char *uploadedFileName = getPostData(con_info->post_data, "uploadfile");
+    if(uploadedFileName != NULL) {
+      char *filename_template = o_strdup("/tmp/%s.dat");
+      char *filename = malloc(10+strlen(uploadedFileName));
+      sprintf(filename, filename_template, uploadedFileName);
+      free(filename_template);
+      unlink(filename);
+      free(filename);
     }
     g_hash_table_remove_all( con_info->post_data );
     g_hash_table_unref( con_info->post_data );
-//    free( con_info->post_data );
   }
   free (con_info);
   *con_cls = NULL;
@@ -252,14 +299,14 @@ static void postDumper(GHashTable *table) {
   debug_message("Collected post data: ", DEBUGM);
   g_hash_table_iter_init (&iter, table);
   while (g_hash_table_iter_next (&iter, &key, &value)) {
-    tmp = o_strdup("      ");
-    conCat(&tmp, key);
-    conCat(&tmp, " : " );
-    conCat(&tmp, getPostData(table, key) );
-    debug_message(tmp, DEBUGM);
+    tmp = o_strdup("      %s : %s");
+    char *data = getPostData(table, key);
+    char *logLine = malloc(10 + strlen(key) + strlen(data));
+    sprintf(logLine, tmp, key, data);
+    debug_message(logLine, DEBUGM);
     free(tmp);
+    free(logLine);
   }
-
 }
 
 extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
@@ -276,8 +323,8 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
   // Discover Params
   if (NULL == *con_cls) {
     struct connection_info_struct *con_info;
-//    if (nr_of_uploading_clients >= MAXCLIENTS)
-//      return send_page_bin (connection, build_page(o_strdup(busypage)), MHD_HTTP_SERVICE_UNAVAILABLE, MIMETYPE_HTML);
+    if (nr_of_clients >= MAXCLIENTS)
+      return send_page_bin (connection, build_page(o_strdup(busypage)), MHD_HTTP_SERVICE_UNAVAILABLE, MIMETYPE_HTML);
     con_info = malloc (sizeof (struct connection_info_struct));
     if (NULL == con_info)
       return MHD_NO;
@@ -289,7 +336,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
         free (con_info);
         return MHD_NO;
       }
-//      nr_of_uploading_clients++;
+      nr_of_clients++;
       con_info->connectiontype = POST;
     }
     else
@@ -659,15 +706,16 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           size = strlen(content);
         }
 
-        else if ( action && 0 == strcmp(action, "uploadfile") ) {
-          debug_message("Processing request for: uploadfile", INFORMATION);
+        else if ( action && 0 == strcmp(action, "uploadFile") ) {
+          debug_message("Processing request for: uploadFile", INFORMATION);
           if ( accessPrivs.add_import == 0 )
             content = o_strdup(noaccessxml);
           else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
-            char *filename = getPostData(con_info->post_data, "filename");
+            char *filename = getPostData(con_info->post_data, "uploadfile");
             char *ftype = getPostData(con_info->post_data, "ftype");
+debug_message(filename, ERROR);
             content = uploadfile(filename, ftype); // import_doc.c
             if(content == (void *)NULL)
               content = o_strdup(servererrorpage);
@@ -688,6 +736,26 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
               content = o_strdup(servererrorpage);
           }
           mimetype = MIMETYPE_XML;
+          size = strlen(content);
+        }
+
+        else if ( action && 0 == strcmp(action, "controlAccess") ) {
+          debug_message("Processing request for: controlAccess", INFORMATION);
+          if ( accessPrivs.update_access == 0 )
+            content = build_page(denied);
+          else if ( validate( con_info->post_data, action ) ) 
+            content = o_strdup(errorxml);
+          else {
+            char *submethod = getPostData(con_info->post_data, "submethod");
+            char *location = getPostData(con_info->post_data, "address");
+            //char *user = getPostData(con_info->post_data, "user");
+            //char *password = getPostData(con_info->post_data, "password");
+            int role = atoi(getPostData(con_info->post_data, "role"));
+            content = controlAccess(submethod, location, NULL, NULL, role); // pageRender.c
+            if(content == (void *)NULL)
+              content = o_strdup(servererrorpage);
+          }
+          mimetype = MIMETYPE_HTML;
           size = strlen(content);
         }
 

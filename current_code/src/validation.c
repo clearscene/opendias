@@ -91,7 +91,8 @@ extern int basicValidation(GHashTable *postdata) {
     && 0 != strcmp(action, "getAudio")
     && 0 != strcmp(action, "uploadfile")
     && 0 != strcmp(action, "getAccessDetails")
-    && 0 != strcmp(action, "titleAutoComplete") ) {
+    && 0 != strcmp(action, "titleAutoComplete")
+    && 0 != strcmp(action, "controlAccess") ) {
     debug_message( "requested 'action' is not available.", ERROR);
     return 1;
   }
@@ -157,6 +158,16 @@ static int checkAddRemove(char *val) {
     return 0;
   }
   debug_message("Validation failed: add/remove check", ERROR);
+  return 1;
+}
+
+static int validUploadType(char *val) {
+  if ( 0 != strcmp(val, "PDF" )
+    || 0 != strcmp(val, "ODF" ) 
+    || 0 != strcmp(val, "jpg" ) ) {
+    return 0;
+  }
+  debug_message("Validation failed: uploadType check", ERROR);
   return 1;
 }
 
@@ -249,6 +260,22 @@ static int checkVal(char *val) {
   return 0;
 }
 
+static int checkControlAccessMethod(char *submethod) {
+  if ( 0 != strcmp(submethod, "addLocation")
+    || 0 != strcmp(submethod, "removeLocation" )
+    || 0 != strcmp(submethod, "addUser" )
+    || 0 != strcmp(submethod, "removeUser" ) ) {
+    return 0;
+  }
+  debug_message("Validation failed: accessConrol Method check", ERROR);
+  return 1;
+}
+
+static int checkRole(char *role) {
+  if(checkStringIsInt(role)) return 1;
+  if(checkSaneRange(role, 1, 10)) return 1;
+  return 0;
+}
 
 
 /*************************************************8
@@ -330,6 +357,7 @@ extern int validate(GHashTable *postdata, char *action) {
 
   if ( 0 == strcmp(action, "uploadfile") ) {
     ret += checkOnlyKeys(postdata, "filename,ftype");
+    ret += validUploadType(getPostData(postdata, "ftype"));
   }
 
   if ( 0 == strcmp(action, "getAccessDetails") ) {
@@ -337,7 +365,13 @@ extern int validate(GHashTable *postdata, char *action) {
   }
 
   if ( 0 == strcmp(action, "titleAutoComplete") ) {
-    ret += checkOnlyKeys(postdata, "");
+    ret += checkOnlyKeys(postdata, "startsWith");
+  }
+
+  if ( 0 == strcmp(action, "controlAccess") ) {
+    ret += checkOnlyKeys(postdata, "submethod,address,user,password,role");
+    ret += checkControlAccessMethod(getPostData(postdata, "submethod"));
+    ret += checkRole(getPostData(postdata, "role"));
   }
 
   return ret;

@@ -510,6 +510,39 @@ extern char *getAccessDetails() {
   return access;
 }
 
+extern char *controlAccess(char *submethod, char *location, char *user, char *password, int role) {
+
+  if(!strcmp(submethod, "addLocation")) {
+    char *txt = o_strdup("Adding access %i to location %s");
+    char *msg = malloc(29+strlen(location));
+    sprintf(msg, txt, role, location);
+    debug_message(msg, INFORMATION);
+    free(msg);
+    free(txt);
+    addLocation(location, role);
+
+  } else if(!strcmp(submethod, "removeLocation")) {
+
+
+
+  } else if(!strcmp(submethod, "addUser")) {
+
+
+
+  } else if(!strcmp(submethod, "removeUser")) {
+
+
+
+  } else {
+
+    // Should not have gotten here (validation)
+    debug_message("Unknown accessControl Method", ERROR);
+    return NULL;
+  }
+
+  return o_strdup("<html><HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/accessControls.html\"></HEAD><body></body></html>");
+}
+
 extern char *titleAutoComplete(char *startsWith) {
 
   int notFirst = 0;

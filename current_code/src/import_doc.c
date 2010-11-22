@@ -27,45 +27,69 @@
 #endif // CAN_READODF //
 #include <glib.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 extern char *uploadfile(char *filename, char *ftype) {
 
-  //char *fileName;
-  char *sql, *tmp, *dateStr;
-  int lastInserted;
-  GTimeVal todaysDate;
+  int itype;
+  char *ocrText;
 
   // Save Record
-  debug_message("Saving record", DEBUGM);
-  g_get_current_time (&todaysDate);
-  dateStr = g_time_val_to_iso8601 (&todaysDate);
+  debug_message("Saving doc import record", DEBUGM);
 
-  sql = o_strdup("INSERT INTO docs \
-    (doneocr, ocrtext, entrydate, filetype) \
-    VALUES (0, '--fromDoc--', '");
-  tmp = g_strconcat(dateStr, "', ", NULL);
-  conCat(&sql, tmp);
-  free(tmp);
-  tmp = itoa(DOC_FILETYPE, 10);
-  conCat(&sql, tmp);
-  free(tmp);
-  conCat(&sql, ") ");
-  debug_message(sql, DEBUGM);
-  runquery_db("1", sql);
-  lastInserted = last_insert();
-  free(sql);
-  sql = itoa(lastInserted, 10);
+  if(0==strcmp("PDF", ftype)) {
+    itype = PDF_FILETYPE;
 
-  tmp = o_strdup(BASE_DIR);
-  conCat(&tmp, "scans/");
-  conCat(&tmp, sql);
-  conCat(&tmp, ".odt");
-  debug_message(tmp, DEBUGM);
-//  fcopy(fileName, tmp);
-  free(tmp);
+    // REPLACE ME WITH SOME LIB METHOD TO DO THE SAME
+    // \/ \/ \/ \/ \/ \/ \/ \/
+    char *cmd_template = o_strdup("pdftotext /tmp/%s.dat /tmp/%s.txt");
+    char *cmd = malloc(30+(2*strlen(filename)));
+    sprintf(cmd, cmd_template, filename, filename);
+    free(cmd_template);
+    //system(cmd);
+    free(cmd);
+
+    char *out_template = o_strdup("/tmp/%s.txt");
+    char *out = malloc(30+strlen(filename));
+    sprintf(out, out_template, filename);
+    free(out_template);
+    load_file_to_memory(out, &ocrText);
+    free(out);
+    // --------------------------------------
+  }
+  else if(0==strcmp("ODF", ftype)) {
+    itype = ODF_FILETYPE;
+    ocrText = get_odf_Text(filename);  
+  }
+  else if(0==strcmp("jpg", ftype)) {
+    itype = JPG_FILETYPE;
+    ocrText = o_strdup("-- Could not extract text from Image --");
+  }
+
+  // Save the record to the DB
+  char *docid = addNewFileDoc(itype, ocrText); //ocrText get freed in this method
+
+  // Docs that are not scanned, are stored with no "_x" postfix, but any thumbnails - are.
+  char *to_name = g_strconcat(BASE_DIR,"/scans/",docid, NULL);
+  addFileExt(&to_name, itype);
+
+  char *filename_template = o_strdup("/tmp/%s.dat");
+  char *full_filename = malloc(10+strlen(filename));
+  sprintf(full_filename, filename_template, filename);
+  free(filename_template);
+
+  fcopy(full_filename, to_name);
+  free(to_name);
 
   // Open the document for editing.
-  return "";
+  char *redirect = o_strdup("<html><HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/docDetail.html?docid=");
+  conCat(&redirect, docid);
+  conCat(&redirect, "\"></HEAD><body></body></html>");
+  free(docid);
+
+  return redirect;
+
 }
 
 

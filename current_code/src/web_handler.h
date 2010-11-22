@@ -23,7 +23,7 @@
 #include <microhttpd.h>
 
 #define POSTBUFFERSIZE 512
-#define MAXCLIENTS 2
+#define MAXCLIENTS 5
 #define GET 0
 #define POST 1
 
@@ -36,7 +36,7 @@
 #define MIMETYPE_OGG "audio/ogg"
 #define MIMETYPE_JSON "text/x-json"
 
-//static unsigned int nr_of_uploading_clients = 0;
+static unsigned int nr_of_clients = 0;
 
 extern int answer_to_connection (void *, struct MHD_Connection *, const char *, const char *, const char *, const char *, size_t *, void **);
 extern void request_completed (void *, struct MHD_Connection *, void **, enum MHD_RequestTerminationCode );

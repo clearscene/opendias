@@ -163,19 +163,16 @@ extern void fcopy(char *fnsource, char *fntarget) {
 
   FILE *fpin = fopen(fnsource, "rb");
 
-  if(fpin != NULL)
-  {
-  FILE *fpout = fopen(fntarget, "wb");
-  if(fpout != NULL)
-    {
-    int ch = 0;
-    while((ch = getc(fpin)) != EOF)
-    {
-    putc(ch, fpout);
+  if(fpin != NULL) {
+    FILE *fpout = fopen(fntarget, "wb");
+    if(fpout != NULL) {
+      int ch = 0;
+      while((ch = getc(fpin)) != EOF) {
+        putc(ch, fpout);
+      }
+      fclose(fpin);
     }
-    fclose(fpin);
-    }
-  fclose(fpout);
+    fclose(fpout);
   }
 
 }
@@ -308,3 +305,15 @@ extern struct dateParts *dateStringToDateParts(char *dateString) {
   return dp;
 }
 
+extern void addFileExt(char **fname, int ftype) {
+
+  char *ext;
+
+       if(ftype == SCAN_FILETYPE) ext = o_strdup(".jpg");
+  else if(ftype == PDF_FILETYPE) ext = o_strdup(".pdf");
+  else if(ftype == ODF_FILETYPE) ext = o_strdup(".odf");
+  else if(ftype == JPG_FILETYPE) ext = o_strdup(".jpg");
+  
+  conCat(fname, ext);
+  free(ext);
+}

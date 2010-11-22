@@ -326,3 +326,34 @@
   #home p {
     margin-left: 15px;
   }
+  #home .row p {
+    margin-left: 2px;
+  }
+
+  /* --------- Forms --------- */
+  input, textarea {
+    margin: 3px;
+    border: solid 1px #E5E5E5;
+    outline: 0;
+    padding-left: 3px;
+    background: #FFFFFF url('bg_form.png') left top repeat-x;
+    background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #EEEEEE), to(#FFFFFF));
+    background: -moz-linear-gradient(top, #FFFFFF, #EEEEEE 1px, #FFFFFF 25px);
+    box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+    -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+    -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+  } 
+  .checkbox {
+    background: #000;
+    width: 12px;
+  }
+  textarea {
+    line-height: 150%;
+  } 
+  input:hover, textarea:hover, input:focus, textarea:focus {
+    border-color: #C9C9C9;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 8px;
+  } 
+

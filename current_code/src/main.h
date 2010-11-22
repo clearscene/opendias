@@ -25,8 +25,10 @@ unsigned short PORT;
 
 enum {
   PLACE_HOLDER = 0,
-  DOC_FILETYPE,
+  ODF_FILETYPE,
   SCAN_FILETYPE,
+  PDF_FILETYPE,
+  JPG_FILETYPE,
 };
 
 #endif /* MAIN */

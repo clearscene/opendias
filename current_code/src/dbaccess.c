@@ -101,7 +101,7 @@ extern void updateScanProgress (char *uuid, int status, int value) {
 
 }
 
-extern char *addNewScannedDoc (int getLines, int ppl, int resolution, int pageCount) {
+static char *addNewDoc (int ftype, int getLines, int ppl, int resolution, int pageCount, char *ocrText) {
 
 
   GTimeVal todaysDate;
@@ -111,14 +111,14 @@ extern char *addNewScannedDoc (int getLines, int ppl, int resolution, int pageCo
     (depth, lines, ppl, resolution, ocrText, pages, entrydate, filetype) \
     VALUES (8, ?, ?, ?, ?, ?, ?, ?)");
   GList *vars = NULL;
-    vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
+  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
   vars = g_list_append(vars, GINT_TO_POINTER(getLines));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
   vars = g_list_append(vars, GINT_TO_POINTER(ppl));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
   vars = g_list_append(vars, GINT_TO_POINTER(resolution));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(""));
+  vars = g_list_append(vars, ocrText);
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
   vars = g_list_append(vars, GINT_TO_POINTER(pageCount));
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
@@ -129,6 +129,14 @@ extern char *addNewScannedDoc (int getLines, int ppl, int resolution, int pageCo
   free(sql);
   return itoa(last_insert(), 10);
 
+}
+
+extern char *addNewScannedDoc (int getLines, int ppl, int resolution, int pageCount) {
+  return addNewDoc(SCAN_FILETYPE, getLines, ppl, resolution, pageCount, o_strdup("") );
+}
+
+extern char *addNewFileDoc (int ftype, char *ocrText) {
+  return addNewDoc(ftype, 0, 0, 0, 1, ocrText);
 }
 
 extern void updateNewScannedPage (char *docid, char *ocrText, int page) {
@@ -206,6 +214,17 @@ extern void removeDoc (char *docid) {
   GList *vars = NULL;
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
   vars = g_list_append(vars, GINT_TO_POINTER(atoi(docid)));
+  runUpdate_db(sql, vars);
+  free(sql);
+}
+
+extern void addLocation(char *location, int role) {
+
+  char *sql = o_strdup("INSERT INTO location_access (location, role) VALUES (?, ?);");
+  GList *vars = g_list_append(NULL, GINT_TO_POINTER(DB_TEXT));
+  vars = g_list_append(vars, o_strdup(location));
+  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
+  vars = g_list_append(vars, GINT_TO_POINTER(role));
   runUpdate_db(sql, vars);
   free(sql);
 }

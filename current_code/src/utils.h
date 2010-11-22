@@ -39,5 +39,6 @@ extern char *getTimeStr();
 extern void propper(char *);
 extern void chop(char *);
 extern struct dateParts *dateStringToDateParts(char *);
+extern void addFileExt(char **, int);
 
 #endif /* UTILS */

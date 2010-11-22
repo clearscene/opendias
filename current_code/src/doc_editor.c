@@ -131,23 +131,11 @@ extern char *openDocEditor (char *documentId) {
   ppl = o_strdup(readData_db("1", "ppl"));
   pages = o_strdup(readData_db("1", "pages"));
   lines = o_strdup(readData_db("1", "lines"));
-  type = o_strdup(g_str_equal (readData_db("1", "filetype"),"1")?"ODF Doc":"Scaned Doc");
+  type = o_strdup(readData_db("1", "filetype"));
+  ocrText = o_strdup(readData_db("1", "ocrtext"));
   humanReadableDate = dateHuman( o_strdup(readData_db("1", "docdatey")),
                                  o_strdup(readData_db("1", "docdatem")),
                                  o_strdup(readData_db("1", "docdated")) );
-
-//  if( atoi(readData_db("1", "")) == DOC_FILETYPE) {
-//#ifdef CAN_READODF
-//    char *filename = o_strdup(BASE_DIR);
-//    conCat(&filename, "scans/");
-//    //conCat(&filename, imgData.documentId);
-//    conCat(&filename, ".odt");
-//    ocrText = get_odf_Text(filename);
-//    free(filename);
-//#endif // CAN_READODF //
-//  }
-//  else
-    ocrText = o_strdup(readData_db("1", "ocrtext"));
 
   free_recordset("1");
   free(sql);

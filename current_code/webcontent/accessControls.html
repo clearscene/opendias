@@ -6,10 +6,13 @@
 <p>Allow access from certain locations.</p>
 
 <h4>Add new access by location</h4>
+<form action='/dynamic' method='post'>
+<input name='action' type='hidden' value='controlAccess' />
+<input name='submethod' type='hidden' value='addLocation' />
 <div id='locationSet'>
   <div class='row'>
     <div class='label'>Address:</div>
-    <div class='data'><input type='address' name='ftype' /><span>eg 127.0.0.1 or 192.168.%</span></div>
+    <div class='data'><input name='address' />&nbsp;<span>eg 127.0.0.1 or 192.168.%</span></div>
   </div>
   <div class='row'>
     <div class='label'>Role:</div>
@@ -27,8 +30,12 @@
     <div class='data'><input type='submit' name='addButton' value='Add' /></div>
   </div>
 </div>
+</form>
 
 <h4>Current access by location</h4>
+<form action='/dynamic' method='post'>
+<input name='action' type='hidden' value='controlAccess' />
+<input name='method' type='hidden' value='removeLocation' />
 <div id='locationList'>
   <div class='row'>
     <div class='label'>&nbsp;</div>
@@ -47,6 +54,7 @@
     </div>
   </div>
 </div>
+</form>
 <div class='cclear'></div>
 
 
@@ -57,6 +65,9 @@
 <p>Allow access for certain users<span id='withLocation'><strong>, if access is not provided by location</strong></span>.</p>
 
 <h4>Add access by username and password</h4>
+<form action='/dynamic' method='post'>
+<input name='action' type='hidden' value='controlAccess' />
+<input name='method' type='hidden' value='addUser' />
 <div id='locationSet'>
   <div class='row'>
     <div class='label'>User:</div>
@@ -82,8 +93,12 @@
     <div class='data'><input type='submit' name='addButton' value='Add' /></div>
   </div>
 </div>
+</form>
 
 <h4>Current access by username and password</h4>
+<form action='/dynamic' method='post'>
+<input name='action' type='hidden' value='controlAccess' />
+<input name='method' type='hidden' value='removeUser' />
 <div id='locationList'>
   <div class='row'>
     <div class='label'>&nbsp;</div>
@@ -102,8 +117,8 @@
     </div>
   </div>
 </div>
+</form>
 <div class='cclear'></div>
 
 </div>
-
 <script type="text/javascript" src="/includes/openDias.getAccessDetails.js"></script>

@@ -71,30 +71,44 @@ $(document).ready(function() {
            $("#ocrtext").val( $(data).find('extractedText').text() );
            $("#docDate").val( $(data).find('docDate').text() );
            $("#scanDate").append(document.createTextNode( $(data).find('scanDate').text() ));
-           $("#type").append(document.createTextNode( $(data).find('type').text() ));
+           $("#type").append(document.createTextNode( getTypeDescription($(data).find('type').text()) ));
 
-           // Set images and default width
-           for( x=1 ; x<=parseInt($(data).find('pages').text()) ; x++ ) {
-             $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage"+x+"' alt='' src='/scans/"+officialDocId+"_"+x+".jpg' /></div></li>");
-             $("#scanImage"+x).css("width", "300px");
-           }
+           //
+           // Doc type display options.
 
-           // setup the slider
-           $("#slider li").css("height", 30+($(data).find('y').text() * ( 300 / $(data).find('x').text() ))+"px" );
-           if($(data).find('pages').text() != "1") {
-             $("#slider").easySlider({prevText:'', nextText:''});
-           }
+//           if( $(data).find('type').text() == "1" ) { // ODF Documents
 
-           // make eachimage zoomable
-           for( x=1 ; x<=parseInt($(data).find('pages').text()) ; x++ ) {
-             $("#scanImage"+x).parent().gzoom({
-                                 sW: 300,
-                                 sH: $(data).find('y').text() * ( 300 / $(data).find('x').text() ),
-                                 lW: $(data).find('x').text(),
-                                 lH: $(data).find('y').text(), 
-                                 lighbox: false
-                                 });
-           }
+//           }
+
+//           else if( $(data).find('type').text() == "2" || $(data).find('type').text() == "4") {
+             // Set images and default width
+             for( x=1 ; x<=parseInt($(data).find('pages').text()) ; x++ ) {
+               $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage"+x+"' alt='' src='/scans/"+officialDocId+"_"+x+".jpg' /></div></li>");
+               $("#scanImage"+x).css("width", "300px");
+             }
+
+             // setup the slider
+             $("#slider li").css("height", 30+($(data).find('y').text() * ( 300 / $(data).find('x').text() ))+"px" );
+             if($(data).find('pages').text() != "1") {
+               $("#slider").easySlider({prevText:'', nextText:''});
+             }
+
+             // make eachimage zoomable
+             for( x=1 ; x<=parseInt($(data).find('pages').text()) ; x++ ) {
+               $("#scanImage"+x).parent().gzoom({
+                                   sW: 300,
+                                   sH: $(data).find('y').text() * ( 300 / $(data).find('x').text() ),
+                                   lW: $(data).find('x').text(),
+                                   lH: $(data).find('y').text(), 
+                                   lighbox: false
+                                   });
+             }
+//           }
+
+//           else if( $(data).find('type').text() == "3" ) { // PDF Documents
+
+//           }
+  
 
            $("#docDate").datepicker( {dateFormat:"yy/mm/dd"} );
 
@@ -153,3 +167,18 @@ $(document).ready(function() {
 
 });
 
+function getTypeDescription(iType) {
+
+  if( iType == "1" ) {
+    return "ODF Document";
+  } else if( iType == "2" ) {
+    return "Scanned Docuemnt";
+  } else if( iType == "3" ) {
+    return "PDF Document";
+  } else if( iType == "4" ) {
+    return "JPEG Image";
+  } else {
+    return "[unknown]";
+  }
+
+}
