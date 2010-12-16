@@ -80,7 +80,7 @@ extern int connect_db (int createIfRequired) {
   db = o_strdup(BASE_DIR);
   conCat(&db, "/openDIAS.sqlite3");
   if(g_file_test(db, G_FILE_TEST_EXISTS)) {
-    debug_message("Dir structure is in-plce, database should exist", DEBUGM);
+    debug_message("Dir structure is in-place, database should exist", DEBUGM);
     if(open_db (db)) {
       debug_message("Could not connect to database.", WARNING);
       free(db);

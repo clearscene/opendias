@@ -30,11 +30,18 @@
 #include <unistd.h>
 #include <stdarg.h>
 
+#include <signal.h>
+#include <errno.h>
+#include <fcntl.h>
+
 #include "main.h"
 #include "db.h" 
 #include "utils.h"
 #include "debug.h"
 #include "web_handler.h"
+
+struct MHD_Daemon *httpdaemon;
+int pidFilehandle;
 
 int setup (char *configFile) {
 
@@ -117,45 +124,177 @@ int setup (char *configFile) {
 
 }
 
-void server_shutdown(struct MHD_Daemon *daemon) {
-  MHD_stop_daemon (daemon);
+void server_shutdown() {
+  debug_message("openDias service is shutdown....", INFORMATION);
+  close(pidFilehandle);
+  MHD_stop_daemon (httpdaemon);
   debug_message("sane_exit", DEBUGM);
   sane_exit();
   close_db ();
   free(BASE_DIR);
 }
 
+void signal_handler(int sig) {
+    char *ss, *mm;
+    switch(sig) {
+        case SIGHUP:
+            debug_message("Received SIGHUP signal. IGNORING", INFORMATION);
+            break;
+        case SIGINT:
+        case SIGTERM:
+            debug_message("Received SIGTERM signal.", INFORMATION);
+            server_shutdown();
+            exit(EXIT_SUCCESS);
+            break;
+        default:
+            ss = o_strdup(strsignal(sig));
+            mm = malloc(18+strlen(ss));
+            sprintf(mm, "Unhandled signal %s", ss);
+            debug_message(mm, INFORMATION);
+            free(ss);
+            free(mm);
+            break;
+    }
+}
+ 
+void daemonize(char *rundir, char *pidfile) {
+    int pid, sid, i;
+    char str[10];
+    struct sigaction newSigAction;
+    sigset_t newSigSet;
+ 
+    /* Check if parent process id is set */
+    if (getppid() == 1) {
+        /* PPID exists, therefore we are already a daemon */
+        debug_message("Code called to make this process a daemon, but we are already such.", ERROR);
+        return;
+    }
+ 
+    /* Set signal mask - signals we want to block */
+    sigemptyset(&newSigSet);
+    sigaddset(&newSigSet, SIGCHLD);  /* ignore child - i.e. we don't need to wait for it */
+    sigaddset(&newSigSet, SIGTSTP);  /* ignore Tty stop signals */
+    sigaddset(&newSigSet, SIGTTOU);  /* ignore Tty background writes */
+    sigaddset(&newSigSet, SIGTTIN);  /* ignore Tty background reads */
+    sigprocmask(SIG_BLOCK, &newSigSet, NULL);   /* Block the above specified signals */
+ 
+    /* Set up a signal handler */
+    newSigAction.sa_handler = signal_handler;
+    sigemptyset(&newSigAction.sa_mask);
+    newSigAction.sa_flags = 0;
+ 
+    /* Signals to handle */
+    sigaction(SIGHUP, &newSigAction, NULL);     /* catch hangup signal */
+    sigaction(SIGTERM, &newSigAction, NULL);    /* catch term signal */
+    sigaction(SIGINT, &newSigAction, NULL);     /* catch interrupt signal */
+ 
+    /* Fork*/
+    pid = fork();
+ 
+    if (pid < 0) {
+        /* Could not fork */
+        debug_message("Could not fork.", ERROR);
+        exit(EXIT_FAILURE);
+    }
+ 
+    if (pid > 0) {
+        /* Child created ok, so exit parent process */
+        char *m = malloc(24+6);
+        sprintf(m,"Child process created: %d", pid);
+        debug_message("Could not fork.", INFORMATION);
+        free(m);
+        exit(EXIT_SUCCESS);
+    }
+ 
+    /* Child continues */
+
+    umask(027); /* Set file permissions 750 */
+ 
+    /* Get a new process group */
+    sid = setsid();
+    if (sid < 0) {
+        debug_message("Could not get new process group.", ERROR);
+        exit(EXIT_FAILURE);
+    }
+ 
+    /* close all descriptors */
+    for (i = getdtablesize(); i >= 0; --i) {
+        close(i);
+    }
+ 
+    /* Route I/O connections */
+    close(STDIN_FILENO);
+    close(STDOUT_FILENO);
+    close(STDERR_FILENO);
+ 
+    chdir(rundir); /* change running directory */
+ 
+    /* Ensure only one copy */
+    pidFilehandle = open(pidfile, O_RDWR|O_CREAT, 0600);
+ 
+    if (pidFilehandle == -1 ) {
+        /* Couldn't open lock file */
+        debug_message("Could not open PID lock file. Exiting", ERROR);
+        exit(EXIT_FAILURE);
+    }
+ 
+    /* Try to lock file */
+    if (lockf(pidFilehandle,F_TLOCK,0) == -1) {
+        /* Couldn't get lock on lock file */
+        debug_message("Could not lock PID lock file. Exiting", ERROR);
+        exit(EXIT_FAILURE);
+    }
+ 
+    /* Get and format PID */
+    sprintf(str,"%d\n",getpid());
+ 
+    /* write pid to lockfile */
+    write(pidFilehandle, str, strlen(str));
+}
 
 int main (int argc, char **argv) {
 
-  struct MHD_Daemon *daemon;
   char *configFile = NULL;
 
-  if(argc >= 2) 
-    fprintf(stderr, "Usage: opendias <configfile>\n");
+  if(argc >= 3) 
+    fprintf(stderr, "Usage: opendias <configfile> [-d]\n");
   else 
     configFile = argv[1];
 
   if(setup (configFile))
     return 1;
 
+  if(!argv[2]) {
+    // Turn into a meamon and write the pid file.
+    daemonize("/tmp/", "/var/run/opendias.pid");
+  }
+
   debug_message("... Starting up the openDias service.", INFORMATION);
-  daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 
+  httpdaemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 
     NULL, NULL, 
     &answer_to_connection, NULL, 
     MHD_OPTION_NOTIFY_COMPLETED, request_completed, NULL, 
     MHD_OPTION_END);
-  if (NULL == daemon) {
-    server_shutdown(daemon);
+  if (NULL == httpdaemon) {
+    debug_message("Could not create an http service", INFORMATION);
+    server_shutdown();
     return 1;
   }
   debug_message("ready to accept connectons", INFORMATION);
 
-  // just hang about for a bit
-  getchar ();
+  
+  if(!argv[2]) {
+    while(1) {
+      sleep(500);
+    }
+    debug_message("done waiting - should never get here", INFORMATION);
+  }
+  else {
+    printf("Hit any key to close the service.\n");
+    getchar();
+    server_shutdown();
+    return 0;
+  }
 
-  server_shutdown(daemon);
-  debug_message("openDias service is shutdown....", INFORMATION);
-  return 0;
 }
 
