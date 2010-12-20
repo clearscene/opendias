@@ -357,3 +357,12 @@
     -webkit-box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 8px;
   } 
 
+  .gOut {
+    position: absolute;
+    left: -45px;
+    background: rgba(0,0,0,0.4);
+    padding: 15px;
+    width: 100%;
+    margin-bottom: 15px;
+    min-height: 350px;
+  }

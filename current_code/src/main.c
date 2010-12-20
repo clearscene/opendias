@@ -33,6 +33,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 
 #include "main.h"
 #include "db.h" 
@@ -194,6 +195,7 @@ void daemonize(char *rundir, char *pidfile) {
     if (pid < 0) {
         /* Could not fork */
         debug_message("Could not fork.", ERROR);
+        printf("Could not daemonise. Try running with the -d option or as super user\n");
         exit(EXIT_FAILURE);
     }
  
@@ -201,7 +203,7 @@ void daemonize(char *rundir, char *pidfile) {
         /* Child created ok, so exit parent process */
         char *m = malloc(24+6);
         sprintf(m,"Child process created: %d", pid);
-        debug_message("Could not fork.", INFORMATION);
+        debug_message(m, INFORMATION);
         free(m);
         exit(EXIT_SUCCESS);
     }
@@ -214,9 +216,33 @@ void daemonize(char *rundir, char *pidfile) {
     sid = setsid();
     if (sid < 0) {
         debug_message("Could not get new process group.", ERROR);
+        printf("Could not daemonise. Try running with the -d option or as super user\n");
         exit(EXIT_FAILURE);
     }
  
+    /* Ensure only one copy */
+    pidFilehandle = open(pidfile, O_RDWR|O_CREAT, 0600);
+ 
+    if (pidFilehandle == -1 ) {
+        /* Couldn't open lock file */
+        printf("Could not daemonise. Try running with the -d option or as super user\n");
+        debug_message("Could not open PID lock file. Exiting", ERROR);
+        exit(EXIT_FAILURE);
+    }
+ 
+    /* Try to lock file */
+    if (lockf(pidFilehandle,F_TLOCK,0) == -1) {
+        /* Couldn't get lock on lock file */
+        printf("Could not daemonise. Try running with the -d option or as super user\n");
+        debug_message("Could not lock PID lock file. Exiting", ERROR);
+        exit(EXIT_FAILURE);
+    }
+ 
+    /* Get and format PID */
+    sprintf(str,"%d\n",getpid());
+ 
+    /* write pid to lockfile */
+    i = write(pidFilehandle, str, strlen(str));
     /* close all descriptors */
     for (i = getdtablesize(); i >= 0; --i) {
         close(i);
@@ -227,44 +253,46 @@ void daemonize(char *rundir, char *pidfile) {
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
  
-    chdir(rundir); /* change running directory */
- 
-    /* Ensure only one copy */
-    pidFilehandle = open(pidfile, O_RDWR|O_CREAT, 0600);
- 
-    if (pidFilehandle == -1 ) {
-        /* Couldn't open lock file */
-        debug_message("Could not open PID lock file. Exiting", ERROR);
-        exit(EXIT_FAILURE);
-    }
- 
-    /* Try to lock file */
-    if (lockf(pidFilehandle,F_TLOCK,0) == -1) {
-        /* Couldn't get lock on lock file */
-        debug_message("Could not lock PID lock file. Exiting", ERROR);
-        exit(EXIT_FAILURE);
-    }
- 
-    /* Get and format PID */
-    sprintf(str,"%d\n",getpid());
- 
-    /* write pid to lockfile */
-    write(pidFilehandle, str, strlen(str));
+    i = chdir(rundir); /* change running directory */
+}
+
+void usage(void) {
+    fprintf(stderr,"openDIAS. v0.5.12\n");
+    fprintf(stderr,"usage: opendias <options>\n");
+    fprintf(stderr,"\n");
+    fprintf(stderr,"Where:\n");
+    fprintf(stderr,"          -d = don't turn into a daemon once started\n");
+    fprintf(stderr,"          -c = specify config \"file\"\n");
+    fprintf(stderr,"          -h = show this page\n");
 }
 
 int main (int argc, char **argv) {
 
   char *configFile = NULL;
+  int turnToDaemon = 1;
+  int c;
 
-  if(argc >= 3) 
-    fprintf(stderr, "Usage: opendias <configfile> [-d]\n");
-  else 
-    configFile = argv[1];
+  while ((c = getopt(argc, argv, "dc:ih")) != EOF) {
+    switch (c) {
+      case 'c':
+        configFile = optarg;
+        break;
+      case 'd': 
+        turnToDaemon = 0;
+        break;
+      case 'h': 
+        usage();
+        return 0;
+        break;
+      default: usage();
+    }
+  }
 
   if(setup (configFile))
     return 1;
 
-  if(!argv[2]) {
+printf("turnToDaemon = %d\n", turnToDaemon);
+  if(turnToDaemon==1) {
     // Turn into a meamon and write the pid file.
     daemonize("/tmp/", "/var/run/opendias.pid");
   }
@@ -283,14 +311,14 @@ int main (int argc, char **argv) {
   debug_message("ready to accept connectons", INFORMATION);
 
   
-  if(!argv[2]) {
+  if(turnToDaemon==1) {
     while(1) {
       sleep(500);
     }
     debug_message("done waiting - should never get here", INFORMATION);
   }
   else {
-    printf("Hit any key to close the service.\n");
+    printf("Hit [enter] to close the service.\n");
     getchar();
     server_shutdown();
     return 0;
