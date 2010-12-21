@@ -19,6 +19,8 @@
 #ifndef DEBUG
 #define DEBUG
 
+#include <stdarg.h>
+
 enum {
   SILENT = 0,
   ERROR,
@@ -34,6 +36,8 @@ enum {
 int VERBOSITY;
 char *LOG_DIR;
 
+extern void i_o_log(const int, const char *, va_list);
+extern void o_log(const int, const char *, ...);
 extern void debug_message(const char *, const int);
 
 #endif /* DEBUG */

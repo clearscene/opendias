@@ -35,10 +35,7 @@ int open_db (char *db) {
   int rc;
   rc = sqlite3_open_v2(db, &DBH, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_CREATE, NULL);
   if ( rc ) {
-    char *tmp = o_strdup("Can't open database: ");
-    conCat(&tmp, sqlite3_errmsg(DBH));
-    debug_message(tmp, ERROR);
-    free(tmp);
+    o_log(ERROR, "Can't open database: %d", sqlite3_errmsg(DBH));
     close_db ();
     return 1;
   }
@@ -115,7 +112,7 @@ extern int connect_db (int createIfRequired) {
     ver = itoa(i, 10);
     tmp = o_strdup("Bringing BD upto version: ");
     conCat(&tmp, ver);
-    debug_message(tmp, INFORMATION);
+    o_log(INFORMATION, "Bringing BD upto version: %d", i);
     free(tmp);
     tmp = o_strdup(PACKAGE_DATA_DIR);
     conCat(&tmp, "/opendias/openDIAS.sqlite3.dmp.v");
@@ -213,34 +210,14 @@ extern int runUpdate_db (char *sql, GList *vars) {
 
   rc = sqlite3_step(stmt);
   if( rc != SQLITE_DONE ) {
-    tmp = o_strdup("An SQL error has been produced. \n");
-    conCat(&tmp, "The return code was: ");
-    tmp2 = itoa(rc, 10);
-    conCat(&tmp, tmp2);
-    free(tmp2);
-    conCat(&tmp, "\nThe error was: ");
-    conCat(&tmp, sqlite3_errmsg(DBH));
-    conCat(&tmp, "\nThe following SQL gave the error: \n");
-    conCat(&tmp, sql);
-    debug_message(tmp, ERROR);
-    free(tmp);
+    o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);
     return 1;
   }
 
   rc = sqlite3_finalize(stmt);
   g_list_free(vars);
   if( rc != SQLITE_OK ) {
-    tmp = o_strdup("An SQL error has been produced. \n");
-    conCat(&tmp, "The return code was: ");
-    tmp2 = itoa(rc, 10);
-    conCat(&tmp, tmp2);
-    free(tmp2);
-    conCat(&tmp, "\nThe error was: ");
-    conCat(&tmp, sqlite3_errmsg(DBH));
-    conCat(&tmp, "\nThe following SQL gave the error: \n");
-    conCat(&tmp, sql);
-    debug_message(tmp, ERROR);
-    free(tmp);
+    o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);
     return 1;
   }
   else
@@ -254,11 +231,7 @@ extern int runquery_db (char *recordSetKey, char *sql) {
   GList *rSet;
 
   debug_message("Run Query", DEBUGM);
-
-  tmp = o_strdup("SQL = ");
-  conCat(&tmp, sql);
-  debug_message(tmp, SQLDEBUG);
-  free(tmp);
+  o_log(SQLDEBUG, "SQL = %s", sql);
 
   //  Free the corrent recordset - were gonna overwrite_mode
   //  then, create a new container for the row data and pointers

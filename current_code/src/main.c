@@ -107,6 +107,8 @@ int setup (char *configFile) {
   free_recordset("1");
   free(sql);
 
+  o_log(INFORMATION, "message has string(%s) and int(%d)", "test", 222);
+
   createDir_ifRequired(BASE_DIR);
   conCat(&location, "/scans");
   createDir_ifRequired(location);
@@ -288,14 +290,13 @@ int main (int argc, char **argv) {
     }
   }
 
-  if(setup (configFile))
-    return 1;
-
-printf("turnToDaemon = %d\n", turnToDaemon);
   if(turnToDaemon==1) {
     // Turn into a meamon and write the pid file.
     daemonize("/tmp/", "/var/run/opendias.pid");
   }
+
+  if(setup (configFile))
+    return 1;
 
   debug_message("... Starting up the openDias service.", INFORMATION);
   httpdaemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 
@@ -315,7 +316,7 @@ printf("turnToDaemon = %d\n", turnToDaemon);
     while(1) {
       sleep(500);
     }
-    debug_message("done waiting - should never get here", INFORMATION);
+    debug_message("done waiting - should never get here", ERROR);
   }
   else {
     printf("Hit [enter] to close the service.\n");
