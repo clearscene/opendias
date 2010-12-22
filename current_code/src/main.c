@@ -63,7 +63,7 @@ int setup (char *configFile) {
   else
     conf = "/etc/opendias/opendias.conf";
   if( ! load_file_to_memory(conf, &location) ) {
-    debug_message("Cannot find main config file.", ERROR);
+    o_log(ERROR, "Cannot find main config file.");
     free(location);
     return 1;
   }
@@ -107,18 +107,16 @@ int setup (char *configFile) {
   free_recordset("1");
   free(sql);
 
-  o_log(INFORMATION, "message has string(%s) and int(%d)", "test", 222);
-
   createDir_ifRequired(BASE_DIR);
   conCat(&location, "/scans");
   createDir_ifRequired(location);
   free(location);
 
 #ifdef CAN_SCAN
-  debug_message("sane_init", DEBUGM);
+  o_log(DEBUGM, "sane_init");
   status = sane_init(NULL, NULL);
   if(status != SANE_STATUS_GOOD) {
-    debug_message("sane did not start", ERROR);
+    o_log(ERROR, "sane did not start");
     return 1;
   }
 #endif // CAN_SCAN //
@@ -128,34 +126,28 @@ int setup (char *configFile) {
 }
 
 void server_shutdown() {
-  debug_message("openDias service is shutdown....", INFORMATION);
+  o_log(INFORMATION, "openDias service is shutdown....");
   close(pidFilehandle);
   MHD_stop_daemon (httpdaemon);
-  debug_message("sane_exit", DEBUGM);
+  o_log(DEBUGM, "sane_exit");
   sane_exit();
   close_db ();
   free(BASE_DIR);
 }
 
 void signal_handler(int sig) {
-    char *ss, *mm;
     switch(sig) {
         case SIGHUP:
-            debug_message("Received SIGHUP signal. IGNORING", INFORMATION);
+            o_log(INFORMATION, "Received SIGHUP signal. IGNORING");
             break;
         case SIGINT:
         case SIGTERM:
-            debug_message("Received SIGTERM signal.", INFORMATION);
+            o_log(INFORMATION, "Received SIGTERM signal.");
             server_shutdown();
             exit(EXIT_SUCCESS);
             break;
         default:
-            ss = o_strdup(strsignal(sig));
-            mm = malloc(18+strlen(ss));
-            sprintf(mm, "Unhandled signal %s", ss);
-            debug_message(mm, INFORMATION);
-            free(ss);
-            free(mm);
+            o_log(INFORMATION, "Unhandled signal %s", strsignal(sig));
             break;
     }
 }
@@ -169,7 +161,7 @@ void daemonize(char *rundir, char *pidfile) {
     /* Check if parent process id is set */
     if (getppid() == 1) {
         /* PPID exists, therefore we are already a daemon */
-        debug_message("Code called to make this process a daemon, but we are already such.", ERROR);
+        o_log(ERROR, "Code called to make this process a daemon, but we are already such.");
         return;
     }
  
@@ -196,17 +188,14 @@ void daemonize(char *rundir, char *pidfile) {
  
     if (pid < 0) {
         /* Could not fork */
-        debug_message("Could not fork.", ERROR);
+        o_log(ERROR, "Could not fork.");
         printf("Could not daemonise. Try running with the -d option or as super user\n");
         exit(EXIT_FAILURE);
     }
  
     if (pid > 0) {
         /* Child created ok, so exit parent process */
-        char *m = malloc(24+6);
-        sprintf(m,"Child process created: %d", pid);
-        debug_message(m, INFORMATION);
-        free(m);
+        o_log(INFORMATION, "Child process created %d", pid);
         exit(EXIT_SUCCESS);
     }
  
@@ -217,7 +206,7 @@ void daemonize(char *rundir, char *pidfile) {
     /* Get a new process group */
     sid = setsid();
     if (sid < 0) {
-        debug_message("Could not get new process group.", ERROR);
+        o_log(ERROR, "Could not get new process group.");
         printf("Could not daemonise. Try running with the -d option or as super user\n");
         exit(EXIT_FAILURE);
     }
@@ -228,7 +217,7 @@ void daemonize(char *rundir, char *pidfile) {
     if (pidFilehandle == -1 ) {
         /* Couldn't open lock file */
         printf("Could not daemonise. Try running with the -d option or as super user\n");
-        debug_message("Could not open PID lock file. Exiting", ERROR);
+        o_log(ERROR, "Could not open PID lock file. Exiting");
         exit(EXIT_FAILURE);
     }
  
@@ -236,7 +225,7 @@ void daemonize(char *rundir, char *pidfile) {
     if (lockf(pidFilehandle,F_TLOCK,0) == -1) {
         /* Couldn't get lock on lock file */
         printf("Could not daemonise. Try running with the -d option or as super user\n");
-        debug_message("Could not lock PID lock file. Exiting", ERROR);
+        o_log(ERROR, "Could not lock PID lock file. Exiting");
         exit(EXIT_FAILURE);
     }
  
@@ -298,25 +287,25 @@ int main (int argc, char **argv) {
   if(setup (configFile))
     return 1;
 
-  debug_message("... Starting up the openDias service.", INFORMATION);
+  o_log(INFORMATION, "... Starting up the openDias service.");
   httpdaemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 
     NULL, NULL, 
     &answer_to_connection, NULL, 
     MHD_OPTION_NOTIFY_COMPLETED, request_completed, NULL, 
     MHD_OPTION_END);
   if (NULL == httpdaemon) {
-    debug_message("Could not create an http service", INFORMATION);
+    o_log(INFORMATION, "Could not create an http service");
     server_shutdown();
     return 1;
   }
-  debug_message("ready to accept connectons", INFORMATION);
+  o_log(INFORMATION, "ready to accept connectons");
 
   
   if(turnToDaemon==1) {
     while(1) {
       sleep(500);
     }
-    debug_message("done waiting - should never get here", ERROR);
+    o_log(ERROR, "done waiting - should never get here");
   }
   else {
     printf("Hit [enter] to close the service.\n");

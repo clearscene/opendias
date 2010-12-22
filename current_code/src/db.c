@@ -70,16 +70,16 @@ int get_db_version() {
 extern int connect_db (int createIfRequired) {
 
   int version = 0, i;
-  char *db, *tmp, *tmp2, *ver;
+  char *db, *ver;
   char *data;
 
   // Test to see if a DB file exsists
   db = o_strdup(BASE_DIR);
   conCat(&db, "/openDIAS.sqlite3");
   if(g_file_test(db, G_FILE_TEST_EXISTS)) {
-    debug_message("Dir structure is in-place, database should exist", DEBUGM);
+    o_log(DEBUGM, "Dir structure is in-place, database should exist");
     if(open_db (db)) {
-      debug_message("Could not connect to database.", WARNING);
+      o_log(WARNING, "Could not connect to database.");
       free(db);
       return 1;
     }
@@ -87,10 +87,10 @@ extern int connect_db (int createIfRequired) {
   }
 
   if( !version && createIfRequired ) {
-    debug_message("Creating new database", INFORMATION);
+    o_log(INFORMATION, "Creating new database");
     if(open_db (db)) {
-      debug_message("Could not create/connect to new database", WARNING);
-      debug_message(db, WARNING);
+      o_log(WARNING, "Could not create/connect to new database");
+      o_log(WARNING, db);
       free(db);
       return 1;
     }
@@ -98,38 +98,34 @@ extern int connect_db (int createIfRequired) {
   }
 
   if( !version && !createIfRequired ) {
-    debug_message("Could not connect to the database & have been asked not to create one", WARNING);
+    o_log(WARNING, "Could not connect to the database & have been asked not to create one");
     free(db);
     return 1;
   }
   else {
-    debug_message("Connected to database", INFORMATION);
+    o_log(INFORMATION, "Connected to database");
   }
   free(db);
 
   // Bring the DB up-2-date
   for(i=version+1 ; i <= DB_VERSION ; i++) {
     ver = itoa(i, 10);
-    tmp = o_strdup("Bringing BD upto version: ");
-    conCat(&tmp, ver);
+    char *upgradeSQL = o_strdup(PACKAGE_DATA_DIR);
+    conCat(&upgradeSQL, "/opendias/openDIAS.sqlite3.dmp.v");
+    conCat(&upgradeSQL, ver);
+    conCat(&upgradeSQL, ".sql");
+
     o_log(INFORMATION, "Bringing BD upto version: %d", i);
-    free(tmp);
-    tmp = o_strdup(PACKAGE_DATA_DIR);
-    conCat(&tmp, "/opendias/openDIAS.sqlite3.dmp.v");
-    conCat(&tmp, ver);
-    conCat(&tmp, ".sql");
-    tmp2 = o_strdup("Reading SQL code from file: ");
-    conCat(&tmp2, tmp);
-    debug_message(tmp2, DEBUGM);
-    free(tmp2);
-    if(load_file_to_memory(tmp, &data)) {
-      debug_message(data, INFORMATION);
+    o_log(DEBUGM, "Reading SQL code from file: %d", upgradeSQL);
+
+    if(load_file_to_memory(upgradeSQL, &data)) {
+      o_log(INFORMATION, data);
       runquery_db("1", data);
       free_recordset("1");
       free(data);
     }
     free(ver);
-    free(tmp);
+    free(upgradeSQL);
   }
 
   return 0;
@@ -142,7 +138,7 @@ static int callback(char *recordSetKey, int argc, char **argv, char **azColName)
   GHashTable *row;
 //  char *tmp;
 
-  debug_message("Reading row from database", SQLDEBUG);
+  o_log(SQLDEBUG, "Reading row from database");
 
   // Create row container
   row = g_hash_table_new(g_str_hash, g_str_equal);
@@ -154,7 +150,7 @@ static int callback(char *recordSetKey, int argc, char **argv, char **azColName)
     conCat(&tmp, azColName[i]);
     conCat(&tmp, " : ");
     conCat(&tmp, argv[i]);
-    debug_message(tmp, SQLDEBUG);
+    o_log(SQLDEBUG, tmp);
     free(tmp);  
     // -------------------------------------------
 */
@@ -180,9 +176,8 @@ extern int runUpdate_db (char *sql, GList *vars) {
   sqlite3_stmt *stmt;
   GList *tmpList = NULL;
   int col = 0, type, rc;
-  char *tmp, *tmp2;
 
-  debug_message(sql, SQLDEBUG);
+  o_log(SQLDEBUG, sql);
   sqlite3_prepare(DBH, sql, strlen(sql), &stmt, NULL);
 
   tmpList = vars;
@@ -227,17 +222,17 @@ extern int runUpdate_db (char *sql, GList *vars) {
 extern int runquery_db (char *recordSetKey, char *sql) {
 
   int rc;
-  char *zErrMsg, *tmp, *tmp2;
+  char *zErrMsg;
   GList *rSet;
 
-  debug_message("Run Query", DEBUGM);
+  o_log(DEBUGM, "Run Query");
   o_log(SQLDEBUG, "SQL = %s", sql);
 
   //  Free the corrent recordset - were gonna overwrite_mode
   //  then, create a new container for the row data and pointers
   rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
   if(rSet) {
-    debug_message("Overwritting an in-use recordset", WARNING);
+    o_log(WARNING, "Overwritting an in-use recordset");
     free_recordset(recordSetKey);
   }
   rSet = NULL;
@@ -248,19 +243,7 @@ extern int runquery_db (char *recordSetKey, char *sql) {
 
   // Dump out on error
   if( rc != SQLITE_OK ) {
-    tmp = o_strdup("An SQL error has been produced. \n");
-    conCat(&tmp, "The return code was: ");
-    tmp2 = itoa(rc, 10);
-    conCat(&tmp, tmp2);
-    free(tmp2);
-    conCat(&tmp, "\nThe error was: ");
-    conCat(&tmp, sqlite3_errmsg(DBH));
-    conCat(&tmp, "\nand/or: ");
-    conCat(&tmp, zErrMsg);
-    conCat(&tmp, "\nThe following SQL gave the error: \n");
-    conCat(&tmp, sql);
-    debug_message(tmp, ERROR);
-    free(tmp);
+    o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s and/or %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), zErrMsg, sql);
     if (zErrMsg)
       sqlite3_free(zErrMsg);
   }
@@ -276,16 +259,11 @@ extern char *readData_db (char *recordSetKey, char *field_db) {
 
   GList *rSet;
   GHashTable *row;
-  char *tmp;
 
   rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
   row = rSet->data;
   if(row) {
-    tmp = o_strdup(field_db);
-    conCat(&tmp, " : ");
-    conCat(&tmp, g_hash_table_lookup(row, field_db));
-    debug_message(tmp, SQLDEBUG);
-    free(tmp);
+    o_log(SQLDEBUG, "%s : %s", field_db, g_hash_table_lookup(row, field_db));
     return g_hash_table_lookup(row, field_db);
   }
 
@@ -298,7 +276,7 @@ extern int nextRow (char * recordSetKey) {
   GList *rSet;
   int ret = 0;
 
-  debug_message("Moving to next row", SQLDEBUG);
+  o_log(SQLDEBUG, "Moving to next row");
   rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
   rSet = g_list_next(rSet);
   if(rSet) {
@@ -315,7 +293,7 @@ extern void free_recordset (char *recordSetKey) {
   GHashTableIter iter;
   gpointer key, value;
 
-  debug_message("Free recordset", DEBUGM);
+  o_log(DEBUGM, "Free recordset");
 
   rSet = g_list_first(rSet);
   for(li = rSet ; li ; li = g_list_next(li)) {
@@ -337,7 +315,7 @@ extern void close_db () {
   GHashTableIter iter;
   gpointer key, value;
 
-  debug_message("Closing database", DEBUGM);
+  o_log(DEBUGM, "Closing database");
 
   // foreach record in the g_hash_table RECORDSET, loop and call 'free_recordset'
   g_hash_table_iter_init (&iter, RECORDSET);

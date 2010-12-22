@@ -145,16 +145,16 @@ gint LIBARCHIVEgetEntry(char *name, char *contentFile, char **ptr) {
 
   while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
     if(g_str_equal(archive_entry_pathname(entry), contentFile)) {
-      debug_message((char *)archive_compression_name(a), DEBUGM);
-      debug_message((char *)archive_format_name(a), DEBUGM);
-      debug_message((char *)archive_entry_pathname(entry), DEBUGM);
+      o_log(DEBUGM, (char *)archive_compression_name(a));
+      o_log(DEBUGM, (char *)archive_format_name(a));
+      o_log(DEBUGM, (char *)archive_entry_pathname(entry));
       size = archive_entry_size(entry);
       if(size <= 0)
-        debug_message("zero size", DEBUGM);
+        o_log(DEBUGM, "zero size");
       if ((buf = (char *)malloc(size+1)) == NULL)
-        debug_message("cannot allocate memory", ERROR);
+        o_log(ERROR, "cannot allocate memory");
       if (archive_read_data(a, buf, size) != size)
-        debug_message("cannot read data", DEBUGM);
+        o_log(DEBUGM, "cannot read data");
       buf[size] = '\0';
       *ptr = buf;
     }

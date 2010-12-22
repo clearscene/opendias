@@ -42,14 +42,7 @@
 
 void handleSaneErrors(char *defaultMessage, SANE_Status st, int retCode) {
 
-  char *errorMessage_t = o_strdup("%s: sane error = %d (%s), return code = %d\n");
-  char *returnCode = itoa(retCode, 10);
-  int s = strlen(errorMessage_t) + strlen(defaultMessage) + 3 + strlen(sane_strstatus(st)) + strlen(returnCode) + 1;
-  char *errorMessage = malloc(s);
-  sprintf(errorMessage, errorMessage_t, defaultMessage, st, sane_strstatus(st), retCode);
-  debug_message(errorMessage, ERROR);
-  free(errorMessage_t);
-  free(errorMessage);
+  o_log(ERROR, "%s: sane error = %d (%s), return code = %d", defaultMessage, st, sane_strstatus(st), retCode);
 
 }
 
@@ -64,7 +57,7 @@ extern void doScanningOperation(void *uuid) {
 
 
   // Open the device
-  debug_message("sane_open", DEBUGM);
+  o_log(DEBUGM, "sane_open");
   updateScanProgress(uuid, SCAN_WAITING_ON_SCANNER, 0);
   SANE_Handle *openDeviceHandle;
   SANE_Status status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
@@ -119,7 +112,7 @@ extern void doScanningOperation(void *uuid) {
 
 
   // Set Resolution 
-  debug_message("Set resolution", DEBUGM);
+  o_log(DEBUGM, "Set resolution");
   char *request_resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
   int request_resolution = atoi(request_resolution_s);
   free(request_resolution_s);
@@ -133,7 +126,7 @@ extern void doScanningOperation(void *uuid) {
 
 
   // Get scanning params (from the scanner)
-  debug_message("Got scanning params", DEBUGM);
+  o_log(DEBUGM, "Got scanning params");
   SANE_Parameters pars;
   status = sane_get_parameters (openDeviceHandle, &pars);
   int getLines = pars.lines;
@@ -150,7 +143,7 @@ extern void doScanningOperation(void *uuid) {
     pars.bytes_per_line, pars.pixels_per_line,
     pars.lines, getLines, pars.depth);
 
-  debug_message("sane_start", DEBUGM);
+  o_log(DEBUGM, "sane_start");
   status = sane_start (openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {  
     handleSaneErrors("Cannot start scanning", status, 0);
@@ -163,7 +156,7 @@ extern void doScanningOperation(void *uuid) {
   int docid, page;
   char *page_s;
   if( docid_s == NULL ) {
-    debug_message("Saving record", DEBUGM);
+    o_log(DEBUGM, "Saving record");
     updateScanProgress(uuid, SCAN_DB_WORKING, 0);
     docid_s = addNewScannedDoc(getLines, pars.pixels_per_line, request_resolution, pageCount); 
 
@@ -187,12 +180,12 @@ extern void doScanningOperation(void *uuid) {
   // Acquire Image & Save Document
   FILE *scanOutFile;
   if ((scanOutFile = fopen("/tmp/tmp.pnm", "w")) == NULL)
-    debug_message("could not open file for output", ERROR);
+    o_log(ERROR, "could not open file for output");
   fprintf (scanOutFile, "P5\n# SANE data follows\n%d %d\n%d\n", 
     pars.pixels_per_line, getLines,
     (pars.depth <= 8) ? 255 : 65535);
 
-  debug_message("scan_read - start", DEBUGM);
+  o_log(DEBUGM, "scan_read - start");
   double totbytes = pars.bytes_per_line * getLines;
   double readSoFar = 0;
   int progress = 0;
@@ -211,13 +204,13 @@ extern void doScanningOperation(void *uuid) {
       if (status == SANE_STATUS_EOF)
         noMoreReads = 1;
       else
-        debug_message("something wrong while scanning", ERROR);
+        o_log(ERROR, "something wrong while scanning");
     }
 
     if(buff_len > 0) {
 
       if(readSoFar + buff_len > totbytes) {
-        debug_message("scann has read more than expected", ERROR);
+        o_log(ERROR, "scann has read more than expected");
         buff_len = totbytes - readSoFar;
         noMoreReads = 1;
       }
@@ -240,13 +233,13 @@ extern void doScanningOperation(void *uuid) {
       break;
 
   } while (1);
-  debug_message("scan_read - end", DEBUGM);
+  o_log(DEBUGM, "scan_read - end");
   free(buffer);
 
-  debug_message("sane_cancel", DEBUGM);
+  o_log(DEBUGM, "sane_cancel");
   sane_cancel(openDeviceHandle);
 
-  debug_message("sane_close", DEBUGM);
+  o_log(DEBUGM, "sane_close");
   sane_close(openDeviceHandle);
 
 
@@ -256,7 +249,7 @@ extern void doScanningOperation(void *uuid) {
   int skew = atoi(skew_s);
   free(skew_s);
   if(skew != 0) {
-    debug_message("fixing skew", DEBUGM);
+    o_log(DEBUGM, "fixing skew");
     updateScanProgress(uuid, SCAN_FIXING_SKEW, 0);
 
     deSkew(pic, totbytes, (double)skew, (double)pars.pixels_per_line, getLines);
@@ -282,7 +275,7 @@ extern void doScanningOperation(void *uuid) {
   if(shoulddoocr==1) {
 
     if(request_resolution >= 300 && request_resolution <= 400) {
-      debug_message("attempting OCR", DEBUGM);
+      o_log(DEBUGM, "attempting OCR");
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
       struct scanCallInfo infoData;
@@ -295,7 +288,7 @@ extern void doScanningOperation(void *uuid) {
       infoData.height = getLines;
 
       runocr(&infoData);
-      debug_message(infoData.ret, DEBUGM);
+      o_log(DEBUGM, infoData.ret);
       ocrText = o_strdup("---------------- page ");
       conCat(&ocrText, page_s);
       conCat(&ocrText, " ----------------\n");
@@ -304,7 +297,7 @@ extern void doScanningOperation(void *uuid) {
       free(infoData.ret);
     }
     else {
-      debug_message("OCR was requested, but the specified resolution means it's not safe to be attempted", DEBUGM);
+      o_log(DEBUGM, "OCR was requested, but the specified resolution means it's not safe to be attempted");
       ocrText = o_strdup("---------------- page ");
       conCat(&ocrText, page_s);
       conCat(&ocrText, " ----------------\n");
@@ -333,7 +326,7 @@ extern void doScanningOperation(void *uuid) {
   if(FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90)) {
     resultMessage = o_strdup("Saved JPEG output of scan");
     resultVerbosity = INFORMATION;
-    debug_message(outFilename, DEBUGM);
+    o_log(DEBUGM, outFilename);
   } else {
     resultMessage = o_strdup("Error saving jpeg of scan, to: ");
     conCat(&resultMessage, outFilename);
@@ -343,12 +336,12 @@ extern void doScanningOperation(void *uuid) {
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 90);
   FreeImage_Unload(bitmap);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
-  debug_message(resultMessage, resultVerbosity);
+  o_log(resultVerbosity, resultMessage);
   free(resultMessage);
   free(page_s);
 
   FreeImage_DeInitialise();
-  debug_message(outFilename, DEBUGM);
+  o_log(DEBUGM, outFilename);
   free(outFilename);
 
 
@@ -361,14 +354,14 @@ extern void doScanningOperation(void *uuid) {
 
   // cleaup && What should we do next
   //
-  debug_message("mostly done.", DEBUGM);
+  o_log(DEBUGM, "mostly done.");
   if(page >= pageCount)
     updateScanProgress(uuid, SCAN_FINISHED, docid);
   else
     updateScanProgress(uuid, SCAN_WAITING_ON_NEW_PAGE, ++page);
 
   free(uuid);
-  debug_message("Page scan done.", DEBUGM);
+  o_log(DEBUGM, "Page scan done.");
   pthread_exit(NULL);
 
 }

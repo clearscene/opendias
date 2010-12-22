@@ -36,19 +36,19 @@ static int checkVitals(char *vvalue, int doLengthChecking, int doEscaping) {
 
   // We actually have a value
   if ( vvalue == NULL ) {
-    debug_message("http post data contained a key with no value", ERROR);
+    o_log(ERROR, "http post data contained a key with no value");
     return 1;
   }
 
   // The value contains something
   if ( 0 != strcmp(vvalue, "") ) {
-    debug_message("http post data contained a key with no value", ERROR);
+    o_log(ERROR, "http post data contained a key with no value");
     return 1;
   }
 
   // Got a decent length
   if( doLengthChecking && 6 > strlen(vvalue) && strlen(vvalue) < 20 ) {
-    debug_message("http post data value outside specified length", ERROR);
+    o_log(ERROR, "http post data value outside specified length");
     return 1;
   }
 
@@ -62,13 +62,10 @@ static int checkVitals(char *vvalue, int doLengthChecking, int doEscaping) {
 
 extern int basicValidation(GHashTable *postdata) {
 
-  GHashTableIter iter;
-  gpointer key, value;
-
   // Check thet we have a main request param
   char *action = getPostData(postdata, "action");
   if ( action == NULL ) {
-    debug_message( "no requested 'action' given.", ERROR);
+    o_log(ERROR,  "no requested 'action' given.");
     return 1;
   }
 
@@ -93,7 +90,7 @@ extern int basicValidation(GHashTable *postdata) {
     && 0 != strcmp(action, "getAccessDetails")
     && 0 != strcmp(action, "titleAutoComplete")
     && 0 != strcmp(action, "controlAccess") ) {
-    debug_message( "requested 'action' is not available.", ERROR);
+    o_log(ERROR,  "requested 'action' is not available.");
     return 1;
   }
 
@@ -130,7 +127,7 @@ static int checkStringIsInt(char *StrInt) {
 static int checkSaneRange(char *StrInt, int low, int high) {
   int i = atoi(StrInt);
   if(i >= low && i <= high) return 0;
-  debug_message("Validation failed: not a sane range", ERROR);
+  o_log(ERROR, "Validation failed: not a sane range");
   return 1;
 }
 
@@ -157,7 +154,7 @@ static int checkAddRemove(char *val) {
     || 0 != strcmp(val, "remove" ) ) {
     return 0;
   }
-  debug_message("Validation failed: add/remove check", ERROR);
+  o_log(ERROR, "Validation failed: add/remove check");
   return 1;
 }
 
@@ -167,7 +164,7 @@ static int validUploadType(char *val) {
     || 0 != strcmp(val, "jpg" ) ) {
     return 0;
   }
-  debug_message("Validation failed: uploadType check", ERROR);
+  o_log(ERROR, "Validation failed: uploadType check");
   return 1;
 }
 
@@ -177,7 +174,7 @@ static int checkCheckbox(char *val) {
     || 0 != strcmp(val, "on" ) ) {
     return 0;
   }
-  debug_message("Validation failed: checkbox check", ERROR);
+  o_log(ERROR, "Validation failed: checkbox check");
   return 1;
 }
 
@@ -202,7 +199,7 @@ static int checkDate(char *val) {
   free(dp->year);
 
   free(dp);
-  if( x > 0 ) debug_message("Validation failed: date check", ERROR);
+  if( x > 0 ) o_log(ERROR, "Validation failed: date check");
   return x;
 }
 
@@ -213,7 +210,7 @@ static int checkDeviceId(char *val) {
 //
 static int checkFormat(char *val) {
   if ( 0 != strcmp(val, "grey scale") ) return 0;
-  debug_message("Validation failed: scan format check", ERROR);
+  o_log(ERROR, "Validation failed: scan format check");
   return 1;
 }
 
@@ -267,7 +264,7 @@ static int checkControlAccessMethod(char *submethod) {
     || 0 != strcmp(submethod, "removeUser" ) ) {
     return 0;
   }
-  debug_message("Validation failed: accessConrol Method check", ERROR);
+  o_log(ERROR, "Validation failed: accessConrol Method check");
   return 1;
 }
 

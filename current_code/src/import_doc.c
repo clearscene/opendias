@@ -36,7 +36,7 @@ extern char *uploadfile(char *filename, char *ftype) {
   char *ocrText;
 
   // Save Record
-  debug_message("Saving doc import record", DEBUGM);
+  o_log(DEBUGM, "Saving doc import record");
 
   if(0==strcmp("PDF", ftype)) {
     itype = PDF_FILETYPE;

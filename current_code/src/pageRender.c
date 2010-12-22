@@ -131,22 +131,21 @@ extern char *getScannerList() {
   if(status == SANE_STATUS_GOOD) {
     if (device_list && device_list[0]) {
       scanOK = TRUE;
-      debug_message("device(s) found", DEBUGM);
+      o_log(DEBUGM, "device(s) found");
     }
     else
-      debug_message("No devices found", INFORMATION);
+      o_log(INFORMATION, "No devices found");
   }
   else
-    debug_message("Checking for devices failed", WARNING);
+    o_log(WARNING, "Checking for devices failed");
 
   if(scanOK) {
     answer = o_strdup("<devices>");
     for (i=0 ; device_list[i] ; i++) {
-      debug_message("sane_open", DEBUGM);
+      o_log(DEBUGM, "sane_open");
       status = sane_open (device_list[i]->name, (SANE_Handle)&openDeviceHandle);
       if(status != SANE_STATUS_GOOD) {
-        debug_message(g_strconcat("Could not open: ",device_list[i]->vendor,
-           " ",device_list[i]->model, " with error:", status, NULL), ERROR);
+        o_log(ERROR, "Could not open: %s %s with error: %s", device_list[i]->vendor, device_list[i]->model, status);
         return NULL;
       }
 
@@ -221,7 +220,7 @@ extern char *getScannerList() {
       if(resolution <= minRes)
         resolution = minRes;
 
-      debug_message("sane_close", DEBUGM);
+      o_log(DEBUGM, "sane_close");
       sane_close(openDeviceHandle);
 
       // Build Reply
@@ -291,7 +290,7 @@ extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, 
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
   rc = pthread_create(&thread, &attr, (void *)doScanningOperation, (void *)scanUuid);
   if(rc != 0) {
-    debug_message("Failed to create a new thread - for scanning operation.", ERROR);
+    o_log(ERROR, "Failed to create a new thread - for scanning operation.");
     return NULL;
   }
 
@@ -332,11 +331,11 @@ extern char *nextPageReady(char *scanid) {
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
     rc = pthread_create(&thread, &attr, (void *)doScanningOperation, (void *)o_strdup(scanid));
     if(rc != 0) {
-      debug_message("Failed to create a new thread - for scanning operation.", ERROR);
+      o_log(ERROR, "Failed to create a new thread - for scanning operation.");
       return NULL;
     }
   } else {
-    debug_message("scan id indicates a status not waiting for a new page signal.", WARNING);
+    o_log(WARNING, "scan id indicates a status not waiting for a new page signal.");
     return NULL;
   }
 
@@ -439,7 +438,7 @@ extern char *docFilter(char *textSearch, char *startDate, char *endDate) {
     if(tagWhere)
       conCat(&sql, tagWhere);
   }
-  debug_message(sql, DEBUGM);
+  o_log(DEBUGM, sql);
 
   // Get Results
   //
@@ -513,12 +512,7 @@ extern char *getAccessDetails() {
 extern char *controlAccess(char *submethod, char *location, char *user, char *password, int role) {
 
   if(!strcmp(submethod, "addLocation")) {
-    char *txt = o_strdup("Adding access %i to location %s");
-    char *msg = malloc(29+strlen(location));
-    sprintf(msg, txt, role, location);
-    debug_message(msg, INFORMATION);
-    free(msg);
-    free(txt);
+    o_log(INFORMATION, "Adding access %i to location %s", role, location);
     addLocation(location, role);
 
   } else if(!strcmp(submethod, "removeLocation")) {
@@ -536,7 +530,7 @@ extern char *controlAccess(char *submethod, char *location, char *user, char *pa
   } else {
 
     // Should not have gotten here (validation)
-    debug_message("Unknown accessControl Method", ERROR);
+    o_log(ERROR, "Unknown accessControl Method");
     return NULL;
   }
 

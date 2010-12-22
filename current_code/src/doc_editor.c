@@ -50,10 +50,10 @@ extern char *doDelete (char *documentId) {
   if(runquery_db("1", sql)) {
     char *pages_s = o_strdup(readData_db("1", "pages"));
     pages = atoi(pages_s);
-    debug_message(pages_s, INFORMATION);
+    o_log(INFORMATION, pages_s);
     free(pages_s);
   } else {
-    debug_message("Could not select record.", ERROR);
+    o_log(ERROR, "Could not select record.");
     free_recordset("1");
     free(sql);
     return NULL;
@@ -71,7 +71,7 @@ extern char *doDelete (char *documentId) {
     char *page_num = itoa(i, 10);
     conCat(&docPath, page_num);
     conCat(&docPath, ".jpg");
-    debug_message(docPath, INFORMATION);
+    o_log(INFORMATION, docPath);
     unlink(docPath);
     free(docPath);
     free(page_num);
@@ -113,7 +113,7 @@ extern char *openDocEditor (char *documentId) {
   sql = o_strdup("SELECT * FROM docs WHERE docid = ");
   conCat(&sql, documentId);
   if(!runquery_db("1", sql)) {
-    debug_message("Could not select record.", ERROR);
+    o_log(ERROR, "Could not select record.");
     free_recordset("1");
     free(sql);
     return NULL;

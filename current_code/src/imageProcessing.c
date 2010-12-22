@@ -29,8 +29,8 @@
  */
 void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
   if(fif != FIF_UNKNOWN)
-    printf("%s Format\n", FreeImage_GetFormatFromFIF(fif));
-  debug_message(message, ERROR);
+    o_log(ERROR, "%s Format\n", FreeImage_GetFormatFromFIF(fif));
+  o_log(ERROR, message);
 }
 
 /*
@@ -94,7 +94,7 @@ extern void deSkew(unsigned char *pic, double picBytes, double skew, double ppl,
   if(FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90)) {
     resultMessage = o_strdup("Saved JPEG output of scan");
     resultVerbosity = INFORMATION;
-    debug_message(outFilename, DEBUGM);
+    o_log(DEBUGM, outFilename);
   } else {
     resultMessage = o_strdup("Error saving jpeg of scan, to: ");
     conCat(&resultMessage, outFilename);
@@ -104,10 +104,10 @@ extern void deSkew(unsigned char *pic, double picBytes, double skew, double ppl,
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 90);
   FreeImage_Unload(bitmap);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
-  debug_message(resultMessage, resultVerbosity);
+  o_log(resultVerbosity, resultMessage);
   free(resultMessage);
   FreeImage_DeInitialise();
-  debug_message(outFilename, DEBUGM);
+  o_log(DEBUGM, outFilename);
   free(outFilename);
 
 }

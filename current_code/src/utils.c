@@ -59,7 +59,7 @@ extern char * itoa(long int val, int base) {
 
   if((buf = (char *) malloc(len)) == NULL)
   {
-  debug_message("out of memory in itoa\n", ERROR);
+  o_log(ERROR, "out of memory in itoa\n");
   return "";
   }
   s = buf;
@@ -79,14 +79,10 @@ extern int load_file_to_memory(const char *p_filename, char **result) {
 
   int size = 0;
   FILE *p_f = fopen(p_filename, "r");
-  char *m;
 
   if (p_f == NULL) {
     *result = NULL;
-    m = strdup("Count not open file: ");
-    conCat(&m, p_filename);
-    debug_message(m, ERROR);
-    free(m);
+    o_log(ERROR, "Could not open file: %s", p_filename);
     return -1; // -1 means file opening fail
   }
 
@@ -95,7 +91,7 @@ extern int load_file_to_memory(const char *p_filename, char **result) {
   fseek(p_f, 0, SEEK_SET);
 
   if((*result = (char *)malloc(size+1)) == NULL) {
-    debug_message("Out of memory while reading file information", ERROR);
+    o_log(ERROR, "Out of memory while reading file information");
     return 0;
   }
 
@@ -116,12 +112,12 @@ extern void createDir_ifRequired(char *dir) {
   if (!g_file_test(dir, G_FILE_TEST_EXISTS))
   {
   // Create the directory
-  debug_message("Created directory.", INFORMATION);
+  o_log(INFORMATION, "Created directory.");
   g_mkdir(dir, 5570);
   if (!g_file_test(dir, G_FILE_TEST_EXISTS))
     {
     // Major error - do something!
-    debug_message("Could not get to new directory.", ERROR);
+    o_log(ERROR, "Could not get to new directory.");
     exit(1);
     }
   }
@@ -258,13 +254,12 @@ extern void chop( char *s ) {
 
 extern char *getTimeStr() {
   time_t ttime;
-  char *out;
+  char *strdate = malloc(18);
 
   time(&ttime);
-  out = ctime(&ttime);
-  chop(out);
-
-  return out;
+  struct tm *stTime = gmtime(&ttime);
+  strftime(strdate, 18, "%Y%m%d%H%M%S", stTime);
+  return strdate;
 }
 
 extern void propper(char *inStr) {
@@ -313,6 +308,7 @@ extern void addFileExt(char **fname, int ftype) {
   else if(ftype == PDF_FILETYPE) ext = o_strdup(".pdf");
   else if(ftype == ODF_FILETYPE) ext = o_strdup(".odf");
   else if(ftype == JPG_FILETYPE) ext = o_strdup(".jpg");
+  else ext = o_strdup(".WILLNEVERHAPPEN");
   
   conCat(fname, ext);
   free(ext);

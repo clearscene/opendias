@@ -24,14 +24,14 @@
 #include "debug.h"
 #include "utils.h"
 
-extern void i_o_log(const int verbosity, const char *message, va_list inargs) {
+void i_o_log(const int verbosity, const char *message, va_list inargs) {
 
   FILE *fp;
   char *logFile;
 
   if( verbosity <= VERBOSITY) {
 
-    char *thumb = o_strdup("%s : %s : %s : ");
+    char *thumb = o_strdup("%s : %X : %s : ");
     char *ltime = getTimeStr();
     char *vb;
     if(verbosity == 1) {
@@ -61,7 +61,8 @@ extern void i_o_log(const int verbosity, const char *message, va_list inargs) {
       fprintf(stderr,"Cannot open log file.\n");
       exit(1);
     }
-    fprintf(fp,thumb,ltime,thread,vb);
+    //fprintf(fp,thumb,ltime,thread,vb);
+    fprintf(fp,thumb,ltime,pthread_self(),vb);
     vfprintf(fp,message,inargs);
     fprintf(fp,"\n");
     fclose(fp);
@@ -74,15 +75,14 @@ extern void i_o_log(const int verbosity, const char *message, va_list inargs) {
 
 }
 
-extern void debug_message(const char *message, const int verbosity) {
-  o_log(verbosity, message, NULL);
-}
-
 extern void o_log(const int verbosity, const char *message, ... ) {
 
-  va_list inargs;
-  va_start(inargs, message);
-  i_o_log(verbosity, message, inargs);
-  va_end(inargs);
+  if( verbosity <= VERBOSITY) {
+    va_list inargs;
+    va_start(inargs, message);
+    i_o_log(verbosity, message, inargs);
+    va_end(inargs);
+  }
+
 }
 
