@@ -57,17 +57,15 @@ extern char * itoa(long int val, int base) {
   long int t = val;
   for (len=2; t; t /= base) len++ ; // quickie log_base
 
-  if((buf = (char *) malloc(len)) == NULL)
-  {
-  o_log(ERROR, "out of memory in itoa\n");
-  return "";
+  if((buf = (char *) malloc(len)) == NULL) {
+    o_log(ERROR, "out of memory in itoa\n");
+    return "";
   }
   s = buf;
-  if (val < 0)
-  {
-  *s++ = '-'; 
-  val = -val;
-  };
+  if (val < 0) {
+    *s++ = '-'; 
+    val = -val;
+  }
   len = (int) ritoa(val, val, s, base);
   return(buf);
 
@@ -276,6 +274,15 @@ extern void propper(char *inStr) {
     }
     ++ptr;
   }
+}
+
+extern void replace(char *inStr, char findStr, char replaceStr) {
+
+  char *ptr = inStr;
+
+  /* going thru string */
+  while( ptr[strcspn ( ptr, findStr )] = replaceStr );
+
 }
 
 extern struct dateParts *dateStringToDateParts(char *dateString) {

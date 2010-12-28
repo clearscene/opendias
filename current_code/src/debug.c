@@ -31,7 +31,7 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
 
   if( verbosity <= VERBOSITY) {
 
-    char *thumb = o_strdup("%s : %X : %s : ");
+    char *thumb = o_strdup("%s:%X:%s: ");
     char *ltime = getTimeStr();
     char *vb;
     if(verbosity == 1) {
@@ -67,6 +67,7 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
     fprintf(fp,"\n");
     fclose(fp);
 
+    free(ltime);
     free(logFile);
     free(thumb);
     free(vb);

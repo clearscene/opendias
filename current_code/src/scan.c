@@ -34,9 +34,6 @@
 #include "main.h"
 #include "utils.h"
 #include "debug.h"
-#ifdef CAN_OCR
-#include "ocr_plug.h"
-#endif // CAN_OCR //
 
 #ifdef CAN_SCAN
 
@@ -278,23 +275,14 @@ extern void doScanningOperation(void *uuid) {
       o_log(DEBUGM, "attempting OCR");
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
-      struct scanCallInfo infoData;
+      char *ocrScanText = getTextFromImage((const unsigned char*)pic);
 
-      infoData.language = (const char*)OCR_LANG_BRITISH;
-      infoData.imagedata = (const unsigned char*)pic;
-      infoData.bytes_per_pixel = 1;
-      infoData.bytes_per_line = pars.bytes_per_line;
-      infoData.width = pars.pixels_per_line;
-      infoData.height = getLines;
-
-      runocr(&infoData);
-      o_log(DEBUGM, infoData.ret);
       ocrText = o_strdup("---------------- page ");
       conCat(&ocrText, page_s);
       conCat(&ocrText, " ----------------\n");
-      conCat(&ocrText, infoData.ret);
+      conCat(&ocrText, ocrScanText);
       conCat(&ocrText, "\n");
-      free(infoData.ret);
+      free(ocrScanText);
     }
     else {
       o_log(DEBUGM, "OCR was requested, but the specified resolution means it's not safe to be attempted");
@@ -315,6 +303,9 @@ extern void doScanningOperation(void *uuid) {
   // Convert Raw into JPEG
   //
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
+  char *outFilename = g_strconcat(BASE_DIR,"/scans/",docid_s,"_",page_s,".jpg", NULL);
+  reformatImage(FIF_PGNRAW, "/tmp/tmp/pnm", FIF_JPEG, outFilename);
+/*
   FreeImage_Initialise(TRUE);
   FreeImage_SetOutputMessage(FreeImageErrorHandler);
 
@@ -343,7 +334,7 @@ extern void doScanningOperation(void *uuid) {
   FreeImage_DeInitialise();
   o_log(DEBUGM, outFilename);
   free(outFilename);
-
+*/
 
 
   // update record

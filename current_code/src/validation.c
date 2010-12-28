@@ -90,7 +90,7 @@ extern int basicValidation(GHashTable *postdata) {
     && 0 != strcmp(action, "getAccessDetails")
     && 0 != strcmp(action, "titleAutoComplete")
     && 0 != strcmp(action, "controlAccess") ) {
-    o_log(ERROR,  "requested 'action' is not available.");
+    o_log(ERROR, "requested 'action' (of '%s') is not available.", action);
     return 1;
   }
 

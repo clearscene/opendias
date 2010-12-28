@@ -189,7 +189,10 @@ extern void request_completed (void *cls, struct MHD_Connection *connection, voi
       char *filename = malloc(10+strlen(uploadedFileName));
       sprintf(filename, filename_template, uploadedFileName);
       free(filename_template);
+/*
+ * DO NOT COMMIT ME
       unlink(filename);
+ */
       free(filename);
     }
     g_hash_table_remove_all( con_info->post_data );
@@ -471,7 +474,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
     // Otherwise give an empty page
     else {
-      o_log(WARNING, "disallowed content");
+      o_log(WARNING, "disallowed content: static file of unknown type");
       content = o_strdup("");
       mimetype = MIMETYPE_HTML;
       size = 0;
@@ -687,8 +690,8 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           size = strlen(content);
         }
 
-        else if ( action && 0 == strcmp(action, "uploadFile") ) {
-          o_log(INFORMATION, "Processing request for: uploadFile");
+        else if ( action && 0 == strcmp(action, "uploadfile") ) {
+          o_log(INFORMATION, "Processing request for: uploadfile");
           if ( accessPrivs.add_import == 0 )
             content = o_strdup(noaccessxml);
           else if ( validate( con_info->post_data, action ) ) 
@@ -758,7 +761,7 @@ o_log(ERROR, filename);
 
         else {
           // unknown post request - should have been picked up by validation!
-          o_log(WARNING, "disallowed content");
+          o_log(WARNING, "disallowed content: post request for unknown action - %s", action);
           content = o_strdup("");
           mimetype = MIMETYPE_HTML;
           size = 0;
@@ -767,7 +770,7 @@ o_log(ERROR, filename);
     }
     else {
       // post request to a non standard uri (ie not "/dynamic")
-      o_log(WARNING, "disallowed content");
+      o_log(WARNING, "disallowed content: post request for unknown method");
       content = o_strdup("");
       mimetype = MIMETYPE_HTML;
       size = 0;

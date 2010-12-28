@@ -62,8 +62,10 @@ int setup (char *configFile) {
     conf = configFile;
   else
     conf = "/etc/opendias/opendias.conf";
+
+  o_log(INFORMATION, "Using config file: %s", conf);
   if( ! load_file_to_memory(conf, &location) ) {
-    o_log(ERROR, "Cannot find main config file.");
+    o_log(ERROR, "Cannot find main config file: %s", conf);
     free(location);
     return 1;
   }
@@ -83,6 +85,7 @@ int setup (char *configFile) {
     do {
       config_option = o_strdup(readData_db("1", "config_option"));
       config_value = o_strdup(readData_db("1", "config_value"));
+      o_log(INFORMATION, "Config setting: %s = %s", config_option, config_value);
       if( 0 == strcmp(config_option, "log_verbosity") ) {
         VERBOSITY = atoi(config_value);
       }
@@ -286,6 +289,10 @@ int main (int argc, char **argv) {
 
   if(setup (configFile))
     return 1;
+
+  char *testStr = o_strdup("this is a test");
+  replace(testStr, 'i', 'I');
+  o_log(DEBUGM, "TEST: '%s' ", testStr);
 
   o_log(INFORMATION, "... Starting up the openDias service.");
   httpdaemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 

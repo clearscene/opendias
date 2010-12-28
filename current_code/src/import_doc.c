@@ -30,6 +30,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef CAN_ORC
+#include "ocr_plug.h"
+#endif // CAN_OCR //
+
 extern char *uploadfile(char *filename, char *ftype) {
 
   int itype;
@@ -43,19 +47,23 @@ extern char *uploadfile(char *filename, char *ftype) {
 
     // REPLACE ME WITH SOME LIB METHOD TO DO THE SAME
     // \/ \/ \/ \/ \/ \/ \/ \/
-    char *cmd_template = o_strdup("pdftotext /tmp/%s.dat /tmp/%s.txt");
-    char *cmd = malloc(30+(2*strlen(filename)));
+    char *cmd_template = o_strdup("/usr/bin/pdftotext /tmp/%s.dat /tmp/%s.txt");
+    // /\ /\ /\ /\ /\ /\ /\ /\
+
+    char *cmd = malloc(30+9+(2*strlen(filename)));
     sprintf(cmd, cmd_template, filename, filename);
     free(cmd_template);
-    //system(cmd);
+    system(cmd);
     free(cmd);
 
     char *out_template = o_strdup("/tmp/%s.txt");
     char *out = malloc(30+strlen(filename));
     sprintf(out, out_template, filename);
     free(out_template);
-    load_file_to_memory(out, &ocrText);
+    if(load_file_to_memory(out, &ocrText) <= 0)
+      ocrText = o_strdup("--unable to read the PDF file--");
     free(out);
+    
     // --------------------------------------
   }
   else if(0==strcmp("ODF", ftype)) {
@@ -64,7 +72,7 @@ extern char *uploadfile(char *filename, char *ftype) {
   }
   else if(0==strcmp("jpg", ftype)) {
     itype = JPG_FILETYPE;
-    ocrText = o_strdup("-- Could not extract text from Image --");
+    ocrText = getTextFromImage((const unsigned char *)pic);
   }
 
   // Save the record to the DB
@@ -80,6 +88,7 @@ extern char *uploadfile(char *filename, char *ftype) {
   free(filename_template);
 
   fcopy(full_filename, to_name);
+  free(full_filename);
   free(to_name);
 
   // Open the document for editing.

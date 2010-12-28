@@ -21,6 +21,10 @@
 #include <FreeImage.h>
 #include "debug.h"
 
+#ifdef CAN_OCR
+#include "ocr_plug.h"
+#endif // CAN_OCR //
+
 /*
  *
  * FreeImage error handler
@@ -84,7 +88,7 @@ extern void deSkew(unsigned char *pic, double picBytes, double skew, double ppl,
 /*
  * Convert Raw into JPEG
  */
-/*
+extern void reformatImage(int fromFormat, char* fromFilename, int toFormat, char* toFilename ) { 
   FreeImage_Initialise(TRUE);
   FreeImage_SetOutputMessage(FreeImageErrorHandler);
 
@@ -111,4 +115,21 @@ extern void deSkew(unsigned char *pic, double picBytes, double skew, double ppl,
   free(outFilename);
 
 }
-*/
+
+extern char *getTextFromImage(const unsigned char *pic) {
+
+  struct scanCallInfo infoData;
+
+  infoData.language = (const char*)OCR_LANG_BRITISH;
+  infoData.imagedata = (const unsigned char*)pic;
+  infoData.bytes_per_pixel = 1;
+  infoData.bytes_per_line = pars.bytes_per_line;
+  infoData.width = pars.pixels_per_line;
+  infoData.height = getLines;
+
+  runocr(&infoData);
+  char *txt = infoData.ret;
+  o_log(DEBUGM, txt);
+
+  return txt;
+}
