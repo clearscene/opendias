@@ -4,13 +4,13 @@
  <head>
   <title>openDAIS</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/style/common.css" type="text/css" />
-  <script type="text/javascript" src="/includes/jquery.js"></script>
+  <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
-  <link rel="stylesheet" href="/style/ieFix.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/ieFix.css" type="text/css" />
   <![endif]-->
 
  </head>
@@ -20,17 +20,17 @@
 
   <div id='header'>
     <div class="container">
-      <img id='logo' src='/images/openDIAS_sml.png' />
+      <img id='logo' src='/opendias/images/openDIAS_sml.png' />
     </div>
   </div>
 
   <div id='menu'>
     <div class="container">
       <ul>
-        <li><a href='/'>Home</a></li>
-        <li><a href='/docList.html'>Document List</a></li>
-        <li><a href='/acquire.html'>Acquire New</a></li>
-        <li><a href='/accessControls.html'>Access Controls</a></li>
+        <li><a href='/opendias/'>Home</a></li>
+        <li><a href='/opendias/docList.html'>Document List</a></li>
+        <li><a href='/opendias/acquire.html'>Acquire New</a></li>
+        <li><a href='/opendias/accessControls.html'>Access Controls</a></li>
       </ul>
     </div>
   </div>

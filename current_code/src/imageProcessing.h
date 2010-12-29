@@ -24,6 +24,6 @@
 extern void deSkew(unsigned char *, double, double, double, int);
 extern void FreeImageErrorHandler(FREE_IMAGE_FORMAT, const char *);
 extern void reformatImage(int, char *, int, char *);
-extern char *getTextFromImage(const unsigned char *);
+extern char *getTextFromImage(const unsigned char *, int, int, int);
 
 #endif /* IMAGEPROCESSING */

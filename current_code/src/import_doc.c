@@ -31,7 +31,7 @@
 #include <string.h>
 
 #ifdef CAN_ORC
-#include "ocr_plug.h"
+#include "imageProcessing.h"
 #endif // CAN_OCR //
 
 extern char *uploadfile(char *filename, char *ftype) {
@@ -72,7 +72,8 @@ extern char *uploadfile(char *filename, char *ftype) {
   }
   else if(0==strcmp("jpg", ftype)) {
     itype = JPG_FILETYPE;
-    ocrText = getTextFromImage((const unsigned char *)pic);
+    char *pic = NULL;
+    ocrText = getTextFromImage((const unsigned char *)pic, 1, 1, 1);
   }
 
   // Save the record to the DB

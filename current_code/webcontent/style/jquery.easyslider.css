@@ -23,8 +23,8 @@
 	display:block;
 	width:30px;
 	height:77px;
-	background:url(/images/easySlider/btn_prev.png) no-repeat 0 0;	
+	background:url(/opendias/images/easySlider/btn_prev.png) no-repeat 0 0;	
 	}	
 #nextBtn a{ 
-	background:url(/images/easySlider/btn_next.png) no-repeat 0 0;	
+	background:url(/opendias/images/easySlider/btn_next.png) no-repeat 0 0;	
 	}

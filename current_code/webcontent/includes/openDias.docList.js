@@ -109,7 +109,7 @@ function processData(){
     document.getElementById('docList_table').getElementsByTagName('tbody')[0].appendChild(tr);
 
     $('#docid_'+docid).click(function() { 
-      document.location.href = "/docDetail.html?docid="+docid;
+      document.location.href = "/opendias/docDetail.html?docid="+docid;
     });
 
     $("#progressbar").progressbar({

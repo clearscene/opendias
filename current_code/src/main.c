@@ -291,8 +291,9 @@ int main (int argc, char **argv) {
     return 1;
 
   char *testStr = o_strdup("this is a test");
-  replace(testStr, 'i', 'I');
+//  replace(testStr, 'i', 'I');
   o_log(DEBUGM, "TEST: '%s' ", testStr);
+  free(testStr);
 
   o_log(INFORMATION, "... Starting up the openDias service.");
   httpdaemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 

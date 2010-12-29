@@ -83,7 +83,7 @@ $(document).ready(function() {
 //           else if( $(data).find('type').text() == "2" || $(data).find('type').text() == "4") {
              // Set images and default width
              for( x=1 ; x<=parseInt($(data).find('pages').text()) ; x++ ) {
-               $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage"+x+"' alt='' src='/scans/"+officialDocId+"_"+x+".jpg' /></div></li>");
+               $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage"+x+"' alt='' src='/opendias/scans/"+officialDocId+"_"+x+".jpg' /></div></li>");
                $("#scanImage"+x).css("width", "300px");
              }
 

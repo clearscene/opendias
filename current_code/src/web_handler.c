@@ -297,9 +297,20 @@ static void postDumper(GHashTable *table) {
 }
 
 extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
-              const char *url, const char *method,
+              const char *url_orig, const char *method,
               const char *version, const char *upload_data,
               size_t *upload_data_size, void **con_cls) {
+
+  // Remove the begining "/opendias" (so this URL can be used like:)
+  // http://server:port/opendias/
+  // or via a server (apache) rewrite rule
+  // http://server/opendias/
+  char *url = url_orig;
+  if( 0 != strncmp(url,"/opendias", 9) ) {
+    o_log(ERROR, "request '%s' does not start '/opendias'", url_orig);
+    return send_page_bin (connection, build_page((char *)o_strdup(servererrorpage)), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
+  }
+  url += 9;
 
   // First Validate the request basic fields
   if( 0 != strstr(url, "..") ) {

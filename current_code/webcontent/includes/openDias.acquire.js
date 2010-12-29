@@ -159,7 +159,7 @@ function getScanProgress (progressId, device) {
            } else if( status == 16 ) { // SCAN_FINISHED
              showStatus(device, undefined, undefined);
              $('#status_'+device).text("Scan operation complete.");
-             document.location.href = "/docDetail.html?docid="+vvalue;
+             document.location.href = "/opendias/docDetail.html?docid="+vvalue;
              finish = 1;
 
            }
