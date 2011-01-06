@@ -133,6 +133,7 @@ extern char *openDocEditor (char *documentId) {
   lines = o_strdup(readData_db("1", "lines"));
   type = o_strdup(readData_db("1", "filetype"));
   ocrText = o_strdup(readData_db("1", "ocrtext"));
+
   humanReadableDate = dateHuman( o_strdup(readData_db("1", "docdatey")),
                                  o_strdup(readData_db("1", "docdatem")),
                                  o_strdup(readData_db("1", "docdated")) );

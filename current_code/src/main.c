@@ -72,6 +72,7 @@ int setup (char *configFile) {
 
   chop(location);
   BASE_DIR = o_strdup(location);
+  o_log(INFORMATION, "Which says the database is at: %s", BASE_DIR);
 
   // Open (& maybe update) the database.
   if(connect_db (1)) { // 1 = create if required
@@ -291,7 +292,7 @@ int main (int argc, char **argv) {
     return 1;
 
   char *testStr = o_strdup("this is a test");
-//  replace(testStr, 'i', 'I');
+  replace(testStr, "i", "I");
   o_log(DEBUGM, "TEST: '%s' ", testStr);
   free(testStr);
 

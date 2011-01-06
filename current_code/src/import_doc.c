@@ -63,17 +63,25 @@ extern char *uploadfile(char *filename, char *ftype) {
     if(load_file_to_memory(out, &ocrText) <= 0)
       ocrText = o_strdup("--unable to read the PDF file--");
     free(out);
-    
+    replace(ocrText, "\f", ".");
+
     // --------------------------------------
   }
   else if(0==strcmp("ODF", ftype)) {
     itype = ODF_FILETYPE;
-    ocrText = get_odf_Text(filename);  
+    char *full_fn = o_strdup("/tmp/");
+    conCat(&full_fn, filename);
+    conCat(&full_fn, ".dat");
+    ocrText = get_odf_Text(full_fn); // read_odf.c 
+    if(ocrText == NULL)
+      ocrText = o_strdup("--text not extracted--");
+    free(full_fn);
   }
   else if(0==strcmp("jpg", ftype)) {
     itype = JPG_FILETYPE;
-    char *pic = NULL;
-    ocrText = getTextFromImage((const unsigned char *)pic, 1, 1, 1);
+//    char *pic = NULL;
+//    ocrText = getTextFromImage((const unsigned char *)pic, 1, 1, 1);
+    ocrText = o_strdup("--text not extracted--");
   }
 
   // Save the record to the DB
@@ -93,7 +101,7 @@ extern char *uploadfile(char *filename, char *ftype) {
   free(to_name);
 
   // Open the document for editing.
-  char *redirect = o_strdup("<html><HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/docDetail.html?docid=");
+  char *redirect = o_strdup("<html><HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/opendias/docDetail.html?docid=");
   conCat(&redirect, docid);
   conCat(&redirect, "\"></HEAD><body></body></html>");
   free(docid);

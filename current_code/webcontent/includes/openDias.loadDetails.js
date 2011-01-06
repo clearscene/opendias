@@ -38,7 +38,7 @@ function applyNewRow(tagid, tag, selected) {
 $(document).ready(function() {
 
   $('#playAudioLink').click(function(){
-                               $.ajax({ url: "dynamic",
+                               $.ajax({ url: "/opendias/dynamic",
                                         dataType: "xml",
                                         data: {action: "getAudio", docid: getUrlVars()['docid']},
                                         cache: false,
@@ -55,7 +55,7 @@ $(document).ready(function() {
                                $('#playAudio').toggle();
                                });
 
-  $.ajax({ url: "dynamic",
+  $.ajax({ url: "/opendias/dynamic",
          dataType: "xml",
          data: {action: "getDocDetail", docid: getUrlVars()['docid']},
          cache: false,
@@ -75,12 +75,11 @@ $(document).ready(function() {
 
            //
            // Doc type display options.
+           if( $(data).find('type').text() == "1" ) { // ODF Documents
+              $("#slider").append("<a href='/opendias/scans/"+officialDocId+".odt' target='_new'>Download ODF Document</a>");
+           }
 
-//           if( $(data).find('type').text() == "1" ) { // ODF Documents
-
-//           }
-
-//           else if( $(data).find('type').text() == "2" || $(data).find('type').text() == "4") {
+           else if( $(data).find('type').text() == "2" || $(data).find('type').text() == "4") {
              // Set images and default width
              for( x=1 ; x<=parseInt($(data).find('pages').text()) ; x++ ) {
                $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage"+x+"' alt='' src='/opendias/scans/"+officialDocId+"_"+x+".jpg' /></div></li>");
@@ -103,12 +102,11 @@ $(document).ready(function() {
                                    lighbox: false
                                    });
              }
-//           }
+           }
 
-//           else if( $(data).find('type').text() == "3" ) { // PDF Documents
-
-//           }
-  
+           else if( $(data).find('type').text() == "3" ) { // PDF Documents
+              $("#slider").append("<a href='/opendias/scans/"+officialDocId+".pdf' target='_new'>Download PDF Document</a>");
+           }
 
            $("#docDate").datepicker( {dateFormat:"yy/mm/dd"} );
 
@@ -134,7 +132,7 @@ $(document).ready(function() {
   $('#title').autocomplete({
       source: function( request, response ) {
         $.ajax({
-          url: "/dynamic",
+          url: "/opendias./dynamic",
           dataType: "json",
           type: "POST",
           data: {

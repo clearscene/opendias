@@ -176,8 +176,9 @@ extern char *get_odf_Text (const char *filename) {
   gint size;
 
   size = getEntry(filename, "content.xml", &xml);
+  o_log(DEBUGM, "Found message of size %d. Message reads\n %s", size, xml);
   if(size > 0)
-  text = xmlToText(xml, size);
+    text = xmlToText(xml, size);
 
   return text;
 }

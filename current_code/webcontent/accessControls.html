@@ -6,7 +6,7 @@
 <p>Allow access from certain locations.</p>
 
 <h4>Add new access by location</h4>
-<form action='/dynamic' method='post'>
+<form action='/opendias/dynamic' method='post'>
 <input name='action' type='hidden' value='controlAccess' />
 <input name='submethod' type='hidden' value='addLocation' />
 <div id='locationSet'>
@@ -33,7 +33,7 @@
 </form>
 
 <h4>Current access by location</h4>
-<form action='/dynamic' method='post'>
+<form action='/opendias/dynamic' method='post'>
 <input name='action' type='hidden' value='controlAccess' />
 <input name='method' type='hidden' value='removeLocation' />
 <div id='locationList'>
@@ -67,7 +67,7 @@
 <p>Allow access for certain users<span id='withLocation'><strong>, if access is not provided by location</strong></span>.</p>
 
 <h4>Add access by username and password</h4>
-<form action='/dynamic' method='post'>
+<form action='/opendias/dynamic' method='post'>
 <input name='action' type='hidden' value='controlAccess' />
 <input name='method' type='hidden' value='addUser' />
 <div id='locationSet'>

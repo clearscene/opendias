@@ -44,7 +44,7 @@ function applyNewRow(type, human, prop, role) {
 
 $(document).ready(function() {
 
-  $.ajax({ url: "dynamic",
+  $.ajax({ url: "/opendias/dynamic",
          dataType: "xml",
          data: {action: "getAccessDetails"},
          cache: false,

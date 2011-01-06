@@ -3,7 +3,7 @@ formFields = new Array( 'title', 'docDate', 'extractedText' );
 function sendUpdate(kkey, vvalue) {
 
     lockForm();
-    $.ajax({ url: "dynamic",
+    $.ajax({ url: "/opendias/dynamic",
              dataType: "xml",
              data: {action: "updateDocDetails", 
                     docid: $('#docid').text(),
@@ -28,7 +28,7 @@ function moveTag(tagid, add_remove) {
 
     lockForm();
     id = tagid.replace(new RegExp("tagid_"),"");
-    $.ajax({ url: "dynamic",
+    $.ajax({ url: "/opendias/dynamic",
              dataType: "xml",
              data: {action: "moveTag", 
                     docid: $('#docid').text(),
@@ -139,7 +139,7 @@ $(document).ready(function() {
   $('#delete').click( function() {
     var answer = confirm("Delete this document. Are you sure?");
     if (answer){
-      $.ajax({ url: "dynamic",
+      $.ajax({ url: "/opendias/dynamic",
              dataType: "xml",
              data: {action: "deletedoc", 
                     docid: $('#docid').text(),

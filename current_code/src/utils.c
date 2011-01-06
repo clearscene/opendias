@@ -276,12 +276,14 @@ extern void propper(char *inStr) {
   }
 }
 
-extern void replace(char *inStr, char findStr, char replaceStr) {
+extern void replace(char *inStr, char *findStr, char *replaceStr) {
 
   char *ptr = inStr;
 
   /* going thru string */
-  while( ptr[strcspn ( ptr, findStr )] = replaceStr );
+  while( 0 != strstr(inStr, findStr) ) {
+    ptr[strcspn (inStr, findStr )] = *replaceStr;
+  }
 
 }
 

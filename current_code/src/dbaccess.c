@@ -124,7 +124,7 @@ static char *addNewDoc (int ftype, int getLines, int ppl, int resolution, int pa
   vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
   vars = g_list_append(vars, dateStr);
   vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(SCAN_FILETYPE));
+  vars = g_list_append(vars, GINT_TO_POINTER(ftype));
   runUpdate_db(sql, vars);
   free(sql);
   return itoa(last_insert(), 10);

@@ -47,7 +47,7 @@ function showStatus(dev, canv, prog) {
 
 function getScanProgress (progressId, device) {
 
-  $.ajax({ url: "dynamic",
+  $.ajax({ url: "/opendias/dynamic",
 	 dataType: "xml",
 	 data: {action: "getScanningProgress", 
 		scanprogressid: progressId,
@@ -108,7 +108,7 @@ function getScanProgress (progressId, device) {
              showStatus(device, undefined, undefined);
              $('#status_'+device).text("Please insert page "+vvalue+".");
              if(confirm("Please insert page "+vvalue+".")) {
-               $.ajax({ url: "dynamic",
+               $.ajax({ url: "/opendias/dynamic",
                       dataType: "xml",
                       data: {action: "nextPageReady",
                              scanprogressid: progressId,
@@ -179,7 +179,7 @@ $(document).ready(function() {
 
   $('#loading').canvasLoader({'radius':20, 'dotRadius':2});
 
-  $.ajax({ url: "dynamic",
+  $.ajax({ url: "/opendias/dynamic",
          dataType: "xml",
          data: {action: "getScannerList"},
          cache: false,
@@ -310,7 +310,7 @@ $(document).ready(function() {
                $("#resolutionGood_"+device).removeClass("sweetResolution");
                $("#resolutionGood_"+device).addClass("greySweetResolution");
 
-               $.ajax({ url: "dynamic",
+               $.ajax({ url: "/opendias/dynamic",
                         dataType: "xml",
                         data: {action: "doScan", 
                                deviceid: $("#deviceid_"+device).val(),

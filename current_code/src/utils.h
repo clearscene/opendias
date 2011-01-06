@@ -40,6 +40,6 @@ extern void propper(char *);
 extern void chop(char *);
 extern struct dateParts *dateStringToDateParts(char *);
 extern void addFileExt(char **, int);
-extern void replace(char *, char, char);
+extern void replace(char *, char*, char*);
 
 #endif /* UTILS */

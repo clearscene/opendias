@@ -10,7 +10,7 @@ $(document).ready(function(){
   $('#startDate').datepicker( {dateFormat:'yy-mm-dd'} );
   $('#endDate').datepicker( {dateFormat:'yy-mm-dd'} );
   $('#doFilter').click(function(){
-    $.ajax({ url: "dynamic",
+    $.ajax({ url: "/opendias/dynamic",
              dataType: "xml",
              data: {action: "filter",
                     textSearch: $('#textSearch').val(),
