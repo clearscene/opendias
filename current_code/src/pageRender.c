@@ -72,7 +72,18 @@ extern char *populate_doclist (void) {
 
       rows++;
       docid = o_strdup(readData_db("1", "docid"));
-      type = o_strdup(g_str_equal (readData_db("1", "filetype"),"1")?"ODF Doc":"Scaned Doc");
+      if(g_str_equal (readData_db("1", "filetype"),"1") ) {
+        type = o_strdup("Imported ODF Doc");
+      }
+      else if(g_str_equal (readData_db("1", "filetype"),"3") ) {
+        type = o_strdup("Imported PDF Doc");
+      }
+      else if(g_str_equal (readData_db("1", "filetype"),"4") ) {
+        type = o_strdup("Imported Image");
+      }
+      else {
+        type = o_strdup("Scaned Doc");
+      }
       title = o_strdup(readData_db("1", "title"));
       if(g_str_equal (title, "NULL") ) {
         free(title);

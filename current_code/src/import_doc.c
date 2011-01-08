@@ -36,7 +36,7 @@
 
 extern char *uploadfile(char *filename, char *ftype) {
 
-  int itype;
+  int itype = PLACE_HOLDER;
   char *ocrText;
 
   // Save Record
@@ -53,14 +53,14 @@ extern char *uploadfile(char *filename, char *ftype) {
     char *cmd = malloc(30+9+(2*strlen(filename)));
     sprintf(cmd, cmd_template, filename, filename);
     free(cmd_template);
-    system(cmd);
+    int s = system(cmd);
     free(cmd);
 
     char *out_template = o_strdup("/tmp/%s.txt");
     char *out = malloc(30+strlen(filename));
     sprintf(out, out_template, filename);
     free(out_template);
-    if(load_file_to_memory(out, &ocrText) <= 0)
+    if(s != 0 || load_file_to_memory(out, &ocrText) <= 0)
       ocrText = o_strdup("--unable to read the PDF file--");
     free(out);
     replace(ocrText, "\f", ".");
@@ -74,7 +74,7 @@ extern char *uploadfile(char *filename, char *ftype) {
     conCat(&full_fn, ".dat");
     ocrText = get_odf_Text(full_fn); // read_odf.c 
     if(ocrText == NULL)
-      ocrText = o_strdup("--text not extracted--");
+      ocrText = o_strdup("--text could not be extracted--");
     free(full_fn);
   }
   else if(0==strcmp("jpg", ftype)) {
@@ -82,6 +82,11 @@ extern char *uploadfile(char *filename, char *ftype) {
 //    char *pic = NULL;
 //    ocrText = getTextFromImage((const unsigned char *)pic, 1, 1, 1);
     ocrText = o_strdup("--text not extracted--");
+  }
+
+  if(itype == PLACE_HOLDER) {
+    o_log(ERROR, "unknown file type.");
+    return NULL;
   }
 
   // Save the record to the DB
@@ -107,7 +112,5 @@ extern char *uploadfile(char *filename, char *ftype) {
   free(docid);
 
   return redirect;
-
 }
-
 

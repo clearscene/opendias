@@ -306,7 +306,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
   // http://server:port/opendias/
   // or via a server (apache) rewrite rule
   // http://server/opendias/
-  char *url = url_orig;
+  const char *url = url_orig;
   if( 0 != strncmp(url,"/opendias", 9) ) {
     o_log(ERROR, "request '%s' does not start '/opendias'", url_orig);
     return send_page_bin (connection, build_page((char *)o_strdup(requesterrorpage)), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
@@ -421,12 +421,24 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
         mimetype = MIMETYPE_JPG;
     }
 
-    // Serve 'scans' content
-    else if( 0!=strstr(url,"/scans/") && 0!=strstr(url,".jpg") ) {
+    // Serve 'scans' content [image|pdf|odf]
+    else if( 0!=strstr(url,"/scans/") && (0!=strstr(url,".jpg") || 0!=strstr(url,".pdf") || 0!=strstr(url,".odt") ) ) {
       dir = o_strdup(BASE_DIR);
       conCat(&dir, url);
       size = getFromFile_fullPath(dir, &content);
       free(dir);
+      if(0!=strstr(url,".jpg")) {
+        mimetype = MIMETYPE_JPG;
+      } 
+      else if (0!=strstr(url,".odt")) {
+        mimetype = MIMETYPE_ODT;
+      }
+      else if (0!=strstr(url,".pdf")) {
+        mimetype = MIMETYPE_PDF;
+      }
+      else
+        size = -1;
+
       if(size < 0) {
         free(content);
         content = o_strdup("");
@@ -434,8 +446,6 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
       	mimetype = MIMETYPE_HTML;
         size = 0;
       }
-      else
-        mimetype = MIMETYPE_JPG;
     }
 
     // Serve 'audio' content
@@ -711,7 +721,6 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           else {
             char *filename = getPostData(con_info->post_data, "uploadfile");
             char *ftype = getPostData(con_info->post_data, "ftype");
-o_log(ERROR, filename);
             content = uploadfile(filename, ftype); // import_doc.c
             if(content == (void *)NULL)
               content = o_strdup(servererrorpage);

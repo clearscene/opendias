@@ -17,11 +17,13 @@
  */
 
 #include "config.h"
+#include <stdlib.h>
 #include <stdio.h>
 #include <FreeImage.h>
 #include "debug.h"
+#include "utils.h"
 
-#include <glib.h>       // REMOVE ME (and the g_strconcat)
+//#include <glib.h>       // REMOVE ME (and the g_strconcat)
 
 #ifdef CAN_OCR
 #include "ocr_plug.h"
@@ -90,15 +92,15 @@ extern void deSkew(unsigned char *pic, double picBytes, double skew, double ppl,
 /*
  * Convert Raw into JPEG
  */
-/*
-extern void reformatImage(int fromFormat, char* fromFilename, int toFormat, char* toFilename ) { 
+extern void reformatImage(int fromFormat, char *fromFilename, int toFormat, char *outFilename ) { 
   FreeImage_Initialise(TRUE);
   FreeImage_SetOutputMessage(FreeImageErrorHandler);
+  char *resultMessage;
+  int resultVerbosity;
 
-  char *outFilename = g_strconcat(BASE_DIR,"/scans/",docid_s,"_",page_s,".jpg", NULL);
-  FIBITMAP *bitmap = FreeImage_Load(FIF_PGMRAW, "/tmp/tmp.pnm", 0);
-  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 60);
-  if(FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90)) {
+  FIBITMAP *bitmap = FreeImage_Load(fromFormat, fromFilename, 0);
+  //updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 60);
+  if(FreeImage_Save(toFormat, bitmap, outFilename, 90)) {
     resultMessage = o_strdup("Saved JPEG output of scan");
     resultVerbosity = INFORMATION;
     o_log(DEBUGM, outFilename);
@@ -106,11 +108,11 @@ extern void reformatImage(int fromFormat, char* fromFilename, int toFormat, char
     resultMessage = o_strdup("Error saving jpeg of scan, to: ");
     conCat(&resultMessage, outFilename);
     resultVerbosity = ERROR;
-    updateScanProgress(uuid, SCAN_ERROR_CONVERTING_FORMAT, 0);
+    //updateScanProgress(uuid, SCAN_ERROR_CONVERTING_FORMAT, 0);
   }
-  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 90);
+  //updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 90);
   FreeImage_Unload(bitmap);
-  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
+  //updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   o_log(resultVerbosity, resultMessage);
   free(resultMessage);
   FreeImage_DeInitialise();
@@ -118,7 +120,7 @@ extern void reformatImage(int fromFormat, char* fromFilename, int toFormat, char
   free(outFilename);
 
 }
-*/
+
 
 extern char *getTextFromImage(const unsigned char *pic, int bpl, int ppl, int lines) {
 

@@ -29,12 +29,14 @@
 
 #define MIMETYPE_HTML "text/html"
 #define MIMETYPE_PNG "image/png"
-#define MIMETYPE_JPG "image/png"
+#define MIMETYPE_JPG "image/jpeg"
 #define MIMETYPE_CSS "text/css"
 #define MIMETYPE_JS "application/javascript"
 #define MIMETYPE_XML "text/xml"
 #define MIMETYPE_OGG "audio/ogg"
 #define MIMETYPE_JSON "text/x-json"
+#define MIMETYPE_PDF "application/pdf"
+#define MIMETYPE_ODT "application/vnd.oasis.opendocument.text"
 
 static unsigned int nr_of_clients = 0;
 

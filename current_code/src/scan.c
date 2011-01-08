@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-//#include <glib.h>       // REMOVE ME (and the g_strconcat)
+#include <glib.h>       // REMOVE ME (and the g_strconcat)
 #include <stdlib.h>
 #include <stdio.h>      // printf, file operations
 #include <string.h>     // compares
@@ -133,8 +133,7 @@ extern void doScanningOperation(void *uuid) {
     getLines = (int)(getLines * pagelength / 100);
   free(length_s);
 
-  fprintf (stderr,
-    "Parm : stat=%s form=%d,lf=%d,bpl=%d,pixpl=%d,lin=%d,get=%d,dep=%d\n",
+  o_log(INFORMATION, "Scanner Parm : stat=%s form=%d,lf=%d,bpl=%d,pixpl=%d,lin=%d,get=%d,dep=%d\n",
     sane_strstatus (status),
     pars.format, pars.last_frame,
     pars.bytes_per_line, pars.pixels_per_line,
@@ -302,39 +301,10 @@ extern void doScanningOperation(void *uuid) {
 
   // Convert Raw into JPEG
   //
-/*  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
   char *outFilename = g_strconcat(BASE_DIR,"/scans/",docid_s,"_",page_s,".jpg", NULL);
-  reformatImage(FIF_PGNRAW, "/tmp/tmp/pnm", FIF_JPEG, outFilename);
-*/
-  FreeImage_Initialise(TRUE);
-  FreeImage_SetOutputMessage(FreeImageErrorHandler);
-
-  char *resultMessage;
-  char *outFilename = g_strconcat(BASE_DIR,"/scans/",docid_s,"_",page_s,".jpg", NULL);
-  FIBITMAP *bitmap = FreeImage_Load(FIF_PGMRAW, "/tmp/tmp.pnm", 0);
-  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 60);
-  int resultVerbosity;
-  if(FreeImage_Save(FIF_JPEG, bitmap, outFilename, 90)) {
-    resultMessage = o_strdup("Saved JPEG output of scan");
-    resultVerbosity = INFORMATION;
-    o_log(DEBUGM, outFilename);
-  } else {
-    resultMessage = o_strdup("Error saving jpeg of scan, to: ");
-    conCat(&resultMessage, outFilename);
-    resultVerbosity = ERROR;
-    updateScanProgress(uuid, SCAN_ERROR_CONVERTING_FORMAT, 0);
-  }
-  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 90);
-  FreeImage_Unload(bitmap);
+  reformatImage(FIF_PGMRAW, "/tmp/tmp/pnm", FIF_JPEG, outFilename);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
-  o_log(resultVerbosity, resultMessage);
-  free(resultMessage);
-  free(page_s);
-
-  FreeImage_DeInitialise();
-  o_log(DEBUGM, outFilename);
-  free(outFilename);
-
 
 
   // update record

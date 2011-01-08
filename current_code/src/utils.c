@@ -315,7 +315,7 @@ extern void addFileExt(char **fname, int ftype) {
 
        if(ftype == SCAN_FILETYPE) ext = o_strdup(".jpg");
   else if(ftype == PDF_FILETYPE) ext = o_strdup(".pdf");
-  else if(ftype == ODF_FILETYPE) ext = o_strdup(".odf");
+  else if(ftype == ODF_FILETYPE) ext = o_strdup(".odt");
   else if(ftype == JPG_FILETYPE) ext = o_strdup(".jpg");
   else ext = o_strdup(".WILLNEVERHAPPEN");
   
