@@ -27,10 +27,10 @@
   <div id='menu'>
     <div class="container">
       <ul>
-        <li><a href='/opendias/'>Home</a></li>
-        <li><a href='/opendias/docList.html'>Document List</a></li>
-        <li><a href='/opendias/acquire.html'>Acquire New</a></li>
-        <li><a href='/opendias/accessControls.html'>Access Controls</a></li>
+        <li><a id='homeLink' href='/opendias/'>Home</a></li>
+        <li><a id='doclistLink' href='/opendias/docList.html'>Document List</a></li>
+        <li><a id='acquireLink' href='/opendias/acquire.html'>Acquire New</a></li>
+        <li><a id='accessLink' href='/opendias/accessControls.html'>Access Controls</a></li>
       </ul>
     </div>
   </div>

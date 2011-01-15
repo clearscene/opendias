@@ -186,7 +186,8 @@ $(document).ready(function() {
          type: "POST",
          success: function(data){
            if( $(data).find('error').text() ){
-             alert("Unable to fetch a list of available scanners: "+$(data).find('error').text());
+             $('#loading').canvasLoaderHalt();
+             $('#loading').text("Unable to fetch a list of available scanners: "+$(data).find('error').text());
              return 1;
            }
            var deviceid=0;

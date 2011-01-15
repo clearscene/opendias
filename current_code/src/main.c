@@ -193,7 +193,7 @@ void daemonize(char *rundir, char *pidfile) {
     if (pid < 0) {
         /* Could not fork */
         o_log(ERROR, "Could not fork.");
-        printf("Could not daemonise. Try running with the -d option or as super user\n");
+        printf("Could not daemonisei [1]. Try running with the -d option or as super user\n");
         exit(EXIT_FAILURE);
     }
  
@@ -211,7 +211,7 @@ void daemonize(char *rundir, char *pidfile) {
     sid = setsid();
     if (sid < 0) {
         o_log(ERROR, "Could not get new process group.");
-        printf("Could not daemonise. Try running with the -d option or as super user\n");
+        printf("Could not daemonise [2]. Try running with the -d option or as super user\n");
         exit(EXIT_FAILURE);
     }
  
@@ -220,7 +220,7 @@ void daemonize(char *rundir, char *pidfile) {
  
     if (pidFilehandle == -1 ) {
         /* Couldn't open lock file */
-        printf("Could not daemonise. Try running with the -d option or as super user\n");
+        printf("Could not daemonise [3]. Try running with the -d option or as super user\n");
         o_log(ERROR, "Could not open PID lock file. Exiting");
         exit(EXIT_FAILURE);
     }
@@ -228,7 +228,7 @@ void daemonize(char *rundir, char *pidfile) {
     /* Try to lock file */
     if (lockf(pidFilehandle,F_TLOCK,0) == -1) {
         /* Couldn't get lock on lock file */
-        printf("Could not daemonise. Try running with the -d option or as super user\n");
+        printf("Could not daemonise [4]. Try running with the -d option or as super user\n");
         o_log(ERROR, "Could not lock PID lock file. Exiting");
         exit(EXIT_FAILURE);
     }

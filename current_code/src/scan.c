@@ -303,7 +303,7 @@ extern void doScanningOperation(void *uuid) {
   //
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
   char *outFilename = g_strconcat(BASE_DIR,"/scans/",docid_s,"_",page_s,".jpg", NULL);
-  reformatImage(FIF_PGMRAW, "/tmp/tmp/pnm", FIF_JPEG, outFilename);
+  reformatImage(FIF_PGMRAW, "/tmp/tmp.pnm", FIF_JPEG, outFilename);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
 
 

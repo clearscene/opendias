@@ -147,7 +147,7 @@ $(document).ready(function() {
              cache: false,
              type: "POST",
              success: function(data){
-               document.location.href = "/";
+               document.location.href = "/opendias/";
              },
       });
     }

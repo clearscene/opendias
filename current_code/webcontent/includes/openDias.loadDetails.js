@@ -132,7 +132,7 @@ $(document).ready(function() {
   $('#title').autocomplete({
       source: function( request, response ) {
         $.ajax({
-          url: "/opendias./dynamic",
+          url: "/opendias/dynamic",
           dataType: "json",
           type: "POST",
           data: {

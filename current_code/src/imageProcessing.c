@@ -92,28 +92,27 @@ extern void deSkew(unsigned char *pic, double picBytes, double skew, double ppl,
 /*
  * Convert Raw into JPEG
  */
-extern void reformatImage(int fromFormat, char *fromFilename, int toFormat, char *outFilename ) { 
+extern void reformatImage(FREE_IMAGE_FORMAT fromFormat, char *fromFilename, FREE_IMAGE_FORMAT toFormat, char *outFilename ) { 
   FreeImage_Initialise(TRUE);
   FreeImage_SetOutputMessage(FreeImageErrorHandler);
   char *resultMessage;
   int resultVerbosity;
 
   FIBITMAP *bitmap = FreeImage_Load(fromFormat, fromFilename, 0);
-  //updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 60);
-  if(FreeImage_Save(toFormat, bitmap, outFilename, 90)) {
-    resultMessage = o_strdup("Saved JPEG output of scan");
-    resultVerbosity = INFORMATION;
-    o_log(DEBUGM, outFilename);
-  } else {
-    resultMessage = o_strdup("Error saving jpeg of scan, to: ");
-    conCat(&resultMessage, outFilename);
+  if(bitmap == NULL) {
+    resultMessage = o_strdup("Error loading scaned image, to: %s");
     resultVerbosity = ERROR;
-    //updateScanProgress(uuid, SCAN_ERROR_CONVERTING_FORMAT, 0);
+  } else if(FreeImage_Save(toFormat, bitmap, outFilename, 90)) {
+    resultMessage = o_strdup("Saved JPEG output of scan, to: %s");
+    resultVerbosity = INFORMATION;
+  } else {
+    resultMessage = o_strdup("Error saving jpeg of scan, to: %s");
+    resultVerbosity = ERROR;
   }
   //updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 90);
   FreeImage_Unload(bitmap);
   //updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
-  o_log(resultVerbosity, resultMessage);
+  o_log(resultVerbosity, resultMessage, outFilename);
   free(resultMessage);
   FreeImage_DeInitialise();
   o_log(DEBUGM, outFilename);
