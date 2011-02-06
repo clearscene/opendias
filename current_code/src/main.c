@@ -285,16 +285,15 @@ int main (int argc, char **argv) {
 
   if(turnToDaemon==1) {
     // Turn into a meamon and write the pid file.
+    o_log(INFOMATION, "Running in daemon mode.");
     daemonize("/tmp/", "/var/run/opendias.pid");
+  }
+  else {
+    o_log(INFOMATION, "Running in interactive mode.");
   }
 
   if(setup (configFile))
     return 1;
-
-  char *testStr = o_strdup("this is a test");
-  replace(testStr, "i", "I");
-  o_log(DEBUGM, "TEST: '%s' ", testStr);
-  free(testStr);
 
   o_log(INFORMATION, "... Starting up the openDias service.");
   httpdaemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 

@@ -270,7 +270,9 @@ extern void propper(char *inStr) {
   /* going thru string */
   while(*ptr) {
     if( isspace(*ptr) ) {
-      *(++ptr) = toupper(*ptr);
+      // if were on a space and we have something after it
+      if(++ptr)
+        *ptr = toupper(*ptr);
     }
     ++ptr;
   }
@@ -322,3 +324,39 @@ extern void addFileExt(char **fname, int ftype) {
   conCat(fname, ext);
   free(ext);
 }
+
+char *i_printf(const char *fmt, va_list inargs) {
+  int len;
+  char *str;
+  len = vsnprintf(NULL, 0, fmt, inargs);
+  str = malloc((len + 1) * sizeof(char));
+  len = vsnprintf(str, len + 1, fmt, inargs);
+  return str;
+}
+
+extern char *o_printf(const char *fmt, ...) {
+
+  va_list inargs;
+  char *str;
+
+  va_start(inargs, fmt);
+  str = i_printf(fmt, inargs);
+  va_end(inargs);
+
+  return str;
+}
+
+extern void concatf(char **mainStr, const char *fmt, ...) {
+
+  va_list inargs;
+  char *str;
+
+  va_start(inargs, fmt);
+  str = i_printf(fmt, inargs);
+  va_end(inargs);
+
+  conCat(mainStr, str);
+  free(str);
+
+}
+

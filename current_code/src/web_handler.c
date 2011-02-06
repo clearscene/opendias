@@ -357,6 +357,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
   accessPrivs.add_scan = 0;
 
   if (0 == *upload_data_size) {
+
     if ((0 == strcmp (method, "GET") && 0 != strstr(url,".html")) || 0 == strcmp(method,"POST")) {
       char *accessError = accessChecks(connection, url, &accessPrivs);
       if(accessError != NULL) {

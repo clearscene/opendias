@@ -29,6 +29,8 @@ opendias_SOURCES = \
 	ocr_plug.h    \
 	scan.c    \
 	scan.h    \
+	scanner.c    \
+	scanner.h    \
 	speak.cc    \
 	speak.h    \
 	utils.c    \
