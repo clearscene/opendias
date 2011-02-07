@@ -285,11 +285,11 @@ int main (int argc, char **argv) {
 
   if(turnToDaemon==1) {
     // Turn into a meamon and write the pid file.
-    o_log(INFOMATION, "Running in daemon mode.");
+    o_log(INFORMATION, "Running in daemon mode.");
     daemonize("/tmp/", "/var/run/opendias.pid");
   }
   else {
-    o_log(INFOMATION, "Running in interactive mode.");
+    o_log(INFORMATION, "Running in interactive mode.");
   }
 
   if(setup (configFile))
