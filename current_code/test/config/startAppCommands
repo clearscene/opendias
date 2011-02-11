@@ -1,3 +1,1 @@
-touch runningTest
-G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind --leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=results/resultsFiles/valgrind.out --gen-suppressions=all ../src/opendias &> results/resultsFiles/appLog.out
-rm runningTest
+G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind --suppressions=suppressions/sane.suppression --suppressions=suppressions/t --leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=results/resultsFiles/valgrind.out --gen-suppressions=all ../src/opendias -c /home/wbooth/store/nonweb/opendias/current_code/test/config/testapp.conf > results/resultsFiles/appLog.out

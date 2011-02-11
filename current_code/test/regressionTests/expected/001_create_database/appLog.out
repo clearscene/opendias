@@ -1,0 +1,212 @@
+STDOUT
+--------------------------------------------------
+LOG-OUTPUT
+-date-:-thread-: /home/wbooth/store/nonweb/opendias/current_code/test/config/testapp.conf
+-date-:-thread-: /tmp/opendiastest/
+-date-:-thread-: Creating new database
+-date-:-thread-: Run Query
+-date-:-thread-: Free recordset
+-date-:-thread-: Connected to database
+-date-:-thread-: 1
+-date-:-thread-: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v1.sql
+-date-:-thread-: BEGIN TRANSACTION;
+
+CREATE TABLE version (
+	version INTEGER PRIMARY KEY,
+	for_app_version NUMERIC,
+	version_name TEXT);
+
+CREATE UNIQUE INDEX version_idx 
+ON version(version ASC);
+
+DELETE FROM version;
+
+INSERT INTO version VALUES(1,0.1,'Draft');
+
+CREATE TABLE docs (
+	docid INTEGER PRIMARY KEY, 
+	doneocr NUMERIC, 
+	ocrtext TEXT, 
+	depth NUMERIC, 
+	lines NUMERIC, 
+	ppl NUMERIC, 
+	resolution NUMERIC, 
+	docdatey NUMERIC, 
+	docdatem NUMERIC, 
+	docdated NUMERIC, 
+	entrydate TEXT, 
+	filetype NUMERIC, 
+	title TEXT);
+
+CREATE TABLE tags (
+	tagid INTEGER PRIMARY KEY, 
+	tagname TEXT);
+
+CREATE UNIQUE INDEX tagname_idx 
+ON tags(tagname ASC);
+
+INSERT INTO tags VALUES(1,'Bank');
+INSERT INTO tags VALUES(2,'Utility');
+INSERT INTO tags VALUES(3,'Tax');
+INSERT INTO tags VALUES(4,'Household');
+INSERT INTO tags VALUES(5,'Account');
+INSERT INTO tags VALUES(6,'Credit Card');
+INSERT INTO tags VALUES(7,'Gas');
+INSERT INTO tags VALUES(8,'Electricity');
+INSERT INTO tags VALUES(9,'Water');
+INSERT INTO tags VALUES(10,'Government');
+INSERT INTO tags VALUES(11,'Local');
+INSERT INTO tags VALUES(12,'Personal');
+INSERT INTO tags VALUES(13,'Morgadge');
+INSERT INTO tags VALUES(14,'Insurance');
+INSERT INTO tags VALUES(15,'Car');
+INSERT INTO tags VALUES(16,'Land-Line');
+INSERT INTO tags VALUES(17,'Mobile');
+INSERT INTO tags VALUES(18,'Internet');
+INSERT INTO tags VALUES(19,'TV');
+INSERT INTO tags VALUES(20,'Letter');
+INSERT INTO tags VALUES(21,'Statement');
+INSERT INTO tags VALUES(22,'Bill');
+INSERT INTO tags VALUES(23,'Recieved');
+INSERT INTO tags VALUES(24,'Sent');
+
+CREATE TABLE doc_tags (
+	doctagid INTEGER PRIMARY KEY,
+	docid NUMERIC,
+	tagid NUMERIC);
+
+CREATE INDEX doc_tags_tagid_idx
+ON doc_tags(tagid ASC);
+
+COMMIT;
+
+
+-date-:-thread-: Run Query
+-date-:-thread-: Free recordset
+-date-:-thread-: 2
+-date-:-thread-: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v2.sql
+-date-:-thread-: BEGIN TRANSACTION;
+
+ALTER TABLE docs
+ADD COLUMN pages NUMERIC;
+
+CREATE TEMPORARY TABLE t1_backup(a,b);
+INSERT INTO t1_backup SELECT version, for_app_version FROM version;
+DROP TABLE version;
+CREATE TABLE version (
+	version INTEGER PRIMARY KEY,
+	for_app_version TEXT); 
+INSERT INTO version SELECT a,b FROM t1_backup;
+DROP TABLE t1_backup;
+
+UPDATE version
+SET version = 2,
+for_app_version = "0.2.2";
+
+COMMIT;
+
+
+-date-:-thread-: Run Query
+-date-:-thread-: Free recordset
+-date-:-thread-: 3
+-date-:-thread-: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v3.sql
+-date-:-thread-: BEGIN TRANSACTION;
+
+CREATE TABLE "scan_params" (
+    "client_id" TEXT NOT NULL DEFAULT (0),
+    "param_option" INTEGER NOT NULL DEFAULT (0),
+    "param_value" TEXT
+);
+
+CREATE UNIQUE INDEX "primary" on scan_params (client_id ASC, param_option ASC);
+
+CREATE TABLE scan_progress (
+    "status" INTEGER NOT NULL DEFAULT (0),
+    "value" INTEGER,
+    "client_id" CHAR(36) NOT NULL DEFAULT (' ')
+);
+
+CREATE UNIQUE INDEX "client_id" on "scan_progress" (client_id ASC);
+
+CREATE TABLE "config" (
+    "config_option" TEXT NOT NULL,
+    "config_value" TEXT NOT NULL
+);
+
+CREATE UNIQUE INDEX "option" on config (config_option ASC);
+
+UPDATE version
+SET version = 3,
+for_app_version = "0.5";
+
+COMMIT;
+
+
+-date-:-thread-: Run Query
+-date-:-thread-: Free recordset
+-date-:-thread-: 4
+-date-:-thread-: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v4.sql
+-date-:-thread-: BEGIN TRANSACTION;
+
+INSERT INTO tags VALUES(25,'Wages');
+UPDATE tags SET tagname='Morgage' WHERE tagid=13;
+
+INSERT INTO config VALUES ("log_verbosity",3);
+INSERT INTO config VALUES ("scan_directory","/var/lib/opendias");
+INSERT INTO config VALUES ("show_all_available",1);
+INSERT INTO config VALUES ("port",8988);
+INSERT INTO config VALUES ("log_directory","/var/log/opendias");
+
+CREATE TABLE access_role (
+  role INTEGER PRIMARY KEY, 
+  rolename char(25) NOT NULL,
+  update_access INTEGER NOT NULL,
+  view_doc INTEGER NOT NULL,
+  edit_doc INTEGER NOT NULL,
+  delete_doc INTEGER NOT NULL,
+  add_import INTEGER NOT NULL,
+  add_scan INTEGER NOT NULL
+);
+
+INSERT INTO access_role VALUES (1,"admin",1,1,1,1,1,1);
+INSERT INTO access_role VALUES (2,"user",0,1,1,1,1,1);
+INSERT INTO access_role VALUES (3,"view",0,1,0,0,0,0);
+INSERT INTO access_role VALUES (4,"add",0,0,0,0,1,1);
+
+CREATE TABLE user_access (
+  username CHAR(36) NOT NULL,
+  password CHAR(36) NOT NULL, 
+  role INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX "usr_acc" on user_access (username ASC);
+
+CREATE TABLE location_access (
+  location CHAR(15) NOT NULL, 
+  role INTEGER NOT NULL
+);
+
+INSERT INTO location_access VALUES ('127.0.0.1', 1);
+
+CREATE UNIQUE INDEX "loc_acc" on location_access (location ASC);
+
+UPDATE version
+SET version = 4,
+for_app_version = "0.5.8";
+
+COMMIT;
+
+
+-date-:-thread-: Run Query
+-date-:-thread-: Free recordset
+-date-:-thread-: Run Query
+-date-:-thread-: log_verbosity = 3
+-date-:-thread-: scan_directory = /var/lib/opendias
+-date-:-thread-: show_all_available = 1
+-date-:-thread-: port = 8988
+-date-:-thread-: log_directory = /var/log/opendias
+-date-:-thread-: Created directory.
+-date-:-thread-: ... Starting up the openDias service.
+-date-:-thread-: ready to accept connectons
+-date-:-thread-: Received SIGTERM signal.
+-date-:-thread-: openDias service is shutdown....

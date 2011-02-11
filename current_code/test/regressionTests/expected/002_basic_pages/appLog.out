@@ -1,0 +1,52 @@
+STDOUT
+--------------------------------------------------
+LOG-OUTPUT
+-date-:-thread-: /home/wbooth/store/nonweb/opendias/current_code/test/config/testapp.conf
+-date-:-thread-: /tmp/opendiastest/
+-date-:-thread-: Dir structure is in-place, database should exist
+-date-:-thread-: Run Query
+-date-:-thread-: Free recordset
+-date-:-thread-: Run Query
+-date-:-thread-: Free recordset
+-date-:-thread-: Connected to database
+-date-:-thread-: Run Query
+-date-:-thread-: log_verbosity = 3
+-date-:-thread-: scan_directory = /var/lib/opendias
+-date-:-thread-: show_all_available = 1
+-date-:-thread-: port = 8988
+-date-:-thread-: log_directory = /var/log/opendias
+-date-:-thread-: ... Starting up the openDias service.
+-date-:-thread-: ready to accept connectons
+-date-:-thread-: /
+-date-:-thread-: /includes/jquery.js
+-date-:-thread-: /style/common.css
+-date-:-thread-: /docList.html
+-date-:-thread-: /includes/jquery.js
+-date-:-thread-: /includes/jquery-ui.min.js
+-date-:-thread-: /includes/jquery.tablesorter.min.js
+-date-:-thread-: /includes/jquery.tablesorter.pager.js
+-date-:-thread-: /includes/openDias.tablesorter.pager.addRemove.js
+-date-:-thread-: /includes/openDias.filter.js
+-date-:-thread-: /includes/openDias.docList.js
+-date-:-thread-: /style/common.css
+-date-:-thread-: /style/jquery-ui.css
+-date-:-thread-: /style/tablesorter.css
+-date-:-thread-: get doc list
+-date-:-thread-: /acquire.html
+-date-:-thread-: /includes/jquery.js
+-date-:-thread-: /includes/jquery-ui.min.js
+-date-:-thread-: /includes/jquery.canvas-loader.js
+-date-:-thread-: /includes/openDias.acquire.js
+-date-:-thread-: /style/common.css
+-date-:-thread-: /style/jquery-ui.css
+-date-:-thread-: getScannerList
+-date-:-thread-: /accessControls.html
+-date-:-thread-: /includes/jquery.js
+-date-:-thread-: /includes/openDias.getAccessDetails.js
+-date-:-thread-: /style/common.css
+-date-:-thread-: getAccessDetails
+-date-:-thread-: /
+-date-:-thread-: /includes/jquery.js
+-date-:-thread-: /style/common.css
+-date-:-thread-: Received SIGTERM signal.
+-date-:-thread-: openDias service is shutdown....
