@@ -219,7 +219,7 @@ extern char *getScannerList() {
               break;
             x++;
           }
-          break; // weve found the resolution, so all done
+          //break; // weve found the resolution, so all done
         }
       }
 
@@ -230,6 +230,9 @@ extern char *getScannerList() {
         resolution = maxRes;
       if(resolution <= minRes)
         resolution = minRes;
+
+      o_log(DEBUGM, "sane_cancel");
+      sane_cancel(openDeviceHandle);
 
       o_log(DEBUGM, "sane_close");
       sane_close(openDeviceHandle);
@@ -483,14 +486,7 @@ extern char *getAccessDetails() {
   char *sql = o_strdup("SELECT * FROM location_access a left join access_role r on a.role = r.role");
   if(runquery_db("1", sql)) {
     do {
-      char *location = o_strdup(readData_db("1", "location"));
-      char *role = o_strdup(readData_db("1", "rolename"));
-      char *row = malloc(52+strlen(location)+strlen(role));
-      sprintf(row, "<access><location>%s</location><role>%s</role></access>", location, role);
-      conCat(&access, row);
-      free(location);
-      free(role);
-      free(row);
+      concatf(&access, "<access><location>%s</location><role>%s</role></access>", readData_db("1", "location"), readData_db("1", "rolename"));
     } while (nextRow("1"));
   }
   free_recordset("1");
@@ -502,14 +498,7 @@ extern char *getAccessDetails() {
   sql = o_strdup("SELECT * FROM user_access a left join access_role r on a.role = r.role");
   if(runquery_db("1", sql)) {
     do {
-      char *user = o_strdup(readData_db("1", "username"));
-      char *role = o_strdup(readData_db("1", "rolename"));
-      char *row = malloc(46+strlen(user)+strlen(role));
-      sprintf(row, "<access><user>%s</user><role>%s</role></access>", user, role);
-      conCat(&access, row);
-      free(user);
-      free(role);
-      free(row);
+      concatf(&access, "<access><user>%s</user><role>%s</role></access>", readData_db("1", "username"), readData_db("1", "rolename"));
     } while (nextRow("1"));
   }
   free_recordset("1");

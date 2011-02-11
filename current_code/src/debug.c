@@ -52,8 +52,6 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
     else 
       vb = o_strdup("---");
 
-    char *thread = itoa(pthread_self(),10);
-
     // Output to file
     logFile = o_strdup(LOG_DIR);
     conCat(&logFile, "/opendias.log");
@@ -71,7 +69,6 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
     free(logFile);
     free(thumb);
     free(vb);
-    free(thread);
   }
 
 }

@@ -344,6 +344,8 @@ extern void doScanningOperation(void *uuid) {
     return;
   }
 
+  status = sane_set_io_mode(openDeviceHandle, SANE_TRUE);
+
   o_log(DEBUGM, "Get scanning params");
   SANE_Parameters pars;
   status = sane_get_parameters (openDeviceHandle, &pars);

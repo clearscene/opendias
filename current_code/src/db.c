@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <glib.h>
 #include <string.h>
+#include <pthread.h>
 #include "utils.h"
 #include "db.h"
 #include "main.h"
@@ -47,7 +48,7 @@ int get_db_version() {
 
   int version = 0;
   GList *rSet;
-  char *rs = "1";
+  char *rs = o_printf("%x-1", pthread_self() );
 
   runquery_db("1", "pragma table_info('version')");
   rSet = g_hash_table_lookup(RECORDSET, rs);
@@ -63,6 +64,7 @@ int get_db_version() {
     version = 0;
   }
   free_recordset("1");
+  free(rs);
 
   return version;
 }
@@ -70,8 +72,7 @@ int get_db_version() {
 extern int connect_db (int createIfRequired) {
 
   int version = 0, i;
-  char *db, *ver;
-  char *data;
+  char *db, *data;
 
   // Test to see if a DB file exsists
   db = o_strdup(BASE_DIR);
@@ -109,14 +110,11 @@ extern int connect_db (int createIfRequired) {
 
   // Bring the DB up-2-date
   for(i=version+1 ; i <= DB_VERSION ; i++) {
-    ver = itoa(i, 10);
     char *upgradeSQL = o_strdup(PACKAGE_DATA_DIR);
-    conCat(&upgradeSQL, "/opendias/openDIAS.sqlite3.dmp.v");
-    conCat(&upgradeSQL, ver);
-    conCat(&upgradeSQL, ".sql");
+    concatf(&upgradeSQL, "/opendias/openDIAS.sqlite3.dmp.v%d.sql", i);
 
     o_log(INFORMATION, "Bringing BD upto version: %d", i);
-    o_log(DEBUGM, "Reading SQL code from file: %d", upgradeSQL);
+    o_log(DEBUGM, "Reading SQL code from file: %s", upgradeSQL);
 
     if(load_file_to_memory(upgradeSQL, &data)) {
       o_log(INFORMATION, data);
@@ -124,19 +122,19 @@ extern int connect_db (int createIfRequired) {
       free_recordset("1");
       free(data);
     }
-    free(ver);
     free(upgradeSQL);
   }
 
   return 0;
 }
 
-static int callback(char *recordSetKey, int argc, char **argv, char **azColName){
+static int callback(char *recordSetKeyId, int argc, char **argv, char **azColName){
 
   int i;
+  gpointer orig_key;
   GList *rSet;
   GHashTable *row;
-//  char *tmp;
+  char *recordSetKey = o_printf("%x-%s", pthread_self(), recordSetKeyId);
 
   o_log(SQLDEBUG, "Reading row from database");
 
@@ -159,9 +157,10 @@ static int callback(char *recordSetKey, int argc, char **argv, char **azColName)
   }
 
   // Save the new row away - for later retrieval 
-  rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
+  g_hash_table_lookup_extended(RECORDSET, recordSetKey, &orig_key, &rSet);
   rSet = g_list_append(rSet, row);
-  g_hash_table_replace(RECORDSET, recordSetKey, rSet);
+  g_hash_table_replace(RECORDSET, orig_key, rSet);
+  free(recordSetKey);
 
   return 0;
 }
@@ -219,11 +218,13 @@ extern int runUpdate_db (char *sql, GList *vars) {
     return 0;
 }
 
-extern int runquery_db (char *recordSetKey, char *sql) {
+extern int runquery_db (char *recordSetKeyId, char *sql) {
 
   int rc;
   char *zErrMsg;
   GList *rSet;
+
+  char *recordSetKey = o_printf("%x-%s", pthread_self(), recordSetKeyId);
 
   o_log(DEBUGM, "Run Query");
   o_log(SQLDEBUG, "SQL = %s", sql);
@@ -233,13 +234,13 @@ extern int runquery_db (char *recordSetKey, char *sql) {
   rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
   if(rSet) {
     o_log(WARNING, "Overwritting an in-use recordset");
-    free_recordset(recordSetKey);
+    free_recordset(recordSetKeyId);
   }
   rSet = NULL;
-  g_hash_table_insert(RECORDSET, recordSetKey, rSet);
+  g_hash_table_insert(RECORDSET, o_strdup(recordSetKey), rSet);
 
   // Execute the query
-  rc = sqlite3_exec(DBH, sql, (void*)callback, recordSetKey, &zErrMsg);
+  rc = sqlite3_exec(DBH, sql, (void*)callback, recordSetKeyId, &zErrMsg);
 
   // Dump out on error
   if( rc != SQLITE_OK ) {
@@ -248,19 +249,26 @@ extern int runquery_db (char *recordSetKey, char *sql) {
       sqlite3_free(zErrMsg);
   }
 
-  if(g_hash_table_lookup(RECORDSET, recordSetKey))
+  if(g_hash_table_lookup(RECORDSET, recordSetKey)) {
+    free(recordSetKey);
     return 1;
-  else
+  }
+  else {
+    free(recordSetKey);
     return 0;
+  }
 }
 
 
-extern char *readData_db (char *recordSetKey, char *field_db) {
+extern char *readData_db (char *recordSetKeyId, char *field_db) {
 
   GList *rSet;
   GHashTable *row;
 
+  char *recordSetKey = o_printf("%x-%s", pthread_self(), recordSetKeyId);
+
   rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
+  free(recordSetKey);
   row = rSet->data;
   if(row) {
     o_log(SQLDEBUG, "%s : %s", field_db, g_hash_table_lookup(row, field_db));
@@ -271,25 +279,32 @@ extern char *readData_db (char *recordSetKey, char *field_db) {
 }
 
 
-extern int nextRow (char * recordSetKey) {
+extern int nextRow (char *recordSetKeyId) {
 
+  gpointer orig_key;
   GList *rSet;
   int ret = 0;
 
+  char *recordSetKey = o_printf("%x-%s", pthread_self(), recordSetKeyId);
+
   o_log(SQLDEBUG, "Moving to next row");
-  rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
+  g_hash_table_lookup_extended(RECORDSET, recordSetKey, &orig_key, &rSet);
   rSet = g_list_next(rSet);
   if(rSet) {
     ret = 1;
-    g_hash_table_replace(RECORDSET, recordSetKey, rSet);
+    g_hash_table_replace(RECORDSET, orig_key, rSet);
   }
+  free(recordSetKey);
 
   return ret;
 }
 
-extern void free_recordset (char *recordSetKey) {
+extern void free_recordset (char *recordSetKeyId) {
 
-  GList *li, *rSet = g_hash_table_lookup(RECORDSET, recordSetKey);
+  gpointer orig_key;
+  char *recordSetKey = o_printf("%x-%s", pthread_self(), recordSetKeyId);
+  GList *li, *rSet;
+  g_hash_table_lookup_extended(RECORDSET, recordSetKey, &orig_key, &rSet);
   GHashTableIter iter;
   gpointer key, value;
 
@@ -307,6 +322,8 @@ extern void free_recordset (char *recordSetKey) {
   
   g_list_free(rSet);
   g_hash_table_remove(RECORDSET, recordSetKey);
+  free(orig_key);
+  free(recordSetKey);
 }
 
 
