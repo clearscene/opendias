@@ -1,8 +1,6 @@
 1_1-StartStop-createDB
-1_2-StartStop-createDBnoSpace
 1_3-StartStop-loadDB
 1_4-StartStop-loadDBnoPermission
-1_5-StartStop-forceKill
 2_1-MainWindow-display
 2_2-MainWindow-dbDisplay
 2_3-MainWindow-fieldSorting

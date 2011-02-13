@@ -1,0 +1,37 @@
+STDOUT
+--------------------------------------------------
+LOG-OUTPUT
+-date-:-thread-: /home/wbooth/store/nonweb/opendias/current_code/test/config/testapp.conf
+-date-:-thread-: /tmp/opendiastest/
+-date-:-thread-: Dir structure is in-place, database should exist
+-date-:-thread-: Run Query
+-date-:-thread-: Free recordset
+-date-:-thread-: Run Query
+-date-:-thread-: Free recordset
+-date-:-thread-: Connected to database
+-date-:-thread-: Run Query
+-date-:-thread-: log_verbosity = 3
+-date-:-thread-: scan_directory = /var/lib/opendias
+-date-:-thread-: show_all_available = 1
+-date-:-thread-: port = 8988
+-date-:-thread-: log_directory = /var/log/opendias
+-date-:-thread-: ... Starting up the openDias service.
+-date-:-thread-: ready to accept connectons
+-date-:-thread-: /docDetail.html
+-date-:-thread-: /includes/jquery.js
+-date-:-thread-: /includes/jquery-ui.min.js
+-date-:-thread-: /includes/jquery.mousewheel.js
+-date-:-thread-: /includes/jquery.gzoom.js
+-date-:-thread-: /includes/jquery.tablesorter.min.js
+-date-:-thread-: /includes/jquery.easySlider.js
+-date-:-thread-: /includes/openDias.saveDetails.js
+-date-:-thread-: /includes/openDias.loadDetails.js
+-date-:-thread-: /style/common.css
+-date-:-thread-: /style/jquery-ui.css
+-date-:-thread-: /style/jquery.gzoom.css
+-date-:-thread-: /style/tablesorter.css
+-date-:-thread-: /style/jquery.easyslider.css
+-date-:-thread-: document details
+-date-:-thread-: Could not select record.
+-date-:-thread-: Received SIGTERM signal.
+-date-:-thread-: openDias service is shutdown....

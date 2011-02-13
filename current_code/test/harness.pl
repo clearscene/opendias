@@ -29,7 +29,7 @@ if( defined $opt_r ) {
 elsif( defined $opt_m) {
   $SKIPMEMORY="-m";
 }
-my $GIVEN=$ARGV;
+#my $GIVEN = join('', @ARGV);
 
 
 
@@ -63,7 +63,7 @@ EOS
 
 ####################################
 # Format the request, add a generic "all", if nothing was given.
-@runTests = split(" ", $GIVEN) if $GIVEN;
+@runTests = @ARGV;
 push(@runTests, "'*'") unless @runTests;
 
 # Loop over each request.
@@ -90,13 +90,6 @@ for my $requested (@runTests) {
     unless( -e "$TESTPATH/expected/$TESTCASENAME" ) {
       system("mkdir -p $TESTPATH/expected/$TESTCASENAME");
     }
-#    if( length $GENERATE ) {
-#      system("rm -rf $TESTPATH/expected/$TESTCASENAME/working");
-#      system("mkdir -p $TESTPATH/expected/$TESTCASENAME/working");
-#    }
-#    open(CONF, ">config/testapp.conf") or die "Connot write config/testapp.conf. Because: $!"; 
-#    print CONF "$pwd/$TESTPATH/expected/$TESTCASENAME/working";
-#    close(CONF);
 
     # Build new environment
     if( -d "$TESTPATH/inputs/$TESTCASENAME" ) {
@@ -104,26 +97,19 @@ for my $requested (@runTests) {
         o_log("Copying pre defined environment");
         system("cp -r $TESTPATH/inputs/$TESTCASENAME/homeDir/* /tmp/opendiastest/");
       }
-      # If we already have a database, then don't build one
-      unless( -e "/tmp/opendiastest/openDIAS.sqlite3" ) {
-        o_log("Building database with specific file");
-        foreach my $sqlLoc qw( ../sql/ $TESTPATH/inputs/$TESTCASENAME/ ) {
-          opendir(DIR, $sqlLoc) or die "Cannot read SQL directory $sqlLoc, because: $!\n";
-          while( ($filename = readdir(DIR))) {
-            next if ( $filename eq "." || $filename eq ".." );
-            print ".";
-            my $fullPath = $sqlLoc."/".$filename;
-            if ( -f $fullPath && $fullPath =~ /\.sql$/ ) {
-              system("/usr/bin/sqlite /tmp/opendiastest/openDIAS.sqlite3 \".read $fullPath\""); 
-            }
-          }
-          closedir(DIR);
+      opendir(DIR, "$TESTPATH/inputs/$TESTCASENAME/" ) or die "Cannot read SQL directory $TESTPATH/inputs/$TESTCASENAME/, because: $!\n";
+      while( ($filename = readdir(DIR))) {
+        next if ( $filename eq "." || $filename eq ".." );
+        #print ".";
+        my $fullPath = "$TESTPATH/inputs/$TESTCASENAME/".$filename;
+        if ( -f $fullPath && $fullPath =~ /\.sql$/ ) {
+          system("/usr/bin/sqlite /tmp/opendiastest/openDIAS.sqlite3 \".read $fullPath\""); 
         }
-        # We want to update the location of any outputs (from the app default)
-        system("/usr/bin/sqlite /tmp/opendiastest/openDIAS.sqlite3 \"UPDATE config SET config_option='/tmp/opendiastest' WHERE config_value='scan_directory'"); 
       }
+      closedir(DIR);
     }
-    print "\r";
+    # We want to update the location of any outputs (from the app default)
+    system("/usr/bin/sqlite /tmp/opendiastest/openDIAS.sqlite3 \"UPDATE config SET config_option='/tmp/opendiastest' WHERE config_value='scan_directory'"); 
 
     # Reset test result vars
     my $RES=0;
@@ -281,7 +267,7 @@ sub printProgressLine {
   if( chomp( $item2 ) ) {
     $end = "\n";
   }
-  print substr( sprintf ( '%-45s', $item1 ), 0, 45 ) . ' ' . substr( sprintf ( '%25s', $item2 ), 0, 25 );
+  print substr( sprintf ( '%-50s', $item1 ), 0, 50 ) . ' ' . substr( sprintf ( '%30s', $item2 ), 0, 30 );
   print $end;
 
 }
