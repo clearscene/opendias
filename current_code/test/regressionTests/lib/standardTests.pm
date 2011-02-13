@@ -6,16 +6,18 @@ use WWW::HtmlUnit
   study => [
     'com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController',
     'com.gargoylesoftware.htmlunit.SilentCssErrorHandler',
+    'com.gargoylesoftware.htmlunit.CollectingAlertHandler',
     'org.apache.commons.logging.LogFactory',
   ];
 
 require Exporter;
 @ISA = qw(Exporter);
-@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client );
+@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client $alert_handler );
 
 use strict;
 
 our $client = 0;
+our $alert_handler;
 our $true = 1;#$Java::lang::true;
 our $false = 0;#$Java::lang::false;
 
@@ -75,7 +77,8 @@ sub setupClient {
   $client->setJavaScriptEnabled($true);
   $client->setAjaxController(WWW::HtmlUnit::com::gargoylesoftware::htmlunit::NicelyResynchronizingAjaxController->new());
   $client->setCssErrorHandler(WWW::HtmlUnit::com::gargoylesoftware::htmlunit::SilentCssErrorHandler->new());
-
+  $alert_handler = WWW::HtmlUnit::com::gargoylesoftware::htmlunit::CollectingAlertHandler->new();
+  $client->setAlertHandler($alert_handler);
   return 1;
 }
 
