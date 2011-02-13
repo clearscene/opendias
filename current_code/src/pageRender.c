@@ -483,25 +483,25 @@ extern char *getAccessDetails() {
 
   // Access by location
   conCat(&access, "<accesschecks><locationaccess>");
-  char *sql = o_strdup("SELECT * FROM location_access a left join access_role r on a.role = r.role");
-  if(runquery_db("1", sql)) {
+  char *sql = o_strdup("SELECT location, r.rolename FROM location_access a left join access_role r on a.role = r.role");
+  if(runquery_db("3", sql)) {
     do {
-      concatf(&access, "<access><location>%s</location><role>%s</role></access>", readData_db("1", "location"), readData_db("1", "rolename"));
-    } while (nextRow("1"));
+      concatf(&access, "<access><location>%s</location><role>%s</role></access>", readData_db("3", "location"), readData_db("3", "rolename"));
+    } while (nextRow("3"));
   }
-  free_recordset("1");
+  free_recordset("3");
   free(sql);
   conCat(&access, "</locationaccess>");
 
   // Access by user
   conCat(&access, "<useraccess>");
   sql = o_strdup("SELECT * FROM user_access a left join access_role r on a.role = r.role");
-  if(runquery_db("1", sql)) {
+  if(runquery_db("4", sql)) {
     do {
-      concatf(&access, "<access><user>%s</user><role>%s</role></access>", readData_db("1", "username"), readData_db("1", "rolename"));
-    } while (nextRow("1"));
+      concatf(&access, "<access><user>%s</user><role>%s</role></access>", readData_db("4", "username"), readData_db("4", "rolename"));
+    } while (nextRow("4"));
   }
-  free_recordset("1");
+  free_recordset("4");
   free(sql);
   conCat(&access, "</useraccess>");
   conCat(&access, "</accesschecks>");

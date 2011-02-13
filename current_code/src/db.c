@@ -153,7 +153,8 @@ static int callback(char *recordSetKeyId, int argc, char **argv, char **azColNam
     // -------------------------------------------
 */
 
-    g_hash_table_insert(row, o_strdup(azColName[i]), o_strdup(argv[i] ? argv[i]: "NULL"));
+    g_hash_table_insert(row, o_strdup(azColName[i]), 
+                                    o_strdup(argv[i] ? argv[i] : "NULL"));
   }
 
   // Save the new row away - for later retrieval 
