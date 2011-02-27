@@ -7,6 +7,7 @@ usage() {
   echo "  -s       don't use any memory checking suppressions (exclusive to -m flag)"
   echo "  -c       don't do coverage checking"
   echo "  -b       don't rebuild app (may override -c)"
+  echo "  -g       show a visual debugger for the webclient"
   echo "  <tests>  The tests you wish to run. Default to all tests."
   echo "             eg: 1*"
   echo "                 2_1 2_2 2_3"
@@ -21,7 +22,8 @@ NOBUILD=""
 RECORD=""
 SKIPMEMORY=""
 SKIPCOVERAGE=""
-while getopts ":hrmcsb" flag 
+GRAPHICALCLIENT=""
+while getopts ":hrmcsbg" flag 
 do 
   case $flag in 
     h)
@@ -46,6 +48,10 @@ do
     b)
       NOBUILD="-b";
       echo Will not \(re\)build the app.
+    ;;
+    g)
+      GRAPHICALCLIENT="-g";
+      echo The web client will have a graphical debugger frontend
     ;;
   esac 
 done 
@@ -163,7 +169,7 @@ echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP ../src/opendias -c $PWD/config/t
 #######################################
 # Run automated tests
 echo Starting test harness ...
-perl ./harness.pl $RECORD $SKIPMEMORY $@ 2> /dev/null
+perl ./harness.pl $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@ 2> /dev/null
 #######################################
 #######################################
 

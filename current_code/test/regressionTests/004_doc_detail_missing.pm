@@ -15,9 +15,9 @@ sub test {
   
   $page = getPage("/docDetail.html?docid=999");
   waitForPageToFinish($page);
-  my $alert_arrayref = $alert_handler->getCollectedAlerts->toArray();
-  if ( $alert_arrayref->[0] ne "Unable to get document details: Your request could not be processed" ) {
-    o_log("FAIL: No alert that we could not load the document");
+  my $alert = getNextJSAlert();
+  unless ( defined $alert && $alert eq "Unable to get document details: Your request could not be processed" ) {
+    o_log("FAIL: 'no such doc' alert is missing.");
     return 1;
   }
   o_log("Correctly informed - no such doc");

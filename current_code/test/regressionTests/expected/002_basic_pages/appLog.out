@@ -11,7 +11,7 @@ LOG-OUTPUT
 -date-:-thread-: Connected to database
 -date-:-thread-: Run Query
 -date-:-thread-: log_verbosity = 3
--date-:-thread-: scan_directory = /var/lib/opendias
+-date-:-thread-: scan_directory = /tmp/opendiastest
 -date-:-thread-: show_all_available = 1
 -date-:-thread-: port = 8988
 -date-:-thread-: log_directory = /var/log/opendias

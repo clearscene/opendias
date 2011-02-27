@@ -1,0 +1,117 @@
+STDOUT
+--------------------------------------------------
+LOG-OUTPUT
+-date-:-thread-: /home/wbooth/store/nonweb/opendias/current_code/test/config/testapp.conf
+-date-:-thread-: /tmp/opendiastest/
+-date-:-thread-: Dir structure is in-place, database should exist
+-date-:-thread-: Run Query
+-date-:-thread-: Free recordset
+-date-:-thread-: Run Query
+-date-:-thread-: Free recordset
+-date-:-thread-: Connected to database
+-date-:-thread-: Run Query
+-date-:-thread-: log_verbosity = 3
+-date-:-thread-: scan_directory = /tmp/opendiastest
+-date-:-thread-: show_all_available = 1
+-date-:-thread-: port = 8988
+-date-:-thread-: log_directory = /var/log/opendias
+-date-:-thread-: ... Starting up the openDias service.
+-date-:-thread-: ready to accept connectons
+-date-:-thread-: /acquire.html
+-date-:-thread-: /includes/jquery.js
+-date-:-thread-: /includes/jquery-ui.min.js
+-date-:-thread-: /includes/jquery.canvas-loader.js
+-date-:-thread-: /includes/openDias.acquire.js
+-date-:-thread-: /style/common.css
+-date-:-thread-: /style/jquery-ui.css
+-date-:-thread-: getScannerList
+-date-:-thread-: doScan
+-date-:-thread-: getScanning Progress
+-date-:-thread-: stat=Success form=0,lf=1,bpl=2362,pixpl=2362,lin=2362,dep=8
+
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress
+-date-:-thread-: getScanning Progress

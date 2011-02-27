@@ -2,17 +2,19 @@ package standardTests;
 
 use Data::Dumper;
 use IO::Socket::INET;
+use Inline::Java qw(cast);
 use WWW::HtmlUnit 
   study => [
     'com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController',
     'com.gargoylesoftware.htmlunit.SilentCssErrorHandler',
     'com.gargoylesoftware.htmlunit.CollectingAlertHandler',
     'org.apache.commons.logging.LogFactory',
+    'com.gargoylesoftware.htmlunit.util.WebClientUtils',
   ];
 
 require Exporter;
 @ISA = qw(Exporter);
-@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client $alert_handler );
+@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client getNextJSAlert castTo_HtmlInput castTo_HtmlButton removeDuplicateLines );
 
 use strict;
 
@@ -25,7 +27,9 @@ sub openlog {
 
   my $testlogfile = shift;
   open(TESTLOG, ">$testlogfile") or die "Cannot open log file '$testlogfile', because $!";
-
+  my $tmp = select(TESTLOG);
+  $|=1;
+  select($tmp);
 }
 
 sub startService {
@@ -55,6 +59,7 @@ sub startService {
 }
 
 sub setupClient {
+  my $graphicalDebugger = shift;
   return 1 if $client;
 
   # Handle logging
@@ -71,21 +76,32 @@ sub setupClient {
     return 0;
   }
 
+  WWW::HtmlUnit::com::gargoylesoftware::htmlunit::util::WebClientUtils->attachVisualDebugger($client) if $graphicalDebugger;
+
   # Set some sensible defaults
   $client->setRedirectEnabled($true);
   $client->setCssEnabled($true);
-  $client->setJavaScriptEnabled($true);
-  $client->setAjaxController(WWW::HtmlUnit::com::gargoylesoftware::htmlunit::NicelyResynchronizingAjaxController->new());
   $client->setCssErrorHandler(WWW::HtmlUnit::com::gargoylesoftware::htmlunit::SilentCssErrorHandler->new());
+  $client->setJavaScriptEnabled($true);
+  $client->setThrowExceptionOnScriptError($true);
+  $client->setAjaxController(WWW::HtmlUnit::com::gargoylesoftware::htmlunit::NicelyResynchronizingAjaxController->new());
+
   $alert_handler = WWW::HtmlUnit::com::gargoylesoftware::htmlunit::CollectingAlertHandler->new();
   $client->setAlertHandler($alert_handler);
+
   return 1;
 }
 
 sub stopService {
 
+  my $alert_arrayref = $alert_handler->getCollectedAlerts->toArray();
+  foreach my $jsAlert (@{$alert_arrayref}) {
+    o_log("Found uncaught alert: ".$jsAlert);
+  }
   o_log("Stopping service");
   $client->closeAllWindows();
+  undef $client;
+  undef $alert_handler;
   system("kill `cat /var/run/opendias.pid`");
 
   # We need valgrind (if running) so finish it's work nad write it's log
@@ -147,6 +163,24 @@ sub checkTitle {
   return 0;
 }
 
+sub castTo_HtmlInput {
+  return _do_cast('iWWW::HtmlUnit::com::gargoylesoftware::htmlunit::html::HtmlInput', shift);
+}
+sub castTo_HtmlButton {
+  return _do_cast('iWWW::HtmlUnit::com::gargoylesoftware::htmlunit::html::HtmlButton', shift);
+}
+
+sub _do_cast {
+  my ( $toObjectType, $fromObject, ) = @_;
+  my $newObject;
+  eval("\$newObject = Case( \$toObjectType, \$fromObject );");
+  if($@ && ref($@) =~ /Exception/) {
+    o_log("Could not convert to $toObjectType, because of ".Dumper($@)." ($!).");
+    return undef;
+  }
+  return $newObject;
+}
+
 #  my $f = $page->getFormByName('f');
 #  my $submit = $f->getInputByName("btnG");
 #  my $query  = $f->getInputByName("q");
@@ -166,8 +200,38 @@ sub wait_for(&@) {
   o_log("Timeout waiting for $subref");
 }
 
+sub getNextJSAlert {
+  my $alert_arrayref = $alert_handler->getCollectedAlerts->toArray();
+  $alert_handler->getCollectedAlerts->remove(0);
+  return defined $alert_arrayref ? $alert_arrayref->[0] : undef;
+}
+
 sub o_log {
   print TESTLOG join(",", @_)."\n";
+}
+
+sub removeDuplicateLines {
+  my $file = shift;
+  my $lastline;
+  my $givenDupWarn = 0;
+  open(INFILE, $file) or die "Cannot open file: $file, because $!";
+  open(OUTFILE, "/tmp/tmpFile");
+  while(<INFILE>) {
+    my $thisLine = $_;
+    if($thisLine eq $lastline) {
+      unless($givenDupWarn) {
+        print OUTFILE " ----- line duplicated ----- \n";
+        $givenDupWarn = 1;
+      }
+    }
+    else {
+      print OUTFILE $thisLine;
+      $givenDupWarn = 0;
+    }
+  }
+  close(OUTFILE);
+  close(INFILE);
+  system ("cp /tmp/tmpFile $file");
 }
 
 return 1;

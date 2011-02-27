@@ -83,7 +83,7 @@ function getScanProgress (progressId, device) {
            } else if( status == 5 ) { // SCAN_DB_ERROR // DB error code
              showStatus(device, undefined, undefined);
              $('#status_'+device).text("Error while scanning.");
-             alert("Database Error: " + vvalue);
+             alert("Scanner Error: " + vvalue);
              finish = 1;
 
            } else if( status == 4 ) { // SCAN_WAITING_ON_SCANNER,

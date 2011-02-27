@@ -62,7 +62,7 @@ extern char *getScanParam(char *scanid, int param_option) {
   if(runquery_db("2", sql)) {
     do {
       vvalue = o_strdup(readData_db("2", "param_value"));
-    } while (nextRow("1"));
+    } while (nextRow("2"));
   }
   free_recordset("2");
   free(sql);

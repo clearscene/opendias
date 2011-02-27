@@ -21,16 +21,14 @@ my $startCmd=`cat config/startAppCommands`;
 # Read Ops
 my $GENERATE="";
 my $SKIPMEMORY="";
-our ($opt_r, $opt_m);
-getopts('rm');
+our ($opt_r, $opt_m, $opt_g, );
+getopts('rmg');
 if( defined $opt_r ) {
   $GENERATE="(GENERATED)"
 }
-elsif( defined $opt_m) {
+if( defined $opt_m) {
   $SKIPMEMORY="-m";
 }
-#my $GIVEN = join('', @ARGV);
-
 
 
 ##################################
@@ -79,13 +77,12 @@ for my $requested (@runTests) {
     # Create results area and cleanup any old test results
     my ($TESTCASENAME) = $TEST =~ /$TESTPATH\/(.*)\.pm/;
 
-    system("mkdir -p $outputDir/$TESTCASENAME");
     system("rm -rf $outputDir/$TESTCASENAME/*");
+    system("rm -rf /tmp/opendiastest");
+    system("mkdir -p $outputDir/$TESTCASENAME");
+    system("mkdir -p /tmp/opendiastest");
 
     openlog( "$outputDir/$TESTCASENAME/testLog.out" );
-
-    system("mkdir -p /tmp/opendiastest");
-    system("rm -rf /tmp/opendiastest/*");
 
     unless( -e "$TESTPATH/expected/$TESTCASENAME" ) {
       system("mkdir -p $TESTPATH/expected/$TESTCASENAME");
@@ -100,16 +97,15 @@ for my $requested (@runTests) {
       opendir(DIR, "$TESTPATH/inputs/$TESTCASENAME/" ) or die "Cannot read SQL directory $TESTPATH/inputs/$TESTCASENAME/, because: $!\n";
       while( ($filename = readdir(DIR))) {
         next if ( $filename eq "." || $filename eq ".." );
-        #print ".";
         my $fullPath = "$TESTPATH/inputs/$TESTCASENAME/".$filename;
         if ( -f $fullPath && $fullPath =~ /\.sql$/ ) {
-          system("/usr/bin/sqlite /tmp/opendiastest/openDIAS.sqlite3 \".read $fullPath\""); 
+          system("/usr/bin/sqlite3 /tmp/opendiastest/openDIAS.sqlite3 \".read $fullPath\""); 
         }
       }
       closedir(DIR);
     }
-    # We want to update the location of any outputs (from the app default)
-    system("/usr/bin/sqlite /tmp/opendiastest/openDIAS.sqlite3 \"UPDATE config SET config_option='/tmp/opendiastest' WHERE config_value='scan_directory'"); 
+    ## We want to update the location of any outputs (from the app default)
+    #system("/usr/bin/sqlite3 /tmp/opendiastest/openDIAS.sqlite3 \"UPDATE config SET config_option='/tmp/opendiastest' WHERE config_value='scan_directory'\""); 
 
     # Reset test result vars
     my $RES=0;
@@ -135,12 +131,13 @@ for my $requested (@runTests) {
 
       unless( $RES ) {
         printProgressLine($TEST,  "Starting client");
-        $RES = 1 unless setupClient();
+        $RES = 1 unless setupClient($opt_g);
       }
 
       unless( $RES ) {
         printProgressLine($TEST, "Running");
         eval "\$RES = regressionTests::".$TESTCASENAME."::test()";
+        o_log("Error while running test: $@") if ($@);
         printProgressLine($TEST, "Stopping");
         stopService();
       }
@@ -198,6 +195,7 @@ for my $requested (@runTests) {
       system("cat /var/log/opendias/opendias.log >> $outputDir/$TESTCASENAME/appLog.out");
       unlink("/var/log/opendias/opendias.log");
       system("sed -f config/appLogUnify.sed < $outputDir/$TESTCASENAME/appLog.out > $outputDir/$TESTCASENAME/appLog4Compare.out");
+      removeDuplicateLines("$outputDir/$TESTCASENAME/appLog4Compare.out");
       if( length $GENERATE ) {
         system("cp $outputDir/$TESTCASENAME/appLog4Compare.out $TESTPATH/expected/$TESTCASENAME/appLog.out");
       }

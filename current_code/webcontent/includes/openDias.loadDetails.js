@@ -170,7 +170,7 @@ function getTypeDescription(iType) {
   if( iType == "1" ) {
     return "ODF Document";
   } else if( iType == "2" ) {
-    return "Scanned Docuemnt";
+    return "Scanned Document";
   } else if( iType == "3" ) {
     return "PDF Document";
   } else if( iType == "4" ) {

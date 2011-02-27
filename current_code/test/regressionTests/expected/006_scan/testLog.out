@@ -1,0 +1,9 @@
+Copying pre defined environment
+STARTING app...
+Now ready
+Starting Web Client
+Fetching page: /acquire.html
+Checking that the page has finished.
+Timeout waiting for scan to finish
+Stopping service
+Waiting for valgrind to finish.

@@ -32,6 +32,5 @@ LOG-OUTPUT
 -date-:-thread-: /style/tablesorter.css
 -date-:-thread-: /style/jquery.easyslider.css
 -date-:-thread-: document details
--date-:-thread-: Could not select record.
 -date-:-thread-: Received SIGTERM signal.
 -date-:-thread-: openDias service is shutdown....
