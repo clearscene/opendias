@@ -1,1 +1,1 @@
-cvs -d:ext:clearscene@opendias.cvs.sourceforge.net:/cvsroot/opendias/ export -rHEAD opendias
+cvs -d:ext:clearscene@opendias.cvs.sourceforge.net:/cvsroot/opendias/ checkout opendias
