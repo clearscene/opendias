@@ -22,8 +22,26 @@ The LDTP project is used to write (and run) scripts that interface to the applic
 
 
 
+3. Getting the testing environment working
+------------------------------------------
+You will need to install Java and the Perl JUnit wrapper
 
-3. How to run the tests (by hand).
+# run me with root privs
+apt-get install default-jdk
+JAVA_HOME=/usr/lib/jvm/default-java cpan -f Inline::Java
+cpan -f WWW::HtmlUnit
+
+
+
+
+4.1 How to run the tests (automated).
+-------------------------------------
+cd test
+./setupRun.sh
+
+
+
+4.2. How to run the tests (by hand).
 ------------------------
 In general to run a test suit, you can do the following.
 
@@ -48,8 +66,3 @@ lcov -c -i -d src -o test/lastCoverage/app_base.info
 lcov -c -d src -o test/lastCoverage/app_test.info
 lcov -a test/lastCoverage/app_base.info -a test/lastCoverage/app_test.info -o test/lastCoverage/app_total.info
 genhtml -o test/lastCoverage test/lastCoverage/app_total.info 
-
-
-4. How to run the tests (automated).
-cd test
-./setupRun.sh

@@ -212,11 +212,8 @@ web_DATA = \
 	openDias.loadDetails.js \
 	openDias.saveDetails.js \
 	openDias.tablesorter.pager.addRemove.js \
-	openDIAS.png \
 	openDIAS_64x64.ico \
 	openDIAS_sml.png \
-	spindown-closed.png \
-	spindown-open.png \
 	asc.png \
 	bg.png \
 	desc.png \
