@@ -69,7 +69,12 @@ sub setupClient {
                                                               "org.apache.commons.logging.impl.NoOpLog"); 
 
   o_log("Starting Web Client");
+  #my $browser = WWW::HtmlUnit::com::gargoylesoftware::htmlunit::BrowserVersion->BrowserVersion("FIREFOX_3_6", "3.6", "HTMLUNIT", 3.6);
+  #my $browser = WWW::HtmlUnit::com::gargoylesoftware::htmlunit::BrowserVersion->getDefault();
   $client = WWW::HtmlUnit->new("FIREFOX_3_6");
+  my $browser = $client->getBrowserVersion();
+  $browser->setUserAgent("HTMLUNIT");
+#print STDERR ref($browser) . "    " . $browser->toString()."\n";
   if(ref $client ne "WWW::HtmlUnit::com::gargoylesoftware::htmlunit::WebClient") {
     o_log("Could not create browser object");
     undef $client;
@@ -133,7 +138,7 @@ sub waitForPageToFinish {
   my $page = $_[0];
   o_log("Checking that the page has finished.");
   while($page->isBeingParsed() eq $true) {
-    o_log("Waiting for page to finish.");
+    #o_log("Waiting for page to finish.");
     select(undef, undef, undef, 0.25);
   }
 
@@ -164,10 +169,10 @@ sub checkTitle {
 }
 
 sub castTo_HtmlInput {
-  return _do_cast('iWWW::HtmlUnit::com::gargoylesoftware::htmlunit::html::HtmlInput', shift);
+  return _do_cast('WWW::HtmlUnit::com::gargoylesoftware::htmlunit::html::HtmlInput', shift);
 }
 sub castTo_HtmlButton {
-  return _do_cast('iWWW::HtmlUnit::com::gargoylesoftware::htmlunit::html::HtmlButton', shift);
+  return _do_cast('WWW::HtmlUnit::com::gargoylesoftware::htmlunit::html::HtmlButton', shift);
 }
 
 sub _do_cast {
@@ -212,22 +217,24 @@ sub o_log {
 
 sub removeDuplicateLines {
   my $file = shift;
-  my $lastline;
+  my $lastline = "";
   my $givenDupWarn = 0;
   open(INFILE, $file) or die "Cannot open file: $file, because $!";
-  open(OUTFILE, "/tmp/tmpFile");
+  open(OUTFILE, ">/tmp/tmpFile");
   while(<INFILE>) {
     my $thisLine = $_;
     if($thisLine eq $lastline) {
-      unless($givenDupWarn) {
-        print OUTFILE " ----- line duplicated ----- \n";
-        $givenDupWarn = 1;
+      if($givenDupWarn == 3) {
+        print OUTFILE " ----- line duplicated more than three times ----- \n";
+        print OUTFILE $thisLine;
       }
+      $givenDupWarn++;
     }
     else {
       print OUTFILE $thisLine;
       $givenDupWarn = 0;
     }
+    $lastline = $thisLine;
   }
   close(OUTFILE);
   close(INFILE);
@@ -235,3 +242,4 @@ sub removeDuplicateLines {
 }
 
 return 1;
+

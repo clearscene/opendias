@@ -6,6 +6,9 @@ function drawSkew(co, p, val) {
   //   scaleX,      skewY_r,      
   //   skewX_b      scaleY,    
   //   translate_x, translate_y
+  if (navigator.userAgent == "HTMLUNIT") { // htmlunit cannot handle canvas methods (at least in 2.8)
+    return;
+  }
   tr = 0;
   boxSize = 15;
   range = 50;

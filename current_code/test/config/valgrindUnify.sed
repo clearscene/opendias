@@ -7,3 +7,4 @@ s/[0-9]*[0-9] blocks/XXX blocks/g
 s/[0-9]*[0-9] allocs/XXXX allocs/g
 s/[0-9]*[0-9] frees/XXXX frees/g
 s/suppressed: [0-9]* from [0-9]*/suppressed: XXX from XXX/g
+s/Command: ..\/src\/opendias -c .*/Command: ..\/src\/opendias -c [CONFIG_FILE]/

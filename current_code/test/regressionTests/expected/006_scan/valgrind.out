@@ -1,7 +1,7 @@
 ==XXXXX==  Memcheck, a memory error detector
 ==XXXXX==  Copyright (C) 2002-2009, and GNU GPL'd, by Julian Seward et al.
 ==XXXXX==  Using Valgrind-3.6.0.SVN-Debian and LibVEX; rerun with -h for copyright info
-==XXXXX==  Command: ../src/opendias -c /home/wbooth/store/nonweb/opendias/current_code/test/config/testapp.conf
+==XXXXX==  Command: ../src/opendias -c [CONFIG_FILE]
 ==XXXXX==  Parent PID: XXXXX.
 ==XXXXX==  
 ==XXXXX==  Warning: invalid file descriptor 1014 in syscall close()

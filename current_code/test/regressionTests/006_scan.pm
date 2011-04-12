@@ -21,6 +21,7 @@ sub test {
 
   my @expected = ( 'Information', 'Document Import', 'Virtual Device: Noname - Frontend-tester' );
   my $x = 0;
+  my $lastTab;
   my $el;
   foreach $el (@{$elements}) {
     if( ref($el) eq "WWW::HtmlUnit::com::gargoylesoftware::htmlunit::html::HtmlListItem" ) {
@@ -28,6 +29,7 @@ sub test {
         o_log("Unexpected Tab: ".$el->getTextContent() );
         return 1;
       }
+      $lastTab = $el;
       $x++;
     }
   }
@@ -39,15 +41,30 @@ sub test {
   }
 
   # Move to the last tab
-  my $tabClickable = $elements->[-1]->getElementsByTagName("a")->toArray();
+  my $tabClickable;
+  eval( "\$tabClickable = \$lastTab->getElementsByTagName(\"a\")->toArray();" );
   $tabClickable->[0]->click();
 
   # Click the 'do scanning' button
-  my $scanButton = $page->getHtmlElementById("scanButton_1"); 
-  $scanButton->click();
+  my $ocrCheckbox;
+  eval( "\$ocrCheckbox = \$page->getHtmlElementById(\"ocr_1\");" );
+  if(ref($ocrCheckbox) !~ /HtmlCheckBoxInput/) {
+    o_log("Did not find the expected ocr checkbox");
+    return 1;
+  }
+  $ocrCheckbox->setChecked(0);
+
+  # Click the 'do scanning' button
+  my $scanButton;
+  eval( "\$scanButton = \$page->getHtmlElementById(\"scanButton_1\");" );
+  if(ref($scanButton) !~ /HtmlButton/) {
+    o_log("Did not find the expected scanner button");
+    return 1;
+  }
+  $page = $scanButton->click();
 
   # Wait for the scan to happen
-  my $scanTimeout = 240; # seconds = 4 mins (valgrind can slow things down)
+  my $scanTimeout = 300; # seconds = 5 mins (valgrind can slow things down)
   my $runningTime = 0;
   my $newpage;
   do {

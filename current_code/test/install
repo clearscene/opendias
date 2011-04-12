@@ -1,4 +1,0 @@
-# run me with root privs
-apt-get install default-jdk
-JAVA_HOME=/usr/lib/jvm/default-java cpan -f Inline::Java
-cpan -f WWW::HtmlUnit

@@ -72,8 +72,20 @@ if [ ! -f "/usr/bin/lcov" ]; then
 fi
 
 # So that everything else does not have to run as root (for testing), reset back later
-sudo chmod 757 /var/run
-sudo rm -f /var/log/opendias/opendias.log
+for W in /var/run/opendias.pid; do # /var/log/opendias/opendias.log; do
+  if [ ! -w "$W" ]; then
+    echo $W is not writable. Please correct before running testing.
+    exit
+  fi
+done
+
+# Check we dont have a running service atm.
+ps -ef | grep -v "grep" | grep "opendias"
+if [ "$?" -eq "0" ]; then
+  echo "It looks like the opendias service is already running. Please stop before running testing."
+  exit
+fi
+rm -f /var/log/opendias/opendias.log
 
 grep -q "^test" /etc/sane.d/dll.conf
 if [ "$?" -ne "0" ]; then
@@ -169,22 +181,10 @@ echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP ../src/opendias -c $PWD/config/t
 #######################################
 # Run automated tests
 echo Starting test harness ...
+echo perl ./harness.pl $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@
 perl ./harness.pl $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@ 2> /dev/null
 #######################################
 #######################################
-
-
-##
-## Recover data area
-##
-#if [ -f conf/openDias_bkp.$DTE.tar.gz ]; then
-#  echo Restoring personal data ...
-#  rm -rf ~/.openDIAS
-#  OP=`pwd`
-#  cd /
-#  tar -xf conf/openDias_bkp.$DTE.tar.gz
-#  cd $OP
-#fi
 
 
 #
@@ -199,7 +199,4 @@ if [ "$SKIPCOVERAGE" == "" ]; then
 fi
 
 #rm config/startAppCommands
-
-sudo chmod 755 /var/run
-
 

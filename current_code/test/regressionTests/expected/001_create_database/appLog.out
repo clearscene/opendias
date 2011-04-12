@@ -1,15 +1,15 @@
 STDOUT
 --------------------------------------------------
 LOG-OUTPUT
--date-:-thread-: /home/wbooth/store/nonweb/opendias/current_code/test/config/testapp.conf
--date-:-thread-: /tmp/opendiastest/
--date-:-thread-: Creating new database
--date-:-thread-: Run Query
--date-:-thread-: Free recordset
--date-:-thread-: Connected to database
--date-:-thread-: 1
--date-:-thread-: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v1.sql
--date-:-thread-: BEGIN TRANSACTION;
+-date-:-thread-:INF: Using config file: [CONFIG_FILE]
+-date-:-thread-:INF: Which says the database is at: /tmp/opendiastest/
+-date-:-thread-:INF: Creating new database
+-date-:-thread-:DBG: Run Query
+-date-:-thread-:DBG: Free recordset
+-date-:-thread-:INF: Connected to database
+-date-:-thread-:INF: Bringing BD upto version: 1
+-date-:-thread-:DBG: Reading SQL code from file: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v1.sql
+-date-:-thread-:INF: BEGIN TRANSACTION;
 
 CREATE TABLE version (
 	version INTEGER PRIMARY KEY,
@@ -80,12 +80,11 @@ ON doc_tags(tagid ASC);
 
 COMMIT;
 
-
--date-:-thread-: Run Query
--date-:-thread-: Free recordset
--date-:-thread-: 2
--date-:-thread-: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v2.sql
--date-:-thread-: BEGIN TRANSACTION;
+-date-:-thread-:DBG: Run Query
+-date-:-thread-:DBG: Free recordset
+-date-:-thread-:INF: Bringing BD upto version: 2
+-date-:-thread-:DBG: Reading SQL code from file: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v2.sql
+-date-:-thread-:INF: BEGIN TRANSACTION;
 
 ALTER TABLE docs
 ADD COLUMN pages NUMERIC;
@@ -105,12 +104,11 @@ for_app_version = "0.2.2";
 
 COMMIT;
 
-
--date-:-thread-: Run Query
--date-:-thread-: Free recordset
--date-:-thread-: 3
--date-:-thread-: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v3.sql
--date-:-thread-: BEGIN TRANSACTION;
+-date-:-thread-:DBG: Run Query
+-date-:-thread-:DBG: Free recordset
+-date-:-thread-:INF: Bringing BD upto version: 3
+-date-:-thread-:DBG: Reading SQL code from file: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v3.sql
+-date-:-thread-:INF: BEGIN TRANSACTION;
 
 CREATE TABLE "scan_params" (
     "client_id" TEXT NOT NULL DEFAULT (0),
@@ -141,12 +139,11 @@ for_app_version = "0.5";
 
 COMMIT;
 
-
--date-:-thread-: Run Query
--date-:-thread-: Free recordset
--date-:-thread-: 4
--date-:-thread-: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v4.sql
--date-:-thread-: BEGIN TRANSACTION;
+-date-:-thread-:DBG: Run Query
+-date-:-thread-:DBG: Free recordset
+-date-:-thread-:INF: Bringing BD upto version: 4
+-date-:-thread-:DBG: Reading SQL code from file: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v4.sql
+-date-:-thread-:INF: BEGIN TRANSACTION;
 
 INSERT INTO tags VALUES(25,'Wages');
 UPDATE tags SET tagname='Morgage' WHERE tagid=13;
@@ -196,17 +193,16 @@ for_app_version = "0.5.8";
 
 COMMIT;
 
-
--date-:-thread-: Run Query
--date-:-thread-: Free recordset
--date-:-thread-: Run Query
--date-:-thread-: log_verbosity = 3
--date-:-thread-: scan_directory = /var/lib/opendias
--date-:-thread-: show_all_available = 1
--date-:-thread-: port = 8988
--date-:-thread-: log_directory = /var/log/opendias
--date-:-thread-: Created directory.
--date-:-thread-: ... Starting up the openDias service.
--date-:-thread-: ready to accept connectons
--date-:-thread-: Received SIGTERM signal.
--date-:-thread-: openDias service is shutdown....
+-date-:-thread-:DBG: Run Query
+-date-:-thread-:DBG: Free recordset
+-date-:-thread-:DBG: Run Query
+-date-:-thread-:INF: Config setting: log_verbosity = 3
+-date-:-thread-:INF: Config setting: scan_directory = /var/lib/opendias
+-date-:-thread-:INF: Config setting: show_all_available = 1
+-date-:-thread-:INF: Config setting: port = 8988
+-date-:-thread-:INF: Config setting: log_directory = /var/log/opendias
+-date-:-thread-:INF: Created directory.
+-date-:-thread-:INF: ... Starting up the openDias service.
+-date-:-thread-:INF: ready to accept connectons
+-date-:-thread-:INF: Received SIGTERM signal.
+-date-:-thread-:INF: openDias service is shutdown....
