@@ -1,1 +1,4 @@
 cvs -d:ext:clearscene@opendias.cvs.sourceforge.net:/cvsroot/opendias/ checkout opendias
+cp current_code/* opendias
+cd opendias
+cvs commit

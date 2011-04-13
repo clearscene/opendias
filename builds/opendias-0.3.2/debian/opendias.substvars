@@ -1,1 +1,0 @@
-shlibs:Depends=libatk1.0-0 (>= 1.20.0), libxml2 (>= 2.6.27), libgtk2.0-0 (>= 2.12.0), libpango1.0-0 (>= 1.20.1), libtiff4, libc6 (>= 2.4), libsqlite3-0 (>= 3.4.2), libsane (>= 1.0.11-3), libgcc1 (>= 1:4.1.1-21), libespeak1 (>= 1.30), libcairo2 (>= 1.6.0), libstdc++6 (>= 4.1.1-21), libzzip-0-13 (>= 0.13.49), libglib2.0-0 (>= 2.16.0)

@@ -2,11 +2,11 @@
 
 2. How are the tests constructed.
 ---------------------------------
-The tests are generally caregoriesed into three areas.
+The tests are generally categorised into three areas.
 
  * Test Coverage - ensure the tests are exhaustive.
  * Memory Management - ensure all code handles its memory correctly.
- * GUI Excersise - make the app do all it can
+ * GUI Excersise - make the app does all it can
 
 2.1. Test Coverage.
 -------------------
@@ -18,7 +18,7 @@ To ensure that memory is being managed correctly, each test case should be run o
 
 2.3. GUI Excersise.
 -------------------
-The LDTP project is used to write (and run) scripts that interface to the application (via assistive technologies).
+The HtmlUnit (java) project is used to write scripts that interface to the application (via the perl test script).
 
 
 
@@ -34,35 +34,8 @@ cpan -f WWW::HtmlUnit
 
 
 
-4.1 How to run the tests (automated).
+4. How to run the tests (automated).
 -------------------------------------
 cd test
 ./setupRun.sh
-
-
-
-4.2. How to run the tests (by hand).
-------------------------
-In general to run a test suit, you can do the following.
-
-# Cleanup
-rm src/*.gcda src/*.gcno test/valgrind.out test/lastRegression
-
-# Compile, so that run coverage analysis reports can be generated.
-make clean
-./configure CFLAGS='--coverage' LIBS='-lgcov'
-make
-
-# Generate baseline (coverage) information
-lcov -c -i -d src -o test/lastCoverage/app_base.info
-
-# Start the app with memory management reporting enabled.
-# G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind --suppressions=/home/wbooth/.valgrind/gtk.suppression --suppressions=/home/wbooth/.valgrind/basic.suppression --leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=test/valgrind.out src/opendias
-
-# Run automated tests
-./test/harness 
-
-# Collect process and build coverage report
-lcov -c -d src -o test/lastCoverage/app_test.info
-lcov -a test/lastCoverage/app_base.info -a test/lastCoverage/app_test.info -o test/lastCoverage/app_total.info
-genhtml -o test/lastCoverage test/lastCoverage/app_total.info 
+view './index.html' for the test results
