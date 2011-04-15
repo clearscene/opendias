@@ -232,7 +232,9 @@ sub removeDuplicateLines {
       $givenDupWarn++;
     }
     else {
-      print OUTFILE $thisLine;
+      unless ( $lastline =~ /doScan/ && $thisLine =~ /getScanning Progress/ ) {
+        print OUTFILE $thisLine;
+      }
       $givenDupWarn = 0;
     }
     $lastline = $thisLine;
