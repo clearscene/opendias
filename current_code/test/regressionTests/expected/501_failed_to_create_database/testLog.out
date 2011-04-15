@@ -1,0 +1,6 @@
+Updated start command to stop the database from being created.
+STARTING app...
+Could not start the service.
+Starting Web Client
+Stopping service
+Waiting for valgrind to finish.

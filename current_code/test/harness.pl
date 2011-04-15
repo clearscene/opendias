@@ -127,7 +127,7 @@ for my $requested (@runTests) {
     else {
 
       printProgressLine($TEST, "Starting service");
-      $RES = 1 unless startService($startCmd, "$outputDir/$TESTCASENAME/testLog.out");
+      $RES = 1 unless startService($startCmd, "regressionTests::".$TESTCASENAME."::updateStartCommand");
 
       unless( $RES ) {
         printProgressLine($TEST,  "Starting client");

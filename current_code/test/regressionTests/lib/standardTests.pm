@@ -34,9 +34,10 @@ sub openlog {
 
 sub startService {
 
-  my ($startCommand, $testlogfile, ) = @_;
+  my ($startCommand, $updateStartCommandSub, ) = @_;
   my $serviceStart_timeout = 40; # 10 seconds (in 1/4 sec incr)
 
+  eval "$updateStartCommandSub(\\\$startCommand)"; # try and run, don't mind if we fail
   `$startCommand`;
   o_log("STARTING app...");
 
@@ -49,7 +50,7 @@ sub startService {
     select ( undef, undef, undef, 0.25);
     unless($serviceStart_timeout) {
       o_log("Could not start the service.");
-      return 0;
+      return 1;
     }
   }
   $sock->close();

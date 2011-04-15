@@ -1,0 +1,24 @@
+STDOUT
+--------------------------------------------------
+LOG-OUTPUT
+-date-:-thread-:INF: Using config file: [CONFIG_FILE]
+-date-:-thread-:INF: Which says the database is at: /tmp/opendiastest/
+-date-:-thread-:DBG: Dir structure is in-place, database should exist
+-date-:-thread-:DBG: Run Query
+-date-:-thread-:DBG: Free recordset
+-date-:-thread-:DBG: Run Query
+-date-:-thread-:DBG: Free recordset
+-date-:-thread-:INF: Connected to database
+-date-:-thread-:DBG: Run Query
+-date-:-thread-:INF: Config setting: log_verbosity = 3
+-date-:-thread-:INF: Config setting: scan_directory = /tmp/opendiastest
+-date-:-thread-:INF: Config setting: show_all_available = 1
+-date-:-thread-:INF: Config setting: port = 8988
+-date-:-thread-:INF: Config setting: log_directory = /var/log/opendias
+-date-:-thread-:INF: Created directory.
+-date-:-thread-:INF: ... Starting up the openDias service.
+-date-:-thread-:INF: ready to accept connectons
+-date-:-thread-:INF: Received signal Hangup. IGNORING. Try SIGTERM to stop the service.
+-date-:-thread-:INF: Received signal User defined signal 1. IGNORING. Try SIGTERM to stop the service.
+-date-:-thread-:INF: Received SIGTERM signal.
+-date-:-thread-:INF: openDias service is shutdown....

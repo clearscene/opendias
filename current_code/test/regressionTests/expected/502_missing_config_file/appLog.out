@@ -1,0 +1,6 @@
+STDOUT
+--------------------------------------------------
+LOG-OUTPUT
+-date-:-thread-:INF: Using config file: [CONFIG_FILE]
+-date-:-thread-:ERR: Could not open file: /home/wbooth/git/clearscene-src-opendias/current_code/test/config/testappMISSING.conf
+-date-:-thread-:ERR: Cannot find main config file: /home/wbooth/git/clearscene-src-opendias/current_code/test/config/testappMISSING.conf
