@@ -64,7 +64,7 @@ int setup (char *configFile) {
     conf = "/etc/opendias/opendias.conf";
 
   o_log(INFORMATION, "Using config file: %s", conf);
-  if( ! load_file_to_memory(conf, &location) ) {
+  if( load_file_to_memory(conf, &location) <= 0 ) {
     o_log(ERROR, "Cannot find main config file: %s", conf);
     free(location);
     return 1;
@@ -141,9 +141,6 @@ void server_shutdown() {
 
 void signal_handler(int sig) {
     switch(sig) {
-        case SIGHUP:
-            o_log(INFORMATION, "Received SIGHUP signal. IGNORING");
-            break;
         case SIGINT:
         case SIGTERM:
             o_log(INFORMATION, "Received SIGTERM signal.");
@@ -151,7 +148,7 @@ void signal_handler(int sig) {
             exit(EXIT_SUCCESS);
             break;
         default:
-            o_log(INFORMATION, "Unhandled signal %s", strsignal(sig));
+            o_log(INFORMATION, "Received signal %s. IGNORING. Try SIGTERM to stop the service.", strsignal(sig));
             break;
     }
 }
@@ -183,9 +180,11 @@ void daemonize(char *rundir, char *pidfile) {
     newSigAction.sa_flags = 0;
  
     /* Signals to handle */
+    sigaction(SIGTERM, &newSigAction, NULL);    /* catch term signal - shutdown the service*/
     sigaction(SIGHUP, &newSigAction, NULL);     /* catch hangup signal */
-    sigaction(SIGTERM, &newSigAction, NULL);    /* catch term signal */
     sigaction(SIGINT, &newSigAction, NULL);     /* catch interrupt signal */
+    sigaction(SIGUSR1, &newSigAction, NULL);    /* catch user 1 signal */
+    sigaction(SIGUSR2, &newSigAction, NULL);    /* catch user 2 signal */
  
     /* Fork*/
     pid = fork();

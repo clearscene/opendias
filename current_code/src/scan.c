@@ -165,9 +165,14 @@ extern void doScanningOperation(void *uuid) {
 
         // Set scanning depth
         else if ( strcmp(sod->name, SANE_NAME_BIT_DEPTH) == 0 ) {
-          SANE_Int v = 8;
           if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
-            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+            if( sod->type == SANE_TYPE_STRING ) {
+              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, "8", &paramSetRet);
+            }
+            else {
+              SANE_Int v = 8;
+              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+            }
             if(status != SANE_STATUS_GOOD) {
               handleSaneErrors("Cannot set depth", status, paramSetRet);
               updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -179,11 +184,27 @@ extern void doScanningOperation(void *uuid) {
         // Set scanning mode
         else if ( strcmp(sod->name, SANE_NAME_SCAN_MODE) == 0 ) {
           if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
-            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, SANE_VALUE_SCAN_MODE_GRAY, &paramSetRet);
-            if(status != SANE_STATUS_GOOD) {
-              handleSaneErrors("Cannot set mode", status, paramSetRet);
-              updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-              return;
+            int i, j;
+            int foundMatch = 0;
+            const char *modes[] = { SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
+            for (i = 0; modes[i] != NULL; i++) {
+              for (j = 0; sod->constraint.string_list[j]; j++) {
+                if (strcmp (modes[i], sod->constraint.string_list[j]) == 0)
+                  break;
+              }
+              if (sod->constraint.string_list[j] != NULL) {
+                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)modes[i], &paramSetRet);
+                if(status != SANE_STATUS_GOOD) {
+                  handleSaneErrors("Cannot set mode", status, paramSetRet);
+                  updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
+                  return;
+                }
+                foundMatch = 1;
+                break;
+              }
+            }
+            if( foundMatch == 0 ) {
+              o_log(DEBUGM, "Non of the available options are appropriate.");
             }
           }
         }
@@ -237,6 +258,54 @@ extern void doScanningOperation(void *uuid) {
           }
         }
 
+        else if ( strcmp(sod->name, SANE_NAME_BRIGHTNESS) == 0 ) {
+          SANE_Fixed v = 0;
+          status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+          if(status != SANE_STATUS_GOOD) {
+            handleSaneErrors("Cannot set brightness", status, paramSetRet);
+            updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
+            return;
+          }
+        }
+
+        else if ( strcmp(sod->name, SANE_NAME_CONTRAST) == 0 ) {
+          SANE_Fixed v = 0;
+          status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+          if(status != SANE_STATUS_GOOD) {
+            handleSaneErrors("Cannot set contrast", status, paramSetRet);
+            updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
+            return;
+          }
+        }
+
+        else if ( strcmp(sod->name, SANE_NAME_SCAN_SPEED) == 0 ) {
+          if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
+            int i, j;
+            int foundMatch = 0;
+            const char *speeds[] = { "Auto", "Normal", "Fast", NULL };
+            for (i = 0; speeds[i] != NULL; i++) {
+              for (j = 0; sod->constraint.string_list[j]; j++) {
+                if (strcmp (speeds[i], sod->constraint.string_list[j]) == 0)
+                  break;
+              }
+              if (sod->constraint.string_list[j] != NULL) {
+                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)speeds[i], &paramSetRet);
+                if(status != SANE_STATUS_GOOD) {
+                  handleSaneErrors("Cannot set speed", status, paramSetRet);
+                  updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
+                  return;
+                }
+                foundMatch = 1;
+                break;
+              }
+            }
+            if( foundMatch == 0 ) {
+              o_log(DEBUGM, "Non of the available options are appropriate.");
+            }
+          }
+        }
+
+        // Set Preview mode
         else if (strcmp (sod->name, "non-blocking") == 0) {
           SANE_Bool v = SANE_TRUE;
           status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
@@ -409,8 +478,8 @@ extern void doScanningOperation(void *uuid) {
   double readSoFar = 0;
   int progress = 0;
 
-  if( buff_requested_len == 0 )
-    buff_requested_len = pars.bytes_per_line; // Low - but the only way to be sure
+  if( buff_requested_len <= 1 )
+    buff_requested_len = 3 * pars.bytes_per_line * pars.depth;
 
   o_log(DEBUGM, "Using a buff_requested_len of %d", buff_requested_len);
   SANE_Byte *buffer = malloc(buff_requested_len);
@@ -511,7 +580,7 @@ extern void doScanningOperation(void *uuid) {
         o_log(DEBUGM, "Increasing read buffer to %d bytes.", buff_requested_len);
       }
     }
-    else {
+    else if ( buff_len > 0 ) {
       int buff_len_change = ( buff_requested_len - buff_len ) / readItteration;
       if( buff_len_change > 100 ) {
         buff_requested_len -= buff_len_change;
