@@ -8,6 +8,9 @@ current_code/config.h.in
 current_code/config.log
 current_code/config.status
 current_code/configure
+current_code/depcomp
+current_code/install-sh
+current_code/missing
 current_code/mkinstalldirs
 current_code/po/Makefile
 current_code/po/stamp-it
@@ -65,3 +68,5 @@ current_code/stamp-h1
 current_code/test/_Inline/
 current_code/test/results/
 current_code/test/config/startAppCommand
+current_code/webcontent/Makefile.in
+current_code/webcontent/Makefile
