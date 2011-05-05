@@ -130,25 +130,27 @@ int setup (char *configFile) {
 }
 
 void server_shutdown() {
-  o_log(INFORMATION, "openDias service is shutdown....");
-  close(pidFilehandle);
+  o_log(INFORMATION, "openDias service is shutting down....");
+  o_log(DEBUGM, "httpd stop");
   MHD_stop_daemon (httpdaemon);
   o_log(DEBUGM, "sane_exit");
   sane_exit();
+  o_log(DEBUGM, "database close");
   close_db ();
+  o_log(INFORMATION, "....openDias service has shutdown");
+  close(pidFilehandle);
   free(BASE_DIR);
 }
 
 void signal_handler(int sig) {
     switch(sig) {
-        case SIGINT:
-        case SIGTERM:
-            o_log(INFORMATION, "Received SIGTERM signal.");
+        case SIGUSR1:
+            o_log(INFORMATION, "Received SIUSR1 signal.");
             server_shutdown();
             exit(EXIT_SUCCESS);
             break;
         default:
-            o_log(INFORMATION, "Received signal %s. IGNORING. Try SIGTERM to stop the service.", strsignal(sig));
+            o_log(INFORMATION, "Received signal %s. IGNORING. Try SIGUSR1 to stop the service.", strsignal(sig));
             break;
     }
 }
@@ -192,7 +194,7 @@ void daemonize(char *rundir, char *pidfile) {
     if (pid < 0) {
         /* Could not fork */
         o_log(ERROR, "Could not fork.");
-        printf("Could not daemonisei [1]. Try running with the -d option or as super user\n");
+        printf("Could not daemonise [1]. Try running with the -d option or as super user\n");
         exit(EXIT_FAILURE);
     }
  
