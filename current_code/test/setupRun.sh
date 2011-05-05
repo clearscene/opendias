@@ -9,9 +9,9 @@ usage() {
   echo "  -b       don't rebuild app (may override -c)"
   echo "  -g       show a visual debugger for the webclient"
   echo "  <tests>  The tests you wish to run. Default to all tests."
-  echo "             eg: 1*"
-  echo "                 2_1 2_2 2_3"
-  echo "                 2_1 3_4*"
+  echo "             eg: 5*"
+  echo "                 01* 021* 022*"
+  echo "                 006_scan"
 }
 
 #
@@ -119,7 +119,7 @@ if [ "$NOBUILD" == "" ]; then
     ./configure CFLAGS=' -g ' &> test/results/buildLog2.out
   else
     echo " (with coverage) ..."
-    ./configure CFLAGS='--coverage' LIBS='-lgcov' &> test/results/buildLog2.out
+    ./configure CFLAGS='-O0 --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
   fi
   cd test
   # unfortunatly bash cannot support "&>>" - yet!
