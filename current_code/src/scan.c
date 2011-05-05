@@ -418,7 +418,7 @@ extern void doScanningOperation(void *uuid) {
   o_log(DEBUGM, "Get scanning params");
   SANE_Parameters pars;
   status = sane_get_parameters (openDeviceHandle, &pars);
-  o_log(INFORMATION, "Scanner Parm : stat=%s form=%d,lf=%d,bpl=%d,pixpl=%d,lin=%d,dep=%d\n",
+  o_log(INFORMATION, "Scanner Parm : stat=%s form=%d,lf=%d,bpl=%d,pixpl=%d,lin=%d,dep=%d",
     sane_strstatus (status),
     pars.format, pars.last_frame,
     pars.bytes_per_line, pars.pixels_per_line,
@@ -685,7 +685,8 @@ extern void doScanningOperation(void *uuid) {
 
   free(uuid);
   o_log(DEBUGM, "Page scan done.");
-  pthread_exit(NULL);
+o_log(ERROR, "Page scan done.");
+  pthread_exit(0);
 
 }
 #endif // CAN_SCAN //
