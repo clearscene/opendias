@@ -20,11 +20,13 @@
 #define VALIDATION
 
 #include <glib.h>
+#include <pthread.h>
 
 struct connection_info_struct {
   int connectiontype;
   struct MHD_PostProcessor *postprocessor;
   GHashTable *post_data;
+  pthread_t thread;
 };
 
 struct post_data_struct {
