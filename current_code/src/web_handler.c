@@ -309,8 +309,6 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
               const char *version, const char *upload_data,
               size_t *upload_data_size, void **con_cls) {
 
-o_log(ERROR, "got a new connection");
-
   // Remove the begining "/opendias" (so this URL can be used like:)
   // http://server:port/opendias/
   // or via a server (apache) rewrite rule
