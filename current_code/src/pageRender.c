@@ -43,6 +43,7 @@
 #include "utils.h"
 #include "debug.h"
 #include "scan.h"
+#include "validation.h" // for con_info struct - move me to web_handler.h
 
 //GList *SELECTEDTAGS;
 
@@ -273,7 +274,7 @@ extern char *getScannerList() {
 
 // Start the scanning process
 //
-extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, char *pages, char *ocr, char *pagelength) {
+extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, char *pages, char *ocr, char *pagelength, struct connection_info_struct *con_info) {
 
   pthread_t thread;
   pthread_attr_t attr;
@@ -302,11 +303,14 @@ extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, 
   // Create a new thread to start the scan process
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+  //pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
   rc = pthread_create(&thread, &attr, (void *)doScanningOperation, (void *)scanUuid);
+  //rc = pthread_create(&thread, NULL, (void *)doScanningOperation, (void *)scanUuid);
   if(rc != 0) {
     o_log(ERROR, "Failed to create a new thread - for scanning operation.");
     return NULL;
   }
+  //con_info->thread = thread;
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
@@ -317,7 +321,7 @@ extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, 
   return ret;
 }
 
-extern char *nextPageReady(char *scanid) {
+extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
 
   pthread_t thread;
   pthread_attr_t attr;
@@ -343,11 +347,14 @@ extern char *nextPageReady(char *scanid) {
     // Create a new thread to start the scan process
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+    //pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
     rc = pthread_create(&thread, &attr, (void *)doScanningOperation, (void *)o_strdup(scanid));
+    //rc = pthread_create(&thread, NULL, (void *)doScanningOperation, (void *)o_strdup(scanid));
     if(rc != 0) {
       o_log(ERROR, "Failed to create a new thread - for scanning operation.");
       return NULL;
     }
+    //con_info->thread = thread;
   } else {
     o_log(WARNING, "scan id indicates a status not waiting for a new page signal.");
     return NULL;

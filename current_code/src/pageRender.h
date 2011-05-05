@@ -19,12 +19,14 @@
 #ifndef PAGERENDER
 #define PAGERENDER
 
+#include "validation.h" // for con_info struct - move me to web_handler.h
+
 extern char *populate_doclist();
 extern char *getScannerList();
 extern char *getScanProgress(char *);
-extern char *doScan(char *, char *, char *, char *, char *, char *, char *);
+extern char *doScan(char *, char *, char *, char *, char *, char *, char *, struct connection_info_struct *);
 extern char *docFilter(char *, char *, char *);
-extern char *nextPageReady(char *);
+extern char *nextPageReady(char *, struct connection_info_struct *);
 extern char *getAccessDetails();
 extern char *controlAccess(char *, char *, char *, char *, int);
 extern char *titleAutoComplete(char *);
