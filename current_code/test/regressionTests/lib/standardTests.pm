@@ -108,7 +108,7 @@ sub stopService {
   $client->closeAllWindows();
   undef $client;
   undef $alert_handler;
-  system("kill `cat /var/run/opendias.pid`");
+  system("kill -s USR1 `cat /var/run/opendias.pid`");
 
   # We need valgrind (if running) so finish it's work nad write it's log
   o_log("Waiting for valgrind to finish.");
