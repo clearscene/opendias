@@ -34,5 +34,6 @@ LOG-OUTPUT
 -date-:-thread-:INF: Serving request: /style/jquery.easyslider.css
 -date-:-thread-:INF: Processing request for: document details
 -date-:-thread-:ERR: Could not select record.
--date-:-thread-:INF: Received SIGTERM signal.
--date-:-thread-:INF: openDias service is shutdown....
+-date-:-thread-:INF: Received SIGUSR1 signal.
+-date-:-thread-:INF: openDias service is shutting down....
+-date-:-thread-:INF: ....openDias service has shutdown

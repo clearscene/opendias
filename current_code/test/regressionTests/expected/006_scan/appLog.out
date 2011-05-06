@@ -28,7 +28,6 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: getScannerList
 -date-:-thread-:INF: Processing request for: doScan
 -date-:-thread-:INF: Scanner Parm : stat=Success form=0,lf=1,bpl=2362,pixpl=2362,lin=2362,dep=8
-
 -date-:-thread-:INF: Processing request for: getScanning Progress
  ----- line duplicated more than three times ----- 
 -date-:-thread-:INF: Processing request for: getScanning Progress
@@ -48,3 +47,6 @@ LOG-OUTPUT
 -date-:-thread-:INF: Serving request: /style/jquery.gzoom.css
 -date-:-thread-:INF: Serving request: /style/tablesorter.css
 -date-:-thread-:INF: Serving request: /style/jquery.easyslider.css
+-date-:-thread-:INF: Received SIGUSR1 signal.
+-date-:-thread-:INF: openDias service is shutting down....
+-date-:-thread-:INF: ....openDias service has shutdown
