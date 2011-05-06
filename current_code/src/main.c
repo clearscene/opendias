@@ -145,7 +145,7 @@ void server_shutdown() {
 void signal_handler(int sig) {
     switch(sig) {
         case SIGUSR1:
-            o_log(INFORMATION, "Received SIUSR1 signal.");
+            o_log(INFORMATION, "Received SIGUSR1 signal.");
             server_shutdown();
             exit(EXIT_SUCCESS);
             break;
