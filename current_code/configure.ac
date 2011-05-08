@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(opendias, 0.6.0)
-
-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
-AM_CONFIG_HEADER(config.h)
+AC_INIT(opendias, [0.6.2], [wbooth@clearscene.net])
+AC_CONFIG_AUX_DIR([build-aux])
+AM_INIT_AUTOMAKE([foreign -Wall -Werror])
+AM_CONFIG_HEADER([config.h])
 AM_MAINTAINER_MODE
 
 AC_PROG_CXX
@@ -16,12 +16,30 @@ AC_HEADER_STDC
 dnl ***************************************************************************
 dnl Internatinalization
 dnl ***************************************************************************
-GETTEXT_PACKAGE=opendias
-AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [GETTEXT package name])
-AM_GLIB_GNU_GETTEXT
-IT_PROG_INTLTOOL([0.35.0])
+dnl GETTEXT_PACKAGE=opendias
+dnl AC_SUBST(GETTEXT_PACKAGE)
+dnl AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [GETTEXT package name])
+dnl AM_GLIB_GNU_GETTEXT
+dnl IT_PROG_INTLTOOL([0.35.0])
 
+AC_CHECK_FUNCS([gethostbyaddr],,AC_MSG_ERROR([Missing function gethostbyaddr]))
+AC_CHECK_FUNCS([strcspn],[],AC_MSG_ERROR([Missing function strcspn]))
+AC_CHECK_FUNCS([strdup],[],AC_MSG_ERROR([Missing function strdup]))
+AC_CHECK_FUNCS([strstr],[],AC_MSG_ERROR([Missing function strstr]))
+AC_CHECK_HEADERS([arpa/inet.h],[],AC_MSG_ERROR([Missing header arpa/inet.h]))
+AC_CHECK_HEADERS([fcntl.h],[],AC_MSG_ERROR([Missing header fcntl.h]))
+AC_CHECK_HEADERS([netdb.h],[],AC_MSG_ERROR([Missing header netdb.h]))
+AC_CHECK_HEADERS([netinet/in.h],[],AC_MSG_ERROR([Missing header netinet/in.h]))
+AC_CHECK_HEADERS([sys/param.h],[],AC_MSG_ERROR([Missing header sys/param.h]))
+AC_CHECK_HEADERS([sys/socket.h],[],AC_MSG_ERROR([Missing header sys/socket.h]))
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_HEADER_STDBOOL
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
+AC_TYPE_UINT64_T
 
 
 

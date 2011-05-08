@@ -15,6 +15,7 @@
 
 @SET_MAKE@
 
+
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -32,7 +33,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-subdir = webcontent
+subdir = sql
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -42,8 +43,6 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-SOURCES =
-DIST_SOURCES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -65,8 +64,11 @@ am__nobase_list = $(am__nobase_strip_setup); \
 am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__installdirs = "$(DESTDIR)$(webdir)"
-DATA = $(web_DATA)
+am__installdirs = "$(DESTDIR)$(sqldir)" "$(DESTDIR)$(sqldir)"
+SCRIPTS = $(sql_SCRIPTS)
+SOURCES =
+DIST_SOURCES =
+DATA = $(sql_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -163,71 +165,18 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-web_DATA = \
-	docDetail.html\
-	body.html \
-	acquire.html \
-	common.css \
-	datepicker.css \
-	jquery.easyslider.css \
-	jquery.gzoom.css \
-	jquery-ui.css \
-	tablesorter.css \
-	footer.txt \
-	header.txt \
-	jquery.canvas-loader.js \
-	jquery.easySlider.js \
-	jquery.gzoom.js \
-	jquery.js \
-	jquery.mousewheel.js \
-	jquery.tablesorter.min.js \
-	jquery.tablesorter.pager.js \
-	jquery-ui.min.js \
-	openDias.acquire.js \
-	openDias.docList.js \
-	openDias.filter.js \
-	openDias.loadDetails.js \
-	openDias.saveDetails.js \
-	openDias.tablesorter.pager.addRemove.js \
-	openDIAS_64x64.ico \
-	openDIAS_sml.png \
-	asc.png \
-	bg.png \
-	desc.png \
-	first.png \
-	last.png \
-	next.png \
-	prev.png \
-	pbar-ani.png \
-	ui-bg_diagonals-thick_90_eeeeee_40x40.png \
-	ui-bg_flat_15_cd0a0a_40x100.png \
-	ui-bg_glass_50_3baae3_1x400.png \
-	ui-bg_glass_80_d7ebf9_1x400.png \
-	ui-bg_glass_100_e4f1fb_1x400.png \
-	ui-bg_highlight-hard_70_000000_1x100.png \
-	ui-bg_highlight-hard_100_f2f5f7_1x100.png \
-	ui-bg_highlight-soft_25_ffef8f_1x100.png \
-	ui-bg_highlight-soft_100_deedf7_1x100.png \
-	ui-icons_2e83ff_256x240.png \
-	ui-icons_3d80b3_256x240.png \
-	ui-icons_72a7cf_256x240.png \
-	ui-icons_2694e8_256x240.png \
-	ui-icons_ffffff_256x240.png \
-	datepicker_b.png \
-	datepicker_bl.png \
-	datepicker_br.png \
-	datepicker_l.png \
-	datepicker_r.png \
-	datepicker_t.png \
-	datepicker_tl.png \
-	datepicker_tr.png \
-	field.png
+sql_SCRIPTS = 
+sql_DATA = \
+	openDIAS.sqlite3.dmp.v1.sql \
+	openDIAS.sqlite3.dmp.v2.sql \
+	openDIAS.sqlite3.dmp.v3.sql \
+	openDIAS.sqlite3.dmp.v4.sql
 
-webdir = \
+sqldir = \
 	$(pkgdatadir)
 
 EXTRA_DIST = \
-	$(web_DATA)
+	$(sql_DATA)
 
 all: all-am
 
@@ -241,9 +190,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign webcontent/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign sql/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign webcontent/Makefile
+	  $(AUTOMAKE) --foreign sql/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -262,26 +211,60 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-install-webDATA: $(web_DATA)
+install-sqlSCRIPTS: $(sql_SCRIPTS)
 	@$(NORMAL_INSTALL)
-	test -z "$(webdir)" || $(MKDIR_P) "$(DESTDIR)$(webdir)"
-	@list='$(web_DATA)'; test -n "$(webdir)" || list=; \
+	test -z "$(sqldir)" || $(MKDIR_P) "$(DESTDIR)$(sqldir)"
+	@list='$(sql_SCRIPTS)'; test -n "$(sqldir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  if test -f "$$d$$p"; then echo "$$d$$p"; echo "$$p"; else :; fi; \
+	done | \
+	sed -e 'p;s,.*/,,;n' \
+	    -e 'h;s|.*|.|' \
+	    -e 'p;x;s,.*/,,;$(transform)' | sed 'N;N;N;s,\n, ,g' | \
+	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1; } \
+	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
+	    if ($$2 == $$4) { files[d] = files[d] " " $$1; \
+	      if (++n[d] == $(am__install_max)) { \
+		print "f", d, files[d]; n[d] = 0; files[d] = "" } } \
+	    else { print "f", d "/" $$4, $$1 } } \
+	  END { for (d in files) print "f", d, files[d] }' | \
+	while read type dir files; do \
+	     if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
+	     test -z "$$files" || { \
+	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(sqldir)$$dir'"; \
+	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(sqldir)$$dir" || exit $$?; \
+	     } \
+	; done
+
+uninstall-sqlSCRIPTS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(sql_SCRIPTS)'; test -n "$(sqldir)" || exit 0; \
+	files=`for p in $$list; do echo "$$p"; done | \
+	       sed -e 's,.*/,,;$(transform)'`; \
+	test -n "$$list" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(sqldir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(sqldir)" && rm -f $$files
+install-sqlDATA: $(sql_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(sqldir)" || $(MKDIR_P) "$(DESTDIR)$(sqldir)"
+	@list='$(sql_DATA)'; test -n "$(sqldir)" || list=; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(webdir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(webdir)" || exit $$?; \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(sqldir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(sqldir)" || exit $$?; \
 	done
 
-uninstall-webDATA:
+uninstall-sqlDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(web_DATA)'; test -n "$(webdir)" || list=; \
+	@list='$(sql_DATA)'; test -n "$(sqldir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(webdir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(webdir)" && rm -f $$files
+	echo " ( cd '$(DESTDIR)$(sqldir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(sqldir)" && rm -f $$files
 tags: TAGS
 TAGS:
 
@@ -321,9 +304,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(DATA)
+all-am: Makefile $(SCRIPTS) $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(webdir)"; do \
+	for dir in "$(DESTDIR)$(sqldir)" "$(DESTDIR)$(sqldir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -371,7 +354,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-webDATA
+install-data-am: install-sqlDATA install-sqlSCRIPTS
 
 install-dvi: install-dvi-am
 
@@ -415,7 +398,7 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-webDATA
+uninstall-am: uninstall-sqlDATA uninstall-sqlSCRIPTS
 
 .MAKE: install-am install-strip
 
@@ -425,10 +408,11 @@ uninstall-am: uninstall-webDATA
 	install-dvi-am install-exec install-exec-am install-html \
 	install-html-am install-info install-info-am install-man \
 	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip install-webDATA installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am uninstall \
-	uninstall-am uninstall-webDATA
+	install-sqlDATA install-sqlSCRIPTS install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
+	pdf-am ps ps-am uninstall uninstall-am uninstall-sqlDATA \
+	uninstall-sqlSCRIPTS
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
