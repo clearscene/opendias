@@ -133,8 +133,10 @@ void server_shutdown() {
   o_log(INFORMATION, "openDias service is shutting down....");
   o_log(DEBUGM, "httpd stop");
   MHD_stop_daemon (httpdaemon);
+#ifdef CAN_SCAN
   o_log(DEBUGM, "sane_exit");
   sane_exit();
+#endif // CAN_SCAN //
   o_log(DEBUGM, "database close");
   close_db ();
   o_log(INFORMATION, "....openDias service has shutdown");

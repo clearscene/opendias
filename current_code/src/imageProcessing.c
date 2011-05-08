@@ -19,14 +19,14 @@
 #include "config.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <FreeImage.h>
 #include "debug.h"
 #include "utils.h"
 #ifdef CAN_OCR
 #include "ocr_plug.h"
 #endif // CAN_OCR //
-
 #ifdef CAN_SCAN
+#include <FreeImage.h>
+
 /*
  *
  * FreeImage error handler
@@ -121,10 +121,10 @@ extern void deSkew(unsigned char *pic, double picBytes, double skew, double ppl,
 
 extern char *getTextFromImage(const unsigned char *pic, int bpl, int ppl, int lines) {
 
-  struct scanCallInfo infoData;
   char *txt = NULL;
 
 #ifdef CAN_OCR
+  struct scanCallInfo infoData;
   infoData.language = (const char*)OCR_LANG_BRITISH;
   infoData.imagedata = (const unsigned char*)pic;
   infoData.bytes_per_pixel = 1;

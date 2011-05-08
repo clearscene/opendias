@@ -37,7 +37,7 @@
 extern char *uploadfile(char *filename, char *ftype) {
 
   int itype = PLACE_HOLDER;
-  char *ocrText;
+  char *ocrText = NULL;
 
   // Save Record
   o_log(DEBUGM, "Saving doc import record");
@@ -72,7 +72,9 @@ extern char *uploadfile(char *filename, char *ftype) {
     char *full_fn = o_strdup("/tmp/");
     conCat(&full_fn, filename);
     conCat(&full_fn, ".dat");
+#ifdef CAN_READODF
     ocrText = get_odf_Text(full_fn); // read_odf.c 
+#endif // CAN_READODF //
     if(ocrText == NULL)
       ocrText = o_strdup("--text could not be extracted--");
     free(full_fn);

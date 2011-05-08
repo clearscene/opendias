@@ -22,9 +22,9 @@
 #include <stdlib.h>
 #include <stdio.h>      // printf, file operations
 #include <string.h>     // compares
-#include <FreeImage.h>  // 
 #include <math.h>       // for fmod
 #ifdef CAN_SCAN
+#include <FreeImage.h>  // 
 #include <sane/sane.h>  // Scanner Interface
 #include <sane/saneopts.h>  // Scanner Interface
 #include <pthread.h>    // Return from this thread

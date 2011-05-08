@@ -135,7 +135,7 @@ extern char *getScannerList() {
   const SANE_Option_Descriptor *sod;
   int hlp=0, x=0, paramSetRet=0, lastTry=1, q=0, size;
   int scanOK=FALSE, i=0, resolution=0, minRes=9999999, maxRes=0;
-  char *vendor, *model, *type, *name, *scannerHost, *format, *replyTemplate, *answer, *resolution_s, *maxRes_s, *minRes_s, *ipandmore, *ip;
+  char *vendor, *model, *type, *name, *scannerHost, *format, *replyTemplate, *device, *resolution_s, *maxRes_s, *minRes_s, *ipandmore, *ip;
   struct hostent *hp;
   long addr;
 

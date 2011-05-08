@@ -35,22 +35,8 @@ AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
 
 
 
-freeimage="no"
-AC_CHECK_LIB(sane, main, 
-	[AC_CHECK_HEADER(FreeImage.h,
-        	freeimage=yes,
-        	AC_MSG_WARN(You are missing the development headers for the FreeImage libs))], 
-	AC_MSG_WARN(You are missing the FreeImage libs) )
-if test "x$freeimage" = "xyes" ; then
-	AC_DEFINE([CAN_IMAGE],[],[Have everything that is needed for scanning documents])
-	OPENDIAS_LIBS="$OPENDIAS_LIBS -lfreeimage "
-else
-	AC_MSG_WARN(You wll not be able to save and load scanned images.)
-fi
-
-
 imagehandling="no"
-AC_CHECK_LIB(libfreeimage, main, 
+AC_CHECK_LIB(freeimage, FreeImage_Load, 
 	[AC_CHECK_HEADER(FreeImage.h,
         	imagehandling=yes,
         	AC_MSG_WARN(You are missing the development headers for the freeimage libs))], 
@@ -63,7 +49,7 @@ AC_CHECK_LIB(sane, main,
 	AC_MSG_WARN(You are missing the sane libs) )
 if test "x$scanning" = "xyes" && test "x$imagehandling" = "xyes" ; then
 	AC_DEFINE([CAN_SCAN],[],[Have everything that is needed for scanning documents])
-	OPENDIAS_LIBS="$OPENDIAS_LIBS -lsane "
+	OPENDIAS_LIBS="$OPENDIAS_LIBS -lsane -lfreeimage "
 else
 	AC_MSG_WARN(You wll not be able to scan in any document.)
 fi
