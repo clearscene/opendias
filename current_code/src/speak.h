@@ -19,6 +19,8 @@
 #ifndef SPEAK
 #define SPEAK
 
+#ifdef CAN_SPEAK
 extern void readText(char *);
+#endif /* CAN_SPEAK */
 
 #endif /* SPEAK */

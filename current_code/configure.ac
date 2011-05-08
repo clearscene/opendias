@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(opendias, 0.5.0)
+AC_INIT(opendias, 0.6.0)
 
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
@@ -42,21 +42,27 @@ AC_CHECK_LIB(sane, main,
         	AC_MSG_WARN(You are missing the development headers for the FreeImage libs))], 
 	AC_MSG_WARN(You are missing the FreeImage libs) )
 if test "x$freeimage" = "xyes" ; then
-	AC_DEFINE([CAN_IMAGE],[],[Have everything that's needed for scanning documents])
+	AC_DEFINE([CAN_IMAGE],[],[Have everything that is needed for scanning documents])
 	OPENDIAS_LIBS="$OPENDIAS_LIBS -lfreeimage "
 else
 	AC_MSG_WARN(You wll not be able to save and load scanned images.)
 fi
 
 
+imagehandling="no"
+AC_CHECK_LIB(libfreeimage, main, 
+	[AC_CHECK_HEADER(FreeImage.h,
+        	imagehandling=yes,
+        	AC_MSG_WARN(You are missing the development headers for the freeimage libs))], 
+	AC_MSG_WARN(You are missing the freeimage libs) )
 scanning="no"
 AC_CHECK_LIB(sane, main, 
 	[AC_CHECK_HEADER(sane/sane.h,
         	scanning=yes,
         	AC_MSG_WARN(You are missing the development headers for the sane libs))], 
 	AC_MSG_WARN(You are missing the sane libs) )
-if test "x$scanning" = "xyes" ; then
-	AC_DEFINE([CAN_SCAN],[],[Have everything that's needed for scanning documents])
+if test "x$scanning" = "xyes" && test "x$imagehandling" = "xyes" ; then
+	AC_DEFINE([CAN_SCAN],[],[Have everything that is needed for scanning documents])
 	OPENDIAS_LIBS="$OPENDIAS_LIBS -lsane "
 else
 	AC_MSG_WARN(You wll not be able to scan in any document.)
@@ -77,25 +83,26 @@ AC_CHECK_LIB(tesseract_full, main,
         	AC_MSG_WARN(You are missing the development headers for the tesseract libs))], 
 	AC_MSG_WARN(You are missing the tesseract libs) )
 if test "x$tesseract" = "xyes" && test "x$tiff" = "xyes" ; then
-	AC_DEFINE([CAN_OCR],[],[Have everything that's needed to OCR documents])
+	AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
 	OPENDIAS_LIBS="$OPENDIAS_LIBS -ltesseract_full -ltiff "
 else
 	AC_MSG_WARN(You wll not be able to OCR any document.)
 fi
 
 
-speak="no"
-AC_CHECK_LIB(espeak, main, 
-	[AC_CHECK_HEADER(espeak/speak_lib.h,
-        	speak=yes,
-        	AC_MSG_WARN(You are missing the development headers for the espeak libs))], 
-	AC_MSG_WARN(You are missing the espeak libs) )
-if test "x$speak" = "xyes" ; then
-	AC_DEFINE([CAN_SPEAK],[],[Have everything that's needed speak aloud])
-	OPENDIAS_LIBS="$OPENDIAS_LIBS -lespeak "
-else
-	AC_MSG_WARN(You wll not be able to read aloud.)
-fi
+# Not used in the app - atm
+#speak="no"
+#AC_CHECK_LIB(espeak, main, 
+#	[AC_CHECK_HEADER(espeak/speak_lib.h,
+#        	speak=yes,
+#        	AC_MSG_WARN(You are missing the development headers for the espeak libs))], 
+#	AC_MSG_WARN(You are missing the espeak libs) )
+#if test "x$speak" = "xyes" ; then
+#	AC_DEFINE([CAN_SPEAK],[],[Have everything that is needed speak aloud])
+#	OPENDIAS_LIBS="$OPENDIAS_LIBS -lespeak "
+#else
+#	AC_MSG_WARN(You wll not be able to read aloud.)
+#fi
 
 
 xml="no"
@@ -122,7 +129,7 @@ AC_CHECK_LIB(zzipwrap, main,
         	AC_MSG_WARN(You are missing the development headers for the zzip libs))], 
 	AC_MSG_WARN(You are missing the zzip libs) )
 if test "x$xml" = "xyes" && test "x$zzip" = "xyes" && test "x$archive" = "xyes" ; then
-	AC_DEFINE([CAN_READODF],[],[Have everything that's needed to read ODF documents])
+	AC_DEFINE([CAN_READODF],[],[Have everything that is needed to read ODF documents])
 	OPENDIAS_LIBS="$OPENDIAS_LIBS -larchive -lxml2 -lzzip "
 	OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS $xml2_cflags " 
 else
