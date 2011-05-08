@@ -32,6 +32,7 @@ LOG-OUTPUT
  ----- line duplicated more than three times ----- 
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Saved JPEG output of scan, to: /tmp/opendiastest//scans/2_1.jpg
+-date-:-thread-:ERR: Page scan done.
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Serving request: /docDetail.html
 -date-:-thread-:INF: Serving request: /includes/jquery.js
@@ -47,6 +48,7 @@ LOG-OUTPUT
 -date-:-thread-:INF: Serving request: /style/jquery.gzoom.css
 -date-:-thread-:INF: Serving request: /style/tablesorter.css
 -date-:-thread-:INF: Serving request: /style/jquery.easyslider.css
+-date-:-thread-:INF: Processing request for: document details
 -date-:-thread-:INF: Received SIGUSR1 signal.
 -date-:-thread-:INF: openDias service is shutting down....
 -date-:-thread-:INF: ....openDias service has shutdown

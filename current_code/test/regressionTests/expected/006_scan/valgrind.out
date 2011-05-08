@@ -14,3 +14,19 @@
 ==XXXXX==  
 ==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
 ==XXXXX==  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: XXX from XXX)
+==XXXXX==  
+==XXXXX==  HEAP SUMMARY:
+==XXXXX==      in use at exit: XXX bytes in XXX blocks
+==XXXXX==    total heap usage: XXXX allocs, XXXX frees, XXX bytes allocated
+==XXXXX==  
+==XXXXX==  LEAK SUMMARY:
+==XXXXX==     definitely lost: XXX bytes in XXX blocks
+==XXXXX==     indirectly lost: XXX bytes in XXX blocks
+==XXXXX==       possibly lost: XXX bytes in XXX blocks
+==XXXXX==     still reachable: XXX bytes in XXX blocks
+==XXXXX==          suppressed: XXX bytes in XXX blocks
+==XXXXX==  Reachable blocks (those to which a pointer was found) are not shown.
+==XXXXX==  To see them, rerun with: --leak-check=full --show-reachable=yes
+==XXXXX==  
+==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
+==XXXXX==  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: XXX from XXX)

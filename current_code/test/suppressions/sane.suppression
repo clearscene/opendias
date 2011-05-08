@@ -203,3 +203,14 @@
    fun:start_thread
    fun:clone
 }
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
