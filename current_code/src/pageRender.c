@@ -39,7 +39,6 @@
 #ifdef CAN_SCAN
 #include <sane/sane.h>
 #endif // CAN_SCAN //
-// #include "doc_editor.h"
 #include "utils.h"
 #include "debug.h"
 #include "scan.h"
@@ -128,13 +127,15 @@ extern char *populate_doclist (void) {
 
 extern char *getScannerList() {
 
+  char *answer;
+#ifdef CAN_SCAN
   SANE_Status status;
   const SANE_Device **device_list;
   SANE_Handle *openDeviceHandle;
   const SANE_Option_Descriptor *sod;
   int hlp=0, x=0, paramSetRet=0, lastTry=1, q=0, size;
   int scanOK=FALSE, i=0, resolution=0, minRes=9999999, maxRes=0;
-  char *vendor, *model, *type, *name, *scannerHost, *format, *replyTemplate, *device, *answer, *resolution_s, *maxRes_s, *minRes_s, *ipandmore, *ip;
+  char *vendor, *model, *type, *name, *scannerHost, *format, *replyTemplate, *answer, *resolution_s, *maxRes_s, *minRes_s, *ipandmore, *ip;
   struct hostent *hp;
   long addr;
 
@@ -266,6 +267,7 @@ extern char *getScannerList() {
     conCat(&answer, "</devices>");
   }
   else
+#endif // CAN_SCAN //
     answer = NULL;
 
   return answer;
@@ -276,12 +278,13 @@ extern char *getScannerList() {
 //
 extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, char *pages, char *ocr, char *pagelength, struct connection_info_struct *con_info) {
 
+  char *ret;
+#ifdef CAN_SCAN
   pthread_t thread;
   pthread_attr_t attr;
   int rc=0;
   uuid_t uu;
   char *scanUuid;
-  char *ret;
 
   // Generate a uuid and scanning params object
   scanUuid = malloc(36+1);
@@ -318,11 +321,13 @@ extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, 
   conCat(&ret, scanUuid);
   conCat(&ret, "</scanuuid>");
 
+#endif // CAN_SCAN //
   return ret;
 }
 
 extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
 
+#ifdef CAN_SCAN
   pthread_t thread;
   pthread_attr_t attr;
   char *sql;
@@ -362,6 +367,7 @@ extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
+#endif // CAN_SCAN //
   return o_strdup("<result>OK</result>");
 }
 
