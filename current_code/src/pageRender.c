@@ -278,7 +278,7 @@ extern char *getScannerList() {
 //
 extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, char *pages, char *ocr, char *pagelength, struct connection_info_struct *con_info) {
 
-  char *ret;
+  char *ret = NULL;
 #ifdef CAN_SCAN
   pthread_t thread;
   pthread_attr_t attr;
