@@ -116,10 +116,10 @@ if [ "$NOBUILD" == "" ]; then
   cd ../
   if [ "$SKIPCOVERAGE" == "-c" ]; then
     echo " (without coverage) ..."
-    ./configure CFLAGS=' -g ' &> test/results/buildLog2.out
+    ./configure -C CFLAGS=' -g ' &> test/results/buildLog2.out
   else
     echo " (with coverage) ..."
-    ./configure CFLAGS='-O0 --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
+    ./configure -C CFLAGS='-O0 --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
   fi
   cd test
   # unfortunatly bash cannot support "&>>" - yet!
