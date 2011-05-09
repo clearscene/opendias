@@ -1,11 +1,11 @@
- 0.6.3  Improve the build process
+*0.6.3  Improve the build process
 
  0.6.2  Fixes to help get into debian repo
         Ensure we can compile with various 'optional' libs are missing.
 
  0.6.1  Fixes and better testing
 
- 0.6    Second major public release (first in web format)
+*0.6    Second major public release (first in web format)
         Rationalise and fix scanning code
         Various fixed make durring testing
 
