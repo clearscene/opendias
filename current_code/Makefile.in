@@ -733,10 +733,10 @@ uninstall-am: uninstall-opendiasdocDATA
 	uninstall-opendiasdocDATA
 
 
-install-exec-hook: \
-        test ! -e /var/log/opendias && mkdir /var/log/opendias ;\
-        test ! -e /var/lib/opendias && mkdir /var/lib/opendias ;\
-        test ! -e /etc/opendias && mkdir /etc/opendias ;\
+install-exec-hook:
+        test ! -e /var/log/opendias && mkdir /var/log/opendias
+        test ! -e /var/lib/opendias && mkdir /var/lib/opendias
+        test ! -e /etc/opendias && mkdir /etc/opendias
         test ! -e /etc/opendias/opendias.conf && echo /var/lib/opendias >> /etc/opendias/opendias.conf
 
 #dist-hook:
