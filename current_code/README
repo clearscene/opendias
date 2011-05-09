@@ -1,0 +1,65 @@
+openDias - Document Imaging Archive System
+
+  1. Introduction
+  2. Satisfying Dependencies
+    2.1 Required
+    2.2 Optional
+    2.3 Shortcut
+  3. Building
+
+-----------------------------------
+
+1. Introduction
+
+  [please add]
+
+-----------------------------------
+
+2. Satisfying Dependencies
+
+  In order to include certain functionality you will 
+  need to provide third party libraries and headers.
+  This is a list of what you will need.
+
+2.1 Required
+-----------
+
+  sqlite3
+  glib2.0
+  microhttpd
+  uuid
+
+2.2 Optional
+------------ 
+
+  2.2.1 For scanning
+    sane
+    freeimage
+
+  2.2.2 For OCR
+    tesseract-ocr
+
+  2.2.3 For ODF import
+    xml2
+    zzip
+    archive
+
+2.3 Short cut
+-------------
+
+On Debian or Ubuntu, you can do this by running:
+
+  sudo apt-get install build-essential libsqlite3-dev libsane-dev \
+    libglib2.0-dev libmicrohttpd-dev uuid-dev libfreeimage-dev \
+    tesseract-ocr-dev libxml2-dev libzzip-dev libarchive-dev
+
+-----------------------------------
+
+3. Building
+
+You can build and install by issuing the following commands:
+
+  ./configure
+  make
+  sudo make install
+

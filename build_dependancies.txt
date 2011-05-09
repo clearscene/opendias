@@ -1,1 +1,0 @@
-sudo apt-get install build-essential libsqlite3-dev libsane-dev autoconf intltool automake libglib2.0-dev libmicrohttpd-dev uuid-dev libfreeimage-dev tesseract-ocr-dev libxml2-dev libzzip-dev libarchive-dev
