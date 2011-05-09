@@ -4,7 +4,7 @@ web_DATA = \
         btn_prev.png
 
 webdir = \
-	$(pkgdatadir)/images/easySlider
+	$(pkgdatadir)/webcontent/images/easySlider
 
 EXTRA_DIST = \
 	$(web_DATA)

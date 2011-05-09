@@ -8,7 +8,7 @@ web_DATA = \
 	tablesorter.css 
 
 webdir = \
-	$(pkgdatadir)/style
+	$(pkgdatadir)/webcontent/style
 
 EXTRA_DIST = \
 	$(web_DATA)

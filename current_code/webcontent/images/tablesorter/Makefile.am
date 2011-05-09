@@ -10,7 +10,7 @@ web_DATA = \
 
 
 webdir = \
-	$(pkgdatadir)/images/tablesorter
+	$(pkgdatadir)/webcontent/images/tablesorter
 
 EXTRA_DIST = \
 	$(web_DATA)

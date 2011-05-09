@@ -9,7 +9,7 @@ web_DATA = \
 	acquire.html 
 
 webdir = \
-	$(pkgdatadir)
+	$(pkgdatadir)/webcontent
 
 EXTRA_DIST = \
 	$(web_DATA)

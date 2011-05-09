@@ -10,7 +10,7 @@ web_DATA = \
 	datepicker_tr.png 
 
 webdir = \
-	$(pkgdatadir)/images/datepicker
+	$(pkgdatadir)/webcontent/images/datepicker
 
 EXTRA_DIST = \
 	$(web_DATA)

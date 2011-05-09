@@ -1,8 +1,8 @@
-
 current_code/aclocal.m4
 current_code/autom4te.cache/
 current_code/autoscan.log
 current_code/config.cache
+current_code/config.h
 current_code/config.h.in~
 current_code/config.log
 current_code/config.status
@@ -10,6 +10,7 @@ current_code/configure.scan
 current_code/INSTALL
 current_code/Makefile
 current_code/mkinstalldirs
+current_code/opendias-*.tar.gz
 current_code/sql/Makefile
 current_code/src/dbaccess.gcda
 current_code/src/dbaccess.gcno

@@ -210,7 +210,7 @@ web_DATA = \
 	openDIAS_sml.png 
 
 webdir = \
-	$(pkgdatadir)/images
+	$(pkgdatadir)/webcontent/images
 
 EXTRA_DIST = \
 	$(web_DATA)

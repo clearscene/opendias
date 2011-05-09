@@ -669,7 +669,8 @@ install-dvi: install-dvi-recursive
 install-dvi-am:
 
 install-exec-am:
-
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 install-html: install-html-recursive
 
 install-html-am:
@@ -711,7 +712,8 @@ ps-am:
 uninstall-am: uninstall-opendiasdocDATA
 
 .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) all \
-	ctags-recursive install-am install-strip tags-recursive
+	ctags-recursive install-am install-exec-am install-strip \
+	tags-recursive
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am am--refresh check check-am clean clean-generic \
@@ -721,15 +723,21 @@ uninstall-am: uninstall-opendiasdocDATA
 	distcleancheck distdir distuninstallcheck dvi dvi-am html \
 	html-am info info-am install install-am install-data \
 	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-opendiasdocDATA \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am tags \
-	tags-recursive uninstall uninstall-am \
+	install-exec-am install-exec-hook install-html install-html-am \
+	install-info install-info-am install-man \
+	install-opendiasdocDATA install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
+	pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
 	uninstall-opendiasdocDATA
 
+
+install-exec-hook: \
+        test ! -e /var/log/opendias && mkdir /var/log/opendias ;\
+        test ! -e /var/lib/opendias && mkdir /var/lib/opendias ;\
+        test ! -e /etc/opendias && mkdir /etc/opendias ;\
+        test ! -e /etc/opendias/opendias.conf && echo /var/lib/opendias >> /etc/opendias/opendias.conf
 
 #dist-hook:
 #	for specfile in *.spec; do \

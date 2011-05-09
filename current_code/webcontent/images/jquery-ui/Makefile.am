@@ -17,7 +17,7 @@ web_DATA = \
 	ui-icons_ffffff_256x240.png
 
 webdir = \
-	$(pkgdatadir)/images/jquery-ui
+	$(pkgdatadir)/webcontent/images/jquery-ui
 
 EXTRA_DIST = \
 	$(web_DATA)

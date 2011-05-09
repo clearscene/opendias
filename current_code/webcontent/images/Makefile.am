@@ -4,10 +4,11 @@ SUBDIRS = easySlider datepicker jquery-ui tablesorter
 web_DATA = \
         cabinet.jpg \
 	openDIAS_64x64.ico \
-	openDIAS_sml.png 
+	openDIAS_sml.png \
+        opendias.jpg
 
 webdir = \
-	$(pkgdatadir)/images
+	$(pkgdatadir)/webcontent/images
 
 EXTRA_DIST = \
 	$(web_DATA)

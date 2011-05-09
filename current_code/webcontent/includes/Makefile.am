@@ -18,7 +18,7 @@ web_DATA = \
 	openDias.tablesorter.pager.addRemove.js 
 
 webdir = \
-	$(pkgdatadir)/includes
+	$(pkgdatadir)/webcontent/includes
 
 EXTRA_DIST = \
 	$(web_DATA)

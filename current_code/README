@@ -6,6 +6,7 @@ openDias - Document Imaging Archive System
     2.2 Optional
     2.3 Shortcut
   3. Building
+  4. Running
 
 -----------------------------------
 
@@ -22,7 +23,7 @@ openDias - Document Imaging Archive System
   This is a list of what you will need.
 
 2.1 Required
------------
+------------
 
   sqlite3
   glib2.0
@@ -62,4 +63,27 @@ You can build and install by issuing the following commands:
   ./configure
   make
   sudo make install
+
+-----------------------------------
+
+4. Running
+
+Start and get to the apllication with:
+
+  sudo /usr/local/bin/opendias
+
+point a web browser at:
+
+  http://localhost:8988/opendias
+
+This needs to be 'localhost' as the default setting only allow
+access from there. Visit 'Access Controls' and setup access
+from other parts of your network [or specific user (not yet
+implemented)]. Then you can point a browser at:
+
+  http://myServer.com:8988/opendias
+
+or use a forwarding proxy (eg Apache) to remove the port number. eg:
+
+  RewriteRule ^/opendias(.*)$ http://myServer.com:8988/opendias$1 [P]
 
