@@ -4558,19 +4558,6 @@ fi
 
 
 
-for ac_func in dfsgdfgdfg
-do :
-  ac_fn_c_check_func "$LINENO" "dfsgdfgdfg" "ac_cv_func_dfsgdfgdfg"
-if test "x$ac_cv_func_dfsgdfgdfg" = x""yes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_DFSGDFGDFG 1
-_ACEOF
-
-else
-  as_fn_error "Missing function dsfgdfggethostbyaddr" "$LINENO" 5
-fi
-done
-
 for ac_func in gethostbyaddr
 do :
   ac_fn_c_check_func "$LINENO" "gethostbyaddr" "ac_cv_func_gethostbyaddr"
@@ -5730,19 +5717,6 @@ $as_echo "$as_me: WARNING: You wll not be able to OCR any document." >&2;}
 fi
 
 
-# Not used in the app - atm
-#speak="no"
-#AC_CHECK_LIB(espeak, main,
-#	[AC_CHECK_HEADER(espeak/speak_lib.h,
-#        	speak=yes,
-#        	AC_MSG_WARN(You are missing the development headers for the espeak libs))],
-#	AC_MSG_WARN(You are missing the espeak libs) )
-#if test "x$speak" = "xyes" ; then
-#	AC_DEFINE([CAN_SPEAK],[],[Have everything that is needed speak aloud])
-#	OPENDIAS_LIBS="$OPENDIAS_LIBS -lespeak "
-#else
-#	AC_MSG_WARN(You wll not be able to read aloud.)
-#fi
 
 
 xml="no"
@@ -5946,7 +5920,7 @@ $as_echo "$as_me: WARNING: You wll not be able to import any ODF document." >&2;
 fi
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile sql/Makefile webcontent/Makefile"
+ac_config_files="$ac_config_files Makefile src/Makefile sql/Makefile webcontent/Makefile webcontent/style/Makefile webcontent/includes/Makefile webcontent/images/Makefile webcontent/images/datepicker/Makefile webcontent/images/easySlider/Makefile webcontent/images/jquery-ui/Makefile webcontent/images/tablesorter/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6672,6 +6646,13 @@ do
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "sql/Makefile") CONFIG_FILES="$CONFIG_FILES sql/Makefile" ;;
     "webcontent/Makefile") CONFIG_FILES="$CONFIG_FILES webcontent/Makefile" ;;
+    "webcontent/style/Makefile") CONFIG_FILES="$CONFIG_FILES webcontent/style/Makefile" ;;
+    "webcontent/includes/Makefile") CONFIG_FILES="$CONFIG_FILES webcontent/includes/Makefile" ;;
+    "webcontent/images/Makefile") CONFIG_FILES="$CONFIG_FILES webcontent/images/Makefile" ;;
+    "webcontent/images/datepicker/Makefile") CONFIG_FILES="$CONFIG_FILES webcontent/images/datepicker/Makefile" ;;
+    "webcontent/images/easySlider/Makefile") CONFIG_FILES="$CONFIG_FILES webcontent/images/easySlider/Makefile" ;;
+    "webcontent/images/jquery-ui/Makefile") CONFIG_FILES="$CONFIG_FILES webcontent/images/jquery-ui/Makefile" ;;
+    "webcontent/images/tablesorter/Makefile") CONFIG_FILES="$CONFIG_FILES webcontent/images/tablesorter/Makefile" ;;
 
   *) as_fn_error "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

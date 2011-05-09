@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(opendias, [0.6.2], [wbooth@clearscene.net])
+AC_INIT(opendias, [0.6.3], [wbooth@clearscene.net])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AM_CONFIG_HEADER([config.h])
@@ -94,19 +94,19 @@ else
 fi
 
 
-# Not used in the app - atm
-#speak="no"
-#AC_CHECK_LIB(espeak, main, 
-#	[AC_CHECK_HEADER(espeak/speak_lib.h,
-#        	speak=yes,
-#        	AC_MSG_WARN(You are missing the development headers for the espeak libs))], 
-#	AC_MSG_WARN(You are missing the espeak libs) )
-#if test "x$speak" = "xyes" ; then
-#	AC_DEFINE([CAN_SPEAK],[],[Have everything that is needed speak aloud])
-#	OPENDIAS_LIBS="$OPENDIAS_LIBS -lespeak "
-#else
-#	AC_MSG_WARN(You wll not be able to read aloud.)
-#fi
+dnl Not used in the app - atm
+dnl speak="no"
+dnl AC_CHECK_LIB(espeak, main, 
+dnl 	[AC_CHECK_HEADER(espeak/speak_lib.h,
+dnl         	speak=yes,
+dnl         	AC_MSG_WARN(You are missing the development headers for the espeak libs))], 
+dnl 	AC_MSG_WARN(You are missing the espeak libs) )
+dnl if test "x$speak" = "xyes" ; then
+dnl 	AC_DEFINE([CAN_SPEAK],[],[Have everything that is needed speak aloud])
+dnl 	OPENDIAS_LIBS="$OPENDIAS_LIBS -lespeak "
+dnl else
+dnl 	AC_MSG_WARN(You wll not be able to read aloud.)
+dnl fi
 
 
 xml="no"
@@ -146,4 +146,11 @@ Makefile
 src/Makefile
 sql/Makefile
 webcontent/Makefile
+webcontent/style/Makefile
+webcontent/includes/Makefile
+webcontent/images/Makefile
+webcontent/images/datepicker/Makefile
+webcontent/images/easySlider/Makefile
+webcontent/images/jquery-ui/Makefile
+webcontent/images/tablesorter/Makefile
 ])
