@@ -1,3 +1,53 @@
+ 0.6.3  Improve the build process
+
+ 0.6.2  Fixes to help get into debian repo
+        Ensure we can compile with various 'optional' libs are missing.
+
+ 0.6.1  Fixes and better testing
+
+ 0.6    Second major public release (first in web format)
+        Rationalise and fix scanning code
+        Various fixed make durring testing
+
+ 0.5.16 Fixes and change ocr default to on
+
+ 0.5.15 finish file import
+
+ 0.5.14 Update to loggin
+        chage the default URL to start "/opendias/" to allow the use of webserver no port proxying
+
+ 0.5.13 Better Daemon setup
+
+ 0.5.12 make it daemonisable
+
+ 0.5.11 more on: uploading files, admin of access controls, ui improvements, more...
+
+ 0.5.10 More ui improvements
+
+ 0.5.9  more security
+
+ 0.5.8  various fixes
+
+ 0.5.7  UI Tweaks
+        beginnings of access controls
+        input validation
+
+ 0.5.6  Allow variable length scans
+
+ 0.5.5  smooth over UI
+
+ 0.5.4  memory fixes for skew code
+
+ 0.5.3  Fixes, plus software solution for hardware skew
+
+ 0.5.2  Fixes for ocr
+
+ 0.5.1  Fix FreeImage memeory leak
+
+ 0.5    Initial Release (of web version).
+
+ 0.4    [missing entries]
+
  0.3.2	Add threading to 'slick up' the UI in places.
 	Fix more memory leaks
 	Handle things when the loading image is not available.
