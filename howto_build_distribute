@@ -1,0 +1,14 @@
+
+Generate a buildable source tree (after git checkout)
+--------------------------------
+autoreconf -v
+
+
+Create a source tarball (suitable for distribution)
+-----------------------
+make distcheck
+
+
+Checkout from sf.net
+--------------------
+cvs -d:ext:clearscene@opendias.cvs.sourceforge.net:/cvsroot/opendias/ checkout opendias
