@@ -4,6 +4,11 @@ Generate a buildable source tree (after git checkout)
 autoreconf -v
 
 
+Check to ensure 'configure.ac' has all checks
+---------------------------------------------
+autoscan
+
+
 Create a source tarball (suitable for distribution)
 -----------------------
 make distcheck
