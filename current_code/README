@@ -6,6 +6,8 @@ openDias - Document Imaging Archive System
     2.2 Optional
     2.3 Shortcut
   3. Building
+    3.1 As a user
+    3.2 As a developer
   4. Running
 
 -----------------------------------
@@ -58,11 +60,28 @@ On Debian or Ubuntu, you can do this by running:
 
 3. Building
 
+3.1 As a user
+-------------
+If you downloaded the release tarball (opendias-x.y.x.tar.gz)
 You can build and install by issuing the following commands:
 
   ./configure
   make
   sudo make install
+
+3.2 As a developer
+------------------
+If you downloaded the source from, the CVS tree at sf.net, or 
+one of the GIT clones. You need to pre configure the source:
+
+  [ensure the you have the GNU auto* tools installed]
+  autoreconf -v
+
+before running:
+
+  ./configure -C
+  make
+
 
 -----------------------------------
 
