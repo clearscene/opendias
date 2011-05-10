@@ -185,14 +185,13 @@ extern char *get_odf_Text (const char *filename) {
 
 extern void get_odf_Thumb (const char *filename) {
 
-  char *image=NULL;
   char *imageData;
   gint size;
 
   size = getEntry(filename, "Thumbnails/thumbnail.png", &imageData);
   if(size > 0) {
     int tmpFile = open("/tmp/tmpImg.png", O_CREAT|O_WRONLY, 775);
-    write(tmpFile, imageData, size);
+    size = write(tmpFile, imageData, size);
     close(tmpFile);
   }
 

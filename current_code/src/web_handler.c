@@ -46,6 +46,7 @@ char *completepage = "<html><body>All Done</body></html>";
 char *denied = "<h1>Access Denied</h1>";
 char *noaccessxml = "<error>You do not have permissions to complete the request</error>";
 char *errorxml= "<error>Your request could not be processed</error>";
+static unsigned int nr_of_clients = 0;
 
 struct priverlage {
   int update_access;
@@ -198,14 +199,14 @@ extern void request_completed (void *cls, struct MHD_Connection *connection, voi
     g_hash_table_unref( con_info->post_data );
   }
 
-  pthread_t t = con_info->thread;
+  //pthread_t t = con_info->thread;
   free (con_info);
   *con_cls = NULL;
-  if(t != NULL) {
-    o_log(ERROR, "Waiting for child thread %X to finish", t);
-    pthread_join(t, NULL);
-    o_log(ERROR, "finish waiting for the child to come home");
-  }
+  //if(t != NULL) {
+  //  o_log(ERROR, "Waiting for child thread %X to finish", t);
+  //  pthread_join(t, NULL);
+  //  o_log(ERROR, "finish waiting for the child to come home");
+  //}
   o_log(DEBUGM, "end of REQUEST COMPLETE");
 
 }
@@ -334,7 +335,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
     con_info = malloc (sizeof (struct connection_info_struct));
     if (NULL == con_info)
       return MHD_NO;
-    con_info->thread = NULL;
+    //con_info->thread = NULL;
 
     if (0 == strcmp (method, "POST")) {
       con_info->post_data = g_hash_table_new_full(g_str_hash, g_str_equal, (GDestroyNotify)g_free, (GDestroyNotify)post_data_free);

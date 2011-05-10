@@ -46,9 +46,9 @@ extern char *uploadfile(char *filename, char *ftype) {
     itype = PDF_FILETYPE;
 
     // REPLACE ME WITH SOME LIB METHOD TO DO THE SAME
-    // \/ \/ \/ \/ \/ \/ \/ \/
+    // 
     char *cmd_template = o_strdup("/usr/bin/pdftotext /tmp/%s.dat /tmp/%s.txt");
-    // /\ /\ /\ /\ /\ /\ /\ /\
+    // 
 
     char *cmd = malloc(30+9+(2*strlen(filename)));
     sprintf(cmd, cmd_template, filename, filename);

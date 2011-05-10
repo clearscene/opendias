@@ -32,7 +32,7 @@ extern char *getPostData(gpointer post_hash, char *key) {
     return data_struct->data;
 }
 
-static int checkVitals(char *vvalue, int doLengthChecking, int doEscaping) {
+/*static int checkVitals(char *vvalue, int doLengthChecking, int doEscaping) {
 
   // We actually have a value
   if ( vvalue == NULL ) {
@@ -59,6 +59,7 @@ static int checkVitals(char *vvalue, int doLengthChecking, int doEscaping) {
 
   return 0;
 }
+*/
 
 extern int basicValidation(GHashTable *postdata) {
 

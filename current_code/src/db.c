@@ -158,7 +158,7 @@ static int callback(char *recordSetKeyId, int argc, char **argv, char **azColNam
   }
 
   // Save the new row away - for later retrieval 
-  g_hash_table_lookup_extended(RECORDSET, recordSetKey, &orig_key, &rSet);
+  g_hash_table_lookup_extended(RECORDSET, recordSetKey, &orig_key, (void**)&rSet);
   rSet = g_list_append(rSet, row);
   g_hash_table_replace(RECORDSET, orig_key, rSet);
   free(recordSetKey);
@@ -289,7 +289,7 @@ extern int nextRow (char *recordSetKeyId) {
   char *recordSetKey = o_printf("%x-%s", pthread_self(), recordSetKeyId);
 
   o_log(SQLDEBUG, "Moving to next row");
-  g_hash_table_lookup_extended(RECORDSET, recordSetKey, &orig_key, &rSet);
+  g_hash_table_lookup_extended(RECORDSET, recordSetKey, &orig_key, (void**)&rSet);
   rSet = g_list_next(rSet);
   if(rSet) {
     ret = 1;
@@ -305,7 +305,7 @@ extern void free_recordset (char *recordSetKeyId) {
   gpointer orig_key;
   char *recordSetKey = o_printf("%x-%s", pthread_self(), recordSetKeyId);
   GList *li, *rSet;
-  g_hash_table_lookup_extended(RECORDSET, recordSetKey, &orig_key, &rSet);
+  g_hash_table_lookup_extended(RECORDSET, recordSetKey, &orig_key, (void**)&rSet);
   GHashTableIter iter;
   gpointer key, value;
 
