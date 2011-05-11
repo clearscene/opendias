@@ -9,11 +9,14 @@ Check to ensure 'configure.ac' has all checks
 autoscan
 
 
+Hack away
+---------
+Update source / build and tests
+run tests: cd test && ./setupRun.sh
+
+
 Create a source tarball (suitable for distribution)
 -----------------------
 make distcheck
 
 
-Checkout from sf.net
---------------------
-cvs -d:ext:clearscene@opendias.cvs.sourceforge.net:/cvsroot/opendias/ checkout opendias

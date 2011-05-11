@@ -1,0 +1,21 @@
+Implement the remainder of the test plan 'current_code/test/regressionTests/testplan'
+
+Implement 'tag filtering' on the search of the document list
+
+Refactor 'filtering mechanisum' on the document list
+
+Implement 'By Username/Password' access controls
+
+Rationalise & formalise 'comms XML' between frontend (ajax calls) and the backend
+
+Implement 'backend call' tests
+
+Turn OCR into a plugin
+
+Implement 'OCR now' on document detail page.
+
+Implement 'play audio from OCR' on document detail oage.
+
+Improve the tag selection on document detail page.
+
+
