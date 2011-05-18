@@ -1,0 +1,6 @@
+telnet localhost 8988 <<__endjob
+POST /opendias/dynamic HTTP/1.0
+Content-Length: 100
+
+action=doScan&deviceid=test%3A0&format=Grey+Scale&pages=1&skew=0&resolution=300&ocr=-&pagelength=100
+__endjob

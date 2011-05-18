@@ -74,12 +74,12 @@ You can build and install by issuing the following commands:
 
   ./configure
   make
-  sudo make install
+  make install
 
 3.2 As a developer
 ------------------
-If you downloaded the source from, the CVS tree at sf.net, or 
-one of the GIT clones. You need to pre configure the source:
+If you downloaded the source from, the GIT tree at sf.net.
+You need to pre configure the source:
 
   [ensure the you have the GNU auto* tools installed]
   autoreconf -v
@@ -88,7 +88,10 @@ before running:
 
   ./configure -C
   make
-
+  make install
+  cd test
+  [get setup by following the local README file]
+  ./setupRun.sh  
 
 -----------------------------------
 
