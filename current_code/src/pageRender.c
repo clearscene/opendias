@@ -38,6 +38,8 @@
 #include "dbaccess.h"
 #ifdef CAN_SCAN
 #include <sane/sane.h>
+#include <sane/saneopts.h>
+#include "scanner.h"
 #endif // CAN_SCAN //
 #include "utils.h"
 #include "debug.h"
@@ -133,8 +135,8 @@ extern char *getScannerList() {
   const SANE_Device **device_list;
   SANE_Handle *openDeviceHandle;
   const SANE_Option_Descriptor *sod;
-  int hlp=0, x=0, paramSetRet=0, lastTry=1, q=0, size;
-  int scanOK=FALSE, i=0, resolution=0, minRes=9999999, maxRes=0;
+  int hlp=0, size;
+  int scanOK=FALSE, i=0, resolution=0, minRes=50, maxRes=50;
   char *vendor, *model, *type, *name, *scannerHost, *format, *replyTemplate, *device, *resolution_s, *maxRes_s, *minRes_s, *ipandmore, *ip;
   struct hostent *hp;
   long addr;
@@ -196,34 +198,31 @@ extern char *getScannerList() {
         if (sod == NULL)
           break;
 
-        // Find resolutionn
-        //printf("Option %d: %s\n", hlp, sod->name);
-        if((sod->type == SANE_TYPE_FIXED) 
-        && (sod->unit == SANE_UNIT_DPI) 
-        && (sod->constraint_type == SANE_CONSTRAINT_RANGE)) {
-          x = 0;
-          lastTry = 0;
-          q = sod->constraint.range->quant;
-          while(1) {
-            resolution = (q*x)+sod->constraint.range->min;
-            if(resolution <= sod->constraint.range->max) {
-              status = sane_control_option (openDeviceHandle, hlp, SANE_ACTION_SET_VALUE, &resolution, &paramSetRet);
-              if(lastTry != resolution) {
-                // Store this resolution as an available
-                if((int)resolution/q <= minRes)
-                  minRes = (int)resolution/q;
-                if((int)resolution/q >= maxRes)
-                  maxRes = (int)resolution/q;
-                lastTry = resolution;
-              }
-            }
+        if ( strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) == 0) {
+          log_option(hlp, sod);
+
+          // Some kind of sliding range
+          if (sod->constraint_type == SANE_CONSTRAINT_RANGE) {
+            o_log(DEBUGM, "Resolution setting detected as 'range'");
+
+            // Fixed resolution
+            if (sod->type == SANE_TYPE_FIXED)
+              maxRes = SANE_UNFIX (sod->constraint.range->max);
             else
-              break;
-            x++;
+              maxRes = sod->constraint.range->max;
           }
-          //break; // weve found the resolution, so all done
+
+          // A fixed list of options
+          else if (sod->constraint_type == SANE_CONSTRAINT_WORD_LIST) {
+            o_log(DEBUGM, "Resolution setting detected as 'word list'");
+            int lastIndex = sod->constraint.word_list[0];
+            maxRes = sod->constraint.word_list[lastIndex];
+          }
+
+          break; // we've found our resolution - no need to search more
         }
       }
+      o_log(DEBUGM, "Determined max resultion to be %d", maxRes);
 
 
       // Define a default
