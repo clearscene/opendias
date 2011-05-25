@@ -83,6 +83,8 @@ You need to pre configure the source:
 
   [ensure the you have the GNU auto* tools installed]
   autoreconf -v
+  automake --add-missing
+  autoreconf -v
 
 before running:
 

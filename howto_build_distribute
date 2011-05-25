@@ -1,22 +1,22 @@
 
 Generate a buildable source tree (after git checkout)
 --------------------------------
+automake --add-missing
 autoreconf -v
-
-
-Check to ensure 'configure.ac' has all checks
----------------------------------------------
-autoscan
 
 
 Hack away
 ---------
-Update source / build and tests
+Update source, build and tests
 run tests: cd test && ./setupRun.sh
 
 
 Create a source tarball (suitable for distribution)
 -----------------------
+Update: Changelog
+bump version in configure.ac
+autoreconf -v
+autoscan
 make distcheck
 
 

@@ -2,6 +2,7 @@ current_code/aclocal.m4
 current_code/autogen.sh
 current_code/autom4te.cache/
 current_code/autoscan.log
+current_code/build-aux
 current_code/config.cache
 current_code/config.h
 current_code/config.h.in
