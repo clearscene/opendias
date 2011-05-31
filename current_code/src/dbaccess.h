@@ -39,6 +39,7 @@ enum {                                  // Value indicate ...
   SCAN_FINISHED                         // id of the saved doc
 };
 
+extern int checkScannerLock(char *);
 extern int setScanParam(char *, int, char *);
 extern char *getScanParam(char *, int);
 extern void addScanProgress (char *);
