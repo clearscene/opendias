@@ -270,6 +270,7 @@ extern SANE_Status control_option (SANE_Handle handle, const SANE_Option_Descrip
     }
 
     status = sane_control_option (handle, index, action, value, ret);
+/*
     switch (option->type) {
     case SANE_TYPE_BOOL:
         o_log(DEBUGM, "sane_control_option (%d, %s, %s) -> (%s, %s)",
@@ -302,6 +303,7 @@ extern SANE_Status control_option (SANE_Handle handle, const SANE_Option_Descrip
     default:
         break;
     }
+*/
     free (old_value);
 
     if (status != SANE_STATUS_GOOD)
