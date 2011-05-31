@@ -145,7 +145,7 @@ extern char *getScannerList() {
   status = sane_init(NULL, NULL);
   if(status != SANE_STATUS_GOOD) {
     o_log(ERROR, "sane did not start");
-    return 1;
+    return NULL;
   }
 
   device_list = NULL;

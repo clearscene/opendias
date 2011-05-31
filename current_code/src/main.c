@@ -19,10 +19,6 @@
 #include "config.h"
 #include <glib.h>
 
-#ifdef CAN_SCAN
-#include <sane/sane.h>
-#endif // CAN_SCAN //
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -47,9 +43,6 @@ int pidFilehandle;
 int setup (char *configFile) {
 
   char *location, *conf, *sql, *config_option, *config_value;
-#ifdef CAN_SCAN
-  SANE_Status status;
-#endif // CAN_SCAN //
 
   // Defaults
   VERBOSITY = DEBUGM;

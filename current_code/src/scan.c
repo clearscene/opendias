@@ -54,7 +54,7 @@ extern void doScanningOperation(void *uuid) {
   SANE_Status status = sane_init(NULL, NULL);
   if(status != SANE_STATUS_GOOD) {
     o_log(ERROR, "sane did not start");
-    return 1;
+    return;
   }
 
   // Open the device
