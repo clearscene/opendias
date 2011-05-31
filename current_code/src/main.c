@@ -116,15 +116,6 @@ int setup (char *configFile) {
   createDir_ifRequired(location);
   free(location);
 
-#ifdef CAN_SCAN
-  o_log(DEBUGM, "sane_init");
-  status = sane_init(NULL, NULL);
-  if(status != SANE_STATUS_GOOD) {
-    o_log(ERROR, "sane did not start");
-    return 1;
-  }
-#endif // CAN_SCAN //
-
   return 0;
 
 }
@@ -133,10 +124,6 @@ void server_shutdown() {
   o_log(INFORMATION, "openDias service is shutting down....");
   o_log(DEBUGM, "httpd stop");
   MHD_stop_daemon (httpdaemon);
-#ifdef CAN_SCAN
-  o_log(DEBUGM, "sane_exit");
-  sane_exit();
-#endif // CAN_SCAN //
   o_log(DEBUGM, "database close");
   close_db ();
   o_log(INFORMATION, "....openDias service has shutdown");

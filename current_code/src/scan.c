@@ -50,12 +50,18 @@ extern void doScanningOperation(void *uuid) {
   int pageCount = atoi(pageCount_s);
   free(pageCount_s);
 
+  o_log(DEBUGM, "sane_init");
+  SANE_Status status = sane_init(NULL, NULL);
+  if(status != SANE_STATUS_GOOD) {
+    o_log(ERROR, "sane did not start");
+    return 1;
+  }
 
   // Open the device
   o_log(DEBUGM, "sane_open");
   updateScanProgress(uuid, SCAN_WAITING_ON_SCANNER, 0);
   SANE_Handle *openDeviceHandle;
-  SANE_Status status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
+  status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {
     handleSaneErrors("Cannot open device", status, 0);
     updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -186,7 +192,7 @@ extern void doScanningOperation(void *uuid) {
           if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
             int i, j;
             int foundMatch = 0;
-            const char *modes[] = { SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
+            const char *modes[] = { SANE_VALUE_SCAN_MODE_GRAY, SANE_I18N ("Grayscale"), "Grayscale", NULL };
             for (i = 0; modes[i] != NULL; i++) {
               for (j = 0; sod->constraint.string_list[j]; j++) {
                 if (strcmp (modes[i], sod->constraint.string_list[j]) == 0)
@@ -685,7 +691,10 @@ extern void doScanningOperation(void *uuid) {
 
   free(uuid);
   o_log(DEBUGM, "Page scan done.");
-o_log(ERROR, "Page scan done.");
+
+  o_log(DEBUGM, "sane_exit");
+  sane_exit();
+
   pthread_exit(0);
 
 }
