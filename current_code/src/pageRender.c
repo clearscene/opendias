@@ -141,6 +141,13 @@ extern char *getScannerList() {
   struct hostent *hp;
   long addr;
 
+  o_log(DEBUGM, "sane_init");
+  status = sane_init(NULL, NULL);
+  if(status != SANE_STATUS_GOOD) {
+    o_log(ERROR, "sane did not start");
+    return 1;
+  }
+
   device_list = NULL;
   status = sane_get_devices (&device_list, SANE_FALSE);
   if(status == SANE_STATUS_GOOD) {
@@ -198,8 +205,14 @@ extern char *getScannerList() {
         if (sod == NULL)
           break;
 
+        // Just a placeholder
+        if (sod->type == SANE_TYPE_GROUP
+        || sod->name == NULL
+        || option == 0)
+          continue;
+
         if ( strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) == 0) {
-          log_option(hlp, sod);
+          //log_option(hlp, sod);
 
           // Some kind of sliding range
           if (sod->constraint_type == SANE_CONSTRAINT_RANGE) {
@@ -268,6 +281,11 @@ extern char *getScannerList() {
   else
 #endif // CAN_SCAN //
     answer = NULL;
+
+#ifdef CAN_SCAN
+   o_log(DEBUGM, "sane_exit");
+   sane_exit();
+#endif // CAN_SCAN //
 
   return answer;
 
