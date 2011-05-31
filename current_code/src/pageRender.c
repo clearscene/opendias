@@ -208,7 +208,7 @@ extern char *getScannerList() {
         // Just a placeholder
         if (sod->type == SANE_TYPE_GROUP
         || sod->name == NULL
-        || option == 0)
+        || hlp == 0)
           continue;
 
         if ( strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) == 0) {
