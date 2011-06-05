@@ -153,7 +153,9 @@ extern void doScanningOperation(void *uuid) {
                   break;
               }
               if (sod->constraint.string_list[j] != NULL) {
-                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)sources[i], &paramSetRet);
+                char *v = o_strdup(sources[i]);
+                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v, &paramSetRet);
+                free(v);
                 if(status != SANE_STATUS_GOOD) {
                   handleSaneErrors("Cannot set source", status, paramSetRet);
                   updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -173,7 +175,9 @@ extern void doScanningOperation(void *uuid) {
         else if ( strcmp(sod->name, SANE_NAME_BIT_DEPTH) == 0 ) {
           if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
             if( sod->type == SANE_TYPE_STRING ) {
-              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, "8", &paramSetRet);
+              char *v = o_strdup("8");
+              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v, &paramSetRet);
+              free(v);
             }
             else {
               SANE_Int v = 8;
@@ -192,14 +196,16 @@ extern void doScanningOperation(void *uuid) {
           if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
             int i, j;
             int foundMatch = 0;
-            const char *modes[] = { SANE_VALUE_SCAN_MODE_GRAY, SANE_I18N ("Grayscale"), "Grayscale", NULL };
+            const char *modes[] = { SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
             for (i = 0; modes[i] != NULL; i++) {
               for (j = 0; sod->constraint.string_list[j]; j++) {
                 if (strcmp (modes[i], sod->constraint.string_list[j]) == 0)
                   break;
               }
               if (sod->constraint.string_list[j] != NULL) {
-                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)modes[i], &paramSetRet);
+                char *v = o_strdup(modes[i]);
+                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v, &paramSetRet);
+                free(v);
                 if(status != SANE_STATUS_GOOD) {
                   handleSaneErrors("Cannot set mode", status, paramSetRet);
                   updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -295,7 +301,9 @@ extern void doScanningOperation(void *uuid) {
                   break;
               }
               if (sod->constraint.string_list[j] != NULL) {
-                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)speeds[i], &paramSetRet);
+                char *v = o_strdup(speeds[i]);
+                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v, &paramSetRet);
+                free(v);
                 if(status != SANE_STATUS_GOOD) {
                   handleSaneErrors("Cannot set speed", status, paramSetRet);
                   updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
