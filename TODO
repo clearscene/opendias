@@ -12,6 +12,8 @@ Refactor 'filtering mechanisum' on the document list
 
 Implement 'By Username/Password' access controls
 
+Remove the dependency on glib
+
 
 Phase 2
 -------

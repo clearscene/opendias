@@ -54,7 +54,7 @@ int setup (char *configFile) {
   if (configFile != NULL)
     conf = configFile;
   else
-    conf = "/etc/opendias/opendias.conf";
+    conf = DEFAULT_CONF_FILE;
 
   o_log(INFORMATION, "Using config file: %s", conf);
   if( load_file_to_memory(conf, &location) <= 0 ) {
@@ -235,7 +235,7 @@ void daemonize(char *rundir, char *pidfile) {
 }
 
 void usage(void) {
-    fprintf(stderr,"openDIAS. v0.5.12\n");
+    fprintf(stderr,"openDIAS. v%s\n", PACKAGE_VERSION);
     fprintf(stderr,"usage: opendias <options>\n");
     fprintf(stderr,"\n");
     fprintf(stderr,"Where:\n");

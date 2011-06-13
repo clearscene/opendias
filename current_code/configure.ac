@@ -141,6 +141,8 @@ else
 fi
 
 
+OPENDIAS_LIBS="$OPENDIAS_LIBS -lpthread "
+
 AC_OUTPUT([
 Makefile
 src/Makefile
