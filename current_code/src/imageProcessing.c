@@ -119,19 +119,20 @@ extern void deSkew(unsigned char *pic, double picBytes, double skew, double ppl,
   }
 }
 
-extern char *getTextFromImage(const unsigned char *pic, int bpl, int ppl, int lines) {
+extern char *getTextFromImage(const unsigned char *pic, int bpl, int ppl, int lines, char *lang) {
 
   char *txt = NULL;
 
 #ifdef CAN_OCR
   struct scanCallInfo infoData;
-  infoData.language = (const char*)OCR_LANG_BRITISH;
+  infoData.language = (const char*)lang;
   infoData.imagedata = (const unsigned char*)pic;
   infoData.bytes_per_pixel = 1;
   infoData.bytes_per_line = bpl;;
   infoData.width = ppl;
   infoData.height = lines;
 
+  o_log(DEBUGM, "Just about to extract the text form the image. Expecting to read in the '%s' language", lang);
   runocr(&infoData);
   txt = infoData.ret;
   o_log(DEBUGM, txt);

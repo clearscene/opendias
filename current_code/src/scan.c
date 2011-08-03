@@ -483,7 +483,8 @@ extern void doScanningOperation(void *uuid) {
 
   // Acquire Image & Save Document
   FILE *scanOutFile;
-  if ((scanOutFile = fopen("/tmp/tmp.pnm", "w")) == NULL)
+  char *tmpFile = o_printf("/tmp/%s.pnm", uuid);
+  if ((scanOutFile = fopen(tmpFile, "w")) == NULL)
     o_log(ERROR, "could not open file for output");
   fprintf (scanOutFile, "P5\n# SANE data follows\n%d %d\n%d\n", 
     pars.pixels_per_line, pars.lines,
@@ -636,20 +637,15 @@ extern void doScanningOperation(void *uuid) {
   // Do OCR - on this page
   //
   char *ocrText;
-#ifdef CAN_OCR
   char *shoulddoocr_s = getScanParam(uuid, SCAN_PARAM_DO_OCR);
-  int shoulddoocr=0;
-  if(shoulddoocr_s && 0 == strcmp(shoulddoocr_s, "on") )
-    shoulddoocr = 1;
-  free(shoulddoocr_s);
-
-  if(shoulddoocr==1) {
+#ifdef CAN_OCR
+  if(shoulddoocr_s && 0 != strcmp(shoulddoocr_s, "") ) {
 
     if(request_resolution >= 300 && request_resolution <= 400) {
       o_log(DEBUGM, "attempting OCR");
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
-      char *ocrScanText = getTextFromImage((const unsigned char*)pic, pars.bytes_per_line, pars.pixels_per_line, pars.lines);
+      char *ocrScanText = getTextFromImage((const unsigned char*)pic, pars.bytes_per_line, pars.pixels_per_line, pars.lines, shoulddoocr_s);
 
       ocrText = o_strdup("---------------- page ");
       conCat(&ocrText, page_s);
@@ -670,6 +666,7 @@ extern void doScanningOperation(void *uuid) {
   else
 #endif // CAN_OCR //
     ocrText = o_strdup("");
+  free(shoulddoocr_s);
 
   free(pic);
 
@@ -677,10 +674,12 @@ extern void doScanningOperation(void *uuid) {
   // Convert Raw into JPEG
   //
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
-  char *outFilename = g_strconcat(BASE_DIR,"/scans/",docid_s,"_",page_s,".jpg", NULL);
-  reformatImage(FIF_PGMRAW, "/tmp/tmp.pnm", FIF_JPEG, outFilename);
+  char *outFilename = o_printf("%s/scans/%s_%s.jpg", BASE_DIR, docid_s, page_s);
+  reformatImage(FIF_PGMRAW, tmpFile, FIF_JPEG, outFilename);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   free(page_s);
+  remove(tmpFile);
+  free(tmpFile);
 
 
   // update record

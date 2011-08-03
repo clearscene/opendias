@@ -38,10 +38,25 @@ struct scanCallInfo {
     char *ret;
 };
 
+void signal_handler(int sig) {
+    switch(sig) {
+        case SIGUSR1:
+            o_log(INFORMATION, "Received SIGUSR1 signal.");
+            server_shutdown();
+            exit(EXIT_SUCCESS);
+            break;
+        default:
+            o_log(INFORMATION, "Received signal %s. IGNORING. Try SIGUSR1 to stop the service.", strsignal(sig));
+            break;
+    }
+}
+
 extern "C" void runocr(struct scanCallInfo *info) {
 
     char *ret;
     TessBaseAPI *a = new TessBaseAPI();
+
+    sigaddset(&newSigSet, SIGCHLD);  /* ignore child - i.e. we don't need to wait for it */
 
     // Language is the code of the language for which the data will be loaded.
     // (Codes follow ISO 639-2.) If it is NULL, english (eng) will be loaded.

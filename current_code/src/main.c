@@ -286,6 +286,8 @@ int main (int argc, char **argv) {
     MHD_OPTION_END);
   if (NULL == httpdaemon) {
     o_log(INFORMATION, "Could not create an http service");
+    if(turnToDaemon!=1) 
+      printf("Could not create an http service. Port is already in use?.\n");
     server_shutdown();
     return 1;
   }

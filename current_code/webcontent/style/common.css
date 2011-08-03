@@ -58,7 +58,7 @@
   }
   .innerLeftDisplay {
     float: left;
-    width: 80px;
+    width: 90px;
   }
   .innerLeftDisplay div {
     float: left;
@@ -79,6 +79,9 @@
     float: left;
     position: relative;
     width: 215px;
+  }
+  .row select {
+    margin-top: -2px;
   }
 
   #menu {

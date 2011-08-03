@@ -29,7 +29,15 @@ struct scanCallInfo {
   char *ret;
 };
 
-#define OCR_LANG_BRITISH   "eng"   /*International English */
+#define OCR_LANG_BRITISH     "eng"   /*International English */
+#define OCR_LANG_GERMAN      "deu"   /*German */
+#define OCR_LANG_FRENCH      "fra"   /*French */
+#define OCR_LANG_SPANISH     "spa"   /*Spanish */
+#define OCR_LANG_ITALIAN     "ita"   /*Italian */
+#define OCR_LANG_DUTCH       "nld"   /*Dutch */
+#define OCR_LANG_BPORTUGUESE "por"   /*Brasilian Portuguese */
+#define OCR_LANG_VIETNAMESE  "vie"   /*Vietnamese */
+
 extern void runocr(struct scanCallInfo*);
 
 #endif /* OCR_PLUG */

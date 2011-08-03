@@ -298,10 +298,10 @@ $(document).ready(function() {
              });
              drawSkew(document.getElementById("skewDisplay_c_"+device).getContext("2d"), $("#skewDisplay_p_"+device), 0);
              $("#scanButton_"+device).click( function() {
-               var ocr = "-";
-               if($("#ocr_"+device).is(':checked')) {
-                 ocr = "on";
-               }
+               //var ocr = "-";
+               //if($("#ocr_"+device).is(':checked')) {
+               //  ocr = "on";
+               //}
                // Stop the form from being changed after submittion
                $("#format_"+device).attr('disabled', 'disabled');
                $("#pagesSlider_"+device).slider('disable');
@@ -322,7 +322,7 @@ $(document).ready(function() {
                                pages: $("#pages_"+device).val(),
                                skew: $("#skew_"+device).val(),
                                resolution: $("#resolution_"+device).val(),
-                               ocr: ocr,
+                               ocr: $("#ocr_"+device).val(),
                                pagelength: $("#length_"+device).val(),
                               },
                         cache: false,

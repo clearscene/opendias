@@ -207,7 +207,7 @@ extern void request_completed (void *cls, struct MHD_Connection *connection, voi
   //  pthread_join(t, NULL);
   //  o_log(ERROR, "finish waiting for the child to come home");
   //}
-  o_log(DEBUGM, "end of REQUEST COMPLETE");
+  //o_log(DEBUGM, "end of REQUEST COMPLETE");
 
 }
 

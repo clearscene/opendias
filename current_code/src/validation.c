@@ -23,6 +23,7 @@
 #include "validation.h"
 #include "debug.h"
 #include "utils.h"
+#include "ocr_plug.h"
 
 extern char *getPostData(gpointer post_hash, char *key) {
   struct post_data_struct *data_struct = (struct post_data_struct *)g_hash_table_lookup(post_hash, key);
@@ -216,6 +217,24 @@ static int checkFormat(char *val) {
 }
 
 //
+static int checkOCRLanguage(char *val) {
+
+  if ( 0 != strcmp(val, "" )                // No OCR
+    || 0 != strcmp(val, OCR_LANG_BRITISH ) 
+    || 0 != strcmp(val, OCR_LANG_GERMAN ) 
+    || 0 != strcmp(val, OCR_LANG_FRENCH ) 
+    || 0 != strcmp(val, OCR_LANG_SPANISH ) 
+    || 0 != strcmp(val, OCR_LANG_ITALIAN ) 
+    || 0 != strcmp(val, OCR_LANG_DUTCH ) 
+    || 0 != strcmp(val, OCR_LANG_BPORTUGUESE ) 
+    || 0 != strcmp(val, OCR_LANG_VIETNAMESE ) ) {
+    return 0;
+  }
+  o_log(ERROR, "Validation failed: Unknown ocr language");
+  return 1;
+}
+
+//
 static int checkPageLength(char *val) {
   if(checkStringIsInt(val)) return 1;
   if(checkSaneRange(val, 20, 100)) return 1;
@@ -303,7 +322,7 @@ extern int validate(GHashTable *postdata, char *action) {
     ret += checkSkew(getPostData(postdata, "skew"));
     ret += checkResolution(getPostData(postdata, "resolution"));
     ret += checkPages(getPostData(postdata, "pages"));
-    ret += checkCheckbox(getPostData(postdata, "ocr"));
+    ret += checkOCRLanguage(getPostData(postdata, "ocr"));
     ret += checkPageLength(getPostData(postdata, "pagelength"));
   }
 
