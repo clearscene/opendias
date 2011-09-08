@@ -242,10 +242,12 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
 
   if ( locationLimited == 1 ) {
     const union MHD_ConnectionInfo *c_info;
+    struct sockaddr_in *p;
     // Get the client address
     c_info = MHD_get_connection_info(connection, MHD_CONNECTION_INFO_CLIENT_ADDRESS );
-    if ( AF_INET == c_info->client_addr->sin_family) {
-      inet_ntop(c_info->client_addr->sin_family, &(c_info->client_addr->sin_addr), client_address, INET_ADDRSTRLEN);
+    p = (struct sockaddr_in *) c_info->client_addr;
+    if ( AF_INET == p->sin_family) {
+      inet_ntop(p->sin_family, &(p->sin_addr), client_address, INET_ADDRSTRLEN);
     }
 
     char *sql = o_strdup("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan FROM location_access LEFT JOIN access_role ON location_access.role = access_role.role WHERE '");
