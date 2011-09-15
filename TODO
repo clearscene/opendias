@@ -2,11 +2,17 @@
 Phase 1
 -------
 
+Rationalise & formalise 'comms XML' between frontend (ajax calls) and the backend
+
+Implement 'tag filtering' on the search of the document list
+
+Implement 'manage tags'
+
+Implement 'action required' flag
+
 Package into .deb and .rpm and get included into major repositories
 
 Implement the remainder of the test plan 'current_code/test/regressionTests/testplan'
-
-Implement 'tag filtering' on the search of the document list
 
 Refactor 'filtering mechanisum' on the document list
 
@@ -18,6 +24,10 @@ Remove the dependency on glib
 Phase 2
 -------
 
+Print documents
+
+Print doc details label (to stick onto doc after scanning)
+
 Implement 'OCR now' on document detail page.
 
 Implement 'play audio from OCR' on document detail oage.
@@ -27,8 +37,6 @@ Improve the tag selection on document detail page.
 
 Phase 3
 -------
-
-Rationalise & formalise 'comms XML' between frontend (ajax calls) and the backend
 
 Implement 'backend call' tests
 
