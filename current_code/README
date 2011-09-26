@@ -118,3 +118,7 @@ or use a forwarding proxy (eg Apache) to remove the port number. eg:
 
   RewriteRule ^/opendias(.*)$ http://myServer.com:8988/opendias$1 [P]
 
+to be able to point a web browser at:
+
+  http://myproxyServer.com/opendias
+
