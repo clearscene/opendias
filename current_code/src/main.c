@@ -113,7 +113,7 @@ int setup (char *configFile) {
 
 }
 
-void server_shutdown() {
+extern void server_shutdown() {
   o_log(INFORMATION, "openDias service is shutting down....");
   o_log(DEBUGM, "httpd stop");
   MHD_stop_daemon (httpdaemon);

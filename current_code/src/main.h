@@ -33,4 +33,6 @@ enum {
   JPG_FILETYPE,
 };
 
+extern void server_shutdown(void);
+
 #endif /* MAIN */
