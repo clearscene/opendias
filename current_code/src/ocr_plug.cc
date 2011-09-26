@@ -22,7 +22,12 @@
 #include <tesseract/baseapi.h>
 #include <utils.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <signal.h>
+
+#include "debug.h"
+#include "main.h"
 
 #ifndef NULL
 #define NULL 0L
@@ -38,6 +43,7 @@ struct scanCallInfo {
     char *ret;
 };
 
+/*
 void signal_handler(int sig) {
     switch(sig) {
         case SIGUSR1:
@@ -50,11 +56,13 @@ void signal_handler(int sig) {
             break;
     }
 }
+*/
 
 extern "C" void runocr(struct scanCallInfo *info) {
 
     char *ret;
     TessBaseAPI *a = new TessBaseAPI();
+    sigset_t newSigSet;
 
     sigaddset(&newSigSet, SIGCHLD);  /* ignore child - i.e. we don't need to wait for it */
 
