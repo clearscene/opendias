@@ -4,6 +4,10 @@ Phase 1
 
 Rationalise & formalise 'comms XML' between frontend (ajax calls) and the backend
 
+Generate API documentation
+
+Check the use of "extern" where it's used.
+
 Implement 'tag filtering' on the search of the document list
 
 Implement 'manage tags'
