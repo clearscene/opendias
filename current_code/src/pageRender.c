@@ -55,10 +55,9 @@
  * Public Functions
  *
  */
-extern char *populate_doclist (void) {
+extern char *getDocList (void) {
 
   char *sql, *docid, *title, *type, *humanReadableDate;
-  int xmlRowLen = 0;
 
   // Generate the doc list SQL
   //
@@ -67,7 +66,7 @@ extern char *populate_doclist (void) {
   // Generate the response
   //
   int rows = 0;
-  char *docList = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?><docList>");
+  char *rowsData = o_strdup("");
   if(runquery_db("1", sql)) {
     do {
       // Append a row and fill in some data
@@ -95,32 +94,22 @@ extern char *populate_doclist (void) {
                                      o_strdup(readData_db("1", "docdatem")), 
                                      o_strdup(readData_db("1", "docdated")) );
 
-      xmlRowLen = 80; // the legth of the plain xml string
-      xmlRowLen += strlen(docid);
-      xmlRowLen += strlen(title);
-      xmlRowLen += strlen(type);
-      xmlRowLen += strlen(humanReadableDate);
-      char *row = malloc(xmlRowLen);
-
-      sprintf(row, "<row><docid>%s</docid><title><![CDATA[%s]]></title><type>%s</type><date>%s</date></row>", 
+      o_concatf(&rowsData, "<Row><docid>%s</docid><title><![CDATA[%s]]></title><type>%s</type><date>%s</date></Row>", 
                          docid, title, type, humanReadableDate);
-      conCat(&docList, row);
       free(docid);
       free(title);
       free(type);
       free(humanReadableDate);
-      free(row);
 
     } while (nextRow("1"));
   }
   free_recordset("1");
   free(sql);
 
-  conCat(&docList, "<count>");
-  char *rowsc = itoa(rows, 10);
-  conCat(&docList, rowsc);
-  free(rowsc);
-  conCat(&docList, "</count></docList>");
+  char *xml_template = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DocList><Rows>%s</Rows><count>%i</count></DocList></Response>");
+  char *docList = o_printf(xml_template, rowsData, rows);
+  free(rowsData);
+  free(xml_template);
 
   return docList;
 }
@@ -129,15 +118,15 @@ extern char *populate_doclist (void) {
 
 extern char *getScannerList() {
 
-  char *answer;
+  char *answer = NULL;
 #ifdef CAN_SCAN
   SANE_Status status;
-  const SANE_Device **device_list;
+  const SANE_Device **SANE_device_list;
   SANE_Handle *openDeviceHandle;
   const SANE_Option_Descriptor *sod;
-  int hlp=0, size;
+  int hlp=0;
   int scanOK=FALSE, i=0, resolution=0, minRes=50, maxRes=50;
-  char *vendor, *model, *type, *name, *scannerHost, *format, *replyTemplate, *device, *resolution_s, *maxRes_s, *minRes_s, *ipandmore, *ip;
+  char *vendor, *model, *type, *name, *scannerHost, *format, *replyTemplate, *deviceList, *resolution_s, *maxRes_s, *minRes_s, *ipandmore, *ip;
   struct hostent *hp;
   long addr;
 
@@ -148,10 +137,10 @@ extern char *getScannerList() {
     return NULL;
   }
 
-  device_list = NULL;
-  status = sane_get_devices (&device_list, SANE_FALSE);
+  SANE_device_list = NULL;
+  status = sane_get_devices (&SANE_device_list, SANE_FALSE);
   if(status == SANE_STATUS_GOOD) {
-    if (device_list && device_list[0]) {
+    if (SANE_device_list && SANE_device_list[0]) {
       scanOK = TRUE;
       o_log(DEBUGM, "device(s) found");
     }
@@ -162,19 +151,20 @@ extern char *getScannerList() {
     o_log(WARNING, "Checking for devices failed");
 
   if(scanOK) {
-    answer = o_strdup("<devices>");
-    for (i=0 ; device_list[i] ; i++) {
+    replyTemplate = o_strdup("<Device><vendor>%s</vendor><model>%s</model><type>%s</type><name>%s</name><Formats>%s</Formats><max>%s</max><min>%s</min><default>%s</default><host>%s</host></Device>");
+    deviceList = o_strdup("");
+    for (i=0 ; SANE_device_list[i] ; i++) {
       o_log(DEBUGM, "sane_open");
-      status = sane_open (device_list[i]->name, (SANE_Handle)&openDeviceHandle);
+      status = sane_open (SANE_device_list[i]->name, (SANE_Handle)&openDeviceHandle);
       if(status != SANE_STATUS_GOOD) {
-        o_log(ERROR, "Could not open: %s %s with error: %s", device_list[i]->vendor, device_list[i]->model, status);
+        o_log(ERROR, "Could not open: %s %s with error: %s", SANE_device_list[i]->vendor, SANE_device_list[i]->model, status);
         return NULL;
       }
 
-      vendor = o_strdup(device_list[i]->vendor);
-      model = o_strdup(device_list[i]->model);
-      type = o_strdup(device_list[i]->type);
-      name = o_strdup(device_list[i]->name);
+      vendor = o_strdup(SANE_device_list[i]->vendor);
+      model = o_strdup(SANE_device_list[i]->model);
+      type = o_strdup(SANE_device_list[i]->type);
+      name = o_strdup(SANE_device_list[i]->name);
       format = o_strdup("<format>Grey Scale</format>");
       propper(vendor);
       propper(model);
@@ -253,16 +243,12 @@ extern char *getScannerList() {
 
       // Build Reply
       //
-      replyTemplate = o_strdup("<device><vendor>%s</vendor><model>%s</model><type>%s</type><name>%s</name><formats>%s</formats><max>%s</max><min>%s</min><default>%s</default><host>%s</host></device>");
       resolution_s = itoa(resolution,10);
       maxRes_s = itoa(maxRes,10);
       minRes_s = itoa(minRes,10);
-      size = strlen(replyTemplate) + strlen(vendor) + strlen(model) + strlen(type) + strlen(name)
-           + strlen(format) + strlen(maxRes_s) + strlen(minRes_s) + strlen(resolution_s) + strlen(scannerHost);
-      device = malloc(size);
-      sprintf(device, replyTemplate, vendor, model, type, name, format, maxRes_s, minRes_s, resolution_s, scannerHost);
+      o_concatf(&deviceList, replyTemplate, 
+                           vendor, model, type, name, format, maxRes_s, minRes_s, resolution_s, scannerHost);
 
-      free(replyTemplate);
       free(vendor);
       free(model);
       free(type);
@@ -272,19 +258,14 @@ extern char *getScannerList() {
       free(minRes_s);
       free(resolution_s);
       free(scannerHost);
-
-      conCat(&answer, device);
-      free(device);
     }
-    conCat(&answer, "</devices>");
+    free(replyTemplate);
+    answer = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScannerList><Devices>%s</Devices></ScannerList></Response>", deviceList);
+    free(deviceList);
   }
-  else
-#endif // CAN_SCAN //
-    answer = NULL;
 
-#ifdef CAN_SCAN
-   o_log(DEBUGM, "sane_exit");
-   sane_exit();
+  o_log(DEBUGM, "sane_exit");
+  sane_exit();
 #endif // CAN_SCAN //
 
   return answer;
@@ -304,7 +285,7 @@ extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, 
   char *scanUuid;
 
   // Generate a uuid and scanning params object
-  scanUuid = malloc(36+1);
+  scanUuid = malloc(36+1); 
   uuid_generate(uu);
   uuid_unparse(uu, scanUuid);
 
@@ -334,9 +315,7 @@ extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, 
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
-  ret = o_strdup("<scanuuid>");
-  conCat(&ret, scanUuid);
-  conCat(&ret, "</scanuuid>");
+  ret = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DoScan><scanuuid>%s</scanuuid></DoScan></Response>", scanUuid);
 
 #endif // CAN_SCAN //
   return ret;
@@ -350,11 +329,9 @@ extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info
   char *sql;
   int status=0, rc;
 
-  sql = o_strdup("SELECT status \
+  sql = o_printf("SELECT status \
                   FROM scan_progress \
-                  WHERE client_id = '");
-  conCat(&sql, scanid);
-  conCat(&sql, "'");
+                  WHERE client_id = '%s'", scanid);
 
   if(runquery_db("1", sql)) {
     do {
@@ -385,20 +362,17 @@ extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
 #endif // CAN_SCAN //
-  return o_strdup("<result>OK</result>");
+  return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><NextPageReady><result>OK</result></NextPageReasdy></Response>");
 }
 
 
-extern char *getScanProgress(char *scanid) {
+extern char *getScanningProgress(char *scanid) {
 
-  char *sql, *status=0, *value=0, *ret_t, *ret;
-  int s;
+  char *sql, *status=0, *value=0, *ret;
 
-  sql = o_strdup("SELECT status, value \
-      FROM scan_progress \
-      WHERE client_id = '");
-  conCat(&sql, scanid);
-  conCat(&sql, "'");
+  sql = o_printf("SELECT status, value \
+                  FROM scan_progress \
+                  WHERE client_id = '%s'", scanid);
 
   if(runquery_db("1", sql)) {
     do {
@@ -411,40 +385,27 @@ extern char *getScanProgress(char *scanid) {
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
-  ret_t = o_strdup("<scanprogress><status>%s</status><value>%s</value></scanprogress>");
-  s = strlen(ret_t) + strlen(status) + strlen(value);
-  ret = malloc(s);
-  sprintf(ret, ret_t, status, value);
+  ret = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScanningProgress><status>%s</status><value>%s</value></ScanningProgress></Response>", status, value);
   free(status);
   free(value);
-  free(ret_t);
 
   return ret;
 }
 
 extern char *docFilter(char *textSearch, char *startDate, char *endDate) {
 
-  char *sql, *docid, *row, *template, *textWhere=NULL, *dateWhere=NULL, *tagWhere=NULL;
-  int s;
+  char *sql, *textWhere=NULL, *dateWhere=NULL, *tagWhere=NULL;
 
   // Filter by title or OCR
   //
   if( textSearch!=NULL && strlen(textSearch) ) {
-    template = o_strdup("(title LIKE '%%%s%%' OR ocrText LIKE '%%%s%%') ");
-    s = strlen(template) + ( 2 * strlen(textSearch) );
-    textWhere = malloc(s);
-    sprintf(textWhere, template, textSearch, textSearch);
-    free(template);
+    textWhere = o_printf("(title LIKE '%%%s%%' OR ocrText LIKE '%%%s%%') ", textSearch, textSearch);
   }
 
   // Filter by Doc Date
   //
   if( startDate && strlen(startDate) && endDate && strlen(endDate) ) {
-    template = o_strdup("date(docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2)) BETWEEN date('%s') AND date('%s') ");
-    s = strlen(template) + strlen(startDate) + strlen(endDate);
-    dateWhere = malloc(s);
-    sprintf(dateWhere, template, startDate, endDate);
-    free(template);
+    dateWhere = o_printf("date(docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2)) BETWEEN date('%s') AND date('%s') ", startDate, endDate);
   }
 
   // Filter By Tags
@@ -486,55 +447,50 @@ extern char *docFilter(char *textSearch, char *startDate, char *endDate) {
 
   // Get Results
   //
-  char *docList = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?><results>");
+  char *rows = o_strdup("");
   if(runquery_db("1", sql)) {
     do {
-      docid = o_strdup(readData_db("1", "docid"));
-
-      row = malloc(16+strlen(docid));
-      sprintf(row, "<docid>%s</docid>", docid);
-      conCat(&docList, row);
-      free(docid);
-      free(row);
-
+      o_concatf(&rows, "<docid>%s</docid>", readData_db("1", "docid"));
     } while (nextRow("1"));
   }
   free_recordset("1");
   free(sql);
 
-  conCat(&docList, "</results>");
+  char *docList = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DocFilter><Results>%s</Results></DocFilter></Response>", rows);
+  free(rows);
 
   return docList;
 }
 
 extern char *getAccessDetails() {
 
-  char *access = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>");
-
   // Access by location
-  conCat(&access, "<accesschecks><locationaccess>");
   char *sql = o_strdup("SELECT location, r.rolename FROM location_access a left join access_role r on a.role = r.role");
+  char *locationAccess = o_strdup("");
   if(runquery_db("3", sql)) {
     do {
-      concatf(&access, "<access><location>%s</location><role>%s</role></access>", readData_db("3", "location"), readData_db("3", "rolename"));
+      o_concatf(&locationAccess, "<Access><location>%s</location><role>%s</role></Access>", 
+                                readData_db("3", "location"), readData_db("3", "rolename"));
     } while (nextRow("3"));
   }
   free_recordset("3");
   free(sql);
-  conCat(&access, "</locationaccess>");
 
   // Access by user
-  conCat(&access, "<useraccess>");
   sql = o_strdup("SELECT * FROM user_access a left join access_role r on a.role = r.role");
+  char *userAccess = o_strdup("");
   if(runquery_db("4", sql)) {
     do {
-      concatf(&access, "<access><user>%s</user><role>%s</role></access>", readData_db("4", "username"), readData_db("4", "rolename"));
+      o_concatf(&userAccess, "<Access><user>%s</user><role>%s</role></Access>", 
+                            readData_db("4", "username"), readData_db("4", "rolename"));
     } while (nextRow("4"));
   }
   free_recordset("4");
   free(sql);
-  conCat(&access, "</useraccess>");
-  conCat(&access, "</accesschecks>");
+
+  char *access = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><AccessDetails><LocationAccess>%s</LocationAccess><UserAccess>%s</UserAccess></AccessDetails></Response>", locationAccess, userAccess);
+  free(locationAccess);
+  free(userAccess);
 
   return access;
 }
@@ -564,7 +520,7 @@ extern char *controlAccess(char *submethod, char *location, char *user, char *pa
     return NULL;
   }
 
-  return o_strdup("<html><HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/accessControls.html\"></HEAD><body></body></html>");
+  return o_strdup("<html><HEAD><title>refresh</title><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/accessControls.html\"></HEAD><body></body></html>");
 }
 
 extern char *titleAutoComplete(char *startsWith) {
@@ -572,9 +528,7 @@ extern char *titleAutoComplete(char *startsWith) {
   int notFirst = 0;
   char *result = o_strdup("{\"results\":[");
   char *line = o_strdup("{\"title\":\"%s\"}");
-  char *sql = o_strdup("SELECT DISTINCT title FROM docs WHERE title like '");
-  conCat(&sql, startsWith);
-  conCat(&sql, "%'");
+  char *sql = o_printf("SELECT DISTINCT title FROM docs WHERE title like '%s%%'", startsWith);
 
   if(runquery_db("1", sql)) {
     do {

@@ -19,8 +19,7 @@
 #ifndef DOCEDITOR
 #define DOCEDITOR
 
-extern void openDocEditor_window (char *);
-extern char *openDocEditor (char *);
+extern char *getDocDetail (char *);
 extern char *updateDocDetails(char *, char *, char *);
 extern char *updateTagLinkage(char *, char *, char *);
 extern char *doDelete (char *);

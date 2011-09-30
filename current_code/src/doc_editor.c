@@ -45,8 +45,7 @@ extern char *doDelete (char *documentId) {
 
   int pages;
 
-  char *sql = o_strdup("SELECT * FROM docs WHERE docid = ");
-  conCat(&sql, documentId);
+  char *sql = o_printf("SELECT pages FROM docs WHERE docid = %s", documentId);
   if(runquery_db("1", sql)) {
     char *pages_s = o_strdup(readData_db("1", "pages"));
     pages = atoi(pages_s);
@@ -61,27 +60,20 @@ extern char *doDelete (char *documentId) {
   free_recordset("1");
   free(sql);
 
-  char *docPrefix = o_strdup(BASE_DIR);
-  conCat(&docPrefix ,"/scans/");
-  conCat(&docPrefix ,documentId);
-  conCat(&docPrefix ,"_");
+  char *docTemplate = o_strdup("%s/scans/%s_%i.jpg");
   int i;
   for(i = 1 ; i <= pages ; i++) {
-    char *docPath = o_strdup(docPrefix);
-    char *page_num = itoa(i, 10);
-    conCat(&docPath, page_num);
-    conCat(&docPath, ".jpg");
+    char *docPath = o_printf(docTemplate, BASE_DIR, documentId, i);
     o_log(INFORMATION, docPath);
     unlink(docPath);
     free(docPath);
-    free(page_num);
   }
-  free(docPrefix);
+  free(docTemplate);
 
   removeDocTags(documentId);
   removeDoc(documentId);
 
-  return o_strdup("<doc>OK</doc>");;
+  return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DeleteDoc><status>OK</status></DeleteDoc></Response>");;
 }
 
 
@@ -102,16 +94,52 @@ void readTextParser () {
 
 
 
-extern char *openDocEditor (char *documentId) {
+extern char *getDocDetail (char *documentId) {
 
-  char *sql, *tagid, *tagname, *selected, *tagTemp, *pages, *title, 
-       *scanDate, *type, *humanReadableDate, *ocrText, *ppl, *lines, *tags;
-  int size;
+  char *sql, *tags, *tagsTemplate, *title, *humanReadableDate,
+      *returnXMLtemplate, *returnXML;
+
+  // Validate document id
+  //
+  sql = o_printf("SELECT docid FROM docs WHERE docid = %s", documentId);
+  if(!runquery_db("1", sql)) {
+    o_log(ERROR, "Could not select record.");
+    free_recordset("1");
+    free(sql);
+    return NULL;
+  }
+  free_recordset("1");
+  free(sql);
+
+
+
+  // Get a list of tags
+  //
+  tags = o_strdup("");
+  tagsTemplate = o_strdup("<Tag><tagid>%s</tagid><tagname>%s</tagname><selected>%s</selected></Tag>");
+  sql = o_printf(
+    "SELECT tags.tagid, tagname, dt.tagid selected \
+    FROM tags LEFT JOIN \
+    (SELECT * \
+    FROM doc_tags \
+    WHERE docid=%d) dt \
+    ON tags.tagid = dt.tagid \
+    ORDER BY selected DESC, tagname", documentId);
+
+  if(runquery_db("1", sql)) {
+    do  {
+      o_concatf(&tags, tagsTemplate, readData_db("1", "tagid"), readData_db("1", "tagname"), readData_db("1", "selected"));
+    } while (nextRow("1"));
+  }
+  free_recordset("1");
+  free(sql);
+  free(tagsTemplate);
+
+
 
   // Get docinformation
   //
-  sql = o_strdup("SELECT * FROM docs WHERE docid = ");
-  conCat(&sql, documentId);
+  sql = o_printf("SELECT * FROM docs WHERE docid = %s", documentId);
   if(!runquery_db("1", sql)) {
     o_log(ERROR, "Could not select record.");
     free_recordset("1");
@@ -127,90 +155,45 @@ extern char *openDocEditor (char *documentId) {
     title = o_strdup("New (untitled) document.");
   }
 
-  scanDate = o_strdup(readData_db("1", "entrydate"));
-  ppl = o_strdup(readData_db("1", "ppl"));
-  pages = o_strdup(readData_db("1", "pages"));
-  lines = o_strdup(readData_db("1", "lines"));
-  type = o_strdup(readData_db("1", "filetype"));
-  ocrText = o_strdup(readData_db("1", "ocrtext"));
-
   humanReadableDate = dateHuman( o_strdup(readData_db("1", "docdatey")),
                                  o_strdup(readData_db("1", "docdatem")),
                                  o_strdup(readData_db("1", "docdated")) );
 
-  free_recordset("1");
-  free(sql);
-
-
-  char *tagsTemplate = o_strdup("<tag><tagid>%s</tagid><tagname>%s</tagname><selected>%s</selected></tag>");
-
-  // Get a list of tags
-  //
-  tags = o_strdup("");
-  sql = o_strdup(
-    "SELECT tags.tagid, tagname, dt.tagid selected \
-    FROM tags LEFT JOIN \
-    (SELECT * \
-    FROM doc_tags \
-    WHERE docid=");
-  conCat(&sql, documentId);
-  conCat(&sql, ") dt \
-    ON tags.tagid = dt.tagid \
-    ORDER BY selected DESC, tagname");
-
-  if(runquery_db("1", sql)) {
-    do  {
-      // Append a row and fill in some data
-      tagid = o_strdup(readData_db("1", "tagid"));
-      tagname = o_strdup(readData_db("1", "tagname"));
-      selected = o_strdup(readData_db("1", "selected"));
-
-      size = strlen(tagsTemplate) + strlen(tagid) + strlen(tagname) + strlen(selected);
-      tagTemp = malloc(size);
-      sprintf(tagTemp, tagsTemplate, tagid, tagname, selected);
-      conCat(&tags, tagTemp);
-
-      free(tagTemp);
-      free(tagid);
-      free(tagname);
-      free(selected);
-    } while (nextRow("1"));
-  }
-  free_recordset("1");
-  free(sql);
-  free(tagsTemplate);
 
 
   // Build Response
   //
-  char *returnXMLtemplate = o_strdup("<docDetail><docid>%s</docid><title><![CDATA[%s]]></title><scanDate>%s</scanDate><type>%s</type><docDate>%s</docDate><pages>%s</pages><extractedText><![CDATA[%s]]></extractedText><x>%s</x><y>%s</y><tags>%s</tags></docDetail>");
-  size = strlen(returnXMLtemplate);
-  size += strlen(documentId);
-  size += strlen(title);
-  size += strlen(scanDate);
-  size += strlen(type);
-  size += strlen(humanReadableDate);
-  size += strlen(pages);
-  size += strlen(ocrText);
-  size += strlen(ppl);
-  size += strlen(lines);
-  size += strlen(tags);
-  char *returnXML = malloc(size);
-  sprintf(returnXML, returnXMLtemplate, documentId, title, scanDate, type, humanReadableDate, pages, ocrText, ppl, lines, tags);
+  returnXMLtemplate = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\
+<Response>\
+ <DocDetail>\
+  <docid>%s</docid>\
+  <title><![CDATA[%s]]></title>\
+  <scanDate>%s</scanDate>\
+  <type>%s</type>\
+  <docDate>%s</docDate>\
+  <pages>%s</pages>\
+  <extractedText><![CDATA[%s]]></extractedText>\
+  <x>%s</x>\
+  <y>%s</y>\
+  <Tags>%s</Tags>\
+ </DocDetail>\
+</Response>");
+  returnXML = o_printf(returnXMLtemplate, 
+                            documentId, title, readData_db("1", "entrydate"), readData_db("1", "filetype"), 
+                            humanReadableDate, readData_db("1", "pages"), readData_db("1", "ocrtext"), 
+                            readData_db("1", "ppl"), readData_db("1", "lines"), tags);
 
+  free_recordset("1");
+  free(sql);
   free(returnXMLtemplate);
   free(title);
-  free(scanDate);
-  free(type);
   free(humanReadableDate);
-  free(pages);
-  free(ocrText);
-  free(ppl);
-  free(lines);
   free(tags);
 
   return returnXML;
 }
+
+
 
 extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
 
@@ -241,7 +224,7 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
     rc = updateDocValue(docid, kkey, vvalue);
 
   if(rc) return NULL;
-  else return o_strdup("<doc>OK</doc>");;
+  else return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><UpdateDocDetails><status>OK</status></UpdateDocDetails></Response>");
 }
 
 extern char *updateTagLinkage(char *docid, char *tagid, char *add_remove) {
@@ -253,7 +236,7 @@ extern char *updateTagLinkage(char *docid, char *tagid, char *add_remove) {
   else return NULL;
 
   if(rc == 1) return NULL;
-  else return o_strdup("<doc>OK</doc>");;
+  else return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><MoveTag><status>OK</status></MoveTag></Response>");
 }
 
 
