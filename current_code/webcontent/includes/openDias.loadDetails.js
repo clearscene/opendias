@@ -40,7 +40,8 @@ $(document).ready(function() {
   $('#playAudioLink').click(function(){
                                $.ajax({ url: "/opendias/dynamic",
                                         dataType: "xml",
-                                        data: {action: "getAudio", docid: getUrlVars()['docid']},
+                                        data: {action: "getAudio", 
+                                              docid: getUrlVars()['docid']},
                                         cache: false,
                                         type: "POST",
                                         success: function(data){
@@ -48,7 +49,7 @@ $(document).ready(function() {
                                                     alert("Unable to get the audio: "+$(data).find('error').text());
                                                     return 1;
                                                   }
-                                                 id = $(data).find('filename').text();
+                                                 id = $(data).find('Audio').find('filename').text();
                                                  $('#audio').attr('src','/audio/'+id);
                                                  }
                                         });
@@ -57,7 +58,8 @@ $(document).ready(function() {
 
   $.ajax({ url: "/opendias/dynamic",
          dataType: "xml",
-         data: {action: "getDocDetail", docid: getUrlVars()['docid']},
+         data: {action: "getDocDetail", 
+                docid: getUrlVars()['docid']},
          cache: false,
          type: "POST",
          success: function(data){
@@ -65,52 +67,52 @@ $(document).ready(function() {
              alert("Unable to get document details: "+$(data).find('error').text());
              return 1;
            }
-           officialDocId = $(data).find('docid').text();
+           officialDocId = $(data).find('DocDetail').find('docid').text();
            $("#docid").text( officialDocId );
-           $("#title").val( $(data).find('title').text() );
-           $("#ocrtext").val( $(data).find('extractedText').text() );
-           $("#docDate").val( $(data).find('docDate').text() );
-           $("#scanDate").append(document.createTextNode( $(data).find('scanDate').text() ));
-           $("#type").append(document.createTextNode( getTypeDescription($(data).find('type').text()) ));
+           $("#title").val( $(data).find('DocDetail').find('title').text() );
+           $("#ocrtext").val( $(data).find('DocDetail').find('extractedText').text() );
+           $("#docDate").val( $(data).find('DocDetail').find('docDate').text() );
+           $("#scanDate").append(document.createTextNode( $(data).find('DocDetail').find('scanDate').text() ));
+           $("#type").append(document.createTextNode( getTypeDescription($(data).find('DocDetail').find('type').text()) ));
 
            //
            // Doc type display options.
-           if( $(data).find('type').text() == "1" ) { // ODF Documents
+           if( $(data).find('DocDetail').find('type').text() == "1" ) { // ODF Documents
               $("#slider").append("<a href='/opendias/scans/"+officialDocId+".odt' target='_new'>Download ODF Document</a>");
            }
 
-           else if( $(data).find('type').text() == "2" || $(data).find('type').text() == "4") {
+           else if( $(data).find('DocDetail').find('type').text() == "2" || $(data).find('DocDetail').find('type').text() == "4") {
              // Set images and default width
-             for( x=1 ; x<=parseInt($(data).find('pages').text()) ; x++ ) {
+             for( x=1 ; x<=parseInt($(data).find('DocDetail').find('pages').text()) ; x++ ) {
                $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage"+x+"' alt='' src='/opendias/scans/"+officialDocId+"_"+x+".jpg' /></div></li>");
                $("#scanImage"+x).css("width", "300px");
              }
 
              // setup the slider
-             $("#slider li").css("height", 30+($(data).find('y').text() * ( 300 / $(data).find('x').text() ))+"px" );
-             if($(data).find('pages').text() != "1") {
+             $("#slider li").css("height", 30+($(data).find('DocDetail').find('y').text() * ( 300 / $(data).find('DocDetail').find('x').text() ))+"px" );
+             if($(data).find('DocDetail').find('pages').text() != "1") {
                $("#slider").easySlider({prevText:'', nextText:''});
              }
 
              // make eachimage zoomable
-             for( x=1 ; x<=parseInt($(data).find('pages').text()) ; x++ ) {
+             for( x=1 ; x<=parseInt($(data).find('DocDetail').find('pages').text()) ; x++ ) {
                $("#scanImage"+x).parent().gzoom({
                                    sW: 300,
-                                   sH: $(data).find('y').text() * ( 300 / $(data).find('x').text() ),
-                                   lW: $(data).find('x').text(),
-                                   lH: $(data).find('y').text(), 
+                                   sH: $(data).find('DocDetail').find('y').text() * ( 300 / $(data).find('DocDetail').find('x').text() ),
+                                   lW: $(data).find('DocDetail').find('x').text(),
+                                   lH: $(data).find('DocDetail').find('y').text(), 
                                    lighbox: false
                                    });
              }
            }
 
-           else if( $(data).find('type').text() == "3" ) { // PDF Documents
+           else if( $(data).find('DocDetail').find('type').text() == "3" ) { // PDF Documents
               $("#slider").append("<a href='/opendias/scans/"+officialDocId+".pdf' target='_new'>Download PDF Document</a>");
            }
 
            $("#docDate").datepicker( {dateFormat:"yy/mm/dd"} );
 
-           $(data).find('tags').find('tag').each( function() {
+           $(data).find('DocDetail').find('Tags').find('Tag').each( function() {
                applyNewRow( $(this).find("tagid").text(),
                             $(this).find("tagname").text(),
                             $(this).find("selected").text()

@@ -54,12 +54,12 @@ $(document).ready(function() {
              alert("Unable to get access information: "+$(data).find('error').text());
              return 1;
            }
-           $(data).find('accesschecks').find('locationaccess').find('access').each( function() {
+           $(data).find('AccessChecks').find('LocationAccess').find('Access').each( function() {
                applyLocationRow($(this).find("location").text(),
                                 $(this).find("role").text()
                                 );
            });
-           $(data).find('accesschecks').find('useraccess').find('access').each( function() {
+           $(data).find('AccessChecks').find('UserAccess').find('Access').each( function() {
                applyUserRow(    $(this).find("user").text(),
                                 $(this).find("role").text()
                                 );

@@ -48,7 +48,7 @@ function showStatus(dev, canv, prog) {
 }
 
 
-function getScanProgress (progressId, device) {
+function getScanningProgress (progressId, device) {
 
   $.ajax({ url: "/opendias/dynamic",
 	 dataType: "xml",
@@ -64,8 +64,8 @@ function getScanProgress (progressId, device) {
            }
 
            var finish = 0;
-           status = parseInt( $(dta).find('status').text() );
-           vvalue = parseInt( $(dta).find('value').text() );
+           status = parseInt( $(dta).find('ScanningProgress').find('status').text() );
+           vvalue = parseInt( $(dta).find('ScanningProgress').find('value').text() );
 
            if( status == 0 ) { // SCAN_IDLE,
              $('#status_'+device).text("Setting up.");
@@ -168,7 +168,7 @@ function getScanProgress (progressId, device) {
            }
 
            if(finish == 0) {
-             setTimeout("getScanProgress('"+progressId+"','"+device+"')", 400);
+             setTimeout("getScanningProgress('"+progressId+"','"+device+"')", 400);
            }
 
 	 }
@@ -194,7 +194,7 @@ $(document).ready(function() {
              return 1;
            }
            var deviceid=0;
-           $(data).find('device').each( function() {
+           $(data).find('ScannerList').find('Devices').find('Device').each( function() {
 
              deviceid++;
              var device=deviceid;
@@ -332,8 +332,8 @@ $(document).ready(function() {
                             alert("Unable to start the scaning process: "+$(data).find('error').text());
                             return 1;
                           }
-                          scanuuid = $(data).find('scanuuid').text();
-                          getScanProgress(scanuuid, device);
+                          scanuuid = $(data).find('DoScan').find('scanuuid').text();
+                          getScanningProgress(scanuuid, device);
                         }
                       });
              });

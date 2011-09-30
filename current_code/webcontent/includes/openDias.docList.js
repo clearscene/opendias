@@ -44,9 +44,9 @@ $(document).ready(function() {
               alert($(data).find('error').text());
               return 1;
             }
-            totalRows = $(data).find('count').text();
+            totalRows = $(data).find('DocList').find('count').text();
             count = 0;
-            dta = data;
+            dta = data.find('DocList').find('Rows');
             $('#docList_table').css({ display: 'none' });
             $('#pager').css({ display: 'none' });
             cc = 0;
@@ -66,7 +66,7 @@ function get_cookie (cookie_name) {
 
 function processData(){
 
-  rw = $(dta).find('row')[count];
+  rw = $(dta).find('Row')[count];
 
   if(!rw) {
     $("#progressContainer").css({ display: 'none' });

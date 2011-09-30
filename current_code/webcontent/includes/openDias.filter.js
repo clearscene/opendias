@@ -12,7 +12,7 @@ $(document).ready(function(){
   $('#doFilter').click(function(){
     $.ajax({ url: "/opendias/dynamic",
              dataType: "xml",
-             data: {action: "filter",
+             data: {action: "docFilter",
                     textSearch: $('#textSearch').val(),
                     startDate: $('#startDate').val(),
                     endDate: $('#endDate').val()
@@ -25,7 +25,7 @@ $(document).ready(function(){
                } else {
                  $('#docList_table').fadeOut("fast");
                  filteredDocs = new Array();
-                 $(data).find('docid').each( function() {
+                 $(data).find('DocFilter').find('Results').find('docid').each( function() {
                    filteredDocs.push($(this).text());
                  });
                  master = 0;
