@@ -1,0 +1,10 @@
+* Fix an issue with pooly setting of SANE options. (some user could not set the resolution)
+* Added language selection for OCR operations
+* Fix install problem if installation is already found
+* Improved build instructions
+* Fix build problem on Fedora
+* LAyed the groundwork for device locking
+* Various tidy-ups
+* Unified the backed response structure and defined an API
+* Added direct API calls examples
+* Added a "ideals" link to and fixed typos/spelling error on the application homepage.
