@@ -42,6 +42,6 @@ extern struct dateParts *dateStringToDateParts(char *);
 extern void addFileExt(char **, int);
 extern void replace(char *, char*, char*);
 extern char *o_printf(const char *, ...);
-extern void concatf(char **, const char *, ...);
+extern void o_concatf(char **, const char *, ...);
 
 #endif /* UTILS */

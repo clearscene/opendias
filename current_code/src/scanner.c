@@ -70,7 +70,7 @@ extern const char * get_status_string (SANE_Status status) {
     if (status_names[i].name == NULL) {
         free (unknown_string);
         unknown_string = o_strdup("");
-        concatf (&unknown_string, "SANE_ACTION(%d)", status);
+        o_concatf (&unknown_string, "SANE_ACTION(%d)", status);
         return unknown_string; /* Note result is undefined on second call to this function */
     }
 
@@ -96,7 +96,7 @@ extern const char * get_action_string (SANE_Action action) {
     if (action_names[i].name == NULL) {
         free (unknown_string);
         unknown_string = o_strdup("");
-        concatf (&unknown_string, "SANE_ACTION(%d)", action);
+        o_concatf (&unknown_string, "SANE_ACTION(%d)", action);
         return unknown_string; /* Note result is undefined on second call to this function */
     }
 
@@ -109,13 +109,13 @@ extern void log_option (SANE_Int index, const SANE_Option_Descriptor *option) {
     SANE_Int cap;
     
     string = o_strdup("");
-    concatf (&string, "Option %d:", index);
+    o_concatf (&string, "Option %d:", index);
     
     if (option->name)    
-        concatf (&string, " name='%s'", option->name);
+        o_concatf (&string, " name='%s'", option->name);
     
     if (option->title)
-        concatf (&string, " title='%s'", option->title);
+        o_concatf (&string, " title='%s'", option->title);
 
     switch (option->type) {
     case SANE_TYPE_BOOL:
@@ -137,11 +137,11 @@ extern void log_option (SANE_Int index, const SANE_Option_Descriptor *option) {
         conCat(&string, " type=group");
         break;
     default:
-        concatf (&string, " type=%d", option->type);
+        o_concatf (&string, " type=%d", option->type);
         break;
     }
     
-    concatf (&string, " size=%d", option->size);
+    o_concatf (&string, " size=%d", option->size);
 
     switch (option->unit) {
     case SANE_UNIT_NONE:
@@ -165,18 +165,18 @@ extern void log_option (SANE_Int index, const SANE_Option_Descriptor *option) {
         conCat(&string, " unit=microseconds");
         break;
     default:
-        concatf (&string, " unit=%d", option->unit);
+        o_concatf (&string, " unit=%d", option->unit);
         break;
     }
 
     switch (option->constraint_type) {
     case SANE_CONSTRAINT_RANGE:
         if (option->type == SANE_TYPE_FIXED)
-            concatf (&string, " min=%f, max=%f, quant=%d",
+            o_concatf (&string, " min=%f, max=%f, quant=%d",
                                     SANE_UNFIX (option->constraint.range->min), SANE_UNFIX (option->constraint.range->max),
                                     option->constraint.range->quant);
         else
-            concatf (&string, " min=%d, max=%d, quant=%d",
+            o_concatf (&string, " min=%d, max=%d, quant=%d",
                                     option->constraint.range->min, option->constraint.range->max,
                                     option->constraint.range->quant);
         break;
@@ -186,9 +186,9 @@ extern void log_option (SANE_Int index, const SANE_Option_Descriptor *option) {
             if (i != 0)
                 conCat(&string, ", ");
             if (option->type == SANE_TYPE_INT)
-                concatf (&string, "%d", option->constraint.word_list[i+1]);
+                o_concatf (&string, "%d", option->constraint.word_list[i+1]);
             else
-                concatf (&string, "%f", SANE_UNFIX (option->constraint.word_list[i+1]));
+                o_concatf (&string, "%f", SANE_UNFIX (option->constraint.word_list[i+1]));
         }
         conCat(&string, "]");
         break;
@@ -197,7 +197,7 @@ extern void log_option (SANE_Int index, const SANE_Option_Descriptor *option) {
         for (i = 0; option->constraint.string_list[i]; i++) {
             if (i != 0)
                 conCat(&string, ", ");
-            concatf (&string, "\"%s\"", option->constraint.string_list[i]);
+            o_concatf (&string, "\"%s\"", option->constraint.string_list[i]);
         }
         conCat(&string, "]");
         break;
@@ -236,7 +236,7 @@ extern void log_option (SANE_Int index, const SANE_Option_Descriptor *option) {
         if (cap) {
             if (n != 0)
                 conCat(&string, ",");
-            concatf (&string, "%x", cap);
+            o_concatf (&string, "%x", cap);
         }
     }
 

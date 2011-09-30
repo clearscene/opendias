@@ -346,7 +346,7 @@ extern char *o_printf(const char *fmt, ...) {
   return str;
 }
 
-extern void concatf(char **mainStr, const char *fmt, ...) {
+extern void o_concatf(char **mainStr, const char *fmt, ...) {
 
   va_list inargs;
   char *str;
