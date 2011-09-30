@@ -44,8 +44,8 @@ char *requesterrorpage = "<html><body>Your request did not fir the form 'http://
 char *fileexistspage = "<html><body>File exists</body></html>";
 char *completepage = "<html><body>All Done</body></html>";
 char *denied = "<h1>Access Denied</h1>";
-char *noaccessxml = "<error>You do not have permissions to complete the request</error>";
-char *errorxml= "<error>Your request could not be processed</error>";
+char *noaccessxml = "<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>You do not have permissions to complete the request</error></Response>";
+char *errorxml= "<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>Your request could not be processed</error></Response>";
 static unsigned int nr_of_clients = 0;
 
 struct priverlage {
@@ -541,7 +541,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
-            content = populate_doclist(); // pageRender.c
+            content = getDocList(); // pageRender.c
             if(content == (void *)NULL)
               content = o_strdup(errorxml);
           }
@@ -557,7 +557,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
             content = o_strdup(errorxml);
           else {
             char *docid = getPostData(con_info->post_data, "docid");
-            content = openDocEditor(docid); //doc_editor.c
+            content = getDocDetail(docid); //doc_editor.c
             if(content == (void *)NULL)
               content = o_strdup(errorxml);
           }
@@ -612,7 +612,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
             content = o_strdup(errorxml);
           else {
             char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
-            content = getScanProgress(scanprogressid); //scan.c
+            content = getScanningProgress(scanprogressid); //pageRender.c
             if(content == (void *)NULL) {
               content = o_strdup(errorxml);
             }
@@ -675,7 +675,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           size = strlen(content);
         }
 
-        else if ( action && 0 == strcmp(action, "filter") ) {
+        else if ( action && 0 == strcmp(action, "docFilter") ) {
           o_log(INFORMATION, "Processing request for: Doc List Filter");
           if ( accessPrivs.view_doc == 0 )
             content = o_strdup(noaccessxml);
@@ -694,7 +694,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           size = strlen(content);
         }
 
-        else if ( action && 0 == strcmp(action, "deletedoc") ) {
+        else if ( action && 0 == strcmp(action, "deleteDoc") ) {
           o_log(INFORMATION, "Processing request for: delete document");
           if ( accessPrivs.delete_doc == 0 )
             content = o_strdup(noaccessxml);
@@ -702,7 +702,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
             content = o_strdup(errorxml);
           else {
             char *docid = getPostData(con_info->post_data, "docid");
-            content = doDelete(docid);
+            content = doDelete(docid); // doc_editor.c
             if(content == (void *)NULL) {
               content = o_strdup(errorxml);
             }
@@ -718,7 +718,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
-            content = o_strdup("<filename>BabyBeat.ogg</filename>");
+            content = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><Audio<<filename>BabyBeat.ogg</filename></Audio></Response>");
           }
           mimetype = MIMETYPE_XML;
           size = strlen(content);
