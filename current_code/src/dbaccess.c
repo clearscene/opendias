@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <string.h>
 
+/*
 extern int checkScannerLock(char *device) {
 
   char *sql = o_printf("SELECT pa.client_id, status, value \
@@ -33,17 +34,16 @@ extern int checkScannerLock(char *device) {
                         WHERE pa.param_option=1 \
                           AND pr.status != 16 \
                           AND pa.param_value='%s'", device);
-/*
   if(runquery_db("2", sql)) {
     do {
       vvalue = o_strdup(readData_db("2", "param_value"));
     } while (nextRow("2"));
   }
   free_recordset("2");
-*/
   free(sql);
 
 }
+*/
 
 extern int setScanParam(char *uuid, int param, char *vvalue) {
 
