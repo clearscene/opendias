@@ -86,7 +86,7 @@ extern int basicValidation(GHashTable *postdata) {
     && 0 != strcmp(action, "updateDocDetails") 
     && 0 != strcmp(action, "moveTag") 
     && 0 != strcmp(action, "filter") 
-    && 0 != strcmp(action, "deletedoc") 
+    && 0 != strcmp(action, "deleteDoc") 
     && 0 != strcmp(action, "getAudio")
     && 0 != strcmp(action, "uploadfile")
     && 0 != strcmp(action, "getAccessDetails")
@@ -363,7 +363,7 @@ extern int validate(GHashTable *postdata, char *action) {
     if(data != NULL && strcmp(data,"")) ret += checkDate(data);
   }
 
-  if ( 0 == strcmp(action, "deletedoc") ) {
+  if ( 0 == strcmp(action, "deleteDoc") ) {
     ret += checkOnlyKeys(postdata, "docid");
     ret += checkDocId(getPostData(postdata, "docid"));
   }

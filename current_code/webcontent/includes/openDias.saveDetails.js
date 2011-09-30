@@ -141,13 +141,18 @@ $(document).ready(function() {
     if (answer){
       $.ajax({ url: "/opendias/dynamic",
              dataType: "xml",
-             data: {action: "deletedoc", 
+             data: {action: "deleteDoc", 
                     docid: $('#docid').text(),
                    },
              cache: false,
              type: "POST",
              success: function(data){
-               document.location.href = "/opendias/";
+               if( $(data).find('error').text() ) {
+                 alert("An error occured deleting the document.");
+                 unlockForm(0);
+               } else {
+                 document.location.href = "/opendias/";
+               }
              },
       });
     }
