@@ -639,7 +639,7 @@ extern void doScanningOperation(void *uuid) {
   char *ocrText;
   char *shoulddoocr_s = getScanParam(uuid, SCAN_PARAM_DO_OCR);
 #ifdef CAN_OCR
-  if(shoulddoocr_s && 0 != strcmp(shoulddoocr_s, "") ) {
+  if(shoulddoocr_s && 0 != strcmp(shoulddoocr_s, "-") ) {
 
     if(request_resolution >= 300 && request_resolution <= 400) {
       o_log(DEBUGM, "attempting OCR");

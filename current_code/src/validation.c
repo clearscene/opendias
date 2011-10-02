@@ -219,7 +219,7 @@ static int checkFormat(char *val) {
 //
 static int checkOCRLanguage(char *val) {
 
-  if ( 0 != strcmp(val, "" )                // No OCR
+  if ( 0 != strcmp(val, "-" )                // No OCR
     || 0 != strcmp(val, OCR_LANG_BRITISH ) 
     || 0 != strcmp(val, OCR_LANG_GERMAN ) 
     || 0 != strcmp(val, OCR_LANG_FRENCH ) 
