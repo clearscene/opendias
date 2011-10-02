@@ -46,7 +46,7 @@ $(document).ready(function() {
             }
             totalRows = $(data).find('DocList').find('count').text();
             count = 0;
-            dta = data.find('DocList').find('Rows');
+            dta = $(data).find('DocList').find('Rows');
             $('#docList_table').css({ display: 'none' });
             $('#pager').css({ display: 'none' });
             cc = 0;
