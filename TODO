@@ -5,19 +5,9 @@
 Phase 1
 -------
 
-Rationalise & formalise 'comms XML' between frontend (ajax calls) and the backend
-
-Generate API documentation
-
-Check the use of "extern" where it's used.
-
 Implement 'tag filtering' on the search of the document list
 
 Implement 'manage tags'
-
-Implement 'action required' flag
-
-Package into .deb and .rpm and get included into major repositories
 
 Implement the remainder of the test plan 'current_code/test/regressionTests/testplan'
 
@@ -25,7 +15,9 @@ Refactor 'filtering mechanisum' on the document list
 
 Implement 'By Username/Password' access controls
 
-Remove the dependency on glib
+TECHNICAL: Remove the dependency on glib
+
+TECHNICAL: Check the use of "extern" where it's used.
 
 
 Phase 2
@@ -33,23 +25,31 @@ Phase 2
 
 Print documents
 
-Print doc details label (to stick onto doc after scanning)
-
 Implement 'OCR now' on document detail page.
 
 Implement 'play audio from OCR' on document detail oage.
 
 Improve the tag selection on document detail page.
 
+Implement 'action required' flag
+
+Implement 'document linkage'
+
+Package into .deb and .rpm and get included into major repositories
+
 
 Phase 3
 -------
+
+Print doc details label (to stick onto doc after scanning)
 
 Implement 'backend call' tests
 
 Turn OCR into a plugin
 
 Turn 'Play Audio' into a plugin
+
+Add Localization framework the application;
 
 
 Phase 4
