@@ -19,20 +19,18 @@
 #ifndef DB
 #define DB
 
-#include <glib.h>
+#include "simpleLinkedList.h"
 
-enum {
-  DB_NULL = 0,
-  DB_TEXT,
-  DB_INT,
-  DB_DOUBLE
-  };
+#define DB_NULL "null"
+#define DB_TEXT "text"
+#define DB_INT "int"
+#define DB_DOUBLE "double"
 
 extern int connect_db (int);
 extern void close_db (void);
 extern void free_recordset (char *);
 extern int last_insert(void);
-extern int runUpdate_db (char *, GList *);
+extern int runUpdate_db (char *, struct simpleLinkedList *);
 extern int runquery_db (char *, char *);
 extern char *readData_db (char *, char *);
 extern int nextRow (char *);

@@ -19,6 +19,7 @@
 #include "config.h"
 #include "db.h"
 #include "utils.h"
+#include "simpleLinkedList.h"
 #include "main.h"
 #include "dbaccess.h"
 #include <stdlib.h>
@@ -35,7 +36,9 @@ extern int checkScannerLock(char *device) {
                           AND pr.status != 16 \
                           AND pa.param_value='%s'", device);
   if(runquery_db("2", sql)) {
+    vvalue = o_strdup(".");
     do {
+      free(vvalue);
       vvalue = o_strdup(readData_db("2", "param_value"));
     } while (nextRow("2"));
   }
@@ -47,18 +50,18 @@ extern int checkScannerLock(char *device) {
 
 extern int setScanParam(char *uuid, int param, char *vvalue) {
 
-  GList *vars = NULL;
   char *sql = o_strdup("INSERT OR REPLACE \
                         INTO scan_params \
                         (client_id, param_option, param_value) \
                         VALUES (?, ?, ?);");
 
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(uuid));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(param));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(vvalue));
+  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, uuid );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &param );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, vvalue );
 
   int rc = runUpdate_db(sql, vars);
   free(sql);
@@ -68,19 +71,17 @@ extern int setScanParam(char *uuid, int param, char *vvalue) {
 
 extern char *getScanParam(char *scanid, int param_option) {
 
-  char *sql, *vvalue=NULL, *param_option_s;
+  char *sql, *vvalue = NULL;
 
-  sql = o_strdup("SELECT param_value \
+  sql = o_printf("SELECT param_value \
                   FROM scan_params \
-                  WHERE client_id = '");
-  conCat(&sql, scanid);
-  conCat(&sql, "' AND param_option = ");
-  param_option_s = itoa(param_option, 10);
-  conCat(&sql, param_option_s);
-  free(param_option_s);
+                  WHERE client_id = '%s' \
+                  AND param_option = %i", scanid, param_option);
 
   if(runquery_db("2", sql)) {
+    vvalue = o_strdup(".");
     do {
+      free(vvalue);
       vvalue = o_strdup(readData_db("2", "param_value"));
     } while (nextRow("2"));
   }
@@ -93,28 +94,31 @@ extern char *getScanParam(char *scanid, int param_option) {
 extern void addScanProgress (char *uuid) {
 
   char *sql = o_strdup("INSERT INTO scan_progress (client_id, status, value) VALUES (?, ?, 0);");
-  GList *vars = g_list_append(NULL, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(uuid));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(SCAN_IDLE));
+
+  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, uuid );
+  sll_append(vars, DB_INT );
+  sll_append(vars, SCAN_IDLE );
+
   runUpdate_db(sql, vars);
   free(sql);
 }
 
 extern void updateScanProgress (char *uuid, int status, int value) {
 
-  GList *vars = NULL;
   char *progressUpdate = o_strdup("UPDATE scan_progress \
                                    SET status = ?, \
                                        value = ? \
                                    WHERE client_id = ? ");
 
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(status));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(value));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(uuid));
+  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &status );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &value );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, uuid );
 
   runUpdate_db(progressUpdate, vars);
   free(progressUpdate);
@@ -123,30 +127,30 @@ extern void updateScanProgress (char *uuid, int status, int value) {
 
 static char *addNewDoc (int ftype, int getLines, int ppl, int resolution, int pageCount, char *ocrText) {
 
-
-  GTimeVal todaysDate;
-  g_get_current_time (&todaysDate);
-  char *dateStr = g_time_val_to_iso8601 (&todaysDate);
+  char *dateStr = getTimeStr_iso8601();
   char *sql = o_strdup("INSERT INTO docs \
     (depth, lines, ppl, resolution, ocrText, pages, entrydate, filetype) \
     VALUES (8, ?, ?, ?, ?, ?, ?, ?)");
-  GList *vars = NULL;
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(getLines));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(ppl));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(resolution));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, ocrText);
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(pageCount));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, dateStr);
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(ftype));
+
+  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  sll_append(vars, DB_INT) ;
+  sll_append(vars, &getLines );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &ppl );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &resolution );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, ocrText );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &pageCount );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, dateStr );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &ftype );
+
   runUpdate_db(sql, vars);
   free(sql);
+  free(dateStr);
   return itoa(last_insert(), 10);
 
 }
@@ -161,14 +165,17 @@ extern char *addNewFileDoc (int ftype, char *ocrText) {
 
 extern void updateNewScannedPage (char *docid, char *ocrText, int page) {
 
+  int docid_i = atoi(docid);
   char *sql = o_strdup("UPDATE docs SET pages = ?, ocrText = ocrText || ? WHERE docid = ?");
-  GList *vars = NULL;
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(page));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, ocrText);
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(atoi(docid)));
+
+  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &page );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, ocrText );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &docid_i );
+
   runUpdate_db(sql, vars);
   free(sql);
   free(docid);
@@ -177,19 +184,17 @@ extern void updateNewScannedPage (char *docid, char *ocrText, int page) {
 
 extern int updateDocValue (char *docid, char *kkey, char *vvalue) {
 
-  char *sql_t, *sql;
-  int size = 0, rc = 0;
-  GList *vars = NULL;
+  char *sql;
+  int rc = 0;
 
-  sql_t = o_strdup("UPDATE docs SET %s = ? WHERE docid = ?");
-  size = strlen(sql_t) + strlen(kkey);
-  sql = malloc(size);
-  sprintf(sql, sql_t, kkey);
-  free(sql_t);
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(vvalue));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(docid));
+  sql = o_printf("UPDATE docs SET %s = ? WHERE docid = ?", kkey);
+
+  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, vvalue );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, docid );
+
   rc = runUpdate_db(sql, vars);
   free(sql);
 
@@ -198,11 +203,12 @@ extern int updateDocValue (char *docid, char *kkey, char *vvalue) {
 
 static int addRemoveTagOnDocument (char *sql, char *docid, char *tagid) {
 
-  GList *vars = NULL;
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(docid));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(tagid));
+  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, docid );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, tagid );
+
   int rc = runUpdate_db(sql, vars);
   free(sql);
   return rc;
@@ -222,18 +228,24 @@ extern int removeTagFromDoc (char *docid, char *tagid) {
 
 extern void removeDocTags (char *docid) {
   char *sql = o_strdup("DELETE FROM doc_tags WHERE docid = ?");
-  GList *vars = NULL;
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(atoi(docid)));
+  int docid_i = atoi(docid);
+
+  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &docid_i );
+
   runUpdate_db(sql, vars);
   free(sql);
 }
 
 extern void removeDoc (char *docid) {
   char *sql = o_strdup("DELETE FROM docs WHERE docid = ?");
-  GList *vars = NULL;
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(atoi(docid)));
+  int docid_i = atoi(docid);
+
+  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &docid_i );
+
   runUpdate_db(sql, vars);
   free(sql);
 }
@@ -241,10 +253,12 @@ extern void removeDoc (char *docid) {
 extern void addLocation(char *location, int role) {
 
   char *sql = o_strdup("INSERT INTO location_access (location, role) VALUES (?, ?);");
-  GList *vars = g_list_append(NULL, GINT_TO_POINTER(DB_TEXT));
-  vars = g_list_append(vars, o_strdup(location));
-  vars = g_list_append(vars, GINT_TO_POINTER(DB_INT));
-  vars = g_list_append(vars, GINT_TO_POINTER(role));
+  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, location );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &role );
+
   runUpdate_db(sql, vars);
   free(sql);
 }

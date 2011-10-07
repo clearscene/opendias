@@ -51,6 +51,9 @@ current_code/src/pageRender.o
 current_code/src/read_odf.gcda
 current_code/src/read_odf.gcno
 current_code/src/read_odf.o
+current_code/src/simpleLinkedList.gcda
+current_code/src/simpleLinkedList.gcdo
+current_code/src/simpleLinkedList.o
 current_code/src/scan.gcda
 current_code/src/scan.gcno
 current_code/src/scanner.gcda

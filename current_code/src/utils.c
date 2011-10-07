@@ -260,6 +260,16 @@ extern char *getTimeStr() {
   return strdate;
 }
 
+extern char *getTimeStr_iso8601() {
+  time_t ttime;
+  char *strdate = malloc(32);
+
+  time(&ttime);
+  struct tm *stTime = gmtime(&ttime);
+  strftime(strdate, 32, "%Y-%m-%d %H:%M:%S", stTime);
+  return strdate;
+}
+
 extern void propper(char *inStr) {
 
   char *ptr = inStr;

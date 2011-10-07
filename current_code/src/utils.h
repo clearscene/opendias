@@ -36,6 +36,7 @@ extern int min(int, int);
 extern char *dateHuman(char *, char *, char *);
 extern void conCat(char **, const char *);
 extern char *getTimeStr();
+extern char *getTimeStr_iso8601();
 extern void propper(char *);
 extern void chop(char *);
 extern struct dateParts *dateStringToDateParts(char *);

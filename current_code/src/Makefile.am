@@ -45,7 +45,9 @@ opendias_SOURCES = \
 	validation.c    \
 	validation.h    \
 	import_doc.c    \
-	import_doc.h
+	import_doc.h    \
+        simpleLinkedList.c    \
+        simpleLinkedList.h
 
 opendias_LDFLAGS = 
 

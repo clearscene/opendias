@@ -150,7 +150,7 @@ extern char *getDocDetail (char *documentId) {
   // Build Human Readable
   //
   title = o_strdup(readData_db("1", "title"));
-  if(g_str_equal (title, "NULL") ) {
+  if( 0 == strcmp(title, "NULL") ) {
     free(title);
     title = o_strdup("New (untitled) document.");
   }
