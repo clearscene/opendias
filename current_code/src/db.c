@@ -137,7 +137,6 @@ static int callback(char *recordSetKeyId, int argc, char **argv, char **azColNam
   // Create row container
   for(i=0; i<argc; i++) {
     o_log(SQLDEBUG, "Saving rowdata: %s : %s", azColName[i], argv[i] );
-    o_log(INFORMATION, "Saving rowdata: %s : %s", azColName[i], argv[i] );
     sll_insert(row, o_strdup(azColName[i]), o_strdup(argv[i] ? argv[i] : "NULL"));
   }
 
@@ -232,14 +231,14 @@ extern int runquery_db (char *recordSetKeyId, char *sql) {
       sqlite3_free(zErrMsg);
   }
 
-//  if(rSet == sll_searchKeys( RECORDSETS, recordSetKey ) ) {
+  if(rSet->data != NULL ) {
     free(recordSetKey);
     return 1;
-//  }
-//  else {
-//    free(recordSetKey);
-//    return 0;
-//  }
+  }
+  else {
+    free(recordSetKey);
+    return 0;
+  }
 
 }
 
