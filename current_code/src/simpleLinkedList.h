@@ -30,13 +30,16 @@ struct simpleLinkedList {
   struct simpleLinkedList *next;
 };
 
+extern struct simpleLinkedList *sll_init();
 extern void sll_append ( struct simpleLinkedList *, void * );
 extern struct simpleLinkedList *sll_createNewElement( void * );
 extern struct simpleLinkedList *sll_findLastElement( struct simpleLinkedList * );
 extern struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList * );
 extern struct simpleLinkedList *sll_getNext( struct simpleLinkedList * );
 extern void sll_insert ( struct simpleLinkedList *, char *, void * );
-extern struct simpleLinkedList *sll_findNext( struct simpleLinkedList *, char * );
+extern struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *, char * );
+extern struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList * );
 extern void sll_destroy( struct simpleLinkedList * );
+extern void sll_delete( struct simpleLinkedList * );
 
 #endif /* SIMPLELINKEDLIST */

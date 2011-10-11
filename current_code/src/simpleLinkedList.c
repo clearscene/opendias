@@ -46,6 +46,10 @@ struct simpleLinkedList *sll_createNewElement( void *data ) {
   return generate_new_element( NULL, data );
 }
 
+struct simpleLinkedList *sll_init() {
+  return generate_new_element( NULL, NULL );
+}
+
 void sll_append ( struct simpleLinkedList *element, void *data ) {
   if( element ) {
     if( element->data == NULL && element->next == NULL && element->prev == NULL ) {
@@ -75,12 +79,12 @@ void sll_insert ( struct simpleLinkedList *element, char *key, void *data ) {
   }
 }
 
-struct simpleLinkedList *sll_findNext( struct simpleLinkedList *element, char *key ) {
-  if( element ) {
-    if( 0 == strcmp(element->key, key) ) {
+struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *element, char *key ) {
+  if( element && element != NULL ) {
+    if( element->key && 0 == strcmp(element->key, key) ) {
       return element;
     }
-    return sll_findNext( sll_getNext( element ), key );
+    return sll_searchKeys( sll_getNext( element ), key );
   }
   return NULL;
 }
@@ -93,7 +97,7 @@ struct simpleLinkedList *sll_findLastElement( struct simpleLinkedList *element )
 }
 
 struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList *element ) {
-  if( element->prev == NULL ) {
+  if( !element || element->prev == NULL ) {
     return element;
   }
   return sll_findFirstElement( element->prev );
@@ -107,12 +111,23 @@ struct simpleLinkedList *sll_getNext( struct simpleLinkedList *element ) {
 }
 
 void sll_destroy( struct simpleLinkedList *element ) {
-  if( element ) {
+  if( element && element != NULL ) {
+    o_log(SQLDEBUG, "preparing to delete element: %x, with prev=%x, and next=%x", element, element->prev, element->next);
     sll_destroy( sll_getNext( element ) );
-    if( element->key != NULL ) {
-      free( element->key );
-    }
-    free( element );
+    sll_delete( element );
   }
+}
+
+void sll_delete( struct simpleLinkedList *element ) {
+  o_log(SQLDEBUG, "Asked to delete element: %x, with prev=%x, and next=%x", element, element->prev, element->next);
+  struct simpleLinkedList *prev_element = element->prev;
+  struct simpleLinkedList *next_element = element->next;
+  if( next_element && next_element != NULL ) {
+    next_element->prev = prev_element;
+  }
+  if( prev_element && prev_element != NULL ) {
+    prev_element->next = next_element;
+  }
+  free( element );
 }
 

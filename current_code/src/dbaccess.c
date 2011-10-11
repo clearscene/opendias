@@ -55,7 +55,7 @@ extern int setScanParam(char *uuid, int param, char *vvalue) {
                         (client_id, param_option, param_value) \
                         VALUES (?, ?, ?);");
 
-  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_TEXT );
   sll_append(vars, uuid );
   sll_append(vars, DB_INT );
@@ -95,7 +95,7 @@ extern void addScanProgress (char *uuid) {
 
   char *sql = o_strdup("INSERT INTO scan_progress (client_id, status, value) VALUES (?, ?, 0);");
 
-  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_TEXT );
   sll_append(vars, uuid );
   sll_append(vars, DB_INT );
@@ -112,7 +112,7 @@ extern void updateScanProgress (char *uuid, int status, int value) {
                                        value = ? \
                                    WHERE client_id = ? ");
 
-  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_INT );
   sll_append(vars, &status );
   sll_append(vars, DB_INT );
@@ -132,7 +132,7 @@ static char *addNewDoc (int ftype, int getLines, int ppl, int resolution, int pa
     (depth, lines, ppl, resolution, ocrText, pages, entrydate, filetype) \
     VALUES (8, ?, ?, ?, ?, ?, ?, ?)");
 
-  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_INT) ;
   sll_append(vars, &getLines );
   sll_append(vars, DB_INT );
@@ -168,7 +168,7 @@ extern void updateNewScannedPage (char *docid, char *ocrText, int page) {
   int docid_i = atoi(docid);
   char *sql = o_strdup("UPDATE docs SET pages = ?, ocrText = ocrText || ? WHERE docid = ?");
 
-  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_INT );
   sll_append(vars, &page );
   sll_append(vars, DB_TEXT );
@@ -189,7 +189,7 @@ extern int updateDocValue (char *docid, char *kkey, char *vvalue) {
 
   sql = o_printf("UPDATE docs SET %s = ? WHERE docid = ?", kkey);
 
-  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_TEXT );
   sll_append(vars, vvalue );
   sll_append(vars, DB_TEXT );
@@ -203,7 +203,7 @@ extern int updateDocValue (char *docid, char *kkey, char *vvalue) {
 
 static int addRemoveTagOnDocument (char *sql, char *docid, char *tagid) {
 
-  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_TEXT );
   sll_append(vars, docid );
   sll_append(vars, DB_TEXT );
@@ -230,7 +230,7 @@ extern void removeDocTags (char *docid) {
   char *sql = o_strdup("DELETE FROM doc_tags WHERE docid = ?");
   int docid_i = atoi(docid);
 
-  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_INT );
   sll_append(vars, &docid_i );
 
@@ -242,7 +242,7 @@ extern void removeDoc (char *docid) {
   char *sql = o_strdup("DELETE FROM docs WHERE docid = ?");
   int docid_i = atoi(docid);
 
-  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_INT );
   sll_append(vars, &docid_i );
 
@@ -253,7 +253,7 @@ extern void removeDoc (char *docid) {
 extern void addLocation(char *location, int role) {
 
   char *sql = o_strdup("INSERT INTO location_access (location, role) VALUES (?, ?);");
-  struct simpleLinkedList *vars = sll_createNewElement( NULL );
+  struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_TEXT );
   sll_append(vars, location );
   sll_append(vars, DB_INT );
