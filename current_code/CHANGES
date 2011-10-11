@@ -3,8 +3,9 @@
 * Fix install problem if installation is already found
 * Improved build instructions
 * Fix build problem on Fedora
-* LAyed the groundwork for device locking
+* Layed the groundwork for device locking
 * Various tidy-ups
 * Unified the backed response structure and defined an API
 * Added direct API calls examples
-* Added a "ideals" link to and fixed typos/spelling error on the application homepage.
+* Added a "ideas" link to and fixed typos/spelling error on the application homepage.
+* Removed the dependency on glib
