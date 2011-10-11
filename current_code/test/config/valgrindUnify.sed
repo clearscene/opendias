@@ -8,3 +8,6 @@ s/[0-9]*[0-9] allocs/XXXX allocs/g
 s/[0-9]*[0-9] frees/XXXX frees/g
 s/suppressed: [0-9]* from [0-9]*/suppressed: XXX from XXX/g
 s/Command: ..\/src\/opendias -c .*/Command: ..\/src\/opendias -c [CONFIG_FILE]/
+s/Using Valgrind.*/Using Valgrind [version and build info]/
+s/Copyright.*/Copyright [details]/
+s/Warning: invalid file descriptor.*/Warning: invalid file descriptor [system specific]/
