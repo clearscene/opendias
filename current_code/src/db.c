@@ -48,7 +48,6 @@ int get_db_version() {
 
   o_log(DEBUGM, "Checking for a populated database");
   struct simpleLinkedList *rSet = runquery_db("pragma table_info('version')");
-  o_log(DEBUGM, "Asked to delete element: %x, with prev=%x, and next=%x. with data of %x", rSet, rSet->prev, rSet->next, rSet->data);
   if( rSet != NULL ) {
     o_log(DEBUGM, "We have one. So will check to see what verstion it is.");
     // We have a version table - so interogate!
@@ -149,14 +148,12 @@ static int callback(struct simpleLinkedList *rSet, int argc, char **argv, char *
   else
     row = (struct simpleLinkedList *)rSet->data;
 
-  o_log(SQLDEBUG, "Reading row from database");
-  o_log(DEBUGM, "Reading row from database (%x)", rSet);
+  o_log(SQLDEBUG, "Reading row from database (%x)", rSet);
 
   // Create row container
   field = sll_init();
   for(i=0; i<argc; i++) {
     o_log(SQLDEBUG, "Saving rowdata: %s : %s", azColName[i], argv[i] );
-    o_log(DEBUGM, "Saving rowdata: %s : %s", azColName[i], argv[i] );
     sll_insert(field, o_strdup(azColName[i]), o_strdup(argv[i] ? argv[i] : "NULL"));
   }
 
@@ -240,10 +237,10 @@ extern struct simpleLinkedList *runquery_db (char *sql) {
   }
 
   if(rSet->data != NULL ) {
-    o_log(DEBUGM, "has rows");
     return rSet;
   }
   else {
+    o_log(SQLDEBUG, "No rows found (%x)", rSet);
     sll_destroy(rSet);
     return NULL;
   }
@@ -256,7 +253,7 @@ extern char *readData_db (struct simpleLinkedList *rSet, char *field_db) {
   struct simpleLinkedList *row;
   struct simpleLinkedList *field;
 
-  o_log(DEBUGM, "Reading row (%x)", rSet);
+  o_log(SQLDEBUGM, "Reading row (%x)", rSet);
 
   row = (struct simpleLinkedList *)rSet->data;
   if(row) {
@@ -274,8 +271,7 @@ extern int nextRow (struct simpleLinkedList *rSet) {
   struct simpleLinkedList *row;
   int ret = 0;
 
-  o_log(SQLDEBUG, "Moving to next row");
-  o_log(DEBUGM, "Moving to next row (%x)", rSet);
+  o_log(SQLDEBUG, "Moving to next row (%x)", rSet);
 
   row = (struct simpleLinkedList *)rSet->data;
   row = sll_getNext(row);
@@ -298,18 +294,18 @@ extern void free_recordset (struct simpleLinkedList *rSet) {
       for( row = sll_findFirstElement((struct simpleLinkedList *)rSet->data) ; row != NULL ; row = sll_getNext(row) ) {
         if( row && row != NULL && row->data != NULL ) {
           for( field = sll_findFirstElement((struct simpleLinkedList *)row->data) ; field != NULL ; field = sll_getNext(field) ) {
-            o_log(DEBUGM, "Freeing: %s = %s", field->key, field->data);
+            o_log(SQLDEBUG, "Freeing: %s = %s", field->key, field->data);
             free(field->key);
             free(field->data);
           }
         }
-        o_log(DEBUGM, "Freeing field data"); 
+        o_log(SQLDEBUG, "Freeing field data"); 
         sll_destroy((struct simpleLinkedList *)row->data);
       }
-      o_log(DEBUGM, "Free a row");
+      o_log(SQLDEBUG, "Freeing a row");
       sll_destroy( sll_findFirstElement( (struct simpleLinkedList *)rSet->data ) );
     }
-    o_log(DEBUGM, "Free a record set pointer");
+    o_log(SQLDEBUG, "Free a record set pointer (%s)", rSet);
     sll_delete(rSet);
   }
 }

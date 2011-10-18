@@ -312,11 +312,6 @@ static void postDumper(struct simpleLinkedList *table) {
     char *data = getPostData(table, row->key);
     o_log(DEBUGM, "      %s : %s", row->key, data);
   }
-//  g_hash_table_iter_init (&iter, table);
-//  while (g_hash_table_iter_next (&iter, &key, &value)) {
-//    char *data = getPostData(table, key);
-//    o_log(DEBUGM, "      %s : %s", key, data);
-//  }
 }
 
 extern int answer_to_connection (void *cls, struct MHD_Connection *connection,

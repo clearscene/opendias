@@ -276,7 +276,7 @@ int main (int argc, char **argv) {
 
   if(setup (configFile))
     return 1;
-VERBOSITY = SQLDEBUG;
+
   o_log(INFORMATION, "... Starting up the openDias service.");
   httpdaemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 
     NULL, NULL, 
