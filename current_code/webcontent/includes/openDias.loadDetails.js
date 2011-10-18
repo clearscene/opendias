@@ -75,6 +75,13 @@ $(document).ready(function() {
            $("#scanDate").append(document.createTextNode( $(data).find('DocDetail').find('scanDate').text() ));
            $("#type").append(document.createTextNode( getTypeDescription($(data).find('DocDetail').find('type').text()) ));
 
+           if( $(data).find('DocDetail').find('actionrequired').text() == "1" ) {
+              $("#actionrequired").checked(true); 
+           }
+           else {
+              $("#actionrequired").checked(false);
+           }
+
            //
            // Doc type display options.
            if( $(data).find('DocDetail').find('type').text() == "1" ) { // ODF Documents

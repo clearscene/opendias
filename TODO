@@ -15,8 +15,6 @@ Refactor 'filtering mechanisum' on the document list
 
 Implement 'By Username/Password' access controls
 
-TECHNICAL: Remove the dependency on glib
-
 TECHNICAL: Check the use of "extern" where it's used.
 
 

@@ -16,7 +16,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -75,7 +74,7 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
 
 extern void o_log(const int verbosity, const char *message, ... ) {
 
-  if( verbosity <= VERBOSITY) {
+  if( verbosity <= VERBOSITY ) {
     va_list inargs;
     va_start(inargs, message);
     i_o_log(verbosity, message, inargs);

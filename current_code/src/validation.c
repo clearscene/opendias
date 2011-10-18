@@ -17,7 +17,6 @@
  */
 
 #include "config.h"
-#include <glib.h>
 #include <stdlib.h>
 #include <string.h>
 #include "validation.h"
@@ -25,8 +24,12 @@
 #include "utils.h"
 #include "ocr_plug.h"
 
-extern char *getPostData(gpointer post_hash, char *key) {
-  struct post_data_struct *data_struct = (struct post_data_struct *)g_hash_table_lookup(post_hash, key);
+extern char *getPostData(struct simpleLinkedList *post_hash, const char *key) {
+  struct simpleLinkedList *data = sll_searchKeys(post_hash, key);
+  struct post_data_struct *data_struct = NULL;
+  if( data != NULL && data->data != NULL )
+    data_struct = (struct post_data_struct *)data->data;
+
   if(data_struct == NULL || data_struct->data == NULL)
     return NULL;
   else
@@ -62,7 +65,7 @@ extern char *getPostData(gpointer post_hash, char *key) {
 }
 */
 
-extern int basicValidation(GHashTable *postdata) {
+extern int basicValidation(struct simpleLinkedList *postdata) {
 
   // Check thet we have a main request param
   char *action = getPostData(postdata, "action");
@@ -115,7 +118,7 @@ extern int basicValidation(GHashTable *postdata) {
  */
 
 // Check trhe hashtable to ensure it only contains the specified keys
-static int checkOnlyKeys(GHashTable *postdata, char *keyList) {
+static int checkOnlyKeys(struct simpleLinkedList *postdata, char *keyList) {
   // TODO
   return 0;
 }
@@ -298,7 +301,7 @@ static int checkRole(char *role) {
 /*************************************************8
  * Checks on each calling method
  */
-extern int validate(GHashTable *postdata, char *action) {
+extern int validate(struct simpleLinkedList *postdata, const char *action) {
 
   int ret = 0;
 

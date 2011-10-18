@@ -17,8 +17,6 @@
  */
 
 #include "config.h"
-#include <glib.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -75,10 +73,11 @@ int setup (char *configFile) {
   }
 
   sql = o_strdup("SELECT config_option, config_value FROM config");
-  if( runquery_db("1", sql) ) {
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet != NULL ) {
     do {
-      config_option = o_strdup(readData_db("1", "config_option"));
-      config_value = o_strdup(readData_db("1", "config_value"));
+      config_option = o_strdup(readData_db(rSet, "config_option"));
+      config_value = o_strdup(readData_db(rSet, "config_value"));
       o_log(INFORMATION, "Config setting: %s = %s", config_option, config_value);
       if( 0 == strcmp(config_option, "log_verbosity") ) {
         VERBOSITY = atoi(config_value);
@@ -99,9 +98,9 @@ int setup (char *configFile) {
       }
       free(config_option);
       free(config_value);
-    } while (nextRow("1"));
+    } while ( nextRow( rSet ) );
   }
-  free_recordset("1");
+  free_recordset( rSet );
   free(sql);
 
   createDir_ifRequired(BASE_DIR);
@@ -277,7 +276,7 @@ int main (int argc, char **argv) {
 
   if(setup (configFile))
     return 1;
-
+VERBOSITY = SQLDEBUG;
   o_log(INFORMATION, "... Starting up the openDias service.");
   httpdaemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 
     NULL, NULL, 

@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(opendias, [0.6.5], [wbooth@clearscene.net])
+AC_INIT(opendias, [0.6.6], [wbooth@clearscene.net])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AM_CONFIG_HEADER([config.h])
@@ -45,7 +45,7 @@ AC_TYPE_UINT64_T
 
 
 
-PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid glib-2.0])
+PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)

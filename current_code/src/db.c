@@ -18,7 +18,6 @@
 
 #include <sqlite3.h>
 #include <stdlib.h>
-//#include <glib.h>
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -29,11 +28,8 @@
 #include "debug.h"
 
 sqlite3 *DBH;
-struct simpleLinkedList *RECORDSETS;
 
 int open_db (char *db) {
-
-  RECORDSETS = sll_init();
 
   int rc;
   rc = sqlite3_open_v2(db, &DBH, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_CREATE, NULL);
@@ -50,18 +46,25 @@ int get_db_version() {
 
   int version = 0;
 
-  if( runquery_db("1", "pragma table_info('version')") ) {
+  o_log(DEBUGM, "Checking for a populated database");
+  struct simpleLinkedList *rSet = runquery_db("pragma table_info('version')");
+  o_log(DEBUGM, "Asked to delete element: %x, with prev=%x, and next=%x. with data of %x", rSet, rSet->prev, rSet->next, rSet->data);
+  if( rSet != NULL ) {
+    o_log(DEBUGM, "We have one. So will check to see what verstion it is.");
     // We have a version table - so interogate!
-    free_recordset("1");
-    if( runquery_db("1", "SELECT version FROM version") ) {
-      version = atoi(readData_db("1", "version"));
+    free_recordset( rSet );
+    rSet = runquery_db("SELECT version FROM version");
+    if( rSet != NULL ) {
+      version = atoi(readData_db(rSet, "version"));
+      o_log(DEBUGM, "Database reports that it is version: %i", version);
     }
+    free_recordset( rSet );
   }
   else {
+    o_log(DEBUGM, "No database tables found.");
     // No 'version' table. Assume 'zero'
     version = 0;
   }
-  free_recordset("1");
 
   return version;
 }
@@ -73,8 +76,7 @@ extern int connect_db (int createIfRequired) {
 
   // Test to see if a DB file exsists
   db = o_printf("%s/openDIAS.sqlite3", BASE_DIR);
-  if( access(db, F_OK) == 0 ) {
-  //if(g_file_test(db, G_FILE_TEST_EXISTS)) {
+  if( 0 == access(db, F_OK) ) {
     o_log(DEBUGM, "Dir structure is in-place, database should exist");
     if(open_db (db)) {
       o_log(WARNING, "Could not connect to database.");
@@ -114,9 +116,9 @@ extern int connect_db (int createIfRequired) {
     o_log(DEBUGM, "Reading SQL code from file: %s", upgradeSQL);
 
     if(load_file_to_memory(upgradeSQL, &data) > 0) {
-      o_log(INFORMATION, data);
-      runquery_db("1", data);
-      free_recordset("1");
+      o_log(DEBUGM, data);
+      struct simpleLinkedList *rSet = runquery_db(data);
+      free_recordset( rSet );
       free(data);
     }
     free(upgradeSQL);
@@ -125,25 +127,40 @@ extern int connect_db (int createIfRequired) {
   return 0;
 }
 
-static int callback(char *recordSetKeyId, int argc, char **argv, char **azColName){
+/*
+ * rSet (strcut simpleLinkedList)
+ * pointer to a list of rows or NULL if no rows
+ *     |
+ *     -----> rSet->data, or row (struct simpleLinkedList)
+ *            sll list of rows, one entry per row
+ *                   |
+ *                   -----> fields (struct simpleLinkedList)
+ *                          sll hash of field names and their data
+ */ 
+
+static int callback(struct simpleLinkedList *rSet, int argc, char **argv, char **azColName){
 
   int i;
-  struct simpleLinkedList *rSet = NULL; //sll_createNewElement( NULL );
-  struct simpleLinkedList *row = sll_init();
-  char *recordSetKey = o_printf("%x-%s", pthread_self(), recordSetKeyId);
+  struct simpleLinkedList *row, *field = NULL;
+  if( rSet->data == NULL ) {
+    row = sll_init();
+    rSet->data = row;
+  }
+  else
+    row = (struct simpleLinkedList *)rSet->data;
 
   o_log(SQLDEBUG, "Reading row from database");
+  o_log(DEBUGM, "Reading row from database (%x)", rSet);
 
   // Create row container
+  field = sll_init();
   for(i=0; i<argc; i++) {
     o_log(SQLDEBUG, "Saving rowdata: %s : %s", azColName[i], argv[i] );
-    sll_insert(row, o_strdup(azColName[i]), o_strdup(argv[i] ? argv[i] : "NULL"));
+    o_log(DEBUGM, "Saving rowdata: %s : %s", azColName[i], argv[i] );
+    sll_insert(field, o_strdup(azColName[i]), o_strdup(argv[i] ? argv[i] : "NULL"));
   }
 
-  // Save the new row away - for later retrieval 
-  rSet = sll_searchKeys( RECORDSETS, recordSetKey );
-  sll_append((struct simpleLinkedList *)rSet->data, row);
-  free(recordSetKey);
+  sll_append(row, field);
 
   return 0;
 }
@@ -173,10 +190,11 @@ extern int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
     }
     else if ( 0 == strcmp (type, DB_TEXT ) ) {
       sqlite3_bind_text(stmt, col, (char *)tmpList->data, strlen(tmpList->data), SQLITE_TRANSIENT );
-      free(tmpList->data);
+//      free(tmpList->data);
     }
     else if ( 0 == strcmp (type, DB_INT ) ) {
-      sqlite3_bind_int(stmt, col, (int)tmpList->data );
+      int *m = tmpList->data;
+      sqlite3_bind_int(stmt, col, *m );
     }
 //    else if ( 0 == strcmp (type, DB_DOUBLE ) ) {
 //        sqlite3_bind_double(stmt, col, tmpList->data );
@@ -193,36 +211,26 @@ extern int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
   rc = sqlite3_finalize(stmt);
   sll_destroy(vars);
   if( rc != SQLITE_OK ) {
-    o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);
+    o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\n\
+The error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);
     return 1;
   }
   else
     return 0;
 }
 
-extern int runquery_db (char *recordSetKeyId, char *sql) {
+extern struct simpleLinkedList *runquery_db (char *sql) {
 
   int rc;
   char *zErrMsg;
-  struct simpleLinkedList *rSet;
+  struct simpleLinkedList *rSet = sll_init();
 
-  char *recordSetKey = o_printf("%x-%s", pthread_self(), recordSetKeyId);
-
-  o_log(DEBUGM, "Run Query");
+  o_log(DEBUGM, "Run Query (%x)", rSet);
   o_log(SQLDEBUG, "SQL = %s", sql);
 
-  //  Free the corrent recordset - were gonna overwrite_mode
-  //  then, create a new container for the row data and pointers
-  rSet = sll_searchKeys( RECORDSETS, recordSetKey );
-  if(rSet) {
-    o_log(WARNING, "Overwritting an in-use recordset");
-    free_recordset(recordSetKeyId);
-  }
-  rSet = sll_init();
-  sll_insert( RECORDSETS, o_strdup(recordSetKey), rSet );
 
   // Execute the query
-  rc = sqlite3_exec(DBH, sql, (void*)callback, recordSetKeyId, &zErrMsg);
+  rc = sqlite3_exec(DBH, sql, (void*)callback, rSet, &zErrMsg);
 
   // Dump out on error
   if( rc != SQLITE_OK ) {
@@ -232,27 +240,23 @@ extern int runquery_db (char *recordSetKeyId, char *sql) {
   }
 
   if(rSet->data != NULL ) {
-    free(recordSetKey);
-    return 1;
+    o_log(DEBUGM, "has rows");
+    return rSet;
   }
   else {
-    free(recordSetKey);
-    return 0;
+    sll_destroy(rSet);
+    return NULL;
   }
 
 }
 
 
-extern char *readData_db (char *recordSetKeyId, char *field_db) {
+extern char *readData_db (struct simpleLinkedList *rSet, char *field_db) {
 
-  struct simpleLinkedList *rSet;
   struct simpleLinkedList *row;
   struct simpleLinkedList *field;
 
-  char *recordSetKey = o_printf("%x-%s", pthread_self(), recordSetKeyId);
-
-  rSet = sll_searchKeys( RECORDSETS, recordSetKey );
-  free(recordSetKey);
+  o_log(DEBUGM, "Reading row (%x)", rSet);
 
   row = (struct simpleLinkedList *)rSet->data;
   if(row) {
@@ -265,76 +269,54 @@ extern char *readData_db (char *recordSetKeyId, char *field_db) {
 }
 
 
-extern int nextRow (char *recordSetKeyId) {
+extern int nextRow (struct simpleLinkedList *rSet) {
 
-  struct simpleLinkedList *rSet;
   struct simpleLinkedList *row;
   int ret = 0;
 
-  char *recordSetKey = o_printf("%x-%s", pthread_self(), recordSetKeyId);
-
   o_log(SQLDEBUG, "Moving to next row");
-  rSet = sll_searchKeys( RECORDSETS, recordSetKey );
+  o_log(DEBUGM, "Moving to next row (%x)", rSet);
+
   row = (struct simpleLinkedList *)rSet->data;
   row = sll_getNext(row);
   if( row != NULL ) {
     ret = 1;
     rSet->data = row;
   }
-  free(recordSetKey);
 
   return ret;
 }
 
-extern void free_recordset (char *recordSetKeyId) {
+extern void free_recordset (struct simpleLinkedList *rSet) {
 
-  char *recordSetKey = o_printf("%x-%s", pthread_self(), recordSetKeyId);
-  struct simpleLinkedList *field, *row, *rSet;
-  rSet = sll_searchKeys( RECORDSETS, recordSetKey );
+  struct simpleLinkedList *field, *row;
 
-  o_log(DEBUGM, "Free recordset");
+  o_log(DEBUGM, "Free recordset (%x)", rSet);
 
-  if( rSet && rSet->data != NULL ) {
-    for( row = sll_findFirstElement((struct simpleLinkedList *)rSet->data) ; row != NULL ; row = sll_getNext(row) ) {
-      for( field = sll_findFirstElement((struct simpleLinkedList *)row->data) ; field != NULL ; field = sll_getNext(field) ) {
-        o_log(SQLDEBUG, "Freeing: %s = %s", field->key, field->data);
-        free(field->key);
-        free(field->data);
+  if( rSet && rSet != NULL ) {
+    if( rSet->data != NULL ) {
+      for( row = sll_findFirstElement((struct simpleLinkedList *)rSet->data) ; row != NULL ; row = sll_getNext(row) ) {
+        if( row && row != NULL && row->data != NULL ) {
+          for( field = sll_findFirstElement((struct simpleLinkedList *)row->data) ; field != NULL ; field = sll_getNext(field) ) {
+            o_log(DEBUGM, "Freeing: %s = %s", field->key, field->data);
+            free(field->key);
+            free(field->data);
+          }
+        }
+        o_log(DEBUGM, "Freeing field data"); 
+        sll_destroy((struct simpleLinkedList *)row->data);
       }
-      o_log(SQLDEBUG, "Freeing field data"); 
-      sll_destroy((struct simpleLinkedList *)row->data);
+      o_log(DEBUGM, "Free a row");
+      sll_destroy( sll_findFirstElement( (struct simpleLinkedList *)rSet->data ) );
     }
-    o_log(SQLDEBUG, "Free a row");
-    sll_destroy( sll_findFirstElement( (struct simpleLinkedList *)rSet->data ) );
-  }
-  o_log(SQLDEBUG, "Free a record set pointer");
-  free(rSet->key);
-  if(rSet->next == NULL && rSet->prev == NULL ) {
-    // If it's the last one, then just reset to NULLs
-    rSet->key = NULL;
-    rSet->data = NULL;
-  }
-  else {
+    o_log(DEBUGM, "Free a record set pointer");
     sll_delete(rSet);
   }
-
-  //g_hash_table_remove(RECORDSETS, recordSetKey);
-  free(recordSetKey);
 }
 
 
 extern void close_db () {
 
-  struct simpleLinkedList *rSet;
   o_log(DEBUGM, "Closing database");
-
-  // foreach record in the g_hash_table RECORDSETS, loop and call 'free_recordset'
-  for( rSet = sll_findFirstElement(RECORDSETS) ; rSet ; rSet = sll_getNext(rSet) ) {
-    if( rSet->key && rSet->key != NULL ) {
-      free_recordset(rSet->key);
-    }
-  }
-  sll_destroy(RECORDSETS);
-
   sqlite3_close(DBH);
 }

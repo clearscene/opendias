@@ -46,13 +46,13 @@ sub test {
   $tabClickable->[0]->click();
 
   # Click the 'do scanning' button
-  my $ocrCheckbox;
+  my $ocrDropdown;
   eval( "\$ocrCheckbox = \$page->getHtmlElementById(\"ocr_1\");" );
-  if(ref($ocrCheckbox) !~ /HtmlCheckBoxInput/) {
-    o_log("Did not find the expected ocr checkbox");
+  if(ref($ocrDropdown) !~ /HtmlSelect/) {
+    o_log("Did not find the expected ocr language selection");
     return 1;
   }
-  $ocrCheckbox->setChecked(0);
+  $ocrDropdown->setSelectedAttribute('English', $true);
 
   # Click the 'do scanning' button
   my $scanButton;

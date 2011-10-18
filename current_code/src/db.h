@@ -28,11 +28,11 @@
 
 extern int connect_db (int);
 extern void close_db (void);
-extern void free_recordset (char *);
+extern void free_recordset (struct simpleLinkedList *);
 extern int last_insert(void);
 extern int runUpdate_db (char *, struct simpleLinkedList *);
-extern int runquery_db (char *, char *);
-extern char *readData_db (char *, char *);
-extern int nextRow (char *);
+extern struct simpleLinkedList *runquery_db (char *);
+extern char *readData_db (struct simpleLinkedList *, char *);
+extern int nextRow (struct simpleLinkedList *);
 
 #endif /* DB */

@@ -46,18 +46,19 @@ extern char *doDelete (char *documentId) {
   int pages;
 
   char *sql = o_printf("SELECT pages FROM docs WHERE docid = %s", documentId);
-  if(runquery_db("1", sql)) {
-    char *pages_s = o_strdup(readData_db("1", "pages"));
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet != NULL ) {
+    char *pages_s = o_strdup(readData_db(rSet, "pages"));
     pages = atoi(pages_s);
     o_log(INFORMATION, pages_s);
     free(pages_s);
   } else {
     o_log(ERROR, "Could not select record.");
-    free_recordset("1");
+    free_recordset( rSet );
     free(sql);
     return NULL;
   }
-  free_recordset("1");
+  free_recordset( rSet );
   free(sql);
 
   char *docTemplate = o_strdup("%s/scans/%s_%i.jpg");
@@ -102,13 +103,14 @@ extern char *getDocDetail (char *documentId) {
   // Validate document id
   //
   sql = o_printf("SELECT docid FROM docs WHERE docid = %s", documentId);
-  if(!runquery_db("1", sql)) {
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet == NULL ) {
     o_log(ERROR, "Could not select record.");
-    free_recordset("1");
+    free_recordset( rSet );
     free(sql);
     return NULL;
   }
-  free_recordset("1");
+  free_recordset( rSet );
   free(sql);
 
 
@@ -126,12 +128,13 @@ extern char *getDocDetail (char *documentId) {
     ON tags.tagid = dt.tagid \
     ORDER BY selected DESC, tagname", documentId);
 
-  if(runquery_db("1", sql)) {
+  rSet = runquery_db(sql);
+  if( rSet ) {
     do  {
-      o_concatf(&tags, tagsTemplate, readData_db("1", "tagid"), readData_db("1", "tagname"), readData_db("1", "selected"));
-    } while (nextRow("1"));
+      o_concatf(&tags, tagsTemplate, readData_db(rSet, "tagid"), readData_db(rSet, "tagname"), readData_db(rSet, "selected"));
+    } while ( nextRow( rSet ) );
   }
-  free_recordset("1");
+  free_recordset( rSet );
   free(sql);
   free(tagsTemplate);
 
@@ -140,24 +143,25 @@ extern char *getDocDetail (char *documentId) {
   // Get docinformation
   //
   sql = o_printf("SELECT * FROM docs WHERE docid = %s", documentId);
-  if(!runquery_db("1", sql)) {
+  rSet = runquery_db(sql);
+  if( rSet == NULL ) {
     o_log(ERROR, "Could not select record.");
-    free_recordset("1");
+    free_recordset( rSet );
     free(sql);
     return NULL;
   }
 
   // Build Human Readable
   //
-  title = o_strdup(readData_db("1", "title"));
+  title = o_strdup(readData_db(rSet, "title"));
   if( 0 == strcmp(title, "NULL") ) {
     free(title);
     title = o_strdup("New (untitled) document.");
   }
 
-  humanReadableDate = dateHuman( o_strdup(readData_db("1", "docdatey")),
-                                 o_strdup(readData_db("1", "docdatem")),
-                                 o_strdup(readData_db("1", "docdated")) );
+  humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")),
+                                 o_strdup(readData_db(rSet, "docdatem")),
+                                 o_strdup(readData_db(rSet, "docdated")) );
 
 
 
@@ -176,14 +180,15 @@ extern char *getDocDetail (char *documentId) {
   <x>%s</x>\
   <y>%s</y>\
   <Tags>%s</Tags>\
+  <actionrequired>%s</actionrequired>\
  </DocDetail>\
 </Response>");
   returnXML = o_printf(returnXMLtemplate, 
-                            documentId, title, readData_db("1", "entrydate"), readData_db("1", "filetype"), 
-                            humanReadableDate, readData_db("1", "pages"), readData_db("1", "ocrtext"), 
-                            readData_db("1", "ppl"), readData_db("1", "lines"), tags);
+                            documentId, title, readData_db(rSet, "entrydate"), readData_db(rSet, "filetype"), 
+                            humanReadableDate, readData_db(rSet, "pages"), readData_db(rSet, "ocrtext"), 
+                            readData_db(rSet, "ppl"), readData_db(rSet, "lines"), tags, readData_db(rSet, "actionrequired") );
 
-  free_recordset("1");
+  free_recordset(rSet);
   free(sql);
   free(returnXMLtemplate);
   free(title);
@@ -219,8 +224,18 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
       free(dp->day);
     }
     free(dp);
+  } 
 
-  } else 
+  else if ( 0 == strcmp(kkey, "actionrequired") ) {
+    if( vvalue && 0 == strcmp(vvalue, "on") ) {
+      rc = updateDocValue(docid, kkey, 1);
+    }
+    else {
+      rc = updateDocValue(docid, kkey, 0);
+    }
+  } 
+
+  else 
     rc = updateDocValue(docid, kkey, vvalue);
 
   if(rc) return NULL;

@@ -25,11 +25,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
-#include <glib.h>
-#include <glib/gstdio.h>
 #include <libxml/parser.h>
 #include <zzip/lib.h>
 #include "read_odf.h"
+#include "utils.h"
 #include "debug.h"
 
 
@@ -43,15 +42,14 @@ struct mydata {
 
 void xmlAllNodeGetContent(xmlNode *parent, char **str) {
 
-  char *buf;
   xmlNode *node = parent->children; //childs;
   char *text;
 
   while(node != 0) {
     if (node->type == XML_TEXT_NODE) {
-      text = g_strconcat((char *)xmlNodeGetContent(node), " ", NULL);
-      buf = g_strconcat (*str, text, NULL);
-      *str = buf;
+      text = o_printf("%s ", (char *)xmlNodeGetContent(node));
+      conCat(str, text);
+      free(text);
     }
     xmlAllNodeGetContent(node, str);
     node = node->next;
@@ -59,7 +57,7 @@ void xmlAllNodeGetContent(xmlNode *parent, char **str) {
 }
 
 
-char *xmlToText(char *xml, gint size) {
+char *xmlToText(char *xml, int size) {
 
   char *text="";
 
@@ -70,9 +68,9 @@ char *xmlToText(char *xml, gint size) {
   return text;
 }
 
-gint getEntry(const char *name, char *contentFile, char **ptr) {
+int getEntry(const char *name, char *contentFile, char **ptr) {
 
-  gint size=0;
+  int size=0;
   ZZIP_DIR *dir;
   ZZIP_DIRENT entry;
   char *buf;
@@ -124,12 +122,12 @@ int myclose(struct archive *a, void *client_data) {
   return (ARCHIVE_OK);
 }
 
-gint LIBARCHIVEgetEntry(char *name, char *contentFile, char **ptr) {
+int LIBARCHIVEgetEntry(char *name, char *contentFile, char **ptr) {
   struct mydata *mydata;
   struct archive *a;
   struct archive_entry *entry;
   char *buf;
-  gint size = 0;
+  int size = 0;
 
   mydata = (struct mydata*)malloc(sizeof(struct mydata));
   a = archive_read_new();
@@ -144,7 +142,7 @@ gint LIBARCHIVEgetEntry(char *name, char *contentFile, char **ptr) {
   }
 
   while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
-    if(g_str_equal(archive_entry_pathname(entry), contentFile)) {
+    if( 0 == strcmp(archive_entry_pathname(entry), contentFile)) {
       o_log(DEBUGM, (char *)archive_compression_name(a));
       o_log(DEBUGM, (char *)archive_format_name(a));
       o_log(DEBUGM, (char *)archive_entry_pathname(entry));
@@ -173,7 +171,7 @@ extern char *get_odf_Text (const char *filename) {
 
   char *text="";
   char *xml;
-  gint size;
+  int size;
 
   size = getEntry(filename, "content.xml", &xml);
   o_log(DEBUGM, "Found message of size %d. Message reads\n %s", size, xml);
@@ -186,7 +184,7 @@ extern char *get_odf_Text (const char *filename) {
 extern void get_odf_Thumb (const char *filename) {
 
   char *imageData;
-  gint size;
+  int size;
 
   size = getEntry(filename, "Thumbnails/thumbnail.png", &imageData);
   if(size > 0) {

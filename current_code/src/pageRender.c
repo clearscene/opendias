@@ -17,7 +17,6 @@
  */
 
 #include "config.h"
-#include <glib.h>
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
@@ -67,32 +66,33 @@ extern char *getDocList (void) {
   //
   int rows = 0;
   char *rowsData = o_strdup("");
-  if(runquery_db("1", sql)) {
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet != NULL ) {
     do {
       // Append a row and fill in some data
 
       rows++;
-      docid = o_strdup(readData_db("1", "docid"));
-      if(g_str_equal (readData_db("1", "filetype"),"1") ) {
+      if( 0 == strcmp(readData_db(rSet, "filetype"), "1") ) {
         type = o_strdup("Imported ODF Doc");
       }
-      else if(g_str_equal (readData_db("1", "filetype"),"3") ) {
+      else if( 0 == strcmp(readData_db(rSet, "filetype"), "3") ) {
         type = o_strdup("Imported PDF Doc");
       }
-      else if(g_str_equal (readData_db("1", "filetype"),"4") ) {
+      else if( 0 == strcmp(readData_db(rSet, "filetype"), "4") ) {
         type = o_strdup("Imported Image");
       }
       else {
         type = o_strdup("Scaned Doc");
       }
-      title = o_strdup(readData_db("1", "title"));
-      if(g_str_equal (title, "NULL") ) {
+      title = o_strdup(readData_db(rSet, "title"));
+      docid = o_strdup(readData_db(rSet, "docid"));
+      if( 0 == strcmp(title, "NULL") ) {
         free(title);
         title = o_strdup("New (untitled) document.");
       }
-      humanReadableDate = dateHuman( o_strdup(readData_db("1", "docdatey")), 
-                                     o_strdup(readData_db("1", "docdatem")), 
-                                     o_strdup(readData_db("1", "docdated")) );
+      humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")), 
+                                     o_strdup(readData_db(rSet, "docdatem")), 
+                                     o_strdup(readData_db(rSet, "docdated")) );
 
       o_concatf(&rowsData, "<Row><docid>%s</docid><title><![CDATA[%s]]></title><type>%s</type><date>%s</date></Row>", 
                          docid, title, type, humanReadableDate);
@@ -101,9 +101,9 @@ extern char *getDocList (void) {
       free(type);
       free(humanReadableDate);
 
-    } while (nextRow("1"));
+    } while ( nextRow( rSet ) );
   }
-  free_recordset("1");
+  free_recordset( rSet );
   free(sql);
 
   char *xml_template = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DocList><Rows>%s</Rows><count>%i</count></DocList></Response>");
@@ -125,7 +125,7 @@ extern char *getScannerList() {
   SANE_Handle *openDeviceHandle;
   const SANE_Option_Descriptor *sod;
   int hlp=0;
-  int scanOK=FALSE, i=0, resolution=0, minRes=50, maxRes=50;
+  int scanOK=SANE_FALSE, i=0, resolution=0, minRes=50, maxRes=50;
   char *vendor, *model, *type, *name, *scannerHost, *format, *replyTemplate, *deviceList, *resolution_s, *maxRes_s, *minRes_s, *ipandmore, *ip;
   struct hostent *hp;
   long addr;
@@ -141,7 +141,7 @@ extern char *getScannerList() {
   status = sane_get_devices (&SANE_device_list, SANE_FALSE);
   if(status == SANE_STATUS_GOOD) {
     if (SANE_device_list && SANE_device_list[0]) {
-      scanOK = TRUE;
+      scanOK = SANE_TRUE;
       o_log(DEBUGM, "device(s) found");
     }
     else
@@ -150,7 +150,7 @@ extern char *getScannerList() {
   else
     o_log(WARNING, "Checking for devices failed");
 
-  if(scanOK) {
+  if(scanOK == SANE_TRUE) {
     replyTemplate = o_strdup("<Device><vendor>%s</vendor><model>%s</model><type>%s</type><name>%s</name><Formats>%s</Formats><max>%s</max><min>%s</min><default>%s</default><host>%s</host></Device>");
     deviceList = o_strdup("");
     for (i=0 ; SANE_device_list[i] ; i++) {
@@ -201,7 +201,7 @@ extern char *getScannerList() {
         || hlp == 0)
           continue;
 
-        if ( strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) == 0) {
+        if ( 0 == strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) ) {
           //log_option(hlp, sod);
 
           // Some kind of sliding range
@@ -333,12 +333,13 @@ extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info
                   FROM scan_progress \
                   WHERE client_id = '%s'", scanid);
 
-  if(runquery_db("1", sql)) {
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet != NULL ) {
     do {
-      status = atoi(readData_db("1", "status"));
-    } while (nextRow("1"));
+      status = atoi(readData_db(rSet, "status"));
+    } while ( nextRow( rSet ) );
+    free_recordset( rSet );
   }
-  free_recordset("1");
   free(sql);
 
   //
@@ -374,13 +375,14 @@ extern char *getScanningProgress(char *scanid) {
                   FROM scan_progress \
                   WHERE client_id = '%s'", scanid);
 
-  if(runquery_db("1", sql)) {
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet != NULL ) {
     do {
-      status = o_strdup(readData_db("1", "status"));
-      value = o_strdup(readData_db("1", "value"));
-    } while (nextRow("1"));
+      status = o_strdup(readData_db(rSet, "status"));
+      value = o_strdup(readData_db(rSet, "value"));
+    } while ( nextRow( rSet ) );
+    free_recordset( rSet );
   }
-  free_recordset("1");
   free(sql);
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
@@ -448,12 +450,13 @@ extern char *docFilter(char *textSearch, char *startDate, char *endDate) {
   // Get Results
   //
   char *rows = o_strdup("");
-  if(runquery_db("1", sql)) {
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet != NULL ) {
     do {
-      o_concatf(&rows, "<docid>%s</docid>", readData_db("1", "docid"));
-    } while (nextRow("1"));
+      o_concatf(&rows, "<docid>%s</docid>", readData_db(rSet, "docid"));
+    } while ( nextRow( rSet ) );
+    free_recordset( rSet );
   }
-  free_recordset("1");
   free(sql);
 
   char *docList = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DocFilter><Results>%s</Results></DocFilter></Response>", rows);
@@ -467,25 +470,27 @@ extern char *getAccessDetails() {
   // Access by location
   char *sql = o_strdup("SELECT location, r.rolename FROM location_access a left join access_role r on a.role = r.role");
   char *locationAccess = o_strdup("");
-  if(runquery_db("3", sql)) {
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet != NULL ) {
     do {
       o_concatf(&locationAccess, "<Access><location>%s</location><role>%s</role></Access>", 
-                                readData_db("3", "location"), readData_db("3", "rolename"));
-    } while (nextRow("3"));
+                                readData_db(rSet, "location"), readData_db(rSet, "rolename"));
+    } while ( nextRow( rSet ) );
+    free_recordset( rSet );
   }
-  free_recordset("3");
   free(sql);
 
   // Access by user
   sql = o_strdup("SELECT * FROM user_access a left join access_role r on a.role = r.role");
   char *userAccess = o_strdup("");
-  if(runquery_db("4", sql)) {
+  rSet = runquery_db(sql);
+  if( rSet != NULL ) {
     do {
       o_concatf(&userAccess, "<Access><user>%s</user><role>%s</role></Access>", 
-                            readData_db("4", "username"), readData_db("4", "rolename"));
-    } while (nextRow("4"));
+                            readData_db(rSet, "username"), readData_db(rSet, "rolename"));
+    } while ( nextRow( rSet ) );
+    free_recordset( rSet );
   }
-  free_recordset("4");
   free(sql);
 
   char *access = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><AccessDetails><LocationAccess>%s</LocationAccess><UserAccess>%s</UserAccess></AccessDetails></Response>", locationAccess, userAccess);
@@ -530,20 +535,21 @@ extern char *titleAutoComplete(char *startsWith) {
   char *line = o_strdup("{\"title\":\"%s\"}");
   char *sql = o_printf("SELECT DISTINCT title FROM docs WHERE title like '%s%%'", startsWith);
 
-  if(runquery_db("1", sql)) {
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet != NULL ) {
     do {
       if(notFirst==1) 
         conCat(&result, ",");
       notFirst = 1;
-      char *title = o_strdup(readData_db("1", "title"));
+      char *title = o_strdup(readData_db(rSet, "title"));
       char *data = malloc(13+strlen(title));
       sprintf(data, line, title);
       conCat(&result, data);
       free(data);
       free(title);
-    } while (nextRow("1"));
+    } while ( nextRow( rSet ) );
+    free_recordset( rSet );
   }
-  free_recordset("1");
   free(sql);
   free(line);
   conCat(&result, "]}");

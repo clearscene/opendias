@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct simpleLinkedList *generate_new_element( char *key, void *data ) {
+struct simpleLinkedList *generate_new_element( const char *key, void *data ) {
   struct simpleLinkedList *element = malloc( sizeof(struct simpleLinkedList) );
   element->key = key;
   element->data = data;
@@ -64,7 +64,7 @@ void sll_append ( struct simpleLinkedList *element, void *data ) {
   }
 }
 
-void sll_insert ( struct simpleLinkedList *element, char *key, void *data ) {
+void sll_insert ( struct simpleLinkedList *element, const char *key, void *data ) {
   if ( element ) {
     if( element->data == NULL && element->next == NULL && element->prev == NULL ) {
       element->key = key;
@@ -79,9 +79,9 @@ void sll_insert ( struct simpleLinkedList *element, char *key, void *data ) {
   }
 }
 
-struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *element, char *key ) {
+struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *element, const char *key ) {
   if( element && element != NULL ) {
-    if( element->key && 0 == strcmp(element->key, key) ) {
+    if( element->key && element->key != NULL && 0 == strcmp(element->key, key) ) {
       return element;
     }
     return sll_searchKeys( sll_getNext( element ), key );

@@ -19,13 +19,13 @@
 #ifndef VALIDATION
 #define VALIDATION
 
-#include <glib.h>
+#include "simpleLinkedList.h"
 #include <pthread.h>
 
 struct connection_info_struct {
   int connectiontype;
   struct MHD_PostProcessor *postprocessor;
-  GHashTable *post_data;
+  struct simpleLinkedList *post_data;
   pthread_t thread;
 };
 
@@ -34,8 +34,8 @@ struct post_data_struct {
   char *data;
 };
 
-extern char *getPostData(gpointer, char *);
-extern int basicValidation(GHashTable *);
-extern int validate(GHashTable *, char *);
+extern char *getPostData(struct simpleLinkedList *, const char *);
+extern int basicValidation(struct simpleLinkedList *);
+extern int validate(struct simpleLinkedList *, const char *);
 
 #endif /* VALIDATION */

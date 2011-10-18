@@ -28,7 +28,6 @@ openDias - Document Imaging Archive System
 ------------
 
   sqlite3
-  glib2.0
   microhttpd
   uuid
 

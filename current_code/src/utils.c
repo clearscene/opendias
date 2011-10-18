@@ -20,9 +20,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include <glib.h>
-#include <glib/gstdio.h>
 #include <unistd.h> // for getpid & readlink
+#include <sys/stat.h> // for mkdir
 #include <ctype.h>
 #include "main.h"
 #include "debug.h"
@@ -107,47 +106,17 @@ extern int load_file_to_memory(const char *p_filename, char **result) {
 
 extern void createDir_ifRequired(char *dir) {
 
-  if (!g_file_test(dir, G_FILE_TEST_EXISTS))
-  {
-  // Create the directory
-  o_log(INFORMATION, "Created directory.");
-  g_mkdir(dir, 5570);
-  if (!g_file_test(dir, G_FILE_TEST_EXISTS))
-    {
-    // Major error - do something!
-    o_log(ERROR, "Could not get to new directory.");
-    exit(1);
+  if ( 0 != access(dir, F_OK) ) {
+    // Create the directory
+    o_log(INFORMATION, "Created directory.");
+    mkdir( dir, 5570 );
+    if ( 0 != access(dir, F_OK) ) {
+      // Major error - do something!
+      o_log(ERROR, "Could not get to new directory.");
+      exit(1);
     }
   }
 
-}
-
-
-
-/* return the path where the executable is located
- * Gets the path name where this exe is installed
- * buffer = Where to format the path. Must be at least
- * PATH_MAX in size.
- */
-extern void get_exe_name(char *buffer) {
-
-  char linkname[64];
-  register pid_t pid;
-  register unsigned long offset;
-
-  pid = getpid();
-  snprintf(&linkname[0], sizeof(linkname), "/proc/%i/exe", pid);
-  if (readlink(&linkname[0], buffer, PATH_MAX) == -1)
-  offset = 0;
-  else
-  {
-  offset = strlen(buffer);
-  while (offset && buffer[offset - 1] != '/') 
-    --offset;
-  if (offset && buffer[offset - 1] == '/') 
-    --offset;
-  }
-  buffer[offset] = 0;
 }
 
 
@@ -195,7 +164,7 @@ extern char *dateHuman(char *a, char *b, char *c) {
 
   char *m;
 
-  if(!g_str_equal(a, "NULL") && !g_str_equal(b, "NULL") && !g_str_equal(c, "NULL")) {
+  if( 0 != strcmp(a, "NULL") && 0 != strcmp(b, "NULL") && 0 != strcmp(c, "NULL")) {
     if(strlen(b) == 1) {
       m = o_strdup("0");
       conCat(&m, b);
@@ -237,9 +206,9 @@ extern void conCat(char **mainStr, const char *addStr) {
 
   char *tmp, *tmp2;
 
-  if(addStr && !g_str_equal(addStr, "")) {
+  if(addStr && 0 != strcmp(addStr, "")) {
     tmp2 = *mainStr;
-    tmp = g_strconcat(tmp2, addStr, NULL);
+    tmp = o_printf("%s%s", tmp2, addStr);
     free(tmp2);
     *mainStr = tmp;
   }

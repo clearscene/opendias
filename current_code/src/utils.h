@@ -29,7 +29,6 @@ extern char *o_strdup(const char *);
 extern char *itoa(long int, int);
 extern int load_file_to_memory(const char *, char **);
 extern void createDir_ifRequired(char *);
-extern void get_exe_name(char *);
 extern void fcopy(char *, char *);
 extern int max(int, int);
 extern int min(int, int);

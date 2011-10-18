@@ -226,6 +226,7 @@ getDocDetail -> docEditor::getDocDetail
 		    scanDate - the date that the document was added to the application.
 		    type* - the style of document
 		    pages - the number of pages used by the document
+                    actionrequired - indication if the document has been flagged as requiring an action
 		    x - the number of horizontal pizel required by the document
 		    y - the number of lines required by the document
 		    <Taqs>

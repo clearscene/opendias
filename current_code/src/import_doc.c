@@ -25,7 +25,6 @@
 #ifdef CAN_READODF
 #include "read_odf.h"
 #endif // CAN_READODF //
-#include <glib.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -95,7 +94,7 @@ extern char *uploadfile(char *filename, char *ftype) {
   char *docid = addNewFileDoc(itype, ocrText); //ocrText get freed in this method
 
   // Docs that are not scanned, are stored with no "_x" postfix, but any thumbnails - are.
-  char *to_name = g_strconcat(BASE_DIR,"/scans/",docid, NULL);
+  char *to_name = o_printf("%s/scans/%s", BASE_DIR, docid);
   addFileExt(&to_name, itype);
 
   char *filename_template = o_strdup("/tmp/%s.dat");

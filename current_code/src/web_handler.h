@@ -19,7 +19,6 @@
 #ifndef WEBHANDLER
 #define WEBHANDLER
 
-#include <glib.h>
 #include <microhttpd.h>
 
 #define POSTBUFFERSIZE 512

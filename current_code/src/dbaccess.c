@@ -78,14 +78,11 @@ extern char *getScanParam(char *scanid, int param_option) {
                   WHERE client_id = '%s' \
                   AND param_option = %i", scanid, param_option);
 
-  if(runquery_db("2", sql)) {
-    vvalue = o_strdup(".");
-    do {
-      free(vvalue);
-      vvalue = o_strdup(readData_db("2", "param_value"));
-    } while (nextRow("2"));
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet ) {
+    vvalue = o_strdup(readData_db(rSet, "param_value"));
   }
-  free_recordset("2");
+  free_recordset( rSet );
   free(sql);
 
   return vvalue;
@@ -95,11 +92,14 @@ extern void addScanProgress (char *uuid) {
 
   char *sql = o_strdup("INSERT INTO scan_progress (client_id, status, value) VALUES (?, ?, 0);");
 
+  int t1 = SCAN_IDLE;
+  int *t = &t1;
+
   struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_TEXT );
   sll_append(vars, uuid );
   sll_append(vars, DB_INT );
-  sll_append(vars, SCAN_IDLE );
+  sll_append(vars, t );
 
   runUpdate_db(sql, vars);
   free(sql);
@@ -151,6 +151,7 @@ static char *addNewDoc (int ftype, int getLines, int ppl, int resolution, int pa
   runUpdate_db(sql, vars);
   free(sql);
   free(dateStr);
+  free(ocrText);
   return itoa(last_insert(), 10);
 
 }
@@ -179,6 +180,7 @@ extern void updateNewScannedPage (char *docid, char *ocrText, int page) {
   runUpdate_db(sql, vars);
   free(sql);
   free(docid);
+  free(octText);
 
 }
 

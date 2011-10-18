@@ -18,7 +18,6 @@
 
 #include "config.h"
 
-#include <glib.h>       // REMOVE ME (and the g_strconcat)
 #include <stdlib.h>
 #include <stdio.h>      // printf, file operations
 #include <string.h>     // compares
@@ -45,7 +44,6 @@ extern void doScanningOperation(void *uuid) {
   int request_resolution=0, testScanner=0;
   char *devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
   char *docid_s = getScanParam(uuid, SCAN_PARAM_DOCID);
-
   char *pageCount_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_PAGES);
   int pageCount = atoi(pageCount_s);
   free(pageCount_s);

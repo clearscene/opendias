@@ -16,7 +16,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -37,6 +36,7 @@
 #include "pageRender.h"
 #include "doc_editor.h"
 #include "import_doc.h"
+#include "simpleLinkedList.h"
 
 char *busypage = "<html><body>This server is busy, please try again later.</body></html>";
 char *servererrorpage = "<html><body>An internal server error has occured.</body></html>";
@@ -66,11 +66,7 @@ static int getFromFile_fullPath(const char *url, char **data) {
 static int getFromFile(const char *url, char **data) {
 
   // Build Document Root
-  char *htmlFrag = o_strdup(PACKAGE_DATA_DIR);
-  conCat(&htmlFrag, "/../share/opendias/webcontent");
-
-  // Add requested URI
-  conCat(&htmlFrag, url);
+  char *htmlFrag = o_printf("%s/opendias/webcontent%s", PACKAGE_DATA_DIR, url);
 
   int size = getFromFile_fullPath(htmlFrag, data);
   free(htmlFrag);
@@ -100,6 +96,20 @@ static char *build_page (char *page) {
 
 }
 
+// struct connection_info_struct 
+// ---- (details about an incomming http connection request)
+// | int connectiontype [POST|GET]
+// | pthread_t thread
+// | struct MHD_PostProcessor *postprocessor
+// | struct simpleLinkedList *post_data  -------->  struct simpleLinkedList *post_data
+// ----                                             ---- (details about what the user POSTed)
+//                                                  | char *key
+//                                                  | void *data  --------->  struct post_data_struct 
+//                                                  | sll *next               ---- (individual post data elements)
+//                                                  | sll *prev               | int size
+//                                                  ----                      | char *data
+//                                                                            ----
+
 static int send_page (struct MHD_Connection *connection, char *page, int status_code, const char* mimetype, int contentSize) {
   int ret;
   struct MHD_Response *response;
@@ -120,12 +130,14 @@ static int send_page_bin (struct MHD_Connection *connection, char *page, int sta
 static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key, const char *filename, const char *content_type, const char *transfer_encoding, const char *data, uint64_t off, size_t size) {
 
   struct connection_info_struct *con_info = coninfo_cls;
-  struct post_data_struct *data_struct = (struct post_data_struct *)g_hash_table_lookup(con_info->post_data, key);
+  struct simpleLinkedList *post_element = sll_searchKeys(con_info->post_data, key);
+  struct post_data_struct *data_struct = NULL;
+  if( post_element && post_element != NULL && post_element->data != NULL )
+    data_struct = (struct post_data_struct *)post_element->data;
 
   if(size > 0) {
     char *trimedData = calloc(size+1, sizeof(char));
     strncat(trimedData, data, size);
-    //trimedData[size] = NULL; // Add on the trailing NULL
 
     if(NULL == data_struct) {
       data_struct = (struct post_data_struct *) malloc (sizeof (struct post_data_struct));
@@ -141,21 +153,18 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
       else {
         data_struct->data = o_strdup(trimedData);
       }
-      g_hash_table_insert(con_info->post_data, o_strdup(key), data_struct);
+      sll_insert(con_info->post_data, o_strdup(key), data_struct);
     }
 
     else if(0 != strcmp(key, "uploadfile")) {
       conCat(&(data_struct->data), trimedData);
       data_struct->size += size;
-      g_hash_table_replace(con_info->post_data, (gpointer)key, (gpointer)data_struct);
+      ////////////g_hash_table_replace(con_info->post_data, key, data_struct);
     }
 
     if(0 == strcmp(key, "uploadfile")) {
       FILE *fp;
-      char *filename_template = o_strdup("/tmp/%s.dat");
-      char *filename = malloc(10+strlen(data_struct->data));
-      sprintf(filename, filename_template, data_struct->data);
-      free(filename_template);
+      char *filename = o_printf("/tmp/%s.dat", data_struct->data);
       if ((fp = fopen(filename, "ab")) == NULL)
         o_log(ERROR, "could not open http post binary data file for output");
       else {
@@ -188,15 +197,20 @@ extern void request_completed (void *cls, struct MHD_Connection *connection, voi
     }
     char *uploadedFileName = getPostData(con_info->post_data, "uploadfile");
     if(uploadedFileName != NULL) {
-      char *filename_template = o_strdup("/tmp/%s.dat");
-      char *filename = malloc(10+strlen(uploadedFileName));
-      sprintf(filename, filename_template, uploadedFileName);
-      free(filename_template);
+      char *filename = o_printf("/tmp/%s.dat", uploadedFileName);
       unlink(filename); // Remove any uploaded files
       free(filename);
     }
-    g_hash_table_remove_all( con_info->post_data );
-    g_hash_table_unref( con_info->post_data );
+    struct simpleLinkedList *row, *data;
+    for( row = sll_findFirstElement( con_info->post_data ) ; row != NULL ; row = sll_getNext(row) ) {
+      free(row->key);
+      row->key = NULL;
+      struct post_data_struct *data_struct = (struct post_data_struct *)row->data;
+      free(data_struct->data);
+      free(data_struct);
+      row->data = NULL;
+    }
+    sll_destroy( sll_findFirstElement( con_info->post_data ) );
   }
 
   //pthread_t t = con_info->thread;
@@ -211,12 +225,6 @@ extern void request_completed (void *cls, struct MHD_Connection *connection, voi
 
 }
 
-static GDestroyNotify post_data_free(struct post_data_struct *d ) {
-  free(d->data);
-  free(d);
-  return (GDestroyNotify)1;
-}
-
 static char *accessChecks(struct MHD_Connection *connection, const char *url, struct priverlage *privs) {
 
   int locationLimited = 0, userLimited = 0, locationAccess = 0, userAccess = 0;
@@ -224,9 +232,10 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
 
   // Check if there are any restrictions
   char *sql = o_strdup("SELECT 'location' as type, role FROM location_access UNION SELECT 'user' as type, role FROM user_access");
-  if(runquery_db("1", sql)) {
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet != NULL ) {
     do  {
-      char *type = o_strdup(readData_db("1", "type"));
+      char *type = o_strdup(readData_db(rSet, "type"));
       if(0 == strcmp(type, "location")) {
         locationLimited = 1;
       }
@@ -234,9 +243,9 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
         userLimited = 1;
       }
       free(type);
-    } while (nextRow("1"));
+    } while ( nextRow( rSet ) );
   }
-  free_recordset("1");
+  free_recordset( rSet );
   free(sql);
 
 
@@ -250,21 +259,22 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
       inet_ntop(p->sin_family, &(p->sin_addr), client_address, INET_ADDRSTRLEN);
     }
 
-    char *sql = o_strdup("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan FROM location_access LEFT JOIN access_role ON location_access.role = access_role.role WHERE '");
-    conCat(&sql, client_address);
-    conCat(&sql, "' like location");
-    if(runquery_db("1", sql)) {
+    char *sql = o_printf("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan \
+            FROM location_access LEFT JOIN access_role ON location_access.role = access_role.role \
+            WHERE '%s' LIKE location", client_address);
+    rSet = runquery_db(sql);
+    if( rSet != NULL ) {
       do  {
         locationAccess = 1;
-        privs->update_access += atoi(readData_db("1", "update_access"));
-        privs->view_doc += atoi(readData_db("1", "view_doc"));
-        privs->edit_doc += atoi(readData_db("1", "edit_doc"));
-        privs->delete_doc += atoi(readData_db("1", "delete_doc"));
-        privs->add_import += atoi(readData_db("1", "add_import"));
-        privs->add_scan += atoi(readData_db("1", "add_scan"));
-      } while (nextRow("1"));
+        privs->update_access += atoi(readData_db(rSet, "update_access"));
+        privs->view_doc += atoi(readData_db(rSet, "view_doc"));
+        privs->edit_doc += atoi(readData_db(rSet, "edit_doc"));
+        privs->delete_doc += atoi(readData_db(rSet, "delete_doc"));
+        privs->add_import += atoi(readData_db(rSet, "add_import"));
+        privs->add_scan += atoi(readData_db(rSet, "add_scan"));
+      } while ( nextRow( rSet ) );
     }
-    free_recordset("1");
+    free_recordset( rSet );
     free(sql);
   }
 
@@ -294,17 +304,19 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
   }
 }
 
-static void postDumper(GHashTable *table) {
-
-  GHashTableIter iter;
-  gpointer key, value;
+static void postDumper(struct simpleLinkedList *table) {
 
   o_log(DEBUGM, "Collected post data: ");
-  g_hash_table_iter_init (&iter, table);
-  while (g_hash_table_iter_next (&iter, &key, &value)) {
-    char *data = getPostData(table, key);
-    o_log(DEBUGM, "      %s : %s", key, data);
+  struct simpleLinkedList *row;
+  for( row = sll_findFirstElement( table ) ; row != NULL ; row = sll_getNext(row) ) {
+    char *data = getPostData(table, row->key);
+    o_log(DEBUGM, "      %s : %s", row->key, data);
   }
+//  g_hash_table_iter_init (&iter, table);
+//  while (g_hash_table_iter_next (&iter, &key, &value)) {
+//    char *data = getPostData(table, key);
+//    o_log(DEBUGM, "      %s : %s", key, data);
+//  }
 }
 
 extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
@@ -340,7 +352,8 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
     //con_info->thread = NULL;
 
     if (0 == strcmp (method, "POST")) {
-      con_info->post_data = g_hash_table_new_full(g_str_hash, g_str_equal, (GDestroyNotify)g_free, (GDestroyNotify)post_data_free);
+      con_info->post_data = sll_init();
+      ////////con_info->post_data = g_hash_table_new_full(g_str_hash, g_str_equal, (GDestroyNotify)g_free, (GDestroyNotify)post_data_free);
       con_info->postprocessor = MHD_create_post_processor (connection, POSTBUFFERSIZE, iterate_post, (void *) con_info);
       if (NULL == con_info->postprocessor) {
         free (con_info);
@@ -435,8 +448,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
     // Serve 'scans' content [image|pdf|odf]
     else if( 0!=strstr(url,"/scans/") && (0!=strstr(url,".jpg") || 0!=strstr(url,".pdf") || 0!=strstr(url,".odt") ) ) {
-      dir = o_strdup(BASE_DIR);
-      conCat(&dir, url);
+      dir = o_printf("%s%s", BASE_DIR, url);
       size = getFromFile_fullPath(dir, &content);
       free(dir);
       if(0!=strstr(url,".jpg")) {
@@ -461,7 +473,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
     }
 
     // Serve 'audio' content
-    else if( 0!=strstr(url,"/audio/") && 0!=strstr(url,".ogg") ) {
+/*    else if( 0!=strstr(url,"/audio/") && 0!=strstr(url,".ogg") ) {
       char *dir = o_strdup(g_getenv("HOME"));
       conCat(&dir, "/.openDIAS/");
       conCat(&dir, url);
@@ -477,7 +489,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
       else
         mimetype = MIMETYPE_OGG;
     }
-
+*/
     // Serve 'js' content
     else if( 0!=strstr(url,"/includes/") && 0!=strstr(url,".js") ) {
       size = getFromFile(url, &content);
