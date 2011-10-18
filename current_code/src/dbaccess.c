@@ -180,16 +180,36 @@ extern void updateNewScannedPage (char *docid, char *ocrText, int page) {
   runUpdate_db(sql, vars);
   free(sql);
   free(docid);
-  free(octText);
+  free(ocrText);
 
 }
 
-extern int updateDocValue (char *docid, char *kkey, char *vvalue) {
+extern int doUpdateDocValue (char *kkey, struct simpleLinkedList *vars) {
 
   char *sql;
   int rc = 0;
 
   sql = o_printf("UPDATE docs SET %s = ? WHERE docid = ?", kkey);
+
+  rc = runUpdate_db(sql, vars);
+  free(sql);
+
+  return rc;
+}
+
+extern int updateDocValue_int (char *docid, char *kkey, int vvalue) {
+
+  struct simpleLinkedList *vars = sll_init();
+  int *v = &vvalue;
+  sll_append(vars, DB_INT );
+  sll_append(vars, v );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, docid );
+
+  return doUpdateDocValue(kkey, vars);
+}
+
+extern int updateDocValue (char *docid, char *kkey, char *vvalue) {
 
   struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_TEXT );
@@ -197,10 +217,7 @@ extern int updateDocValue (char *docid, char *kkey, char *vvalue) {
   sll_append(vars, DB_TEXT );
   sll_append(vars, docid );
 
-  rc = runUpdate_db(sql, vars);
-  free(sql);
-
-  return rc;
+  return doUpdateDocValue(kkey, vars);
 }
 
 static int addRemoveTagOnDocument (char *sql, char *docid, char *tagid) {

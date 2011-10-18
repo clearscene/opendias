@@ -24,7 +24,7 @@
 #endif
 
 struct simpleLinkedList {
-  const char *key;
+  char *key;
   void *data;
   struct simpleLinkedList *prev;
   struct simpleLinkedList *next;
@@ -37,8 +37,8 @@ extern struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList * 
 extern struct simpleLinkedList *sll_getNext( struct simpleLinkedList * );
 extern struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *, const char * );
 extern struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList * );
-extern void sll_append ( struct simpleLinkedList *, void * );
-extern void sll_insert ( struct simpleLinkedList *, const char *, void * );
+extern void sll_append( struct simpleLinkedList *, void * );
+extern void sll_insert( struct simpleLinkedList *, char *, void * );
 extern void sll_destroy( struct simpleLinkedList * );
 extern void sll_delete( struct simpleLinkedList * );
 

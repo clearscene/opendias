@@ -47,6 +47,7 @@ extern void updateScanProgress(char *, int, int);
 extern void updateNewScannedPage (char *, char *, int); // Frees both chars
 extern char *addNewScannedDoc (int, int, int, int);
 extern char *addNewFileDoc (int, char *);
+extern int updateDocValue_int (char *, char *, int);
 extern int updateDocValue (char *, char *, char *);
 extern int addTagToDoc (char *, char *);
 extern int removeTagFromDoc (char *, char *);

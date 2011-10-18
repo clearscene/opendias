@@ -253,7 +253,7 @@ extern char *readData_db (struct simpleLinkedList *rSet, char *field_db) {
   struct simpleLinkedList *row;
   struct simpleLinkedList *field;
 
-  o_log(SQLDEBUGM, "Reading row (%x)", rSet);
+  o_log(SQLDEBUG, "Reading row (%x)", rSet);
 
   row = (struct simpleLinkedList *)rSet->data;
   if(row) {

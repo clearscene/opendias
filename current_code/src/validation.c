@@ -24,7 +24,7 @@
 #include "utils.h"
 #include "ocr_plug.h"
 
-extern char *getPostData(struct simpleLinkedList *post_hash, const char *key) {
+extern char *getPostData(struct simpleLinkedList *post_hash, char *key) {
   struct simpleLinkedList *data = sll_searchKeys(post_hash, key);
   struct post_data_struct *data_struct = NULL;
   if( data != NULL && data->data != NULL )
@@ -301,7 +301,7 @@ static int checkRole(char *role) {
 /*************************************************8
  * Checks on each calling method
  */
-extern int validate(struct simpleLinkedList *postdata, const char *action) {
+extern int validate(struct simpleLinkedList *postdata, char *action) {
 
   int ret = 0;
 

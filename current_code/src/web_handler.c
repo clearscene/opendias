@@ -201,7 +201,7 @@ extern void request_completed (void *cls, struct MHD_Connection *connection, voi
       unlink(filename); // Remove any uploaded files
       free(filename);
     }
-    struct simpleLinkedList *row, *data;
+    struct simpleLinkedList *row;
     for( row = sll_findFirstElement( con_info->post_data ) ; row != NULL ; row = sll_getNext(row) ) {
       free(row->key);
       row->key = NULL;
