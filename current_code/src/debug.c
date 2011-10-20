@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 #include <pthread.h>
 #include "debug.h"
 #include "utils.h"
@@ -28,7 +29,7 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
   FILE *fp;
   char *logFile;
 
-  if( verbosity <= VERBOSITY) {
+  if( verbosity <= VERBOSITY ) {
 
     char *thumb = o_strdup("%s:%X:%s: ");
     char *ltime = getTimeStr();
@@ -51,6 +52,11 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
     else 
       vb = o_strdup("---");
 
+    if( message == strstr(message,"|") ) {
+      vprintf(message,inargs);
+      printf("\n");
+    }
+
     // Output to file
     logFile = o_strdup(LOG_DIR);
     conCat(&logFile, "/opendias.log");
@@ -58,14 +64,13 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
       fprintf(stderr,"Cannot open log file.\n");
       exit(1);
     }
-    //fprintf(fp,thumb,ltime,thread,vb);
     fprintf(fp,thumb,ltime,pthread_self(),vb);
     vfprintf(fp,message,inargs);
     fprintf(fp,"\n");
     fclose(fp);
+    free(logFile);
 
     free(ltime);
-    free(logFile);
     free(thumb);
     free(vb);
   }

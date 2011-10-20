@@ -11,7 +11,23 @@ AM_CFLAGS =\
 	 -Wall\
 	 -g
 
-bin_PROGRAMS = opendias
+bin_PROGRAMS = opendias opendiasconfig
+
+opendiasconfig_SOURCES = \
+	db.c    \
+	db.h    \
+	debug.c    \
+	debug.h    \
+	utils.c    \
+	utils.h    \
+        opendiasconfig.h \
+        opendiasconfig.c \
+        simpleLinkedList.c    \
+        simpleLinkedList.h
+
+opendiasconfig_LDFLAGS = 
+
+opendiasconfig_LDADD = $(OPENDIAS_LIBS)
 
 opendias_SOURCES = \
 	db.c    \
