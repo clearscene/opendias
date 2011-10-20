@@ -1,4 +1,4 @@
-formFields = new Array( 'title', 'actionrequired', 'docDate', 'extractedText' );
+formFields = new Array( 'title', 'actionrequired', 'docDate', 'ocrtext' );
 
 function sendUpdate(kkey, vvalue) {
 
@@ -64,9 +64,11 @@ function unlockForm(success) {
 function changeFormState(state) {
   for ( var key in formFields ) {
     if(state) {
+//      $('#'+formFields[key]).addClass('disabled');
       $('#'+formFields[key]).attr('disabled', 'disabled');
     } else {
       $('#'+formFields[key]).removeAttr('disabled');
+//      $('#'+formFields[key]).removeClass('disabled');
     }
   }
 }
@@ -132,7 +134,11 @@ $(document).ready(function() {
 
   for ( var key in formFields ) {
     $('#'+formFields[key]).change(function(){
-      sendUpdate( $(this).attr('id'), $(this).val() );
+      if($(this).is(':checkbox')) {
+        sendUpdate( $(this).attr('id'), $(this).is(':checked') );
+      } else {
+        sendUpdate( $(this).attr('id'), $(this).val() );
+      }
     });
   }
 

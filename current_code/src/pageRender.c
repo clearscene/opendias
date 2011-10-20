@@ -56,7 +56,7 @@
  */
 extern char *getDocList (void) {
 
-  char *sql, *docid, *title, *type, *humanReadableDate;
+  char *sql, *docid, *actionrequired, *title, *type, *humanReadableDate;
 
   // Generate the doc list SQL
   //
@@ -84,6 +84,7 @@ extern char *getDocList (void) {
       else {
         type = o_strdup("Scaned Doc");
       }
+      actionrequired = o_strdup(readData_db(rSet, "actionrequired"));
       title = o_strdup(readData_db(rSet, "title"));
       docid = o_strdup(readData_db(rSet, "docid"));
       if( 0 == strcmp(title, "NULL") ) {
@@ -94,8 +95,8 @@ extern char *getDocList (void) {
                                      o_strdup(readData_db(rSet, "docdatem")), 
                                      o_strdup(readData_db(rSet, "docdated")) );
 
-      o_concatf(&rowsData, "<Row><docid>%s</docid><title><![CDATA[%s]]></title><type>%s</type><date>%s</date></Row>", 
-                         docid, title, type, humanReadableDate);
+      o_concatf(&rowsData, "<Row><docid>%s</docid><actionrequired>%s</actionrequired><title><![CDATA[%s]]></title><type>%s</type><date>%s</date></Row>", 
+                         docid, actionrequired, title, type, humanReadableDate);
       free(docid);
       free(title);
       free(type);

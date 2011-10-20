@@ -136,6 +136,7 @@ getDocList -> pageRender::getDocList
 		    <Rows>
 		      <Row>
 			docid - the document id of a found document
+                        actionrequired - indicator flag
 			title - the user defined title of the found document
 			type* - the style of document
 			date - the user defined date of the found document

@@ -5,7 +5,8 @@ web_DATA = \
         cabinet.jpg \
 	openDIAS_64x64.ico \
 	openDIAS_sml.png \
-        opendias.jpg
+        opendias.jpg \
+        actionrequired.png
 
 webdir = \
 	$(pkgdatadir)/webcontent/images

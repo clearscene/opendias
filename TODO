@@ -29,7 +29,7 @@ Implement 'play audio from OCR' on document detail oage.
 
 Improve the tag selection on document detail page.
 
-Implement 'action required' flag
+Search on 'action required' flag
 
 Implement 'document linkage'
 
@@ -47,7 +47,7 @@ Turn OCR into a plugin
 
 Turn 'Play Audio' into a plugin
 
-Add Localization framework the application;
+Add Localization framework to the application;
 
 
 Phase 4
@@ -62,6 +62,7 @@ Phase 5 (possible ideas)
  * document workflow
  * document encryption
  * Updates versioning/audit
+ * auto (learning) tagging of new docs
 
 
 ==================================================

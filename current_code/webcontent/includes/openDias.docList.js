@@ -87,6 +87,7 @@ function processData(){
   else {
     count++;
     var docid = $(rw).find('docid').text();
+    var actionrequired = $(rw).find('actionrequired').text();
     var title = $(rw).find('title').text();
     var type = $(rw).find('type').text();
     var date = $(rw).find('date').text();
@@ -95,7 +96,15 @@ function processData(){
     var id = document.createAttribute('id');
     tr.setAttribute('id','docid_'+docid);
     var e_docid = document.createElement("td");
+    e_docid.setAttribute('class','indicator');
     e_docid.appendChild(document.createTextNode(docid));
+    if(actionrequired!="1") {
+      e_docid.appendChild(document.createTextNode(" "));
+    } else {
+      var img = document.createElement("img");
+      img.setAttribute('src','/opendias/images/actionrequired.png');
+      e_docid.appendChild(img);
+    }
     tr.appendChild(e_docid);
     var e_title = document.createElement("td");
     e_title.appendChild(document.createTextNode(title));

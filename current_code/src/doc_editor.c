@@ -227,7 +227,7 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
   } 
 
   else if ( 0 == strcmp(kkey, "actionrequired") ) {
-    if( vvalue && 0 == strcmp(vvalue, "on") ) {
+    if( vvalue && 0 == strcmp(vvalue, "true") ) {
       rc = updateDocValue_int(docid, kkey, 1);
     }
     else {

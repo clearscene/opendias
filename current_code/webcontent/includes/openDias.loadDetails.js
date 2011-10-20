@@ -76,10 +76,10 @@ $(document).ready(function() {
            $("#type").append(document.createTextNode( getTypeDescription($(data).find('DocDetail').find('type').text()) ));
 
            if( $(data).find('DocDetail').find('actionrequired').text() == "1" ) {
-              $("#actionrequired").checked(true); 
+              $("#actionrequired").attr({checked: true}); 
            }
            else {
-              $("#actionrequired").checked(false);
+              $("#actionrequired").attr({checked: false});
            }
 
            //
