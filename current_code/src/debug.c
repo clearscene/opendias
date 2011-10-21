@@ -53,7 +53,7 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
       vb = o_strdup("---");
 
     if( message == strstr(message,"|") ) {
-      vprintf(message,inargs);
+      vprintf((char *)message+1,inargs);
       printf("\n");
     }
 
