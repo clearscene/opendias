@@ -1,3 +1,17 @@
+*0.6.6  Fix an issue with bad setting of SANE options. (some user could not set the resolution)
+        Added language selection for OCR operations
+        Fix install problem if installation is already found
+        Improved build instructions
+        Fix build problem on Fedora
+        Layed the groundwork for device locking
+        Various tidy-ups
+        Unified the backed response structure and defined an API
+        Added direct API calls examples
+        Added an "ideas" link and fixed typos/spelling error, on the application homepage.
+        Removed the dependency on glib
+        Moved around the doclist page to better show fix vs. user defined, options
+        Added new admin app to easily set config options
+
 *0.6.5  Fix for scanners with "word_list" resolution options
 
 *0.6.4  Fix warnings at compile time
