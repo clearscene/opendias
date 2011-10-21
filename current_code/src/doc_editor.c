@@ -124,7 +124,7 @@ extern char *getDocDetail (char *documentId) {
     FROM tags LEFT JOIN \
     (SELECT * \
     FROM doc_tags \
-    WHERE docid=%d) dt \
+    WHERE docid=%s) dt \
     ON tags.tagid = dt.tagid \
     ORDER BY selected DESC, tagname", documentId);
 
