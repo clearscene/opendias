@@ -58,17 +58,15 @@ function unlockForm(success) {
   changeFormState(false);
   if(success) {
     $('#saveAlert').show();
-    $('#saveAlert').fadeOut(1000);
+    $('#saveAlert').fadeOut(4000);
   }
 }
 function changeFormState(state) {
   for ( var key in formFields ) {
     if(state) {
-//      $('#'+formFields[key]).addClass('disabled');
       $('#'+formFields[key]).attr('disabled', 'disabled');
     } else {
       $('#'+formFields[key]).removeAttr('disabled');
-//      $('#'+formFields[key]).removeClass('disabled');
     }
   }
 }
