@@ -45,9 +45,6 @@
 #include "scan.h"
 #include "validation.h" // for con_info struct - move me to web_handler.h
 
-//GList *SELECTEDTAGS;
-
-
 
 /*
  *
