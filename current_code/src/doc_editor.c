@@ -118,20 +118,20 @@ extern char *getDocDetail (char *documentId) {
   // Get a list of tags
   //
   tags = o_strdup("");
-  tagsTemplate = o_strdup("<Tag><tagid>%s</tagid><tagname>%s</tagname><selected>%s</selected></Tag>");
+  tagsTemplate = o_strdup("<tag>%s</tag>");
   sql = o_printf(
-    "SELECT tags.tagid, tagname, dt.tagid selected \
-    FROM tags LEFT JOIN \
+    "SELECT tagname \
+    FROM tags JOIN \
     (SELECT * \
     FROM doc_tags \
     WHERE docid=%s) dt \
     ON tags.tagid = dt.tagid \
-    ORDER BY selected DESC, tagname", documentId);
+    ORDER BY tagname", documentId);
 
   rSet = runquery_db(sql);
   if( rSet ) {
     do  {
-      o_concatf(&tags, tagsTemplate, readData_db(rSet, "tagid"), readData_db(rSet, "tagname"), readData_db(rSet, "selected"));
+      o_concatf(&tags, tagsTemplate, readData_db(rSet, "tagname") );
     } while ( nextRow( rSet ) );
   }
   free_recordset( rSet );
@@ -242,14 +242,27 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
   else return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><UpdateDocDetails><status>OK</status></UpdateDocDetails></Response>");
 }
 
-extern char *updateTagLinkage(char *docid, char *tagid, char *add_remove) {
+extern char *updateTagLinkage(char *docid, char *tag, char *subaction) {
 
   int rc = 0;
 
-  if(0 == strcmp(add_remove, "add")) rc = addTagToDoc(docid, tagid);
-  else if(0 == strcmp(add_remove, "remove")) rc = removeTagFromDoc (docid, tagid);
-  else return NULL;
+  // Check if their is a tag of this name, if not add one
+  char *tagid = getTagId( tag );
 
+  if(0 == strcmp(subaction, "addTag")) {
+    rc = addTagToDoc(docid, tagid);
+  }
+  else if(0 == strcmp(subaction, "removeTag")) {
+    rc = removeTagFromDoc (docid, tagid);
+    if( 0 == countDocsWithTag( tagid ) )
+      deleteTag( tagid );
+  }
+  else {
+    o_log(ERROR, "Unknown subaction.");
+    rc = 1;
+  }
+
+  free(tagid);
   if(rc == 1) return NULL;
   else return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><MoveTag><status>OK</status></MoveTag></Response>");
 }

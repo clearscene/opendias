@@ -42,6 +42,16 @@ Error Response
 
 
 
+controlAccess -> pageRender::controlAccess()
+        Called from:
+        Purpose: 
+        Inputs: action: fixed string 'controlAccess'
+                submethod: The type of access controls being updated
+                location: The location to assign or remove
+                role: The role to assign or remove
+        Outputs:
+
+
 getScanningProgress -> pageRender::getScanningProgress()
 	Called from: openDias.acquire.js :: getScanningProgress()
 	Purpose: Read the state of an asyncronouse scan.
@@ -231,11 +241,9 @@ getDocDetail -> docEditor::getDocDetail
 		    x - the number of horizontal pizel required by the document
 		    y - the number of lines required by the document
 		    <Taqs>
-		      <Tag>
-		        tagid
-		        tagname
-		        selected
-		      </Tag>
+		      <tag>
+		        tagname - the name of the assigned tag
+		      </tag>
 		      ...
 		    </Tags>
 		  </DocDetail>
@@ -264,8 +272,8 @@ moveTag -> docEditor::updateTagLinkage
 	Purpose: Updates links between documents and tags 
 	Inputs:	action: fixed string 'moveTag'
 		docid: the documents id
-		tagid: the id of the tag that is being (un)linked
-		add_remove: flag to indicate if the tag should be added or removed ['add',remove']
+		tag: the tag that is being (un)linked
+		subaction: flag to indicate if the tag should be added or removed ['addTag','removeTag']
 	Outputs;
 		<Response>
 		  </MoveTag>

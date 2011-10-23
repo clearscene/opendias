@@ -54,5 +54,8 @@ extern int removeTagFromDoc (char *, char *);
 extern void removeDocTags (char *);
 extern void removeDoc (char *);
 extern void addLocation(char *, int);
+extern char *getTagId(char *);
+extern int countDocsWithTag(char *);
+extern void deleteTag(char *);
 
 #endif /* DBACCESS */

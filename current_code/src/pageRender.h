@@ -30,5 +30,6 @@ extern char *nextPageReady(char *, struct connection_info_struct *);
 extern char *getAccessDetails();
 extern char *controlAccess(char *, char *, char *, char *, int);
 extern char *titleAutoComplete(char *);
+extern char *tagsAutoComplete(char *, char *);
 
 #endif /* PAGERENDER */

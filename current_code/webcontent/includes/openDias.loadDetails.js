@@ -12,49 +12,26 @@ function getUrlVars() {
     return vars;
 }
 
-function applyNewRow(tagid, tag, selected) {
-
-  var tr = document.createElement("tr");
-  var id = document.createAttribute('id');
-  tr.setAttribute('id','tagid_'+tagid);
-  var e_tag = document.createElement("td");
-  e_tag.appendChild(document.createTextNode(tag));
-  tr.appendChild(e_tag);
-
-  if(selected=="NULL") {
-    document.getElementById('available').getElementsByTagName('tbody')[0].appendChild(tr);
-    $('#tagid_'+tagid).one('dblclick', function() {
-      moveTag( $(this).attr('id'), 'add' );
-    });
-  } else {
-    document.getElementById('selected').getElementsByTagName('tbody')[0].appendChild(tr);
-    $('#tagid_'+tagid).one('dblclick', function() {
-      moveTag( $(this).attr('id'), 'remove' );
-    });
-  }
-
-}
-
 $(document).ready(function() {
 
-  $('#playAudioLink').click(function(){
-                               $.ajax({ url: "/opendias/dynamic",
-                                        dataType: "xml",
-                                        data: {action: "getAudio", 
-                                              docid: getUrlVars()['docid']},
-                                        cache: false,
-                                        type: "POST",
-                                        success: function(data){
-                                                  if($(data).find('error').text()) {
-                                                    alert("Unable to get the audio: "+$(data).find('error').text());
-                                                    return 1;
-                                                  }
-                                                 id = $(data).find('Audio').find('filename').text();
-                                                 $('#audio').attr('src','/audio/'+id);
-                                                 }
-                                        });
-                               $('#playAudio').toggle();
-                               });
+//  $('#playAudioLink').click(function(){
+//                               $.ajax({ url: "/opendias/dynamic",
+//                                        dataType: "xml",
+//                                        data: {action: "getAudio", 
+//                                              docid: getUrlVars()['docid']},
+//                                        cache: false,
+//                                        type: "POST",
+//                                        success: function(data){
+//                                                  if($(data).find('error').text()) {
+//                                                    alert("Unable to get the audio: "+$(data).find('error').text());
+//                                                    return 1;
+//                                                  }
+//                                                 id = $(data).find('Audio').find('filename').text();
+//                                                 $('#audio').attr('src','/audio/'+id);
+//                                                 }
+//                                        });
+//                               $('#playAudio').toggle();
+//                               });
 
   $.ajax({ url: "/opendias/dynamic",
          dataType: "xml",
@@ -119,22 +96,53 @@ $(document).ready(function() {
 
            $("#docDate").datepicker( {dateFormat:"yy/mm/dd"} );
 
-           $(data).find('DocDetail').find('Tags').find('Tag').each( function() {
-               applyNewRow( $(this).find("tagid").text(),
-                            $(this).find("tagname").text(),
-                            $(this).find("selected").text()
-                            );
+           var tags = new Array();
+           $(data).find('DocDetail').find('Tags').find('tag').each( function() {
+                tags.push( $(this).text() );
            });
 
-           $("#available")
-                 .trigger("update")
-                 .trigger("appendCache")
-                 .trigger("sorton",[sorting]);
-           $("#selected")
-                 .trigger("update")
-                 .trigger("appendCache")
-                 .trigger("sorton",[sorting]);
-
+           $("#tags").val( tags.join() );
+           $('#tags').tagsInput({
+                autocomplete_url: '', // Were going to use the ui.autocomplete (since the plugins autocomplete stuff doesn't seam to work cuorrectly. However, added this here as a hack to handle bluring correctly.
+                onAddTag:function(tag) {
+                          moveTag(tag,officialDocId,"addTag");
+                          },
+                onRemoveTag:function(tag) {
+                          moveTag(tag,officialDocId,"removeTag");
+                          },
+           });
+           $('#tags_tag').autocomplete({
+               source: function( request, response ) {
+                 $.ajax({
+                   url: "/opendias/dynamic",
+                   dataType: "json",
+                   type: "POST",
+                   data: {
+                     action: "tagsAutoComplete",
+                     startsWith: request.term,
+                     docid: officialDocId
+                   },
+                   success: function( data ) {
+                     response( $.map( data.results, function( item ) {
+                       return {
+                         label: item.tag,
+                         value: item.tag
+                       }
+                     }));
+                   }
+                 });
+               },
+               minLength: 1, // because most tags are so short - and there are not that many tags,
+               select: function( event, ui ) {
+               //  log( ui.item ?  "Selected: " + ui.item.label : "Nothing selected, input was " + this.value);
+               },
+               open: function() {
+                 $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+               },
+               close: function() {
+                 $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+               }
+             });
          }
   });
 
@@ -160,9 +168,7 @@ $(document).ready(function() {
       },
       minLength: 2,
       select: function( event, ui ) {
-      //  log( ui.item ?
-      //    "Selected: " + ui.item.label :
-      //    "Nothing selected, input was " + this.value);
+      //  log( ui.item ?  "Selected: " + ui.item.label : "Nothing selected, input was " + this.value);
       },
       open: function() {
         $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );

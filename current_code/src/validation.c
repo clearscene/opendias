@@ -94,6 +94,7 @@ extern int basicValidation(struct simpleLinkedList *postdata) {
     && 0 != strcmp(action, "uploadfile")
     && 0 != strcmp(action, "getAccessDetails")
     && 0 != strcmp(action, "titleAutoComplete")
+    && 0 != strcmp(action, "tagsAutoComplete")
     && 0 != strcmp(action, "controlAccess") ) {
     o_log(ERROR, "requested 'action' (of '%s') is not available.", action);
     return 1;
@@ -155,8 +156,8 @@ static int checkDocId(char *val) {
 
 //
 static int checkAddRemove(char *val) {
-  if ( 0 != strcmp(val, "add")
-    || 0 != strcmp(val, "remove" ) ) {
+  if ( 0 != strcmp(val, "addTag")
+    || 0 != strcmp(val, "removeTag" ) ) {
     return 0;
   }
   o_log(ERROR, "Validation failed: add/remove check");
@@ -267,8 +268,6 @@ static int checkSkew(char *val) {
 
 //
 static int checkTag(char *val) {
-  if(checkStringIsInt(val)) return 1;
-  if(checkSaneRange(val, 1, 9999)) return 1;
   return 0;
 }
 
@@ -347,10 +346,10 @@ extern int validate(struct simpleLinkedList *postdata, char *action) {
   }
 
   if ( 0 == strcmp(action, "moveTag") ) {
-    ret += checkOnlyKeys(postdata, "docid,tagid,add_remove");
+    ret += checkOnlyKeys(postdata, "docid,tag,subaction");
     ret += checkDocId(getPostData(postdata, "docid"));
-    ret += checkTag(getPostData(postdata, "tagid"));
-    ret += checkAddRemove(getPostData(postdata, "add_remove"));
+    ret += checkTag(getPostData(postdata, "tag"));
+    ret += checkAddRemove(getPostData(postdata, "subaction"));
   }
 
   if ( 0 == strcmp(action, "filter") ) {
@@ -386,6 +385,11 @@ extern int validate(struct simpleLinkedList *postdata, char *action) {
 
   if ( 0 == strcmp(action, "titleAutoComplete") ) {
     ret += checkOnlyKeys(postdata, "startsWith");
+  }
+
+  if ( 0 == strcmp(action, "tagsAutoComplete") ) {
+    ret += checkOnlyKeys(postdata, "startsWith");
+    ret += checkDocId(getPostData(postdata, "docid"));
   }
 
   if ( 0 == strcmp(action, "controlAccess") ) {

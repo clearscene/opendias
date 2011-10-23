@@ -21,6 +21,7 @@
 #include "utils.h"
 #include "simpleLinkedList.h"
 #include "main.h"
+#include "debug.h"
 #include "dbaccess.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -277,6 +278,63 @@ extern void addLocation(char *location, int role) {
   sll_append(vars, location );
   sll_append(vars, DB_INT );
   sll_append(vars, &role );
+
+  runUpdate_db(sql, vars);
+  free(sql);
+}
+
+extern char *getTagId(char *tagname) {
+
+  char *sql = o_printf("SELECT tagid FROM tags WHERE tagname = '%s'", tagname);
+  char *ret = NULL;
+
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet != NULL ) {
+    ret = o_strdup(readData_db(rSet, "tagid"));
+  }
+  else {
+    o_log(DEBUGM, "no tag was found. Adding a new one.");
+    char *sql2 = o_strdup("INSERT INTO tags VALUES (NULL,?)");
+
+    struct simpleLinkedList *vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, tagname );
+
+    runUpdate_db(sql, vars);
+    free(sql2);
+
+    ret = itoa(last_insert(), 10);
+  }
+  free_recordset( rSet );
+  free(sql);
+
+  o_log(DEBUGM, "Using tagid of %s", ret);
+  return ret;
+}
+
+extern int countDocsWithTag( char *tagid ) {
+
+  char *sql = o_printf("SELECT COUNT(tagid) ct FROM doc_tags WHERE tagid = '%s'", tagid);
+  int ret = 0;
+
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet ) {
+    ret = atoi(readData_db(rSet, "ct"));
+  }
+  free_recordset( rSet );
+  free(sql);
+  o_log(DEBUGM, "Tag is being used on %i docs", ret);
+
+  return ret;
+}
+
+extern void deleteTag( char *tagid ) {
+  char *sql = o_strdup("DELETE FROM tags WHERE tagid = ?");
+  int tagid_i = atoi(tagid);
+
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_INT );
+  sll_append(vars, &tagid_i );
 
   runUpdate_db(sql, vars);
   free(sql);

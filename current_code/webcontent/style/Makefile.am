@@ -3,6 +3,7 @@ web_DATA = \
 	common.css \
 	datepicker.css \
 	jquery.easyslider.css \
+	jquery.tagsinput.css \
 	jquery.gzoom.css \
 	jquery-ui.css \
 	tablesorter.css 

@@ -5,6 +5,7 @@ web_DATA = \
 	jquery.canvas-loader.js \
 	jquery.easySlider.js \
 	jquery.gzoom.js \
+	jquery.tagsinput.js \
 	jquery.js \
 	jquery.mousewheel.js \
 	jquery.tablesorter.min.js \

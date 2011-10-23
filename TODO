@@ -7,8 +7,6 @@ Phase 1
 
 Implement 'tag filtering' on the search of the document list
 
-Implement 'manage tags'
-
 Implement the remainder of the test plan 'current_code/test/regressionTests/testplan'
 
 Refactor 'filtering mechanisum' on the document list

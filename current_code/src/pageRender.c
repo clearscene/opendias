@@ -554,3 +554,42 @@ extern char *titleAutoComplete(char *startsWith) {
 
   return result;
 }
+
+extern char *tagsAutoComplete(char *startsWith, char *docid) {
+
+  int notFirst = 0;
+  char *result = o_strdup("{\"results\":[");
+  char *line = o_strdup("{\"tag\":\"%s\"}");
+  char *sql = o_printf(
+    "SELECT tagname \
+    FROM tags LEFT JOIN \
+    (SELECT docid, tagid \
+    FROM doc_tags \
+    WHERE docid=%s) dt \
+    ON tags.tagid = dt.tagid \
+    WHERE dt.docid IS NULL \
+    AND tagname like '%s%%' \
+    ORDER BY tagname", docid, startsWith);
+
+  struct simpleLinkedList *rSet = runquery_db(sql);
+  if( rSet != NULL ) {
+    do {
+      if(notFirst==1) 
+        conCat(&result, ",");
+      notFirst = 1;
+      char *title = o_strdup(readData_db(rSet, "tagname"));
+      char *data = malloc(13+strlen(title));
+      sprintf(data, line, title);
+      conCat(&result, data);
+      free(data);
+      free(title);
+    } while ( nextRow( rSet ) );
+    free_recordset( rSet );
+  }
+  free(sql);
+  free(line);
+  conCat(&result, "]}");
+
+  return result;
+}
+

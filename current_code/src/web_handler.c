@@ -672,9 +672,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
             content = o_strdup(errorxml);
           else {
             char *docid = getPostData(con_info->post_data, "docid");
-            char *tagid = getPostData(con_info->post_data, "tagid");
-            char *add_remove = getPostData(con_info->post_data, "add_remove");
-            content = updateTagLinkage(docid, tagid, add_remove); //doc_editor.c
+            char *tag = getPostData(con_info->post_data, "tag");
+            char *subaction = getPostData(con_info->post_data, "subaction");
+            content = updateTagLinkage(docid, tag, subaction); //doc_editor.c
             if(content == (void *)NULL) 
               content = o_strdup(errorxml);
           }
@@ -792,6 +792,23 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           else {
             char *startsWith = getPostData(con_info->post_data, "startsWith");
             content = titleAutoComplete(startsWith); // pageRender.c
+            if(content == (void *)NULL)
+              content = o_strdup(servererrorpage);
+          }
+          mimetype = MIMETYPE_JSON;
+          size = strlen(content);
+        }
+
+        else if ( action && 0 == strcmp(action, "tagsAutoComplete") ) {
+          o_log(INFORMATION, "Processing request for: tagsAutoComplete");
+          if ( accessPrivs.view_doc == 0 )
+            content = o_strdup(noaccessxml);
+          else if ( validate( con_info->post_data, action ) ) 
+            content = o_strdup(errorxml);
+          else {
+            char *startsWith = getPostData(con_info->post_data, "startsWith");
+            char *docid = getPostData(con_info->post_data, "docid");
+            content = tagsAutoComplete(startsWith, docid); // pageRender.c
             if(content == (void *)NULL)
               content = o_strdup(servererrorpage);
           }
