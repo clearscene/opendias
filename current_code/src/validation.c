@@ -80,8 +80,7 @@ extern int basicValidation(struct simpleLinkedList *postdata) {
 //  }
 
   // Check the main request param is sane
-  if ( 0 != strcmp(action, "getDocList") 
-    && 0 != strcmp(action, "getDocDetail") 
+  if ( 0 != strcmp(action, "getDocDetail") 
     && 0 != strcmp(action, "getScannerList") 
     && 0 != strcmp(action, "doScan") 
     && 0 != strcmp(action, "getScanningProgress") 
@@ -327,10 +326,6 @@ static int checkRole(char *role) {
 extern int validate(struct simpleLinkedList *postdata, char *action) {
 
   int ret = 0;
-
-  if ( 0 == strcmp(action, "getDocList") ) {
-    ret += checkOnlyKeys(postdata, "");
-  }
 
   if ( 0 == strcmp(action, "getDocDetail") ) {
     ret += checkOnlyKeys(postdata, "docid");

@@ -51,69 +51,6 @@
  * Public Functions
  *
  */
-extern char *getDocList (void) {
-
-  char *sql, *docid, *actionrequired, *title, *type, *humanReadableDate;
-
-  // Generate the doc list SQL
-  //
-  sql = o_strdup("SELECT DISTINCT docs.* FROM docs");
-
-  // Generate the response
-  //
-  int rows = 0;
-  char *rowsData = o_strdup("");
-  struct simpleLinkedList *rSet = runquery_db(sql);
-  if( rSet != NULL ) {
-    do {
-      // Append a row and fill in some data
-
-      rows++;
-      if( 0 == strcmp(readData_db(rSet, "filetype"), "1") ) {
-        type = o_strdup("Imported ODF Doc");
-      }
-      else if( 0 == strcmp(readData_db(rSet, "filetype"), "3") ) {
-        type = o_strdup("Imported PDF Doc");
-      }
-      else if( 0 == strcmp(readData_db(rSet, "filetype"), "4") ) {
-        type = o_strdup("Imported Image");
-      }
-      else {
-        type = o_strdup("Scaned Doc");
-      }
-      actionrequired = o_strdup(readData_db(rSet, "actionrequired"));
-      title = o_strdup(readData_db(rSet, "title"));
-      docid = o_strdup(readData_db(rSet, "docid"));
-      if( 0 == strcmp(title, "NULL") ) {
-        free(title);
-        title = o_strdup("New (untitled) document.");
-      }
-      humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")), 
-                                     o_strdup(readData_db(rSet, "docdatem")), 
-                                     o_strdup(readData_db(rSet, "docdated")) );
-
-      o_concatf(&rowsData, "<Row><docid>%s</docid><actionrequired>%s</actionrequired><title><![CDATA[%s]]></title><type>%s</type><date>%s</date></Row>", 
-                         docid, actionrequired, title, type, humanReadableDate);
-      free(docid);
-      free(title);
-      free(type);
-      free(humanReadableDate);
-
-    } while ( nextRow( rSet ) );
-  }
-  free_recordset( rSet );
-  free(sql);
-
-  char *xml_template = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DocList><Rows>%s</Rows><count>%i</count></DocList></Response>");
-  char *docList = o_printf(xml_template, rowsData, rows);
-  free(rowsData);
-  free(xml_template);
-
-  return docList;
-}
-
-
-
 extern char *getScannerList() {
 
   char *answer = NULL;

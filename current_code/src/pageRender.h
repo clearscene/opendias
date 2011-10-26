@@ -21,7 +21,6 @@
 
 #include "validation.h" // for con_info struct - move me to web_handler.h
 
-extern char *getDocList();
 extern char *getScannerList();
 extern char *getScanningProgress(char *);
 extern char *doScan(char *, char *, char *, char *, char *, char *, char *, struct connection_info_struct *);

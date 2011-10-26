@@ -541,22 +541,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
         char *action = getPostData(con_info->post_data, "action");
 
-        if ( action && 0 == strcmp(action, "getDocList") ) {
-          o_log(INFORMATION, "Processing request for: get doc list");
-          if ( accessPrivs.view_doc == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            content = getDocList(); // pageRender.c
-            if(content == (void *)NULL)
-              content = o_strdup(errorxml);
-          }
-          mimetype = MIMETYPE_XML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "getDocDetail") ) {
+        if ( action && 0 == strcmp(action, "getDocDetail") ) {
           o_log(INFORMATION, "Processing request for: document details");
           if ( accessPrivs.view_doc == 0 )
             content = o_strdup(noaccessxml);

@@ -134,16 +134,6 @@ doScan -> pageRender::doScan()
 
 
 
-getDocList -> pageRender::getDocList
-	Called from: openDias.docList.js :: ananoumouse()
-	Purpose: Get a list of documents already entered into the application
-	Inputs:	action: fixed string 'getDocList'
-	Outputs;
-		<?xml version='1.0' encoding='iso-8859-1'?>
-		<Response>
-		  <DocList>
-		    count - the number of documents found.
-		    <Rows>
 		      <Row>
 			docid - the document id of a found document
                         actionrequired - indicator flag
@@ -158,7 +148,7 @@ getDocList -> pageRender::getDocList
 
 
 
-filter -> pageRender::docFilter
+docFilter -> pageRender::docFilter
 	Called from: openDias.filter.js :: ananoumouse()
 	Purpose: Get a list of documents that fit a specific set of cryteria
 	Inputs:	action: fixed string 'docFilter'
@@ -174,7 +164,10 @@ filter -> pageRender::docFilter
                     count - the count of matching documents
 		    <Results>
 		      docid - the document id of a found document
-		      ...
+                      actionrequired - indicator flag
+		      title - the user defined title of the found document
+		      type* - the style of document
+		      date - the user defined date of the found document
 		    </Results>
 		  </DocFilter>
 		</Response>
