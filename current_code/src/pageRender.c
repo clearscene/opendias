@@ -392,9 +392,17 @@ extern char *getScanningProgress(char *scanid) {
   return ret;
 }
 
-extern char *docFilter(char *textSearch, char *startDate, char *endDate) {
+extern char *docFilter(char *subaction, char *textSearch, char *startDate, char *endDate, char *tags) {
 
   char *sql, *textWhere=NULL, *dateWhere=NULL, *tagWhere=NULL;
+  int count = 0;
+
+  if( 0 == strcmp(subaction, "fullList") ) {
+    sql = o_strdup("SELECT DISTINCT docs.* FROM docs ");
+  }
+  else {
+    sql = o_strdup("SELECT COUNT(docs.docid) c FROM docs ");
+  }
 
   // Filter by title or OCR
   //
@@ -410,54 +418,98 @@ extern char *docFilter(char *textSearch, char *startDate, char *endDate) {
 
   // Filter By Tags
   //
-/*  filterByTags = o_strdup("");
-  if(SELECTEDTAGS) {
-    docsWithSelectedTags = docsWithAllTags(SELECTEDTAGS);
-    for(tmpList = docsWithSelectedTags ; tmpList != NULL ; tmpList = g_list_next(tmpList)) {
-      conCat(&filterByTags, tmpList->data);
-      if(tmpList->next)
-        conCat(&filterByTags, ", ");
+  if( tags && strlen(tags) ) {
+    tagWhere = o_strdup("tags.tagname IN (");
+    count = 0;
+    char *olds = tags;
+    char delim = ',';
+    char olddelim = delim;
+    while(olddelim && *tags) {
+      while(*tags && (delim != *tags)) tags++;
+      *tags ^= olddelim = *tags; // olddelim = *s; *s = 0;
+      char *token = o_strdup(olds);
+      o_concatf(&tagWhere, "'%s',", token);
+      free(token);
+      count++;
+      *tags++ ^= olddelim; // *s = olddelim; s++;
+      olds = tags;
     }
-    conCat(&sql, ", doc_tags WHERE docs.docid IN (");
-    conCat(&sql, filterByTags);
-    conCat(&sql, ") ");
+    tagWhere[strlen(tagWhere)-1] = ')';
+
+    o_concatf(&sql, " JOIN (SELECT docid, COUNT(docid) c FROM doc_tags \
+                    JOIN tags ON tags.tagid = doc_tags.tagid \
+                    WHERE %s GROUP BY docid HAVING c = %i ) t \
+                    ON docs.docid = t.docid ", tagWhere, count);
+    free(tagWhere);
   }
-  free(filterByTags);
-*/
 
   // Build final SQL
   //
-  sql = o_strdup("SELECT DISTINCT docs.docid FROM docs ");
-  if(textWhere || dateWhere || tagWhere) {
+  if(textWhere || dateWhere) {
     conCat(&sql, "WHERE ");
     if(textWhere) {
       conCat(&sql, textWhere);
-      if(dateWhere || tagWhere)
+      free(textWhere);
+      if(dateWhere)
         conCat(&sql, "AND ");
     }
     if(dateWhere) {
       conCat(&sql, dateWhere);
-      if(tagWhere)
-        conCat(&sql, "AND ");
+      free(dateWhere);
     }
-    if(tagWhere)
-      conCat(&sql, tagWhere);
   }
-  o_log(DEBUGM, sql);
 
   // Get Results
   //
   char *rows = o_strdup("");
+  count = 0;
   struct simpleLinkedList *rSet = runquery_db(sql);
   if( rSet != NULL ) {
     do {
-      o_concatf(&rows, "<docid>%s</docid>", readData_db(rSet, "docid"));
+
+      if( 0 == strcmp(subaction, "fullList") ) {
+        count++;
+        char *type;
+        if( 0 == strcmp(readData_db(rSet, "filetype"), "1") ) {
+          type = o_strdup("Imported ODF Doc");
+        }
+        else if( 0 == strcmp(readData_db(rSet, "filetype"), "3") ) {
+          type = o_strdup("Imported PDF Doc");
+        }
+        else if( 0 == strcmp(readData_db(rSet, "filetype"), "4") ) {
+          type = o_strdup("Imported Image");
+        }
+        else {
+          type = o_strdup("Scaned Doc");
+        }
+        char *actionrequired = o_strdup(readData_db(rSet, "actionrequired"));
+        char *title = o_strdup(readData_db(rSet, "title"));
+        char *docid = o_strdup(readData_db(rSet, "docid"));
+        if( 0 == strcmp(title, "NULL") ) {
+          free(title);
+          title = o_strdup("New (untitled) document.");
+        }
+        char *humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")), 
+                                             o_strdup(readData_db(rSet, "docdatem")), 
+                                             o_strdup(readData_db(rSet, "docdated")) );
+
+        o_concatf(&rows, "<Row><docid>%s</docid><actionrequired>%s</actionrequired><title><![CDATA[%s]]></title><type>%s</type><date>%s</date></Row>", 
+                           docid, actionrequired, title, type, humanReadableDate);
+        free(docid);
+        free(title);
+        free(type);
+        free(humanReadableDate);
+        free(actionrequired);
+      }
+      else 
+        count = atoi( readData_db(rSet, "c") );
+
     } while ( nextRow( rSet ) );
     free_recordset( rSet );
   }
   free(sql);
 
-  char *docList = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DocFilter><Results>%s</Results></DocFilter></Response>", rows);
+  char *docList = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DocFilter><count>%i</count><Results>%s</Results></DocFilter></Response>", count, rows);
   free(rows);
 
   return docList;

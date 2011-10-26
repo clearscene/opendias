@@ -88,7 +88,7 @@ extern int basicValidation(struct simpleLinkedList *postdata) {
     && 0 != strcmp(action, "nextPageReady") 
     && 0 != strcmp(action, "updateDocDetails") 
     && 0 != strcmp(action, "moveTag") 
-    && 0 != strcmp(action, "filter") 
+    && 0 != strcmp(action, "docFilter") 
     && 0 != strcmp(action, "deleteDoc") 
     && 0 != strcmp(action, "getAudio")
     && 0 != strcmp(action, "uploadfile")
@@ -121,6 +121,16 @@ extern int basicValidation(struct simpleLinkedList *postdata) {
 // Check trhe hashtable to ensure it only contains the specified keys
 static int checkOnlyKeys(struct simpleLinkedList *postdata, char *keyList) {
   // TODO
+/*  char *olds = keyList;
+  char olddelim = ',';
+  while(olddelim && *keyList) {
+    while(*s && (delim != *keyList)) s++;
+    *keyList ^= olddelim = *keyList; // olddelim = *s; *s = 0;
+    cb(olds);
+    *keyList++ ^= olddelim; // *s = olddelim; s++;
+    olds = keyList;
+  }
+*/
   return 0;
 }
 
@@ -150,7 +160,7 @@ static int checkUUID(char *val) {
 //
 static int checkDocId(char *val) {
   if(checkStringIsInt(val)) return 1;
-  if(checkSaneRange(val, 1, 9999999)) return 1;
+  if(checkSaneRange(val, 0, 9999999)) return 1;
   return 0;
 }
 
@@ -161,6 +171,16 @@ static int checkAddRemove(char *val) {
     return 0;
   }
   o_log(ERROR, "Validation failed: add/remove check");
+  return 1;
+}
+
+//
+static int checkFullCount(char *val) {
+  if ( 0 != strcmp(val, "fullList")
+    || 0 != strcmp(val, "count" ) ) {
+    return 0;
+  }
+  o_log(ERROR, "Validation failed: fullList/count check");
   return 1;
 }
 
@@ -197,12 +217,12 @@ static int checkDate(char *val) {
   if(checkStringIsInt(dp->month)) x++;
   else
     if(checkSaneRange(dp->month, 1, 12)) x++;
-  free(dp->year);
+  free(dp->month);
 
   if(checkStringIsInt(dp->day)) x++;
   else
     if(checkSaneRange(dp->day, 1, 31)) x++;
-  free(dp->year);
+  free(dp->day);
 
   free(dp);
   if( x > 0 ) o_log(ERROR, "Validation failed: date check");
@@ -279,6 +299,10 @@ static int checkVal(char *val) {
   return 0;
 }
 
+static int checkTagList(char *val) {
+  return 0;
+}
+
 static int checkControlAccessMethod(char *submethod) {
   if ( 0 != strcmp(submethod, "addLocation")
     || 0 != strcmp(submethod, "removeLocation" )
@@ -352,8 +376,10 @@ extern int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkAddRemove(getPostData(postdata, "subaction"));
   }
 
-  if ( 0 == strcmp(action, "filter") ) {
-    ret += checkOnlyKeys(postdata, "textSearch,startDate,endDate");
+  if ( 0 == strcmp(action, "docFilter") ) {
+    ret += checkOnlyKeys(postdata, "subaction,textSearch,startDate,endDate,tags");
+
+    ret += checkFullCount(getPostData(postdata, "subaction"));
 
     char *data = getPostData(postdata, "textSearch");
     if(data != NULL && strcmp(data,"")) ret += checkVal(data);
@@ -363,6 +389,9 @@ extern int validate(struct simpleLinkedList *postdata, char *action) {
 
     data = getPostData(postdata, "endDate");
     if(data != NULL && strcmp(data,"")) ret += checkDate(data);
+
+    data = getPostData(postdata, "tags");
+    if(data != NULL && strcmp(data,"")) ret += checkTagList(data);
   }
 
   if ( 0 == strcmp(action, "deleteDoc") ) {

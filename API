@@ -162,13 +162,16 @@ filter -> pageRender::docFilter
 	Called from: openDias.filter.js :: ananoumouse()
 	Purpose: Get a list of documents that fit a specific set of cryteria
 	Inputs:	action: fixed string 'docFilter'
+                subaction: Get all details or just the count of matching docs ['count','fullList']
 		textSearch: Text that a document must match (title or ocr text)
                 startDate: The first date that a document could fit into
                 endDate: The last date that a document could fit into
+                tags: Comma delimetered list of tagnames.
 	Outputs;
 		<?xml version='1.0' encoding='iso-8859-1'?>
 		<Response>
 		  <DocFilter>
+                    count - the count of matching documents
 		    <Results>
 		      docid - the document id of a found document
 		      ...

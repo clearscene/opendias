@@ -689,10 +689,12 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           else if ( validate( con_info->post_data, action ) ) 
             content = o_strdup(errorxml);
           else {
+            char *subaction = getPostData(con_info->post_data, "subaction");
             char *textSearch = getPostData(con_info->post_data, "textSearch");
             char *startDate = getPostData(con_info->post_data, "startDate");
             char *endDate = getPostData(con_info->post_data, "endDate");
-            content = docFilter(textSearch, startDate, endDate); //pageRender.c
+            char *tags = getPostData(con_info->post_data, "tags");
+            content = docFilter(subaction, textSearch, startDate, endDate, tags); //pageRender.c
             if(content == (void *)NULL) {
               content = o_strdup(errorxml);
             }

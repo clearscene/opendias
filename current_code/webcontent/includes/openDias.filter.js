@@ -9,13 +9,55 @@ $(document).ready(function(){
 
   $('#startDate').datepicker( {dateFormat:'yy-mm-dd'} );
   $('#endDate').datepicker( {dateFormat:'yy-mm-dd'} );
+
   $('#doFilter').click(function(){
+    document.getElementById('docList_table').getElementsByTagName('tbody')[0].innerHTML = "";
+    loadListData();
+//    $.ajax({ url: "/opendias/dynamic",
+//             dataType: "xml",
+//             data: {action: "docFilter",
+//                    subaction: "fullList",
+//                    textSearch: $('#textSearch').val(),
+//                    startDate: $('#startDate').val(),
+//                    endDate: $('#endDate').val(),
+//                    tags: $('#tags').val()
+//                   },
+//             cache: false,
+//             type: "POST",
+//             success: function(data){
+//               if( $(data).find('error').text() ) {
+//                 alert("Unable to get a filtered list:."+$(data).find('error').text());
+//               } else {
+//                 $('#docList_table').fadeOut("fast");
+//                 filteredDocs = new Array();
+//                 $(data).find('DocFilter').find('Results').find('docid').each( function() {
+//                   filteredDocs.push($(this).text());
+//                 });
+//                 master = 0;
+//                 applyMoveRow();
+//               }
+//             }
+//           });
+
+  });
+
+  $('#textSearch').keypress( function() { getRecordCount() } );
+  $('#textSearch').change( function() { getRecordCount() } );
+  $('#startDate').change( function() { getRecordCount() } );
+  $('#endDate').change( function() { getRecordCount() } );
+  //$('#tags').change( function() { getRecordCount() } );
+
+});
+
+function getRecordCount() {
     $.ajax({ url: "/opendias/dynamic",
              dataType: "xml",
              data: {action: "docFilter",
+                    subaction: "count",
                     textSearch: $('#textSearch').val(),
                     startDate: $('#startDate').val(),
-                    endDate: $('#endDate').val()
+                    endDate: $('#endDate').val(),
+                    tags: $('#tags').val()
                    },
              cache: false,
              type: "POST",
@@ -23,19 +65,11 @@ $(document).ready(function(){
                if( $(data).find('error').text() ) {
                  alert("Unable to get a filtered list:."+$(data).find('error').text());
                } else {
-                 $('#docList_table').fadeOut("fast");
-                 filteredDocs = new Array();
-                 $(data).find('DocFilter').find('Results').find('docid').each( function() {
-                   filteredDocs.push($(this).text());
-                 });
-                 master = 0;
-                 applyMoveRow();
+                 $('#filterProgress').text( "Will return an estimated "+$(data).find('DocFilter').find('count').text()+" docs" );
                }
              }
            });
-
-  });
-});
+}
 
 function applyMoveRow() {
   if(master >= allDocs.length) {
