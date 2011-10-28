@@ -240,7 +240,7 @@ extern void log_option (SANE_Int index, const SANE_Option_Descriptor *option) {
         }
     }
 
-    o_log(DEBUGM, string);
+    o_log(DEBUGM, "%s", string);
     free(string);
 
 //    if (option->desc)

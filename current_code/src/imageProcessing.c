@@ -36,7 +36,7 @@
 void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
   if(fif != FIF_UNKNOWN)
     o_log(ERROR, "%s Format\n", FreeImage_GetFormatFromFIF(fif));
-  o_log(ERROR, message);
+  o_log(ERROR, "%s", message);
 }
 
 /*
@@ -65,7 +65,7 @@ extern void reformatImage(FREE_IMAGE_FORMAT fromFormat, char *fromFilename, FREE
   o_log(resultVerbosity, resultMessage, outFilename);
   free(resultMessage);
   FreeImage_DeInitialise();
-  o_log(DEBUGM, outFilename);
+  o_log(DEBUGM, "%s", outFilename);
   free(outFilename);
 
 }
@@ -135,7 +135,7 @@ extern char *getTextFromImage(const unsigned char *pic, int bpl, int ppl, int li
   o_log(DEBUGM, "Just about to extract the text form the image. Expecting to read in the '%s' language", lang);
   runocr(&infoData);
   txt = infoData.ret;
-  o_log(DEBUGM, txt);
+  o_log(DEBUGM, "%s", txt);
 
 #endif // CAN_OCR //
   return txt;

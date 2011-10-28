@@ -820,7 +820,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
       size = 0;
     }
 
-    o_log(DEBUGM, content);
+    o_log(DEBUGM, "%s", content);
     return send_page (connection, content, status, mimetype, size);
   }
 

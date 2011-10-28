@@ -1,4 +1,4 @@
-*0.6.6  Fix an issue with bad setting of SANE options. (some user could not set the resolution)
+*0.7.0  Fix an issue with bad setting of SANE options. (some user could not set the resolution)
         Added language selection for OCR operations
         Fix install problem if installation is already found
         Improved build instructions

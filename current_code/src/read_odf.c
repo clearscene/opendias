@@ -143,9 +143,9 @@ int LIBARCHIVEgetEntry(char *name, char *contentFile, char **ptr) {
 
   while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
     if( 0 == strcmp(archive_entry_pathname(entry), contentFile)) {
-      o_log(DEBUGM, (char *)archive_compression_name(a));
-      o_log(DEBUGM, (char *)archive_format_name(a));
-      o_log(DEBUGM, (char *)archive_entry_pathname(entry));
+      o_log(DEBUGM, "%s", (char *)archive_compression_name(a));
+      o_log(DEBUGM, "%s", (char *)archive_format_name(a));
+      o_log(DEBUGM, "%s", (char *)archive_entry_pathname(entry));
       size = archive_entry_size(entry);
       if(size <= 0)
         o_log(DEBUGM, "zero size");

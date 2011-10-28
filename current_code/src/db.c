@@ -89,7 +89,7 @@ extern int connect_db (int createIfRequired) {
     o_log(INFORMATION, "Creating new database");
     if(open_db (db)) {
       o_log(WARNING, "Could not create/connect to new database");
-      o_log(WARNING, db);
+      o_log(WARNING, "%s", db);
       free(db);
       return 1;
     }
@@ -115,7 +115,7 @@ extern int connect_db (int createIfRequired) {
     o_log(DEBUGM, "Reading SQL code from file: %s", upgradeSQL);
 
     if(load_file_to_memory(upgradeSQL, &data) > 0) {
-      o_log(DEBUGM, data);
+      o_log(DEBUGM, "%s", data);
       struct simpleLinkedList *rSet = runquery_db(data);
       free_recordset( rSet );
       free(data);
@@ -174,7 +174,7 @@ extern int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
   int col = 0, rc;
   char *type;
 
-  o_log(SQLDEBUG, sql);
+  o_log(SQLDEBUG, "%s", sql);
   sqlite3_prepare(DBH, sql, strlen(sql), &stmt, NULL);
 
   tmpList = vars;

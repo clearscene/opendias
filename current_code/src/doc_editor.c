@@ -50,7 +50,7 @@ extern char *doDelete (char *documentId) {
   if( rSet != NULL ) {
     char *pages_s = o_strdup(readData_db(rSet, "pages"));
     pages = atoi(pages_s);
-    o_log(INFORMATION, pages_s);
+    o_log(INFORMATION, "%s", pages_s);
     free(pages_s);
   } else {
     o_log(ERROR, "Could not select record.");
@@ -65,7 +65,7 @@ extern char *doDelete (char *documentId) {
   int i;
   for(i = 1 ; i <= pages ; i++) {
     char *docPath = o_printf(docTemplate, BASE_DIR, documentId, i);
-    o_log(INFORMATION, docPath);
+    o_log(INFORMATION, "%s", docPath);
     unlink(docPath);
     free(docPath);
   }

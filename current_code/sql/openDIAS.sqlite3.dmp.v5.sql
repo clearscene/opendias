@@ -1,7 +1,7 @@
 BEGIN TRANSACTION;
 
 ALTER TABLE scan_progress 
-ADD COLUMN lockexpires
+ADD COLUMN lockexpires;
 
 ALTER TABLE docs
 ADD COLUMN actionrequired NUMERIC;

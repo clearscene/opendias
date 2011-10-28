@@ -80,7 +80,7 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
 extern void o_log(const int verbosity, const char *message, ... ) {
 
   if( verbosity <= VERBOSITY ) {
-    va_list inargs;
+    va_list inargs = NULL; // so we can test it later
     va_start(inargs, message);
     i_o_log(verbosity, message, inargs);
     va_end(inargs);
