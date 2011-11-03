@@ -294,13 +294,13 @@ extern char *getTagId(char *tagname) {
   }
   else {
     o_log(DEBUGM, "no tag was found. Adding a new one.");
-    char *sql2 = o_strdup("INSERT INTO tags VALUES (NULL,?)");
+    char *sql2 = o_strdup("INSERT INTO tags (tagname) VALUES (?)");
 
     struct simpleLinkedList *vars = sll_init();
     sll_append(vars, DB_TEXT );
     sll_append(vars, tagname );
 
-    runUpdate_db(sql, vars);
+    runUpdate_db(sql2, vars);
     free(sql2);
 
     ret = itoa(last_insert(), 10);
