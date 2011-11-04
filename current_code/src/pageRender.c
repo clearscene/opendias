@@ -512,7 +512,7 @@ extern char *controlAccess(char *submethod, char *location, char *user, char *pa
     return NULL;
   }
 
-  return o_strdup("<html><HEAD><title>refresh</title><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/accessControls.html\"></HEAD><body></body></html>");
+  return o_strdup("<html><HEAD><title>refresh</title><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/opendias/accessControls.html\"></HEAD><body></body></html>");
 }
 
 extern char *titleAutoComplete(char *startsWith) {
