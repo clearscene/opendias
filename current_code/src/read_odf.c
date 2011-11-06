@@ -73,6 +73,7 @@ int getEntry(const char *name, char *contentFile, char **ptr) {
   int size=0;
   ZZIP_DIR *dir;
   ZZIP_DIRENT entry;
+  ZZIP_FILE *file;
   char *buf;
 
   dir = zzip_dir_open(name, 0);
@@ -83,7 +84,7 @@ int getEntry(const char *name, char *contentFile, char **ptr) {
 
   zzip_dir_read(dir, &entry);
 
-  ZZIP_FILE *file = zzip_file_open(dir, contentFile, 0);
+  file = zzip_file_open(dir, contentFile, 0);
 
   zzip_seek(file, 0, SEEK_END);
   size = zzip_tell(file);

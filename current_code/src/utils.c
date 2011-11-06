@@ -221,20 +221,22 @@ extern void chop( char *s ) {
 
 extern char *getTimeStr() {
   time_t ttime;
+  struct tm *stTime;
   char *strdate = malloc(18);
 
   time(&ttime);
-  struct tm *stTime = gmtime(&ttime);
+  stTime = gmtime(&ttime);
   strftime(strdate, 18, "%Y%m%d%H%M%S", stTime);
   return strdate;
 }
 
 extern char *getTimeStr_iso8601() {
   time_t ttime;
+  struct tm *stTime;
   char *strdate = malloc(32);
 
   time(&ttime);
-  struct tm *stTime = gmtime(&ttime);
+  stTime = gmtime(&ttime);
   strftime(strdate, 32, "%Y-%m-%d %H:%M:%S", stTime);
   return strdate;
 }

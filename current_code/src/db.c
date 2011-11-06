@@ -45,9 +45,10 @@ int open_db (char *db) {
 int get_db_version() {
 
   int version = 0;
+  struct simpleLinkedList *rSet;
 
   o_log(DEBUGM, "Checking for a populated database");
-  struct simpleLinkedList *rSet = runquery_db("pragma table_info('version')");
+  rSet = runquery_db("pragma table_info('version')");
   if( rSet != NULL ) {
     o_log(DEBUGM, "We have one. So will check to see what verstion it is.");
     // We have a version table - so interogate!
@@ -72,6 +73,7 @@ extern int connect_db (int createIfRequired) {
 
   int version = 0, i;
   char *db, *data;
+  struct simpleLinkedList *rSet;
 
   // Test to see if a DB file exsists
   db = o_printf("%s/openDIAS.sqlite3", BASE_DIR);
@@ -116,7 +118,7 @@ extern int connect_db (int createIfRequired) {
 
     if(load_file_to_memory(upgradeSQL, &data) > 0) {
       o_log(DEBUGM, "%s", data);
-      struct simpleLinkedList *rSet = runquery_db(data);
+      rSet = runquery_db(data);
       free_recordset( rSet );
       free(data);
     }
@@ -164,7 +166,7 @@ static int callback(struct simpleLinkedList *rSet, int argc, char **argv, char *
 
 extern int last_insert() {
 
-  return sqlite3_last_insert_rowid(DBH);
+  return (int)sqlite3_last_insert_rowid(DBH);
 }
 
 extern int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
@@ -175,7 +177,7 @@ extern int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
   char *type;
 
   o_log(SQLDEBUG, "%s", sql);
-  sqlite3_prepare(DBH, sql, strlen(sql), &stmt, NULL);
+  sqlite3_prepare(DBH, sql, (int)strlen(sql), &stmt, NULL);
 
   tmpList = vars;
   do {
@@ -186,7 +188,7 @@ extern int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
       sqlite3_bind_null(stmt, col);
     }
     else if ( 0 == strcmp (type, DB_TEXT ) ) {
-      sqlite3_bind_text(stmt, col, (char *)tmpList->data, strlen(tmpList->data), SQLITE_TRANSIENT );
+      sqlite3_bind_text(stmt, col, (char *)tmpList->data, (int)strlen(tmpList->data), SQLITE_TRANSIENT );
 //      free(tmpList->data);
     }
     else if ( 0 == strcmp (type, DB_INT ) ) {

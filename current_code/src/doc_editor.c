@@ -43,7 +43,9 @@
 
 extern char *doDelete (char *documentId) {
 
-  int pages;
+  int pages, i;
+  char *docTemplate, *docPath;
+
 
   char *sql = o_printf("SELECT pages FROM docs WHERE docid = %s", documentId);
   struct simpleLinkedList *rSet = runquery_db(sql);
@@ -61,10 +63,9 @@ extern char *doDelete (char *documentId) {
   free_recordset( rSet );
   free(sql);
 
-  char *docTemplate = o_strdup("%s/scans/%s_%i.jpg");
-  int i;
+  docTemplate = o_strdup("%s/scans/%s_%i.jpg");
   for(i = 1 ; i <= pages ; i++) {
-    char *docPath = o_printf(docTemplate, BASE_DIR, documentId, i);
+    docPath = o_printf(docTemplate, BASE_DIR, documentId, i);
     o_log(INFORMATION, "%s", docPath);
     unlink(docPath);
     free(docPath);
@@ -97,13 +98,14 @@ void readTextParser () {
 
 extern char *getDocDetail (char *documentId) {
 
+  struct simpleLinkedList *rSet;
   char *sql, *tags, *tagsTemplate, *title, *humanReadableDate,
       *returnXMLtemplate, *returnXML;
 
   // Validate document id
   //
   sql = o_printf("SELECT docid FROM docs WHERE docid = %s", documentId);
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  rSet = runquery_db(sql);
   if( rSet == NULL ) {
     o_log(ERROR, "Could not select record.");
     free_recordset( rSet );

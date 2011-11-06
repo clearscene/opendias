@@ -40,6 +40,7 @@ int pidFilehandle;
 
 int setup (char *configFile) {
 
+  struct simpleLinkedList *rSet;
   char *location, *conf, *sql, *config_option, *config_value;
 
   // Defaults
@@ -66,14 +67,14 @@ int setup (char *configFile) {
   o_log(INFORMATION, "Which says the database is at: %s", BASE_DIR);
 
   // Open (& maybe update) the database.
-  if(connect_db (1)) { // 1 = create if required
+  if(1 == connect_db(1)) { // 1 = create if required
     free(BASE_DIR);
     free(location);
     return 1;
   }
 
   sql = o_strdup("SELECT config_option, config_value FROM config");
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  rSet = runquery_db(sql);
   if( rSet != NULL ) {
     do {
       config_option = o_strdup(readData_db(rSet, "config_option"));
@@ -138,7 +139,7 @@ void signal_handler(int sig) {
  
 void daemonize(char *rundir, char *pidfile) {
     int pid, sid, i;
-    char str[10];
+    char *str;
     struct sigaction newSigAction;
     sigset_t newSigSet;
  
@@ -216,7 +217,7 @@ void daemonize(char *rundir, char *pidfile) {
     }
  
     /* Get and format PID */
-    sprintf(str,"%d\n",getpid());
+    str = o_printf("%d\n",getpid());
  
     /* write pid to lockfile */
     i = write(pidFilehandle, str, strlen(str));

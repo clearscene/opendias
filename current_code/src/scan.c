@@ -41,7 +41,35 @@
 
 extern void doScanningOperation(void *uuid) {
 
+  SANE_Status status;
+  SANE_Handle *openDeviceHandle;
+  SANE_Fixed v_f;
+  SANE_Int v_i;
+  SANE_Int buff_len;
+  SANE_Bool v_b;
+  SANE_Parameters pars;
+  SANE_Byte *buffer, *pic;
+  int docid, page, offset;
+  int samp_inc;
+  int sample, pixelIncrement, bytesInThisBlock;
+  char *page_s, *tmpFile, *skew_s, *outFilename;
+  FILE *scanOutFile;
+  char *ocrText, *shoulddoocr_s, *ocrScanText;
+  int expectFrames = 0;
+  int noMoreReads = 0;
+  int counter, progress_d, buff_len_change, skew;
+  int onlyReadxFromBlockofThree = 0;
+  int readItteration = 0;
+  int i, j, foundMatch, progress, pagelength;
   int request_resolution=0, testScanner=0;
+  int sane_resolution, buff_requested_len=0; 
+  int option=0, paramSetRet=0;
+  const SANE_Option_Descriptor *sod;
+  char *v_c, *request_resolution_s, *length_s;
+  double totbytes, readSoFar;
+  const char *sources[] = { "Auto", SANE_I18N ("Auto"), "Flatbed", SANE_I18N ("Flatbed"), "FlatBed", "Normal", SANE_I18N ("Normal"), NULL };
+  const char *modes[] = { SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
+  const char *speeds[] = { "Auto", "Normal", "Fast", NULL };
   char *devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
   char *docid_s = getScanParam(uuid, SCAN_PARAM_DOCID);
   char *pageCount_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_PAGES);
@@ -49,7 +77,7 @@ extern void doScanningOperation(void *uuid) {
   free(pageCount_s);
 
   o_log(DEBUGM, "sane_init");
-  SANE_Status status = sane_init(NULL, NULL);
+  status = sane_init(NULL, NULL);
   if(status != SANE_STATUS_GOOD) {
     o_log(ERROR, "sane did not start");
     return;
@@ -58,7 +86,6 @@ extern void doScanningOperation(void *uuid) {
   // Open the device
   o_log(DEBUGM, "sane_open");
   updateScanProgress(uuid, SCAN_WAITING_ON_SCANNER, 0);
-  SANE_Handle *openDeviceHandle;
   status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {
     handleSaneErrors("Cannot open device", status, 0);
@@ -71,11 +98,8 @@ extern void doScanningOperation(void *uuid) {
   }
   free(devName);
 
-  int buff_requested_len = 0; 
-  int option=0, paramSetRet=0;
   for (option = 0; option < 9999; option++) {
 
-    const SANE_Option_Descriptor *sod;
     sod = sane_get_option_descriptor (openDeviceHandle, option);
 
     // No more options    
@@ -110,7 +134,7 @@ extern void doScanningOperation(void *uuid) {
         // Set scanning resolution
         if ( strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) == 0) {
 
-          char *request_resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
+          request_resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
           request_resolution = atoi(request_resolution_s);
           free(request_resolution_s);
 
@@ -118,8 +142,8 @@ extern void doScanningOperation(void *uuid) {
             buff_requested_len = sod->constraint.range->quant; // q seam to be a good buffer size to use!
 
           if (sod->type == SANE_TYPE_FIXED) {
-            SANE_Fixed f = SANE_FIX(request_resolution);
-            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &f, &paramSetRet);
+            v_f = SANE_FIX(request_resolution);
+            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
             if(status != SANE_STATUS_GOOD) {
               handleSaneErrors("Cannot set resolution (fixed)", status, paramSetRet);
               updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -127,7 +151,7 @@ extern void doScanningOperation(void *uuid) {
             }
           }
           else {
-            int sane_resolution = request_resolution;
+            sane_resolution = request_resolution;
             if( sod->constraint.range->quant != 0 ) 
               sane_resolution = sane_resolution * sod->constraint.range->quant;
             status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &sane_resolution, &paramSetRet);
@@ -142,18 +166,16 @@ extern void doScanningOperation(void *uuid) {
         // Set scanning Source
         else if ( strcmp(sod->name, SANE_NAME_SCAN_SOURCE) == 0 ) {
           if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
-            int i, j;
-            int foundMatch = 0;
-            const char *sources[] = { "Auto", SANE_I18N ("Auto"), "Flatbed", SANE_I18N ("Flatbed"), "FlatBed", "Normal", SANE_I18N ("Normal"), NULL };
+            foundMatch = 0;
             for (i = 0; sources[i] != NULL; i++) {
               for (j = 0; sod->constraint.string_list[j]; j++) {
                 if (strcmp (sources[i], sod->constraint.string_list[j]) == 0)
                   break;
               }
               if (sod->constraint.string_list[j] != NULL) {
-                char *v = o_strdup(sources[i]);
-                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v, &paramSetRet);
-                free(v);
+                v_c = o_strdup(sources[i]);
+                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
+                free(v_c);
                 if(status != SANE_STATUS_GOOD) {
                   handleSaneErrors("Cannot set source", status, paramSetRet);
                   updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -173,13 +195,13 @@ extern void doScanningOperation(void *uuid) {
         else if ( strcmp(sod->name, SANE_NAME_BIT_DEPTH) == 0 ) {
           if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
             if( sod->type == SANE_TYPE_STRING ) {
-              char *v = o_strdup("8");
-              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v, &paramSetRet);
-              free(v);
+              v_c = o_strdup("8");
+              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
+              free(v_c);
             }
             else {
-              SANE_Int v = 8;
-              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+              v_i = 8;
+              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_i, &paramSetRet);
             }
             if(status != SANE_STATUS_GOOD) {
               handleSaneErrors("Cannot set depth", status, paramSetRet);
@@ -192,18 +214,16 @@ extern void doScanningOperation(void *uuid) {
         // Set scanning mode
         else if ( strcmp(sod->name, SANE_NAME_SCAN_MODE) == 0 ) {
           if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
-            int i, j;
-            int foundMatch = 0;
-            const char *modes[] = { SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
+            foundMatch = 0;
             for (i = 0; modes[i] != NULL; i++) {
               for (j = 0; sod->constraint.string_list[j]; j++) {
                 if (strcmp (modes[i], sod->constraint.string_list[j]) == 0)
                   break;
               }
               if (sod->constraint.string_list[j] != NULL) {
-                char *v = o_strdup(modes[i]);
-                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v, &paramSetRet);
-                free(v);
+                v_c = o_strdup(modes[i]);
+                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
+                free(v_c);
                 if(status != SANE_STATUS_GOOD) {
                   handleSaneErrors("Cannot set mode", status, paramSetRet);
                   updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -222,8 +242,8 @@ extern void doScanningOperation(void *uuid) {
         // Set Preview mode
         else if ( strcmp(sod->name, SANE_NAME_PREVIEW) == 0 ) {
           if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
-            SANE_Bool v = SANE_FALSE;
-            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+            v_b = SANE_FALSE;
+            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
             if(status != SANE_STATUS_GOOD) {
               handleSaneErrors("Cannot set mode", status, paramSetRet);
               updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -233,8 +253,8 @@ extern void doScanningOperation(void *uuid) {
         }
 
         else if ( strcmp(sod->name, SANE_NAME_SCAN_TL_X) == 0 || strcmp(sod->name, SANE_NAME_SCAN_TL_Y) == 0 ) {
-          SANE_Fixed v = sod->constraint.range->min;
-          status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+          v_f = sod->constraint.range->min;
+          status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set TL", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -243,14 +263,14 @@ extern void doScanningOperation(void *uuid) {
         }
 
         else if ( strcmp(sod->name, SANE_NAME_SCAN_BR_Y) == 0 ) {
-          SANE_Fixed v = sod->constraint.range->max;
-          char *length_s = getScanParam(uuid, SCAN_PARAM_LENGTH);
-          int pagelength = atoi(length_s);
+          v_f = sod->constraint.range->max;
+          length_s = getScanParam(uuid, SCAN_PARAM_LENGTH);
+          pagelength = atoi(length_s);
           if(pagelength && pagelength >= 20 && pagelength < 100)
-            v = v * ((double)pagelength / 100);
+            v_f = v_f * ((double)pagelength / 100);
           free(length_s);
 
-          status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+          status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set BR", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -259,8 +279,8 @@ extern void doScanningOperation(void *uuid) {
         }
 
         else if ( strcmp(sod->name, SANE_NAME_SCAN_BR_X) == 0 ) {
-          SANE_Fixed v = sod->constraint.range->max;
-          status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+          v_f = sod->constraint.range->max;
+          status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set BR", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -269,8 +289,8 @@ extern void doScanningOperation(void *uuid) {
         }
 
         else if ( strcmp(sod->name, SANE_NAME_BRIGHTNESS) == 0 ) {
-          SANE_Fixed v = 0;
-          status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+          v_f = 0;
+          status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set brightness", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -279,8 +299,8 @@ extern void doScanningOperation(void *uuid) {
         }
 
         else if ( strcmp(sod->name, SANE_NAME_CONTRAST) == 0 ) {
-          SANE_Fixed v = 0;
-          status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+          v_f = 0;
+          status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set contrast", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -290,18 +310,16 @@ extern void doScanningOperation(void *uuid) {
 
         else if ( strcmp(sod->name, SANE_NAME_SCAN_SPEED) == 0 ) {
           if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
-            int i, j;
-            int foundMatch = 0;
-            const char *speeds[] = { "Auto", "Normal", "Fast", NULL };
+            foundMatch = 0;
             for (i = 0; speeds[i] != NULL; i++) {
               for (j = 0; sod->constraint.string_list[j]; j++) {
                 if (strcmp (speeds[i], sod->constraint.string_list[j]) == 0)
                   break;
               }
               if (sod->constraint.string_list[j] != NULL) {
-                char *v = o_strdup(speeds[i]);
-                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v, &paramSetRet);
-                free(v);
+                v_c = o_strdup(speeds[i]);
+                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
+                free(v_c);
                 if(status != SANE_STATUS_GOOD) {
                   handleSaneErrors("Cannot set speed", status, paramSetRet);
                   updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -319,8 +337,8 @@ extern void doScanningOperation(void *uuid) {
 
         // Set Preview mode
         else if (strcmp (sod->name, "non-blocking") == 0) {
-          SANE_Bool v = SANE_TRUE;
-          status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+          v_b = SANE_TRUE;
+          status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set non-blocking", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -329,8 +347,8 @@ extern void doScanningOperation(void *uuid) {
         }
 
         else if (strcmp (sod->name, "custom-gamma") == 0) {
-          SANE_Bool v = SANE_FALSE;
-          status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+          v_b = SANE_FALSE;
+          status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set no to custonmer-gamma", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
@@ -341,12 +359,12 @@ extern void doScanningOperation(void *uuid) {
         // For the test 'virtual scanner'
         else if (testScanner == 1) {
           if (strcmp (sod->name, "hand-scanner") == 0) {
-            SANE_Bool v = SANE_FALSE;
-            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+            v_b = SANE_FALSE;
+            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
           }
           else if (strcmp (sod->name, "three-pass") == 0) {
-            SANE_Bool v = SANE_FALSE;
-            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+            v_b = SANE_FALSE;
+            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
           }
           else if (strcmp (sod->name, "three-pass-order") == 0) {
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, "RGB", &paramSetRet);
@@ -355,36 +373,36 @@ extern void doScanningOperation(void *uuid) {
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, "Color pattern", &paramSetRet);
           }
           else if (strcmp (sod->name, "read-delay") == 0) {
-            SANE_Bool v = SANE_TRUE;
-            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+            v_b = SANE_TRUE;
+            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
           }
           else if (strcmp (sod->name, "fuzzy-parameters") == 0) {
-            SANE_Bool v = SANE_TRUE;
-            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+            v_b = SANE_TRUE;
+            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
           }
           else if (strcmp (sod->name, "read-delay-duration") == 0) {
-            SANE_Int v = 1000;
-            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+            v_i = 1000;
+            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_i, &paramSetRet);
           }
           else if (strcmp (sod->name, "read-limit") == 0) {
-            SANE_Bool v = SANE_TRUE;
-            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+            v_b = SANE_TRUE;
+            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
           }
           else if (strcmp (sod->name, "read-limit-size") == 0) {
-            SANE_Int v = sod->constraint.range->max;
+            v_i = sod->constraint.range->max;
             buff_requested_len = sod->constraint.range->max;
-            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_i, &paramSetRet);
           }
           else if (strcmp (sod->name, "read-return-value") == 0) {
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, "Default", &paramSetRet);
           }
           else if (strcmp (sod->name, "ppl-loss") == 0) {
-            SANE_Int v = 0;
-            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+            v_i = 0;
+            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_i, &paramSetRet);
           }
           else if (strcmp (sod->name, "invert-endianess") == 0) {
-            SANE_Bool v = SANE_FALSE;
-            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v, &paramSetRet);
+            v_b = SANE_FALSE;
+            status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
           }
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set option", status, paramSetRet);
@@ -428,7 +446,6 @@ extern void doScanningOperation(void *uuid) {
   status = sane_set_io_mode(openDeviceHandle, SANE_TRUE);
 
   o_log(DEBUGM, "Get scanning params");
-  SANE_Parameters pars;
   status = sane_get_parameters (openDeviceHandle, &pars);
   o_log(INFORMATION, "Scanner Parm : stat=%s form=%d,lf=%d,bpl=%d,pixpl=%d,lin=%d,dep=%d",
     sane_strstatus (status),
@@ -436,7 +453,6 @@ extern void doScanningOperation(void *uuid) {
     pars.bytes_per_line, pars.pixels_per_line,
     pars.lines, pars.depth);
 
-  int expectFrames = 0;
   switch (pars.format) {
     case SANE_FRAME_GRAY:
       o_log(DEBUGM, "Expecting Gray data (1 channel only).");
@@ -455,8 +471,6 @@ extern void doScanningOperation(void *uuid) {
 
   // Save Record
   //
-  int docid, page;
-  char *page_s;
   if( docid_s == NULL ) {
     o_log(DEBUGM, "Saving record");
     updateScanProgress(uuid, SCAN_DB_WORKING, 0);
@@ -480,33 +494,27 @@ extern void doScanningOperation(void *uuid) {
   }
 
   // Acquire Image & Save Document
-  FILE *scanOutFile;
-  char *tmpFile = o_printf("/tmp/%s.pnm", uuid);
+  tmpFile = o_printf("/tmp/%s.pnm", uuid);
   if ((scanOutFile = fopen(tmpFile, "w")) == NULL)
     o_log(ERROR, "could not open file for output");
   fprintf (scanOutFile, "P5\n# SANE data follows\n%d %d\n%d\n", 
     pars.pixels_per_line, pars.lines,
     (pars.depth <= 8) ? 255 : 65535);
-  double totbytes = (pars.bytes_per_line * pars.lines) / expectFrames;
-  double readSoFar = 0;
-  int progress = 0;
+  totbytes = (pars.bytes_per_line * pars.lines) / expectFrames;
+  readSoFar = 0;
+  progress = 0;
 
   if( buff_requested_len <= 1 )
     buff_requested_len = 3 * pars.bytes_per_line * pars.depth;
 
   o_log(DEBUGM, "Using a buff_requested_len of %d", buff_requested_len);
-  SANE_Byte *buffer = malloc(buff_requested_len);
-  SANE_Byte *pic=(unsigned char *)malloc( totbytes+1 );
-  int noMoreReads = 0;
-  int counter;
-  int onlyReadxFromBlockofThree = 0;
+  buffer = malloc(buff_requested_len);
+  pic=(unsigned char *)malloc( totbytes+1 );
   for (counter = 0 ; counter < totbytes ; counter++) pic[counter]=125;
-  int readItteration = 0;
 
   o_log(DEBUGM, "scan_read - start");
   do {
     updateScanProgress(uuid, SCAN_SCANNING, progress);
-    SANE_Int buff_len;
     status = sane_read (openDeviceHandle, buffer, buff_requested_len, &buff_len);
     o_log(DEBUGM, "At %d%, requested %d bytes, got %d, with status %d)", progress, buff_requested_len, buff_len, status);
     if (status != SANE_STATUS_GOOD) {
@@ -521,7 +529,7 @@ extern void doScanningOperation(void *uuid) {
 
       if( expectFrames == 3 ) {
 
-        int offset = 0;
+        offset = 0;
 
         // Do we have to finish the RGB from the last read?
         if( onlyReadxFromBlockofThree ) {
@@ -533,7 +541,6 @@ extern void doScanningOperation(void *uuid) {
           }
 
           offset = 3 - onlyReadxFromBlockofThree;
-          int samp_inc;
           for(samp_inc = 0; samp_inc < offset; samp_inc++) {
             pic[(int)readSoFar] = max( pic[(int)readSoFar], (int)buffer[(int)samp_inc] );
           }
@@ -546,14 +553,13 @@ extern void doScanningOperation(void *uuid) {
         // process each three frame block - looking out for the last frame (that could be a partial block)
         counter = offset;
         while( counter < buff_len ) {
-          int sample = 0;
-          int pixelIncrement = 1;
-          int bytesInThisBlock = 3;
+          sample = 0;
+          pixelIncrement = 1;
+          bytesInThisBlock = 3;
           if ( (counter+3) > buff_len ) {
             bytesInThisBlock = onlyReadxFromBlockofThree;
             pixelIncrement = 0;
           }
-          int samp_inc;
           for(samp_inc = 0; samp_inc < bytesInThisBlock; samp_inc++)
             sample = max(sample, (int)buffer[(int)counter+samp_inc]);
           pic[(int)readSoFar] = (int)sample;
@@ -571,7 +577,7 @@ extern void doScanningOperation(void *uuid) {
       }
 
       // Update the progress info
-      int progress_d = 100 * (readSoFar / totbytes);
+      progress_d = 100 * (readSoFar / totbytes);
       progress = progress_d;
       if(progress > 100)
         progress = 100;
@@ -586,7 +592,7 @@ extern void doScanningOperation(void *uuid) {
 
     // Update the buffer (based on read feedback
     if( buff_requested_len == buff_len ) {
-      int buff_len_change = 10 * pars.bytes_per_line / readItteration;
+      buff_len_change = 10 * pars.bytes_per_line / readItteration;
       if( buff_len_change > 100 ) {
         buff_requested_len += buff_len_change;
         buffer = realloc(buffer, buff_requested_len);
@@ -594,7 +600,7 @@ extern void doScanningOperation(void *uuid) {
       }
     }
     else if ( buff_len > 0 ) {
-      int buff_len_change = ( buff_requested_len - buff_len ) / readItteration;
+      buff_len_change = ( buff_requested_len - buff_len ) / readItteration;
       if( buff_len_change > 100 ) {
         buff_requested_len -= buff_len_change;
         buffer = realloc(buffer, buff_requested_len);
@@ -615,8 +621,8 @@ extern void doScanningOperation(void *uuid) {
 
   // Fix skew - for this page
   //
-  char *skew_s = getScanParam(uuid, SCAN_PARAM_CORRECT_FOR_SKEW);
-  int skew = atoi(skew_s);
+  skew_s = getScanParam(uuid, SCAN_PARAM_CORRECT_FOR_SKEW);
+  skew = atoi(skew_s);
   free(skew_s);
   if(skew != 0) {
     o_log(DEBUGM, "fixing skew");
@@ -634,8 +640,7 @@ extern void doScanningOperation(void *uuid) {
 
   // Do OCR - on this page
   //
-  char *ocrText;
-  char *shoulddoocr_s = getScanParam(uuid, SCAN_PARAM_DO_OCR);
+  shoulddoocr_s = getScanParam(uuid, SCAN_PARAM_DO_OCR);
 #ifdef CAN_OCR
   if(shoulddoocr_s && 0 != strcmp(shoulddoocr_s, "-") ) {
 
@@ -643,7 +648,7 @@ extern void doScanningOperation(void *uuid) {
       o_log(DEBUGM, "attempting OCR");
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
-      char *ocrScanText = getTextFromImage((const unsigned char*)pic, pars.bytes_per_line, pars.pixels_per_line, pars.lines, shoulddoocr_s);
+      ocrScanText = getTextFromImage((const unsigned char*)pic, pars.bytes_per_line, pars.pixels_per_line, pars.lines, shoulddoocr_s);
 
       ocrText = o_strdup("---------------- page ");
       conCat(&ocrText, page_s);
@@ -672,7 +677,7 @@ extern void doScanningOperation(void *uuid) {
   // Convert Raw into JPEG
   //
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
-  char *outFilename = o_printf("%s/scans/%s_%s.jpg", BASE_DIR, docid_s, page_s);
+  outFilename = o_printf("%s/scans/%s_%s.jpg", BASE_DIR, docid_s, page_s);
   reformatImage(FIF_PGMRAW, tmpFile, FIF_JPEG, outFilename);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   free(page_s);

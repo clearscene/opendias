@@ -43,12 +43,14 @@ void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
  * Convert Raw into JPEG
  */
 extern void reformatImage(FREE_IMAGE_FORMAT fromFormat, char *fromFilename, FREE_IMAGE_FORMAT toFormat, char *outFilename ) { 
-  FreeImage_Initialise(TRUE);
-  FreeImage_SetOutputMessage(FreeImageErrorHandler);
   char *resultMessage;
   int resultVerbosity;
+  FIBITMAP *bitmap;
 
-  FIBITMAP *bitmap = FreeImage_Load(fromFormat, fromFilename, 0);
+  FreeImage_Initialise(TRUE);
+  FreeImage_SetOutputMessage(FreeImageErrorHandler);
+
+  bitmap = FreeImage_Load(fromFormat, fromFilename, 0);
   if(bitmap == NULL) {
     resultMessage = o_strdup("Error loading scaned image, to: %s");
     resultVerbosity = ERROR;

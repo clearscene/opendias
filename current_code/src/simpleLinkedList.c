@@ -119,9 +119,9 @@ void sll_destroy( struct simpleLinkedList *element ) {
 }
 
 void sll_delete( struct simpleLinkedList *element ) {
-  o_log(SQLDEBUG, "Asked to delete element: %x, with prev=%x, and next=%x", element, element->prev, element->next);
   struct simpleLinkedList *prev_element = element->prev;
   struct simpleLinkedList *next_element = element->next;
+  o_log(SQLDEBUG, "Asked to delete element: %x, with prev=%x, and next=%x", element, element->prev, element->next);
   if( next_element && next_element != NULL ) {
     next_element->prev = prev_element;
   }

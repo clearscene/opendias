@@ -37,6 +37,7 @@
 
 int setup (char *configFile) {
 
+  struct simpleLinkedList *rSet;
   char *location, *conf, *sql, *config_option, *config_value;
 
   // Defaults
@@ -70,7 +71,7 @@ int setup (char *configFile) {
 
   o_log(INFORMATION, "|Current config is: ");
   sql = o_strdup("SELECT config_option, config_value FROM config");
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  rSet = runquery_db(sql);
   if( rSet != NULL ) {
     do {
       config_option = o_strdup(readData_db(rSet, "config_option"));

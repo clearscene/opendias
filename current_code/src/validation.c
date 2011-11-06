@@ -326,6 +326,7 @@ static int checkRole(char *role) {
 extern int validate(struct simpleLinkedList *postdata, char *action) {
 
   int ret = 0;
+  char *data;
 
   if ( 0 == strcmp(action, "getDocDetail") ) {
     ret += checkOnlyKeys(postdata, "docid");
@@ -376,7 +377,7 @@ extern int validate(struct simpleLinkedList *postdata, char *action) {
 
     ret += checkFullCount(getPostData(postdata, "subaction"));
 
-    char *data = getPostData(postdata, "textSearch");
+    data = getPostData(postdata, "textSearch");
     if(data != NULL && strcmp(data,"")) ret += checkVal(data);
 
     data = getPostData(postdata, "startDate");

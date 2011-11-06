@@ -59,7 +59,7 @@ extern char *getScannerList() {
   const SANE_Device **SANE_device_list;
   SANE_Handle *openDeviceHandle;
   const SANE_Option_Descriptor *sod;
-  int hlp=0;
+  int lastIndex, l, hlp=0;
   int scanOK=SANE_FALSE, i=0, resolution=0, minRes=50, maxRes=50;
   char *vendor, *model, *type, *name, *scannerHost, *format, *replyTemplate, *deviceList, *resolution_s, *maxRes_s, *minRes_s, *ipandmore, *ip;
   struct hostent *hp;
@@ -108,7 +108,7 @@ extern char *getScannerList() {
       // Find location of the device
       if( name && name == strstr(name, "net:") ) {
         ipandmore = name + 4;
-        int l = strstr(ipandmore, ":") - ipandmore;
+        l = strstr(ipandmore, ":") - ipandmore;
         ip = malloc(1+l);
         (void) strncpy(ip,ipandmore,l);
         ip[l] = '\0';
@@ -153,7 +153,7 @@ extern char *getScannerList() {
           // A fixed list of options
           else if (sod->constraint_type == SANE_CONSTRAINT_WORD_LIST) {
             o_log(DEBUGM, "Resolution setting detected as 'word list'");
-            int lastIndex = sod->constraint.word_list[0];
+            lastIndex = sod->constraint.word_list[0];
             maxRes = sod->constraint.word_list[lastIndex];
           }
 
@@ -263,12 +263,13 @@ extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info
   pthread_attr_t attr;
   char *sql;
   int status=0, rc;
+  struct simpleLinkedList *rSet;
 
   sql = o_printf("SELECT status \
                   FROM scan_progress \
                   WHERE client_id = '%s'", scanid);
 
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  rSet = runquery_db(sql);
   if( rSet != NULL ) {
     do {
       status = atoi(readData_db(rSet, "status"));
@@ -304,13 +305,14 @@ extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info
 
 extern char *getScanningProgress(char *scanid) {
 
+  struct simpleLinkedList *rSet;
   char *sql, *status=0, *value=0, *ret;
 
   sql = o_printf("SELECT status, value \
                   FROM scan_progress \
                   WHERE client_id = '%s'", scanid);
 
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  rSet = runquery_db(sql);
   if( rSet != NULL ) {
     do {
       status = o_strdup(readData_db(rSet, "status"));
@@ -331,7 +333,10 @@ extern char *getScanningProgress(char *scanid) {
 
 extern char *docFilter(char *subaction, char *textSearch, char *startDate, char *endDate, char *tags) {
 
-  char *sql, *textWhere=NULL, *dateWhere=NULL, *tagWhere=NULL;
+  struct simpleLinkedList *rSet;
+  char *docList, *actionrequired, *title, *docid, *humanReadableDate, *type, 
+    *rows, *token, *olds, *sql, *textWhere=NULL, *dateWhere=NULL, *tagWhere=NULL;
+  char delim, olddelim;
   int count = 0;
 
   if( 0 == strcmp(subaction, "fullList") ) {
@@ -358,13 +363,13 @@ extern char *docFilter(char *subaction, char *textSearch, char *startDate, char 
   if( tags && strlen(tags) ) {
     tagWhere = o_strdup("tags.tagname IN (");
     count = 0;
-    char *olds = tags;
-    char delim = ',';
-    char olddelim = delim;
+    olds = tags;
+    delim = ',';
+    olddelim = delim;
     while(olddelim && *tags) {
       while(*tags && (delim != *tags)) tags++;
       *tags ^= olddelim = *tags; // olddelim = *s; *s = 0;
-      char *token = o_strdup(olds);
+      token = o_strdup(olds);
       o_concatf(&tagWhere, "'%s',", token);
       free(token);
       count++;
@@ -398,15 +403,14 @@ extern char *docFilter(char *subaction, char *textSearch, char *startDate, char 
 
   // Get Results
   //
-  char *rows = o_strdup("");
+  rows = o_strdup("");
   count = 0;
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  rSet = runquery_db(sql);
   if( rSet != NULL ) {
     do {
 
       if( 0 == strcmp(subaction, "fullList") ) {
         count++;
-        char *type;
         if( 0 == strcmp(readData_db(rSet, "filetype"), "1") ) {
           type = o_strdup("Imported ODF Doc");
         }
@@ -419,16 +423,16 @@ extern char *docFilter(char *subaction, char *textSearch, char *startDate, char 
         else {
           type = o_strdup("Scaned Doc");
         }
-        char *actionrequired = o_strdup(readData_db(rSet, "actionrequired"));
-        char *title = o_strdup(readData_db(rSet, "title"));
-        char *docid = o_strdup(readData_db(rSet, "docid"));
+        actionrequired = o_strdup(readData_db(rSet, "actionrequired"));
+        title = o_strdup(readData_db(rSet, "title"));
+        docid = o_strdup(readData_db(rSet, "docid"));
         if( 0 == strcmp(title, "NULL") ) {
           free(title);
           title = o_strdup("New (untitled) document.");
         }
-        char *humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")), 
-                                             o_strdup(readData_db(rSet, "docdatem")), 
-                                             o_strdup(readData_db(rSet, "docdated")) );
+        humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")), 
+                                       o_strdup(readData_db(rSet, "docdatem")), 
+                                       o_strdup(readData_db(rSet, "docdated")) );
 
         o_concatf(&rows, "<Row><docid>%s</docid><actionrequired>%s</actionrequired><title><![CDATA[%s]]></title><type>%s</type><date>%s</date></Row>", 
                            docid, actionrequired, title, type, humanReadableDate);
@@ -446,13 +450,15 @@ extern char *docFilter(char *subaction, char *textSearch, char *startDate, char 
   }
   free(sql);
 
-  char *docList = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DocFilter><count>%i</count><Results>%s</Results></DocFilter></Response>", count, rows);
+  docList = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DocFilter><count>%i</count><Results>%s</Results></DocFilter></Response>", count, rows);
   free(rows);
 
   return docList;
 }
 
 extern char *getAccessDetails() {
+
+  char *userAccess, *access;
 
   // Access by location
   char *sql = o_strdup("SELECT location, r.rolename FROM location_access a left join access_role r on a.role = r.role");
@@ -469,7 +475,7 @@ extern char *getAccessDetails() {
 
   // Access by user
   sql = o_strdup("SELECT * FROM user_access a left join access_role r on a.role = r.role");
-  char *userAccess = o_strdup("");
+  userAccess = o_strdup("");
   rSet = runquery_db(sql);
   if( rSet != NULL ) {
     do {
@@ -480,7 +486,7 @@ extern char *getAccessDetails() {
   }
   free(sql);
 
-  char *access = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><AccessDetails><LocationAccess>%s</LocationAccess><UserAccess>%s</UserAccess></AccessDetails></Response>", locationAccess, userAccess);
+  access = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><AccessDetails><LocationAccess>%s</LocationAccess><UserAccess>%s</UserAccess></AccessDetails></Response>", locationAccess, userAccess);
   free(locationAccess);
   free(userAccess);
 
@@ -518,6 +524,7 @@ extern char *controlAccess(char *submethod, char *location, char *user, char *pa
 extern char *titleAutoComplete(char *startsWith) {
 
   int notFirst = 0;
+  char *title, *data;
   char *result = o_strdup("{\"results\":[");
   char *line = o_strdup("{\"title\":\"%s\"}");
   char *sql = o_printf("SELECT DISTINCT title FROM docs WHERE title like '%s%%'", startsWith);
@@ -528,9 +535,8 @@ extern char *titleAutoComplete(char *startsWith) {
       if(notFirst==1) 
         conCat(&result, ",");
       notFirst = 1;
-      char *title = o_strdup(readData_db(rSet, "title"));
-      char *data = malloc(13+strlen(title));
-      sprintf(data, line, title);
+      title = o_strdup(readData_db(rSet, "title"));
+      data = o_printf(line, title);
       conCat(&result, data);
       free(data);
       free(title);
@@ -546,7 +552,9 @@ extern char *titleAutoComplete(char *startsWith) {
 
 extern char *tagsAutoComplete(char *startsWith, char *docid) {
 
+  struct simpleLinkedList *rSet;
   int notFirst = 0;
+  char *title, *data;
   char *result = o_strdup("{\"results\":[");
   char *line = o_strdup("{\"tag\":\"%s\"}");
   char *sql = o_printf(
@@ -560,15 +568,14 @@ extern char *tagsAutoComplete(char *startsWith, char *docid) {
     AND tagname like '%s%%' \
     ORDER BY tagname", docid, startsWith);
 
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  rSet = runquery_db(sql);
   if( rSet != NULL ) {
     do {
       if(notFirst==1) 
         conCat(&result, ",");
       notFirst = 1;
-      char *title = o_strdup(readData_db(rSet, "tagname"));
-      char *data = malloc(13+strlen(title));
-      sprintf(data, line, title);
+      title = o_strdup(readData_db(rSet, "tagname"));
+      data = o_printf(line, title);
       conCat(&result, data);
       free(data);
       free(title);

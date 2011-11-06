@@ -35,8 +35,8 @@
 
 extern char *uploadfile(char *filename, char *ftype) {
 
-  int itype = PLACE_HOLDER;
-  char *ocrText = NULL;
+  int s, itype = PLACE_HOLDER;
+  char *docid, *to_name, *tmp, *ocrText = NULL;
 
   // Save Record
   o_log(DEBUGM, "Saving doc import record");
@@ -46,37 +46,28 @@ extern char *uploadfile(char *filename, char *ftype) {
 
     // REPLACE ME WITH SOME LIB METHOD TO DO THE SAME
     // 
-    char *cmd_template = o_strdup("/usr/bin/pdftotext /tmp/%s.dat /tmp/%s.txt");
+    tmp = o_printf("/usr/bin/pdftotext /tmp/%s.dat /tmp/%s.txt", filename, filename);
+    s = system(tmp);
+    free(tmp);
     // 
 
-    char *cmd = malloc(30+9+(2*strlen(filename)));
-    sprintf(cmd, cmd_template, filename, filename);
-    free(cmd_template);
-    int s = system(cmd);
-    free(cmd);
-
-    char *out_template = o_strdup("/tmp/%s.txt");
-    char *out = malloc(30+strlen(filename));
-    sprintf(out, out_template, filename);
-    free(out_template);
-    if(s != 0 || load_file_to_memory(out, &ocrText) <= 0)
+    tmp = o_printf("/tmp/%s.txt", filename);
+    if(s != 0 || load_file_to_memory(tmp, &ocrText) <= 0)
       ocrText = o_strdup("--unable to read the PDF file--");
-    free(out);
+    free(tmp);
     replace(ocrText, "\f", ".");
 
     // --------------------------------------
   }
   else if(0==strcmp("ODF", ftype)) {
     itype = ODF_FILETYPE;
-    char *full_fn = o_strdup("/tmp/");
-    conCat(&full_fn, filename);
-    conCat(&full_fn, ".dat");
+    tmp = o_printf("/tmp/%s.dat", filename);
 #ifdef CAN_READODF
-    ocrText = get_odf_Text(full_fn); // read_odf.c 
+    ocrText = get_odf_Text(tmp); // read_odf.c 
 #endif // CAN_READODF //
     if(ocrText == NULL)
       ocrText = o_strdup("--text could not be extracted--");
-    free(full_fn);
+    free(tmp);
   }
   else if(0==strcmp("jpg", ftype)) {
     itype = JPG_FILETYPE;
@@ -91,27 +82,22 @@ extern char *uploadfile(char *filename, char *ftype) {
   }
 
   // Save the record to the DB
-  char *docid = addNewFileDoc(itype, ocrText); //ocrText get freed in this method
+  docid = addNewFileDoc(itype, ocrText); //ocrText get freed in this method
 
   // Docs that are not scanned, are stored with no "_x" postfix, but any thumbnails - are.
-  char *to_name = o_printf("%s/scans/%s", BASE_DIR, docid);
+  to_name = o_printf("%s/scans/%s", BASE_DIR, docid);
   addFileExt(&to_name, itype);
 
-  char *filename_template = o_strdup("/tmp/%s.dat");
-  char *full_filename = malloc(10+strlen(filename));
-  sprintf(full_filename, filename_template, filename);
-  free(filename_template);
+  tmp = o_printf("/tmp/%s.dat", filename);
 
-  fcopy(full_filename, to_name);
-  free(full_filename);
+  fcopy(tmp, to_name);
+  free(tmp);
   free(to_name);
 
   // Open the document for editing.
-  char *redirect = o_strdup("<html><HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/opendias/docDetail.html?docid=");
-  conCat(&redirect, docid);
-  conCat(&redirect, "\"></HEAD><body></body></html>");
+  tmp = o_printf("<html><HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/opendias/docDetail.html?docid=%s\"></HEAD><body></body></html>", docid);
   free(docid);
 
-  return redirect;
+  return tmp;
 }
 

@@ -186,7 +186,11 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
 }
 
 extern void request_completed (void *cls, struct MHD_Connection *connection, void **con_cls, enum MHD_RequestTerminationCode toe) {
+
+  struct simpleLinkedList *row;
+  struct post_data_struct *data_struct;
   struct connection_info_struct *con_info = *con_cls;
+  char *uploadedFileName, *filename;
   if (NULL == con_info)
     return;
 
@@ -195,17 +199,17 @@ extern void request_completed (void *cls, struct MHD_Connection *connection, voi
       MHD_destroy_post_processor (con_info->postprocessor);
       nr_of_clients--;
     }
-    char *uploadedFileName = getPostData(con_info->post_data, "uploadfile");
+    uploadedFileName = getPostData(con_info->post_data, "uploadfile");
     if(uploadedFileName != NULL) {
-      char *filename = o_printf("/tmp/%s.dat", uploadedFileName);
+      filename = o_printf("/tmp/%s.dat", uploadedFileName);
       unlink(filename); // Remove any uploaded files
       free(filename);
     }
-    struct simpleLinkedList *row;
+
     for( row = sll_findFirstElement( con_info->post_data ) ; row != NULL ; row = sll_getNext(row) ) {
       free(row->key);
       row->key = NULL;
-      struct post_data_struct *data_struct = (struct post_data_struct *)row->data;
+      data_struct = (struct post_data_struct *)row->data;
       free(data_struct->data);
       free(data_struct);
       row->data = NULL;
@@ -228,14 +232,17 @@ extern void request_completed (void *cls, struct MHD_Connection *connection, voi
 static char *accessChecks(struct MHD_Connection *connection, const char *url, struct priverlage *privs) {
 
   int locationLimited = 0, userLimited = 0, locationAccess = 0, userAccess = 0;
-  char client_address[INET6_ADDRSTRLEN+14];
+  char *sql, *type, client_address[INET6_ADDRSTRLEN+14];
+  struct simpleLinkedList *rSet;
+  const union MHD_ConnectionInfo *c_info;
+  struct sockaddr_in *p;
 
   // Check if there are any restrictions
-  char *sql = o_strdup("SELECT 'location' as type, role FROM location_access UNION SELECT 'user' as type, role FROM user_access");
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  sql = o_strdup("SELECT 'location' as type, role FROM location_access UNION SELECT 'user' as type, role FROM user_access");
+  rSet = runquery_db(sql);
   if( rSet != NULL ) {
     do  {
-      char *type = o_strdup(readData_db(rSet, "type"));
+      type = o_strdup(readData_db(rSet, "type"));
       if(0 == strcmp(type, "location")) {
         locationLimited = 1;
       }
@@ -250,8 +257,6 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
 
 
   if ( locationLimited == 1 ) {
-    const union MHD_ConnectionInfo *c_info;
-    struct sockaddr_in *p;
     // Get the client address
     c_info = MHD_get_connection_info(connection, MHD_CONNECTION_INFO_CLIENT_ADDRESS );
     p = (struct sockaddr_in *) c_info->client_addr;
@@ -259,7 +264,7 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
       inet_ntop(p->sin_family, &(p->sin_addr), client_address, INET_ADDRSTRLEN);
     }
 
-    char *sql = o_printf("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan \
+    sql = o_printf("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan \
             FROM location_access LEFT JOIN access_role ON location_access.role = access_role.role \
             WHERE '%s' LIKE location", client_address);
     rSet = runquery_db(sql);
@@ -306,8 +311,8 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
 
 static void postDumper(struct simpleLinkedList *table) {
 
-  o_log(DEBUGM, "Collected post data: ");
   struct simpleLinkedList *row;
+  o_log(DEBUGM, "Collected post data: ");
   for( row = sll_findFirstElement( table ) ; row != NULL ; row = sll_getNext(row) ) {
     char *data = getPostData(table, row->key);
     o_log(DEBUGM, "      %s : %s", row->key, data);
@@ -319,11 +324,18 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
               const char *version, const char *upload_data,
               size_t *upload_data_size, void **con_cls) {
 
+  struct connection_info_struct *con_info;
+  char *content, *mimetype, *dir, *action;
+  int size = 0;
+  int status = MHD_HTTP_OK;
+  struct priverlage accessPrivs;
+  const char *url;
+
   // Remove the begining "/opendias" (so this URL can be used like:)
   // http://server:port/opendias/
   // or via a server (apache) rewrite rule
   // http://server/opendias/
-  const char *url = url_orig;
+  url = url_orig;
   if( 0 != strncmp(url,"/opendias", 9) ) {
     o_log(ERROR, "request '%s' does not start '/opendias'", url_orig);
     return send_page_bin (connection, build_page((char *)o_strdup(requesterrorpage)), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
@@ -338,7 +350,6 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
   // Discover Params
   if (NULL == *con_cls) {
-    struct connection_info_struct *con_info;
     if (nr_of_clients >= MAXCLIENTS)
       return send_page_bin (connection, build_page(o_strdup(busypage)), MHD_HTTP_SERVICE_UNAVAILABLE, MIMETYPE_HTML);
     con_info = malloc (sizeof (struct connection_info_struct));
@@ -364,10 +375,6 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
     return MHD_YES;
   }
 
-  char *content, *mimetype, *dir;
-  int size = 0;
-  int status = MHD_HTTP_OK;
-  struct priverlage accessPrivs;
   accessPrivs.update_access = 0;
   accessPrivs.view_doc = 0;
   accessPrivs.edit_doc = 0;
@@ -539,7 +546,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
         basicValidation(con_info->post_data);
         postDumper(con_info->post_data);
 
-        char *action = getPostData(con_info->post_data, "action");
+        action = getPostData(con_info->post_data, "action");
 
         if ( action && 0 == strcmp(action, "getDocDetail") ) {
           o_log(INFORMATION, "Processing request for: document details");

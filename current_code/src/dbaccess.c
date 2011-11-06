@@ -51,6 +51,7 @@ extern int checkScannerLock(char *device) {
 
 extern int setScanParam(char *uuid, int param, char *vvalue) {
 
+  int rc;
   char *sql = o_strdup("INSERT OR REPLACE \
                         INTO scan_params \
                         (client_id, param_option, param_value) \
@@ -64,7 +65,7 @@ extern int setScanParam(char *uuid, int param, char *vvalue) {
   sll_append(vars, DB_TEXT );
   sll_append(vars, vvalue );
 
-  int rc = runUpdate_db(sql, vars);
+  rc = runUpdate_db(sql, vars);
   free(sql);
 
   return rc;
@@ -73,13 +74,14 @@ extern int setScanParam(char *uuid, int param, char *vvalue) {
 extern char *getScanParam(char *scanid, int param_option) {
 
   char *sql, *vvalue = NULL;
+  struct simpleLinkedList *rSet;
 
   sql = o_printf("SELECT param_value \
                   FROM scan_params \
                   WHERE client_id = '%s' \
                   AND param_option = %i", scanid, param_option);
 
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  rSet = runquery_db(sql);
   if( rSet ) {
     vvalue = o_strdup(readData_db(rSet, "param_value"));
   }
@@ -223,13 +225,14 @@ extern int updateDocValue (char *docid, char *kkey, char *vvalue) {
 
 static int addRemoveTagOnDocument (char *sql, char *docid, char *tagid) {
 
+  int rc;
   struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_TEXT );
   sll_append(vars, docid );
   sll_append(vars, DB_TEXT );
   sll_append(vars, tagid );
 
-  int rc = runUpdate_db(sql, vars);
+  rc = runUpdate_db(sql, vars);
   free(sql);
   return rc;
 }
@@ -285,18 +288,19 @@ extern void addLocation(char *location, int role) {
 
 extern char *getTagId(char *tagname) {
 
+  struct simpleLinkedList *vars, *rSet;
+  char *sql2, *ret = NULL;
   char *sql = o_printf("SELECT tagid FROM tags WHERE tagname = '%s'", tagname);
-  char *ret = NULL;
 
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  rSet = runquery_db(sql);
   if( rSet != NULL ) {
     ret = o_strdup(readData_db(rSet, "tagid"));
   }
   else {
     o_log(DEBUGM, "no tag was found. Adding a new one.");
-    char *sql2 = o_strdup("INSERT INTO tags (tagname) VALUES (?)");
+    sql2 = o_strdup("INSERT INTO tags (tagname) VALUES (?)");
 
-    struct simpleLinkedList *vars = sll_init();
+    vars = sll_init();
     sll_append(vars, DB_TEXT );
     sll_append(vars, tagname );
 
