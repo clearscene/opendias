@@ -139,10 +139,11 @@ extern int connect_db (int createIfRequired) {
  *                          sll hash of field names and their data
  */ 
 
-static int callback(struct simpleLinkedList *rSet, int argc, char **argv, char **azColName){
+static int callback(void *rSetIn, int argc, char **argv, char **azColName){
 
   int i;
-  struct simpleLinkedList *row, *field = NULL;
+  struct simpleLinkedList *row, *rSet, *field = NULL;
+  rSet = (struct simpleLinkedList *)rSetIn;
   if( rSet->data == NULL ) {
     row = sll_init();
     rSet->data = row;
@@ -229,7 +230,7 @@ extern struct simpleLinkedList *runquery_db (char *sql) {
 
 
   // Execute the query
-  rc = sqlite3_exec(DBH, sql, (void*)callback, rSet, &zErrMsg);
+  rc = sqlite3_exec(DBH, sql, callback, rSet, &zErrMsg);
 
   // Dump out on error
   if( rc != SQLITE_OK ) {

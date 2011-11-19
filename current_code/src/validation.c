@@ -194,7 +194,7 @@ static int validUploadType(char *val) {
 }
 
 //
-static int checkCheckbox(char *val) {
+/*static int checkCheckbox(char *val) {
   if ( 0 != strcmp(val, "")
     || 0 != strcmp(val, "on" ) ) {
     return 0;
@@ -202,6 +202,7 @@ static int checkCheckbox(char *val) {
   o_log(ERROR, "Validation failed: checkbox check");
   return 1;
 }
+*/
 
 //
 static int checkDate(char *val) {

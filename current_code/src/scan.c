@@ -39,8 +39,7 @@
 
 #ifdef CAN_SCAN
 
-extern void doScanningOperation(void *uuid) {
-
+extern void *doScanningOperation(void *uuid) {
   SANE_Status status;
   SANE_Handle *openDeviceHandle;
   SANE_Fixed v_f;
@@ -64,6 +63,7 @@ extern void doScanningOperation(void *uuid) {
   int request_resolution=0, testScanner=0;
   int sane_resolution, buff_requested_len=0; 
   int option=0, paramSetRet=0;
+  size_t size;
   const SANE_Option_Descriptor *sod;
   char *v_c, *request_resolution_s, *length_s;
   double totbytes, readSoFar;
@@ -80,7 +80,7 @@ extern void doScanningOperation(void *uuid) {
   status = sane_init(NULL, NULL);
   if(status != SANE_STATUS_GOOD) {
     o_log(ERROR, "sane did not start");
-    return;
+    return 0;
   }
 
   // Open the device
@@ -91,7 +91,7 @@ extern void doScanningOperation(void *uuid) {
     handleSaneErrors("Cannot open device", status, 0);
     updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
     free(devName);
-    return;
+    return 0;
   }
   if ( strstr(devName, "test") != 0 ) {
     testScanner=1;
@@ -147,7 +147,7 @@ extern void doScanningOperation(void *uuid) {
             if(status != SANE_STATUS_GOOD) {
               handleSaneErrors("Cannot set resolution (fixed)", status, paramSetRet);
               updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-              return;
+              return 0;
             }
           }
           else {
@@ -158,7 +158,7 @@ extern void doScanningOperation(void *uuid) {
             if(status != SANE_STATUS_GOOD) {
               handleSaneErrors("Cannot set resolution (range)", status, paramSetRet);
               updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-              return;
+              return 0;
             }
           }
         }
@@ -179,7 +179,7 @@ extern void doScanningOperation(void *uuid) {
                 if(status != SANE_STATUS_GOOD) {
                   handleSaneErrors("Cannot set source", status, paramSetRet);
                   updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-                  return;
+                  return 0;
                 }
                 foundMatch = 1;
                 break;
@@ -206,7 +206,7 @@ extern void doScanningOperation(void *uuid) {
             if(status != SANE_STATUS_GOOD) {
               handleSaneErrors("Cannot set depth", status, paramSetRet);
               updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-              return;
+              return 0;
             }
           }
         }
@@ -227,7 +227,7 @@ extern void doScanningOperation(void *uuid) {
                 if(status != SANE_STATUS_GOOD) {
                   handleSaneErrors("Cannot set mode", status, paramSetRet);
                   updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-                  return;
+                  return 0;
                 }
                 foundMatch = 1;
                 break;
@@ -247,7 +247,7 @@ extern void doScanningOperation(void *uuid) {
             if(status != SANE_STATUS_GOOD) {
               handleSaneErrors("Cannot set mode", status, paramSetRet);
               updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-              return;
+              return 0;
             }
           }
         }
@@ -258,7 +258,7 @@ extern void doScanningOperation(void *uuid) {
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set TL", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return;
+            return 0;
           }
         }
 
@@ -267,14 +267,14 @@ extern void doScanningOperation(void *uuid) {
           length_s = getScanParam(uuid, SCAN_PARAM_LENGTH);
           pagelength = atoi(length_s);
           if(pagelength && pagelength >= 20 && pagelength < 100)
-            v_f = v_f * ((double)pagelength / 100);
+            v_f = v_f * SANE_FIX((double)pagelength / 100);
           free(length_s);
 
           status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set BR", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return;
+            return 0;
           }
         }
 
@@ -284,7 +284,7 @@ extern void doScanningOperation(void *uuid) {
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set BR", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return;
+            return 0;
           }
         }
 
@@ -294,7 +294,7 @@ extern void doScanningOperation(void *uuid) {
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set brightness", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return;
+            return 0;
           }
         }
 
@@ -304,7 +304,7 @@ extern void doScanningOperation(void *uuid) {
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set contrast", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return;
+            return 0;
           }
         }
 
@@ -323,7 +323,7 @@ extern void doScanningOperation(void *uuid) {
                 if(status != SANE_STATUS_GOOD) {
                   handleSaneErrors("Cannot set speed", status, paramSetRet);
                   updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-                  return;
+                  return 0;
                 }
                 foundMatch = 1;
                 break;
@@ -342,7 +342,7 @@ extern void doScanningOperation(void *uuid) {
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set non-blocking", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return;
+            return 0;
           }
         }
 
@@ -352,7 +352,7 @@ extern void doScanningOperation(void *uuid) {
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set no to custonmer-gamma", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return;
+            return 0;
           }
         }
 
@@ -407,7 +407,7 @@ extern void doScanningOperation(void *uuid) {
           if(status != SANE_STATUS_GOOD) {
             handleSaneErrors("Cannot set option", status, paramSetRet);
             updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return;
+            return 0;
           }
         }
 
@@ -433,14 +433,14 @@ extern void doScanningOperation(void *uuid) {
   if(status != SANE_STATUS_GOOD) {  
     handleSaneErrors("Cannot start scanning", status, 0);
     updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-    return;
+    return 0;
   }
 
   // Get scanning params (from the scanner)
   if( request_resolution == 0 ) {
     o_log(DEBUGM, "Resolution did not get set in scanner setup.");
     updateScanProgress(uuid, SCAN_INTERNAL_ERROR, 10004);
-    return;
+    return 0;
   }
 
   status = sane_set_io_mode(openDeviceHandle, SANE_TRUE);
@@ -465,7 +465,7 @@ extern void doScanningOperation(void *uuid) {
     default:
       o_log(DEBUGM, "backend returns three frames speratly. We do not currently support this.");
       updateScanProgress(uuid, SCAN_INTERNAL_ERROR, 10003);
-      return;
+      return 0;
       break;
   }  
 
@@ -500,7 +500,7 @@ extern void doScanningOperation(void *uuid) {
   fprintf (scanOutFile, "P5\n# SANE data follows\n%d %d\n%d\n", 
     pars.pixels_per_line, pars.lines,
     (pars.depth <= 8) ? 255 : 65535);
-  totbytes = (pars.bytes_per_line * pars.lines) / expectFrames;
+  totbytes = (double)((pars.bytes_per_line * pars.lines) / expectFrames);
   readSoFar = 0;
   progress = 0;
 
@@ -508,9 +508,9 @@ extern void doScanningOperation(void *uuid) {
     buff_requested_len = 3 * pars.bytes_per_line * pars.depth;
 
   o_log(DEBUGM, "Using a buff_requested_len of %d", buff_requested_len);
-  buffer = malloc(buff_requested_len);
-  pic=(unsigned char *)malloc( totbytes+1 );
-  for (counter = 0 ; counter < totbytes ; counter++) pic[counter]=125;
+  buffer = malloc(sizeof(SANE_Byte) * (size_t)buff_requested_len);
+  pic=(unsigned char *)malloc( (size_t)totbytes+1 );
+  for (counter = 0 ; (double)counter < totbytes ; counter++) pic[counter]=125;
 
   o_log(DEBUGM, "scan_read - start");
   do {
@@ -542,13 +542,13 @@ extern void doScanningOperation(void *uuid) {
 
           offset = 3 - onlyReadxFromBlockofThree;
           for(samp_inc = 0; samp_inc < offset; samp_inc++) {
-            pic[(int)readSoFar] = max( pic[(int)readSoFar], (int)buffer[(int)samp_inc] );
+            pic[(int)readSoFar] = (SANE_Byte)max( pic[(int)readSoFar], (int)buffer[(int)samp_inc] );
           }
           readSoFar++;
         }
 
         // Check we have full blocks of data
-        onlyReadxFromBlockofThree = (int)fmod( (buff_len - offset), 3 );
+        onlyReadxFromBlockofThree = (int)fmod( (double)(buff_len - offset), 3 );
 
         // process each three frame block - looking out for the last frame (that could be a partial block)
         counter = offset;
@@ -562,7 +562,7 @@ extern void doScanningOperation(void *uuid) {
           }
           for(samp_inc = 0; samp_inc < bytesInThisBlock; samp_inc++)
             sample = max(sample, (int)buffer[(int)counter+samp_inc]);
-          pic[(int)readSoFar] = (int)sample;
+          pic[(int)readSoFar] = (SANE_Byte)sample;
           counter += bytesInThisBlock; // cos were gonna add one at the top of the loop
           readSoFar += pixelIncrement;
         }
@@ -572,12 +572,12 @@ extern void doScanningOperation(void *uuid) {
       else {
         for( counter = 0; counter < buff_len; counter++ )
           pic[(int)(readSoFar + counter)] = 
-            (int)buffer[(int)counter];
+            (SANE_Byte)buffer[(int)counter];
         readSoFar += buff_len;
       }
 
       // Update the progress info
-      progress_d = 100 * (readSoFar / totbytes);
+      progress_d = (int)(100 * (readSoFar / totbytes));
       progress = progress_d;
       if(progress > 100)
         progress = 100;
@@ -595,7 +595,7 @@ extern void doScanningOperation(void *uuid) {
       buff_len_change = 10 * pars.bytes_per_line / readItteration;
       if( buff_len_change > 100 ) {
         buff_requested_len += buff_len_change;
-        buffer = realloc(buffer, buff_requested_len);
+        buffer = realloc(buffer, (size_t)buff_requested_len);
         o_log(DEBUGM, "Increasing read buffer to %d bytes.", buff_requested_len);
       }
     }
@@ -603,7 +603,7 @@ extern void doScanningOperation(void *uuid) {
       buff_len_change = ( buff_requested_len - buff_len ) / readItteration;
       if( buff_len_change > 100 ) {
         buff_requested_len -= buff_len_change;
-        buffer = realloc(buffer, buff_requested_len);
+        buffer = realloc(buffer, (size_t)buff_requested_len);
         o_log(DEBUGM, "Decreasing read buffer to %d bytes.", buff_requested_len);
       }
     }
@@ -634,7 +634,9 @@ extern void doScanningOperation(void *uuid) {
 
   // Write the image to disk now
   //
-  fwrite (pic, pars.pixels_per_line, pars.lines, scanOutFile);
+  size = fwrite (pic, (size_t)pars.pixels_per_line, (size_t)pars.lines, scanOutFile);
+  if((int)size < (pars.pixels_per_line * pars.lines) )
+    o_log(ERROR, "Unable to write the entire image to disk.");
   fclose(scanOutFile);
 
 
@@ -650,20 +652,12 @@ extern void doScanningOperation(void *uuid) {
 
       ocrScanText = getTextFromImage((const unsigned char*)pic, pars.bytes_per_line, pars.pixels_per_line, pars.lines, shoulddoocr_s);
 
-      ocrText = o_strdup("---------------- page ");
-      conCat(&ocrText, page_s);
-      conCat(&ocrText, " ----------------\n");
-      conCat(&ocrText, ocrScanText);
-      conCat(&ocrText, "\n");
+      ocrText = o_printf("---------------- page %s ----------------\n%s\n", page_s, ocrScanText);
       free(ocrScanText);
     }
     else {
       o_log(DEBUGM, "OCR was requested, but the specified resolution means it's not safe to be attempted");
-      ocrText = o_strdup("---------------- page ");
-      conCat(&ocrText, page_s);
-      conCat(&ocrText, " ----------------\n");
-      conCat(&ocrText, "Resolution set outside safe range to attempt OCR.");
-      conCat(&ocrText, "\n");
+      ocrText = o_printf("---------------- page %s ----------------\nResolution set outside safe range to attempt OCR.\n");
     }
   }
   else
@@ -707,6 +701,7 @@ extern void doScanningOperation(void *uuid) {
 
   pthread_exit(0);
 
+  return "OK"; //mute!
 }
 #endif // CAN_SCAN //
 

@@ -20,11 +20,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <signal.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdarg.h>
 
-#include <signal.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -56,7 +56,7 @@ int setup (char *configFile) {
     conf = DEFAULT_CONF_FILE;
 
   o_log(INFORMATION, "Using config file: %s", conf);
-  if( load_file_to_memory(conf, &location) <= 0 ) {
+  if( 0 >= load_file_to_memory(conf, &location) ) {
     o_log(ERROR, "Cannot find main config file: %s", conf);
     free(location);
     return 1;
@@ -121,10 +121,12 @@ extern void server_shutdown() {
   close_db ();
   o_log(INFORMATION, "....openDias service has shutdown");
   close(pidFilehandle);
+  free(LOG_DIR);
   free(BASE_DIR);
 }
 
 void signal_handler(int sig) {
+    char *signame;
     switch(sig) {
         case SIGUSR1:
             o_log(INFORMATION, "Received SIGUSR1 signal.");
@@ -132,7 +134,8 @@ void signal_handler(int sig) {
             exit(EXIT_SUCCESS);
             break;
         default:
-            o_log(INFORMATION, "Received signal %s. IGNORING. Try SIGUSR1 to stop the service.", strsignal(sig));
+            signame = strsignal(sig);
+            o_log(INFORMATION, "Received signal %s. IGNORING. Try SIGUSR1 to stop the service.", signame );
             break;
     }
 }
@@ -140,6 +143,7 @@ void signal_handler(int sig) {
 void daemonize(char *rundir, char *pidfile) {
     int pid, sid, i;
     char *str;
+    size_t size;
     struct sigaction newSigAction;
     sigset_t newSigSet;
  
@@ -188,7 +192,7 @@ void daemonize(char *rundir, char *pidfile) {
  
     /* Child continues */
 
-    umask(027); /* Set file permissions 750 */
+    (void)umask(027); /* Set file permissions 750 */
  
     /* Get a new process group */
     sid = setsid();
@@ -220,8 +224,12 @@ void daemonize(char *rundir, char *pidfile) {
     str = o_printf("%d\n",getpid());
  
     /* write pid to lockfile */
-    i = write(pidFilehandle, str, strlen(str));
+    size = strlen(str);
+    if(size != (size_t)write(pidFilehandle, str, size) )
+      o_log(ERROR, "Could not write entir data.");
+
     /* close all descriptors */
+    free(str);
     for (i = getdtablesize(); i >= 0; --i) {
         close(i);
     }

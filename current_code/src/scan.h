@@ -32,6 +32,6 @@ enum {
   SCAN_PARAM_LENGTH,
 };
 
-extern void doScanningOperation(void *);
+extern void *doScanningOperation(void *);
 
 #endif /* SCAN */

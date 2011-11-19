@@ -57,18 +57,17 @@ struct priverlage {
   int add_scan;
 };
 
-static int getFromFile_fullPath(const char *url, char **data) {
+static size_t getFromFile_fullPath(const char *url, char **data) {
 
-  int size = load_file_to_memory(url, data);
-  return size;
+  return load_file_to_memory(url, data);
 }
 
-static int getFromFile(const char *url, char **data) {
+static size_t getFromFile(const char *url, char **data) {
 
   // Build Document Root
   char *htmlFrag = o_printf("%s/opendias/webcontent%s", PACKAGE_DATA_DIR, url);
 
-  int size = getFromFile_fullPath(htmlFrag, data);
+  size_t size = getFromFile_fullPath(htmlFrag, data);
   free(htmlFrag);
   return size;
 }
@@ -79,18 +78,23 @@ static int getFromFile(const char *url, char **data) {
 static char *build_page (char *page) {
   char *output;
   char *tmp;
+  size_t size;
 
   // Load the std header
-  getFromFile("/includes/header.txt", &output);
+  size = getFromFile("/includes/header.txt", &output);
 
   // Add the payload
-  conCat(&output, page);
-  free(page);
+  if(size > 1) {
+    conCat(&output, page);
+    free(page);
+  }
 
   // Load the std footer
-  getFromFile("/includes/footer.txt", &tmp);
-  conCat(&output, tmp);
-  free(tmp);
+  size = getFromFile("/includes/footer.txt", &tmp);
+  if(size > 1) {
+    conCat(&output, tmp);
+    free(tmp);
+  }
 
   return output;
 
@@ -110,7 +114,7 @@ static char *build_page (char *page) {
 //                                                  ----                      | char *data
 //                                                                            ----
 
-static int send_page (struct MHD_Connection *connection, char *page, int status_code, const char* mimetype, int contentSize) {
+static int send_page (struct MHD_Connection *connection, char *page, int status_code, const char* mimetype, size_t contentSize) {
   int ret;
   struct MHD_Response *response;
   response = MHD_create_response_from_data (contentSize, (void *) page, MHD_NO, MHD_YES);
@@ -118,7 +122,7 @@ static int send_page (struct MHD_Connection *connection, char *page, int status_
   if (!response)
     return MHD_NO;
   MHD_add_response_header (response, "Content-Type", mimetype);
-  ret = MHD_queue_response (connection, status_code, response);
+  ret = MHD_queue_response (connection, (unsigned int)status_code, response);
   MHD_destroy_response (response);
   return ret;
 }
@@ -169,7 +173,8 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
         o_log(ERROR, "could not open http post binary data file for output");
       else {
         fseek(fp, 0, SEEK_END);
-        fwrite (data, size, sizeof (char), fp);
+        if( size > fwrite (data, size, sizeof (char), fp) )
+          o_log(ERROR, "Did not write the fill amount of data.");
         fclose(fp);
 /*        if( data_struct->size != size ) {
           data_struct->size += size;
@@ -232,6 +237,7 @@ extern void request_completed (void *cls, struct MHD_Connection *connection, voi
 static char *accessChecks(struct MHD_Connection *connection, const char *url, struct priverlage *privs) {
 
   int locationLimited = 0, userLimited = 0, locationAccess = 0, userAccess = 0;
+  const char *tmp;
   char *sql, *type, client_address[INET6_ADDRSTRLEN+14];
   struct simpleLinkedList *rSet;
   const union MHD_ConnectionInfo *c_info;
@@ -261,7 +267,8 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
     c_info = MHD_get_connection_info(connection, MHD_CONNECTION_INFO_CLIENT_ADDRESS );
     p = (struct sockaddr_in *) c_info->client_addr;
     if ( AF_INET == p->sin_family) {
-      inet_ntop(p->sin_family, &(p->sin_addr), client_address, INET_ADDRSTRLEN);
+      tmp = inet_ntop((int)(p->sin_family), &(p->sin_addr), client_address, INET_ADDRSTRLEN);
+      //free(tmp);
     }
 
     sql = o_printf("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan \
@@ -325,8 +332,8 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
               size_t *upload_data_size, void **con_cls) {
 
   struct connection_info_struct *con_info;
-  char *content, *mimetype, *dir, *action;
-  int size = 0;
+  char *content, *dir, *action, *mimetype = MIMETYPE_HTML;
+  size_t size = 0;
   int status = MHD_HTTP_OK;
   struct priverlage accessPrivs;
   const char *url;
@@ -399,8 +406,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
     // A 'root' request needs to be mapped to an actual file
     if( strlen(url)==1 && 0!=strstr(url,"/") ) {
-      getFromFile("/body.html", &content);
-      content = build_page(content);
+      size = getFromFile("/body.html", &content);
+      if( size > 0 ) 
+        content = build_page(content);
       mimetype = MIMETYPE_HTML;
       size = strlen(content);
     }

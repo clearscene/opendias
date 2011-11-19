@@ -59,11 +59,11 @@ extern char *getScannerList() {
   const SANE_Device **SANE_device_list;
   SANE_Handle *openDeviceHandle;
   const SANE_Option_Descriptor *sod;
-  int lastIndex, l, hlp=0;
+  int lastIndex, len, hlp=0;
   int scanOK=SANE_FALSE, i=0, resolution=0, minRes=50, maxRes=50;
   char *vendor, *model, *type, *name, *scannerHost, *format, *replyTemplate, *deviceList, *resolution_s, *maxRes_s, *minRes_s, *ipandmore, *ip;
   struct hostent *hp;
-  long addr;
+  in_addr_t addr;
 
   o_log(DEBUGM, "sane_init");
   status = sane_init(NULL, NULL);
@@ -74,6 +74,7 @@ extern char *getScannerList() {
 
   SANE_device_list = NULL;
   status = sane_get_devices (&SANE_device_list, SANE_FALSE);
+
   if(status == SANE_STATUS_GOOD) {
     if (SANE_device_list && SANE_device_list[0]) {
       scanOK = SANE_TRUE;
@@ -108,12 +109,12 @@ extern char *getScannerList() {
       // Find location of the device
       if( name && name == strstr(name, "net:") ) {
         ipandmore = name + 4;
-        l = strstr(ipandmore, ":") - ipandmore;
-        ip = malloc(1+l);
-        (void) strncpy(ip,ipandmore,l);
-        ip[l] = '\0';
+        len = strstr(ipandmore, ":") - ipandmore;
+        ip = malloc(1+(size_t)len);
+        (void) strncpy(ip,ipandmore,(size_t)len);
+        ip[len] = '\0';
         addr = inet_addr(ip);
-        if ((hp = gethostbyaddr(&addr, sizeof(addr), AF_INET)) != NULL) {
+        if ((hp = gethostbyaddr(&addr, (__socklen_t)sizeof(addr), AF_INET)) != NULL) {
           scannerHost = o_strdup(hp->h_name);
         } 
         else
@@ -145,7 +146,7 @@ extern char *getScannerList() {
 
             // Fixed resolution
             if (sod->type == SANE_TYPE_FIXED)
-              maxRes = SANE_UNFIX (sod->constraint.range->max);
+              maxRes = (int)SANE_UNFIX (sod->constraint.range->max);
             else
               maxRes = sod->constraint.range->max;
           }
@@ -240,7 +241,7 @@ extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, 
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
   //pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-  rc = pthread_create(&thread, &attr, (void *)doScanningOperation, (void *)scanUuid);
+  rc = pthread_create(&thread, &attr, doScanningOperation, scanUuid);
   //rc = pthread_create(&thread, NULL, (void *)doScanningOperation, (void *)scanUuid);
   if(rc != 0) {
     o_log(ERROR, "Failed to create a new thread - for scanning operation.");
@@ -284,7 +285,7 @@ extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
     //pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-    rc = pthread_create(&thread, &attr, (void *)doScanningOperation, (void *)o_strdup(scanid));
+    rc = pthread_create(&thread, &attr, doScanningOperation, o_strdup(scanid));
     //rc = pthread_create(&thread, NULL, (void *)doScanningOperation, (void *)o_strdup(scanid));
     if(rc != 0) {
       o_log(ERROR, "Failed to create a new thread - for scanning operation.");
@@ -405,6 +406,7 @@ extern char *docFilter(char *subaction, char *textSearch, char *startDate, char 
   //
   rows = o_strdup("");
   count = 0;
+
   rSet = runquery_db(sql);
   if( rSet != NULL ) {
     do {

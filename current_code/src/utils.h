@@ -19,6 +19,8 @@
 #ifndef UTILS
 #define UTILS
 
+#include <stdlib.h>
+
 struct dateParts {
   char *year;
   char *month;
@@ -27,7 +29,7 @@ struct dateParts {
 
 extern char *o_strdup(const char *);
 extern char *itoa(long int, int);
-extern int load_file_to_memory(const char *, char **);
+extern size_t load_file_to_memory(const char *, char **);
 extern void createDir_ifRequired(char *);
 extern void fcopy(char *, char *);
 extern int max(int, int);

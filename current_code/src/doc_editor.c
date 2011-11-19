@@ -107,7 +107,7 @@ extern char *getDocDetail (char *documentId) {
   sql = o_printf("SELECT docid FROM docs WHERE docid = %s", documentId);
   rSet = runquery_db(sql);
   if( rSet == NULL ) {
-    o_log(ERROR, "Could not select record.");
+    o_log(ERROR, "Could not select record %s.", documentId);
     free_recordset( rSet );
     free(sql);
     return NULL;

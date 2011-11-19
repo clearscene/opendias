@@ -57,20 +57,20 @@ void xmlAllNodeGetContent(xmlNode *parent, char **str) {
 }
 
 
-char *xmlToText(char *xml, int size) {
+char *xmlToText(char *xml, size_t size) {
 
   char *text="";
 
-  xmlDocPtr doc = xmlParseMemory(xml, size);
+  xmlDocPtr doc = xmlParseMemory(xml, (int)size);
   xmlNodePtr root = xmlDocGetRootElement(doc);
   xmlAllNodeGetContent(root, &text);
 
   return text;
 }
 
-int getEntry(const char *name, char *contentFile, char **ptr) {
+size_t getEntry(const char *name, char *contentFile, char **ptr) {
 
-  int size=0;
+  size_t size=0;
   ZZIP_DIR *dir;
   ZZIP_DIRENT entry;
   ZZIP_FILE *file;
@@ -86,11 +86,11 @@ int getEntry(const char *name, char *contentFile, char **ptr) {
 
   file = zzip_file_open(dir, contentFile, 0);
 
-  zzip_seek(file, 0, SEEK_END);
+  (void)zzip_seek(file, 0, SEEK_END);
   size = zzip_tell(file);
-  zzip_seek(file, 0, SEEK_SET);
+  (void)zzip_seek(file, 0, SEEK_SET);
   buf = (char *)malloc(size+1);
-  zzip_read(file, buf, size);
+  (void)zzip_read(file, buf, size);
   buf[size] = '\0';
   *ptr = buf;
 
@@ -123,12 +123,12 @@ int myclose(struct archive *a, void *client_data) {
   return (ARCHIVE_OK);
 }
 
-int LIBARCHIVEgetEntry(char *name, char *contentFile, char **ptr) {
+size_t LIBARCHIVEgetEntry(char *name, char *contentFile, char **ptr) {
   struct mydata *mydata;
   struct archive *a;
   struct archive_entry *entry;
   char *buf;
-  int size = 0;
+  size_t size = 0;
 
   mydata = (struct mydata*)malloc(sizeof(struct mydata));
   a = archive_read_new();
@@ -152,7 +152,7 @@ int LIBARCHIVEgetEntry(char *name, char *contentFile, char **ptr) {
         o_log(DEBUGM, "zero size");
       if ((buf = (char *)malloc(size+1)) == NULL)
         o_log(ERROR, "cannot allocate memory");
-      if (archive_read_data(a, buf, size) != size)
+      if ((size_t)archive_read_data(a, buf, size) != size)
         o_log(DEBUGM, "cannot read data");
       buf[size] = '\0';
       *ptr = buf;
@@ -172,7 +172,7 @@ extern char *get_odf_Text (const char *filename) {
 
   char *text="";
   char *xml;
-  int size;
+  size_t size;
 
   size = getEntry(filename, "content.xml", &xml);
   o_log(DEBUGM, "Found message of size %d. Message reads\n %s", size, xml);
@@ -185,12 +185,13 @@ extern char *get_odf_Text (const char *filename) {
 extern void get_odf_Thumb (const char *filename) {
 
   char *imageData;
-  int size;
+  size_t size;
 
   size = getEntry(filename, "Thumbnails/thumbnail.png", &imageData);
   if(size > 0) {
     int tmpFile = open("/tmp/tmpImg.png", O_CREAT|O_WRONLY, 775);
-    size = write(tmpFile, imageData, size);
+    if((ssize_t)size != write(tmpFile, imageData, size) )
+      o_log(ERROR, "Could not write all data.");;
     close(tmpFile);
   }
 

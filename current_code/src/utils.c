@@ -56,7 +56,7 @@ extern char * itoa(long int val, int base) {
   long int t = val;
   for (len=2; t; t /= base) len++ ; // quickie log_base
 
-  if((buf = (char *) malloc(len)) == NULL) {
+  if((buf = (char *) malloc((size_t)len)) == NULL) {
     o_log(ERROR, "out of memory in itoa\n");
     return "";
   }
@@ -72,9 +72,9 @@ extern char * itoa(long int val, int base) {
 
 
 /* load a file into a buffer */
-extern int load_file_to_memory(const char *p_filename, char **result) {
+extern size_t load_file_to_memory(const char *p_filename, char **result) {
 
-  int size = 0;
+  size_t size = 0;
   FILE *p_f = fopen(p_filename, "r");
 
   if (p_f == NULL) {
@@ -84,7 +84,7 @@ extern int load_file_to_memory(const char *p_filename, char **result) {
   }
 
   fseek(p_f, 0, SEEK_END);
-  size = ftell(p_f);
+  size = (size_t)ftell(p_f);
   fseek(p_f, 0, SEEK_SET);
 
   if((*result = (char *)malloc(size+1)) == NULL) {
@@ -195,7 +195,7 @@ extern char *dateHuman(char *a, char *b, char *c) {
 
 extern char *o_strdup(const char *source) {
 
-  int size = strlen(source);
+  size_t size = strlen(source);
   char *newArea = malloc(size + 1);
   (void) strcpy(newArea, source);
   return newArea;
@@ -222,22 +222,30 @@ extern void chop( char *s ) {
 extern char *getTimeStr() {
   time_t ttime;
   struct tm *stTime;
+  size_t size;
   char *strdate = malloc(18);
 
-  time(&ttime);
+  size = time(&ttime);
   stTime = gmtime(&ttime);
-  strftime(strdate, 18, "%Y%m%d%H%M%S", stTime);
+  size = strftime(strdate, 18, "%Y%m%d%H%M%S", stTime);
+//  if( 18 != size )
+//    o_log(ERROR, "Count not write entire data block.");
+
   return strdate;
 }
 
 extern char *getTimeStr_iso8601() {
   time_t ttime;
   struct tm *stTime;
+  size_t size;
   char *strdate = malloc(32);
 
-  time(&ttime);
+  size = time(&ttime);
   stTime = gmtime(&ttime);
-  strftime(strdate, 32, "%Y-%m-%d %H:%M:%S", stTime);
+  size = strftime(strdate, 32, "%Y-%m-%d %H:%M:%S", stTime);
+//  if( 32 != strftime(strdate, 32, "%Y-%m-%d %H:%M:%S", stTime) )
+//    o_log(ERROR, "Count not write entire data block.");
+
   return strdate;
 }
 
@@ -307,11 +315,13 @@ extern void addFileExt(char **fname, int ftype) {
 }
 
 char *i_printf(const char *fmt, va_list inargs) {
-  int len;
+  size_t len;
   char *str;
-  len = vsnprintf(NULL, 0, fmt, inargs);
+  len = (size_t)vsnprintf(NULL, 0, fmt, inargs);
   str = malloc((len + 1) * sizeof(char));
-  len = vsnprintf(str, len + 1, fmt, inargs);
+  if( (int)(len+1) != vsnprintf(str, len + 1, fmt, inargs) )
+    return str; //o_log(ERROR, "Count not write the entire data block.");
+  
   return str;
 }
 
