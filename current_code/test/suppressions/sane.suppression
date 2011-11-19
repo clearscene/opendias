@@ -1748,4 +1748,588 @@
    fun:start_thread
    fun:clone
 }
-
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   fun:sane_dll_get_devices
+   fun:sane_get_devices
+   fun:getScannerList
+   fun:answer_to_connection
+   obj:/usr/lib/libmicrohttpd.so.5.2.1
+   obj:/usr/lib/libmicrohttpd.so.5.2.1
+   obj:/usr/lib/libmicrohttpd.so.5.2.1
+   obj:/usr/lib/libmicrohttpd.so.5.2.1
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_get_devices
+   fun:sane_get_devices
+   fun:getScannerList
+   fun:answer_to_connection
+   obj:/usr/lib/libmicrohttpd.so.5.2.1
+   obj:/usr/lib/libmicrohttpd.so.5.2.1
+   obj:/usr/lib/libmicrohttpd.so.5.2.1
+   obj:/usr/lib/libmicrohttpd.so.5.2.1
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_get_devices
+   fun:sane_get_devices
+   fun:getScannerList
+   fun:answer_to_connection
+   obj:/usr/lib/libmicrohttpd.so.5.2.1
+   obj:/usr/lib/libmicrohttpd.so.5.2.1
+   obj:/usr/lib/libmicrohttpd.so.5.2.1
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   fun:init
+   fun:sane_dll_open
+   fun:sane_open
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}

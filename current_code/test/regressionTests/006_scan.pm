@@ -47,12 +47,12 @@ sub test {
 
   # Click the 'do scanning' button
   my $ocrDropdown;
-  eval( "\$ocrCheckbox = \$page->getHtmlElementById(\"ocr_1\");" );
+  eval( "\$ocrDropdown = \$page->getHtmlElementById(\"ocr_1\");" );
   if(ref($ocrDropdown) !~ /HtmlSelect/) {
-    o_log("Did not find the expected ocr language selection");
+    o_log("Did not find the expected ocr language selection : ".ref($ocrDropdown) );
     return 1;
   }
-  $ocrDropdown->setSelectedAttribute('English', $true);
+  $ocrDropdown->setSelectedAttribute('English', 1);
 
   # Click the 'do scanning' button
   my $scanButton;

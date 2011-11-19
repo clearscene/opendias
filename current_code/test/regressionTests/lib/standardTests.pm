@@ -89,6 +89,7 @@ sub setupClient {
   $client->setCssEnabled($true);
   $client->setCssErrorHandler(WWW::HtmlUnit::com::gargoylesoftware::htmlunit::SilentCssErrorHandler->new());
   $client->setJavaScriptEnabled($true);
+  #$client->setThrowExceptionOnFailingStatusCode($true);
   $client->setThrowExceptionOnScriptError($true);
   $client->setAjaxController(WWW::HtmlUnit::com::gargoylesoftware::htmlunit::NicelyResynchronizingAjaxController->new());
 
@@ -104,8 +105,18 @@ sub stopService {
   foreach my $jsAlert (@{$alert_arrayref}) {
     o_log("Found uncaught alert: ".$jsAlert);
   }
+  #o_log("Stopping client");
+  eval {
+    local $SIG{ALRM} = sub { die "alarm\n" };
+    alarm 3;
+    $client->closeAllWindows();
+    alarm 0;
+  };
+  alarm 0;
+  #if ($@) {
+  #  o_log("Force killed the client.");
+  #}
   o_log("Stopping service");
-  $client->closeAllWindows();
   undef $client;
   undef $alert_handler;
   system("kill -s USR1 `cat /var/run/opendias.pid`");

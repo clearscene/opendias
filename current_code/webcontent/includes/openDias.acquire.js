@@ -110,6 +110,7 @@ function getScanningProgress (progressId, device) {
            } else if( status == 7 ) { // SCAN_WAITING_ON_NEW_PAGE,// Waiting for page [x]
              showStatus(device, undefined, undefined);
              $('#status_'+device).text("Please insert page "+vvalue+".");
+             finish = 1;
              if(confirm("Please insert page "+vvalue+".")) {
                $.ajax({ url: "/opendias/dynamic",
                       dataType: "xml",
@@ -125,6 +126,7 @@ function getScanningProgress (progressId, device) {
                         }
                       }
                     });
+                getScanningProgress(progressId,device);
              }
 
            } else if( status == 8 ) { // SCAN_TIMEOUT_WAITING_ON_NEW_PAGE,
