@@ -31,6 +31,9 @@ apt-get install default-jdk
 JAVA_HOME=/usr/lib/jvm/default-java cpan -f Inline::Java
 cpan -f WWW::HtmlUnit
 
+Also, Perl will need access to the database, so ensure DBI and sqlite3 DBD in installed
+eg
+sudo apt-get install libdbd-sqlite3-perl
 
 
 
