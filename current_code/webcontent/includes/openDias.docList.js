@@ -97,12 +97,18 @@ function loadListData() {
               return 1;
             }
             totalRows = $(data).find('DocFilter').find('count').text();
-            count = 0;
-            dta = $(data).find('DocFilter').find('Results');
-            $('#docList_table').css({ display: 'none' });
-            $('#pager').css({ display: 'none' });
-            cc = 0;
-            processData();
+            if(totalRows==0) {
+              $('#nodocs').css({ display: 'block' });
+              $('#doclist').css({ display: 'none' });
+            }
+            else {
+              count = 0;
+              dta = $(data).find('DocFilter').find('Results');
+              $('#docList_table').css({ display: 'none' });
+              $('#pager').css({ display: 'none' });
+              cc = 0;
+              processData();
+            }
          }
        });
 }

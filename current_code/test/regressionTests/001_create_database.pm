@@ -14,7 +14,7 @@ sub test {
   $sth->execute();
 
   while( my $hashRef = $sth->fetchrow_hashref() ) {
-    if ( $hashRef->{version} eq "4" ) {
+    if ( $hashRef->{version} eq "5" ) {
       o_log("Correct DB version.");
     }
     else {
