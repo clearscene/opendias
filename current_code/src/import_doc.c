@@ -35,13 +35,14 @@
 
 extern char *uploadfile(char *filename, char *ftype) {
 
-  int s, itype = PLACE_HOLDER;
+  int itype = PLACE_HOLDER;
   char *docid, *to_name, *tmp, *ocrText = NULL;
 
   // Save Record
   o_log(DEBUGM, "Saving doc import record");
 
   if(0==strcmp("PDF", ftype)) {
+    int s;
     itype = PDF_FILETYPE;
 
     // REPLACE ME WITH SOME LIB METHOD TO DO THE SAME

@@ -228,8 +228,8 @@ extern char *getTimeStr() {
   size = time(&ttime);
   stTime = gmtime(&ttime);
   size = strftime(strdate, 18, "%Y%m%d%H%M%S", stTime);
-//  if( 18 != size )
-//    o_log(ERROR, "Count not write entire data block.");
+  if( 17 != size )
+    o_log(ERROR, "Count not write entire data block.");
 
   return strdate;
 }
@@ -243,8 +243,8 @@ extern char *getTimeStr_iso8601() {
   size = time(&ttime);
   stTime = gmtime(&ttime);
   size = strftime(strdate, 32, "%Y-%m-%d %H:%M:%S", stTime);
-//  if( 32 != strftime(strdate, 32, "%Y-%m-%d %H:%M:%S", stTime) )
-//    o_log(ERROR, "Count not write entire data block.");
+  if( 31 != size )
+    o_log(ERROR, "Count not write entire data block.");
 
   return strdate;
 }

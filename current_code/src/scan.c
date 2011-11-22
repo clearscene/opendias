@@ -47,7 +47,7 @@ extern void *doScanningOperation(void *uuid) {
   SANE_Int buff_len;
   SANE_Bool v_b;
   SANE_Parameters pars;
-  SANE_Byte *buffer, *pic;
+  SANE_Byte *tmp_buffer, *buffer, *pic;
   int docid, page, offset;
   int samp_inc;
   int sample, pixelIncrement, bytesInThisBlock;
@@ -595,16 +595,32 @@ extern void *doScanningOperation(void *uuid) {
       buff_len_change = 10 * pars.bytes_per_line / readItteration;
       if( buff_len_change > 100 ) {
         buff_requested_len += buff_len_change;
-        buffer = realloc(buffer, (size_t)buff_requested_len);
-        o_log(DEBUGM, "Increasing read buffer to %d bytes.", buff_requested_len);
+        tmp_buffer = realloc(buffer, (size_t)buff_requested_len);
+        if( tmp_buffer == NULL ) {
+          free(buffer);
+          o_log(ERROR, "Out of memory, when assiging new scan reading buffer.");
+          break;
+        }
+        else {
+          buffer = tmp_buffer;
+          o_log(DEBUGM, "Increasing read buffer to %d bytes.", buff_requested_len);
+        }
       }
     }
     else if ( buff_len > 0 ) {
       buff_len_change = ( buff_requested_len - buff_len ) / readItteration;
       if( buff_len_change > 100 ) {
         buff_requested_len -= buff_len_change;
-        buffer = realloc(buffer, (size_t)buff_requested_len);
-        o_log(DEBUGM, "Decreasing read buffer to %d bytes.", buff_requested_len);
+        tmp_buffer = realloc(buffer, (size_t)buff_requested_len);
+        if( tmp_buffer == NULL ) {
+          free(buffer);
+          o_log(ERROR, "Out of memory, when assiging new scan reading buffer.");
+          break;
+        }
+        else {
+          buffer = tmp_buffer;
+          o_log(DEBUGM, "Decreasing read buffer to %d bytes.", buff_requested_len);
+        }
       }
     }
 

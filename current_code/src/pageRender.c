@@ -20,12 +20,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
+#include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -59,9 +59,9 @@ extern char *getScannerList() {
   const SANE_Device **SANE_device_list;
   SANE_Handle *openDeviceHandle;
   const SANE_Option_Descriptor *sod;
-  int lastIndex, len, hlp=0;
-  int scanOK=SANE_FALSE, i=0, resolution=0, minRes=50, maxRes=50;
-  char *vendor, *model, *type, *name, *scannerHost, *format, *replyTemplate, *deviceList, *resolution_s, *maxRes_s, *minRes_s, *ipandmore, *ip;
+  int scanOK=SANE_FALSE;
+  char *scannerHost, *replyTemplate, *deviceList, 
+  char *ipandmore, *ip;
   struct hostent *hp;
   in_addr_t addr;
 
@@ -87,9 +87,18 @@ extern char *getScannerList() {
     o_log(WARNING, "Checking for devices failed");
 
   if(scanOK == SANE_TRUE) {
+
+    int i = 0;
+
     replyTemplate = o_strdup("<Device><vendor>%s</vendor><model>%s</model><type>%s</type><name>%s</name><Formats>%s</Formats><max>%s</max><min>%s</min><default>%s</default><host>%s</host></Device>");
     deviceList = o_strdup("");
+
     for (i=0 ; SANE_device_list[i] ; i++) {
+
+      int hlp = 0, resolution = 300, minRes=50, maxRes=50;
+      char *vendor, *model, *type, *name, *format;
+      char *resolution_s, *maxRes_s, *minRes_s;
+
       o_log(DEBUGM, "sane_open");
       status = sane_open (SANE_device_list[i]->name, (SANE_Handle)&openDeviceHandle);
       if(status != SANE_STATUS_GOOD) {
@@ -108,6 +117,7 @@ extern char *getScannerList() {
 
       // Find location of the device
       if( name && name == strstr(name, "net:") ) {
+        int len;
         ipandmore = name + 4;
         len = strstr(ipandmore, ":") - ipandmore;
         ip = malloc(1+(size_t)len);
@@ -153,8 +163,8 @@ extern char *getScannerList() {
 
           // A fixed list of options
           else if (sod->constraint_type == SANE_CONSTRAINT_WORD_LIST) {
+            int lastIndex = sod->constraint.word_list[0];
             o_log(DEBUGM, "Resolution setting detected as 'word list'");
-            lastIndex = sod->constraint.word_list[0];
             maxRes = sod->constraint.word_list[lastIndex];
           }
 
@@ -165,7 +175,6 @@ extern char *getScannerList() {
 
 
       // Define a default
-      resolution = 300;
       if(resolution >= maxRes)
         resolution = maxRes;
       if(resolution <= minRes)
@@ -263,7 +272,7 @@ extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info
   pthread_t thread;
   pthread_attr_t attr;
   char *sql;
-  int status=0, rc;
+  int status=0;
   struct simpleLinkedList *rSet;
 
   sql = o_printf("SELECT status \
@@ -281,6 +290,7 @@ extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info
 
   //
   if(status == SCAN_WAITING_ON_NEW_PAGE) {
+    int rc;
     // Create a new thread to start the scan process
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
@@ -337,7 +347,6 @@ extern char *docFilter(char *subaction, char *textSearch, char *startDate, char 
   struct simpleLinkedList *rSet;
   char *docList, *actionrequired, *title, *docid, *humanReadableDate, *type, 
     *rows, *token, *olds, *sql, *textWhere=NULL, *dateWhere=NULL, *tagWhere=NULL;
-  char delim, olddelim;
   int count = 0;
 
   if( 0 == strcmp(subaction, "fullList") ) {
@@ -362,6 +371,7 @@ extern char *docFilter(char *subaction, char *textSearch, char *startDate, char 
   // Filter By Tags
   //
   if( tags && strlen(tags) ) {
+    char delim, olddelim;
     tagWhere = o_strdup("tags.tagname IN (");
     count = 0;
     olds = tags;
@@ -525,7 +535,6 @@ extern char *controlAccess(char *submethod, char *location, char *user, char *pa
 
 extern char *titleAutoComplete(char *startsWith) {
 
-  int notFirst = 0;
   char *title, *data;
   char *result = o_strdup("{\"results\":[");
   char *line = o_strdup("{\"title\":\"%s\"}");
@@ -533,6 +542,7 @@ extern char *titleAutoComplete(char *startsWith) {
 
   struct simpleLinkedList *rSet = runquery_db(sql);
   if( rSet != NULL ) {
+    int notFirst = 0;
     do {
       if(notFirst==1) 
         conCat(&result, ",");
@@ -555,7 +565,6 @@ extern char *titleAutoComplete(char *startsWith) {
 extern char *tagsAutoComplete(char *startsWith, char *docid) {
 
   struct simpleLinkedList *rSet;
-  int notFirst = 0;
   char *title, *data;
   char *result = o_strdup("{\"results\":[");
   char *line = o_strdup("{\"tag\":\"%s\"}");
@@ -572,6 +581,7 @@ extern char *tagsAutoComplete(char *startsWith, char *docid) {
 
   rSet = runquery_db(sql);
   if( rSet != NULL ) {
+    int notFirst = 0;
     do {
       if(notFirst==1) 
         conCat(&result, ",");

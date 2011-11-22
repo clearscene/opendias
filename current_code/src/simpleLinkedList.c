@@ -80,8 +80,8 @@ void sll_insert ( struct simpleLinkedList *element, char *key, void *data ) {
 }
 
 struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *element, const char *key ) {
-  if( element && element != NULL ) {
-    if( element->key && element->key != NULL && 0 == strcmp(element->key, key) ) {
+  if( element && ( element != NULL ) ) {
+    if( element->key && ( element->key != NULL ) && ( 0 == strcmp(element->key, key) ) ) {
       return element;
     }
     return sll_searchKeys( sll_getNext( element ), key );
@@ -111,7 +111,7 @@ struct simpleLinkedList *sll_getNext( struct simpleLinkedList *element ) {
 }
 
 void sll_destroy( struct simpleLinkedList *element ) {
-  if( element && element != NULL ) {
+  if( element && ( element != NULL ) ) {
     o_log(SQLDEBUG, "preparing to delete element: %x, with prev=%x, and next=%x", element, element->prev, element->next);
     sll_destroy( sll_getNext( element ) );
     sll_delete( element );
@@ -122,10 +122,10 @@ void sll_delete( struct simpleLinkedList *element ) {
   struct simpleLinkedList *prev_element = element->prev;
   struct simpleLinkedList *next_element = element->next;
   o_log(SQLDEBUG, "Asked to delete element: %x, with prev=%x, and next=%x", element, element->prev, element->next);
-  if( next_element && next_element != NULL ) {
+  if( next_element && ( next_element != NULL ) ) {
     next_element->prev = prev_element;
   }
-  if( prev_element && prev_element != NULL ) {
+  if( prev_element && ( prev_element != NULL ) ) {
     prev_element->next = next_element;
   }
   free( element );

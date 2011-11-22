@@ -136,7 +136,7 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
   struct connection_info_struct *con_info = coninfo_cls;
   struct simpleLinkedList *post_element = sll_searchKeys(con_info->post_data, key);
   struct post_data_struct *data_struct = NULL;
-  if( post_element && post_element != NULL && post_element->data != NULL )
+  if( post_element && ( post_element != NULL ) && ( post_element->data != NULL ) )
     data_struct = (struct post_data_struct *)post_element->data;
 
   if(size > 0) {
@@ -268,7 +268,8 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
     p = (struct sockaddr_in *) c_info->client_addr;
     if ( AF_INET == p->sin_family) {
       tmp = inet_ntop((int)(p->sin_family), &(p->sin_addr), client_address, INET_ADDRSTRLEN);
-      //free(tmp);
+      if( tmp == NULL )
+        o_log(ERROR, "Couold not convert the address.");
     }
 
     sql = o_printf("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan \

@@ -292,10 +292,10 @@ extern void free_recordset (struct simpleLinkedList *rSet) {
 
   o_log(DEBUGM, "Free recordset (%x)", rSet);
 
-  if( rSet && rSet != NULL ) {
+  if( rSet && ( rSet != NULL ) ) {
     if( rSet->data != NULL ) {
       for( row = sll_findFirstElement((struct simpleLinkedList *)rSet->data) ; row != NULL ; row = sll_getNext(row) ) {
-        if( row && row != NULL && row->data != NULL ) {
+        if( row && ( row != NULL ) && ( row->data != NULL ) ) {
           for( field = sll_findFirstElement((struct simpleLinkedList *)row->data) ; field != NULL ; field = sll_getNext(field) ) {
             o_log(SQLDEBUG, "Freeing: %s = %s", field->key, field->data);
             free(field->key);
