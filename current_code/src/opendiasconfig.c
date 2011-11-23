@@ -52,7 +52,7 @@ int setup (char *configFile) {
     conf = DEFAULT_CONF_FILE;
 
   o_log(INFORMATION, "|Using config file: %s", conf);
-  if( load_file_to_memory(conf, &location) <= 0 ) {
+  if( 0 == load_file_to_memory(conf, &location) ) {
     o_log(ERROR, "|Cannot find main config file: %s", conf);
     free(location);
     return 1;

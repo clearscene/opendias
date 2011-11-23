@@ -417,7 +417,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
     // Serve up content that needs a top and tailed
     else if( 0!=strstr(url,".html") ) {
       size = getFromFile(url, &content);
-      if(size <= 0) {
+      if( 0 == size ) {
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
@@ -433,7 +433,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
     // Serve 'image' content
     else if( 0!=strstr(url,"/images/") && 0!=strstr(url,".png") ) {
       size = getFromFile(url, &content);
-      if(size <= 0) {
+      if( 0 == size ) {
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
@@ -446,7 +446,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
     else if( 0!=strstr(url,"/images/") && 0!=strstr(url,".jpg") ) {
       size = getFromFile(url, &content);
-      if(size <= 0) {
+      if( 0 == size ) {
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
@@ -472,9 +472,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
         mimetype = MIMETYPE_PDF;
       }
       else
-        size = -1;
+        size = 0;
 
-      if(size <= 0) {
+      if( 0 == size ) {
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
@@ -490,7 +490,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
       conCat(&dir, url);
       size = getFromFile_fullPath(dir, &content);
       free(dir);
-      if(size <= 0) {
+      if( 0 == size ) {
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
@@ -504,7 +504,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
     // Serve 'js' content
     else if( 0!=strstr(url,"/includes/") && 0!=strstr(url,".js") ) {
       size = getFromFile(url, &content);
-      if(size <= 0) {
+      if( 0 == size ) {
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
@@ -518,7 +518,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
     // Serve 'style sheet' content
     else if( 0!=strstr(url,"/style/") && 0!=strstr(url,".css") ) {
       size = getFromFile(url, &content);
-      if(size <= 0) {
+      if( 0 == size ) {
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;

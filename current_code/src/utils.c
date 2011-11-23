@@ -80,7 +80,7 @@ extern size_t load_file_to_memory(const char *p_filename, char **result) {
   if (p_f == NULL) {
     *result = NULL;
     o_log(ERROR, "Could not open file: %s", p_filename);
-    return -1; // -1 means file opening fail
+    return (size_t)0; // means file opening fail
   }
 
   fseek(p_f, 0, SEEK_END);
@@ -89,12 +89,13 @@ extern size_t load_file_to_memory(const char *p_filename, char **result) {
 
   if((*result = (char *)malloc(size+1)) == NULL) {
     o_log(ERROR, "Out of memory while reading file information");
-    return 0;
+    return (size_t)0;
   }
 
   if (size != fread(*result, sizeof(char), size, p_f)) {
     free(*result);
-    return -2; // -2 means file reading fail
+    o_log(ERROR, "Error reading from file");
+    return (size_t)0; // means file reading fail
   }
 
   fclose(p_f);

@@ -53,7 +53,7 @@ extern char *uploadfile(char *filename, char *ftype) {
     // 
 
     tmp = o_printf("/tmp/%s.txt", filename);
-    if(s != 0 || load_file_to_memory(tmp, &ocrText) <= 0)
+    if( ( s != 0 ) || ( 0 == load_file_to_memory(tmp, &ocrText) ) )
       ocrText = o_strdup("--unable to read the PDF file--");
     free(tmp);
     replace(ocrText, "\f", ".");

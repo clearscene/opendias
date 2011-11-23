@@ -116,7 +116,7 @@ extern int connect_db (int createIfRequired) {
     o_log(INFORMATION, "Bringing BD upto version: %d", i);
     o_log(DEBUGM, "Reading SQL code from file: %s", upgradeSQL);
 
-    if(load_file_to_memory(upgradeSQL, &data) > 0) {
+    if( 0 != load_file_to_memory(upgradeSQL, &data) ) {
       o_log(DEBUGM, "%s", data);
       rSet = runquery_db(data);
       free_recordset( rSet );
