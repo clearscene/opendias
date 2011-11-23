@@ -4,12 +4,15 @@ LOG-OUTPUT
 -date-:-thread-:INF: Using config file: [CONFIG_FILE]
 -date-:-thread-:INF: Which says the database is at: /tmp/opendiastest/
 -date-:-thread-:DBG: Dir structure is in-place, database should exist
--date-:-thread-:DBG: Run Query
--date-:-thread-:DBG: Free recordset
--date-:-thread-:DBG: Run Query
--date-:-thread-:DBG: Free recordset
+-date-:-thread-:DBG: Checking for a populated database
+-date-:-thread-:DBG: Run Query [RECORDSET]
+-date-:-thread-:DBG: We have one. So will check to see what verstion it is.
+-date-:-thread-:DBG: Free recordset [RECORDSET]
+-date-:-thread-:DBG: Run Query [RECORDSET]
+-date-:-thread-:DBG: Database reports that it is version: 5
+-date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:INF: Connected to database
--date-:-thread-:DBG: Run Query
+-date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:INF: Config setting: log_verbosity = 3
 -date-:-thread-:INF: Config setting: scan_directory = /tmp/opendiastest
 -date-:-thread-:INF: Config setting: show_all_available = 1
