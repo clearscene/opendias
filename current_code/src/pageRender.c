@@ -60,7 +60,7 @@ extern char *getScannerList() {
   SANE_Handle *openDeviceHandle;
   const SANE_Option_Descriptor *sod;
   int scanOK=SANE_FALSE;
-  char *scannerHost, *replyTemplate, *deviceList, 
+  char *scannerHost, *replyTemplate, *deviceList; 
   char *ipandmore, *ip;
   struct hostent *hp;
   in_addr_t addr;
