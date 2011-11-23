@@ -227,9 +227,9 @@ extern char *getTimeStr() {
 
   size = time(&ttime);
   stTime = gmtime(&ttime);
-  size = strftime(strdate, 18, "%Y%m%d%H%M%S", stTime);
-  if( 17 != size )
-    o_log(ERROR, "Count not write entire data block.");
+  size = strftime(strdate, (size_t)18, "%Y%m%d%H%M%S", stTime);
+  if( 0 == size )
+    printf("%s", "Count not write entire data/time message.");
 
   return strdate;
 }
