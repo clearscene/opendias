@@ -116,10 +116,10 @@ if [ "$NOBUILD" == "" ]; then
   cd ../
   if [ "$SKIPCOVERAGE" == "-c" ]; then
     echo " (without coverage) ..."
-    ./configure -C CFLAGS=' -g ' &> test/results/buildLog2.out
+    ./configure -C CFLAGS=' -g3 -O0 ' &> test/results/buildLog2.out
   else
     echo " (with coverage) ..."
-    ./configure -C CFLAGS='-O0 --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
+    ./configure -C CFLAGS='-g3 -O0 --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
   fi
   cd test
   # unfortunatly bash cannot support "&>>" - yet!
@@ -154,23 +154,24 @@ fi
 #
 echo Creating startup scripts ...
 if [ "$SKIPMEMORY" == "" ]; then
-  #CODENAME=`lsb_release -c | cut -f2`
   SUPPRESS=""
-  #if [ -d config/suppressions/$CODENAME ]; then
-  #  for SUPP in `ls config/suppressions/$CODENAME/*`; do
-  if [ -d suppressions ]; then
-    for SUPP in `ls suppressions/*`; do
-      if [ -f $SUPP ]; then
-        SUPPRESS="$SUPPRESS --suppressions=$SUPP"
-      fi
-    done
+  if [ "$NOSUPPRESSIONS" == "" ]; then
+    if [ -d suppressions ]; then
+      for SUPP in `ls suppressions/*`; do
+        if [ -f $SUPP ]; then
+          SUPPRESS="$SUPPRESS --suppressions=$SUPP"
+        fi
+      done
+    fi
   fi
-  VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=results/resultsFiles/valgrind.out "
+  VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=results/resultsFiles/valgrind.out --show-below-main=yes --track-origins=yes --track-fds=yes --smc-check=all --read-var-info=yes "
+  # "-v --trace-children=yes "
   GENSUPP="--gen-suppressions=all "
-  VALGRIND="G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind "
+  VALGRIND="valgrind "
 #else
 #  VALGRIND="strace "
 fi
+
 
 PWD=`pwd`
 echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP ../src/opendias -c $PWD/config/testapp.conf \> results/resultsFiles/appLog.out > config/startAppCommands
