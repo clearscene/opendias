@@ -8,8 +8,7 @@ AM_CPPFLAGS = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" $(OPENDIAS_CFLAGS)
 
 AM_CFLAGS =\
-	 -Wall\
-	 -g
+	 -Wall
 
 bin_PROGRAMS = opendias opendiasconfig
 
