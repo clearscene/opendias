@@ -167,9 +167,8 @@ extern char *addNewFileDoc (int ftype, char *ocrText) {
   return addNewDoc(ftype, 0, 0, 0, 1, ocrText);
 }
 
-extern void updateNewScannedPage (char *docid, char *ocrText, int page) {
+extern void updateNewScannedPage (int docid, char *ocrText, int page) {
 
-  int docid_i = atoi(docid);
   char *sql = o_strdup("UPDATE docs SET pages = ?, ocrText = ocrText || ? WHERE docid = ?");
 
   struct simpleLinkedList *vars = sll_init();
@@ -178,12 +177,10 @@ extern void updateNewScannedPage (char *docid, char *ocrText, int page) {
   sll_append(vars, DB_TEXT );
   sll_append(vars, ocrText );
   sll_append(vars, DB_INT );
-  sll_append(vars, &docid_i );
+  sll_append(vars, &docid );
 
   runUpdate_db(sql, vars);
   free(sql);
-  free(docid);
-  free(ocrText);
 
 }
 

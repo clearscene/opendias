@@ -68,7 +68,6 @@ extern void reformatImage(FREE_IMAGE_FORMAT fromFormat, char *fromFilename, FREE
   free(resultMessage);
   FreeImage_DeInitialise();
   o_log(DEBUGM, "%s", outFilename);
-  free(outFilename);
 
 }
 

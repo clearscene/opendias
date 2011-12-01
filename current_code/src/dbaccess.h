@@ -44,7 +44,7 @@ extern int setScanParam(char *, int, char *);
 extern char *getScanParam(char *, int);
 extern void addScanProgress (char *);
 extern void updateScanProgress(char *, int, int);
-extern void updateNewScannedPage (char *, char *, int); // Frees both chars
+extern void updateNewScannedPage (int, char *, int); // Frees both chars
 extern char *addNewScannedDoc (int, int, int, int);
 extern char *addNewFileDoc (int, char *);
 extern int updateDocValue_int (char *, char *, int);
