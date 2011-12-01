@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef CAN_ORC
+#ifdef CAN_OCR
 #include "imageProcessing.h"
 #endif // CAN_OCR //
 
