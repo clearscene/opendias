@@ -57,22 +57,17 @@ extern char *getScannerList() {
 #ifdef CAN_SCAN
   SANE_Status status;
   const SANE_Device **SANE_device_list;
-  SANE_Handle *openDeviceHandle;
-  const SANE_Option_Descriptor *sod;
-  int scanOK=SANE_FALSE;
-  char *scannerHost, *replyTemplate, *deviceList; 
-  char *ipandmore, *ip;
-  struct hostent *hp;
-  in_addr_t addr;
+  int scanOK = SANE_FALSE;
+  char *replyTemplate, *deviceList; 
 
   o_log(DEBUGM, "sane_init");
   status = sane_init(NULL, NULL);
+
   if(status != SANE_STATUS_GOOD) {
     o_log(ERROR, "sane did not start");
     return NULL;
   }
 
-  SANE_device_list = NULL;
   status = sane_get_devices (&SANE_device_list, SANE_FALSE);
 
   if(status == SANE_STATUS_GOOD) {
@@ -98,6 +93,8 @@ extern char *getScannerList() {
       int hlp = 0, resolution = 300, minRes=50, maxRes=50;
       char *vendor, *model, *type, *name, *format;
       char *resolution_s, *maxRes_s, *minRes_s;
+      char *scannerHost;
+      SANE_Handle *openDeviceHandle;
 
       o_log(DEBUGM, "sane_open");
       status = sane_open (SANE_device_list[i]->name, (SANE_Handle)&openDeviceHandle);
@@ -117,7 +114,12 @@ extern char *getScannerList() {
 
       // Find location of the device
       if( name && name == strstr(name, "net:") ) {
+
+        in_addr_t addr;
         int len;
+        struct hostent *hp;
+        char *ipandmore, *ip;
+
         ipandmore = name + 4;
         len = strstr(ipandmore, ":") - ipandmore;
         ip = malloc(1+(size_t)len);
@@ -137,6 +139,9 @@ extern char *getScannerList() {
 
       // Find resolution ranges
       for (hlp = 0; hlp < 9999; hlp++) {
+
+        const SANE_Option_Descriptor *sod;
+
         sod = sane_get_option_descriptor (openDeviceHandle, hlp);
         if (sod == NULL)
           break;
@@ -204,6 +209,7 @@ extern char *getScannerList() {
       free(resolution_s);
       free(scannerHost);
     }
+
     free(replyTemplate);
     answer = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScannerList><Devices>%s</Devices></ScannerList></Response>", deviceList);
     free(deviceList);
