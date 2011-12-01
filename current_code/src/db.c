@@ -34,7 +34,7 @@ int open_db (char *db) {
   int rc;
   rc = sqlite3_open_v2(db, &DBH, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_CREATE, NULL);
   if ( rc ) {
-    o_log(ERROR, "Can't open database: %d", sqlite3_errmsg(DBH));
+    o_log(ERROR, "Can't open database: %s", sqlite3_errmsg(DBH));
     close_db ();
     return 1;
   }
