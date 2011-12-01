@@ -1,0 +1,3 @@
+rm getScannersTest getScannersTest.o 
+gcc -I. -I../current_code/src/ -g -c -o getScannersTest.o getScannersTest.c
+g++ -g -o getScannersTest getScannersTest.o ../current_code/src/utils.o ../current_code/src/debug.o -lsane 

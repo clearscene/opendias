@@ -1,0 +1,10 @@
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:_Znwj
+   fun:runocr
+   fun:getTextFromImage
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
