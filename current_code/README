@@ -52,14 +52,14 @@ openDias - Document Imaging Archive System
 On, Debian or Ubuntu, you can do this by running:
 
   sudo apt-get install build-essential libsqlite3-dev libsane-dev \
-    libglib2.0-dev libmicrohttpd-dev uuid-dev libfreeimage-dev \
+    libmicrohttpd-dev uuid-dev libfreeimage-dev \
     tesseract-ocr-dev libxml2-dev libzzip-dev libarchive-dev
 
 On, RedHat or Fedora, you can do this by running:
 
   su - 
   yum install gcc-c++ make sqlite-devel libmicrohttpd-devel \
-    libuuid-devel glib2-devel sane-backends-devel freeimage-devel \
+    libuuid-devel sane-backends-devel freeimage-devel \
     tesseract-devel libxml2-devel zziplib-devel libarchive-devel 
 
 -----------------------------------
