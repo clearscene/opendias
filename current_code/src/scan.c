@@ -42,11 +42,7 @@
 
 int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resolution, int *buff_requested_len ) {
 
-  int i, j; 
   int option = 0;
-  int paramSetRet = 0;
-  int foundMatch = 0;
-  int testScanner=0;
   SANE_Status status;
   SANE_Fixed v_f;
   SANE_Int v_i;
@@ -57,9 +53,10 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
   const char *sources[] = { "Auto", SANE_I18N ("Auto"), "Flatbed", SANE_I18N ("Flatbed"), 
                             "FlatBed", "Normal", SANE_I18N ("Normal"), NULL };
 
+  int testScanner = 0;
   char *devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
   if ( strstr(devName, "test") != 0 ) {
-    testScanner=1;
+    testScanner = 1;
   }
   free(devName);
 
@@ -85,6 +82,7 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
     if ( (sod->cap & SANE_CAP_SOFT_SELECT) && (sod->cap & SANE_CAP_HARD_SELECT) ) {
       o_log(DEBUGM, "The backend said that '%s' is both hardward and software settable! Err", sod->name);
       updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, 0);
+      return 0;
     }
 
     // we MUST set this value
@@ -97,6 +95,8 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
 
       // a software setting
       else {
+
+        int paramSetRet = 0;
 
         // Set scanning resolution
         if ( strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) == 0) {
@@ -135,7 +135,8 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
         // Set scanning Source
         else if ( strcmp(sod->name, SANE_NAME_SCAN_SOURCE) == 0 ) {
           if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
-            foundMatch = 0;
+            int i, j; 
+            int foundMatch = 0;
             for (i = 0; sources[i] != NULL; i++) {
               for (j = 0; sod->constraint.string_list[j]; j++) {
                 if (strcmp (sources[i], sod->constraint.string_list[j]) == 0)
@@ -183,7 +184,8 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
         // Set scanning mode
         else if ( strcmp(sod->name, SANE_NAME_SCAN_MODE) == 0 ) {
           if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
-            foundMatch = 0;
+            int i, j; 
+            int foundMatch = 0;
             for (i = 0; modes[i] != NULL; i++) {
               for (j = 0; sod->constraint.string_list[j]; j++) {
                 if (strcmp (modes[i], sod->constraint.string_list[j]) == 0)
@@ -282,7 +284,8 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
 
         else if ( strcmp(sod->name, SANE_NAME_SCAN_SPEED) == 0 ) {
           if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
-            foundMatch = 0;
+            int i, j; 
+            int foundMatch = 0;
             for (i = 0; speeds[i] != NULL; i++) {
               for (j = 0; sod->constraint.string_list[j]; j++) {
                 if (strcmp (speeds[i], sod->constraint.string_list[j]) == 0)
@@ -341,7 +344,7 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
           else if (strcmp (sod->name, "three-pass-order") == 0) {
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, "RGB", &paramSetRet);
           }
-          else if (strcmp (sod->name, "test-picture") == 0) {
+          else if (strcmp (sod->name, "test-raw_imageture") == 0) {
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, "Color pattern", &paramSetRet);
           }
           else if (strcmp (sod->name, "read-delay") == 0) {
@@ -402,24 +405,26 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
   return 1;
 }
 
-SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_requested_len, int expectFrames, double totbytes, int bpl ) {
+
+SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_requested_len, int expectFrames, size_t totbytes, int bpl ) {
 
   SANE_Status status;
   SANE_Int buff_len;
   SANE_Byte *tmp_buffer;
   SANE_Byte *buffer;
-  SANE_Byte *pic;
+  SANE_Byte *raw_image;
   int progress = 0;
   int buff_len_change = 0;
   int noMoreReads = 0;
   int counter;
   int onlyReadxFromBlockofThree = 0;
   int readItteration = 0;
+  size_t readSoFar = 0;
 
-  o_log(DEBUGM, "Using a buff_requested_len of %d", *buff_requested_len);
+  o_log(DEBUGM, "Using a buff_requested_len of %d to collect a total of %d", *buff_requested_len, totbytes);
   buffer = malloc( (size_t)( sizeof(SANE_Byte) * *buff_requested_len ) );
-  pic = (unsigned char *)malloc( (size_t)totbytes+1 );
-  for (counter = 0 ; (double)counter < totbytes ; counter++) pic[counter]=125;
+  raw_image = (unsigned char *)malloc( totbytes );
+  for (counter = 0 ; (size_t)counter < totbytes ; counter++) raw_image[counter]=125;
 
   o_log(DEBUGM, "scan_read - start");
   do {
@@ -435,8 +440,6 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
     readItteration++;
 
     if( buff_len > 0 ) {
-      int progress_d;
-      double readSoFar = 0;
 
       if( expectFrames == 3 ) {
         int offset = 0;
@@ -453,7 +456,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
 
           offset = 3 - onlyReadxFromBlockofThree;
           for(samp_inc = 0; samp_inc < offset; samp_inc++) {
-            pic[(int)readSoFar] = (SANE_Byte)max( pic[(int)readSoFar], (int)buffer[(int)samp_inc] );
+            raw_image[(int)readSoFar] = (SANE_Byte)max( raw_image[(int)readSoFar], (int)buffer[(int)samp_inc] );
           }
           readSoFar++;
         }
@@ -475,7 +478,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
           for(samp_inc = 0; samp_inc < bytesInThisBlock; samp_inc++)
             sample = max(sample, (int)buffer[(int)counter+samp_inc]);
 
-          pic[(int)readSoFar] = (SANE_Byte)sample;
+          raw_image[(int)readSoFar] = (SANE_Byte)sample;
           counter += bytesInThisBlock; // cos were gonna add one at the top of the loop
           readSoFar += pixelIncrement;
         }
@@ -484,14 +487,14 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
       // Only one frame in "Gray" mode.
       else {
         for( counter = 0; counter < buff_len; counter++ )
-          pic[(int)(readSoFar + counter)] = 
+          raw_image[(int)(readSoFar + counter)] = 
             (SANE_Byte)buffer[(int)counter];
         readSoFar += buff_len;
       }
 
       // Update the progress info
-      progress_d = (int)(100 * (readSoFar / totbytes));
-      progress = progress_d;
+      progress = (int)((readSoFar*100) / totbytes);
+      o_log(DEBUGM, "readSoFar = %d, totalbytes = %d, progress = %d", readSoFar, totbytes, progress);
       if(progress > 100)
         progress = 100;
 
@@ -542,31 +545,66 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
 
   free(buffer);
 
+  return raw_image;
 }
 
+void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int request_resolution, SANE_Parameters pars ) {
+  char *ocrText;
+  char *ocrLang;
+  char *ocrScanText;
+
+  ocrLang = getScanParam(uuid, SCAN_PARAM_DO_OCR);
+#ifdef CAN_OCR
+  if(ocrLang && 0 != strcmp(ocrLang, "-") ) {
+
+    if(request_resolution >= 300 && request_resolution <= 400) {
+      o_log(DEBUGM, "attempting OCR");
+      updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
+
+      ocrScanText = getTextFromImage((const unsigned char*)raw_image, pars.bytes_per_line, pars.pixels_per_line, pars.lines, ocrLang);
+
+      ocrText = o_printf("---------------- page %d ----------------\n%s\n", page, ocrScanText);
+      free(ocrScanText);
+    }
+    else {
+      o_log(DEBUGM, "OCR was requested, but the specified resolution means it's not safe to be attempted");
+      ocrText = o_printf("---------------- page %d ----------------\nResolution set outside safe range to attempt OCR.\n");
+    }
+  }
+  else
+#endif // CAN_OCR //
+    ocrText = o_strdup("");
+  free(ocrLang);
+
+  updateScanProgress(uuid, SCAN_DB_WORKING, 0);
+  updateNewScannedPage(docid, ocrText, page);
+  free(ocrText);
+
+}
 
 extern void *doScanningOperation(void *uuid) {
 
   int request_resolution = 0;
   int buff_requested_len = 0; 
   int expectFrames = 0;
+  int skew;
+  int docid;
+  int current_page = 0;
+  int total_requested_pages;
   double totbytes = 0;
   SANE_Status status;
   SANE_Handle *openDeviceHandle;
-  SANE_Byte *pic;
+  SANE_Byte *raw_image;
   SANE_Parameters pars;
-
-  int docid, page;
-  char *page_s, *tmpFile, *skew_s, *outFilename;
+  char *docid_s;
+  char *total_requested_pages_s;
+  char *devName;
+  char *outFilename;
+  char *tmpFile;
+  char *skew_s; 
   FILE *scanOutFile;
-  char *ocrText, *shoulddoocr_s, *ocrScanText;
-  int skew;
   size_t size;
-  char *devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
-  char *docid_s = getScanParam(uuid, SCAN_PARAM_DOCID);
-  char *pageCount_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_PAGES);
-  int pageCount = atoi(pageCount_s);
-  free(pageCount_s);
+
 
   o_log(DEBUGM, "sane_init");
   status = sane_init(NULL, NULL);
@@ -578,6 +616,7 @@ extern void *doScanningOperation(void *uuid) {
   // Open the device
   o_log(DEBUGM, "sane_open");
   updateScanProgress(uuid, SCAN_WAITING_ON_SCANNER, 0);
+  devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
   status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {
     handleSaneErrors("Cannot open device", status, 0);
@@ -634,42 +673,40 @@ extern void *doScanningOperation(void *uuid) {
 
   // Save Record
   //
+  docid_s = getScanParam(uuid, SCAN_PARAM_DOCID);
+  total_requested_pages_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_PAGES);
+  total_requested_pages = atoi(total_requested_pages_s);
+  free(total_requested_pages_s);
   if( docid_s == NULL ) {
     o_log(DEBUGM, "Saving record");
     updateScanProgress(uuid, SCAN_DB_WORKING, 0);
-    docid_s = addNewScannedDoc(pars.lines, pars.pixels_per_line, request_resolution, pageCount); 
 
+    docid_s = addNewScannedDoc(pars.lines, pars.pixels_per_line, request_resolution, total_requested_pages); 
     setScanParam(uuid, SCAN_PARAM_DOCID, docid_s);
-    page_s = o_strdup("1");
-    setScanParam(uuid, SCAN_PARAM_ON_PAGE, page_s);
-    page = 1;
-
-    docid = atoi(docid_s);
+    setScanParam(uuid, SCAN_PARAM_ON_PAGE, "1");
+    current_page = 1;
   }
   else {
-    page_s = getScanParam(uuid, SCAN_PARAM_ON_PAGE);
-    page = atoi(page_s);
-    free(page_s);
-    page++;
-    page_s = itoa(page, 10);
-    setScanParam(uuid, SCAN_PARAM_ON_PAGE, page_s);
-    docid = atoi(docid_s);
-  }
+    char *current_page_s = getScanParam(uuid, SCAN_PARAM_ON_PAGE);
+    current_page = atoi(current_page_s);
+    free(current_page_s);
 
-  // Acquire Image & Save Document
-  tmpFile = o_printf("/tmp/%s.pnm", uuid);
-  if ((scanOutFile = fopen(tmpFile, "w")) == NULL)
-    o_log(ERROR, "could not open file for output");
-  fprintf (scanOutFile, "P5\n# SANE data follows\n%d %d\n%d\n", 
-    pars.pixels_per_line, pars.lines,
-    (pars.depth <= 8) ? 255 : 65535);
+    current_page++;
+
+    current_page_s = itoa(current_page, 10);
+    setScanParam(uuid, SCAN_PARAM_ON_PAGE, current_page_s);
+    free(current_page_s);
+  }
+  docid = atoi(docid_s);
+  free(docid_s);
+
   totbytes = (double)((pars.bytes_per_line * pars.lines) / expectFrames);
 
   if( buff_requested_len <= 1 )
     buff_requested_len = 3 * pars.bytes_per_line * pars.depth;
 
   /* ========================================================== */
-  pic = collectData( (char *)uuid, openDeviceHandle, &buff_requested_len, expectFrames, totbytes, pars.bytes_per_line );
+  raw_image = collectData( (char *)uuid, openDeviceHandle, &buff_requested_len, expectFrames, totbytes, pars.bytes_per_line );
 
   o_log(DEBUGM, "sane_cancel");
   sane_cancel(openDeviceHandle);
@@ -687,70 +724,47 @@ extern void *doScanningOperation(void *uuid) {
     o_log(DEBUGM, "fixing skew");
     updateScanProgress(uuid, SCAN_FIXING_SKEW, 0);
 
-    deSkew(pic, totbytes, (double)skew, (double)pars.pixels_per_line, pars.lines);
+    deSkew(raw_image, totbytes, (double)skew, (double)pars.pixels_per_line, pars.lines);
   }
 
 
   // Write the image to disk now
   //
-  size = fwrite (pic, (size_t)pars.pixels_per_line, (size_t)pars.lines, scanOutFile);
+  tmpFile = o_printf("/tmp/%s.pnm", uuid);
+  if ((scanOutFile = fopen(tmpFile, "w")) == NULL)
+    o_log(ERROR, "could not open file for output");
+  fprintf (scanOutFile, "P5\n# SANE data follows\n%d %d\n%d\n", 
+    pars.pixels_per_line, pars.lines,
+    (pars.depth <= 8) ? 255 : 65535);
+  size = fwrite (raw_image, (size_t)pars.pixels_per_line, (size_t)pars.lines, scanOutFile);
   if((int)size < (pars.pixels_per_line * pars.lines) )
     o_log(ERROR, "Unable to write the entire image to disk.");
   fclose(scanOutFile);
 
 
   // Do OCR - on this page
-  //
-  shoulddoocr_s = getScanParam(uuid, SCAN_PARAM_DO_OCR);
-#ifdef CAN_OCR
-  if(shoulddoocr_s && 0 != strcmp(shoulddoocr_s, "-") ) {
-
-    if(request_resolution >= 300 && request_resolution <= 400) {
-      o_log(DEBUGM, "attempting OCR");
-      updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
-
-      ocrScanText = getTextFromImage((const unsigned char*)pic, pars.bytes_per_line, pars.pixels_per_line, pars.lines, shoulddoocr_s);
-
-      ocrText = o_printf("---------------- page %s ----------------\n%s\n", page_s, ocrScanText);
-      free(ocrScanText);
-    }
-    else {
-      o_log(DEBUGM, "OCR was requested, but the specified resolution means it's not safe to be attempted");
-      ocrText = o_printf("---------------- page %s ----------------\nResolution set outside safe range to attempt OCR.\n");
-    }
-  }
-  else
-#endif // CAN_OCR //
-    ocrText = o_strdup("");
-  free(shoulddoocr_s);
-
-  free(pic);
+  ocrImage(uuid, docid, raw_image, current_page, request_resolution, pars );
+  free(raw_image);
 
 
   // Convert Raw into JPEG
   //
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
-  outFilename = o_printf("%s/scans/%s_%s.jpg", BASE_DIR, docid_s, page_s);
+  outFilename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, current_page);
   reformatImage(FIF_PGMRAW, tmpFile, FIF_JPEG, outFilename);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
-  free(page_s);
   remove(tmpFile);
   free(tmpFile);
-
-
-  // update record
-  // 
-  updateScanProgress(uuid, SCAN_DB_WORKING, 0);
-  updateNewScannedPage(docid_s, ocrText, page); // Frees both chars
+  free(outFilename);
 
 
   // cleaup && What should we do next
   //
   o_log(DEBUGM, "mostly done.");
-  if(page >= pageCount)
+  if(current_page >= total_requested_pages)
     updateScanProgress(uuid, SCAN_FINISHED, docid);
   else
-    updateScanProgress(uuid, SCAN_WAITING_ON_NEW_PAGE, ++page);
+    updateScanProgress(uuid, SCAN_WAITING_ON_NEW_PAGE, ++current_page);
 
   free(uuid);
   o_log(DEBUGM, "Page scan done.");
