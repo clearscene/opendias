@@ -28,6 +28,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <sane/sane.h>
 
 #include "main.h"
 #include "db.h" 
@@ -115,13 +116,19 @@ int setup (char *configFile) {
 
 extern void server_shutdown() {
   o_log(INFORMATION, "openDias service is shutting down....");
+
+  o_log(DEBUGM, "cleanup sane");
+  sane_exit();
+
   o_log(DEBUGM, "httpd stop");
   MHD_stop_daemon (httpdaemon);
+
   o_log(DEBUGM, "database close");
-  close_db ();
+  close_db();
+
   o_log(INFORMATION, "....openDias service has shutdown");
-  close(pidFilehandle);
-  free(LOG_DIR);
+  close(pidFilehandle); 
+  free(LOG_DIR); // Cannot log anymore
   free(BASE_DIR);
 }
 
@@ -226,7 +233,7 @@ void daemonize(char *rundir, char *pidfile) {
     /* write pid to lockfile */
     size = strlen(str);
     if(size != (size_t)write(pidFilehandle, str, size) )
-      o_log(ERROR, "Could not write entir data.");
+      o_log(ERROR, "Could not write entire data.");
 
     /* close all descriptors */
     free(str);
@@ -297,7 +304,7 @@ int main (int argc, char **argv) {
     if(turnToDaemon!=1) 
       printf("Could not create an http service. Port is already in use?.\n");
     server_shutdown();
-    return 1;
+    exit(EXIT_FAILURE);
   }
   o_log(INFORMATION, "ready to accept connectons");
 
@@ -312,7 +319,7 @@ int main (int argc, char **argv) {
     printf("Hit [enter] to close the service.\n");
     getchar();
     server_shutdown();
-    return 0;
+    exit(EXIT_SUCCESS);
   }
 
 }
