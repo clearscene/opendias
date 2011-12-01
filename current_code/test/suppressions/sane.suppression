@@ -2333,3 +2333,38 @@
    fun:start_thread
    fun:clone
 }
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Addr4
+   fun:sane_dll_get_devices
+   fun:sane_get_devices
+   fun:getScannerList
+   fun:answer_to_connection
+   fun:call_connection_handler
+   fun:MHD_connection_handle_idle
+   fun:MHD_select
+   fun:MHD_select_thread
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Addr4
+   fun:sane_dll_get_devices
+   fun:sane_get_devices
+   fun:getScannerList
+   fun:answer_to_connection
+   fun:call_connection_handler
+   fun:MHD_connection_handle_idle
+   fun:MHD_select
+   fun:MHD_select_thread
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
