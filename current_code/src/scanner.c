@@ -19,7 +19,6 @@
 #include "config.h"
 
 #include <stdlib.h>
-//#include <stdio.h>      // printf, file operations
 #include <string.h>     // compares
 #ifdef CAN_SCAN
 #include <sane/sane.h>  // Scanner Interface
@@ -43,7 +42,7 @@ extern void handleSaneErrors(char *defaultMessage, SANE_Status st, int retCode) 
  * Pritty much from here down is lifted from 'simple-scan'. 
  */
 
-extern const char * get_status_string (SANE_Status status) {
+extern const char *get_status_string (SANE_Status status) {
     struct {
         SANE_Status status;
         const char *name;
@@ -78,7 +77,7 @@ extern const char * get_status_string (SANE_Status status) {
 }
 
 
-extern const char * get_action_string (SANE_Action action) {
+extern const char *get_action_string (SANE_Action action) {
     struct {
         SANE_Action action;
         const char *name;
@@ -270,7 +269,7 @@ extern SANE_Status control_option (SANE_Handle handle, const SANE_Option_Descrip
     }
 
     status = sane_control_option (handle, index, action, value, ret);
-/*
+
     switch (option->type) {
     case SANE_TYPE_BOOL:
         o_log(DEBUGM, "sane_control_option (%d, %s, %s) -> (%s, %s)",
@@ -303,7 +302,7 @@ extern SANE_Status control_option (SANE_Handle handle, const SANE_Option_Descrip
     default:
         break;
     }
-*/
+
     free (old_value);
 
     if (status != SANE_STATUS_GOOD)
