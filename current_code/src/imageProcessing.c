@@ -129,7 +129,7 @@ extern char *getTextFromImage(const unsigned char *pic, int bpl, int ppl, int li
   infoData.language = (const char*)lang;
   infoData.imagedata = (const unsigned char*)pic;
   infoData.bytes_per_pixel = 1;
-  infoData.bytes_per_line = bpl;;
+  infoData.bytes_per_line = bpl;
   infoData.width = ppl;
   infoData.height = lines;
 
