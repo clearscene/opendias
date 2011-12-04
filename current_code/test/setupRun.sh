@@ -119,7 +119,7 @@ if [ "$NOBUILD" == "" ]; then
     ./configure -C CFLAGS=' -g3 -O0 ' &> test/results/buildLog2.out
   else
     echo " (with coverage) ..."
-    ./configure -C CFLAGS='-g3 -O0 --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
+    ./configure -C CFLAGS=' -g3 -O0 --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
   fi
   cd test
   # unfortunatly bash cannot support "&>>" - yet!
@@ -164,7 +164,7 @@ if [ "$SKIPMEMORY" == "" ]; then
       done
     fi
   fi
-  VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=results/resultsFiles/valgrind.out --show-below-main=yes --track-origins=yes --track-fds=yes --smc-check=all --read-var-info=yes "
+  VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=results/resultsFiles/valgrind.out --show-below-main=yes --track-origins=yes --track-fds=yes "
   # "-v --trace-children=yes "
   GENSUPP="--gen-suppressions=all "
   VALGRIND="valgrind "
