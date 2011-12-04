@@ -113,28 +113,44 @@ extern char *getScannerList() {
       propper(type);
 
       // Find location of the device
-      if( name && name == strstr(name, "net:") ) {
+      if ( name && name == strstr(name, "net:") ) {
 
-        in_addr_t addr;
-        int len;
-        struct hostent *hp;
+        struct sockaddr_in sa;
         char *ipandmore, *ip;
+        char host[NI_MAXHOST];
+        char service[NI_MAXSERV];
+        int len;
 
+        // Ignore the 'net:' part
         ipandmore = name + 4;
+
+        // Find the length of the address part
         len = strstr(ipandmore, ":") - ipandmore;
+
+        // Load 'ip' with the network addres
         ip = malloc(1+(size_t)len);
         (void) strncpy(ip,ipandmore,(size_t)len);
         ip[len] = '\0';
-        addr = inet_addr(ip);
-        if ((hp = gethostbyaddr(&addr, (__socklen_t)sizeof(addr), AF_INET)) != NULL) {
-          scannerHost = o_strdup(hp->h_name);
+
+        // Convert into an inet address
+        memset(&sa, 0, sizeof(sa));
+        sa.sin_family = AF_INET;
+        sa.sin_addr.s_addr = inet_addr( ip );
+
+        // Lookup hostname from address
+        if ( getnameinfo((struct sockaddr *)&sa, sizeof sa, host, sizeof host, service, sizeof service, NI_NAMEREQD) == 0 ) {
+          scannerHost = o_strdup(host);
         } 
-        else
+        else {
           scannerHost = o_strdup(ip);
+        }
+
+        // Clean up
         free(ip);
       }
-      else
+      else {
         scannerHost = o_strdup("opendias server");
+      }
 
 
       // Find resolution ranges
