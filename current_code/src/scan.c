@@ -560,22 +560,34 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
   return raw_image;
 }
 
-void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int request_resolution, SANE_Parameters pars ) {
+void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int request_resolution, SANE_Parameters pars, double totbytes ) {
   char *ocrText;
   char *ocrLang;
   char *ocrScanText;
+  int counter;
 
   ocrLang = getScanParam(uuid, SCAN_PARAM_DO_OCR);
 #ifdef CAN_OCR
   if(ocrLang && 0 != strcmp(ocrLang, "-") ) {
 
     if(request_resolution >= 300 && request_resolution <= 400) {
+
       o_log(DEBUGM, "attempting OCR");
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
+      // sharpen the image
+      for (counter = 0 ; (size_t)counter < totbytes ; counter++) {
+        if( raw_image[counter] > 100 ) {
+          raw_image[counter] = 255;
+        }
+        else {
+          raw_image[counter] = 0;
+        }
+      }
+
       // Even if we have a scanner with three frames, we've already condenced
       // that down to grey-scale (1 bpp) - hense the hard coded 1
-      ocrScanText = getTextFromImage((const unsigned char*)raw_image, 1, pars.pixels_per_line, pars.lines, ocrLang);
+      ocrScanText = getTextFromImage((const unsigned char*)raw_image, pars.pixels_per_line, pars.pixels_per_line, pars.lines, ocrLang);
 
       ocrText = o_printf("---------------- page %d ----------------\n%s\n", page, ocrScanText);
       free(ocrScanText);
@@ -757,7 +769,7 @@ extern void *doScanningOperation(void *uuid) {
 
 
   // Do OCR - on this page
-  ocrImage(uuid, docid, raw_image, current_page, request_resolution, pars );
+  ocrImage( uuid, docid, raw_image, current_page, request_resolution, pars, totbytes );
   free(raw_image);
 
 
