@@ -409,37 +409,42 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
 SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_requested_len, int expectFrames, size_t totbytes, int bpl ) {
 
   SANE_Status status;
-  SANE_Int buff_len;
+  SANE_Int received_length_from_sane = 0;
   SANE_Byte *tmp_buffer;
   SANE_Byte *buffer;
   SANE_Byte *raw_image;
   int progress = 0;
-  int buff_len_change = 0;
+  int received_length_from_sane_change = 0;
   int noMoreReads = 0;
   int counter;
   int onlyReadxFromBlockofThree = 0;
   int readItteration = 0;
   size_t readSoFar = 0;
 
+  // Initialise the initial buffer and blank image;
   o_log(DEBUGM, "Using a buff_requested_len of %d to collect a total of %d", *buff_requested_len, totbytes);
   buffer = malloc( (size_t)( sizeof(SANE_Byte) * *buff_requested_len ) );
   raw_image = (unsigned char *)malloc( totbytes );
   for (counter = 0 ; (size_t)counter < totbytes ; counter++) raw_image[counter]=125;
 
+
   o_log(DEBUGM, "scan_read - start");
   do {
+    // Set status as 'scanning'
     updateScanProgress(uuid, SCAN_SCANNING, progress);
-    status = sane_read (openDeviceHandle, buffer, *buff_requested_len, &buff_len);
-    o_log(DEBUGM, "At %d%, requested %d bytes, got %d, with status %d)", progress, *buff_requested_len, buff_len, status);
+
+    // Read buffer from sane (the scanner)
+    readItteration++;
+    status = sane_read (openDeviceHandle, buffer, *buff_requested_len, &received_length_from_sane);
+    o_log(DEBUGM, "At %d%, requested %d bytes, got %d, with status %d)", progress, *buff_requested_len, received_length_from_sane, status);
     if (status != SANE_STATUS_GOOD) {
       if (status == SANE_STATUS_EOF)
         noMoreReads = 1;
       else
-        o_log(ERROR, "something wrong while scanning");
+        o_log(ERROR, "something wrong while scanning: %s", sane_strstatus(status) );
     }
-    readItteration++;
 
-    if( buff_len > 0 ) {
+    if( received_length_from_sane > 0 ) {
 
       if( expectFrames == 3 ) {
         int offset = 0;
@@ -449,7 +454,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
         if( onlyReadxFromBlockofThree ) {
 
           // A bit of sanity checking!
-          if( (buff_len + onlyReadxFromBlockofThree - 3) < 0) {
+          if( (received_length_from_sane + onlyReadxFromBlockofThree - 3) < 0) {
             o_log(DEBUGM, "Things dont add up. Stopping reading");
             break;
           }
@@ -462,16 +467,16 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
         }
 
         // Check we have full blocks of data
-        onlyReadxFromBlockofThree = (int)fmod( (double)(buff_len - offset), 3 );
+        onlyReadxFromBlockofThree = (int)fmod( (double)(received_length_from_sane - offset), 3 );
 
         // process each three frame block - looking out for the last frame (that could be a partial block)
         counter = offset;
-        while( counter < buff_len ) {
+        while( counter < received_length_from_sane ) {
           int sample = 0;
           int pixelIncrement = 1;
           int bytesInThisBlock = 3;
 
-          if ( (counter+3) > buff_len ) {
+          if ( (counter+3) > received_length_from_sane ) {
             bytesInThisBlock = onlyReadxFromBlockofThree;
             pixelIncrement = 0;
           }
@@ -486,10 +491,10 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
 
       // Only one frame in "Gray" mode.
       else {
-        for( counter = 0; counter < buff_len; counter++ )
+        for( counter = 0; counter < received_length_from_sane; counter++ )
           raw_image[(int)(readSoFar + counter)] = 
             (SANE_Byte)buffer[(int)counter];
-        readSoFar += buff_len;
+        readSoFar += received_length_from_sane;
       }
 
       // Update the progress info
@@ -500,6 +505,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
 
     }
 
+    // Some sanity checks on result of multi-frames
     if( noMoreReads == 1 ) {
       if( onlyReadxFromBlockofThree )
         o_log(ERROR, "Finished after only reading %d / 3 bytes from the last block", onlyReadxFromBlockofThree);
@@ -507,10 +513,14 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
     }
 
     // Update the buffer (based on read feedback
-    if( *buff_requested_len == buff_len ) {
-      buff_len_change = 10 * bpl / readItteration;
-      if( buff_len_change > 100 ) {
-        *buff_requested_len += buff_len_change;
+    if( *buff_requested_len == received_length_from_sane ) {
+
+      // Try and increase the buffer size
+      received_length_from_sane_change = 10 * bpl / readItteration;
+
+      // Don't trifel us with small increases      
+      if( received_length_from_sane_change > 300 ) {
+        *buff_requested_len += received_length_from_sane_change;
         tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
         if( tmp_buffer == NULL ) {
           free(buffer);
@@ -523,10 +533,12 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
         }
       }
     }
-    else if ( buff_len > 0 ) {
-      buff_len_change = ( *buff_requested_len - buff_len ) / readItteration;
-      if( buff_len_change > 100 ) {
-        *buff_requested_len -= buff_len_change;
+
+    // We received less than we asked for (but we did receive something)
+    else if ( received_length_from_sane > 0 ) {
+      received_length_from_sane_change = ( *buff_requested_len - received_length_from_sane ) / readItteration;
+      if( received_length_from_sane_change > 100 ) {
+        *buff_requested_len -= received_length_from_sane_change;
         tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
         if( tmp_buffer == NULL ) {
           free(buffer);
@@ -561,7 +573,9 @@ void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int reques
       o_log(DEBUGM, "attempting OCR");
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
-      ocrScanText = getTextFromImage((const unsigned char*)raw_image, pars.bytes_per_line, pars.pixels_per_line, pars.lines, ocrLang);
+      // Even if we have a scanner with three frames, we've already condenced
+      // that down to grey-scale (1 bpp) - hense the hard coded 1
+      ocrScanText = getTextFromImage((const unsigned char*)raw_image, 1, pars.pixels_per_line, pars.lines, ocrLang);
 
       ocrText = o_printf("---------------- page %d ----------------\n%s\n", page, ocrScanText);
       free(ocrScanText);
