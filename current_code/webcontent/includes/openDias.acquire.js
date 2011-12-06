@@ -1,33 +1,6 @@
 var baron = 0;
 var canon = 0;
 
-function drawSkew(co, p, val) {
-  // CANVAS - transform
-  //   scaleX,      skewY_r,      
-  //   skewX_b      scaleY,    
-  //   translate_x, translate_y
-  if (navigator.userAgent == "HTMLUNIT") { // htmlunit cannot handle canvas methods (at least in 2.8)
-    return;
-  }
-  tr = 0;
-  boxSize = 15;
-  range = 50;
-  p.text(val+" px");
-  val = (-0.8*val) / range;
-  tr = (-boxSize*val)/2;
-  co.clearRect(0,0,boxSize,boxSize*2);
-  co.transform(1,  val,
-               0,  1,
-               0,  tr);
-  co.fillStyle = '#9999dd';
-  co.fillRect(0,8,boxSize,boxSize);
-  co.strokeStyle = '#000';
-  co.strokeRect(0,8,boxSize,boxSize);
-  co.transform(1,  val*(-1),
-               0,  1,
-               0,  tr*(-1));
-}
-
 function showStatus(dev, canv, prog) {
   if(canv == 1 && canon == 0) {
     $("#progressbar_"+dev).canvasLoader({'radius':20, 'dotRadius':2});
@@ -155,10 +128,7 @@ function getScanningProgress (progressId, device) {
              alert("OCR Error: " + vvalue);
              finish = 1;
 
-           } else if( status == 13 ) { // SCAN_FIXING_SKEW,
-             showStatus(device, 1, undefined);
-             $('#status_'+device).text("Fixing 'skew' in image.");
-
+           } else if( status == 13 ) { // SCAN_RESERVED_3 (used to be FIXING_SKEW),
            } else if( status == 14 ) { // SCAN_RESERVED_1,
            } else if( status == 15 ) { // SCAN_RESERVED_2,
            } else if( status == 16 ) { // SCAN_FINISHED
@@ -207,8 +177,7 @@ $(document).ready(function() {
              var newTabHtml = document.getElementById('scannerTemplate').innerHTML;
              idchange = new Array('title', 'deviceid', 'format', 'pages', 'pagesSlider', 'resolution', 
                         'resolutionSlider', 'ocr', 'progressbar', 'resolutionDisplay', 'pagesDisplay', 
-                        'skew', 'skewDisplay_c', 'skewDisplay_p', 'skewSlider', 'scanButton', 'status', 
-                        'resolutionGood', 'length', 'lengthDisplay', 'lengthSlider');
+                        'scanButton', 'status', 'resolutionGood', 'length', 'lengthDisplay', 'lengthSlider');
              for (change in idchange) {
                //alert("replace: '" + idchange[change]+"_DEVICE'   with    '" + idchange[change]+"_"+device + "'.");
                newTabHtml = newTabHtml.replace(new RegExp(idchange[change]+"_DEVICE","g"), idchange[change]+"_"+device);
@@ -231,7 +200,7 @@ $(document).ready(function() {
                                       $(this).find("vendor").text() + " - " +
                                       $(this).find("model").text() + host);
              $('#deviceid_'+device).val( $(this).find("name").text() );
-             $('#format_'+device).append('<option>'+$(this).find("format").text()+'</option>');
+             //$('#format_'+device).append('<option>'+$(this).find("format").text()+'</option>');
              $("#resolutionSlider_"+device).slider({
                range: "min",
                value: parseInt($(this).find("default").text()),
@@ -288,24 +257,12 @@ $(document).ready(function() {
                  $("#pagesDisplay_"+device).text( ui.value + " pages" );
                }
              });
-             $("#skewSlider_"+device).slider({
-               value: 0,
-               min: -50,
-               max: 50,
-               step: 1,
-               slide: function(event, ui) {
-                 $("#skew_"+device).val( ui.value );
-                 drawSkew(document.getElementById("skewDisplay_c_"+device).getContext("2d"), $("#skewDisplay_p_"+device), ui.value);
-               }
-             });
-             drawSkew(document.getElementById("skewDisplay_c_"+device).getContext("2d"), $("#skewDisplay_p_"+device), 0);
              $("#scanButton_"+device).click( function() {
                // Stop the form from being changed after submittion
                $("#format_"+device).attr('disabled', 'disabled');
                $("#pagesSlider_"+device).slider('disable');
                $("#resolutionSlider_"+device).slider('disable');
                $("#ocr_"+device).attr('disabled', 'disabled');
-               $("#skewSlider_"+device).slider('disable');
                $("#lengthSlider_"+device).slider('disable');
                $("#scanButton_"+device).attr('disabled', 'disabled');
                $("#resolutionGood_"+device).parent().addClass("greyResolution");
@@ -318,7 +275,6 @@ $(document).ready(function() {
                                deviceid: $("#deviceid_"+device).val(),
                                format: $("#format_"+device).val(),
                                pages: $("#pages_"+device).val(),
-                               skew: $("#skew_"+device).val(),
                                resolution: $("#resolution_"+device).val(),
                                ocr: $("#ocr_"+device).val(),
                                pagelength: $("#length_"+device).val(),

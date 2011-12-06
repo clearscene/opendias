@@ -280,13 +280,6 @@ static int checkResolution(char *val) {
 }
 
 //
-static int checkSkew(char *val) {
-  if(checkStringIsInt(val)) return 1;
-  if(checkSaneRange(val, -50, 50)) return 1;
-  return 0;
-}
-
-//
 static int checkTag(char *val) {
   return 0;
 }
@@ -339,10 +332,9 @@ extern int validate(struct simpleLinkedList *postdata, char *action) {
   }
 
   if ( 0 == strcmp(action, "doScan") ) {
-    ret += checkOnlyKeys(postdata, "deviceid,format,skew,resolution,pages,ocr,pageLength");
+    ret += checkOnlyKeys(postdata, "deviceid,format,resolution,pages,ocr,pageLength");
     ret += checkDeviceId(getPostData(postdata, "deviceid"));
     ret += checkFormat(getPostData(postdata, "format"));
-    ret += checkSkew(getPostData(postdata, "skew"));
     ret += checkResolution(getPostData(postdata, "resolution"));
     ret += checkPages(getPostData(postdata, "pages"));
     ret += checkOCRLanguage(getPostData(postdata, "ocr"));

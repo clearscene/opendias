@@ -33,7 +33,7 @@ enum {                                  // Value indicate ...
   SCAN_ERROR_CONVERTING_FORMAT,         // FreeImage error code
   SCAN_PERFORMING_OCR,
   SCAN_ERROR_PERFORMING_OCR,            // xxxxxx error code
-  SCAN_FIXING_SKEW,
+  SCAN_RESERVED_3,    // used to be FIXING_SKEW,
   SCAN_RESERVED_1,
   SCAN_RESERVED_2,
   SCAN_FINISHED                         // id of the saved doc

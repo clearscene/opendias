@@ -598,12 +598,11 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           else {
             char *deviceid = getPostData(con_info->post_data, "deviceid");
             char *format = getPostData(con_info->post_data, "format");
-            char *skew = getPostData(con_info->post_data, "skew");
             char *resolution = getPostData(con_info->post_data, "resolution");
             char *pages = getPostData(con_info->post_data, "pages");
             char *ocr = getPostData(con_info->post_data, "ocr");
             char *pagelength = getPostData(con_info->post_data, "pagelength");
-            content = doScan(deviceid, format, skew, resolution, pages, ocr, pagelength, (void *) con_info); // pageRender.c
+            content = doScan(deviceid, format, resolution, pages, ocr, pagelength, (void *) con_info); // pageRender.c
             if(content == (void *)NULL) {
               content = o_strdup(errorxml);
             }

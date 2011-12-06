@@ -241,7 +241,7 @@ extern char *getScannerList() {
 
 // Start the scanning process
 //
-extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, char *pages, char *ocr, char *pagelength, struct connection_info_struct *con_info) {
+extern char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *ocr, char *pagelength, struct connection_info_struct *con_info) {
 
   char *ret = NULL;
 #ifdef CAN_SCAN
@@ -262,7 +262,6 @@ extern char *doScan(char *deviceid, char *format, char *skew, char *resolution, 
   setScanParam(scanUuid, SCAN_PARAM_DO_OCR, ocr);
   setScanParam(scanUuid, SCAN_PARAM_REQUESTED_PAGES, pages);
   setScanParam(scanUuid, SCAN_PARAM_REQUESTED_RESOLUTION, resolution);
-  setScanParam(scanUuid, SCAN_PARAM_CORRECT_FOR_SKEW, skew);
   setScanParam(scanUuid, SCAN_PARAM_LENGTH, pagelength);
 
   // save scan progress db record

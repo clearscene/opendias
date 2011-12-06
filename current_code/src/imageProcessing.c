@@ -73,52 +73,6 @@ extern void reformatImage(FREE_IMAGE_FORMAT fromFormat, char *fromFilename, FREE
 
 #endif // CAN_SCAN //
 
-/*
- * Fix skew - for this page
- */
-extern void deSkew(unsigned char *pic, double picBytes, double skew, double ppl, int totLines) {
-
-  int col, row;
-  // Calculate the skew angle
-  double ang = (skew / ppl);
-  for(col=0 ; col < ppl ; col++) {
-    // Calculate the drop (or rise) for this col
-    int drop = (int)(ang * (ppl - col));
-    for(row=0 ; row < (totLines-(drop+1)) ; row++) {
-      int lines_offset = ppl * row;
-
-      if((int)(col+lines_offset) >= picBytes || (int)(col+lines_offset) < 0) {
-          // Writing to outside the bounds of the image. 
-          // Apart from being a silly thing to do, would 
-          // cause from memeory issues.
-          // fprintf(stderr, "from = %d     to = %d    ang = %6f1    drop = %d    col = %d    row = %d\n", 
-          //         (int)(col+lines_offset+(drop*ppl)+1), 
-          //         (int)(col+lines_offset), ang, drop, col, row);
-      } 
-      else {
-        if((double)(col+lines_offset+(drop*ppl)+1) < 0
-        || (double)(col+lines_offset+(drop*ppl)+1) >= picBytes ) {
-          // Reading from outside the image bounds, so save just "black";
-          pic[(int)(col+lines_offset)] = 0;
-        } 
-        else {
-          pic[(int)(col+lines_offset)] = 
-            pic[(int)(col+lines_offset+(drop*ppl)+1)];
-        }
-      }
-    }
-    // Clean up
-    for(row=totLines-drop ; row < totLines ; row++) {
-      if((double)(col + (ppl * row)) >= picBytes || (int)(col + (ppl * row)) < 0) {
-        // Belt and braces to prevent memeory issues.
-        // fprintf(stderr, "blanking %d, when max is %8f\n", (int)(col + (ppl * row)), picBytes);
-      }
-      else {
-        pic[(int)(col + (ppl * row))] = 0;
-      }
-    }
-  }
-}
 
 extern char *getTextFromImage(const unsigned char *pic, int bpl, int ppl, int lines, char *lang) {
 

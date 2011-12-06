@@ -613,7 +613,6 @@ extern void *doScanningOperation(void *uuid) {
   int request_resolution = 0;
   int buff_requested_len = 0; 
   int expectFrames = 0;
-  int skew;
   int docid;
   int current_page = 0;
   int total_requested_pages;
@@ -627,7 +626,6 @@ extern void *doScanningOperation(void *uuid) {
   char *devName;
   char *outFilename;
   char *tmpFile;
-  char *skew_s; 
   FILE *scanOutFile;
   size_t size;
 
@@ -740,18 +738,6 @@ extern void *doScanningOperation(void *uuid) {
   o_log(DEBUGM, "sane_close");
   sane_close(openDeviceHandle);
 
-
-  // Fix skew - for this page
-  //
-  skew_s = getScanParam(uuid, SCAN_PARAM_CORRECT_FOR_SKEW);
-  skew = atoi(skew_s);
-  free(skew_s);
-  if(skew != 0) {
-    o_log(DEBUGM, "fixing skew");
-    updateScanProgress(uuid, SCAN_FIXING_SKEW, 0);
-
-    deSkew(raw_image, totbytes, (double)skew, (double)pars.pixels_per_line, pars.lines);
-  }
 
 
   // Write the image to disk now

@@ -25,7 +25,6 @@
 extern void FreeImageErrorHandler(FREE_IMAGE_FORMAT, const char *);
 extern void reformatImage(FREE_IMAGE_FORMAT, char *, FREE_IMAGE_FORMAT, char *);
 #endif // CAN_SCAN //
-extern void deSkew(unsigned char *, double, double, double, int);
 extern char *getTextFromImage(const unsigned char *, int, int, int, char *);
 
 #endif /* IMAGEPROCESSING */

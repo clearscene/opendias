@@ -63,10 +63,12 @@
         <input id='deviceid_DEVICE' type='hidden' />
       </div>
     </div>
-    <div class='row'>
+<!--    <div class='row'>
       <div class='label'>Format:</div>
       <div class='data'><select id='format_DEVICE'></select></div>
     </div>
+-->
+<input id='format_DEVICE' type='hidden' value='Grey Scale' />
     <div class='row'>
       <div class='label' title='The number of pages that make up the document you are going to scan'>Pages:</div>
       <div class='data'>
@@ -105,23 +107,6 @@
           <div class='resolutionQuality' title='Indication of the best resolution for OCRing. Stay within the green area for best results.'>
             <div id='resolutionGood_DEVICE' class='resolutionQualityGood' title='The ideal scanning resolution zone for OCRing.'></div>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class='row'>
-      <div class='label' title='Sometimes scanners will have an inbuild skew (due to ware or other faults). This can be corrected. The graphic to the right represents what the image would look like without skew correction.'>Fix Skew:</div>
-      <div class='data'>
-        <input id='skew_DEVICE' type='hidden' value='0' />
-        <div class='innerLeftDisplay'>
-          <div>
-            <canvas id='skewDisplay_c_DEVICE' width='15px' height='30px'></canvas>
-          </div>
-          <div>
-            <p id='skewDisplay_p_DEVICE'>0 px</p>
-          </div>
-        </div>
-        <div class='innerRightDisplay'>
-          <div id='skewSlider_DEVICE'></div>
         </div>
       </div>
     </div>
