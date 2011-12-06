@@ -23,8 +23,11 @@ function showStatus(dev, canv, prog) {
 
 function getScanningProgress (progressId, device) {
 
+  var action = 'refresh';
+
   $.ajax({ url: "/opendias/dynamic",
 	 dataType: "xml",
+         async: false,
 	 data: {action: "getScanningProgress", 
 		scanprogressid: progressId,
 	       },
@@ -36,7 +39,6 @@ function getScanningProgress (progressId, device) {
              return 1;
            }
 
-           var finish = 0;
            status = parseInt( $(dta).find('ScanningProgress').find('status').text() );
            vvalue = parseInt( $(dta).find('ScanningProgress').find('value').text() );
 
@@ -49,7 +51,7 @@ function getScanningProgress (progressId, device) {
              $('#status_'+device).text("Internal Error.");
              showStatus(device, undefined, undefined);
              alert("Internal Error: " + vvalue);
-             finish = 1;
+             action='finish';
 
            } else if( status == 2 ) { // SCAN_DB_WORKING,
              $('#status_'+device).text("Waiting on the database.");
@@ -60,7 +62,7 @@ function getScanningProgress (progressId, device) {
              showStatus(device, undefined, undefined);
              $('#status_'+device).text("Error while scanning.");
              alert("Scanner Error: " + vvalue);
-             finish = 1;
+             action='finish';
 
            } else if( status == 4 ) { // SCAN_WAITING_ON_SCANNER,
              showStatus(device, undefined, undefined);
@@ -71,7 +73,7 @@ function getScanningProgress (progressId, device) {
              showStatus(device, undefined, undefined);
              $('#status_'+device).text("Error while scanning.");
              alert("Scanner Error: " + vvalue);
-             finish = 1;
+             action='finish';
 
            } else if( status == 6 ) { // SCAN_SCANNING,// Current progress
              $('#status_'+device).text("Scanning in progress.");
@@ -83,8 +85,53 @@ function getScanningProgress (progressId, device) {
            } else if( status == 7 ) { // SCAN_WAITING_ON_NEW_PAGE,// Waiting for page [x]
              showStatus(device, undefined, undefined);
              $('#status_'+device).text("Please insert page "+vvalue+".");
-             finish = 1;
              if(confirm("Please insert page "+vvalue+".")) {
+               action='postnewpage';
+             } else {
+               action='finish';
+             }
+
+           } else if( status == 8 ) { // SCAN_TIMEOUT_WAITING_ON_NEW_PAGE,
+             showStatus(device, undefined, undefined);
+             $('#status_'+device).text("Timeout while waiting for the next page.");
+             alert("Timeout waiting on the new page insert.");
+             action='finish';
+
+           } else if( status == 9 ) { // SCAN_CONVERTING_FORMAT,
+             $('#status_'+device).text("Converting scanned image format.");
+             showStatus(device, 1, undefined);
+
+           } else if( status == 10 ) { // SCAN_ERROR_CONVERTING_FORMAT,// FreeImage error code
+             showStatus(device, undefined, undefined);
+             $('#status_'+device).text("Error while converting scanned image format.");
+             alert("Image Processing Error: " + vvalue);
+             action='finish';
+
+           } else if( status == 11 ) { // SCAN_PERFORMING_OCR,
+             showStatus(device, 1, undefined);
+             $('#status_'+device).text("Performing OCR on scanned image.");
+
+           } else if( status == 12 ) { // SCAN_ERROR_PERFORMING_OCR,// xxxxxx error code
+             showStatus(device, undefined, undefined);
+             $('#status_'+device).text("Error while performing OCR operation.");
+             alert("OCR Error: " + vvalue);
+             action='finish';
+
+           } else if( status == 13 ) { // SCAN_RESERVED_3 (used to be FIXING_SKEW),
+           } else if( status == 14 ) { // SCAN_RESERVED_1,
+           } else if( status == 15 ) { // SCAN_RESERVED_2,
+           } else if( status == 16 ) { // SCAN_FINISHED
+             showStatus(device, undefined, undefined);
+             $('#status_'+device).text("Scan operation complete.");
+             document.location.href = "/opendias/docDetail.html?docid="+vvalue;
+             action='finish';
+
+           }
+	 }
+       });
+
+      if( action=='postnewpage' ) {
+
                $.ajax({ url: "/opendias/dynamic",
                       dataType: "xml",
                       data: {action: "nextPageReady",
@@ -100,51 +147,15 @@ function getScanningProgress (progressId, device) {
                       }
                     });
                 getScanningProgress(progressId,device);
-             }
 
-           } else if( status == 8 ) { // SCAN_TIMEOUT_WAITING_ON_NEW_PAGE,
-             showStatus(device, undefined, undefined);
-             $('#status_'+device).text("Timeout while waiting for the next page.");
-             alert("Timeout waiting on the new page insert.");
-             finish = 1;
+      } else if( action=='refresh' ) {
+        setTimeout("getScanningProgress('"+progressId+"','"+device+"')", 400);
 
-           } else if( status == 9 ) { // SCAN_CONVERTING_FORMAT,
-             $('#status_'+device).text("Converting scanned image format.");
-             showStatus(device, 1, undefined);
+      } else {
+        // do nothinog - just drop off and finish
 
-           } else if( status == 10 ) { // SCAN_ERROR_CONVERTING_FORMAT,// FreeImage error code
-             showStatus(device, undefined, undefined);
-             $('#status_'+device).text("Error while converting scanned image format.");
-             alert("Image Processing Error: " + vvalue);
-             finish = 1;
+      }
 
-           } else if( status == 11 ) { // SCAN_PERFORMING_OCR,
-             showStatus(device, 1, undefined);
-             $('#status_'+device).text("Performing OCR on scanned image.");
-
-           } else if( status == 12 ) { // SCAN_ERROR_PERFORMING_OCR,// xxxxxx error code
-             showStatus(device, undefined, undefined);
-             $('#status_'+device).text("Error while performing OCR operation.");
-             alert("OCR Error: " + vvalue);
-             finish = 1;
-
-           } else if( status == 13 ) { // SCAN_RESERVED_3 (used to be FIXING_SKEW),
-           } else if( status == 14 ) { // SCAN_RESERVED_1,
-           } else if( status == 15 ) { // SCAN_RESERVED_2,
-           } else if( status == 16 ) { // SCAN_FINISHED
-             showStatus(device, undefined, undefined);
-             $('#status_'+device).text("Scan operation complete.");
-             document.location.href = "/opendias/docDetail.html?docid="+vvalue;
-             finish = 1;
-
-           }
-
-           if(finish == 0) {
-             setTimeout("getScanningProgress('"+progressId+"','"+device+"')", 400);
-           }
-
-	 }
-       });
 }
 
 
