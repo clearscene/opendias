@@ -68,12 +68,18 @@ $(document).ready(function() {
            else if( $(data).find('DocDetail').find('type').text() == "2" || $(data).find('DocDetail').find('type').text() == "4") {
              // Set images and default width
              for( x=1 ; x<=parseInt($(data).find('DocDetail').find('pages').text()) ; x++ ) {
-               $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage"+x+"' alt='' src='/opendias/scans/"+officialDocId+"_"+x+".jpg' /></div></li>");
+               $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage"+x+"' " + 
+                                      "alt='' src='/opendias/scans/"+officialDocId+"_"+x+".jpg' />" + 
+                                      "</div><button id='openImg_"+x+"'>Open "+x+" Fullsize</button></li>");
                $("#scanImage"+x).css("width", "300px");
+               $("#openImg_"+x).bind('click', { page: x, docId: officialDocId }, 
+                                  function(e){ 
+                                      window.open("/opendias/scans/"+e.data.docId+"_"+e.data.page+".jpg"); 
+                                  });
              }
 
              // setup the slider
-             $("#slider li").css("height", 30+($(data).find('DocDetail').find('y').text() * ( 300 / $(data).find('DocDetail').find('x').text() ))+"px" );
+             $("#slider li").css("height", 45+($(data).find('DocDetail').find('y').text() * ( 300 / $(data).find('DocDetail').find('x').text() ))+"px" );
              if($(data).find('DocDetail').find('pages').text() != "1") {
                $("#slider").easySlider({prevText:'', nextText:''});
              }
@@ -88,6 +94,7 @@ $(document).ready(function() {
                                    lighbox: false
                                    });
              }
+
            }
 
            else if( $(data).find('DocDetail').find('type').text() == "3" ) { // PDF Documents
