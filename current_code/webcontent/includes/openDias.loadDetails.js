@@ -110,7 +110,7 @@ $(document).ready(function() {
 
            $("#tags").val( tags.join() );
            $('#tags').tagsInput({
-                autocomplete_url: '', // Were going to use the ui.autocomplete (since the plugins autocomplete stuff doesn't seam to work cuorrectly. However, added this here as a hack to handle bluring correctly.
+                autocomplete_url: '', // Were going to use the ui.autocomplete (since the plugins autocomplete stuff doesn't seam to work correctly. However, added this here as a hack to handle bluring correctly.
                 onAddTag:function(tag) {
                           moveTag(tag,officialDocId,"addTag");
                           },
@@ -175,7 +175,9 @@ $(document).ready(function() {
       },
       minLength: 2,
       select: function( event, ui ) {
-      //  log( ui.item ?  "Selected: " + ui.item.label : "Nothing selected, input was " + this.value);
+        if(ui.item) {
+          sendUpdate( 'title', ui.item.label);
+        }
       },
       open: function() {
         $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
