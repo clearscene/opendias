@@ -12,6 +12,9 @@
         Moved around the doclist page to better show fix vs. user defined, options
         Added new admin app to easily set config options
         Improved the selection and assignment of tags
+        Remove the de-skew functionality
+        Improve OCR operations accuracy
+        Allow documents to be opened full screen
 
 *0.6.5  Fix for scanners with "word_list" resolution options
 

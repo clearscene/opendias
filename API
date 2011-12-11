@@ -120,9 +120,8 @@ doScan -> pageRender::doScan()
                 deviceid: The sane device id, as provided by getScannerList : Response.ScannerList.Devices.Device.name
                 format: The format to use for scannsing, one of getScanningList : Response.ScanningList.Devices.Device.Formats.format
                 pages: The number of pages that make up the document,
-                skew: Value use for scew correction,
                 resolution: The resolution to set the scanner to, between Response.ScannerList.Devices.Device.min and Response.ScannerList.Devices.Device.max,
-                ocr: Flag to indicate if an OCR process should be performed,
+                ocr: Flag to indicate if an OCR process should be performed and in what language,
                 pagelength: The length of the page to scan, Percent, in relation to the maximum available by the scanner.
 	Outputs;
 		<?xml version='1.0' encoding='iso-8859-1'?>
@@ -130,20 +129,6 @@ doScan -> pageRender::doScan()
 		  </DoScan>
 		    scanuuid - The application uniq id for the scanning process.
 		  </DoScan>
-		</Response>
-
-
-
-		      <Row>
-			docid - the document id of a found document
-                        actionrequired - indicator flag
-			title - the user defined title of the found document
-			type* - the style of document
-			date - the user defined date of the found document
-		      </Row>
-		      ...
-		    </Rows>
-		  </DocList>
 		</Response>
 
 
@@ -306,7 +291,7 @@ status
 10  SCAN_ERROR_CONVERTING_FORMAT,         // FreeImage error code
 11  SCAN_PERFORMING_OCR,
 12  SCAN_ERROR_PERFORMING_OCR,            // xxxxxx error code
-13  SCAN_FIXING_SKEW,
+13  SCAN_RESERVED_3,                      // used to be FIXING_SKEW
 14  SCAN_RESERVED_1,
 15  SCAN_RESERVED_2,
 16  SCAN_FINISHED                         // id of the saved doc
@@ -317,4 +302,12 @@ type
 3	PDF Document
 4	Imported Image
 
-
+ocr Language
+eng   International English
+deu   German
+fra   French
+spa   Spanish
+ita   Italian
+nld   Dutch
+por   Brasilian Portuguese
+vie   Vietnamese
