@@ -24,7 +24,7 @@
 extern char *getScannerList();
 extern char *getScanningProgress(char *);
 extern char *doScan(char *, char *, char *, char *, char *, char *, struct connection_info_struct *);
-extern char *docFilter(char *, char *, char *, char *, char *);
+extern char *docFilter(char *, char *, char *, char *, char *, char *, char *);
 extern char *nextPageReady(char *, struct connection_info_struct *);
 extern char *getAccessDetails();
 extern char *controlAccess(char *, char *, char *, char *, int);

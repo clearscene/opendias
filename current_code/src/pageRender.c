@@ -363,7 +363,7 @@ extern char *getScanningProgress(char *scanid) {
   return ret;
 }
 
-extern char *docFilter(char *subaction, char *textSearch, char *startDate, char *endDate, char *tags) {
+extern char *docFilter(char *subaction, char *textSearch, char *startDate, char *endDate, char *tags, char *page, char *range ) {
 
   struct simpleLinkedList *rSet;
   char *docList, *actionrequired, *title, *docid, *humanReadableDate, *type, 
@@ -430,6 +430,18 @@ extern char *docFilter(char *subaction, char *textSearch, char *startDate, char 
     if(dateWhere) {
       conCat(&sql, dateWhere);
       free(dateWhere);
+    }
+  }
+
+
+  // Paginate the results
+  //
+  if( 0 == strcmp(subaction, "fullList") ) {
+    if( page != NULL && range != NULL ) {
+      int page_i = atoi( page );
+      int range_i = atoi( range );
+      int offset = (page_i - 1) * range_i;
+      o_concatf(&sql, "LIMIT %d, %d ", offset, range_i);
     }
   }
 

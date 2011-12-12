@@ -694,7 +694,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
             char *startDate = getPostData(con_info->post_data, "startDate");
             char *endDate = getPostData(con_info->post_data, "endDate");
             char *tags = getPostData(con_info->post_data, "tags");
-            content = docFilter(subaction, textSearch, startDate, endDate, tags); //pageRender.c
+            char *page = getPostData(con_info->post_data, "page");
+            char *range = getPostData(con_info->post_data, "range");
+            content = docFilter(subaction, textSearch, startDate, endDate, tags, page, range); //pageRender.c
             if(content == (void *)NULL) {
               content = o_strdup(errorxml);
             }
