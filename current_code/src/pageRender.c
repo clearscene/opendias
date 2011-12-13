@@ -363,7 +363,7 @@ extern char *getScanningProgress(char *scanid) {
   return ret;
 }
 
-extern char *docFilter(char *subaction, char *textSearch, char *startDate, char *endDate, char *tags, char *page, char *range ) {
+extern char *docFilter(char *subaction, char *textSearch, char *startDate, char *endDate, char *tags, char *page, char *range, char *sort ) {
 
   struct simpleLinkedList *rSet;
   char *docList, *actionrequired, *title, *docid, *humanReadableDate, *type, 
@@ -433,6 +433,10 @@ extern char *docFilter(char *subaction, char *textSearch, char *startDate, char 
     }
   }
 
+  // Sort if required
+  if( sort != NULL ) {
+    o_concatf(&sql, "ORDER BY %s ", sort);
+  }
 
   // Paginate the results
   //
