@@ -142,6 +142,8 @@ docFilter -> pageRender::docFilter
                 startDate: The first date that a document could fit into
                 endDate: The last date that a document could fit into
                 tags: Comma delimetered list of tagnames.
+                page: The number of 'range' offsets to apply before the first returned row.
+                range: the number of records to return in a single request.
 	Outputs;
 		<?xml version='1.0' encoding='iso-8859-1'?>
 		<Response>
