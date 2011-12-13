@@ -154,5 +154,4 @@ webcontent/images/Makefile
 webcontent/images/datepicker/Makefile
 webcontent/images/easySlider/Makefile
 webcontent/images/jquery-ui/Makefile
-webcontent/images/tablesorter/Makefile
 ])

@@ -5,8 +5,7 @@ web_DATA = \
 	jquery.easyslider.css \
 	jquery.tagsinput.css \
 	jquery.gzoom.css \
-	jquery-ui.css \
-	tablesorter.css 
+	jquery-ui.css
 
 webdir = \
 	$(pkgdatadir)/webcontent/style

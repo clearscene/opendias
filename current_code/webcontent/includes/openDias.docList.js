@@ -64,7 +64,6 @@ $(document).ready(function() {
 
   $('#docList_table').css({ display: 'none' });
   $('#pager').css({ display: 'none' });
-  $('#docList_table').tablesorter({widthFixed: true, widgets: ['zebra']});
 
   $('#pageSizeSelect').bind('change', function() {
     document.cookie = "pageLength="+$(this).val();
@@ -132,7 +131,6 @@ function processData(){
       .trigger("update") 
       .trigger("appendCache")
       .trigger("sorton",[sorting]) 
-      .tablesorterPager({size: pageLength, container: $("#pager"), positionFixed: false})
       .bind("addRow",function(event,newRow){ addRow(this,newRow); })
       .bind("removeRow",function(event,rowId){ removeRow(this,rowId); })
       .bind("rebuild",function(event){ rebuild(this); })

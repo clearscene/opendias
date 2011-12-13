@@ -1,5 +1,5 @@
 
-SUBDIRS = easySlider datepicker jquery-ui tablesorter
+SUBDIRS = easySlider datepicker jquery-ui
 
 web_DATA = \
         cabinet.jpg \

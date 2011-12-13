@@ -8,16 +8,13 @@ web_DATA = \
 	jquery.tagsinput.js \
 	jquery.js \
 	jquery.mousewheel.js \
-	jquery.tablesorter.min.js \
-	jquery.tablesorter.pager.js \
 	jquery-ui.min.js \
 	openDias.acquire.js \
 	openDias.docList.js \
 	openDias.filter.js \
 	openDias.loadDetails.js \
 	openDias.saveDetails.js \
-	openDias.getAccessDetails.js \
-	openDias.tablesorter.pager.addRemove.js 
+	openDias.getAccessDetails.js
 
 webdir = \
 	$(pkgdatadir)/webcontent/includes

@@ -25,6 +25,7 @@
    margin: 0px;
    font-family: arial;
    font-size: 0.9em;
+   height: 100%;
   }
   .container {
    width: 850px;
@@ -157,11 +158,6 @@
   }
 
   /*  ------- Page Elements ------ */
-
-  #doclist {
-    width: 85%;
-    padding-left: 15px;
-  }
 
   #filter {
    position: relative;
@@ -376,4 +372,41 @@
   }
   .indicator img {
     margin-left: 15px;
+  }
+
+
+  #doclist {
+    width: 85%;
+    padding-left: 15px;
+  }
+
+  .results {
+display:block;
+min-height: 100%;
+  }
+
+  .tablerow {
+    width: 700px;
+    min-height: 30px;
+    clear: both;
+  }
+  .tabledocid {
+    float: left;
+    margin-right: 6px;
+    width: 80px;
+  }
+  .tabletitle {
+    float: left;
+    margin-right: 6px;
+    width: 300px;
+  }
+  .tabletype {
+    float: left;
+    margin-right: 6px;
+    width: 130px;
+  }
+  .tabledate {
+    float: left;
+    margin-right: 6px;
+    width: 140px;
   }
