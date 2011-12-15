@@ -1,5 +1,3 @@
-var sorting = [[1,0]]; // sort by date desc
-
 // Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
     var vars = [], hash;
