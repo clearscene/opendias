@@ -696,8 +696,9 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
             char *tags = getPostData(con_info->post_data, "tags");
             char *page = getPostData(con_info->post_data, "page");
             char *range = getPostData(con_info->post_data, "range");
-            char *sort = getPostData(con_info->post_data, "sort");
-            content = docFilter(subaction, textSearch, startDate, endDate, tags, page, range, sort); //pageRender.c
+            char *sortfield = getPostData(con_info->post_data, "sortfield");
+            char *sortorder = getPostData(con_info->post_data, "sortorder");
+            content = docFilter(subaction, textSearch, startDate, endDate, tags, page, range, sortfield, sortorder); //pageRender.c
             if(content == (void *)NULL) {
               content = o_strdup(errorxml);
             }

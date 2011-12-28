@@ -144,12 +144,14 @@ docFilter -> pageRender::docFilter
                 tags: Comma delimetered list of tagnames.
                 page: The number of 'range' offsets to apply before the first returned row.
                 range: The number of records to return in a single request.
-                sort: Order the results by column
+                sortfield*: Order the results by column
+                sortorder: present results in acending/decending order ['0','1']
 	Outputs;
 		<?xml version='1.0' encoding='iso-8859-1'?>
 		<Response>
 		  <DocFilter>
-                    count - the count of matching documents
+                    count - The count of matching documents
+                    page - The requested page
 		    <Results>
 		      docid - the document id of a found document
                       actionrequired - indicator flag
@@ -324,3 +326,13 @@ ita   Italian
 nld   Dutch
 por   Brasilian Portuguese
 vie   Vietnamese
+
+sortfieldsortfield
+0   docid
+1   title
+2   doc type
+3   date
+0   docid
+1   title
+2   doc type
+3   date

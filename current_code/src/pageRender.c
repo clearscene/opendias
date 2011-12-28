@@ -363,11 +363,12 @@ extern char *getScanningProgress(char *scanid) {
   return ret;
 }
 
-extern char *docFilter(char *subaction, char *textSearch, char *startDate, char *endDate, char *tags, char *page, char *range, char *sort ) {
+extern char *docFilter(char *subaction, char *textSearch, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder ) {
 
   struct simpleLinkedList *rSet;
   char *docList, *actionrequired, *title, *docid, *humanReadableDate, *type, 
-    *rows, *token, *olds, *sql, *textWhere=NULL, *dateWhere=NULL, *tagWhere=NULL;
+    *rows, *token, *olds, *sql, *textWhere=NULL, *dateWhere=NULL, 
+    *tagWhere=NULL, *page_ret;
   int count = 0;
 
   if( 0 == strcmp(subaction, "fullList") ) {
@@ -434,25 +435,55 @@ extern char *docFilter(char *subaction, char *textSearch, char *startDate, char 
   }
 
   // Sort if required
-  if( sort != NULL ) {
-    o_concatf(&sql, "ORDER BY %s ", sort);
+  if( sortfield != NULL ) {
+    // Which way
+    char *direction;
+    if( ( sortorder != NULL ) && (0 == strcmp(sortorder, "1") ) ) {
+      direction = strdup("DESC");
+    }
+    else {
+      direction = strdup("ASC");
+    }
+
+    switch(atoi(sortfield)) {
+    case 0:
+      o_concatf(&sql, "ORDER BY docid %s ", direction);
+      break;
+
+    case 1:
+      o_concatf(&sql, "ORDER BY title %s ", direction);
+      break;
+
+    case 2:
+      o_concatf(&sql, "ORDER BY filetype %s ", direction);
+      break;
+
+    case 3:
+      o_concatf(&sql, "ORDER BY docdatey %s, docdatem %s, docdated %s ", direction, direction, direction);
+      break;
+
+    }
+    free(direction);
   }
 
   // Paginate the results
   //
-  if( 0 == strcmp(subaction, "fullList") ) {
-    if( page != NULL && range != NULL ) {
-      int page_i = atoi( page );
-      int range_i = atoi( range );
-      int offset = (page_i - 1) * range_i;
-      o_concatf(&sql, "LIMIT %d, %d ", offset, range_i);
-    }
+  if( (0 == strcmp(subaction, "fullList")) && (page != NULL) && (range != NULL) ) {
+    int page_i = atoi( page );
+    int range_i = atoi( range );
+    int offset = (page_i - 1) * range_i;
+    o_concatf(&sql, "LIMIT %d, %d ", offset, range_i);
+    page_ret = o_printf("<page>%s</page>", page);
+  }
+  else {
+    page_ret = strdup("");
   }
 
   // Get Results
   //
   rows = o_strdup("");
   count = 0;
+o_log(DEBUGM, "sql=%s", sql);
 
   rSet = runquery_db(sql);
   if( rSet != NULL ) {
@@ -499,7 +530,7 @@ extern char *docFilter(char *subaction, char *textSearch, char *startDate, char 
   }
   free(sql);
 
-  docList = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DocFilter><count>%i</count><Results>%s</Results></DocFilter></Response>", count, rows);
+  docList = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DocFilter><count>%i</count>%s<Results>%s</Results></DocFilter></Response>", count, page_ret, rows);
   free(rows);
 
   return docList;
