@@ -1,26 +1,61 @@
-var pageLength = 5; // number of records in the table;
-var sorting = [[3,1]]; // sort by date desc
+var field = 0;
+var order = 1;
 var count = 0;
 var totalRows = 0;
-var dta;
-var allDocs = new Array();
-var showingDocs = new Array();
-var cc = 0;
+var ENTERIES_PER_PAGE = 12; // keep this even.
+var odd = 0;
+var check_result_block = 1;
+var currentOrder = new Array(3, 0); // default: most recent docs first
 
 $(document).ready(function() {
 
-  // Check the cookies for page setting (pageLength and sortOrder)
-  t = get_cookie('pageLength');
-  if(t != null) {
-    pageLength = t;
-    $('#pageSizeSelect').val(t);
-  }
+  var defaultSort = 'ui-icon-radio-on';
+  var sortFields = new Array("docid", "title", "type", "date");
+  var orderClass = new Array("ui-icon-carat-1-n", "ui-icon-carat-1-s", // Indicator
+                             "ui-icon-triangle-1-n", "ui-icon-triangle-1-s"); // What's selected
 
+  // Get expected sort order
   t = get_cookie('sortOrder');
   if(t != null) {
-    res = t.split(",");
-    sorting = [[res[0],res[1]]];
+    currentOrder = t.split(",");
   }
+
+  $.each( sortFields, function(fieldIndex, fieldName) {
+    // Set the curent order
+    if( sortFields[ currentOrder[field] ] == fieldName ) {
+      $('#sortby'+fieldName+' span.ui-icon').addClass( orderClass[ 2 + parseInt(currentOrder[order]) ] );
+      $('#sortby'+fieldName).hover( 
+        function() {
+          $('#sortby'+fieldName+' span.ui-icon').addClass( orderClass[ oposite(currentOrder[order]) ] );
+          $('#sortby'+fieldName+' span.ui-icon').removeClass( orderClass[ 2 + parseInt(currentOrder[order]) ] );
+        },
+        function() {
+          $('#sortby'+fieldName+' span.ui-icon').addClass( orderClass[ 2 + parseInt(currentOrder[order]) ] );
+          $('#sortby'+fieldName+' span.ui-icon').removeClass( orderClass[ oposite(currentOrder[order]) ] );
+        });
+      $('#sortby'+fieldName).click( function() {
+        document.cookie = 'sortOrder='+fieldIndex+','+oposite(currentOrder[order])+'; path=/';
+        window.location.reload(true);
+        });
+        
+    }
+    else {
+      $('#sortby'+fieldName+' span.ui-icon').addClass( defaultSort );
+      $('#sortby'+fieldName).hover( 
+        function() {
+          $('#sortby'+fieldName+' span.ui-icon').removeClass( defaultSort );
+          $('#sortby'+fieldName+' span.ui-icon').addClass( orderClass[ 0 ] );
+        },
+        function() {
+          $('#sortby'+fieldName+' span.ui-icon').removeClass( orderClass[ 0 ] );
+          $('#sortby'+fieldName+' span.ui-icon').addClass( defaultSort );
+        });
+      $('#sortby'+fieldName).click( function() {
+        document.cookie = 'sortOrder='+fieldIndex+',0; path=/';
+        window.location.reload(true);
+        });
+    }
+  });
 
   $('#tags').tagsInput({ 
           autocomplete_url: '',
@@ -51,7 +86,6 @@ $(document).ready(function() {
       },
       minLength: 1, // because most tags are so short - and there are not that many tags,
       select: function( event, ui ) {
-      //  log( ui.item ?  "Selected: " + ui.item.label : "Nothing selected, input was " + this.value);
           getRecordCount()
       },
       open: function() {
@@ -62,55 +96,12 @@ $(document).ready(function() {
       }
     });
 
-  $('#docList_table').css({ display: 'none' });
-  $('#pager').css({ display: 'none' });
-
-  $('#pageSizeSelect').bind('change', function() {
-    document.cookie = "pageLength="+$(this).val();
+  loadListData( check_result_block );
+  $(window).scroll( function() {
+    loadListData( check_result_block );
   });
-
-  $("#progressbar")
-         .progressbar({ value: 0, })
-         .css({ display: '' });
-
-  loadListData();
+  
 });
-
-function loadListData() {
-
-  $.ajax({ url: "dynamic",
-         dataType: "xml",
-             data: {action: "docFilter",
-                    subaction: "fullList",
-                    textSearch: $('#textSearch').val(),
-                    startDate: $('#startDate').val(),
-                    endDate: $('#endDate').val(),
-                    tags: $('#tags').val()
-                   },
-
-         cache: false,
-         type: "POST",
-         success: function(data){
-            if( $(data).find('error').text() ){
-              alert($(data).find('error').text());
-              return 1;
-            }
-            totalRows = $(data).find('DocFilter').find('count').text();
-            if(totalRows==0) {
-              $('#nodocs').css({ display: 'block' });
-              $('#doclist').css({ display: 'none' });
-            }
-            else {
-              count = 0;
-              dta = $(data).find('DocFilter').find('Results');
-              $('#docList_table').css({ display: 'none' });
-              $('#pager').css({ display: 'none' });
-              cc = 0;
-              processData();
-            }
-         }
-       });
-}
 
 function get_cookie (cookie_name) {
   var results = document.cookie.match( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)' );
@@ -120,38 +111,102 @@ function get_cookie (cookie_name) {
     return null;
 }
 
-function processData(){
-
-  rw = $(dta).find('Row')[count];
-
-  if(!rw) {
-    $("#progressContainer").css({ display: 'none' });
-    $("#progressbar").css({ display: 'none' });
-    $("#docList_table")
-      .trigger("update") 
-      .trigger("appendCache")
-      .trigger("sorton",[sorting]) 
-      .bind("addRow",function(event,newRow){ addRow(this,newRow); })
-      .bind("removeRow",function(event,rowId){ removeRow(this,rowId); })
-      .bind("rebuild",function(event){ rebuild(this); })
-      .bind("sortEnd", function(){ document.cookie = "sortOrder="+this.config.sortList; });
-
-    $('#docList_table').fadeIn();
-    $('#pager').fadeIn();
+function oposite(inn) {
+  if(inn==1) {
+    return 0;
+  } else {
+    return 1;
   }
-  else {
-    count++;
+}
+
+function loadListData(currentPage) {
+
+  if( currentPage==0 || !is_in_viewport( currentPage ) ) {
+    return 0;
+  }
+  check_result_block = 0;
+  $('#loading').css({ display: 'block' });
+
+  $.ajax({ url: "dynamic",
+         dataType: "xml",
+         data: {  action: "docFilter",
+                  subaction: "fullList",
+                  textSearch: $('#textSearch').val(),
+                  startDate: $('#startDate').val(),
+                  endDate: $('#endDate').val(),
+                  tags: $('#tags').val(),
+                  page: currentPage,
+                  range: ENTERIES_PER_PAGE,
+                  sortfield: currentOrder[field],
+                  sortorder: currentOrder[order]
+                  },
+         cache: false,
+         type: "POST",
+         success: function(data){
+            if( $(data).find('error').text() ){
+              alert($(data).find('error').text());
+              $('#loading').css({ display: 'none' });
+              return 1;
+            }
+            totalRows = $(data).find('DocFilter').find('count').text();
+            if(totalRows > 0) {
+              // Display rows
+              $('#nodocs').css({ display: 'none' });
+              $('#doclist').css({ display: 'block' });
+              var dta = $(data).find('DocFilter').find('Results');
+              count = 0;
+              processData( dta, currentPage );
+
+              // Setup new results_block
+              currentPage++;
+              var new_result = document.createElement("div");
+              var id = document.createAttribute('id');
+              new_result.setAttribute('id','result_block_'+currentPage);
+              document.getElementById('binding_block').appendChild(new_result);
+              $('#loading').css({ display: 'none' });
+              if( ! loadListData(currentPage) ) {
+                check_result_block = currentPage;
+              }  
+            }
+            else {
+              $('#loading').css({ display: 'none' });
+              check_result_block = 0;
+            }
+         }
+       });
+  return 1;
+}
+
+function processData( in_data, thispage ){
+
+  rw = $(in_data).find('Row')[count];
+
+  if(rw) {
+
+    // Gather data
     var docid = $(rw).find('docid').text();
     var actionrequired = $(rw).find('actionrequired').text();
     var title = $(rw).find('title').text();
     var type = $(rw).find('type').text();
     var date = $(rw).find('date').text();
 
-    var tr = document.createElement("tr");
+    // Create row with id
+    var tr = document.createElement("div");
     var id = document.createAttribute('id');
     tr.setAttribute('id','docid_'+docid);
-    var e_docid = document.createElement("td");
+    if(odd) {
+      tr.setAttribute('class','tablerow zebra');
+      odd = 0;
+    }
+    else {
+      tr.setAttribute('class','tablerow');
+      odd = 1;
+    }
+
+    // Create docid column
+    var e_docid = document.createElement("div");
     e_docid.setAttribute('class','indicator');
+    e_docid.setAttribute('class','tabledocid');
     e_docid.appendChild(document.createTextNode(docid));
     if(actionrequired!="1") {
       e_docid.appendChild(document.createTextNode(" "));
@@ -161,35 +216,47 @@ function processData(){
       e_docid.appendChild(img);
     }
     tr.appendChild(e_docid);
-    var e_title = document.createElement("td");
+
+    // Create 'title' column
+    var e_title = document.createElement("div");
+    e_title.setAttribute('class','tabletitle');
     e_title.appendChild(document.createTextNode(title));
     tr.appendChild(e_title);
-    var e_type = document.createElement("td");
+
+    // Create 'type' column
+    var e_type = document.createElement("div");
+    e_type.setAttribute('class','tabletype');
     e_type.appendChild(document.createTextNode(type));
     tr.appendChild(e_type);
-    var e_date = document.createElement("td");
+
+    // Create 'data' column
+    var e_date = document.createElement("div");
+    e_date.setAttribute('class','tabledate');
     e_date.appendChild(document.createTextNode(date));
     tr.appendChild(e_date);
-    document.getElementById('docList_table').getElementsByTagName('tbody')[0].appendChild(tr);
 
+    // Add to the main document.
+    document.getElementById('result_block_'+thispage).appendChild(tr);
+
+    // Make clickable
     $('#docid_'+docid).click(function() { 
       document.location.href = "/opendias/docDetail.html?docid="+docid;
     });
 
-    $("#progressbar").progressbar({
-      value: parseInt( (count*100)/totalRows ),
-    });
+    count++;
+    processData( in_data, thispage );
 
-    allDocs.push(docid);
-    showingDocs.push(docid);
-    cc++;
-    if(cc>=4) {
-      cc = 0;
-      setTimeout("processData()", 1); // give the ui a chance to catchup
-    } else {
-      processData();
-    }
   }
 
 }
 
+function is_in_viewport(el) {
+
+    var rect = document.getElementById('result_block_'+el).getBoundingClientRect()
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= window.innerHeight &&
+        rect.right <= window.innerWidth 
+        )
+}

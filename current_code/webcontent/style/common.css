@@ -282,9 +282,6 @@
     background: #aa7777;
     border: 1px solid black;
   }
-  #safeKeeping {
-    display: none;
-  }
 
   .accessControl h3 {
     background-color: #9999ee;
@@ -380,15 +377,19 @@
     padding-left: 15px;
   }
 
-  .results {
-display:block;
-min-height: 100%;
+  #results {
+    margin-bottom: 25px;
+    border-top: 2px solid #333;
+    border-bottom: 2px solid #333;
   }
 
-  .tablerow {
+  .tablerow, .tableheader {
     width: 700px;
-    min-height: 30px;
     clear: both;
+    padding: 8px;
+    min-height: 17px;
+    font-size: 0.9em;
+    cursor: pointer;
   }
   .tabledocid {
     float: left;
@@ -398,15 +399,37 @@ min-height: 100%;
   .tabletitle {
     float: left;
     margin-right: 6px;
-    width: 300px;
+    width: 400px;
   }
   .tabletype {
     float: left;
     margin-right: 6px;
-    width: 130px;
+    width: 110px;
   }
   .tabledate {
     float: left;
     margin-right: 6px;
-    width: 140px;
+    width: 85px;
+  }
+  .zebra {
+   background-color: #ccccee;
+  }
+  .tablerow:hover {
+    background-color: #dddd77;
+  }
+  .tableheader {
+    font-weight: bold;
+  }
+  .tableheader div span {
+    float: left;
+  }
+  .tabledocid img {
+    padding-left: 5px;
+  }
+  #loading {
+    width: 100%; 
+    text-align: center; 
+    display: none; 
+    font-size: 2em; 
+    padding: 10px;
   }
