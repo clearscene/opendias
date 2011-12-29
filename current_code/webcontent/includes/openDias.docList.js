@@ -5,14 +5,14 @@ var totalRows = 0;
 var ENTERIES_PER_PAGE = 12; // keep this even.
 var odd = 0;
 var check_result_block = 1;
-var currentOrder = new Array(3, 0); // default: most recent docs first
+var currentOrder = new Array(3, 1); // default: most recent docs first
 
 $(document).ready(function() {
 
   var defaultSort = 'ui-icon-radio-on';
   var sortFields = new Array("docid", "title", "type", "date");
-  var orderClass = new Array("ui-icon-carat-1-n", "ui-icon-carat-1-s", // Indicator
-                             "ui-icon-triangle-1-n", "ui-icon-triangle-1-s"); // What's selected
+  var orderClass = new Array("ui-icon-carat-1-s", "ui-icon-carat-1-n", // Indicator
+                             "ui-icon-triangle-1-s", "ui-icon-triangle-1-n"); // What's selected
 
   // Get expected sort order
   t = get_cookie('sortOrder');
