@@ -15,6 +15,7 @@
         Remove the de-skew functionality
         Improve OCR operations accuracy
         Allow documents to be opened full screen
+        Revamp doc list and filter functionality
 
 *0.6.5  Fix for scanners with "word_list" resolution options
 
