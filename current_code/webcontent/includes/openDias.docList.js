@@ -1,61 +1,22 @@
 var field = 0;
 var order = 1;
 var count = 0;
-var totalRows = 0;
 var ENTERIES_PER_PAGE = 12; // keep this even.
 var odd = 0;
 var check_result_block = 1;
 var currentOrder = new Array(3, 1); // default: most recent docs first
+var defaultSort = 'ui-icon-radio-on';
+var sortFields = new Array("docid", "title", "type", "date");
+var orderClass = new Array("ui-icon-carat-1-s", "ui-icon-carat-1-n", // Indicator
+                           "ui-icon-triangle-1-s", "ui-icon-triangle-1-n"); // What's selected
 
 $(document).ready(function() {
-
-  var defaultSort = 'ui-icon-radio-on';
-  var sortFields = new Array("docid", "title", "type", "date");
-  var orderClass = new Array("ui-icon-carat-1-s", "ui-icon-carat-1-n", // Indicator
-                             "ui-icon-triangle-1-s", "ui-icon-triangle-1-n"); // What's selected
 
   // Get expected sort order
   t = get_cookie('sortOrder');
   if(t != null) {
     currentOrder = t.split(",");
   }
-
-  $.each( sortFields, function(fieldIndex, fieldName) {
-    // Set the curent order
-    if( sortFields[ currentOrder[field] ] == fieldName ) {
-      $('#sortby'+fieldName+' span.ui-icon').addClass( orderClass[ 2 + parseInt(currentOrder[order]) ] );
-      $('#sortby'+fieldName).hover( 
-        function() {
-          $('#sortby'+fieldName+' span.ui-icon').addClass( orderClass[ oposite(currentOrder[order]) ] );
-          $('#sortby'+fieldName+' span.ui-icon').removeClass( orderClass[ 2 + parseInt(currentOrder[order]) ] );
-        },
-        function() {
-          $('#sortby'+fieldName+' span.ui-icon').addClass( orderClass[ 2 + parseInt(currentOrder[order]) ] );
-          $('#sortby'+fieldName+' span.ui-icon').removeClass( orderClass[ oposite(currentOrder[order]) ] );
-        });
-      $('#sortby'+fieldName).click( function() {
-        document.cookie = 'sortOrder='+fieldIndex+','+oposite(currentOrder[order])+'; path=/';
-        window.location.reload(true);
-        });
-        
-    }
-    else {
-      $('#sortby'+fieldName+' span.ui-icon').addClass( defaultSort );
-      $('#sortby'+fieldName).hover( 
-        function() {
-          $('#sortby'+fieldName+' span.ui-icon').removeClass( defaultSort );
-          $('#sortby'+fieldName+' span.ui-icon').addClass( orderClass[ 0 ] );
-        },
-        function() {
-          $('#sortby'+fieldName+' span.ui-icon').removeClass( orderClass[ 0 ] );
-          $('#sortby'+fieldName+' span.ui-icon').addClass( defaultSort );
-        });
-      $('#sortby'+fieldName).click( function() {
-        document.cookie = 'sortOrder='+fieldIndex+',0; path=/';
-        window.location.reload(true);
-        });
-    }
-  });
 
   $('#tags').tagsInput({ 
           autocomplete_url: '',
@@ -96,7 +57,7 @@ $(document).ready(function() {
       }
     });
 
-  loadListData( check_result_block );
+  reloadResults();
   $(window).scroll( function() {
     loadListData( check_result_block );
   });
@@ -111,6 +72,58 @@ function get_cookie (cookie_name) {
     return null;
 }
 
+function reloadResults() {
+
+  check_result_block = 0;
+  $('#binding_block').replaceWith("<div id='binding_block'><div id='result_block_1'></div></div>");
+
+  $.each( sortFields, function(fieldIndex, fieldName) {
+    $.each( orderClass, function(orderClassIndex, orderClassName) {
+      $('#sortby'+fieldName+' span.ui-icon').removeClass( orderClassName );
+    });
+    $('#sortby'+fieldName).unbind('click');
+
+    // Set the curent order
+    if( sortFields[ currentOrder[field] ] == fieldName ) {
+      $('#sortby'+fieldName+' span.ui-icon').addClass( orderClass[ 2 + parseInt(currentOrder[order]) ] );
+      $('#sortby'+fieldName).hover( 
+        function() {
+          $('#sortby'+fieldName+' span.ui-icon').addClass( orderClass[ oposite(currentOrder[order]) ] );
+          $('#sortby'+fieldName+' span.ui-icon').removeClass( orderClass[ 2 + parseInt(currentOrder[order]) ] );
+        },
+        function() {
+          $('#sortby'+fieldName+' span.ui-icon').addClass( orderClass[ 2 + parseInt(currentOrder[order]) ] );
+          $('#sortby'+fieldName+' span.ui-icon').removeClass( orderClass[ oposite(currentOrder[order]) ] );
+        });
+      $('#sortby'+fieldName).click( function() {
+        document.cookie = 'sortOrder='+fieldIndex+','+oposite(currentOrder[order])+'; path=/';
+        currentOrder = new Array(fieldIndex, oposite(currentOrder[order])); 
+        reloadResults();
+        });
+        
+    }
+    else {
+      $('#sortby'+fieldName+' span.ui-icon').addClass( defaultSort );
+      $('#sortby'+fieldName).hover( 
+        function() {
+          $('#sortby'+fieldName+' span.ui-icon').removeClass( defaultSort );
+          $('#sortby'+fieldName+' span.ui-icon').addClass( orderClass[ 0 ] );
+        },
+        function() {
+          $('#sortby'+fieldName+' span.ui-icon').removeClass( orderClass[ 0 ] );
+          $('#sortby'+fieldName+' span.ui-icon').addClass( defaultSort );
+        });
+      $('#sortby'+fieldName).click( function() {
+        document.cookie = 'sortOrder='+fieldIndex+',0; path=/';
+        currentOrder = new Array(fieldIndex, 0); 
+        reloadResults();
+        });
+    }
+  });
+
+  loadListData(1);
+}
+
 function oposite(inn) {
   if(inn==1) {
     return 0;
@@ -121,7 +134,9 @@ function oposite(inn) {
 
 function loadListData(currentPage) {
 
-  if( currentPage==0 || !is_in_viewport( currentPage ) ) {
+  if( currentPage == 0 // We're already calculating the next blocl
+  || !is_in_viewport( currentPage ) // is the block we want to fill in view?
+      ) {
     return 0;
   }
   check_result_block = 0;
@@ -148,7 +163,7 @@ function loadListData(currentPage) {
               $('#loading').css({ display: 'none' });
               return 1;
             }
-            totalRows = $(data).find('DocFilter').find('count').text();
+            var totalRows = $(data).find('DocFilter').find('count').text();
             if(totalRows > 0) {
               // Display rows
               $('#nodocs').css({ display: 'none' });
@@ -252,8 +267,11 @@ function processData( in_data, thispage ){
 
 function is_in_viewport(el) {
 
-    var rect = document.getElementById('result_block_'+el).getBoundingClientRect()
-    return (
+  if( el == 1 ) {
+    return 1; // The first page we'll fill regardless.
+  }
+  var rect = document.getElementById('result_block_'+el).getBoundingClientRect()
+  return (
         rect.top >= 0 &&
         rect.left >= 0 &&
         rect.bottom <= window.innerHeight &&

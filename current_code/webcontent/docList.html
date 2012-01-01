@@ -4,8 +4,8 @@
 
 <script type="text/javascript" src="/opendias/includes/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/opendias/includes/jquery.tagsinput.js"></script>
-<script type="text/javascript" src="/opendias/includes/openDias.filter.js"></script>
 <script type="text/javascript" src="/opendias/includes/openDias.docList.js"></script>
+<script type="text/javascript" src="/opendias/includes/openDias.filter.js"></script>
 
 <div id='filter'>
   <div id='filterOptions'>
@@ -17,6 +17,14 @@
         </div>
         <div class='data'>
           <input id='textSearch' />
+        </div>
+      </div>
+      <div class='row'>
+        <div class='label'>
+          Has 'Action Required':
+        </div>
+        <div class='data'>
+            <input type='checkbox' id='isactionrequired' />
         </div>
       </div>
       <div class='row'>
@@ -72,8 +80,6 @@
 
   <div id='results'>
     <div id='binding_block'>
-      <div id='result_block_1'>
-      </div>
     </div>
     <div id='loading'>Loading&nbsp;.&nbsp;.&nbsp;.</div>
   </div>
