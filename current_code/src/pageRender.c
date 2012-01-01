@@ -363,12 +363,12 @@ extern char *getScanningProgress(char *scanid) {
   return ret;
 }
 
-extern char *docFilter(char *subaction, char *textSearch, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder ) {
+extern char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder ) {
 
   struct simpleLinkedList *rSet;
   char *docList, *actionrequired, *title, *docid, *humanReadableDate, *type, 
     *rows, *token, *olds, *sql, *textWhere=NULL, *dateWhere=NULL, 
-    *tagWhere=NULL, *page_ret;
+    *tagWhere=NULL, *actionWhere=NULL, *page_ret;
   int count = 0;
 
   if( 0 == strcmp(subaction, "fullList") ) {
@@ -382,6 +382,12 @@ extern char *docFilter(char *subaction, char *textSearch, char *startDate, char 
   //
   if( textSearch!=NULL && strlen(textSearch) ) {
     textWhere = o_printf("(title LIKE '%%%s%%' OR ocrText LIKE '%%%s%%') ", textSearch, textSearch);
+  }
+
+  // Filter by ActionRequired
+  //
+  if( ( isActionRequired!=NULL ) && ( 0 == strcmp(isActionRequired, "true") ) ) {
+    actionWhere = o_strdup("actionrequired=1 ");
   }
 
   // Filter by Doc Date
@@ -418,21 +424,47 @@ extern char *docFilter(char *subaction, char *textSearch, char *startDate, char 
     free(tagWhere);
   }
 
+
   // Build final SQL
   //
-  if(textWhere || dateWhere) {
+  if(textWhere || dateWhere || actionWhere ) {
+    int prefixAnd = 0;
     conCat(&sql, "WHERE ");
+
     if(textWhere) {
-      conCat(&sql, textWhere);
-      free(textWhere);
-      if(dateWhere)
+      if(prefixAnd == 1) {
         conCat(&sql, "AND ");
+      }
+      else {
+        prefixAnd = 1;
+      }
+      conCat(&sql, textWhere);
     }
+
     if(dateWhere) {
+      if(prefixAnd == 1) {
+        conCat(&sql, "AND ");
+      }
+      else {
+        prefixAnd = 1;
+      }
       conCat(&sql, dateWhere);
-      free(dateWhere);
+    }
+
+    if(actionWhere) {
+      if(prefixAnd == 1) {
+        conCat(&sql, "AND ");
+      }
+      else {
+        prefixAnd = 1;
+      }
+      conCat(&sql, actionWhere);
     }
   }
+  free(textWhere);
+  free(dateWhere);
+  free(actionWhere);
+
 
   // Sort if required
   if( sortfield != NULL ) {

@@ -691,6 +691,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
           else {
             char *subaction = getPostData(con_info->post_data, "subaction");
             char *textSearch = getPostData(con_info->post_data, "textSearch");
+            char *isActionRequired = getPostData(con_info->post_data, "isActionRequired");
             char *startDate = getPostData(con_info->post_data, "startDate");
             char *endDate = getPostData(con_info->post_data, "endDate");
             char *tags = getPostData(con_info->post_data, "tags");
@@ -698,7 +699,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
             char *range = getPostData(con_info->post_data, "range");
             char *sortfield = getPostData(con_info->post_data, "sortfield");
             char *sortorder = getPostData(con_info->post_data, "sortorder");
-            content = docFilter(subaction, textSearch, startDate, endDate, tags, page, range, sortfield, sortorder); //pageRender.c
+            content = docFilter(subaction, textSearch, isActionRequired, startDate, endDate, tags, page, range, sortfield, sortorder); //pageRender.c
             if(content == (void *)NULL) {
               content = o_strdup(errorxml);
             }

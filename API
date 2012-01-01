@@ -139,6 +139,7 @@ docFilter -> pageRender::docFilter
 	Inputs:	action: fixed string 'docFilter'
                 subaction: Get all details or just the count of matching docs ['count','fullList']
 		textSearch: Text that a document must match (title or ocr text)
+                isActionRequired: If 'true' return only records that are marked as 'action required'.
                 startDate: The first date that a document could fit into
                 endDate: The last date that a document could fit into
                 tags: Comma delimetered list of tagnames.

@@ -147,6 +147,7 @@ function loadListData(currentPage) {
          data: {  action: "docFilter",
                   subaction: "fullList",
                   textSearch: $('#textSearch').val(),
+                  isActionRequired: $('#isActionRequired').is(':checked'),
                   startDate: $('#startDate').val(),
                   endDate: $('#endDate').val(),
                   tags: $('#tags').val(),

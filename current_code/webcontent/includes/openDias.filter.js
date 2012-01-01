@@ -16,7 +16,7 @@ $(document).ready(function(){
 
   $('#textSearch').keypress( function() { getRecordCount() } );
   $('#textSearch').change( function() { getRecordCount() } );
-  $('#isactionrequired').change( function() { getRecordCount() } );
+  $('#isActionRequired').change( function() { getRecordCount() } );
   $('#startDate').change( function() { getRecordCount() } );
   $('#endDate').change( function() { getRecordCount() } );
 
@@ -28,7 +28,7 @@ function getRecordCount() {
              data: {action: "docFilter",
                     subaction: "count",
                     textSearch: $('#textSearch').val(),
-                    actionrequired: $('#isactionrequired').val(),
+                    isActionRequired: $('#isActionRequired').is(':checked'),
                     startDate: $('#startDate').val(),
                     endDate: $('#endDate').val(),
                     tags: $('#tags').val()
