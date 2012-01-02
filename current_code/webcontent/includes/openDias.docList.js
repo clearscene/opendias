@@ -78,10 +78,14 @@ function reloadResults() {
   $('#binding_block').replaceWith("<div id='binding_block'><div id='result_block_1'></div></div>");
 
   $.each( sortFields, function(fieldIndex, fieldName) {
+
+    // reset styles
+    $('#sortby'+fieldName+' span.ui-icon').removeClass( defaultSort );
     $.each( orderClass, function(orderClassIndex, orderClassName) {
       $('#sortby'+fieldName+' span.ui-icon').removeClass( orderClassName );
     });
     $('#sortby'+fieldName).unbind('click');
+    $('#sortby'+fieldName).unbind('mouseenter mouseleave'); // 'hover' does not work
 
     // Set the curent order
     if( sortFields[ currentOrder[field] ] == fieldName ) {
