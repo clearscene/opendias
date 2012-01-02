@@ -5,11 +5,7 @@
 Phase 1
 -------
 
-Implement 'tag filtering' on the search of the document list
-
 Implement the remainder of the test plan 'current_code/test/regressionTests/testplan'
-
-Refactor 'filtering mechanisum' on the document list
 
 Implement 'By Username/Password' access controls
 
@@ -24,10 +20,6 @@ Print documents
 Implement 'OCR now' on document detail page.
 
 Implement 'play audio from OCR' on document detail oage.
-
-Improve the tag selection on document detail page.
-
-Search on 'action required' flag
 
 Implement 'document linkage'
 
