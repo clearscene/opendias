@@ -241,7 +241,7 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
           length_s = getScanParam(uuid, SCAN_PARAM_LENGTH);
           pagelength = atoi(length_s);
           if(pagelength && pagelength >= 20 && pagelength < 100)
-            v_f = v_f * SANE_FIX((double)pagelength / 100);
+            v_f = SANE_FIX( ( SANE_UNFIX(v_f) * (double)pagelength) / 100);
           free(length_s);
 
           status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
