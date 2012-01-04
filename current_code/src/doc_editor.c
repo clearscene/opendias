@@ -24,9 +24,6 @@
 #include "db.h"
 #include "dbaccess.h"
 #include "doc_editor.h"
-#ifdef CAN_SPEAK
-#include "speak.h"
-#endif // CAN_SPEAK //
 #include "main.h"
 #include "utils.h"
 #include "debug.h"
@@ -77,20 +74,6 @@ extern char *doDelete (char *documentId) {
 
   return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DeleteDoc><status>OK</status></DeleteDoc></Response>");;
 }
-
-
-#ifdef CAN_SPEAK
-void readTextParser () {
-
-  char *textToRead = "";
-
-  textToRead = o_strdup("TEST TEXT");
-  readText(textToRead);
-  free(textToRead);
-
-}
-#endif // CAN_SPEAK //
-
 
 
 

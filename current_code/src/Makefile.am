@@ -46,8 +46,6 @@ opendias_SOURCES = \
 	scan.h    \
 	scanner.c    \
 	scanner.h    \
-	speak.cc    \
-	speak.h    \
 	utils.c    \
 	utils.h    \
 	main.c    \

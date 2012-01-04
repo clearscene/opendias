@@ -94,20 +94,6 @@ else
 fi
 
 
-dnl Not used in the app - atm
-dnl speak="no"
-dnl AC_CHECK_LIB(espeak, main, 
-dnl 	[AC_CHECK_HEADER(espeak/speak_lib.h,
-dnl         	speak=yes,
-dnl         	AC_MSG_WARN(You are missing the development headers for the espeak libs))], 
-dnl 	AC_MSG_WARN(You are missing the espeak libs) )
-dnl if test "x$speak" = "xyes" ; then
-dnl 	AC_DEFINE([CAN_SPEAK],[],[Have everything that is needed speak aloud])
-dnl 	OPENDIAS_LIBS="$OPENDIAS_LIBS -lespeak "
-dnl else
-dnl 	AC_MSG_WARN(You wll not be able to read aloud.)
-dnl fi
-
 
 xml="no"
 AC_CHECK_LIB(xml2, xmlParseExternalEntity, 
