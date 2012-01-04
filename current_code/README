@@ -77,16 +77,10 @@ You can build and install by issuing the following commands:
 
 3.2 As a developer
 ------------------
-If you downloaded the source from, the GIT tree at sf.net.
+If you downloaded the source from, the GIT tree at GitHub.
 You need to pre configure the source:
 
-  [ensure the you have the GNU auto* tools installed]
-  autoreconf -v
-  automake --add-missing
-  autoreconf -v
-
-before running:
-
+  autoreconf -iv
   ./configure -C
   make
   make install
