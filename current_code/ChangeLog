@@ -1,4 +1,10 @@
-*0.7.0  Fix an issue with bad setting of SANE options. (some user could not set the resolution)
+ 0.8... Remove defunct speak functionality
+
+*0.7.2  Improve OCR operations accuracy
+        Allow documents to be opened full screen
+        Revamp doc list and filter functionality
+
+ 0.7.0  Fix an issue with bad setting of SANE options. (some user could not set the resolution)
         Added language selection for OCR operations
         Fix install problem if installation is already found
         Improved build instructions
@@ -13,9 +19,6 @@
         Added new admin app to easily set config options
         Improved the selection and assignment of tags
         Remove the de-skew functionality
-        Improve OCR operations accuracy
-        Allow documents to be opened full screen
-        Revamp doc list and filter functionality
 
 *0.6.5  Fix for scanners with "word_list" resolution options
 
