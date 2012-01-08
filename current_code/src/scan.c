@@ -107,7 +107,7 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
           *request_resolution = atoi(request_resolution_s);
           free(request_resolution_s);
 
-          if( sod->constraint.range->quant != 0 ) 
+          if( (sod->constraint_type == SANE_CONSTRAINT_RANGE) && (sod->constraint.range->quant != 0) ) 
             *buff_requested_len = sod->constraint.range->quant; // q seam to be a good buffer size to use!
 
           if (sod->type == SANE_TYPE_FIXED) {
@@ -115,6 +115,15 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
             status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
             if(status != SANE_STATUS_GOOD) {
               handleSaneErrors("Cannot set resolution (fixed)", status, paramSetRet);
+              updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
+              return 0;
+            }
+          }
+          else if (sod->type == SANE_TYPE_INT) {
+            int sane_resolution = *request_resolution;
+            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &sane_resolution, &paramSetRet);
+            if(status != SANE_STATUS_GOOD) {
+              handleSaneErrors("Cannot set resolution (int)", status, paramSetRet);
               updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
               return 0;
             }
