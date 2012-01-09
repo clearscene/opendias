@@ -1,5 +1,5 @@
 ####################################################################################
-## EDITED THIS DOC? NOW GO UPDATE essesntialcollections.co.uk/openDIAS/todo.shtml ##
+## EDITED THIS DOC? NOW GO UPDATE essesntialcollections.co.uk/opendias_website/todo.shtml ##
 ####################################################################################
 
 Phase 1
@@ -8,6 +8,10 @@ Phase 1
 Implement the remainder of the test plan 'current_code/test/regressionTests/testplan'
 
 Implement 'By Username/Password' access controls
+
+Implement 'document linkage'
+
+Scanner device locking
 
 TECHNICAL: Check the use of "extern" where it's used.
 
@@ -19,38 +23,25 @@ Print documents
 
 Implement 'OCR now' on document detail page.
 
-Implement 'play audio from OCR' on document detail oage.
-
-Implement 'document linkage'
-
 Package into .deb and .rpm and get included into major repositories
 
 
 Phase 3
 -------
 
-Print doc details label (to stick onto doc after scanning)
-
 Implement 'backend call' tests
 
 Turn OCR into a plugin
 
-Turn 'Play Audio' into a plugin
-
 Add Localization framework to the application;
 
 
-Phase 4
+
+Phase 4 (possible ideas)
 -------
 
-Break the backend and the frontend apart
-
-
-Phase 5 (possible ideas)
--------
-
+ * Print doc details label (to stick onto doc after scanning)
  * document workflow
- * document encryption
  * Updates versioning/audit
  * auto (learning) tagging of new docs
 
