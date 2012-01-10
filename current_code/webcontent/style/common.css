@@ -426,7 +426,7 @@
   .tabledocid img {
     padding-left: 5px;
   }
-  #loading {
+  #results #loading {
     width: 100%; 
     text-align: center; 
     display: none; 

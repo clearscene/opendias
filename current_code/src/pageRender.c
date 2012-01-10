@@ -138,10 +138,13 @@ extern char *getScannerList() {
         sa.sin_addr.s_addr = inet_addr( ip );
 
         // Lookup hostname from address
+        o_log(DEBUGM, "Going to lookup: %s", ip);
         if ( getnameinfo((struct sockaddr *)&sa, sizeof sa, host, sizeof host, service, sizeof service, NI_NAMEREQD) == 0 ) {
+          o_log(DEBUGM, "found host: %s", host);
           scannerHost = o_strdup(host);
         } 
         else {
+          o_log(DEBUGM, "Could not get hostname");
           scannerHost = o_strdup(ip);
         }
 
