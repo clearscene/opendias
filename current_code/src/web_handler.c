@@ -459,27 +459,33 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
     // Serve 'scans' content [image|pdf|odf]
     else if( 0!=strstr(url,"/scans/") && (0!=strstr(url,".jpg") || 0!=strstr(url,".pdf") || 0!=strstr(url,".odt") ) ) {
-      dir = o_printf("%s%s", BASE_DIR, url);
-      size = getFromFile_fullPath(dir, &content);
-      free(dir);
-      if(0!=strstr(url,".jpg")) {
-        mimetype = MIMETYPE_JPG;
-      } 
-      else if (0!=strstr(url,".odt")) {
-        mimetype = MIMETYPE_ODT;
+      if ( accessPrivs.view_doc == 0 ) {
+        content = o_strdup(noaccessxml);
+        size = strlen(content);
       }
-      else if (0!=strstr(url,".pdf")) {
-        mimetype = MIMETYPE_PDF;
-      }
-      else
-        size = 0;
+      else {
+        dir = o_printf("%s%s", BASE_DIR, url);
+        size = getFromFile_fullPath(dir, &content);
+        free(dir);
+        if(0!=strstr(url,".jpg")) {
+          mimetype = MIMETYPE_JPG;
+        } 
+        else if (0!=strstr(url,".odt")) {
+          mimetype = MIMETYPE_ODT;
+        }
+        else if (0!=strstr(url,".pdf")) {
+          mimetype = MIMETYPE_PDF;
+        }
+        else
+          size = 0;
 
-      if( 0 == size ) {
-        free(content);
-        content = o_strdup("");
-        status = MHD_HTTP_NOT_FOUND;
-      	mimetype = MIMETYPE_HTML;
-        size = 0;
+        if( 0 == size ) {
+          free(content);
+          content = o_strdup("");
+          status = MHD_HTTP_NOT_FOUND;
+      	  mimetype = MIMETYPE_HTML;
+          size = 0;
+        }
       }
     }
 
