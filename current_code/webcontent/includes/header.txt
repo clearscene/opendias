@@ -31,6 +31,7 @@
         <li><a id='doclistLink' href='/opendias/docList.html'>Document List</a></li>
         <li><a id='acquireLink' href='/opendias/acquire.html'>Acquire New</a></li>
         <li><a id='accessLink' href='/opendias/accessControls.html'>Access Controls</a></li>
+        <li><a id='ProjectHome' href='http://opendias.essentialcollections.co.uk/' target='_blank'>Project Home</a></li>
       </ul>
     </div>
   </div>
