@@ -1,5 +1,6 @@
- 0.7.3  Fix issue for scanners with 'word_list' resolutions
+ 0.7.3  Issue #9 - Scanners with 'word_list' resolutions
         Fix spinner viability on searching for scanners.
+        Issue #10 - Scan images display is not permission checked
 
  0.7.2  Remove the de-skew functionality
         Improve OCR operations accuracy
