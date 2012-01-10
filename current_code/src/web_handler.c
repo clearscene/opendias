@@ -392,7 +392,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
   if (0 == *upload_data_size) {
 
-    if ((0 == strcmp (method, "GET") && 0 != strstr(url,".html")) || 0 == strcmp(method,"POST")) {
+    if ((0 == strcmp (method, "GET") && (0!=strstr(url,".html") || 0!=strstr(url,"/scans/"))) || 0 == strcmp(method,"POST")) {
       char *accessError = accessChecks(connection, url, &accessPrivs);
       if(accessError != NULL) {
         char *accessErrorPage = build_page(accessError);
@@ -489,24 +489,6 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
       }
     }
 
-    // Serve 'audio' content
-/*    else if( 0!=strstr(url,"/audio/") && 0!=strstr(url,".ogg") ) {
-      char *dir = o_strdup(g_getenv("HOME"));
-      conCat(&dir, "/.openDIAS/");
-      conCat(&dir, url);
-      size = getFromFile_fullPath(dir, &content);
-      free(dir);
-      if( 0 == size ) {
-        free(content);
-        content = o_strdup("");
-        status = MHD_HTTP_NOT_FOUND;
-      	mimetype = MIMETYPE_HTML;
-        size = 0;
-      }
-      else
-        mimetype = MIMETYPE_OGG;
-    }
-*/
     // Serve 'js' content
     else if( 0!=strstr(url,"/includes/") && 0!=strstr(url,".js") ) {
       size = getFromFile(url, &content);
