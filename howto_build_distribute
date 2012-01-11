@@ -1,8 +1,7 @@
 
 Generate a buildable source tree (after git checkout)
 --------------------------------
-automake --add-missing
-autoreconf -v
+autoreconf -iv
 
 
 Hack away
@@ -15,7 +14,7 @@ Create a source tarball (suitable for distribution)
 -----------------------
 Update: Changelog
 bump version in configure.ac
-autoreconf -v
+autoreconf -iv
 autoscan
 make distcheck
 
