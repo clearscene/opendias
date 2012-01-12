@@ -46,8 +46,8 @@ int setup (char *configFile) {
 
   // Defaults
   VERBOSITY = DEBUGM;
-  DB_VERSION = 5;
-  PORT = 8988;
+  DB_VERSION = 6;
+  PORT = 8988; // Default - but overridden by config settings before port is opened
   LOG_DIR = o_strdup("/var/log/opendias");
 
   // Get 'DB' location
