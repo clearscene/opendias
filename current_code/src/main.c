@@ -94,9 +94,12 @@ int setup (char *configFile) {
         PORT = (unsigned short) atoi(config_value);
       }
       else if ( 0 == strcmp(config_option, "log_directory") ) {
-        free(LOG_DIR);
-        LOG_DIR = o_strdup(config_value);
-        createDir_ifRequired(LOG_DIR);
+        if ( 0 != strcmp( LOG_DIR, config_value ) ) {
+          o_log(INFORMATION, "Moving log entries from %s to %s", LOG_DIR, config_value);
+          free(LOG_DIR);
+          LOG_DIR = o_strdup(config_value);
+          createDir_ifRequired(LOG_DIR);
+        }
       }
       free(config_option);
       free(config_value);
@@ -281,7 +284,7 @@ int main (int argc, char **argv) {
     }
   }
 
-  if(turnToDaemon==1) {
+  if( turnToDaemon==1 ) {
     // Turn into a meamon and write the pid file.
     o_log(INFORMATION, "Running in daemon mode.");
     daemonize("/tmp/", "/var/run/opendias.pid");
@@ -290,8 +293,11 @@ int main (int argc, char **argv) {
     o_log(INFORMATION, "Running in interactive mode.");
   }
 
-  if(setup (configFile))
+  if( setup(configFile) == 1 ) {
+    if( turnToDaemon!=1 ) 
+      printf("Could not startup. Check /var/log/opendias/ for the reason.\n");
     return 1;
+  }
 
   o_log(INFORMATION, "... Starting up the openDias service.");
   httpdaemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 
@@ -301,7 +307,7 @@ int main (int argc, char **argv) {
     MHD_OPTION_END);
   if (NULL == httpdaemon) {
     o_log(INFORMATION, "Could not create an http service");
-    if(turnToDaemon!=1) 
+    if( turnToDaemon != 1 ) 
       printf("Could not create an http service. Port is already in use?.\n");
     server_shutdown();
     exit(EXIT_FAILURE);
@@ -309,7 +315,7 @@ int main (int argc, char **argv) {
   o_log(INFORMATION, "ready to accept connectons");
 
   
-  if(turnToDaemon==1) {
+  if( turnToDaemon==1 ) {
     while(1) {
       sleep(500);
     }
