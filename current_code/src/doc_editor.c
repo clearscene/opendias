@@ -102,6 +102,9 @@ extern char *getDocDetail (char *documentId) {
   char *sql, *tags, *tagsTemplate, *title, *humanReadableDate,
       *returnXMLtemplate, *returnXML;
 
+  // Remove any trailing '#' marks
+  replace(documentId, "#", "");
+
   // Validate document id
   //
   sql = o_printf("SELECT docid FROM docs WHERE docid = %s", documentId);
