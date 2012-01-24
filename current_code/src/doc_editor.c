@@ -84,7 +84,7 @@ extern char *getDocDetail (char *documentId) {
 
   struct simpleLinkedList *rSet;
   char *sql, *tags, *tagsTemplate, *title, *humanReadableDate,
-      *returnXMLtemplate, *returnXML;
+      *docs, *docsTemplate, *returnXMLtemplate, *returnXML;
 
   // Remove any trailing '#' marks
   replace(documentId, "#", "");
@@ -129,6 +129,32 @@ extern char *getDocDetail (char *documentId) {
 
 
 
+
+
+  // Get a list of linked docs
+  //
+  docs = o_strdup("");
+  docsTemplate = o_strdup("<doc><docid>%s</docid><title>%s</title></doc>");
+  sql = o_printf(
+    "SELECT l.linkeddocid, d.title \
+    FROM doc_links l JOIN docs d \
+    ON l.linkeddocid = d.docid \
+    WHERE l.docid = %s \
+    ORDER BY d.title", documentId);
+
+  rSet = runquery_db(sql);
+  if( rSet ) {
+    do  {
+      o_concatf(&docs, docsTemplate, readData_db(rSet, "linkeddocid"), readData_db(rSet, "title") );
+    } while ( nextRow( rSet ) );
+  }
+  free_recordset( rSet );
+  free(sql);
+  free(docsTemplate);
+
+
+
+
   // Get docinformation
   //
   sql = o_printf("SELECT * FROM docs WHERE docid = %s", documentId);
@@ -169,13 +195,15 @@ extern char *getDocDetail (char *documentId) {
   <x>%s</x>\
   <y>%s</y>\
   <Tags>%s</Tags>\
+  <DocLinks>%s</DocLinks>\
   <actionrequired>%s</actionrequired>\
  </DocDetail>\
 </Response>");
   returnXML = o_printf(returnXMLtemplate, 
                             documentId, title, readData_db(rSet, "entrydate"), readData_db(rSet, "filetype"), 
                             humanReadableDate, readData_db(rSet, "pages"), readData_db(rSet, "ocrtext"), 
-                            readData_db(rSet, "ppl"), readData_db(rSet, "lines"), tags, readData_db(rSet, "actionrequired") );
+                            readData_db(rSet, "ppl"), readData_db(rSet, "lines"), tags, docs, 
+                            readData_db(rSet, "actionrequired") );
 
   free_recordset(rSet);
   free(sql);
@@ -183,6 +211,7 @@ extern char *getDocDetail (char *documentId) {
   free(title);
   free(humanReadableDate);
   free(tags);
+  free(docs);
 
   return returnXML;
 }

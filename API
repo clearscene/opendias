@@ -233,6 +233,13 @@ getDocDetail -> docEditor::getDocDetail
 		      </tag>
 		      ...
 		    </Tags>
+		    <DocLinks>
+		      <doc>
+		        docid - the docid of the linked doc
+                        title - the user defined title of the linked doc
+		      </doc>
+		      ...
+		    </DocLinks>
 		  </DocDetail>
 		</Response>
 
