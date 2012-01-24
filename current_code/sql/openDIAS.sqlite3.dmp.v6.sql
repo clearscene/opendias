@@ -9,5 +9,13 @@ DROP TABLE t1_backup;
 
 UPDATE version SET version = 6;
 
+CREATE TABLE doc_links (
+        doclinkid INTEGER PRIMARY KEY,
+        docid NUMERIC,
+        linkeddocid NUMERIC);
+
+CREATE INDEX doc_links_linkid_idx
+ON doc_links(docid ASC);
+
 COMMIT;
 

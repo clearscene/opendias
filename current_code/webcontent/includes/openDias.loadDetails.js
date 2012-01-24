@@ -12,25 +12,6 @@ function getUrlVars() {
 
 $(document).ready(function() {
 
-//  $('#playAudioLink').click(function(){
-//                               $.ajax({ url: "/opendias/dynamic",
-//                                        dataType: "xml",
-//                                        data: {action: "getAudio", 
-//                                              docid: getUrlVars()['docid']},
-//                                        cache: false,
-//                                        type: "POST",
-//                                        success: function(data){
-//                                                  if($(data).find('error').text()) {
-//                                                    alert("Unable to get the audio: "+$(data).find('error').text());
-//                                                    return 1;
-//                                                  }
-//                                                 id = $(data).find('Audio').find('filename').text();
-//                                                 $('#audio').attr('src','/audio/'+id);
-//                                                 }
-//                                        });
-//                               $('#playAudio').toggle();
-//                               });
-
   $.ajax({ url: "/opendias/dynamic",
          dataType: "xml",
          data: {action: "getDocDetail", 
@@ -101,11 +82,13 @@ $(document).ready(function() {
 
            $("#docDate").datepicker( {dateFormat:"yy/mm/dd"} );
 
+
+           //
+           // Load and setup Tags
            var tags = new Array();
            $(data).find('DocDetail').find('Tags').find('tag').each( function() {
                 tags.push( $(this).text() );
            });
-
            $("#tags").val( tags.join() );
            $('#tags').tagsInput({
                 autocomplete_url: '', // Were going to use the ui.autocomplete (since the plugins autocomplete stuff doesn't seam to work correctly. However, added this here as a hack to handle bluring correctly.
@@ -148,6 +131,58 @@ $(document).ready(function() {
                  $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
                }
              });
+
+
+           //
+           // Load and setup document linkages
+           $('#doclinks_tag').val($('#doclinks_tag').attr('data-default'));
+           $('#doclinks_tag').bind('focus','',function(event) {
+             if ($(this).val()==$(this).attr('data-default')) {
+               $(this).val('');
+             }
+             $(this).css('color','#000000');
+           });
+           $(data).find('DocDetail').find('Doclinks').find('doc').each( function() {
+             createDocLinkHtml( $(this).find('value').text(), $(this).find('label').text() );
+           });
+           $('#doclinks_tag').autocomplete({
+               source: function( request, response ) {
+                 $.ajax({
+                   url: "/opendias/dynamic",
+                   dataType: "json",
+                   type: "POST",
+                   data: {
+                     action: "titleAutoComplete",
+                     startsWith: request.term,
+                   },
+                   success: function( data ) {
+                     response( $.map( data.results, function( item ) {
+                       return {
+                         label: item.title,
+                         value: item.docid
+                       }
+                     }));
+                   }
+                 });
+               },
+               minLength: 3, 
+               select: function( event, ui ) {
+                if (ui.item) {
+                  createDocLinkHtml( ui.item.value, ui.item.label );
+                  moveTag( ui.item.value, officialDocId, "addDoc");
+                } else {
+                  alert("Nothing selected, input was " + this.value);
+                }
+                $( this ).val('');
+               },
+               open: function() {
+                 $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+               },
+               close: function() {
+                 $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+               }
+             });
+
          }
   });
 
@@ -200,5 +235,24 @@ function getTypeDescription(iType) {
   } else {
     return "[unknown]";
   }
+
+}
+
+function createDocLinkHtml( val, lab ) {
+
+  var ret = "<span class='tag'>"
+          + " <span>"
+          + "   <a href='/opendias/docDetail.html?docid=" + val + "'>"
+          + "     " + lab
+          + "   </a>&nbsp;&nbsp;"
+          + " </span>"
+          + " <a id='deleteDocLink_"+val+"' title='Removing tag'>x</a>"
+          + "</span>";
+
+  $('#doclinks_tagsinput').append( ret );
+
+  $('#deleteDocLink_'+val).click( function() {
+    moveTag( ui.item.value, officialDocId, "removeDoc");
+  });
 
 }

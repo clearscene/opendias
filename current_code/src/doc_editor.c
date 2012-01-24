@@ -70,6 +70,7 @@ extern char *doDelete (char *documentId) {
   free(docTemplate);
 
   removeDocTags(documentId);
+  removeDocLinks(documentId);
   removeDoc(documentId);
 
   return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DeleteDoc><status>OK</status></DeleteDoc></Response>");;
@@ -85,6 +86,9 @@ extern char *getDocDetail (char *documentId) {
   char *sql, *tags, *tagsTemplate, *title, *humanReadableDate,
       *returnXMLtemplate, *returnXML;
 
+  // Remove any trailing '#' marks
+  replace(documentId, "#", "");
+ 
   // Validate document id
   //
   sql = o_printf("SELECT docid FROM docs WHERE docid = %s", documentId);
@@ -227,28 +231,40 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
   else return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><UpdateDocDetails><status>OK</status></UpdateDocDetails></Response>");
 }
 
-extern char *updateTagLinkage(char *docid, char *tag, char *subaction) {
+extern char *updateTagLinkage(char *docid, char *link, char *subaction) {
 
   int rc = 0;
 
   // Check if their is a tag of this name, if not add one
-  char *tagid = getTagId( tag );
 
   if(0 == strcmp(subaction, "addTag")) {
+    char *tagid = getTagId( link );
     rc = addTagToDoc(docid, tagid);
+    free(tagid);
   }
   else if(0 == strcmp(subaction, "removeTag")) {
+    char *tagid = getTagId( link );
     rc = removeTagFromDoc (docid, tagid);
     if( 0 == countDocsWithTag( tagid ) )
       deleteTag( tagid );
+    free(tagid);
   }
+
+  else if(0 == strcmp(subaction, "addDoc")) {
+    rc = addDocToDoc(docid, link);
+    rc += addDocToDoc(link, docid);
+  }
+  else if(0 == strcmp(subaction, "removeDoc")) {
+    rc = removeDocFromDoc(docid, link);
+    rc += removeDocFromDoc(link, docid);
+  }
+
   else {
     o_log(ERROR, "Unknown subaction.");
     rc = 1;
   }
 
-  free(tagid);
-  if(rc == 1) return NULL;
+  if(rc != 0) return NULL;
   else return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><MoveTag><status>OK</status></MoveTag></Response>");
 }
 

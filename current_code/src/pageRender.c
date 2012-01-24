@@ -638,10 +638,10 @@ extern char *controlAccess(char *submethod, char *location, char *user, char *pa
 
 extern char *titleAutoComplete(char *startsWith) {
 
-  char *title, *data;
+  char *docid, *title, *data;
   char *result = o_strdup("{\"results\":[");
-  char *line = o_strdup("{\"title\":\"%s\"}");
-  char *sql = o_printf("SELECT DISTINCT title FROM docs WHERE title like '%s%%'", startsWith);
+  char *line = o_strdup("{\"docid\":\"%s\",\"title\":\"%s\"}");
+  char *sql = o_printf("SELECT DISTINCT docid, title FROM docs WHERE title like '%s%%'", startsWith);
 
   struct simpleLinkedList *rSet = runquery_db(sql);
   if( rSet != NULL ) {
@@ -650,10 +650,12 @@ extern char *titleAutoComplete(char *startsWith) {
       if(notFirst==1) 
         conCat(&result, ",");
       notFirst = 1;
+      docid = o_strdup(readData_db(rSet, "docid"));
       title = o_strdup(readData_db(rSet, "title"));
-      data = o_printf(line, title);
+      data = o_printf(line, docid, title);
       conCat(&result, data);
       free(data);
+      free(docid);
       free(title);
     } while ( nextRow( rSet ) );
     free_recordset( rSet );

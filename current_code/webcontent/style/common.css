@@ -433,3 +433,10 @@
     font-size: 2em; 
     padding: 10px;
   }
+  div.tagsinput span.tag span a {
+    color: #216384;
+    font-family: helvetica;
+    font-size: 13px;
+    font-weight: normal;
+    text-decoration: underline
+  }

@@ -256,11 +256,11 @@ updateDocDetails -> docEditor::updateDocDetails
 
 moveTag -> docEditor::updateTagLinkage
 	Called from: openDias.saveDetails.js :: ananoumouse()
-	Purpose: Updates links between documents and tags 
+	Purpose: Updates links between documents n tags, and document n documents
 	Inputs:	action: fixed string 'moveTag'
 		docid: the documents id
 		tag: the tag that is being (un)linked
-		subaction: flag to indicate if the tag should be added or removed ['addTag','removeTag']
+		subaction: flag to indicate if the tag should be added or removed ['addTag','removeTag','addDoc','removeDoc']
 	Outputs;
 		<Response>
 		  </MoveTag>

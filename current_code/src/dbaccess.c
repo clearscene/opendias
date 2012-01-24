@@ -246,11 +246,44 @@ extern int removeTagFromDoc (char *docid, char *tagid) {
   return addRemoveTagOnDocument(sql, docid, tagid);
 }
 
+extern int addDocToDoc (char *docid, char *linkdocid) {
+
+  char *sql = o_strdup("INSERT INTO doc_links (docid, linkeddocid) VALUES (?, ?) ");
+  return addRemoveTagOnDocument(sql, docid, linkdocid);
+}
+
+extern int removeDocFromDoc (char *docid, char *linkdocid) {
+
+  char *sql = o_strdup("DELETE FROM doc_links WHERE docid = ? AND linkeddocid = ? ");
+  return addRemoveTagOnDocument(sql, docid, linkdocid);
+}
+
 extern void removeDocTags (char *docid) {
   char *sql = o_strdup("DELETE FROM doc_tags WHERE docid = ?");
   int docid_i = atoi(docid);
 
   struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_INT );
+  sll_append(vars, &docid_i );
+
+  runUpdate_db(sql, vars);
+  free(sql);
+}
+
+extern void removeDocLinks (char *docid) {
+  char *sql = o_strdup("DELETE FROM doc_links WHERE docid = ?");
+  int docid_i = atoi(docid);
+
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_INT );
+  sll_append(vars, &docid_i );
+
+  runUpdate_db(sql, vars);
+  free(sql);
+
+  sql = o_strdup("DELETE FROM doc_links WHERE linkeddocid = ?");
+
+  vars = sll_init();
   sll_append(vars, DB_INT );
   sll_append(vars, &docid_i );
 

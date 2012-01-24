@@ -119,6 +119,10 @@ extern int connect_db (int createIfRequired) {
     if( 0 != load_file_to_memory(upgradeSQL, &data) ) {
       o_log(DEBUGM, "%s", data);
       rSet = runquery_db(data);
+      if( rSet == 0 ) {
+        o_log(ERROR, "Could not update the database to version %d.", i);
+        return 1;
+      }
       free_recordset( rSet );
       free(data);
     }

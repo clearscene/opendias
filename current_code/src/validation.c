@@ -166,7 +166,9 @@ static int checkDocId(char *val) {
 //
 static int checkAddRemove(char *val) {
   if ( 0 != strcmp(val, "addTag")
-    || 0 != strcmp(val, "removeTag" ) ) {
+    || 0 != strcmp(val, "removeTag" ) 
+    || 0 != strcmp(val, "addDoc" ) 
+    || 0 != strcmp(val, "removeDoc" ) ) {
     return 0;
   }
   o_log(ERROR, "Validation failed: add/remove check");
