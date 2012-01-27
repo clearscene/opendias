@@ -235,8 +235,8 @@ getDocDetail -> docEditor::getDocDetail
 		    </Tags>
 		    <DocLinks>
 		      <doc>
-		        docid - the docid of the linked doc
-                        title - the user defined title of the linked doc
+		        targetDocid - the docid of the linked doc
+                        targetTitle - the user defined title of the linked doc
 		      </doc>
 		      ...
 		    </DocLinks>
@@ -293,10 +293,28 @@ deleteDoc -> docEditor::doDelete
 tagsAutoComplete -> pageRender::tagsAutoComplete
         Called from: openDias.loadDetails.js :: autocomplete function()
         Purpose: Complete a tagname from the start of the name. 
-        Inputs: startsWith: the beginning of the tags to return.
+        Inputs: action: fixed string 'tagsAutoComplete'
+                startsWith: the beginning of the tags to return.
                 docid: the documents id
         Outputs; JSON as required by JQuery autocomplete methods.
+              {"results":[
+                {"tag":"%s"},
+                ...
+              ]}
 
+
+titleAutoComplete -> pageRender::titleAutoComplete
+        Called from: openDias.loadDetails.js :: autocomplete function()
+        Purpose: Complete a title from the start of the name. 
+        Inputs: action: fixed string 'titleAutoComplete'
+                startsWith: the beginning of the titles to return.
+                notLinkedTo: (optional) Do not return: document with this docid, 
+                              or documents linked to this docid
+        Outputs; JSON as required by JQuery autocomplete methods.
+              {"results":[
+                {"docid":"%s","title":"%s"},
+                ...
+              ]}
 
 
 ----------------------------------------------------

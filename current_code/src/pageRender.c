@@ -636,12 +636,28 @@ extern char *controlAccess(char *submethod, char *location, char *user, char *pa
   return o_strdup("<html><HEAD><title>refresh</title><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/opendias/accessControls.html\"></HEAD><body></body></html>");
 }
 
-extern char *titleAutoComplete(char *startsWith) {
+extern char *titleAutoComplete(char *startsWith, char *notLinkedTo) {
 
   char *docid, *title, *data;
   char *result = o_strdup("{\"results\":[");
   char *line = o_strdup("{\"docid\":\"%s\",\"title\":\"%s\"}");
-  char *sql = o_printf("SELECT DISTINCT docid, title FROM docs WHERE title like '%s%%'", startsWith);
+
+  char *sql = o_printf("SELECT DISTINCT docs.docid, docs.title FROM docs ");
+
+  if(notLinkedTo != NULL) {
+    o_concatf(&sql, "LEFT JOIN (SELECT * FROM doc_links \
+                        WHERE linkeddocid = %s) dl \
+                     ON docs.docid = dl.docid ", notLinkedTo);
+  }
+
+  o_concatf(&sql, "WHERE title LIKE '%s%%' ", startsWith);
+
+  if(notLinkedTo != NULL) {
+    o_concatf(&sql, "AND dl.docid IS NULL \
+                     AND docs.docid != %s ", notLinkedTo);
+  }
+
+  conCat(&sql, "ORDER BY title ");
 
   struct simpleLinkedList *rSet = runquery_db(sql);
   if( rSet != NULL ) {

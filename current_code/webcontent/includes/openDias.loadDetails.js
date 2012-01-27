@@ -142,8 +142,8 @@ $(document).ready(function() {
              }
              $(this).css('color','#000000');
            });
-           $(data).find('DocDetail').find('Doclinks').find('doc').each( function() {
-             createDocLinkHtml( $(this).find('value').text(), $(this).find('label').text() );
+           $(data).find('DocDetail').find('DocLinks').find('doc').each( function() {
+             createDocLinkHtml( $(this).find('targetDocid').text(), $(this).find('targetTitle').text() );
            });
            $('#doclinks_tag').autocomplete({
                source: function( request, response ) {
@@ -154,6 +154,7 @@ $(document).ready(function() {
                    data: {
                      action: "titleAutoComplete",
                      startsWith: request.term,
+                     notLinkedTo: officialDocId,
                    },
                    success: function( data ) {
                      response( $.map( data.results, function( item ) {
@@ -246,13 +247,15 @@ function createDocLinkHtml( val, lab ) {
           + "     " + lab
           + "   </a>&nbsp;&nbsp;"
           + " </span>"
-          + " <a id='deleteDocLink_"+val+"' title='Removing tag'>x</a>"
+          + " <span id='deleteDocLink_"+val+"' class='clickable' title='Removing tag'>x</span>"
           + "</span>";
 
   $('#doclinks_tagsinput').append( ret );
 
-  $('#deleteDocLink_'+val).click( function() {
-    moveTag( ui.item.value, officialDocId, "removeDoc");
+  $('#deleteDocLink_'+val).bind( 'click', { v: val, i: officialDocId }, function(e) {
+    moveTag( e.data.v, e.data.i, "removeDoc");
+    $('#deleteDocLink_'+val).unbind('click');
+    $(this).parent().remove();
   });
 
 }

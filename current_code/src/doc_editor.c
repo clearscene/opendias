@@ -134,7 +134,7 @@ extern char *getDocDetail (char *documentId) {
   // Get a list of linked docs
   //
   docs = o_strdup("");
-  docsTemplate = o_strdup("<doc><docid>%s</docid><title>%s</title></doc>");
+  docsTemplate = o_strdup("<doc><targetDocid>%s</targetDocid><targetTitle>%s</targetTitle></doc>");
   sql = o_printf(
     "SELECT l.linkeddocid, d.title \
     FROM doc_links l JOIN docs d \

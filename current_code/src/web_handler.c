@@ -786,7 +786,8 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
             content = o_strdup(errorxml);
           else {
             char *startsWith = getPostData(con_info->post_data, "startsWith");
-            content = titleAutoComplete(startsWith); // pageRender.c
+            char *notLinkedTo = getPostData(con_info->post_data, "notLinkedTo");
+            content = titleAutoComplete(startsWith, notLinkedTo); // pageRender.c
             if(content == (void *)NULL)
               content = o_strdup(servererrorpage);
           }
