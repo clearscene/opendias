@@ -443,3 +443,6 @@
   .clickable {
     cursor: pointer; cursor: hand;   
   }
+  .divider {
+    border-top: 1px dotted #888;
+  }

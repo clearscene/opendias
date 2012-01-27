@@ -142,6 +142,12 @@ $(document).ready(function() {
              }
              $(this).css('color','#000000');
            });
+           $('#doclinks_tag').bind('blur','',function(event) {
+             if ($(this).val()=='') {
+                $(this).val($(this).attr('data-default'));
+                $(this).css('color','#676767');
+              }
+           });
            $(data).find('DocDetail').find('DocLinks').find('doc').each( function() {
              createDocLinkHtml( $(this).find('targetDocid').text(), $(this).find('targetTitle').text() );
            });
@@ -171,16 +177,16 @@ $(document).ready(function() {
                 if (ui.item) {
                   createDocLinkHtml( ui.item.value, ui.item.label );
                   moveTag( ui.item.value, officialDocId, "addDoc");
-                } else {
-                  alert("Nothing selected, input was " + this.value);
                 }
-                $( this ).val('');
+                return 0;
                },
                open: function() {
                  $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
                },
                close: function() {
                  $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+                 $(this).val($(this).attr('data-default'));
+                 $(this).css('color','#676767');
                }
              });
 
@@ -241,16 +247,14 @@ function getTypeDescription(iType) {
 
 function createDocLinkHtml( val, lab ) {
 
-  var ret = "<span class='tag'>"
-          + " <span>"
-          + "   <a href='/opendias/docDetail.html?docid=" + val + "'>"
-          + "     " + lab
-          + "   </a>&nbsp;&nbsp;"
+  var ret = "<span>"
+          + " <a href='/opendias/docDetail.html?docid=" + val + "'>"
+          + "  " + lab
+          + " </a>&nbsp;&nbsp;"
           + " </span>"
-          + " <span id='deleteDocLink_"+val+"' class='clickable' title='Removing tag'>x</span>"
-          + "</span>";
+          + "<span id='deleteDocLink_"+val+"' class='clickable' title='Removing tag'>x</span>";
 
-  $('#doclinks_tagsinput').append( ret );
+  $('<span>').addClass('tag').append( ret ).insertBefore( '#doclinks_addTag' );
 
   $('#deleteDocLink_'+val).bind( 'click', { v: val, i: officialDocId }, function(e) {
     moveTag( e.data.v, e.data.i, "removeDoc");
