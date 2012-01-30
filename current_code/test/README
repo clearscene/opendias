@@ -4,9 +4,12 @@
 ---------------------------------
 Tests are generally categorised into three areas.
 
- * Test Coverage - ensure the tests are exhaustive.
- * Memory Management - ensure all code handles its memory correctly.
- * GUI Excersise - make the app does all it can
+ * Backend API tests:
+    * Test Coverage - ensure the tests are exhaustive.
+    * Memory Management - ensure all code handles its memory correctly.
+    * Does the backend return what it's supposed to.
+ * GUI Excersise
+    * Does the webpages function as expected.
 
 These are the main components:
 
