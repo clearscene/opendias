@@ -14,9 +14,10 @@ sub updateStartCommand {
   $sock = IO::Socket::INET->new( Listen => 1,
                                  LocalAddr => 'localhost',
                                  LocalPort => '8988',
-                                 Proto => 'tcp');
+                                 Proto => 'tcp')
+      || die "Could not create blocking socket: $!";
 
-  o_log("Reserved the opendiaqs port, to stop the service from starting correctly.");
+  o_log("Reserved the opendias port, to stop the service from starting correctly.") if $sock;
 }
 
 sub test {

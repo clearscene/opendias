@@ -1,5 +1,6 @@
 Copying pre defined environment
-Reserved the opendiaqs port, to stop the service from starting correctly.
+Copying default database
+Reserved the opendias port, to stop the service from starting correctly.
 STARTING app...
 Now ready
 Starting Web Client

@@ -7,6 +7,8 @@ use strict;
 
 sub test {
 
+  sleep(3);
+
   # try kills this way and that
   system("kill -s HUP `cat /var/run/opendias.pid`");
   sleep(3);
