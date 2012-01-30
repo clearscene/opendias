@@ -80,13 +80,15 @@ You can build and install by issuing the following commands:
 If you downloaded the source from, the GIT tree at GitHub.
 You need to pre configure the source:
 
+  cd current_code
   autoreconf -iv
   ./configure -C
   make
   make install
   cd test
   [get setup by following the local README file]
-  ./setupRun.sh  
+  ./setupRun.sh 
+  [refer to ../howto_build_distribute for details on publishing]
 
 -----------------------------------
 
