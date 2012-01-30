@@ -9,7 +9,7 @@ LOG-OUTPUT
 -date-:-thread-:DBG: We have one. So will check to see what verstion it is.
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:DBG: Run Query [RECORDSET]
--date-:-thread-:DBG: Database reports that it is version: 5
+-date-:-thread-:DBG: Database reports that it is version: 6
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:INF: Connected to database
 -date-:-thread-:DBG: Run Query [RECORDSET]

@@ -81,8 +81,6 @@ ON doc_tags(tagid ASC);
 
 COMMIT;
 
--date-:-thread-:DBG: Run Query [RECORDSET]
--date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:INF: Bringing BD upto version: 2
 -date-:-thread-:DBG: Reading SQL code from file: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v2.sql
 -date-:-thread-:DBG: BEGIN TRANSACTION;
@@ -105,8 +103,6 @@ for_app_version = "0.2.2";
 
 COMMIT;
 
--date-:-thread-:DBG: Run Query [RECORDSET]
--date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:INF: Bringing BD upto version: 3
 -date-:-thread-:DBG: Reading SQL code from file: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v3.sql
 -date-:-thread-:DBG: BEGIN TRANSACTION;
@@ -140,8 +136,6 @@ for_app_version = "0.5";
 
 COMMIT;
 
--date-:-thread-:DBG: Run Query [RECORDSET]
--date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:INF: Bringing BD upto version: 4
 -date-:-thread-:DBG: Reading SQL code from file: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v4.sql
 -date-:-thread-:DBG: BEGIN TRANSACTION;
@@ -194,8 +188,6 @@ for_app_version = "0.5.8";
 
 COMMIT;
 
--date-:-thread-:DBG: Run Query [RECORDSET]
--date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:INF: Bringing BD upto version: 5
 -date-:-thread-:DBG: Reading SQL code from file: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v5.sql
 -date-:-thread-:DBG: BEGIN TRANSACTION;
@@ -212,8 +204,29 @@ for_app_version = "0.6.4";
 
 COMMIT;
 
--date-:-thread-:DBG: Run Query [RECORDSET]
--date-:-thread-:DBG: Free recordset [RECORDSET]
+-date-:-thread-:INF: Bringing BD upto version: 6
+-date-:-thread-:DBG: Reading SQL code from file: /usr/local/share/opendias/openDIAS.sqlite3.dmp.v6.sql
+-date-:-thread-:DBG: BEGIN TRANSACTION;
+
+CREATE TEMPORARY TABLE t1_backup(a);
+INSERT INTO t1_backup SELECT version FROM version;
+DROP TABLE version;
+CREATE TABLE version (version INTEGER PRIMARY KEY);
+INSERT INTO version SELECT a FROM t1_backup;
+DROP TABLE t1_backup;
+
+UPDATE version SET version = 6;
+
+CREATE TABLE doc_links (
+        doclinkid INTEGER PRIMARY KEY,
+        docid NUMERIC,
+        linkeddocid NUMERIC);
+
+CREATE INDEX doc_links_linkid_idx
+ON doc_links(docid ASC);
+
+COMMIT;
+
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:INF: Config setting: log_verbosity = 3
 -date-:-thread-:INF: Config setting: scan_directory = /var/lib/opendias
