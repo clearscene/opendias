@@ -94,6 +94,11 @@ for my $requested (@runTests) {
         o_log("Copying pre defined environment");
         system("cp -r $TESTPATH/inputs/$TESTCASENAME/homeDir/* /tmp/opendiastest/");
       }
+      if( -e "/tmp/opendiastest/DEFAULTDB" ) {
+        o_log("Copying default database");
+        system("cp -r config/defaultdatabase.sqlite3 /tmp/opendiastest/openDIAS.sqlite3");
+        system("rm -f /tmp/opendiastest/DEFAULTDB");
+      }
       opendir(DIR, "$TESTPATH/inputs/$TESTCASENAME/" ) or die "Cannot read SQL directory $TESTPATH/inputs/$TESTCASENAME/, because: $!\n";
       while( ($filename = readdir(DIR))) {
         next if ( $filename eq "." || $filename eq ".." );
