@@ -179,9 +179,9 @@ extern int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
   char *type;
 
   o_log(SQLDEBUG, "%s", sql);
-  sqlite3_prepare(DBH, sql, (int)strlen(sql), &stmt, NULL);
 
   if(vars != NULL) {
+    sqlite3_prepare(DBH, sql, (int)strlen(sql), &stmt, NULL);
     tmpList = vars;
     do {
       col++;
