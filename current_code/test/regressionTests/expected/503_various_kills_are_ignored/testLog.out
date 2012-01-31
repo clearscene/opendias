@@ -2,6 +2,6 @@ Copying pre defined environment
 Copying default database
 STARTING app...
 Now ready
-Starting Web Client
+No need for a web client for this test.
 Stopping service
 Waiting for valgrind to finish.

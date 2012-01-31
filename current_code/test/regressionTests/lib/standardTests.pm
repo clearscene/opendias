@@ -36,8 +36,11 @@ sub startService {
 
   my ($startCommand, $updateStartCommandSub, ) = @_;
   my $serviceStart_timeout = 40; # 10 seconds (in 1/4 sec incr)
+  my $overrideTimeout = undef;
 
-  eval "$updateStartCommandSub(\\\$startCommand)"; # try and run, don't mind if we fail
+  eval "\$overrideTimeout = $updateStartCommandSub(\\\$startCommand)"; # try and run, don't mind if we fail
+  $serviceStart_timeout = $overrideTimeout if defined $overrideTimeout;
+
   `$startCommand`;
   o_log("STARTING app...");
 
@@ -47,7 +50,8 @@ sub startService {
                                             Timeout => 1,
                                             Proto => 'tcp') ) ) {
     $serviceStart_timeout--;
-    select ( undef, undef, undef, 0.25);
+    sleep(1);
+    #select ( undef, undef, undef, 0.25);
     unless($serviceStart_timeout) {
       o_log("Could not start the service.");
       return 1;
@@ -101,24 +105,27 @@ sub setupClient {
 
 sub stopService {
 
-  my $alert_arrayref = $alert_handler->getCollectedAlerts->toArray();
-  foreach my $jsAlert (@{$alert_arrayref}) {
-    o_log("Found uncaught alert: ".$jsAlert);
-  }
-  #o_log("Stopping client");
-  eval {
-    local $SIG{ALRM} = sub { die "alarm\n" };
-    alarm 3;
-    $client->closeAllWindows();
+  if($client) {
+    my $alert_arrayref = $alert_handler->getCollectedAlerts->toArray();
+    foreach my $jsAlert (@{$alert_arrayref}) {
+      o_log("Found uncaught alert: ".$jsAlert);
+    }
+    #o_log("Stopping client");
+    eval {
+      local $SIG{ALRM} = sub { die "alarm\n" };
+      alarm 3;
+      $client->closeAllWindows();
+      alarm 0;
+    };
     alarm 0;
-  };
-  alarm 0;
-  #if ($@) {
-  #  o_log("Force killed the client.");
-  #}
+    #if ($@) {
+    #  o_log("Force killed the client.");
+    #}
+    undef $client;
+    undef $alert_handler;
+  }
+
   o_log("Stopping service");
-  undef $client;
-  undef $alert_handler;
   system("kill -s USR1 `cat /var/run/opendias.pid`");
 
   # We need valgrind (if running) so finish it's work nad write it's log

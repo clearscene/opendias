@@ -18,6 +18,7 @@ sub updateStartCommand {
       || die "Could not create blocking socket: $!";
 
   o_log("Reserved the opendias port, to stop the service from starting correctly.") if $sock;
+  return undef; # Use the defaulttimeout;
 }
 
 sub test {

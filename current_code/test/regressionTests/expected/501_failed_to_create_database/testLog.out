@@ -1,6 +1,6 @@
 Updated start command to stop the database from being created.
 STARTING app...
 Could not start the service.
-Starting Web Client
+No need for a web client for this test.
 Stopping service
 Waiting for valgrind to finish.

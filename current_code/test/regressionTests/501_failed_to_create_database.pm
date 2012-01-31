@@ -9,6 +9,7 @@ sub updateStartCommand {
   my $startCommand = shift;
   $$startCommand =~ s/testapp\.conf/testappUnableToCreate.conf/g;
   o_log("Updated start command to stop the database from being created.");
+  return undef; # Use the defaulttimeout;
 }
 
 sub test {

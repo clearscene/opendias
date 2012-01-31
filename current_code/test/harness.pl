@@ -122,7 +122,7 @@ for my $requested (@runTests) {
 
     if($@) {
 
-      printProgressLine($TEST, "Crashed!");
+      printProgressLine($TEST, "Crashed!\n");
       print OUTPUTINDEX "<tr class='fail'><td>CRASH</td>";
       $TEST_RES="<td colspan=6>$@</td>";
       $failCount++;
@@ -136,7 +136,12 @@ for my $requested (@runTests) {
 
       unless( $RES ) {
         printProgressLine($TEST,  "Starting client");
-        $RES = 1 unless setupClient($opt_g);
+        if (eval "regressionTests::".$TESTCASENAME."::needClient();" ) {
+          $RES = 1 unless setupClient($opt_g);
+        }
+        else {
+          o_log("No need for a web client for this test.");
+        }
       }
 
       unless( $RES ) {
@@ -151,24 +156,29 @@ for my $requested (@runTests) {
       ############
       # memory log - output from valgrind
       unless( length $SKIPMEMORY ) {
-        # copy and parse out changeable content
-        system("mv $outputDir/valgrind.out $outputDir/$TESTCASENAME/valgrind.out");
-        system("sed -f config/valgrindUnify.sed < $outputDir/$TESTCASENAME/valgrind.out > $outputDir/$TESTCASENAME/valgrind4Compare.out");
+        if( -f "$outputDir/valgrind.out" ) {
+          # copy and parse out changeable content
+          system("mv $outputDir/valgrind.out $outputDir/$TESTCASENAME/valgrind.out");
+          system("sed -f config/valgrindUnify.sed < $outputDir/$TESTCASENAME/valgrind.out > $outputDir/$TESTCASENAME/valgrind4Compare.out");
 
-        # Make this the expected, if required
-        if( length $GENERATE ) {
-          system("cp $outputDir/$TESTCASENAME/valgrind4Compare.out $TESTPATH/expected/$TESTCASENAME/valgrind.out");
-        }
+          # Make this the expected, if required
+          if( length $GENERATE ) {
+            system("cp $outputDir/$TESTCASENAME/valgrind4Compare.out $TESTPATH/expected/$TESTCASENAME/valgrind.out");
+          }
 
-        $MEM_RES="<td class='none'><a href='./$TESTCASENAME/valgrind.out'>actual</a></td>";
-        system("diff -ydN $TESTPATH/expected/$TESTCASENAME/valgrind.out $outputDir/$TESTCASENAME/valgrind4Compare.out > $outputDir/$TESTCASENAME/valgrindDiff.out");
-        if($? >> 8 == 0) {
-          system("rm $outputDir/$TESTCASENAME/valgrindDiff.out");
-          $MEM_RES .= "<td class='ok'>OK</td>";
+          $MEM_RES="<td class='none'><a href='./$TESTCASENAME/valgrind.out'>actual</a></td>";
+          system("diff -ydN $TESTPATH/expected/$TESTCASENAME/valgrind.out $outputDir/$TESTCASENAME/valgrind4Compare.out > $outputDir/$TESTCASENAME/valgrindDiff.out");
+          if($? >> 8 == 0) {
+            system("rm $outputDir/$TESTCASENAME/valgrindDiff.out");
+            $MEM_RES .= "<td class='ok'>OK</td>";
+          }
+          else {
+            $MEM_RES .= "<td><a href='./$TESTCASENAME/valgrindDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../$TESTPATH/expected/$TESTCASENAME/valgrind.out'>expected</a></td>";
+            $RES=1
+          }
         }
         else {
-          $MEM_RES .= "<td><a href='./$TESTCASENAME/valgrindDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../$TESTPATH/expected/$TESTCASENAME/valgrind.out'>expected</a></td>";
-          $RES=1
+          $MEM_RES="<td colspan=2 class='none'>-- NA --</td>"
         }
       }
       else {

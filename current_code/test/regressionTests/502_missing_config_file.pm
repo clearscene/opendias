@@ -9,6 +9,7 @@ sub updateStartCommand {
   my $startCommand = shift;
   $$startCommand =~ s/testapp\.conf/testappMISSING.conf/g;
   o_log("Updated start command to specify a mmissing config file.");
+  return undef; # Use the defaulttimeout;
 }
 
 sub test {

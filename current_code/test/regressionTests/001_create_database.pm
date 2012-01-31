@@ -5,6 +5,12 @@ use DBI;
 use standardTests;
 use strict;
 
+sub updateStartCommand {
+
+  # Set new timeout
+  return 240;
+}
+
 sub test {
 
   my $dbh = DBI->connect( "dbi:SQLite:dbname=/tmp/opendiastest/openDIAS.sqlite3", 
