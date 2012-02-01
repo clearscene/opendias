@@ -1,4 +1,4 @@
-package regressionTests::502_missing_config_file;
+package regressionTests::1_3_missing_config_file;
 
 use lib qw( regressionTests/lib );
 use DBI;
