@@ -55,6 +55,7 @@ sub startService {
   }
   $sock->close();
 
+  sleep(1); # Ensure everything is ready - not just the web socket.
   o_log("Now ready");
   return 1;
 }
@@ -128,6 +129,7 @@ sub stopService {
   o_log("Waiting for valgrind to finish.");
   system("while [ \"`pidof valgrind.bin`\" != \"\" ]; do sleep 1; done");
 
+  sleep(1); # Ensure logs are caught up.
   close(TESTLOG);
 }
 
