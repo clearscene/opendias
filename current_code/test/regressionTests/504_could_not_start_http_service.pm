@@ -8,9 +8,16 @@ use IO::Socket::INET;
 
 our $sock;
 
+sub testProfile {
+  return {
+    valgrind => 1,
+    client => 0,
+    updateStartCommand => 'updateStartCommand',
+  }; 
+} 
+
 sub updateStartCommand {
   # Start a port on the opendias port
-
   $sock = IO::Socket::INET->new( Listen => 1,
                                  LocalAddr => 'localhost',
                                  LocalPort => '8988',
@@ -18,7 +25,6 @@ sub updateStartCommand {
       || die "Could not create blocking socket: $!";
 
   o_log("Reserved the opendias port, to stop the service from starting correctly.") if $sock;
-  return undef; # Use the defaulttimeout;
 }
 
 sub test {

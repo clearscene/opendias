@@ -5,10 +5,12 @@ use DBI;
 use standardTests;
 use strict;
 
-sub updateStartCommand {
-
-  # Set new timeout
-  return 240;
+sub testProfile {
+  return {
+    valgrind => 1,
+    client => 0,
+    startTimeout => 240,
+  };
 }
 
 sub test {

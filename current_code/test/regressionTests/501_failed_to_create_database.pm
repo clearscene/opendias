@@ -5,11 +5,18 @@ use DBI;
 use standardTests;
 use strict;
 
+sub testProfile {
+  return {
+    valgrind => 1,
+    client => 0,
+    updateStartCommand => 'updateStartCommand',
+  }; 
+} 
+
 sub updateStartCommand {
   my $startCommand = shift;
   $$startCommand =~ s/testapp\.conf/testappUnableToCreate.conf/g;
   o_log("Updated start command to stop the database from being created.");
-  return undef; # Use the defaulttimeout;
 }
 
 sub test {

@@ -131,12 +131,33 @@ for my $requested (@runTests) {
 
     else {
 
-      printProgressLine($TEST, "Starting service");
-      $RES = 1 unless startService($startCmd, "regressionTests::".$TESTCASENAME."::updateStartCommand");
+      my $startCommand = $startCmd;
 
+      my $testProfile = eval("regressionTests::".$TESTCASENAME."::testProfile();");
+
+      if( $testProfile->{updateStartCommand} ) {
+        eval "regressionTests::${TESTCASENAME}::".$testProfile->{updateStartCommand}."(\\\$startCommand)";
+      }
+
+
+      # Start opendias
+      if( $testProfile->{valgrind} && $testProfile->{valgrind} == 1 ) {
+        printProgressLine($TEST, "Starting service (valgrind)");
+      }
+      else {
+        printProgressLine($TEST, "Starting service");
+        $startCommand =~ s{^.*\.\./src/opendias}
+                      {../src/opendias}xms;
+        o_log("No need for valgrind on this test.");
+      }
+      $RES = 1 unless startService( $startCommand, $testProfile->{startTimeout} );
+
+
+      # Start a web client
       unless( $RES ) {
         printProgressLine($TEST,  "Starting client");
-        if (eval "regressionTests::".$TESTCASENAME."::needClient();" ) {
+        if ( $testProfile->{client} && $testProfile->{client} == 1 ) {
+          o_log("Asked to start a web clinet.");
           $RES = 1 unless setupClient($opt_g);
         }
         else {
@@ -144,6 +165,8 @@ for my $requested (@runTests) {
         }
       }
 
+
+      # Run the test
       unless( $RES ) {
         printProgressLine($TEST, "Running");
         eval "\$RES = regressionTests::".$TESTCASENAME."::test()";

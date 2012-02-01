@@ -5,6 +5,13 @@ use DBI;
 use standardTests;
 use strict;
 
+sub testProfile {
+  return {
+    valgrind => 1,
+    client => 0,
+  }; 
+} 
+
 sub test {
 
   sleep(3);

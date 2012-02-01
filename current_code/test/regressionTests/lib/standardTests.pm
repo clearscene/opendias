@@ -34,12 +34,9 @@ sub openlog {
 
 sub startService {
 
-  my ($startCommand, $updateStartCommandSub, ) = @_;
-  my $serviceStart_timeout = 40; # 10 seconds (in 1/4 sec incr)
-  my $overrideTimeout = undef;
+  my ($startCommand, $overrideTimeout, ) = @_;
 
-  eval "\$overrideTimeout = $updateStartCommandSub(\\\$startCommand)"; # try and run, don't mind if we fail
-  $serviceStart_timeout = $overrideTimeout if defined $overrideTimeout;
+  my $serviceStart_timeout = $overrideTimeout || 10; # default of 10 seconds
 
   `$startCommand`;
   o_log("STARTING app...");
@@ -51,7 +48,6 @@ sub startService {
                                             Proto => 'tcp') ) ) {
     $serviceStart_timeout--;
     sleep(1);
-    #select ( undef, undef, undef, 0.25);
     unless($serviceStart_timeout) {
       o_log("Could not start the service.");
       return 1;

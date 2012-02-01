@@ -7,15 +7,12 @@ use standardTests;
 
 use strict;
 
-sub needClient { o_log("Asked to start a web clinet."); return 1; }
-
-sub updateStartCommand {
-  my $startCommand = shift;
-  $$startCommand =~ s{^.*\.\./src/opendias}
-                      {../src/opendias}xms;
-  o_log("No need for valgrind on this test.");
-  return undef; # Use the defaulttimeout;
-}
+sub testProfile {
+  return {
+    valgrind => 0,
+    client => 1,
+  }; 
+} 
 
 sub test {
 
