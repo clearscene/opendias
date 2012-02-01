@@ -1,4 +1,4 @@
-package regressionTests::001_create_database;
+package regressionTests::505_create_database;
 
 use lib qw( regressionTests/lib );
 use DBI;
