@@ -1,4 +1,4 @@
-package regressionTests::504_could_not_start_http_service;
+package regressionTests::1_5_could_not_start_http_service;
 
 use lib qw( regressionTests/lib );
 use DBI;
