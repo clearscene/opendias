@@ -1,4 +1,4 @@
-package regressionTests::003_doc_detail;
+package regressionTests::8_2_doc_detail;
 
 use lib qw( regressionTests/lib );
 
