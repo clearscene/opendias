@@ -1,4 +1,4 @@
-package regressionTests::006_scan;
+package regressionTests::8_4_scan;
 
 use lib qw( regressionTests/lib );
 
