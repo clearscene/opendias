@@ -1,4 +1,4 @@
-package regressionTests::503_various_kills_are_ignored;
+package regressionTests::1_4_various_kills_are_ignored;
 
 use lib qw( regressionTests/lib );
 use DBI;
