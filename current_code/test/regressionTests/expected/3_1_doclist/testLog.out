@@ -1,0 +1,11 @@
+Copying pre defined environment
+Copying default database
+STARTING app...
+Now ready
+No need for a web client for this test.
+No Rows = <?xml version='1.0' encoding='iso-8859-1'?>
+<Response><DocFilter><count>0</count><page>1</page><Results></Results></DocFilter></Response>
+One Row = <?xml version='1.0' encoding='iso-8859-1'?>
+<Response><DocFilter><count>1</count><page>1</page><Results><Row><docid>1</docid><actionrequired>0</actionrequired><title><![CDATA[Test Title]]></title><type>Scaned Doc</type><date>2010/12/31</date></Row></Results></DocFilter></Response>
+Stopping service
+Waiting for valgrind to finish.
