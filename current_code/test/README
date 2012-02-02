@@ -4,11 +4,15 @@
 ---------------------------------
 Tests are generally categorised into three areas.
 
- * Backend API tests:
-    * Test Coverage - ensure the tests are exhaustive.
+ * (1_*) Appplication tests
+    * Test Coverage - ensure the testsi code coverage are exhaustive.
+    * Memory Management - ensure all code handles its memory correctly.
+    * Ensure the application can start,stop and handle common,edge use cases.
+ * (3_*) Backend API tests:
+    * Test Coverage - ensure the testsi code coverage are exhaustive.
     * Memory Management - ensure all code handles its memory correctly.
     * Does the backend return what it's supposed to.
- * GUI Excersise
+ * (8_*) GUI Excersise
     * Does the webpages function as expected.
 
 These are the main components:
@@ -19,9 +23,9 @@ These are the main components:
  * harness.pl  - decides what tests are going to be run, keeps track 
                  of passes/failes, and generates the results summary.
  * regressionTest/*.pm - Each actual test. 
-                         0** - Are frontend tests
-                         3** - Are backend tests
-                         5** - App startup handeling
+                         1_* - App handeling
+                         3_* - Are API backend tests
+                         8_* - Are frontend tests
 
 2.1. Test Coverage.
 -------------------
@@ -48,6 +52,8 @@ To check the code base does not include common errors:
 
 3. Getting the GUI testing environment working
 ----------------------------------------------
+In order to run the frontend tests (8_* range), you will need the Java wrapper installed.
+The Java wrapper provides JUnit, a library that simulates browser behaviour.
 You will need to install Java and the Perl JUnit wrapper
 
 # run me with root privs
