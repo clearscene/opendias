@@ -40,7 +40,7 @@
 
 char *busypage = "<html><body>This server is busy, please try again later.</body></html>";
 char *servererrorpage = "<html><body>An internal server error has occured.</body></html>";
-char *requesterrorpage = "<html><body>Your request did not fir the form 'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)'.</body></html>";
+char *requesterrorpage = "<html><body>Your request did not fit the form 'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)'.</body></html>";
 char *fileexistspage = "<html><body>File exists</body></html>";
 char *completepage = "<html><body>All Done</body></html>";
 char *denied = "<h1>Access Denied</h1>";

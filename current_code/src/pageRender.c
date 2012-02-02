@@ -518,7 +518,7 @@ extern char *docFilter(char *subaction, char *textSearch, char *isActionRequired
   //
   rows = o_strdup("");
   count = 0;
-o_log(DEBUGM, "sql=%s", sql);
+  o_log(DEBUGM, "sql=%s", sql);
 
   rSet = runquery_db(sql);
   if( rSet != NULL ) {
@@ -567,6 +567,7 @@ o_log(DEBUGM, "sql=%s", sql);
 
   docList = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DocFilter><count>%i</count>%s<Results>%s</Results></DocFilter></Response>", count, page_ret, rows);
   free(rows);
+  free(page_ret);
 
   return docList;
 }
