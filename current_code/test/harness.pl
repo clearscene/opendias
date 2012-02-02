@@ -77,6 +77,9 @@ for my $requested (@runTests) {
     # Create results area and cleanup any old test results
     my ($TESTCASENAME) = $TEST =~ /$TESTPATH\/(.*)\.pm/;
 
+    $standardTests::testpath = $TESTPATH;
+    $standardTests::testcasename = $TESTCASENAME;
+
     system("rm -rf $outputDir/$TESTCASENAME/*");
     system("rm -rf /tmp/opendiastest");
     system("mkdir -p $outputDir/$TESTCASENAME");

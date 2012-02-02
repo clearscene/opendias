@@ -1,8 +1,10 @@
 package standardTests;
 
+use LWP;
 use Data::Dumper;
 use IO::Socket::INET;
 use Inline::Java qw(cast);
+use URI::Escape;
 use WWW::HtmlUnit 
   study => [
     'com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController',
@@ -14,7 +16,7 @@ use WWW::HtmlUnit
 
 require Exporter;
 @ISA = qw(Exporter);
-@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client getNextJSAlert castTo_HtmlInput castTo_HtmlButton removeDuplicateLines );
+@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client getNextJSAlert castTo_HtmlInput castTo_HtmlButton removeDuplicateLines directRequest inTestSQL $testpath $testcasename );
 
 use strict;
 
@@ -22,6 +24,8 @@ our $client = 0;
 our $alert_handler;
 our $true = 1;#$Java::lang::true;
 our $false = 0;#$Java::lang::false;
+our $testpath;
+our $testcasename;
 
 sub openlog {
 
@@ -260,5 +264,64 @@ sub removeDuplicateLines {
   system ("cp /tmp/tmpFile $file");
 }
 
+sub directRequest {
+
+  my ($params, ) = @_;
+  my %default = (
+    '__proto' => 'http://',
+    '__domain' => 'localhost:8988',
+    '__uri' => '/opendias/dynamic',
+    '__encoding' => 'application/x-www-form-urlencoded',
+    '__agent' => 'opendias-api-testing',
+  );
+
+  #
+  # Generate HTTP request
+  #
+  my @data = ();
+  foreach my $key (keys %$params) {
+    if( $key =~ /^__/ ) {
+      $default{$key} = $params->{$key};
+    }
+    else {
+      push @data, $key."=".uri_escape($params->{$key});
+    }
+  }
+
+  my $payload = join( '&', @data );
+
+
+  #
+  # Send to and receive from the application
+  #
+  my $ua = LWP::UserAgent->new;
+  $ua->agent($default{__agent});
+
+  my $req = HTTP::Request->new(POST => $default{__proto} . $default{__domain} . $default{__uri});
+  $req->content_type($default{__encoding});
+  $req->content($payload);
+
+  # Pass request to the user agent and get a response back
+  my $res = $ua->request($req);
+
+  # Check the outcome of the response
+  my $resData;
+  if ($res->is_success) {
+    $resData = $res->content;
+  }
+  else {
+    $resData = $res->status_line . "\n\nRES=" . Dumper($res) . "\n\nREQ=" . Dumper($req);
+  }
+
+  return $resData;;
+}
+
+sub inTestSQL {
+  my ($filename, ) = @_;
+  my $fullPath = "$testpath/inputs/$testcasename/intest/".$filename.".sql";
+  if ( -f $fullPath ) {
+    system("/usr/bin/sqlite3 /tmp/opendiastest/openDIAS.sqlite3 \".read $fullPath\""); 
+  }
+}
 return 1;
 
