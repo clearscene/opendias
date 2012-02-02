@@ -3,6 +3,7 @@ package regressionTests::3_1_doclist;
 use lib qw( regressionTests/lib );
 use DBI;
 use standardTests;
+use Data::Dumper;
 use strict;
 
 sub testProfile {
@@ -13,6 +14,9 @@ sub testProfile {
 } 
 
 sub test {
+
+  $Data::Dumper::Indent = 1;
+  $Data::Dumper::Sortkeys = 1;
 
   my %data = (
     action => 'docFilter',
@@ -34,10 +38,10 @@ sub test {
 #  );
 
   # Entry DB
-  o_log( "No Rows = " . directRequest( \%data ) );
+  o_log( "No Rows = " . Dumper( directRequest( \%data ) ) );
 
   inTestSQL('1'); # Add a simgle document
-  o_log( "One Row = " . directRequest( \%data ) );
+  o_log( "One Row = " . Dumper( directRequest( \%data ) ) );
 
   return 0;
 }

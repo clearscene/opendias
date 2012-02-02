@@ -2,6 +2,7 @@ package standardTests;
 
 use LWP;
 use Data::Dumper;
+use XML::Simple;
 use IO::Socket::INET;
 use Inline::Java qw(cast);
 use URI::Escape;
@@ -307,13 +308,14 @@ sub directRequest {
   # Check the outcome of the response
   my $resData;
   if ($res->is_success) {
-    $resData = $res->content;
+    my $xml = new XML::Simple;
+    $resData = $xml->XMLin( $res->content );
   }
   else {
     $resData = $res->status_line . "\n\nRES=" . Dumper($res) . "\n\nREQ=" . Dumper($req);
   }
 
-  return $resData;;
+  return $resData;
 }
 
 sub inTestSQL {
