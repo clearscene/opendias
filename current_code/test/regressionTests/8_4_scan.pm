@@ -104,6 +104,7 @@ sub test {
     return 1;
   }
 
+  sleep(1); # Let the log catchup.
   return 0;
 }
 
