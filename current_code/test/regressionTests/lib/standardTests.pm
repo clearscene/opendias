@@ -280,7 +280,7 @@ sub directRequest {
   # Generate HTTP request
   #
   my @data = ();
-  foreach my $key (keys %$params) {
+  foreach my $key (sort {$a cmp $b} (keys %$params)) {
     if( $key =~ /^__/ ) {
       $default{$key} = $params->{$key};
     }
@@ -288,8 +288,8 @@ sub directRequest {
       push @data, $key."=".uri_escape($params->{$key});
     }
   }
-
   my $payload = join( '&', @data );
+  o_log( 'Sending request = ' . $payload );
 
 
   #
