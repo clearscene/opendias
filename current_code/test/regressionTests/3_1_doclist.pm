@@ -23,25 +23,48 @@ sub test {
     subaction => 'fullList',
     isActionRequired => 'false',
     page => '1',
-    range => '12',
-    sortfield => '3',
+    range => '3',
+    sortfield => '3', # date
     sortorder => '1',
   );
-#  my %data = (
-#    action => 'doScan',
-#    deviceid => 'test:0',
-#    format => 'Grey Scale',
-#    pages => 1,
-#    resolution => '300',
-#    ocr => '-',
-#    pagelength => '100',
-#  );
 
   # Entry DB
   o_log( "No Rows = " . Dumper( directRequest( \%data ) ) );
 
-  inTestSQL('1'); # Add a simgle document
+  # Add a simgle document
+  inTestSQL('1'); 
   o_log( "One Row = " . Dumper( directRequest( \%data ) ) );
+
+  # Add three more document
+  inTestSQL('2'); 
+  o_log( "Date Order = " . Dumper( directRequest( \%data ) ) );
+
+  # Change sort order
+  $data{sortorder} = 0;
+  o_log( "Date Order reverse = " . Dumper( directRequest( \%data ) ) );
+
+  # Change display page
+  $data{page} = 2;
+  o_log( "Second Page = " . Dumper( directRequest( \%data ) ) );
+
+  # Sort by type
+  $data{sortfield} = 2;
+  $data{page} = 1;
+  $data{range} = 5;
+  $data{sortorder} = 1;
+  o_log( "Sort by type, all records = " . Dumper( directRequest( \%data ) ) );
+
+  # Change sort field
+  $data{sortfield} = 1;
+  o_log( "Sort by title, all records = " . Dumper( directRequest( \%data ) ) );
+
+  # Sort by docid 
+  $data{sortfield} = 0;
+  o_log( "Sort by docid, all records = " . Dumper( directRequest( \%data ) ) );
+
+  # Reverse Order
+  $data{sortorder} = 0;
+  o_log( "Sort by reverse-docid, all records = " . Dumper( directRequest( \%data ) ) );
 
   return 0;
 }
