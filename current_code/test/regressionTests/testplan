@@ -1,26 +1,110 @@
-1_1-StartStop-createDB
-1_3-StartStop-loadDB
-1_4-StartStop-loadDBnoPermission
-2_1-MainWindow-display
-2_2-MainWindow-dbDisplay
-2_3-MainWindow-fieldSorting
-2_4-MainWindow-tagFiltering
-2_5-MainWindow-menusCredits
-2_6-MainWindow-docSelectOptions
-2_7-MainWindow-changeDocRoot
-3_1-DocDetails-display
-3_2-DocDetails-populatesFields
-3_3-DocDetails-savesToDB
-3_4-DocDetails-pagination
-3_5-DocDetails-zoomPan
-3_6-DocDetails-delete
-3_7-DocDetails-noEmptyImage
-3_8-DocDetails-loadSeveral
-4_1-AcquireNoScanner-display
-5_1-AcquireScanner-display
-5_2-AcquireScanner-optionsPopulated
-5_3-AcquireScanner-scanProcess
-6_1-AcquireODF-display
-6_2-AcquireODF-importProcess
-7_1-AcquireOCR-ocr
+* 1_1_create_database
+* 1_2_failed_to_create_database
+* 1_3_missing_config_file
+* 1_4_various_kills_are_ignored
+* 1_5_could_not_start_http_service
+  1_6_no_permission_read_create_db
+
+* 3_1_doclist
+* 3_2_doclist_search
+
+        Inputs: action: fixed string 'controlAccess'
+                submethod: The type of access controls being updated
+                location: The location to assign or remove
+                role: The role to assign or remove
+
+
+	Inputs:	action: fixed string 'getScanningProgress'
+		scanprogressid: The uuid of the scanning process (as returned by 'doScan')
+
+
+	Inputs:	action: fixed string 'nextPageReady'
+		scanprogressid: The uuid of the scanning process (as returned by 'doScan')
+
+
+	Inputs:	action: fixed string 'getScannerList'
+
+
+	Inputs:	action: fixed string "doScan",
+                deviceid: The sane device id, as provided by getScannerList : Response.ScannerList.Devices.Device.name
+                format: The format to use for scannsing, one of getScanningList : Response.ScanningList.Devices.Device.Formats.format
+                pages: The number of pages that make up the document,
+                resolution: The resolution to set the scanner to, between Response.ScannerList.Devices.Device.min and Response.ScannerList.Devices.Device.max,
+                ocr: Flag to indicate if an OCR process should be performed and in what language,
+                pagelength: The length of the page to scan, Percent, in relation to the maximum available by the scanner.
+
+
+	Inputs:	action: fixed string 'docFilter'
+                subaction: Get all details or just the count of matching docs ['count','fullList']
+		textSearch: Text that a document must match (title or ocr text)
+                isActionRequired: If 'true' return only records that are marked as 'action required'.
+                startDate: The first date that a document could fit into
+                endDate: The last date that a document could fit into
+                tags: Comma delimetered list of tagnames.
+                page: The number of 'range' offsets to apply before the first returned row.
+                range: The number of records to return in a single request.
+                sortfield*: Order the results by column
+                sortorder: present results in acending/decending order ['0','1']
+
+
+	Inputs:	action: fixed string 'getAccessDetails'
+
+
+	Inputs:	action: fixed string 'getDocDetail'
+		docid: the documents id
+
+
+	Inputs:	action: fixed string 'updateDocDetails'
+		docid: the documents id
+		kkey: the name of the field that is being updated
+		vvalue: the new value to set the field to
+
+
+	Inputs:	action: fixed string 'moveTag'
+		docid: the documents id
+		tag: the tag that is being (un)linked
+		subaction: flag to indicate if the tag should be added or removed ['addTag','removeTag','addDoc','removeDoc']
+
+
+	Inputs:	action: fixed string 'deleteDoc'
+		docid: the documents id
+
+
+        Inputs: action: fixed string 'tagsAutoComplete'
+                startsWith: the beginning of the tags to return.
+                docid: the documents id
+
+
+        Inputs: action: fixed string 'titleAutoComplete'
+                startsWith: the beginning of the titles to return.
+                notLinkedTo: (optional) Do not return: document with this docid, 
+                              or documents linked to this docid
+
+* 8_1_basic_pages
+* 8_2_doc_detail
+* 8_3_doc_detail_missing
+* 8_4_scan
+
+  12_1-MainWindow-display
+  12_2-MainWindow-dbDisplay
+  12_3-MainWindow-fieldSorting
+  12_4-MainWindow-tagFiltering
+  12_5-MainWindow-menusCredits
+  12_6-MainWindow-docSelectOptions
+  12_7-MainWindow-changeDocRoot
+  13_1-DocDetails-display
+  13_2-DocDetails-populatesFields
+  13_3-DocDetails-savesToDB
+  13_4-DocDetails-pagination
+  13_5-DocDetails-zoomPan
+  13_6-DocDetails-delete
+  13_7-DocDetails-noEmptyImage
+  13_8-DocDetails-loadSeveral
+  14_1-AcquireNoScanner-display
+  15_1-AcquireScanner-display
+  15_2-AcquireScanner-optionsPopulated
+  15_3-AcquireScanner-scanProcess
+  16_1-AcquireODF-display
+  16_2-AcquireODF-importProcess
+  17_1-AcquireOCR-ocr
 
