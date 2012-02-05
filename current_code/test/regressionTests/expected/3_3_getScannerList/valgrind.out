@@ -1,0 +1,614 @@
+==XXXXX==  Memcheck, a memory error detector
+==XXXXX==  Copyright [details]
+==XXXXX==  Using Valgrind [version and build info]
+==XXXXX==  Command: ../src/opendias -c [CONFIG_FILE]
+==XXXXX==  Parent PID: XXXXX.
+==XXXXX==  
+==XXXXX==  Warning: invalid file descriptor [system specific]
+==XXXXX==  
+==XXXXX==  FILE DESCRIPTORS: 4 open at exit.
+==XXXXX==  Open file descriptor 3: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  Open file descriptor 2: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  Open file descriptor 1: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  Open file descriptor 0: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  
+==XXXXX==  HEAP SUMMARY:
+==XXXXX==      in use at exit: XXX bytes in XXX blocks
+==XXXXX==    total heap usage: XXXX allocs, XXXX frees, XXX bytes allocated
+==XXXXX==  
+==XXXXX==  All heap blocks were freed -- no leaks are possible
+==XXXXX==  
+==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
+==XXXXX==  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: XXX from XXX)
+==XXXXX==  Thread 2:
+==XXXXX==  Invalid read of size 4
+==XXXXX==     at 0x40FDFE7: sane_dll_get_devices (string3.h:144)
+==XXXXX==     by 0x40FB552: sane_get_devices (dll-s.c:17)
+==XXXXX==     by 0x805EB7C: getScannerList (pageRender.c:71)
+==XXXXX==     by 0x805DFC3: answer_to_connection (web_handler.c:571)
+==XXXXX==     by 0x40EC0CF: call_connection_handler (connection.c:1158)
+==XXXXX==     by 0x40ED216: MHD_connection_handle_idle (connection.c:2055)
+==XXXXX==     by 0x40EF528: MHD_select (daemon.c:1050)
+==XXXXX==     by 0x40EF69E: MHD_select_thread (daemon.c:1127)
+==XXXXX==     by 0x45C8D30: start_thread (pthread_create.c:304)
+==XXXXX==     by 0x47E30CD: clone (clone.S:130)
+==XXXXX==   Address 0x4b4d04c is XXX bytes inside a block of size 23 alloc'd
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x40FDFCB: sane_dll_get_devices (dll.c:1102)
+==XXXXX==     by 0x40FB552: sane_get_devices (dll-s.c:17)
+==XXXXX==     by 0x805EB7C: getScannerList (pageRender.c:71)
+==XXXXX==     by 0x805DFC3: answer_to_connection (web_handler.c:571)
+==XXXXX==     by 0x40EC0CF: call_connection_handler (connection.c:1158)
+==XXXXX==     by 0x40ED216: MHD_connection_handle_idle (connection.c:2055)
+==XXXXX==     by 0x40EF528: MHD_select (daemon.c:1050)
+==XXXXX==     by 0x40EF69E: MHD_select_thread (daemon.c:1127)
+==XXXXX==     by 0x45C8D30: start_thread (pthread_create.c:304)
+==XXXXX==     by 0x47E30CD: clone (clone.S:130)
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Addr4
+   fun:sane_dll_get_devices
+   fun:sane_get_devices
+   fun:getScannerList
+   fun:answer_to_connection
+   fun:call_connection_handler
+   fun:MHD_connection_handle_idle
+   fun:MHD_select
+   fun:MHD_select_thread
+   fun:start_thread
+   fun:clone
+}
+==XXXXX==  
+==XXXXX==  FILE DESCRIPTORS: 0 open at exit.
+==XXXXX==  
+==XXXXX==  HEAP SUMMARY:
+==XXXXX==      in use at exit: XXX bytes in XXX blocks
+==XXXXX==    total heap usage: XXXX allocs, XXXX frees, XXX bytes allocated
+==XXXXX==  
+==XXXXX==  Thread 1:
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 1 of 169
+==XXXXX==     at 0x402732C: calloc (vg_replace_malloc.c:467)
+==XXXXX==     by 0x5DFD576: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 2 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x2061FFFF: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are possibly lost in loss record 19 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x4787010: strdup (strdup.c:43)
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 22 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x65646F6C: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 24 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x785F6C73: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 25 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x795F6C73: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 26 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x785F7261: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 27 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x795F7261: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 28 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x74706563: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 35 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x552D397: ???
+==XXXXX==     by 0x552F270: ???
+==XXXXX==     by 0x552C53B: ???
+==XXXXX==     by 0x682CD1E: ???
+==XXXXX==     by 0x68349CC: ???
+==XXXXX==     by 0x3330782F: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 43 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x552D397: ???
+==XXXXX==     by 0x552F270: ???
+==XXXXX==     by 0x552C53B: ???
+==XXXXX==     by 0x56CD0AE: ???
+==XXXXX==     by 0x56DA58A: ???
+==XXXXX==     by 0x62696C2E: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 46 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x552D397: ???
+==XXXXX==     by 0x552F270: ???
+==XXXXX==     by 0x552C53B: ???
+==XXXXX==     by 0x5B62A6E: ???
+==XXXXX==     by 0x5B66F16: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 69 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x2D6C706F: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 70 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x656C6572: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 72 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x74736573: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 73 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x646E6167: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 74 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x2D6E6F6D: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 89 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x5659FDA: ???
+==XXXXX==     by 0x565A03F: ???
+==XXXXX==     by 0x56688B8: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 97 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x56CB86A: ???
+==XXXXX==     by 0x56CB8CF: ???
+==XXXXX==     by 0x56DA59D: ???
+==XXXXX==     by 0x62696C2E: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 101 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x5B5E2CA: ???
+==XXXXX==     by 0x5B5E32F: ???
+==XXXXX==     by 0x5B5E6CF: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 104 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x5B9FC6A: ???
+==XXXXX==     by 0x5B9FCCF: ???
+==XXXXX==     by 0x5BBF429: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 111 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x5E1F75A: ???
+==XXXXX==     by 0x5E1F7BF: ???
+==XXXXX==     by 0x5E2714C: ???
+==XXXXX==     by 0x62696C2E: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 124 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x6978E7A: ???
+==XXXXX==     by 0x6978EDF: ???
+==XXXXX==     by 0x6982CBD: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 128 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x69F0F8A: ???
+==XXXXX==     by 0x69F0FEF: ???
+==XXXXX==     by 0x69FD861: ???
+==XXXXX==     by 0x6273752E: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 131 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x6E585DA: ???
+==XXXXX==     by 0x6E5863F: ???
+==XXXXX==     by 0x6E5DDEE: ???
+==XXXXX==     by 0x62696C2E: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 133 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x6E7B58A: ???
+==XXXXX==     by 0x6E7B5EF: ???
+==XXXXX==     by 0x6E8027E: ???
+==XXXXX==     by 0x62696C2E: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 138 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x65642F22: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 139 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x65766E68: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 140 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x7A7A7565: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 141 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x626D756D: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 142 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x62616E64: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 146 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x65726873: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 149 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x6D6F6566: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 150 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x56CBADF: ???
+==XXXXX==     by 0x56DA652: ???
+==XXXXX==     by 0x65726176: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+   obj:*
+   obj:*
+}
+==XXXXX==  57 (40 direct, 17 indirect) bytes in XXX blocks are definitely lost in loss record 151 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x5E54A22: ???
+==XXXXX==     by 0x2A202A1F: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 152 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x6F736571: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 153 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x64616571: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  957 (952 direct, 5 indirect) bytes in XXX blocks are definitely lost in loss record 164 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x5BB38A3: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 165 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x478707A: strndup (strndup.c:46)
+==XXXXX==     by 0x55410F3: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+==XXXXX==  XXX bytes in XXX blocks are possibly lost in loss record 169 of 169
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x566815B: ???
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+}
+==XXXXX==  LEAK SUMMARY:
+==XXXXX==     definitely lost: XXX bytes in XXX blocks
+==XXXXX==     indirectly lost: XXX bytes in XXX blocks
+==XXXXX==       possibly lost: XXX bytes in XXX blocks
+==XXXXX==     still reachable: XXX bytes in XXX blocks
+==XXXXX==          suppressed: XXX bytes in XXX blocks
+==XXXXX==  Reachable blocks (those to which a pointer was found) are not shown.
+==XXXXX==  To see them, rerun with: --leak-check=full --show-reachable=yes
+==XXXXX==  
+==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
+==XXXXX==  ERROR SUMMARY: 41 errors from 41 contexts (suppressed: XXX from XXX)
