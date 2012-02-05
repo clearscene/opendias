@@ -112,6 +112,26 @@ sub test {
   $data{subaction} = 'fullList';
   o_log( Dumper( directRequest( \%data ) ) );
   $data{isActionRequired} = 'false';
+  $data{startDate} = undef;
+  $data{endDate} = undef;
+
+
+  # Single tag filter 
+  o_log( "Single tag filter" );
+  $data{tags} = 'tag two';
+  $data{subaction} = 'count';
+  o_log( Dumper( directRequest( \%data ) ) );
+  $data{subaction} = 'fullList';
+  o_log( Dumper( directRequest( \%data ) ) );
+
+
+  # Double tag filter 
+  o_log( "Single tag filter" );
+  $data{tags} = 'tag two,tag one';
+  $data{subaction} = 'count';
+  o_log( Dumper( directRequest( \%data ) ) );
+  $data{subaction} = 'fullList';
+  o_log( Dumper( directRequest( \%data ) ) );
 
 
   return 0;
