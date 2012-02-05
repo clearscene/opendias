@@ -7,6 +7,7 @@
 
 * 3_1_doclist
 * 3_2_doclist_search
+* 3_3_getScannerList
 
         Inputs: action: fixed string 'controlAccess'
                 submethod: The type of access controls being updated
@@ -22,9 +23,6 @@
 		scanprogressid: The uuid of the scanning process (as returned by 'doScan')
 
 
-	Inputs:	action: fixed string 'getScannerList'
-
-
 	Inputs:	action: fixed string "doScan",
                 deviceid: The sane device id, as provided by getScannerList : Response.ScannerList.Devices.Device.name
                 format: The format to use for scannsing, one of getScanningList : Response.ScanningList.Devices.Device.Formats.format
@@ -32,19 +30,6 @@
                 resolution: The resolution to set the scanner to, between Response.ScannerList.Devices.Device.min and Response.ScannerList.Devices.Device.max,
                 ocr: Flag to indicate if an OCR process should be performed and in what language,
                 pagelength: The length of the page to scan, Percent, in relation to the maximum available by the scanner.
-
-
-	Inputs:	action: fixed string 'docFilter'
-                subaction: Get all details or just the count of matching docs ['count','fullList']
-		textSearch: Text that a document must match (title or ocr text)
-                isActionRequired: If 'true' return only records that are marked as 'action required'.
-                startDate: The first date that a document could fit into
-                endDate: The last date that a document could fit into
-                tags: Comma delimetered list of tagnames.
-                page: The number of 'range' offsets to apply before the first returned row.
-                range: The number of records to return in a single request.
-                sortfield*: Order the results by column
-                sortorder: present results in acending/decending order ['0','1']
 
 
 	Inputs:	action: fixed string 'getAccessDetails'
