@@ -28,6 +28,9 @@ our $false = 0;#$Java::lang::false;
 our $testpath;
 our $testcasename;
 
+$Data::Dumper::Indent = 1;
+$Data::Dumper::Sortkeys = 1;
+
 sub openlog {
 
   my $testlogfile = shift;

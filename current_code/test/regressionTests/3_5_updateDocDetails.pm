@@ -15,9 +15,6 @@ sub testProfile {
 
 sub test {
 
-  $Data::Dumper::Indent = 1;
-  $Data::Dumper::Sortkeys = 1;
-
   my %getData = (
     action => 'getDocDetail',
     docid => 2,
