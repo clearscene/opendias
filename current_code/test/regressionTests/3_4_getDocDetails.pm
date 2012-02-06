@@ -25,12 +25,17 @@ sub test {
 
 
   # Call getDocDetails
-  o_log( "Doc Details, one linked document" );
+  o_log( "Doc Details, one tag" );
+  o_log( Dumper( directRequest( \%data ) ) );
+
+  # Call getDocDetails
+  o_log( "Doc Details, two tags" );
+  $data{docid} = 2;
   o_log( Dumper( directRequest( \%data ) ) );
 
   # Call getDocDetails
   o_log( "Doc Details, two linked documents" );
-  $data{docid} = 2;
+  $data{docid} = 4;
   o_log( Dumper( directRequest( \%data ) ) );
 
   return 0;

@@ -10,4 +10,8 @@ INSERT INTO doc_tags (doctagid, docid, tagid) VALUES (1, 2, 31);
 INSERT INTO doc_tags (doctagid, docid, tagid) VALUES (2, 2, 32);
 INSERT INTO doc_tags (doctagid, docid, tagid) VALUES (3, 3, 32);
 INSERT INTO doc_tags (doctagid, docid, tagid) VALUES (4, 4, 33);
+INSERT INTO doc_links (doclinkid,docid,linkeddocid) VALUES (1, 2, 4);
+INSERT INTO doc_links (doclinkid,docid,linkeddocid) VALUES (2, 4, 2);
+INSERT INTO doc_links (doclinkid,docid,linkeddocid) VALUES (3, 1, 4);
+INSERT INTO doc_links (doclinkid,docid,linkeddocid) VALUES (4, 4, 1);
 COMMIT;
