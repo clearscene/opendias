@@ -7,12 +7,71 @@
 
 * 3_1_doclist
 * 3_2_doclist_search
-* 3_3_getScannerList
+o 3_3_getScannerList
+* 3_4_getDocDetails
+* 3_5_updateDocDetails
+
+
+3_6
+	Inputs:	action: fixed string 'moveTag'
+		docid: the documents id
+		tag: the tag that is being (un)linked
+		subaction: flag to indicate if the tag should be added or removed ['addTag','removeTag','addDoc','removeDoc']
+
+
+
+
+
+
+3_7
+	Inputs:	action: fixed string 'deleteDoc'
+		docid: the documents id
+
+
+
+
+
+
+
+
+
+3_8
+        Inputs: action: fixed string 'tagsAutoComplete'
+                startsWith: the beginning of the tags to return.
+                docid: the documents id
+
+
+        Inputs: action: fixed string 'titleAutoComplete'
+                startsWith: the beginning of the titles to return.
+                notLinkedTo: (optional) Do not return: document with this docid, 
+                              or documents linked to this docid
+
+
+
+
+
+
+
+3_9
+	Inputs:	action: fixed string 'getAccessDetails'
+
 
         Inputs: action: fixed string 'controlAccess'
                 submethod: The type of access controls being updated
                 location: The location to assign or remove
                 role: The role to assign or remove
+
+
+
+
+3_10
+	Inputs:	action: fixed string "doScan",
+                deviceid: The sane device id, as provided by getScannerList : Response.ScannerList.Devices.Device.name
+                format: The format to use for scannsing, one of getScanningList : Response.ScanningList.Devices.Device.Formats.format
+                pages: The number of pages that make up the document,
+                resolution: The resolution to set the scanner to, between Response.ScannerList.Devices.Device.min and Response.ScannerList.Devices.Device.max,
+                ocr: Flag to indicate if an OCR process should be performed and in what language,
+                pagelength: The length of the page to scan, Percent, in relation to the maximum available by the scanner.
 
 
 	Inputs:	action: fixed string 'getScanningProgress'
@@ -23,47 +82,9 @@
 		scanprogressid: The uuid of the scanning process (as returned by 'doScan')
 
 
-	Inputs:	action: fixed string "doScan",
-                deviceid: The sane device id, as provided by getScannerList : Response.ScannerList.Devices.Device.name
-                format: The format to use for scannsing, one of getScanningList : Response.ScanningList.Devices.Device.Formats.format
-                pages: The number of pages that make up the document,
-                resolution: The resolution to set the scanner to, between Response.ScannerList.Devices.Device.min and Response.ScannerList.Devices.Device.max,
-                ocr: Flag to indicate if an OCR process should be performed and in what language,
-                pagelength: The length of the page to scan, Percent, in relation to the maximum available by the scanner.
 
 
-	Inputs:	action: fixed string 'getAccessDetails'
 
-
-	Inputs:	action: fixed string 'getDocDetail'
-		docid: the documents id
-
-
-	Inputs:	action: fixed string 'updateDocDetails'
-		docid: the documents id
-		kkey: the name of the field that is being updated
-		vvalue: the new value to set the field to
-
-
-	Inputs:	action: fixed string 'moveTag'
-		docid: the documents id
-		tag: the tag that is being (un)linked
-		subaction: flag to indicate if the tag should be added or removed ['addTag','removeTag','addDoc','removeDoc']
-
-
-	Inputs:	action: fixed string 'deleteDoc'
-		docid: the documents id
-
-
-        Inputs: action: fixed string 'tagsAutoComplete'
-                startsWith: the beginning of the tags to return.
-                docid: the documents id
-
-
-        Inputs: action: fixed string 'titleAutoComplete'
-                startsWith: the beginning of the titles to return.
-                notLinkedTo: (optional) Do not return: document with this docid, 
-                              or documents linked to this docid
 
 * 8_1_basic_pages
 * 8_2_doc_detail
