@@ -62,10 +62,12 @@ EOS
 ####################################
 # Format the request, add a generic "all", if nothing was given.
 @runTests = @ARGV;
-push(@runTests, "'*'") unless @runTests;
+push(@runTests, "''") unless @runTests;
 
 # Loop over each request.
 for my $requested (@runTests) {
+
+  $requested .= '*'; # So we only have to specify the prefix
 
   # Find all tests that match this request (eg. "1*", given "1_1_General" and "1_2_GeneralFiles")
   my $found = "find $TESTPATH -maxdepth 1 -type f -name $requested.pm | sort";
