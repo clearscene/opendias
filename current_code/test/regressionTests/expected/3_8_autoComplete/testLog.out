@@ -1,0 +1,66 @@
+Copying pre defined environment
+Copying default database
+No need for valgrind on this test.
+STARTING app...
+Now ready
+No need for a web client for this test.
+On document : 2
+Suggestions for an entry of: 
+Sending request = action=tagsAutoComplete&docid=2&startsWith=
+$VAR1 = '{"results":[]}';
+
+Suggestions for an entry of: t
+Sending request = action=tagsAutoComplete&docid=2&startsWith=t
+$VAR1 = '{"results":[{"tag":"TV"},{"tag":"Tax"},{"tag":"tag three"}]}';
+
+Suggestions for an entry of: ta
+Sending request = action=tagsAutoComplete&docid=2&startsWith=ta
+$VAR1 = '{"results":[{"tag":"Tax"},{"tag":"tag three"}]}';
+
+Suggestions for an entry of: tag
+Sending request = action=tagsAutoComplete&docid=2&startsWith=tag
+$VAR1 = '{"results":[{"tag":"tag three"}]}';
+
+Suggestions for an entry of: tag 
+Sending request = action=tagsAutoComplete&docid=2&startsWith=tag%20
+$VAR1 = '{"results":[{"tag":"tag three"}]}';
+
+Suggestions for an entry of: tag o
+Sending request = action=tagsAutoComplete&docid=2&startsWith=tag%20o
+$VAR1 = '{"results":[]}';
+
+Suggestions for an entry of: tag on
+Sending request = action=tagsAutoComplete&docid=2&startsWith=tag%20on
+$VAR1 = '{"results":[]}';
+
+On document : 4
+Suggestions for an entry of: 
+Sending request = action=tagsAutoComplete&docid=4&startsWith=
+$VAR1 = '{"results":[]}';
+
+Suggestions for an entry of: t
+Sending request = action=tagsAutoComplete&docid=4&startsWith=t
+$VAR1 = '{"results":[{"tag":"TV"},{"tag":"Tax"},{"tag":"tag one"},{"tag":"tag two"}]}';
+
+Suggestions for an entry of: ta
+Sending request = action=tagsAutoComplete&docid=4&startsWith=ta
+$VAR1 = '{"results":[{"tag":"Tax"},{"tag":"tag one"},{"tag":"tag two"}]}';
+
+Suggestions for an entry of: tag
+Sending request = action=tagsAutoComplete&docid=4&startsWith=tag
+$VAR1 = '{"results":[{"tag":"tag one"},{"tag":"tag two"}]}';
+
+Suggestions for an entry of: tag 
+Sending request = action=tagsAutoComplete&docid=4&startsWith=tag%20
+$VAR1 = '{"results":[{"tag":"tag one"},{"tag":"tag two"}]}';
+
+Suggestions for an entry of: tag o
+Sending request = action=tagsAutoComplete&docid=4&startsWith=tag%20o
+$VAR1 = '{"results":[{"tag":"tag one"}]}';
+
+Suggestions for an entry of: tag on
+Sending request = action=tagsAutoComplete&docid=4&startsWith=tag%20on
+$VAR1 = '{"results":[{"tag":"tag one"}]}';
+
+Stopping service
+Waiting for valgrind to finish.

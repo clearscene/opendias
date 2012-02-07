@@ -312,8 +312,13 @@ sub directRequest {
   # Check the outcome of the response
   my $resData;
   if ($res->is_success) {
-    my $xml = new XML::Simple;
-    $resData = $xml->XMLin( $res->content );
+    if( $res->content =~ /^</ ) {
+      my $xml = new XML::Simple;
+      $resData = $xml->XMLin( $res->content );
+    }
+    else {
+      $resData = $res->content; # most prob JSON data.
+    }
   }
   else {
     $resData = $res->status_line . "\n\nRES=" . Dumper($res) . "\n\nREQ=" . Dumper($req);
