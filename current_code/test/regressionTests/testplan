@@ -10,20 +10,8 @@
 o 3_3_getScannerList
 * 3_4_getDocDetails
 * 3_5_updateDocDetails
-
-
-3_6
-	Inputs:	action: fixed string 'moveTag'
-		docid: the documents id
-		tag: the tag that is being (un)linked
-		subaction: flag to indicate if the tag should be added or removed ['addTag','removeTag','addDoc','removeDoc']
-
-
-
-
-
-
-3_7
+* 3_6_moveTag
+  3_7_deleteDoc
 	Inputs:	action: fixed string 'deleteDoc'
 		docid: the documents id
 
@@ -64,7 +52,7 @@ o 3_3_getScannerList
 
 
 
-3_10
+3_a
 	Inputs:	action: fixed string "doScan",
                 deviceid: The sane device id, as provided by getScannerList : Response.ScannerList.Devices.Device.name
                 format: The format to use for scannsing, one of getScanningList : Response.ScanningList.Devices.Device.Formats.format
@@ -90,27 +78,26 @@ o 3_3_getScannerList
 * 8_2_doc_detail
 * 8_3_doc_detail_missing
 * 8_4_scan
-
-  12_1-MainWindow-display
-  12_2-MainWindow-dbDisplay
-  12_3-MainWindow-fieldSorting
-  12_4-MainWindow-tagFiltering
-  12_5-MainWindow-menusCredits
-  12_6-MainWindow-docSelectOptions
-  12_7-MainWindow-changeDocRoot
-  13_1-DocDetails-display
-  13_2-DocDetails-populatesFields
-  13_3-DocDetails-savesToDB
-  13_4-DocDetails-pagination
-  13_5-DocDetails-zoomPan
-  13_6-DocDetails-delete
-  13_7-DocDetails-noEmptyImage
-  13_8-DocDetails-loadSeveral
-  14_1-AcquireNoScanner-display
-  15_1-AcquireScanner-display
-  15_2-AcquireScanner-optionsPopulated
-  15_3-AcquireScanner-scanProcess
-  16_1-AcquireODF-display
-  16_2-AcquireODF-importProcess
-  17_1-AcquireOCR-ocr
+  8_11-MainWindow-display
+  8_12-MainWindow-dbDisplay
+  8_13-MainWindow-fieldSorting
+  8_14-MainWindow-tagFiltering
+  8_15-MainWindow-menusCredits
+  8_16-MainWindow-docSelectOptions
+  8_17-MainWindow-changeDocRoot
+  8_21-DocDetails-display
+  8_22-DocDetails-populatesFields
+  8_23-DocDetails-savesToDB
+  8_24-DocDetails-pagination
+  8_25-DocDetails-zoomPan
+  8_26-DocDetails-delete
+  8_27-DocDetails-noEmptyImage
+  8_28-DocDetails-loadSeveral
+  8_31-AcquireNoScanner-display
+  8_41-AcquireScanner-display
+  8_42-AcquireScanner-optionsPopulated
+  8_43-AcquireScanner-scanProcess
+  8_51-AcquireODF-display
+  8_52-AcquireODF-importProcess
+  8_61-AcquireOCR-ocr
 
