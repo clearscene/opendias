@@ -8,7 +8,7 @@ use strict;
 
 sub testProfile {
   return {
-    valgrind => 0,
+    valgrind => 1,
     client => 0,
   }; 
 } 

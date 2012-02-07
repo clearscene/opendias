@@ -1,6 +1,5 @@
 Copying pre defined environment
 Copying default database
-No need for valgrind on this test.
 STARTING app...
 Now ready
 No need for a web client for this test.
