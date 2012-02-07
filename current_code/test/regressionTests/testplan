@@ -11,17 +11,7 @@ o 3_3_getScannerList
 * 3_4_getDocDetails
 * 3_5_updateDocDetails
 * 3_6_moveTag
-  3_7_deleteDoc
-	Inputs:	action: fixed string 'deleteDoc'
-		docid: the documents id
-
-
-
-
-
-
-
-
+* 3_7_deleteDoc
 
 3_8
         Inputs: action: fixed string 'tagsAutoComplete'
