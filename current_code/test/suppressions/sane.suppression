@@ -1,0 +1,28 @@
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Addr4
+   fun:sane_dll_get_devices
+   fun:sane_get_devices
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:sane_get_devices
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strndup
+   obj:*
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:sane_open
+   ...
+}

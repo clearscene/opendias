@@ -35,72 +35,6 @@
 ==XXXXX==      in use at exit: XXX bytes in XXX blocks
 ==XXXXX==    total heap usage: XXXX allocs, XXXX frees, XXX bytes allocated
 ==XXXXX==  
-==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 1 of 3
-==XXXXX==     at 0x402732C: calloc (vg_replace_malloc.c:467)
-==XXXXX==     by 0x5522F22: ???
-==XXXXX==     by 0x40FDD5C: sane_dll_get_devices (dll.c:1057)
-==XXXXX==     by 0x40FB552: sane_get_devices (dll-s.c:17)
-==XXXXX==     by 0x80612FC: getScannerList (pageRender.c:71)
-==XXXXX==     by 0x805F9BC: answer_to_connection (web_handler.c:571)
-==XXXXX==     by 0x40EC0CF: call_connection_handler (connection.c:1158)
-==XXXXX==     by 0x40ED216: MHD_connection_handle_idle (connection.c:2055)
-==XXXXX==     by 0x40EF528: MHD_select (daemon.c:1050)
-==XXXXX==     by 0x40EF69E: MHD_select_thread (daemon.c:1127)
-==XXXXX==     by 0x45C8D30: start_thread (pthread_create.c:304)
-==XXXXX==     by 0x47E30CD: clone (clone.S:130)
-==XXXXX==  
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:calloc
-   obj:*
-   fun:sane_dll_get_devices
-   fun:sane_get_devices
-   fun:getScannerList
-   fun:answer_to_connection
-   fun:call_connection_handler
-   fun:MHD_connection_handle_idle
-   fun:MHD_select
-   fun:MHD_select_thread
-   fun:start_thread
-   fun:clone
-}
-==XXXXX==  XXX bytes in XXX blocks are definitely lost in loss record 3 of 3
-==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
-==XXXXX==     by 0x55164AA: ???
-==XXXXX==     by 0x551650F: ???
-==XXXXX==     by 0x5522D89: ???
-==XXXXX==     by 0x40FD331: init (dll.c:613)
-==XXXXX==     by 0x40FDD3E: sane_dll_get_devices (dll.c:1054)
-==XXXXX==     by 0x40FB552: sane_get_devices (dll-s.c:17)
-==XXXXX==     by 0x80612FC: getScannerList (pageRender.c:71)
-==XXXXX==     by 0x805F9BC: answer_to_connection (web_handler.c:571)
-==XXXXX==     by 0x40EC0CF: call_connection_handler (connection.c:1158)
-==XXXXX==     by 0x40ED216: MHD_connection_handle_idle (connection.c:2055)
-==XXXXX==     by 0x40EF528: MHD_select (daemon.c:1050)
-==XXXXX==     by 0x40EF69E: MHD_select_thread (daemon.c:1127)
-==XXXXX==     by 0x45C8D30: start_thread (pthread_create.c:304)
-==XXXXX==     by 0x47E30CD: clone (clone.S:130)
-==XXXXX==  
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:malloc
-   obj:*
-   obj:*
-   obj:*
-   fun:init
-   fun:sane_dll_get_devices
-   fun:sane_get_devices
-   fun:getScannerList
-   fun:answer_to_connection
-   fun:call_connection_handler
-   fun:MHD_connection_handle_idle
-   fun:MHD_select
-   fun:MHD_select_thread
-   fun:start_thread
-   fun:clone
-}
 ==XXXXX==  LEAK SUMMARY:
 ==XXXXX==     definitely lost: XXX bytes in XXX blocks
 ==XXXXX==     indirectly lost: XXX bytes in XXX blocks
@@ -111,4 +45,4 @@
 ==XXXXX==  To see them, rerun with: --leak-check=full --show-reachable=yes
 ==XXXXX==  
 ==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
-==XXXXX==  ERROR SUMMARY: 2 errors from 2 contexts (suppressed: XXX from XXX)
+==XXXXX==  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: XXX from XXX)

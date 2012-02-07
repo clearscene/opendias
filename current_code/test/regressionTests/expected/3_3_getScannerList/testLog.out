@@ -6,7 +6,23 @@ No need for a web client for this test.
 Scanner List
 Sending request = action=getScannerList
 $VAR1 = {
-  'error' => 'Your request could not be processed'
+  'ScannerList' => {
+    'Devices' => {
+      'Device' => {
+        'Formats' => {
+          'format' => 'Grey Scale'
+        },
+        'default' => '300',
+        'host' => 'opendias server',
+        'max' => '800',
+        'min' => '50',
+        'model' => 'Frontend-tester',
+        'name' => 'test:0',
+        'type' => 'Virtual Device',
+        'vendor' => 'Noname'
+      }
+    }
+  }
 };
 
 Stopping service
