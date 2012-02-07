@@ -30,6 +30,8 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: document details
 -date-:-thread-:INF: Processing request for: Move Tag
 -date-:-thread-:INF: Processing request for: document details
+-date-:-thread-:INF: Processing request for: Move Tag
+-date-:-thread-:INF: Processing request for: document details
 -date-:-thread-:INF: Received SIGUSR1 signal.
 -date-:-thread-:INF: openDias service is shutting down....
 -date-:-thread-:INF: ....openDias service has shutdown

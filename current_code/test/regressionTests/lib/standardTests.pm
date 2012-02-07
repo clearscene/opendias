@@ -3,6 +3,7 @@ package standardTests;
 use LWP;
 use Data::Dumper;
 use XML::Simple;
+use DBI;
 use IO::Socket::INET;
 use Inline::Java qw(cast);
 use URI::Escape;
@@ -17,7 +18,7 @@ use WWW::HtmlUnit
 
 require Exporter;
 @ISA = qw(Exporter);
-@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client getNextJSAlert castTo_HtmlInput castTo_HtmlButton removeDuplicateLines directRequest inTestSQL $testpath $testcasename );
+@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client getNextJSAlert castTo_HtmlInput castTo_HtmlButton removeDuplicateLines directRequest inTestSQL dumpQueryResult $testpath $testcasename );
 
 use strict;
 
@@ -328,5 +329,29 @@ sub inTestSQL {
     system("/usr/bin/sqlite3 /tmp/opendiastest/openDIAS.sqlite3 \".read $fullPath\""); 
   }
 }
+
+sub dumpQueryResult {
+  my ($sql, ) = @_;
+
+  my $dbh = DBI->connect( "dbi:SQLite:dbname=/tmp/opendiastest/openDIAS.sqlite3",
+                          "", "", { RaiseError => 1, AutoCommit => 0 } );
+
+  my $sth = $dbh->prepare( $sql );
+  $sth->execute();
+
+  o_log( $sql );
+  my $row = 0;
+  while( my $hashRef = $sth->fetchrow_hashref() ) {
+    $row++;
+    o_log("------------------ row $row ------------------");
+    foreach my $col (sort {$a cmp $b} (keys %$hashRef)) {
+      o_log( "$col : $hashRef->{$col}" );
+    }
+  }
+  $dbh->disconnect();
+  o_log( "\n" );
+  
+}
+
 return 1;
 

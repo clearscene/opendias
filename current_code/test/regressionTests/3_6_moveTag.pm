@@ -54,6 +54,10 @@ sub test {
   o_log( Dumper( directRequest( \%getData ) ) );
 
 
+
+  dumpQueryResult( "SELECT doctagid, docid, tagid FROM doc_tags ORDER BY doctagid" );
+  dumpQueryResult( "SELECT tagid, tagname FROM tags ORDER BY tagid" );
+
   # Update doc details
   o_log( "Remove a tag linkage" );
   $updateData{tag} = 'tag two';
@@ -63,6 +67,23 @@ sub test {
   # Call getDocDetails
   o_log( "Doc Details - after update" );
   o_log( Dumper( directRequest( \%getData ) ) );
+
+  dumpQueryResult( "SELECT doctagid, docid, tagid FROM doc_tags ORDER BY doctagid" );
+  dumpQueryResult( "SELECT tagid, tagname FROM tags ORDER BY tagid" );
+
+  # Update doc details
+  o_log( "Remove a tag linkage" );
+  $updateData{tag} = 'tag one';
+  $updateData{subaction} = 'removeTag';
+  o_log( Dumper( directRequest( \%updateData ) ) );
+
+  # Call getDocDetails
+  o_log( "Doc Details - after update" );
+  o_log( Dumper( directRequest( \%getData ) ) );
+
+  # Were expecting not only the doc_tag linkage (to 'tag one') to be deleted, but also the tag itself, since it was linked to only one doc
+  dumpQueryResult( "SELECT doctagid, docid, tagid FROM doc_tags ORDER BY doctagid" );
+  dumpQueryResult( "SELECT tagid, tagname FROM tags ORDER BY tagid" );
 
 
   # Update doc details
