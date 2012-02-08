@@ -12,25 +12,9 @@ o 3_3_getScannerList (see issue #XXXXX)
 * 3_5_updateDocDetails
 * 3_6_moveTag
 o 3_7_deleteDoc (see issue #XXXXX)
+* 3_8_autoComplete
 
-3_8
-        Inputs: action: fixed string 'tagsAutoComplete'
-                startsWith: the beginning of the tags to return.
-                docid: the documents id
-
-
-        Inputs: action: fixed string 'titleAutoComplete'
-                startsWith: the beginning of the titles to return.
-                notLinkedTo: (optional) Do not return: document with this docid, 
-                              or documents linked to this docid
-
-
-
-
-
-
-
-3_9
+  3_9
 	Inputs:	action: fixed string 'getAccessDetails'
 
 
