@@ -61,5 +61,143 @@ Suggestions for an entry of: tag on
 Sending request = action=tagsAutoComplete&docid=4&startsWith=tag%20on
 $VAR1 = '{"results":[{"tag":"tag one"}]}';
 
+Show document options that are not already linked to docid: 2
+Suggestions for an entry of: 
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=
+$VAR1 = '{"results":[]}';
+
+Suggestions for an entry of: T
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=T
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"},{"docid":"1","title":"Test Titletext"}]}';
+
+Suggestions for an entry of: Te
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Te
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"},{"docid":"1","title":"Test Titletext"}]}';
+
+Suggestions for an entry of: Tes
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Tes
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"},{"docid":"1","title":"Test Titletext"}]}';
+
+Suggestions for an entry of: Test
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Test
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"},{"docid":"1","title":"Test Titletext"}]}';
+
+Suggestions for an entry of: Test 
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Test%20
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"},{"docid":"1","title":"Test Titletext"}]}';
+
+Suggestions for an entry of: Test 2
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Test%202
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Test%202%20
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 T
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Test%202%20T
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Ti
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Test%202%20Ti
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Tit
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Test%202%20Tit
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Titl
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Test%202%20Titl
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Title
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Test%202%20Title
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Title 
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Test%202%20Title%20
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Title t
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Test%202%20Title%20t
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Title te
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Test%202%20Title%20te
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Title tex
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=2&startsWith=Test%202%20Title%20tex
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Show document options that are not already linked to docid: 4
+Suggestions for an entry of: 
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=
+$VAR1 = '{"results":[]}';
+
+Suggestions for an entry of: T
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=T
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Te
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Te
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Tes
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Tes
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Test
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Test%20
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Test%202
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Test%202%20
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 T
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Test%202%20T
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Ti
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Test%202%20Ti
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Tit
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Test%202%20Tit
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Titl
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Test%202%20Titl
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Title
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Test%202%20Title
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Title 
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Test%202%20Title%20
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Title t
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Test%202%20Title%20t
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Title te
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Test%202%20Title%20te
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
+Suggestions for an entry of: Test 2 Title tex
+Sending request = action=titleAutoComplete&docid=4&notLinkedTo=4&startsWith=Test%202%20Title%20tex
+$VAR1 = '{"results":[{"docid":"3","title":"Test 2 Title text"}]}';
+
 Stopping service
 Waiting for valgrind to finish.

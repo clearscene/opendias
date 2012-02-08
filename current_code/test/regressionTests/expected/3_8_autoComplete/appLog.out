@@ -24,6 +24,9 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: tagsAutoComplete
  ----- line duplicated more than three times ----- 
 -date-:-thread-:INF: Processing request for: tagsAutoComplete
+-date-:-thread-:INF: Processing request for: titleAutoComplete
+ ----- line duplicated more than three times ----- 
+-date-:-thread-:INF: Processing request for: titleAutoComplete
 -date-:-thread-:INF: Received SIGUSR1 signal.
 -date-:-thread-:INF: openDias service is shutting down....
 -date-:-thread-:INF: ....openDias service has shutdown

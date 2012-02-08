@@ -15,11 +15,11 @@ sub testProfile {
 
 sub test {
 
-  my $entry = 'tag one';
   my %data = (
     action => 'tagsAutoComplete',
   );
 
+  my $entry = 'tag one';
   foreach my $docid (2,4) {
     o_log( "On document : $docid" );
     $data{docid} = $docid;
@@ -31,9 +31,18 @@ sub test {
     }
   }
 
-#action: fixed string 'titleAutoComplete'
-#startsWith: the beginning of the titles to return.
-#notLinkedTo:
+  $data{action} = 'titleAutoComplete';
+  my $entry = 'Test 2 Title text';
+  foreach my $docid (2,4) {
+    o_log( "Show document options that are not already linked to docid: $docid" );
+    $data{notLinkedTo} = $docid;
+    for( my $x = 0 ; $x < length( $entry ) ; $x++) {
+      my $partEntry = substr( $entry, 0, $x );
+      $data{startsWith} = $partEntry;
+      o_log( "Suggestions for an entry of: $partEntry" );
+      o_log( Dumper( directRequest( \%data ) ) );
+    }
+  }
 
   return 0;
 }
