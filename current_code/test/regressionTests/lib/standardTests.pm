@@ -313,8 +313,13 @@ sub directRequest {
   my $resData;
   if ($res->is_success) {
     if( $res->content =~ /^</ ) {
-      my $xml = new XML::Simple;
-      $resData = $xml->XMLin( $res->content );
+      eval {
+        my $xml = new XML::Simple;
+        $resData = $xml->XMLin( $res->content );
+      };
+      if( $@ ) {
+        $resData = $res->content; # We can't parse the result as XML, so just dump what we got.
+      }
     }
     else {
       $resData = $res->content; # most prob JSON data.
