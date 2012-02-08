@@ -1,0 +1,48 @@
+==XXXXX==  Memcheck, a memory error detector
+==XXXXX==  Copyright [details]
+==XXXXX==  Using Valgrind [version and build info]
+==XXXXX==  Command: ../src/opendias -c [CONFIG_FILE]
+==XXXXX==  Parent PID: XXXXX.
+==XXXXX==  
+==XXXXX==  Warning: invalid file descriptor [system specific]
+==XXXXX==  
+==XXXXX==  FILE DESCRIPTORS: 4 open at exit.
+==XXXXX==  Open file descriptor 3: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  Open file descriptor 2: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  Open file descriptor 1: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  Open file descriptor 0: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  
+==XXXXX==  HEAP SUMMARY:
+==XXXXX==      in use at exit: XXX bytes in XXX blocks
+==XXXXX==    total heap usage: XXXX allocs, XXXX frees, XXX bytes allocated
+==XXXXX==  
+==XXXXX==  All heap blocks were freed -- no leaks are possible
+==XXXXX==  
+==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
+==XXXXX==  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: XXX from XXX)
+==XXXXX==  
+==XXXXX==  FILE DESCRIPTORS: 0 open at exit.
+==XXXXX==  
+==XXXXX==  HEAP SUMMARY:
+==XXXXX==      in use at exit: XXX bytes in XXX blocks
+==XXXXX==    total heap usage: XXXX allocs, XXXX frees, XXX bytes allocated
+==XXXXX==  
+==XXXXX==  LEAK SUMMARY:
+==XXXXX==     definitely lost: XXX bytes in XXX blocks
+==XXXXX==     indirectly lost: XXX bytes in XXX blocks
+==XXXXX==       possibly lost: XXX bytes in XXX blocks
+==XXXXX==     still reachable: XXX bytes in XXX blocks
+==XXXXX==          suppressed: XXX bytes in XXX blocks
+==XXXXX==  Reachable blocks (those to which a pointer was found) are not shown.
+==XXXXX==  To see them, rerun with: --leak-check=full --show-reachable=yes
+==XXXXX==  
+==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
+==XXXXX==  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: XXX from XXX)

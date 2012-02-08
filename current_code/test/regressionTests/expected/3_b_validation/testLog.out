@@ -1,0 +1,76 @@
+Copying pre defined environment
+Copying default database
+STARTING app...
+Now ready
+No need for a web client for this test.
+Sending request = action=deleteDoc
+deleteDoc = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=doScan
+doScan = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=docFilter
+docFilter = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=getDocDetail
+getDocDetail = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=getScannerList
+getScannerList = $VAR1 = {
+  'ScannerList' => {
+    'Devices' => {
+      'Device' => {
+        'Formats' => {
+          'format' => 'Grey Scale'
+        },
+        'default' => '300',
+        'host' => 'opendias server',
+        'max' => '800',
+        'min' => '50',
+        'model' => 'Frontend-tester',
+        'name' => 'test:0',
+        'type' => 'Virtual Device',
+        'vendor' => 'Noname'
+      }
+    }
+  }
+};
+
+Sending request = action=getScanningProgress
+getScanningProgress = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=moveTag
+moveTag = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=nextPageReady
+nextPageReady = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=tagsAutoComplete
+tagsAutoComplete = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=titleAutoComplete
+titleAutoComplete = $VAR1 = '{"results":[]}';
+
+Sending request = action=updateDocDetails
+updateDocDetails = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Stopping service
+Waiting for valgrind to finish.
