@@ -1,0 +1,159 @@
+==XXXXX==  Memcheck, a memory error detector
+==XXXXX==  Copyright [details]
+==XXXXX==  Using Valgrind [version and build info]
+==XXXXX==  Command: ../src/opendias -c [CONFIG_FILE]
+==XXXXX==  Parent PID: XXXXX.
+==XXXXX==  
+==XXXXX==  Warning: invalid file descriptor [system specific]
+==XXXXX==  
+==XXXXX==  FILE DESCRIPTORS: 4 open at exit.
+==XXXXX==  Open file descriptor 3: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  Open file descriptor 2: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  Open file descriptor 1: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  Open file descriptor 0: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  
+==XXXXX==  HEAP SUMMARY:
+==XXXXX==      in use at exit: XXX bytes in XXX blocks
+==XXXXX==    total heap usage: XXXX allocs, XXXX frees, XXX bytes allocated
+==XXXXX==  
+==XXXXX==  All heap blocks were freed -- no leaks are possible
+==XXXXX==  
+==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
+==XXXXX==  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: XXX from XXX)
+==XXXXX==  
+==XXXXX==  FILE DESCRIPTORS: 1 open at exit.
+==XXXXX==  Open file descriptor 3: [FILE PATH]
+==XXXXX==     at 0x47D1C6A: open64 (open64.c:46)
+==XXXXX==     by 0x40F5165: ??? (in /lib/i386-linux-gnu/libuuid.so.1.3.0)
+==XXXXX==     by 0x40F61BE: uuid_generate (in /lib/i386-linux-gnu/libuuid.so.1.3.0)
+==XXXXX==     by 0x8061CB8: doScan (pageRender.c:259)
+==XXXXX==     by 0x805FBD6: answer_to_connection (web_handler.c:593)
+==XXXXX==     by 0x40EC0CF: call_connection_handler (connection.c:1158)
+==XXXXX==     by 0x40ED216: MHD_connection_handle_idle (connection.c:2055)
+==XXXXX==     by 0x40EF528: MHD_select (daemon.c:1050)
+==XXXXX==     by 0x40EF69E: MHD_select_thread (daemon.c:1127)
+==XXXXX==     by 0x45C8D30: start_thread (pthread_create.c:304)
+==XXXXX==     by 0x47E30CD: clone (clone.S:130)
+==XXXXX==  
+==XXXXX==  
+==XXXXX==  HEAP SUMMARY:
+==XXXXX==      in use at exit: XXX bytes in XXX blocks
+==XXXXX==    total heap usage: XXXX allocs, XXXX frees, XXX bytes allocated
+==XXXXX==  
+==XXXXX==  XXX bytes in XXX blocks are possibly lost in loss record 478 of 600
+==XXXXX==     at 0x402842F: operator new(unsigned int) (vg_replace_malloc.c:255)
+==XXXXX==     by 0x41175FF: FreeImage_AllocateT (BitmapAccess.cpp:265)
+==XXXXX==     by 0x41177C7: FreeImage_Allocate (BitmapAccess.cpp:165)
+==XXXXX==     by 0x4139E4D: Load(FreeImageIO*, void*, int, int, void*) (PluginPNM.cpp:259)
+==XXXXX==     by 0x411D195: FreeImage_LoadFromHandle (Plugin.cpp:368)
+==XXXXX==     by 0x411D959: FreeImage_Load (Plugin.cpp:389)
+==XXXXX==     by 0x806C01A: reformatImage (imageProcessing.c:53)
+==XXXXX==     by 0x8066CFC: doScanningOperation (scan.c:775)
+==XXXXX==     by 0x45C8D30: start_thread (pthread_create.c:304)
+==XXXXX==     by 0x47E30CD: clone (clone.S:130)
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:_Znwj
+   fun:FreeImage_AllocateT
+   fun:FreeImage_Allocate
+   fun:_ZL4LoadP11FreeImageIOPviiS1_
+   fun:FreeImage_LoadFromHandle
+   fun:FreeImage_Load
+   fun:reformatImage
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+==XXXXX==  XXX bytes in XXX blocks are possibly lost in loss record 571 of 600
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x468AA1C: __cxa_allocate_exception (eh_alloc.cc:102)
+==XXXXX==     by 0x412F8ED: empty_output_buffer(jpeg_compress_struct*) (PluginJPEG.cpp:183)
+==XXXXX==     by 0x417D2DF: encode_mcu_huff (jchuff.c:285)
+==XXXXX==     by 0x4178F7B: compress_data (jccoefct.c:207)
+==XXXXX==     by 0x417DB52: process_data_simple_main (jcmainct.c:135)
+==XXXXX==     by 0x41769EE: jpeg_write_scanlines (jcapistd.c:108)
+==XXXXX==     by 0x41303C8: Save(FreeImageIO*, FIBITMAP*, void*, int, int, void*) (PluginJPEG.cpp:1350)
+==XXXXX==     by 0x411D087: FreeImage_SaveToHandle (Plugin.cpp:433)
+==XXXXX==     by 0x411D8C0: FreeImage_Save (Plugin.cpp:455)
+==XXXXX==     by 0x806C07E: reformatImage (imageProcessing.c:57)
+==XXXXX==     by 0x8066CFC: doScanningOperation (scan.c:775)
+==XXXXX==     by 0x45C8D30: start_thread (pthread_create.c:304)
+==XXXXX==     by 0x47E30CD: clone (clone.S:130)
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:__cxa_allocate_exception
+   fun:_ZL19empty_output_bufferP20jpeg_compress_struct
+   fun:encode_mcu_huff
+   fun:compress_data
+   fun:process_data_simple_main
+   fun:jpeg_write_scanlines
+   fun:_ZL4SaveP11FreeImageIOP8FIBITMAPPviiS3_
+   fun:FreeImage_SaveToHandle
+   fun:FreeImage_Save
+   fun:reformatImage
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+==XXXXX==  XXX bytes in XXX blocks are possibly lost in loss record 574 of 600
+==XXXXX==     at 0x402732C: calloc (vg_replace_malloc.c:467)
+==XXXXX==     by 0x4010C54: allocate_dtv (dl-tls.c:300)
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   fun:allocate_dtv
+}
+==XXXXX==  XXX bytes in XXX blocks are possibly lost in loss record 600 of 600
+==XXXXX==     at 0x4028876: malloc (vg_replace_malloc.c:236)
+==XXXXX==     by 0x4117475: FreeImage_Aligned_Malloc(unsigned int, unsigned int) (BitmapAccess.cpp:127)
+==XXXXX==     by 0x4117571: FreeImage_AllocateT (BitmapAccess.cpp:236)
+==XXXXX==     by 0x41177C7: FreeImage_Allocate (BitmapAccess.cpp:165)
+==XXXXX==     by 0x4139E4D: Load(FreeImageIO*, void*, int, int, void*) (PluginPNM.cpp:259)
+==XXXXX==     by 0x411D195: FreeImage_LoadFromHandle (Plugin.cpp:368)
+==XXXXX==     by 0x411D959: FreeImage_Load (Plugin.cpp:389)
+==XXXXX==     by 0x806C01A: reformatImage (imageProcessing.c:53)
+==XXXXX==     by 0x8066CFC: doScanningOperation (scan.c:775)
+==XXXXX==     by 0x45C8D30: start_thread (pthread_create.c:304)
+==XXXXX==     by 0x47E30CD: clone (clone.S:130)
+==XXXXX==  
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_Z24FreeImage_Aligned_Mallocjj
+   fun:FreeImage_AllocateT
+   fun:FreeImage_Allocate
+   fun:_ZL4LoadP11FreeImageIOPviiS1_
+   fun:FreeImage_LoadFromHandle
+   fun:FreeImage_Load
+   fun:reformatImage
+   fun:doScanningOperation
+   fun:start_thread
+   fun:clone
+}
+==XXXXX==  LEAK SUMMARY:
+==XXXXX==     definitely lost: XXX bytes in XXX blocks
+==XXXXX==     indirectly lost: XXX bytes in XXX blocks
+==XXXXX==       possibly lost: XXX bytes in XXX blocks
+==XXXXX==     still reachable: XXX bytes in XXX blocks
+==XXXXX==          suppressed: XXX bytes in XXX blocks
+==XXXXX==  Reachable blocks (those to which a pointer was found) are not shown.
+==XXXXX==  To see them, rerun with: --leak-check=full --show-reachable=yes
+==XXXXX==  
+==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
+==XXXXX==  ERROR SUMMARY: 4 errors from 4 contexts (suppressed: XXX from XXX)
