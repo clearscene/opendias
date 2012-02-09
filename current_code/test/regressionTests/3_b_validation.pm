@@ -16,11 +16,19 @@ sub testProfile {
 sub test {
 
   my %calls = (
-    docFilter => '',
+    docFilter => [ 
+          { subaction => 'count' }, 
+          { subaction => 'fullList' }, 
+        ],
     getScannerList => '',
     getDocDetail => '',
     updateDocDetails => '',
-    moveTag => '',
+    moveTag => [ 
+          { subaction => 'addTag' }, 
+          { subaction => 'removeTag' }, 
+          { subaction => 'addDoc' }, 
+          { subaction => 'removeDoc' }, 
+        ],
     deleteDoc => '',
     tagsAutoComplete => '',
     titleAutoComplete => '',
@@ -29,9 +37,30 @@ sub test {
     nextPageReady => '',
   );
 
+
+  # No data
+  o_log( "no post data = " . Dumper( directRequest( { } ) ) );
+
+  # Unknown 'action'
+  o_log( "Unknown action = " . Dumper( directRequest( { action => 'rumplestilskin' } ) ) );
+
   # Try all API actions, with zero supporting fields - expect 'error' response
   foreach my $action (sort {$a cmp $b} (keys %calls)) {
     o_log( "$action = " . Dumper( directRequest( { action => $action } ) ) );
+  }
+
+  # Try all API actions that require a subaction, send an unknown sub action - expect 'error' response
+  foreach my $action (sort {$a cmp $b} (keys %calls)) {
+    next unless ref $calls{$action} eq "ARRAY";
+    o_log( "Unknown subaction on action of $action = " . Dumper( directRequest( { action => $action, subaction => 'rumplestilskin' } ) ) );
+  }
+
+  # Try all API actions that require a subaction, send avalid sub action, but no supporting fields - expect 'error' response
+  foreach my $action (sort {$a cmp $b} (keys %calls)) {
+    next unless ref $calls{$action} eq "ARRAY";
+    foreach my $subaction (sort {$a->{subaction} cmp $b->{subaction}} ( @{$calls{$action}} ) ) {
+      o_log( "actions of $action / $subaction->{subaction} = " . Dumper( directRequest( { action => $action, subaction => $subaction->{subaction} } ) ) );
+    }
   }
 
 

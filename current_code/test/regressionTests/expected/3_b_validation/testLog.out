@@ -3,6 +3,12 @@ Copying default database
 STARTING app...
 Now ready
 No need for a web client for this test.
+Sending request = 
+no post data = $VAR1 = '';
+
+Sending request = action=rumplestilskin
+Unknown action = $VAR1 = '';
+
 Sending request = action=deleteDoc
 deleteDoc = $VAR1 = {
   'error' => 'Your request could not be processed'
@@ -69,6 +75,52 @@ titleAutoComplete = $VAR1 = '{"results":[]}';
 
 Sending request = action=updateDocDetails
 updateDocDetails = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=docFilter&subaction=rumplestilskin
+Unknown subaction on action of docFilter = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=moveTag&subaction=rumplestilskin
+Unknown subaction on action of moveTag = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=docFilter&subaction=count
+actions of docFilter / count = $VAR1 = {
+  'DocFilter' => {
+    'Results' => {},
+    'count' => '0'
+  }
+};
+
+Sending request = action=docFilter&subaction=fullList
+actions of docFilter / fullList = $VAR1 = {
+  'DocFilter' => {
+    'Results' => {},
+    'count' => '0'
+  }
+};
+
+Sending request = action=moveTag&subaction=addDoc
+actions of moveTag / addDoc = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=moveTag&subaction=addTag
+actions of moveTag / addTag = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=moveTag&subaction=removeDoc
+actions of moveTag / removeDoc = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=moveTag&subaction=removeTag
+actions of moveTag / removeTag = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
