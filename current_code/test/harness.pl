@@ -215,11 +215,12 @@ for my $requested (@runTests) {
 
       ##########
       # test log - output from the testing harness
+      system("sed -f config/testLogUnify.sed < $outputDir/$TESTCASENAME/testLog.out > $outputDir/$TESTCASENAME/testLog4Compare.out");
       if( length $GENERATE ) {
-        system("cp $outputDir/$TESTCASENAME/testLog.out $TESTPATH/expected/$TESTCASENAME/testLog.out");
+        system("cp $outputDir/$TESTCASENAME/testLog4Compare.out $TESTPATH/expected/$TESTCASENAME/testLog.out");
       }
       $TEST_RES="<td class='none'><a href='./$TESTCASENAME/testLog.out'>actual</a></td>";
-      system("diff -ydN $TESTPATH/expected/$TESTCASENAME/testLog.out $outputDir/$TESTCASENAME/testLog.out > $outputDir/$TESTCASENAME/testLogDiff.out");
+      system("diff -ydN $TESTPATH/expected/$TESTCASENAME/testLog.out $outputDir/$TESTCASENAME/testLog4Compare.out > $outputDir/$TESTCASENAME/testLogDiff.out");
       if( $? >> 8 == 0 ) {
         system("rm $outputDir/$TESTCASENAME/testLogDiff.out");
         $TEST_RES .= "<td class='ok'>OK</td>";
