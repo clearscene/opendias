@@ -14,6 +14,7 @@ LOG-OUTPUT
 -date-:-thread-:INF: Connected to database
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:INF: Config setting: log_verbosity = 3
+-date-:-thread-:INF: Moving log verbosity from 4 to 3
 -date-:-thread-:INF: Config setting: scan_directory = /tmp/opendiastest
 -date-:-thread-:INF: Config setting: show_all_available = 1
 -date-:-thread-:INF: Config setting: port = 8988
