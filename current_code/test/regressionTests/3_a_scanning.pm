@@ -30,7 +30,7 @@ sub test {
   my $result = directRequest( \%scan );
   o_log( "startScan = " . Dumper( $result ) );
   my $scan_uuid = $result->{DoScan}->{scanuuid};
-
+  return 1 unless defined $scan_uuid && $scan_uuid ne '';
 
 
   # Wait for scanning of the first page to complete
@@ -42,7 +42,7 @@ sub test {
   while( ! exists $result->{ScanningProgress} || $result->{ScanningProgress}->{status} ne '7' ) {
     sleep(1);
     $attempt++;
-    $result = directRequest( \%followup );
+    $result = directRequest( \%followup, $attempt );
     last if( $attempt > 120 );
   }
   o_log( "Message stating, were waiting = " . Dumper( $result ) );
@@ -61,7 +61,7 @@ sub test {
   while( ! exists $result->{ScanningProgress} || $result->{ScanningProgress}->{status} ne '16' ) {
     sleep(1);
     $attempt++;
-    $result = directRequest( \%followup );
+    $result = directRequest( \%followup, $attempt );
     last if( $attempt > 120 );
   }
   o_log( "Final response = " . Dumper( $result ) );

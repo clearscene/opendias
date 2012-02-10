@@ -271,7 +271,7 @@ sub removeDuplicateLines {
 
 sub directRequest {
 
-  my ($params, ) = @_;
+  my ($params, $supressLogOfRequest ) = @_;
   my %default = (
     '__proto' => 'http://',
     '__domain' => 'localhost:8988',
@@ -293,7 +293,7 @@ sub directRequest {
     }
   }
   my $payload = join( '&', @data );
-  o_log( 'Sending request = ' . $payload );
+  o_log( 'Sending request = ' . $payload ) unless ( defined $supressLogOfRequest && $supressLogOfRequest > 1);
 
 
   #

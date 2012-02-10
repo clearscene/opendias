@@ -14,6 +14,7 @@ LOG-OUTPUT
 -date-:-thread-:INF: Connected to database
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:INF: Config setting: log_verbosity = 3
+-date-:-thread-:INF: Moving log verbosity from 4 to 3
 -date-:-thread-:INF: Config setting: scan_directory = /tmp/opendiastest
 -date-:-thread-:INF: Config setting: show_all_available = 1
 -date-:-thread-:INF: Config setting: port = 8988
@@ -23,25 +24,17 @@ LOG-OUTPUT
 -date-:-thread-:INF: ready to accept connectons
 -date-:-thread-:INF: Processing request for: doScan
 -date-:-thread-:INF: Scanner Parm : stat=Success form=0,lf=1,bpl=2362,pixpl=2362,lin=2362,dep=8
--date-:-thread-:ERR: Count not write entire data block.
--date-:-thread-:INF: Processing request for: getScanning Progress
- ----- line duplicated more than three times ----- 
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:ERR: Unable to write the entire image to disk.
--date-:-thread-:INF: Processing request for: getScanning Progress
- ----- line duplicated more than three times ----- 
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Saved JPEG output of scan, to: /tmp/opendiastest//scans/5_1.jpg
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Processing request for: restart scan after page change
--date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Scanner Parm : stat=Success form=0,lf=1,bpl=2362,pixpl=2362,lin=2362,dep=8
--date-:-thread-:INF: Processing request for: getScanning Progress
- ----- line duplicated more than three times ----- 
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:ERR: Unable to write the entire image to disk.
 -date-:-thread-:INF: Processing request for: getScanning Progress
- ----- line duplicated more than three times ----- 
+-date-:-thread-:INF: Saved JPEG output of scan, to: /tmp/opendiastest//scans/5_2.jpg
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Received SIGUSR1 signal.
 -date-:-thread-:INF: openDias service is shutting down....
