@@ -1,6 +1,7 @@
 STDOUT
 --------------------------------------------------
 LOG-OUTPUT
+-date-:-thread-:INF: Setting default log verbosity to 4.
 -date-:-thread-:INF: Using config file: [CONFIG_FILE]
 -date-:-thread-:INF: Which says the database is at: /tmp/opendiastest/
 -date-:-thread-:DBG: Dir structure is in-place, database should exist
@@ -14,6 +15,7 @@ LOG-OUTPUT
 -date-:-thread-:INF: Connected to database
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:INF: Config setting: log_verbosity = 3
+-date-:-thread-:INF: Moving log verbosity from 4 to 3
 -date-:-thread-:INF: Config setting: scan_directory = /tmp/opendiastest
 -date-:-thread-:INF: Config setting: show_all_available = 1
 -date-:-thread-:INF: Config setting: port = 8988
@@ -31,7 +33,6 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: getScannerList
 -date-:-thread-:INF: Processing request for: doScan
 -date-:-thread-:INF: Scanner Parm : stat=Success form=0,lf=1,bpl=2362,pixpl=2362,lin=2362,dep=8
--date-:-thread-:ERR: Count not write entire data block.
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:ERR: Unable to write the entire image to disk.
 -date-:-thread-:INF: Processing request for: getScanning Progress

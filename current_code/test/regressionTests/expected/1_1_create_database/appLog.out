@@ -1,6 +1,7 @@
 STDOUT
 --------------------------------------------------
 LOG-OUTPUT
+-date-:-thread-:INF: Setting default log verbosity to 4.
 -date-:-thread-:INF: Using config file: [CONFIG_FILE]
 -date-:-thread-:INF: Which says the database is at: /tmp/opendiastest/
 -date-:-thread-:INF: Creating new database
@@ -229,6 +230,7 @@ COMMIT;
 
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:INF: Config setting: log_verbosity = 3
+-date-:-thread-:INF: Moving log verbosity from 4 to 3
 -date-:-thread-:INF: Config setting: scan_directory = /var/lib/opendias
 -date-:-thread-:INF: Config setting: show_all_available = 1
 -date-:-thread-:INF: Config setting: port = 8988
