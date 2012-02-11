@@ -16,25 +16,21 @@ sub testProfile {
 sub test {
 
   my %calls = (
-    docFilter => [ 
-          { subaction => 'count' }, 
-          { subaction => 'fullList' }, 
-        ],
-    getScannerList => '',
-    getDocDetail => '',
-    updateDocDetails => '',
-    moveTag => [ 
-          { subaction => 'addTag' }, 
-          { subaction => 'removeTag' }, 
-          { subaction => 'addDoc' }, 
-          { subaction => 'removeDoc' }, 
-        ],
-    deleteDoc => '',
-    tagsAutoComplete => '',
-    titleAutoComplete => '',
-    doScan => '',
-    getScanningProgress => '',
-    nextPageReady => '',
+    docFilter => { 
+          subaction => [ 'count', 'fullList' ],
+          }, 
+    getScannerList => { },
+    getDocDetail => { },
+    updateDocDetails => { },
+    moveTag => { 
+          subaction => [ 'addDoc', 'addTag', 'removeDoc', 'removeTag' ], 
+          },
+    deleteDoc => { },
+    tagsAutoComplete => { },
+    titleAutoComplete => { },
+    doScan => { },
+    getScanningProgress => { },
+    nextPageReady => { },
   );
 
 
@@ -51,15 +47,15 @@ sub test {
 
   # Try all API actions that require a subaction, send an unknown sub action - expect 'error' response
   foreach my $action (sort {$a cmp $b} (keys %calls)) {
-    next unless ref $calls{$action} eq "ARRAY";
+    next unless exists $calls{$action}->{subaction};
     o_log( "Unknown subaction on action of $action = " . Dumper( directRequest( { action => $action, subaction => 'rumplestilskin' } ) ) );
   }
 
-  # Try all API actions that require a subaction, send avalid sub action, but no supporting fields - expect 'error' response
+  # Try all API actions that require a subaction, send a valid sub action, but no supporting fields - expect 'error' response
   foreach my $action (sort {$a cmp $b} (keys %calls)) {
-    next unless ref $calls{$action} eq "ARRAY";
-    foreach my $subaction (sort {$a->{subaction} cmp $b->{subaction}} ( @{$calls{$action}} ) ) {
-      o_log( "actions of $action / $subaction->{subaction} = " . Dumper( directRequest( { action => $action, subaction => $subaction->{subaction} } ) ) );
+    next unless exists $calls{$action}->{subaction};
+    foreach my $subaction ( @{$calls{$action}->{subaction}} ) {
+      o_log( "actions of $action / $subaction = " . Dumper( directRequest( { action => $action, subaction => $subaction } ) ) );
     }
   }
 
