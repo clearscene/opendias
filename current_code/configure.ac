@@ -12,7 +12,6 @@ AC_HEADER_STDC
 
 
 
-
 dnl ***************************************************************************
 dnl Internatinalization
 dnl ***************************************************************************
@@ -22,8 +21,8 @@ dnl AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [GETTEXT package name
 dnl AM_GLIB_GNU_GETTEXT
 dnl IT_PROG_INTLTOOL([0.35.0])
 
-AC_CHECK_FUNCS([gethostbyaddr],,AC_MSG_ERROR([Missing function gethostbyaddr]))
 AC_CHECK_FUNCS([strcspn],[],AC_MSG_ERROR([Missing function strcspn]))
+AC_CHECK_FUNCS([strndup],[],AC_MSG_ERROR([Missing function strndup]))
 AC_CHECK_FUNCS([strdup],[],AC_MSG_ERROR([Missing function strdup]))
 AC_CHECK_FUNCS([strstr],[],AC_MSG_ERROR([Missing function strstr]))
 AC_CHECK_FUNCS([memset],[],AC_MSG_ERROR([Missing function memset])) 
@@ -51,6 +50,11 @@ PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
+
+
+
+
+AC_ENABLE([werror],[OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS -Werror "])
 
 
 
