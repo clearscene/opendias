@@ -84,12 +84,12 @@ updateDocDetails = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=docFilter&endDate=2012-02-01&isActionRequired=bool&page=12345&range=12345&sortfield=12345&sortorder=12345&startDate=2012-02-01&subaction=rumplestilskin&tags=some%20text&textSearch=some%20text
+Sending request = action=docFilter&endDate=2012-12-31&isActionRequired=true&page=1234&range=1234&sortfield=1234&sortorder=1234&startDate=2012-12-31&subaction=rumplestilskin&tags=some%20text&textSearch=some%20text
 Unknown subaction on action of docFilter = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=moveTag&docid=12345&subaction=rumplestilskin&tag=some%20text
+Sending request = action=moveTag&docid=1234&subaction=rumplestilskin&tag=some%20text
 Unknown subaction on action of moveTag = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
@@ -130,78 +130,78 @@ actions of moveTag / removeTag, no supporting fields = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=deleteDoc&docid=12345&rogue_field=evil
-actions of deleteDoc = $VAR1 = {
+Sending request = action=deleteDoc&docid=1234&rogue_field=evil
+rogue field in actions of deleteDoc = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=doScan&deviceid=some%20text&format=some%20text&ocr=some%20text&pageLength=12345&pages=12345&resolution=12345&rogue_field=evil
-actions of doScan = $VAR1 = {
+Sending request = action=doScan&deviceid=some%20text&format=grey%20scale&ocr=eng&pagelength=100&pages=1&resolution=300&rogue_field=evil
+rogue field in actions of doScan = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=docFilter&endDate=2012-02-01&isActionRequired=bool&page=12345&range=12345&rogue_field=evil&sortfield=12345&sortorder=12345&startDate=2012-02-01&subaction=count&tags=some%20text&textSearch=some%20text
-actions of docFilter / count = $VAR1 = {
+Sending request = action=docFilter&endDate=2012-12-31&isActionRequired=true&page=1234&range=1234&rogue_field=evil&sortfield=1234&sortorder=1234&startDate=2012-12-31&subaction=count&tags=some%20text&textSearch=some%20text
+rogue field in actions of docFilter / count = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=docFilter&endDate=2012-02-01&isActionRequired=bool&page=12345&range=12345&rogue_field=evil&sortfield=12345&sortorder=12345&startDate=2012-02-01&subaction=fullList&tags=some%20text&textSearch=some%20text
-actions of docFilter / fullList = $VAR1 = {
+Sending request = action=docFilter&endDate=2012-12-31&isActionRequired=true&page=1234&range=1234&rogue_field=evil&sortfield=1234&sortorder=1234&startDate=2012-12-31&subaction=fullList&tags=some%20text&textSearch=some%20text
+rogue field in actions of docFilter / fullList = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=getDocDetail&docid=12345&rogue_field=evil
-actions of getDocDetail = $VAR1 = {
+Sending request = action=getDocDetail&docid=1234&rogue_field=evil
+rogue field in actions of getDocDetail = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
 Sending request = action=getScannerList&rogue_field=evil
-actions of getScannerList = $VAR1 = {
+rogue field in actions of getScannerList = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
 Sending request = action=getScanningProgress&rogue_field=evil&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
-actions of getScanningProgress = $VAR1 = {
+rogue field in actions of getScanningProgress = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=moveTag&docid=12345&rogue_field=evil&subaction=addDoc&tag=some%20text
-actions of moveTag / addDoc = $VAR1 = {
+Sending request = action=moveTag&docid=1234&rogue_field=evil&subaction=addDoc&tag=some%20text
+rogue field in actions of moveTag / addDoc = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=moveTag&docid=12345&rogue_field=evil&subaction=addTag&tag=some%20text
-actions of moveTag / addTag = $VAR1 = {
+Sending request = action=moveTag&docid=1234&rogue_field=evil&subaction=addTag&tag=some%20text
+rogue field in actions of moveTag / addTag = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=moveTag&docid=12345&rogue_field=evil&subaction=removeDoc&tag=some%20text
-actions of moveTag / removeDoc = $VAR1 = {
+Sending request = action=moveTag&docid=1234&rogue_field=evil&subaction=removeDoc&tag=some%20text
+rogue field in actions of moveTag / removeDoc = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=moveTag&docid=12345&rogue_field=evil&subaction=removeTag&tag=some%20text
-actions of moveTag / removeTag = $VAR1 = {
+Sending request = action=moveTag&docid=1234&rogue_field=evil&subaction=removeTag&tag=some%20text
+rogue field in actions of moveTag / removeTag = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
 Sending request = action=nextPageReady&rogue_field=evil&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
-actions of nextPageReady = $VAR1 = {
+rogue field in actions of nextPageReady = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=tagsAutoComplete&docid=12345&rogue_field=evil&startsWith=test
-actions of tagsAutoComplete = $VAR1 = {
+Sending request = action=tagsAutoComplete&docid=1234&rogue_field=evil&startsWith=test
+rogue field in actions of tagsAutoComplete = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=titleAutoComplete&notLinkedTo=12345&rogue_field=evil&startsWith=test
-actions of titleAutoComplete = $VAR1 = {
+Sending request = action=titleAutoComplete&notLinkedTo=1234&rogue_field=evil&startsWith=test
+rogue field in actions of titleAutoComplete = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 
-Sending request = action=updateDocDetails&docid=12345&kkey=12345&rogue_field=evil&vvalue=some%20text
-actions of updateDocDetails = $VAR1 = {
+Sending request = action=updateDocDetails&docid=1234&kkey=1234&rogue_field=evil&vvalue=some%20text
+rogue field in actions of updateDocDetails = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 

@@ -33,7 +33,7 @@ LOG-OUTPUT
 -date-:-thread-:ERR: Missing manditory post data with key of resolution
 -date-:-thread-:ERR: Missing manditory post data with key of pages
 -date-:-thread-:ERR: Missing manditory post data with key of ocr
--date-:-thread-:ERR: Missing manditory post data with key of pageLength
+-date-:-thread-:ERR: Missing manditory post data with key of pagelength
 -date-:-thread-:INF: Processing request for: Doc List Filter
 -date-:-thread-:ERR: Missing manditory post data with key of subaction
 -date-:-thread-:INF: Processing request for: document details
@@ -52,7 +52,6 @@ LOG-OUTPUT
 -date-:-thread-:ERR: Missing manditory post data with key of docid
 -date-:-thread-:INF: Processing request for: titleAutoComplete
 -date-:-thread-:ERR: Missing manditory post data with key of startsWith
--date-:-thread-:ERR: Missing manditory post data with key of docid
 -date-:-thread-:INF: Processing request for: update doc details
 -date-:-thread-:ERR: Missing manditory post data with key of docid
 -date-:-thread-:ERR: Missing manditory post data with key of kkey
@@ -78,9 +77,6 @@ LOG-OUTPUT
 -date-:-thread-:ERR: Unexpected post data with key of rogue_field
 -date-:-thread-:INF: Processing request for: doScan
 -date-:-thread-:ERR: Unexpected post data with key of rogue_field
--date-:-thread-:ERR: Validation failed: scan format check
--date-:-thread-:ERR: Validation failed: not a sane range
--date-:-thread-:ERR: Validation failed: Unknown ocr language
 -date-:-thread-:INF: Processing request for: Doc List Filter
 -date-:-thread-:ERR: Unexpected post data with key of rogue_field
 -date-:-thread-:INF: Processing request for: Doc List Filter
@@ -105,7 +101,6 @@ LOG-OUTPUT
 -date-:-thread-:ERR: Unexpected post data with key of rogue_field
 -date-:-thread-:INF: Processing request for: titleAutoComplete
 -date-:-thread-:ERR: Unexpected post data with key of rogue_field
--date-:-thread-:ERR: Missing manditory post data with key of docid
 -date-:-thread-:INF: Processing request for: update doc details
 -date-:-thread-:ERR: Unexpected post data with key of rogue_field
 -date-:-thread-:INF: Received SIGUSR1 signal.
