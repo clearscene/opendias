@@ -22,7 +22,7 @@ sub test {
     doScan => { 
           deviceid => 'text',
           format => 'grey scale',
-          pages => '1',
+          pages => 'page',
           resolution => '300',
           ocr => 'lang',
           pagelength => '100',
@@ -34,8 +34,8 @@ sub test {
           startDate => 'date',
           endDate => 'date',
           tags => 'text',
-          page => 'int',
-          range => 'int',
+          page => 'page',
+          range => 'page',
           sortfield => 'int',
           sortorder => 'int',
           }, 
@@ -123,24 +123,24 @@ sub test {
   }
 
 
-#  # Try all API actions that require a subaction, send a valid sub subaction, 
-#  # and all subfields, but include a rogue field.
-#  foreach my $action (sort {$a cmp $b} (keys %calls)) {
-#    foreach my $field (sort {$a cmp $b} (keys %{$calls{$action}})) {
-#      next if $field eq "subaction"; # we've already tested an incorrect subaction
-#      my %local_details = %{$calls{$action}};
-#      replaceWithValues(\%local_details, $field);
-#      if( exists $local_details{subaction} ) {
-#        delete $local_details{subaction};
-#        foreach my $subaction ( @{$calls{$action}->{subaction}} ) {
-#          o_log( "field $field with duff data, $action / $subaction = " . Dumper( directRequest( { action => $action, subaction => $subaction, %local_details } ) ) );
-#        }
-#      }
-#      else {
-#        o_log( "field $field with duff data, $action = " . Dumper( directRequest( { action => $action, %local_details } ) ) );
-#      }
-#    }
-#  }
+  # Try all API actions that require a subaction, send a valid sub subaction, 
+  # and all subfields, but include a rogue field.
+  foreach my $action (sort {$a cmp $b} (keys %calls)) {
+    foreach my $field (sort {$a cmp $b} (keys %{$calls{$action}})) {
+      next if $field eq "subaction"; # we've already tested an incorrect subaction
+      my %local_details = %{$calls{$action}};
+      replaceWithValues(\%local_details, $field);
+      if( exists $local_details{subaction} ) {
+        delete $local_details{subaction};
+        foreach my $subaction ( @{$calls{$action}->{subaction}} ) {
+          o_log( "field $field with duff data, $action / $subaction = " . Dumper( directRequest( { action => $action, subaction => $subaction, %local_details } ) ) );
+        }
+      }
+      else {
+        o_log( "field $field with duff data, $action = " . Dumper( directRequest( { action => $action, %local_details } ) ) );
+      }
+    }
+  }
 
 
   return 0;
@@ -154,6 +154,10 @@ sub replaceWithValues {
     if($hashRef->{$key} eq 'int') {
       $hashRef->{$key} = 1234;
       $hashRef->{$key} = 123499999 if $isBad eq $key;
+    }
+    elsif($hashRef->{$key} eq 'page') {
+      $hashRef->{$key} = 8;
+      $hashRef->{$key} = 999999 if $isBad eq $key;
     }
     elsif($hashRef->{$key} eq 'text') {
       $hashRef->{$key} = 'some text';

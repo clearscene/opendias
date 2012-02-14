@@ -103,6 +103,83 @@ LOG-OUTPUT
 -date-:-thread-:ERR: Unexpected post data with key of rogue_field
 -date-:-thread-:INF: Processing request for: update doc details
 -date-:-thread-:ERR: Unexpected post data with key of rogue_field
+-date-:-thread-:INF: Processing request for: delete document
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: doScan
+-date-:-thread-:ERR: Missing manditory post data with key of deviceid
+-date-:-thread-:INF: Processing request for: doScan
+-date-:-thread-:ERR: Missing manditory post data with key of format
+-date-:-thread-:INF: Processing request for: doScan
+-date-:-thread-:ERR: Validation failed: Unknown ocr language
+-date-:-thread-:INF: Processing request for: doScan
+-date-:-thread-:ERR: Missing manditory post data with key of pagelength
+-date-:-thread-:INF: Processing request for: doScan
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: doScan
+-date-:-thread-:ERR: Missing manditory post data with key of resolution
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:ERR: Validation failed: 12-3 is not an int
+-date-:-thread-:ERR: Validation failed: -2 is not an int
+-date-:-thread-:ERR: Validation failed: date check
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:ERR: Validation failed: 12-3 is not an int
+-date-:-thread-:ERR: Validation failed: -2 is not an int
+-date-:-thread-:ERR: Validation failed: date check
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: Doc List Filter
+ ----- line duplicated more than three times ----- 
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:ERR: Validation failed: 12-3 is not an int
+-date-:-thread-:ERR: Validation failed: -2 is not an int
+-date-:-thread-:ERR: Validation failed: date check
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:ERR: Validation failed: 12-3 is not an int
+-date-:-thread-:ERR: Validation failed: -2 is not an int
+-date-:-thread-:ERR: Validation failed: date check
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:INF: Processing request for: document details
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: getScanning Progress
+-date-:-thread-:ERR: Validation failed: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaZaaaaa is not a valid uuid
+-date-:-thread-:INF: Processing request for: Move Tag
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: Move Tag
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: Move Tag
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: Move Tag
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: Move Tag
+-date-:-thread-:ERR: Missing manditory post data with key of tag
+-date-:-thread-:INF: Processing request for: Move Tag
+-date-:-thread-:ERR: Missing manditory post data with key of tag
+-date-:-thread-:INF: Processing request for: Move Tag
+-date-:-thread-:ERR: Missing manditory post data with key of tag
+-date-:-thread-:INF: Processing request for: Move Tag
+-date-:-thread-:ERR: Missing manditory post data with key of tag
+-date-:-thread-:INF: Processing request for: restart scan after page change
+-date-:-thread-:ERR: Validation failed: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaZaaaaa is not a valid uuid
+-date-:-thread-:INF: Processing request for: tagsAutoComplete
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: tagsAutoComplete
+-date-:-thread-:ERR: Missing manditory post data with key of startsWith
+-date-:-thread-:INF: Processing request for: titleAutoComplete
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: titleAutoComplete
+-date-:-thread-:ERR: Missing manditory post data with key of startsWith
+-date-:-thread-:INF: Processing request for: update doc details
+-date-:-thread-:ERR: Validation failed: not a sane range
+-date-:-thread-:INF: Processing request for: update doc details
+-date-:-thread-:ERR: trying to update an invalid doc field: 123499999.
+-date-:-thread-:INF: Processing request for: update doc details
+-date-:-thread-:ERR: Missing manditory post data with key of vvalue
 -date-:-thread-:INF: Received SIGUSR1 signal.
 -date-:-thread-:INF: openDias service is shutting down....
 -date-:-thread-:INF: ....openDias service has shutdown
