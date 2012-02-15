@@ -107,8 +107,24 @@ if [ "$NOBUILD" == "" ]; then
   #
   echo Cleaning ...
   cd ../
-  make clean > test/results/buildLog.out
+  make clean &> test/results/buildLog2.out
   cd test
+
+  echo Performing code analysis ...
+  cd ../
+  cppcheck --verbose --enable=all --error-exitcode=1 src/ &> test/results/buildLog2.out
+  if [ "$?" -ne "0" ]; then
+    echo "Code analysis found a problem. Check the buildLog.out for details."
+    cd test
+    # unfortunatly bash cannot support "&>>" - yet!
+    cat results/buildLog2.out >> results/buildLog.out
+    rm results/buildLog2.out
+    exit
+  fi
+  cd test
+  # unfortunatly bash cannot support "&>>" - yet!
+  cat results/buildLog2.out >> results/buildLog.out
+  rm results/buildLog2.out
 
   # if the file is here, then last time configure was run was in this script
   # so no need to re-do it.
@@ -130,6 +146,14 @@ if [ "$NOBUILD" == "" ]; then
   echo Making ...
   cd ../
   make &> test/results/buildLog2.out
+  if [ "$?" -ne "0" ]; then
+    echo "Compile stage failed. Check the buildLog.out for details."
+    cd test
+    # unfortunatly bash cannot support "&>>" - yet!
+    cat results/buildLog2.out >> results/buildLog.out
+    rm results/buildLog2.out
+    exit
+  fi
   cd test
   # unfortunatly bash cannot support "&>>" - yet!
   cat results/buildLog2.out >> results/buildLog.out
@@ -182,7 +206,7 @@ echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP ../src/opendias -c $PWD/config/t
 #######################################
 # Run automated tests
 echo Starting test harness ...
-echo perl ./harness.pl $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@
+#echo perl ./harness.pl $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@
 perl ./harness.pl $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@ 2> /dev/null
 #######################################
 #######################################
