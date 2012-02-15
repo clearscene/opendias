@@ -239,12 +239,12 @@ extern char *getTimeStr_iso8601() {
   time_t ttime;
   struct tm *stTime;
   size_t size;
-  char *strdate = malloc(32);
+  char *strdate = malloc(20);
 
   size = time(&ttime);
   stTime = gmtime(&ttime);
-  size = strftime(strdate, 32, "%Y-%m-%d %H:%M:%S", stTime);
-  if( 31 != size )
+  size = strftime(strdate, 20, "%Y-%m-%d %H:%M:%S", stTime);
+  if( 19 != size )
     o_log(ERROR, "Count not write entire data block.");
 
   return strdate;
@@ -264,6 +264,16 @@ extern void propper(char *inStr) {
       if(++ptr)
         *ptr = toupper(*ptr);
     }
+    ++ptr;
+  }
+}
+
+extern void lower(char *inStr) {
+  char *ptr = inStr;
+
+  /* going thru string */
+  while(*ptr) {
+    *ptr = tolower(*ptr);
     ++ptr;
   }
 }
