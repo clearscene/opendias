@@ -55,7 +55,7 @@ extern char *doDelete (char *documentId) {
     o_log(INFORMATION, "%s", pages_s);
     free(pages_s);
   } else {
-    o_log(ERROR, "Could not select record.");
+    o_log(ERROR, "Could not select record %s.", documentId);
     free_recordset( rSet );
     free(sql);
     return NULL;
@@ -150,7 +150,7 @@ extern char *getDocDetail (char *documentId) {
   sql = o_printf("SELECT * FROM docs WHERE docid = %s", documentId);
   rSet = runquery_db(sql);
   if( rSet == NULL ) {
-    o_log(ERROR, "Could not select record.");
+    o_log(ERROR, "Could not select record %s.", documentId);
     free_recordset( rSet );
     free(sql);
     return NULL;
