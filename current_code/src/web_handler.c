@@ -215,8 +215,11 @@ extern void request_completed (void *cls, struct MHD_Connection *connection, voi
       free(row->key);
       row->key = NULL;
       data_struct = (struct post_data_struct *)row->data;
-      free(data_struct->data);
-      free(data_struct);
+      // Incase do data is sent in the post
+      if( data_struct != NULL ) {
+        free(data_struct->data);
+        free(data_struct);
+      }
       row->data = NULL;
     }
     sll_destroy( sll_findFirstElement( con_info->post_data ) );
@@ -538,286 +541,297 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
         return MHD_YES;
       }
       else {
-        // Main post branch point
+        /*
+         * Main post branch point
+         */
 
-        basicValidation(con_info->post_data);
-        postDumper(con_info->post_data);
-
-        action = getPostData(con_info->post_data, "action");
-
-        if ( action && 0 == strcmp(action, "getDocDetail") ) {
-          o_log(INFORMATION, "Processing request for: document details");
-          if ( accessPrivs.view_doc == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            char *docid = getPostData(con_info->post_data, "docid");
-            content = getDocDetail(docid); //doc_editor.c
-            if(content == (void *)NULL)
-              content = o_strdup(errorxml);
-          }
+        if( 1 == basicValidation(con_info->post_data) ) {
+          // If valiation failed, then build an error page and dont try anything else.
+          content = o_strdup(errorxml);
           mimetype = MIMETYPE_XML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "getScannerList") ) {
-          o_log(INFORMATION, "Processing request for: getScannerList");
-          if ( accessPrivs.add_scan == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            content = getScannerList(); // pageRender.c
-            if(content == (void *)NULL) {
-              content = o_strdup(errorxml);
-            }
-          }
-          mimetype = MIMETYPE_XML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "doScan") ) {
-          o_log(INFORMATION, "Processing request for: doScan");
-          if ( accessPrivs.add_scan == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            char *deviceid = getPostData(con_info->post_data, "deviceid");
-            char *format = getPostData(con_info->post_data, "format");
-            char *resolution = getPostData(con_info->post_data, "resolution");
-            char *pages = getPostData(con_info->post_data, "pages");
-            char *ocr = getPostData(con_info->post_data, "ocr");
-            char *pagelength = getPostData(con_info->post_data, "pagelength");
-            content = doScan(deviceid, format, resolution, pages, ocr, pagelength, (void *) con_info); // pageRender.c
-            if(content == (void *)NULL) {
-              content = o_strdup(errorxml);
-            }
-          }
-          mimetype = MIMETYPE_XML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "getScanningProgress") ) {
-          o_log(INFORMATION, "Processing request for: getScanning Progress");
-          if ( accessPrivs.add_scan == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
-            content = getScanningProgress(scanprogressid); //pageRender.c
-            if(content == (void *)NULL) {
-              content = o_strdup(errorxml);
-            }
-          }
-          mimetype = MIMETYPE_XML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "nextPageReady") ) {
-          o_log(INFORMATION, "Processing request for: restart scan after page change");
-          if ( accessPrivs.add_scan == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
-            content = nextPageReady(scanprogressid, (void *) con_info); //pageRender.c
-            if(content == (void *)NULL) {
-              content = o_strdup(errorxml);
-            }
-          }
-          mimetype = MIMETYPE_XML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "updateDocDetails") ) {
-          o_log(INFORMATION, "Processing request for: update doc details");
-          if ( accessPrivs.edit_doc == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            char *docid = getPostData(con_info->post_data, "docid");
-            char *key = getPostData(con_info->post_data, "kkey");
-            char *value = getPostData(con_info->post_data, "vvalue");
-            content = updateDocDetails(docid, key, value); //doc_editor.c
-            if(content == (void *)NULL) {
-              content = o_strdup(errorxml);
-            }
-          }
-          mimetype = MIMETYPE_XML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "moveTag") ) {
-          o_log(INFORMATION, "Processing request for: Move Tag");
-          if ( accessPrivs.edit_doc == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            char *docid = getPostData(con_info->post_data, "docid");
-            char *tag = getPostData(con_info->post_data, "tag");
-            char *subaction = getPostData(con_info->post_data, "subaction");
-            content = updateTagLinkage(docid, tag, subaction); //doc_editor.c
-            if(content == (void *)NULL) 
-              content = o_strdup(errorxml);
-          }
-          mimetype = MIMETYPE_XML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "docFilter") ) {
-          o_log(INFORMATION, "Processing request for: Doc List Filter");
-          if ( accessPrivs.view_doc == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            char *subaction = getPostData(con_info->post_data, "subaction");
-            char *textSearch = getPostData(con_info->post_data, "textSearch");
-            char *isActionRequired = getPostData(con_info->post_data, "isActionRequired");
-            char *startDate = getPostData(con_info->post_data, "startDate");
-            char *endDate = getPostData(con_info->post_data, "endDate");
-            char *tags = getPostData(con_info->post_data, "tags");
-            char *page = getPostData(con_info->post_data, "page");
-            char *range = getPostData(con_info->post_data, "range");
-            char *sortfield = getPostData(con_info->post_data, "sortfield");
-            char *sortorder = getPostData(con_info->post_data, "sortorder");
-            content = docFilter(subaction, textSearch, isActionRequired, startDate, endDate, tags, page, range, sortfield, sortorder); //pageRender.c
-            if(content == (void *)NULL) {
-              content = o_strdup(errorxml);
-            }
-          }
-          mimetype = MIMETYPE_XML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "deleteDoc") ) {
-          o_log(INFORMATION, "Processing request for: delete document");
-          if ( accessPrivs.delete_doc == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            char *docid = getPostData(con_info->post_data, "docid");
-            content = doDelete(docid); // doc_editor.c
-            if(content == (void *)NULL) {
-              content = o_strdup(errorxml);
-            }
-          }
-          mimetype = MIMETYPE_XML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "getAudio") ) {
-          o_log(INFORMATION, "Processing request for: getAudio");
-          if ( accessPrivs.view_doc == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            content = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><Audio<<filename>BabyBeat.ogg</filename></Audio></Response>");
-          }
-          mimetype = MIMETYPE_XML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "uploadfile") ) {
-          o_log(INFORMATION, "Processing request for: uploadfile");
-          if ( accessPrivs.add_import == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            char *filename = getPostData(con_info->post_data, "uploadfile");
-            char *ftype = getPostData(con_info->post_data, "ftype");
-            content = uploadfile(filename, ftype); // import_doc.c
-            if(content == (void *)NULL)
-              content = o_strdup(servererrorpage);
-          }
-          mimetype = MIMETYPE_HTML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "getAccessDetails") ) {
-          o_log(INFORMATION, "Processing request for: getAccessDetails");
-          if ( accessPrivs.update_access == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            content = getAccessDetails(); // pageRender.c
-            if(content == (void *)NULL)
-              content = o_strdup(servererrorpage);
-          }
-          mimetype = MIMETYPE_XML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "controlAccess") ) {
-          o_log(INFORMATION, "Processing request for: controlAccess");
-          if ( accessPrivs.update_access == 0 )
-            content = build_page(denied);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            char *submethod = getPostData(con_info->post_data, "submethod");
-            char *location = getPostData(con_info->post_data, "address");
-            //char *user = getPostData(con_info->post_data, "user");
-            //char *password = getPostData(con_info->post_data, "password");
-            int role = atoi(getPostData(con_info->post_data, "role"));
-            content = controlAccess(submethod, location, NULL, NULL, role); // pageRender.c
-            if(content == (void *)NULL)
-              content = o_strdup(servererrorpage);
-          }
-          mimetype = MIMETYPE_HTML;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "titleAutoComplete") ) {
-          o_log(INFORMATION, "Processing request for: titleAutoComplete");
-          if ( accessPrivs.view_doc == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            char *startsWith = getPostData(con_info->post_data, "startsWith");
-            char *notLinkedTo = getPostData(con_info->post_data, "notLinkedTo");
-            content = titleAutoComplete(startsWith, notLinkedTo); // pageRender.c
-            if(content == (void *)NULL)
-              content = o_strdup(servererrorpage);
-          }
-          mimetype = MIMETYPE_JSON;
-          size = strlen(content);
-        }
-
-        else if ( action && 0 == strcmp(action, "tagsAutoComplete") ) {
-          o_log(INFORMATION, "Processing request for: tagsAutoComplete");
-          if ( accessPrivs.view_doc == 0 )
-            content = o_strdup(noaccessxml);
-          else if ( validate( con_info->post_data, action ) ) 
-            content = o_strdup(errorxml);
-          else {
-            char *startsWith = getPostData(con_info->post_data, "startsWith");
-            char *docid = getPostData(con_info->post_data, "docid");
-            content = tagsAutoComplete(startsWith, docid); // pageRender.c
-            if(content == (void *)NULL)
-              content = o_strdup(servererrorpage);
-          }
-          mimetype = MIMETYPE_JSON;
           size = strlen(content);
         }
 
         else {
-          // unknown post request - should have been picked up by validation!
-          o_log(WARNING, "disallowed content: post request for unknown action - %s", action);
-          content = o_strdup("");
-          mimetype = MIMETYPE_HTML;
-          size = 0;
+
+          // Validation was OK?, then get ready to build a page.
+          postDumper(con_info->post_data);
+          action = getPostData(con_info->post_data, "action");
+
+          if ( action && 0 == strcmp(action, "getDocDetail") ) {
+            o_log(INFORMATION, "Processing request for: document details");
+            if ( accessPrivs.view_doc == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              char *docid = getPostData(con_info->post_data, "docid");
+              content = getDocDetail(docid); //doc_editor.c
+              if(content == (void *)NULL)
+                content = o_strdup(errorxml);
+            }
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "getScannerList") ) {
+            o_log(INFORMATION, "Processing request for: getScannerList");
+            if ( accessPrivs.add_scan == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              content = getScannerList(); // pageRender.c
+              if(content == (void *)NULL) {
+                content = o_strdup(errorxml);
+              }
+            }
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "doScan") ) {
+            o_log(INFORMATION, "Processing request for: doScan");
+            if ( accessPrivs.add_scan == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              char *deviceid = getPostData(con_info->post_data, "deviceid");
+              char *format = getPostData(con_info->post_data, "format");
+              char *resolution = getPostData(con_info->post_data, "resolution");
+              char *pages = getPostData(con_info->post_data, "pages");
+              char *ocr = getPostData(con_info->post_data, "ocr");
+              char *pagelength = getPostData(con_info->post_data, "pagelength");
+              content = doScan(deviceid, format, resolution, pages, ocr, pagelength, (void *) con_info); // pageRender.c
+              if(content == (void *)NULL) {
+                content = o_strdup(errorxml);
+              }
+            }
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "getScanningProgress") ) {
+            o_log(INFORMATION, "Processing request for: getScanning Progress");
+            if ( accessPrivs.add_scan == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
+              content = getScanningProgress(scanprogressid); //pageRender.c
+              if(content == (void *)NULL) {
+                content = o_strdup(errorxml);
+              }
+            }
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "nextPageReady") ) {
+            o_log(INFORMATION, "Processing request for: restart scan after page change");
+            if ( accessPrivs.add_scan == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
+              content = nextPageReady(scanprogressid, (void *) con_info); //pageRender.c
+              if(content == (void *)NULL) {
+                content = o_strdup(errorxml);
+              }
+            }
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "updateDocDetails") ) {
+            o_log(INFORMATION, "Processing request for: update doc details");
+            if ( accessPrivs.edit_doc == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              char *docid = getPostData(con_info->post_data, "docid");
+              char *key = getPostData(con_info->post_data, "kkey");
+              char *value = getPostData(con_info->post_data, "vvalue");
+              content = updateDocDetails(docid, key, value); //doc_editor.c
+              if(content == (void *)NULL) {
+                content = o_strdup(errorxml);
+              }
+            }
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "moveTag") ) {
+            o_log(INFORMATION, "Processing request for: Move Tag");
+            if ( accessPrivs.edit_doc == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              char *docid = getPostData(con_info->post_data, "docid");
+              char *tag = getPostData(con_info->post_data, "tag");
+              char *subaction = getPostData(con_info->post_data, "subaction");
+              content = updateTagLinkage(docid, tag, subaction); //doc_editor.c
+              if(content == (void *)NULL) 
+                content = o_strdup(errorxml);
+            }
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "docFilter") ) {
+            o_log(INFORMATION, "Processing request for: Doc List Filter");
+            if ( accessPrivs.view_doc == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              char *subaction = getPostData(con_info->post_data, "subaction");
+              char *textSearch = getPostData(con_info->post_data, "textSearch");
+              char *isActionRequired = getPostData(con_info->post_data, "isActionRequired");
+              char *startDate = getPostData(con_info->post_data, "startDate");
+              char *endDate = getPostData(con_info->post_data, "endDate");
+              char *tags = getPostData(con_info->post_data, "tags");
+              char *page = getPostData(con_info->post_data, "page");
+              char *range = getPostData(con_info->post_data, "range");
+              char *sortfield = getPostData(con_info->post_data, "sortfield");
+              char *sortorder = getPostData(con_info->post_data, "sortorder");
+              content = docFilter(subaction, textSearch, isActionRequired, startDate, endDate, tags, page, range, sortfield, sortorder); //pageRender.c
+              if(content == (void *)NULL) {
+                content = o_strdup(errorxml);
+              }
+            }
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "deleteDoc") ) {
+            o_log(INFORMATION, "Processing request for: delete document");
+            if ( accessPrivs.delete_doc == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              char *docid = getPostData(con_info->post_data, "docid");
+              content = doDelete(docid); // doc_editor.c
+              if(content == (void *)NULL) {
+                content = o_strdup(errorxml);
+              }
+            }
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "getAudio") ) {
+            o_log(INFORMATION, "Processing request for: getAudio");
+            if ( accessPrivs.view_doc == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              content = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><Audio<<filename>BabyBeat.ogg</filename></Audio></Response>");
+            }
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "uploadfile") ) {
+            o_log(INFORMATION, "Processing request for: uploadfile");
+            if ( accessPrivs.add_import == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              char *filename = getPostData(con_info->post_data, "uploadfile");
+              char *ftype = getPostData(con_info->post_data, "ftype");
+              content = uploadfile(filename, ftype); // import_doc.c
+              if(content == (void *)NULL)
+                content = o_strdup(servererrorpage);
+            }
+            mimetype = MIMETYPE_HTML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "getAccessDetails") ) {
+            o_log(INFORMATION, "Processing request for: getAccessDetails");
+            if ( accessPrivs.update_access == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              content = getAccessDetails(); // pageRender.c
+              if(content == (void *)NULL)
+                content = o_strdup(servererrorpage);
+            }
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "controlAccess") ) {
+            o_log(INFORMATION, "Processing request for: controlAccess");
+            if ( accessPrivs.update_access == 0 )
+              content = build_page(denied);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              char *submethod = getPostData(con_info->post_data, "submethod");
+              char *location = getPostData(con_info->post_data, "address");
+              //char *user = getPostData(con_info->post_data, "user");
+              //char *password = getPostData(con_info->post_data, "password");
+              int role = atoi(getPostData(con_info->post_data, "role"));
+              content = controlAccess(submethod, location, NULL, NULL, role); // pageRender.c
+              if(content == (void *)NULL)
+                content = o_strdup(servererrorpage);
+            }
+            mimetype = MIMETYPE_HTML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "titleAutoComplete") ) {
+            o_log(INFORMATION, "Processing request for: titleAutoComplete");
+            if ( accessPrivs.view_doc == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              char *startsWith = getPostData(con_info->post_data, "startsWith");
+              char *notLinkedTo = getPostData(con_info->post_data, "notLinkedTo");
+              content = titleAutoComplete(startsWith, notLinkedTo); // pageRender.c
+              if(content == (void *)NULL)
+                content = o_strdup(servererrorpage);
+            }
+            mimetype = MIMETYPE_JSON;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "tagsAutoComplete") ) {
+            o_log(INFORMATION, "Processing request for: tagsAutoComplete");
+            if ( accessPrivs.view_doc == 0 )
+              content = o_strdup(noaccessxml);
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_strdup(errorxml);
+            else {
+              char *startsWith = getPostData(con_info->post_data, "startsWith");
+              char *docid = getPostData(con_info->post_data, "docid");
+              content = tagsAutoComplete(startsWith, docid); // pageRender.c
+              if(content == (void *)NULL)
+                content = o_strdup(servererrorpage);
+            }
+            mimetype = MIMETYPE_JSON;
+            size = strlen(content);
+          }
+  
+          else {
+            // should have been picked up by validation! and so never got here
+            o_log(WARNING, "disallowed content: post request for unknown action.");
+            content = o_strdup("");
+            mimetype = MIMETYPE_HTML;
+            size = 0;
+          }
         }
       }
     }
