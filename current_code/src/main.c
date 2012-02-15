@@ -49,6 +49,7 @@ int setup (char *configFile) {
   DB_VERSION = 6;
   PORT = 8988; // Default - but overridden by config settings before port is opened
   LOG_DIR = o_strdup("/var/log/opendias");
+  o_log(INFORMATION, "Setting default log verbosity to %d.", VERBOSITY);
 
   // Get 'DB' location
   if (configFile != NULL)
@@ -82,6 +83,7 @@ int setup (char *configFile) {
       config_value = o_strdup(readData_db(rSet, "config_value"));
       o_log(INFORMATION, "Config setting: %s = %s", config_option, config_value);
       if( 0 == strcmp(config_option, "log_verbosity") ) {
+        o_log(INFORMATION, "Moving log verbosity from %d to %s", VERBOSITY, config_value);
         VERBOSITY = atoi(config_value);
       }
       else if ( 0 == strcmp(config_option, "scan_driectory") ) {
