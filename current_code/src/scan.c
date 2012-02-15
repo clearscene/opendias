@@ -342,6 +342,7 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
 
         // For the test 'virtual scanner'
         else if (testScanner == 1) {
+          status = SANE_STATUS_GOOD;
           if (strcmp (sod->name, "hand-scanner") == 0) {
             v_b = SANE_FALSE;
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
