@@ -239,7 +239,7 @@ extern void request_completed (void *cls, struct MHD_Connection *connection, voi
 
 static char *accessChecks(struct MHD_Connection *connection, const char *url, struct priverlage *privs) {
 
-  int locationLimited = 0, userLimited = 0, locationAccess = 0, userAccess = 0;
+  int locationLimited = 0, userLimited = 0, locationAccess = 0; //, userAccess = 0;
   const char *tmp;
   char *sql, *type, client_address[INET6_ADDRSTRLEN+14];
   struct simpleLinkedList *rSet;
@@ -301,7 +301,7 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
 
   if ( locationLimited == 1 || userLimited == 1 ) {
     // requires some access grant
-    if ( locationAccess == 1 || userAccess == 1 ) {
+    if ( locationAccess == 1 ) { //|| userAccess == 1 ) {
       o_log(DEBUGM, "Access 'granted' to user on %s for request: %s", client_address, url);
       return NULL; // User has access
     }

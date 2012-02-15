@@ -175,12 +175,13 @@ extern int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
 
   sqlite3_stmt *stmt;
   struct simpleLinkedList *tmpList = NULL;
-  int col = 0, rc;
+  int rc;
   char *type;
 
   o_log(SQLDEBUG, "%s", sql);
 
   if(vars != NULL) {
+    int col = 0;
     sqlite3_prepare(DBH, sql, (int)strlen(sql), &stmt, NULL);
     tmpList = vars;
     do {
