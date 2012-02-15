@@ -39,6 +39,7 @@ extern void conCat(char **, const char *);
 extern char *getTimeStr();
 extern char *getTimeStr_iso8601();
 extern void propper(char *);
+extern void lower(char *);
 extern void chop(char *);
 extern struct dateParts *dateStringToDateParts(char *);
 extern void addFileExt(char **, int);

@@ -342,6 +342,7 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
 
         // For the test 'virtual scanner'
         else if (testScanner == 1) {
+          status = SANE_STATUS_GOOD;
           if (strcmp (sod->name, "hand-scanner") == 0) {
             v_b = SANE_FALSE;
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
@@ -573,13 +574,13 @@ void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int reques
   char *ocrText;
   char *ocrLang;
   char *ocrScanText;
-  int counter;
 
   ocrLang = getScanParam(uuid, SCAN_PARAM_DO_OCR);
 #ifdef CAN_OCR
   if(ocrLang && 0 != strcmp(ocrLang, "-") ) {
 
     if(request_resolution >= 300 && request_resolution <= 400) {
+      int counter;
 
       o_log(DEBUGM, "attempting OCR");
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);

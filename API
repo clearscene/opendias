@@ -250,7 +250,7 @@ updateDocDetails -> docEditor::updateDocDetails
 	Purpose: Update a documents field with a specific value. 
 	Inputs:	action: fixed string 'updateDocDetails'
 		docid: the documents id
-		kkey: the name of the field that is being updated
+		kkey: the name of the field that is being updated ['ocrtext','title','docDate','actionrequired']
 		vvalue: the new value to set the field to
 	Outputs;
 		<?xml version='1.0' encoding='iso-8859-1'?>
