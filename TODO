@@ -2,22 +2,22 @@
 ## EDITED THIS DOC? NOW GO UPDATE essesntialcollections.co.uk/opendias_website/todo.shtml ##
 ####################################################################################
 
-Phase 1
--------
+Version 0.8
+-----------
 
-Implement the remainder of the test plan 'current_code/test/regressionTests/testplan'
+Get the frontend to timeout/complain on failed AJAX calls.
+
+Frontend remembers user options
 
 Implement 'By Username/Password' access controls
-
-Implement 'document linkage'
 
 Scanner device locking
 
 TECHNICAL: Check the use of "extern" where it's used.
 
 
-Phase 2
--------
+Version 0.9
+-----------
 
 Print documents
 
@@ -25,11 +25,11 @@ Implement 'OCR now' on document detail page.
 
 Package into .deb and .rpm and get included into major repositories
 
+Implement the remainder of the test plan 'current_code/test/regressionTests/testplan'
 
-Phase 3
--------
 
-Implement 'backend call' tests
+Version 1.0
+-----------
 
 Turn OCR into a plugin
 
