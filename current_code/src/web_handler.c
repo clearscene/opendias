@@ -163,7 +163,6 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
     else if(0 != strcmp(key, "uploadfile")) {
       conCat(&(data_struct->data), trimedData);
       data_struct->size += size;
-      ////////////g_hash_table_replace(con_info->post_data, key, data_struct);
     }
 
     if(0 == strcmp(key, "uploadfile")) {
@@ -173,14 +172,11 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
         o_log(ERROR, "could not open http post binary data file for output");
       else {
         fseek(fp, 0, SEEK_END);
-        if( size > fwrite (data, size, sizeof (char), fp) )
-          o_log(ERROR, "Did not write the fill amount of data.");
+        size_t wrote = fwrite (data, sizeof (char), size, fp);
+        if( size != wrote )
+          o_log(ERROR, "Did not write the full amount of data. Ecpected to write %d, but wrote %d", size, wrote);
         fclose(fp);
-/*        if( data_struct->size != size ) {
-          data_struct->size += size;
-          g_hash_table_replace(con_info->post_data, (gpointer)key, (gpointer)data_struct);
-        }
-*/      }
+      }
       free(filename);
     }
 
