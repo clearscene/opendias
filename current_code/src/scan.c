@@ -416,7 +416,7 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
 }
 
 
-SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_requested_len, int expectFrames, size_t totbytes, int bpl ) {
+SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_requested_len, int expectFrames, size_t totbytes, int bpl, char *header ) {
 
   SANE_Status status;
   SANE_Int received_length_from_sane = 0;
@@ -429,14 +429,15 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
   int counter;
   int onlyReadxFromBlockofThree = 0;
   int readItteration = 0;
-  size_t readSoFar = 0;
+  size_t readSoFar = strlen(header);
 
   // Initialise the initial buffer and blank image;
   o_log(DEBUGM, "Using a buff_requested_len of %d to collect a total of %d", *buff_requested_len, totbytes);
   buffer = malloc( (size_t)( sizeof(SANE_Byte) * *buff_requested_len ) );
-  raw_image = (unsigned char *)malloc( totbytes );
-  for (counter = 0 ; (size_t)counter < totbytes ; counter++) raw_image[counter]=125;
-
+  raw_image = (unsigned char *)malloc( totbytes + readSoFar );
+  strcpy((char *)raw_image, header);
+  for (counter = readSoFar ; (size_t)counter < totbytes+readSoFar ; counter++) raw_image[counter]=125;
+  
 
   o_log(DEBUGM, "scan_read - start");
   do {
@@ -582,7 +583,7 @@ void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int reques
     if(request_resolution >= 300 && request_resolution <= 400) {
       int counter;
 
-      o_log(DEBUGM, "attempting OCR");
+      o_log(INFORMATION, "Attempting OCR in lang of %s", ocrLang);
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
       // sharpen the image
@@ -635,9 +636,6 @@ extern void *doScanningOperation(void *uuid) {
   char *total_requested_pages_s;
   char *devName;
   char *outFilename;
-  char *tmpFile;
-  FILE *scanOutFile;
-  size_t size;
 
 
   o_log(DEBUGM, "sane_init");
@@ -739,8 +737,13 @@ extern void *doScanningOperation(void *uuid) {
   if( buff_requested_len <= 1 )
     buff_requested_len = 3 * pars.bytes_per_line * pars.depth;
 
+  char *header = o_printf ("P5\n# SANE data follows\n%d %d\n%d\n", 
+    pars.pixels_per_line, pars.lines,
+    (pars.depth <= 8) ? 255 : 65535);
+
   /* ========================================================== */
-  raw_image = collectData( (char *)uuid, openDeviceHandle, &buff_requested_len, expectFrames, totbytes, pars.bytes_per_line );
+  raw_image = collectData( (char *)uuid, openDeviceHandle, &buff_requested_len, expectFrames, totbytes, pars.bytes_per_line, header );
+  o_log(INFORMATION, "Scanning done.");
 
   o_log(DEBUGM, "sane_cancel");
   sane_cancel(openDeviceHandle);
@@ -750,34 +753,31 @@ extern void *doScanningOperation(void *uuid) {
 
 
 
-  // Write the image to disk now
-  //
-  tmpFile = o_printf("/tmp/%s.pnm", uuid);
-  if ((scanOutFile = fopen(tmpFile, "w")) == NULL)
-    o_log(ERROR, "could not open file for output");
-  fprintf (scanOutFile, "P5\n# SANE data follows\n%d %d\n%d\n", 
-    pars.pixels_per_line, pars.lines,
-    (pars.depth <= 8) ? 255 : 65535);
-  size = fwrite (raw_image, (size_t)pars.pixels_per_line, (size_t)pars.lines, scanOutFile);
-  if((int)size < (pars.pixels_per_line * pars.lines) )
-    o_log(ERROR, "Unable to write the entire image to disk.");
-  fclose(scanOutFile);
-
-
   // Do OCR - on this page
-  ocrImage( uuid, docid, raw_image, current_page, request_resolution, pars, totbytes );
-  free(raw_image);
+  // - OCR libs just wants the raw data and not the image header
+  ocrImage( uuid, docid, raw_image+strlen(header), current_page, request_resolution, pars, totbytes );
 
 
   // Convert Raw into JPEG
   //
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
+
+  FIMEMORY *hmem = FreeImage_OpenMemory(raw_image, (pars.pixels_per_line*pars.lines)+strlen(header));
+  free(header);
+  o_log(INFORMATION, "Convertion process: Initalised");
+
+  FIBITMAP *src = FreeImage_LoadFromMemory(FIF_PGMRAW, hmem, BMP_DEFAULT);
+  FreeImage_CloseMemory(hmem);
+  free(raw_image);
+  o_log(INFORMATION, "Convertion process: Loaded");
+
   outFilename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, current_page);
-  reformatImage(FIF_PGMRAW, tmpFile, FIF_JPEG, outFilename);
-  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
-  remove(tmpFile);
-  free(tmpFile);
+  FreeImage_Save(FIF_JPEG, src, outFilename, 95);
   free(outFilename);
+  FreeImage_Unload(src);
+  o_log(INFORMATION, "Conversion process: Complete");
+
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
 
 
   // cleaup && What should we do next
