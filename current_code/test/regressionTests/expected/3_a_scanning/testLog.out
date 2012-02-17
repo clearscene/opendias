@@ -1,0 +1,37 @@
+Copying pre defined environment
+Copying default database
+STARTING app...
+Now ready
+No need for a web client for this test.
+Sending request = action=doScan&deviceid=test%3A0&format=Grey%20Scale&ocr=-&pagelength=100&pages=2&resolution=300
+startScan = $VAR1 = {
+  'DoScan' => {
+    'scanuuid' => '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]'
+  }
+};
+
+Sending request = action=getScanningProgress&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+Message stating, were waiting = $VAR1 = {
+  'ScanningProgress' => {
+    'status' => '7',
+    'value' => '2'
+  }
+};
+
+Sending request = action=nextPageReady&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+Result of page turn request = $VAR1 = {
+  'NextPageReady' => {
+    'result' => 'OK'
+  }
+};
+
+Sending request = action=getScanningProgress&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+Final response = $VAR1 = {
+  'ScanningProgress' => {
+    'status' => '16',
+    'value' => '5'
+  }
+};
+
+Stopping service
+Waiting for valgrind to finish.

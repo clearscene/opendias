@@ -1,0 +1,8 @@
+Copying pre defined environment
+Copying default database
+Reserved the opendias port, to stop the service from starting correctly.
+STARTING app...
+Now ready
+No need for a web client for this test.
+Stopping service
+Waiting for valgrind to finish.

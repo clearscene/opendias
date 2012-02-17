@@ -1,0 +1,559 @@
+Copying pre defined environment
+Copying default database
+STARTING app...
+Now ready
+No need for a web client for this test.
+Doc Details
+Sending request = action=getDocDetail&docid=2
+$VAR1 = {
+  'DocDetail' => {
+    'DocLinks' => {
+      'doc' => {
+        'targetDocid' => '4',
+        'targetTitle' => 'Test 1 TitleText 2'
+      }
+    },
+    'Tags' => {
+      'tag' => [
+        'tag one',
+        'tag two'
+      ]
+    },
+    'actionrequired' => '1',
+    'docDate' => '2012/12/31',
+    'docid' => '2',
+    'extractedText' => 'This is final OCR text 3.',
+    'pages' => '1',
+    'scanDate' => '2011-01-04T21:13:05.393946Z',
+    'title' => 'Test 3 Title',
+    'type' => '3',
+    'x' => '2519',
+    'y' => '3509'
+  }
+};
+
+Add a tag linkage
+Sending request = action=moveTag&docid=2&subaction=addTag&tag=new%20tag
+$VAR1 = {
+  'MoveTag' => {
+    'status' => 'OK'
+  }
+};
+
+Doc Details - after update
+Sending request = action=getDocDetail&docid=2
+$VAR1 = {
+  'DocDetail' => {
+    'DocLinks' => {
+      'doc' => {
+        'targetDocid' => '4',
+        'targetTitle' => 'Test 1 TitleText 2'
+      }
+    },
+    'Tags' => {
+      'tag' => [
+        'new tag',
+        'tag one',
+        'tag two'
+      ]
+    },
+    'actionrequired' => '1',
+    'docDate' => '2012/12/31',
+    'docid' => '2',
+    'extractedText' => 'This is final OCR text 3.',
+    'pages' => '1',
+    'scanDate' => '2011-01-04T21:13:05.393946Z',
+    'title' => 'Test 3 Title',
+    'type' => '3',
+    'x' => '2519',
+    'y' => '3509'
+  }
+};
+
+Add a doc linkage
+Sending request = action=moveTag&docid=2&subaction=addDoc&tag=3
+$VAR1 = {
+  'MoveTag' => {
+    'status' => 'OK'
+  }
+};
+
+Doc Details - after update
+Sending request = action=getDocDetail&docid=2
+$VAR1 = {
+  'DocDetail' => {
+    'DocLinks' => {
+      'doc' => [
+        {
+          'targetDocid' => '4',
+          'targetTitle' => 'Test 1 TitleText 2'
+        },
+        {
+          'targetDocid' => '3',
+          'targetTitle' => 'Test 2 Title text'
+        }
+      ]
+    },
+    'Tags' => {
+      'tag' => [
+        'new tag',
+        'tag one',
+        'tag two'
+      ]
+    },
+    'actionrequired' => '1',
+    'docDate' => '2012/12/31',
+    'docid' => '2',
+    'extractedText' => 'This is final OCR text 3.',
+    'pages' => '1',
+    'scanDate' => '2011-01-04T21:13:05.393946Z',
+    'title' => 'Test 3 Title',
+    'type' => '3',
+    'x' => '2519',
+    'y' => '3509'
+  }
+};
+
+SELECT doctagid, docid, tagid FROM doc_tags ORDER BY doctagid
+------------------ row 1 ------------------
+docid : 2
+doctagid : 1
+tagid : 31
+------------------ row 2 ------------------
+docid : 2
+doctagid : 2
+tagid : 32
+------------------ row 3 ------------------
+docid : 3
+doctagid : 3
+tagid : 32
+------------------ row 4 ------------------
+docid : 4
+doctagid : 4
+tagid : 33
+------------------ row 5 ------------------
+docid : 2
+doctagid : 5
+tagid : 34
+
+
+SELECT tagid, tagname FROM tags ORDER BY tagid
+------------------ row 1 ------------------
+tagid : 1
+tagname : Bank
+------------------ row 2 ------------------
+tagid : 2
+tagname : Utility
+------------------ row 3 ------------------
+tagid : 3
+tagname : Tax
+------------------ row 4 ------------------
+tagid : 4
+tagname : Household
+------------------ row 5 ------------------
+tagid : 5
+tagname : Account
+------------------ row 6 ------------------
+tagid : 6
+tagname : Credit Card
+------------------ row 7 ------------------
+tagid : 7
+tagname : Gas
+------------------ row 8 ------------------
+tagid : 8
+tagname : Electricity
+------------------ row 9 ------------------
+tagid : 9
+tagname : Water
+------------------ row 10 ------------------
+tagid : 10
+tagname : Government
+------------------ row 11 ------------------
+tagid : 11
+tagname : Local
+------------------ row 12 ------------------
+tagid : 12
+tagname : Personal
+------------------ row 13 ------------------
+tagid : 13
+tagname : Morgage
+------------------ row 14 ------------------
+tagid : 14
+tagname : Insurance
+------------------ row 15 ------------------
+tagid : 15
+tagname : Car
+------------------ row 16 ------------------
+tagid : 16
+tagname : Land-Line
+------------------ row 17 ------------------
+tagid : 17
+tagname : Mobile
+------------------ row 18 ------------------
+tagid : 18
+tagname : Internet
+------------------ row 19 ------------------
+tagid : 19
+tagname : TV
+------------------ row 20 ------------------
+tagid : 20
+tagname : Letter
+------------------ row 21 ------------------
+tagid : 21
+tagname : Statement
+------------------ row 22 ------------------
+tagid : 22
+tagname : Bill
+------------------ row 23 ------------------
+tagid : 23
+tagname : Recieved
+------------------ row 24 ------------------
+tagid : 24
+tagname : Sent
+------------------ row 25 ------------------
+tagid : 25
+tagname : Wages
+------------------ row 26 ------------------
+tagid : 31
+tagname : tag one
+------------------ row 27 ------------------
+tagid : 32
+tagname : tag two
+------------------ row 28 ------------------
+tagid : 33
+tagname : tag three
+------------------ row 29 ------------------
+tagid : 34
+tagname : new tag
+
+
+Remove a tag linkage
+Sending request = action=moveTag&docid=2&subaction=removeTag&tag=tag%20two
+$VAR1 = {
+  'MoveTag' => {
+    'status' => 'OK'
+  }
+};
+
+Doc Details - after update
+Sending request = action=getDocDetail&docid=2
+$VAR1 = {
+  'DocDetail' => {
+    'DocLinks' => {
+      'doc' => [
+        {
+          'targetDocid' => '4',
+          'targetTitle' => 'Test 1 TitleText 2'
+        },
+        {
+          'targetDocid' => '3',
+          'targetTitle' => 'Test 2 Title text'
+        }
+      ]
+    },
+    'Tags' => {
+      'tag' => [
+        'new tag',
+        'tag one'
+      ]
+    },
+    'actionrequired' => '1',
+    'docDate' => '2012/12/31',
+    'docid' => '2',
+    'extractedText' => 'This is final OCR text 3.',
+    'pages' => '1',
+    'scanDate' => '2011-01-04T21:13:05.393946Z',
+    'title' => 'Test 3 Title',
+    'type' => '3',
+    'x' => '2519',
+    'y' => '3509'
+  }
+};
+
+SELECT doctagid, docid, tagid FROM doc_tags ORDER BY doctagid
+------------------ row 1 ------------------
+docid : 2
+doctagid : 1
+tagid : 31
+------------------ row 2 ------------------
+docid : 3
+doctagid : 3
+tagid : 32
+------------------ row 3 ------------------
+docid : 4
+doctagid : 4
+tagid : 33
+------------------ row 4 ------------------
+docid : 2
+doctagid : 5
+tagid : 34
+
+
+SELECT tagid, tagname FROM tags ORDER BY tagid
+------------------ row 1 ------------------
+tagid : 1
+tagname : Bank
+------------------ row 2 ------------------
+tagid : 2
+tagname : Utility
+------------------ row 3 ------------------
+tagid : 3
+tagname : Tax
+------------------ row 4 ------------------
+tagid : 4
+tagname : Household
+------------------ row 5 ------------------
+tagid : 5
+tagname : Account
+------------------ row 6 ------------------
+tagid : 6
+tagname : Credit Card
+------------------ row 7 ------------------
+tagid : 7
+tagname : Gas
+------------------ row 8 ------------------
+tagid : 8
+tagname : Electricity
+------------------ row 9 ------------------
+tagid : 9
+tagname : Water
+------------------ row 10 ------------------
+tagid : 10
+tagname : Government
+------------------ row 11 ------------------
+tagid : 11
+tagname : Local
+------------------ row 12 ------------------
+tagid : 12
+tagname : Personal
+------------------ row 13 ------------------
+tagid : 13
+tagname : Morgage
+------------------ row 14 ------------------
+tagid : 14
+tagname : Insurance
+------------------ row 15 ------------------
+tagid : 15
+tagname : Car
+------------------ row 16 ------------------
+tagid : 16
+tagname : Land-Line
+------------------ row 17 ------------------
+tagid : 17
+tagname : Mobile
+------------------ row 18 ------------------
+tagid : 18
+tagname : Internet
+------------------ row 19 ------------------
+tagid : 19
+tagname : TV
+------------------ row 20 ------------------
+tagid : 20
+tagname : Letter
+------------------ row 21 ------------------
+tagid : 21
+tagname : Statement
+------------------ row 22 ------------------
+tagid : 22
+tagname : Bill
+------------------ row 23 ------------------
+tagid : 23
+tagname : Recieved
+------------------ row 24 ------------------
+tagid : 24
+tagname : Sent
+------------------ row 25 ------------------
+tagid : 25
+tagname : Wages
+------------------ row 26 ------------------
+tagid : 31
+tagname : tag one
+------------------ row 27 ------------------
+tagid : 32
+tagname : tag two
+------------------ row 28 ------------------
+tagid : 33
+tagname : tag three
+------------------ row 29 ------------------
+tagid : 34
+tagname : new tag
+
+
+Remove a tag linkage
+Sending request = action=moveTag&docid=2&subaction=removeTag&tag=tag%20one
+$VAR1 = {
+  'MoveTag' => {
+    'status' => 'OK'
+  }
+};
+
+Doc Details - after update
+Sending request = action=getDocDetail&docid=2
+$VAR1 = {
+  'DocDetail' => {
+    'DocLinks' => {
+      'doc' => [
+        {
+          'targetDocid' => '4',
+          'targetTitle' => 'Test 1 TitleText 2'
+        },
+        {
+          'targetDocid' => '3',
+          'targetTitle' => 'Test 2 Title text'
+        }
+      ]
+    },
+    'Tags' => {
+      'tag' => 'new tag'
+    },
+    'actionrequired' => '1',
+    'docDate' => '2012/12/31',
+    'docid' => '2',
+    'extractedText' => 'This is final OCR text 3.',
+    'pages' => '1',
+    'scanDate' => '2011-01-04T21:13:05.393946Z',
+    'title' => 'Test 3 Title',
+    'type' => '3',
+    'x' => '2519',
+    'y' => '3509'
+  }
+};
+
+SELECT doctagid, docid, tagid FROM doc_tags ORDER BY doctagid
+------------------ row 1 ------------------
+docid : 3
+doctagid : 3
+tagid : 32
+------------------ row 2 ------------------
+docid : 4
+doctagid : 4
+tagid : 33
+------------------ row 3 ------------------
+docid : 2
+doctagid : 5
+tagid : 34
+
+
+SELECT tagid, tagname FROM tags ORDER BY tagid
+------------------ row 1 ------------------
+tagid : 1
+tagname : Bank
+------------------ row 2 ------------------
+tagid : 2
+tagname : Utility
+------------------ row 3 ------------------
+tagid : 3
+tagname : Tax
+------------------ row 4 ------------------
+tagid : 4
+tagname : Household
+------------------ row 5 ------------------
+tagid : 5
+tagname : Account
+------------------ row 6 ------------------
+tagid : 6
+tagname : Credit Card
+------------------ row 7 ------------------
+tagid : 7
+tagname : Gas
+------------------ row 8 ------------------
+tagid : 8
+tagname : Electricity
+------------------ row 9 ------------------
+tagid : 9
+tagname : Water
+------------------ row 10 ------------------
+tagid : 10
+tagname : Government
+------------------ row 11 ------------------
+tagid : 11
+tagname : Local
+------------------ row 12 ------------------
+tagid : 12
+tagname : Personal
+------------------ row 13 ------------------
+tagid : 13
+tagname : Morgage
+------------------ row 14 ------------------
+tagid : 14
+tagname : Insurance
+------------------ row 15 ------------------
+tagid : 15
+tagname : Car
+------------------ row 16 ------------------
+tagid : 16
+tagname : Land-Line
+------------------ row 17 ------------------
+tagid : 17
+tagname : Mobile
+------------------ row 18 ------------------
+tagid : 18
+tagname : Internet
+------------------ row 19 ------------------
+tagid : 19
+tagname : TV
+------------------ row 20 ------------------
+tagid : 20
+tagname : Letter
+------------------ row 21 ------------------
+tagid : 21
+tagname : Statement
+------------------ row 22 ------------------
+tagid : 22
+tagname : Bill
+------------------ row 23 ------------------
+tagid : 23
+tagname : Recieved
+------------------ row 24 ------------------
+tagid : 24
+tagname : Sent
+------------------ row 25 ------------------
+tagid : 25
+tagname : Wages
+------------------ row 26 ------------------
+tagid : 32
+tagname : tag two
+------------------ row 27 ------------------
+tagid : 33
+tagname : tag three
+------------------ row 28 ------------------
+tagid : 34
+tagname : new tag
+
+
+Remove a doc linkage
+Sending request = action=moveTag&docid=2&subaction=removeDoc&tag=4
+$VAR1 = {
+  'MoveTag' => {
+    'status' => 'OK'
+  }
+};
+
+Doc Details - after update
+Sending request = action=getDocDetail&docid=2
+$VAR1 = {
+  'DocDetail' => {
+    'DocLinks' => {
+      'doc' => {
+        'targetDocid' => '3',
+        'targetTitle' => 'Test 2 Title text'
+      }
+    },
+    'Tags' => {
+      'tag' => 'new tag'
+    },
+    'actionrequired' => '1',
+    'docDate' => '2012/12/31',
+    'docid' => '2',
+    'extractedText' => 'This is final OCR text 3.',
+    'pages' => '1',
+    'scanDate' => '2011-01-04T21:13:05.393946Z',
+    'title' => 'Test 3 Title',
+    'type' => '3',
+    'x' => '2519',
+    'y' => '3509'
+  }
+};
+
+Stopping service
+Waiting for valgrind to finish.

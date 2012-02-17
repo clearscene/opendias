@@ -73,7 +73,6 @@ extern int connect_db (int createIfRequired) {
 
   int version = 0, i;
   char *db, *data;
-  struct simpleLinkedList *rSet;
 
   // Test to see if a DB file exsists
   db = o_printf("%s/openDIAS.sqlite3", BASE_DIR);
@@ -118,12 +117,10 @@ extern int connect_db (int createIfRequired) {
 
     if( 0 != load_file_to_memory(upgradeSQL, &data) ) {
       o_log(DEBUGM, "%s", data);
-      rSet = runquery_db(data);
-      if( rSet == 0 ) {
+      if( 1 == runUpdate_db(data, NULL) ) {
         o_log(ERROR, "Could not update the database to version %d.", i);
         return 1;
       }
-      free_recordset( rSet );
       free(data);
     }
     free(upgradeSQL);
@@ -178,42 +175,51 @@ extern int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
 
   sqlite3_stmt *stmt;
   struct simpleLinkedList *tmpList = NULL;
-  int col = 0, rc;
+  int rc;
   char *type;
 
   o_log(SQLDEBUG, "%s", sql);
-  sqlite3_prepare(DBH, sql, (int)strlen(sql), &stmt, NULL);
 
-  tmpList = vars;
-  do {
-    col++;
-    type = tmpList->data;
-    tmpList = sll_getNext(tmpList);
-    if ( 0 == strcmp (type, DB_NULL ) ) {
-      sqlite3_bind_null(stmt, col);
-    }
-    else if ( 0 == strcmp (type, DB_TEXT ) ) {
-      sqlite3_bind_text(stmt, col, (char *)tmpList->data, (int)strlen(tmpList->data), SQLITE_TRANSIENT );
+  if(vars != NULL) {
+    int col = 0;
+    sqlite3_prepare(DBH, sql, (int)strlen(sql), &stmt, NULL);
+    tmpList = vars;
+    do {
+      col++;
+      type = tmpList->data;
+      tmpList = sll_getNext(tmpList);
+      if ( 0 == strcmp (type, DB_NULL ) ) {
+        sqlite3_bind_null(stmt, col);
+      }
+      else if ( 0 == strcmp (type, DB_TEXT ) ) {
+        sqlite3_bind_text(stmt, col, (char *)tmpList->data, (int)strlen(tmpList->data), SQLITE_TRANSIENT );
 //      free(tmpList->data);
-    }
-    else if ( 0 == strcmp (type, DB_INT ) ) {
-      int *m = tmpList->data;
-      sqlite3_bind_int(stmt, col, *m );
-    }
+      }
+      else if ( 0 == strcmp (type, DB_INT ) ) {
+        int *m = tmpList->data;
+        sqlite3_bind_int(stmt, col, *m );
+      }
 //    else if ( 0 == strcmp (type, DB_DOUBLE ) ) {
 //        sqlite3_bind_double(stmt, col, tmpList->data );
 //    }
-    tmpList = sll_getNext(tmpList);
-  } while (tmpList != NULL);
+      tmpList = sll_getNext(tmpList);
+    } while (tmpList != NULL);
 
-  rc = sqlite3_step(stmt);
-  if( rc != SQLITE_DONE ) {
-    o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);
-    return 1;
+    rc = sqlite3_step(stmt);
+    if( rc != SQLITE_DONE ) {
+      o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);
+      sll_destroy(vars);
+      return 1;
+    }
+
+    rc = sqlite3_finalize(stmt);
+    sll_destroy(vars);
+  }
+  else {
+    char *zErrMsg;
+    rc = sqlite3_exec(DBH, sql, NULL, NULL, &zErrMsg);
   }
 
-  rc = sqlite3_finalize(stmt);
-  sll_destroy(vars);
   if( rc != SQLITE_OK ) {
     o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\n\
 The error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);

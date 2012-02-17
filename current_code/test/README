@@ -2,23 +2,47 @@
 
 2. How are the tests constructed.
 ---------------------------------
-The tests are generally categorised into three areas.
+Tests are generally categorised into three areas.
 
- * Test Coverage - ensure the tests are exhaustive.
- * Memory Management - ensure all code handles its memory correctly.
- * GUI Excersise - make the app does all it can
+ * (1_*) Appplication tests
+    * Test Coverage - ensure the testsi code coverage are exhaustive.
+    * Memory Management - ensure all code handles its memory correctly.
+    * Ensure the application can start,stop and handle common,edge use cases.
+ * (3_*) Backend API tests:
+    * Test Coverage - ensure the testsi code coverage are exhaustive.
+    * Memory Management - ensure all code handles its memory correctly.
+    * Does the backend return what it's supposed to.
+ * (8_*) GUI Excersise
+    * Does the webpages function as expected.
+
+These are the main components:
+
+ * setupRun.sh - Checks, builds and refreshes the environment.
+                 builds the application and configures the testing
+                 tools.
+ * harness.pl  - decides what tests are going to be run, keeps track 
+                 of passes/failes, and generates the results summary.
+ * regressionTest/*.pm - Each actual test. 
+                         1_* - App handeling
+                         3_* - Are API backend tests
+                         8_* - Are frontend tests
 
 2.1. Test Coverage.
 -------------------
-To ensure all areas of code are tested, all tests should be run while the application is compiled in "--coverage" mode. The test coverage can then be analysted after each test run with lcov and genhtml.
+To ensure all areas of code are tested, all tests should be run while 
+the application is compiled in "--coverage" mode. The test coverage 
+can then be analysted after each test run with lcov and genhtml.
 
 2.2. Memory Management.
 -----------------------
-To ensure that memory is being managed correctly, each test case should be run ontop of valgrind. Valgrind will then produce a report of all memory and program logical errors.
+To ensure that memory is being managed correctly, each test case should 
+be run ontop of valgrind. Valgrind will then produce a report of all 
+memory and program logical errors.
 
 2.3. GUI Excersise.
 -------------------
-The HtmlUnit (java) project is used to write scripts that interface to the application (via the perl test script).
+The HtmlUnit (java) project is used to write scripts that interface to 
+the application (via the perl test script).
 
 2.4. Best Practice.
 -------------------
@@ -26,8 +50,10 @@ To check the code base does not include common errors:
   cppcheck --verbose --enable=all src/
   splint -posix-lib -DHAVE_CONFIG_H -I. -I..  -DPACKAGE_LOCALE_DIR=\""/usr/local//locale"\" -DPACKAGE_SRC_DIR=\""."\" -DPACKAGE_DATA_DIR=\""/usr/local/share"\" -I/usr/include/uuid -I/usr/include/libxml2 -D__USE_XOPEN2K8=1 -D__builtin_va_list=va_list -weak src/*.c
 
-3. Getting the testing environment working
-------------------------------------------
+3. Getting the GUI testing environment working
+----------------------------------------------
+In order to run the frontend tests (8_* range), you will need the Java wrapper installed.
+The Java wrapper provides JUnit, a library that simulates browser behaviour.
 You will need to install Java and the Perl JUnit wrapper
 
 # run me with root privs

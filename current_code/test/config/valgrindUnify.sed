@@ -11,3 +11,4 @@ s/Command: ..\/src\/opendias -c .*/Command: ..\/src\/opendias -c [CONFIG_FILE]/
 s/Using Valgrind.*/Using Valgrind [version and build info]/
 s/Copyright.*/Copyright [details]/
 s/Warning: invalid file descriptor.*/Warning: invalid file descriptor [system specific]/
+s/Open file descriptor \([0-9]*\): .*/Open file descriptor \1: [FILE PATH]/

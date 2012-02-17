@@ -1,8 +1,12 @@
 package standardTests;
 
+use LWP;
 use Data::Dumper;
+use XML::Simple;
+use DBI;
 use IO::Socket::INET;
 use Inline::Java qw(cast);
+use URI::Escape;
 use WWW::HtmlUnit 
   study => [
     'com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController',
@@ -14,7 +18,7 @@ use WWW::HtmlUnit
 
 require Exporter;
 @ISA = qw(Exporter);
-@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client getNextJSAlert castTo_HtmlInput castTo_HtmlButton removeDuplicateLines );
+@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client getNextJSAlert castTo_HtmlInput castTo_HtmlButton removeDuplicateLines directRequest inTestSQL dumpQueryResult $testpath $testcasename );
 
 use strict;
 
@@ -22,6 +26,11 @@ our $client = 0;
 our $alert_handler;
 our $true = 1;#$Java::lang::true;
 our $false = 0;#$Java::lang::false;
+our $testpath;
+our $testcasename;
+
+$Data::Dumper::Indent = 1;
+$Data::Dumper::Sortkeys = 1;
 
 sub openlog {
 
@@ -34,10 +43,10 @@ sub openlog {
 
 sub startService {
 
-  my ($startCommand, $updateStartCommandSub, ) = @_;
-  my $serviceStart_timeout = 40; # 10 seconds (in 1/4 sec incr)
+  my ($startCommand, $overrideTimeout, ) = @_;
 
-  eval "$updateStartCommandSub(\\\$startCommand)"; # try and run, don't mind if we fail
+  my $serviceStart_timeout = $overrideTimeout || 10; # default of 10 seconds
+
   `$startCommand`;
   o_log("STARTING app...");
 
@@ -47,7 +56,7 @@ sub startService {
                                             Timeout => 1,
                                             Proto => 'tcp') ) ) {
     $serviceStart_timeout--;
-    select ( undef, undef, undef, 0.25);
+    sleep(1);
     unless($serviceStart_timeout) {
       o_log("Could not start the service.");
       return 1;
@@ -55,6 +64,7 @@ sub startService {
   }
   $sock->close();
 
+  sleep(1); # Ensure everything is ready - not just the web socket.
   o_log("Now ready");
   return 1;
 }
@@ -101,30 +111,34 @@ sub setupClient {
 
 sub stopService {
 
-  my $alert_arrayref = $alert_handler->getCollectedAlerts->toArray();
-  foreach my $jsAlert (@{$alert_arrayref}) {
-    o_log("Found uncaught alert: ".$jsAlert);
-  }
-  #o_log("Stopping client");
-  eval {
-    local $SIG{ALRM} = sub { die "alarm\n" };
-    alarm 3;
-    $client->closeAllWindows();
+  if($client) {
+    my $alert_arrayref = $alert_handler->getCollectedAlerts->toArray();
+    foreach my $jsAlert (@{$alert_arrayref}) {
+      o_log("Found uncaught alert: ".$jsAlert);
+    }
+    #o_log("Stopping client");
+    eval {
+      local $SIG{ALRM} = sub { die "alarm\n" };
+      alarm 3;
+      $client->closeAllWindows();
+      alarm 0;
+    };
     alarm 0;
-  };
-  alarm 0;
-  #if ($@) {
-  #  o_log("Force killed the client.");
-  #}
+    #if ($@) {
+    #  o_log("Force killed the client.");
+    #}
+    undef $client;
+    undef $alert_handler;
+  }
+
   o_log("Stopping service");
-  undef $client;
-  undef $alert_handler;
   system("kill -s USR1 `cat /var/run/opendias.pid`");
 
   # We need valgrind (if running) so finish it's work nad write it's log
   o_log("Waiting for valgrind to finish.");
   system("while [ \"`pidof valgrind.bin`\" != \"\" ]; do sleep 1; done");
 
+  sleep(1); # Ensure logs are caught up.
   close(TESTLOG);
 }
 
@@ -253,6 +267,100 @@ sub removeDuplicateLines {
   close(OUTFILE);
   close(INFILE);
   system ("cp /tmp/tmpFile $file");
+}
+
+sub directRequest {
+
+  my ($params, $supressLogOfRequest ) = @_;
+  my %default = (
+    '__proto' => 'http://',
+    '__domain' => 'localhost:8988',
+    '__uri' => '/opendias/dynamic',
+    '__encoding' => 'application/x-www-form-urlencoded',
+    '__agent' => 'opendias-api-testing',
+  );
+
+  #
+  # Generate HTTP request
+  #
+  my @data = ();
+  foreach my $key (sort {$a cmp $b} (keys %$params)) {
+    if( $key =~ /^__/ ) {
+      $default{$key} = $params->{$key};
+    }
+    else {
+      push @data, $key."=".uri_escape($params->{$key});
+    }
+  }
+  my $payload = join( '&', @data );
+  o_log( 'Sending request = ' . $payload ) unless ( defined $supressLogOfRequest && $supressLogOfRequest > 1);
+
+
+  #
+  # Send to and receive from the application
+  #
+  my $ua = LWP::UserAgent->new;
+  $ua->agent($default{__agent});
+
+  my $req = HTTP::Request->new(POST => $default{__proto} . $default{__domain} . $default{__uri});
+  $req->content_type($default{__encoding});
+  $req->content($payload);
+
+  # Pass request to the user agent and get a response back
+  my $res = $ua->request($req);
+
+  # Check the outcome of the response
+  my $resData;
+  if ($res->is_success) {
+    if( $res->content =~ /^</ ) {
+      eval {
+        my $xml = new XML::Simple;
+        $resData = $xml->XMLin( $res->content );
+      };
+      if( $@ ) {
+        $resData = $res->content; # We can't parse the result as XML, so just dump what we got.
+      }
+    }
+    else {
+      $resData = $res->content; # most prob JSON data.
+    }
+  }
+  else {
+    $resData = $res->status_line . "\n\nRES=" . Dumper($res) . "\n\nREQ=" . Dumper($req);
+  }
+
+  return $resData;
+}
+
+sub inTestSQL {
+  my ($filename, ) = @_;
+  my $fullPath = "$testpath/inputs/$testcasename/intest/".$filename.".sql";
+  if ( -f $fullPath ) {
+    system("/usr/bin/sqlite3 /tmp/opendiastest/openDIAS.sqlite3 \".read $fullPath\""); 
+  }
+}
+
+sub dumpQueryResult {
+  my ($sql, ) = @_;
+
+  my $dbh = DBI->connect( "dbi:SQLite:dbname=/tmp/opendiastest/openDIAS.sqlite3",
+                          "", "", { RaiseError => 1, AutoCommit => 0 } );
+
+  my $sth = $dbh->prepare( $sql );
+  $sth->execute();
+
+  o_log( $sql );
+  my $row = 0;
+  while( my $hashRef = $sth->fetchrow_hashref() ) {
+    $row++;
+    o_log("------------------ row $row ------------------");
+    foreach my $col (sort {$a cmp $b} (keys %$hashRef)) {
+      o_log( "$col : $hashRef->{$col}" );
+    }
+  }
+  $dbh->disconnect();
+  o_log( "\n" );
+  
 }
 
 return 1;
