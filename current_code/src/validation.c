@@ -525,10 +525,11 @@ extern int validate(struct simpleLinkedList *postdata, char *action) {
   }
 
   if ( 0 == strcmp(action, "uploadfile") ) {
-    sll_insert(vars, "filename", "m" );
+    sll_insert(vars, "uploadfile", "m" );
     sll_insert(vars, "ftype", "m" );
     ret += checkKeys(postdata, vars );
     ret += validUploadType(getPostData(postdata, "ftype"));
+    ret += checkUUID(getPostData(postdata, "uploadfile"));
   }
 
   if( ret != 0 ) {
