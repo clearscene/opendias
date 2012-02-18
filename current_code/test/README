@@ -63,7 +63,7 @@ cpan -f WWW::HtmlUnit
 
 Also, Perl will need access to the database, so ensure DBI and sqlite3 DBD in installed
 eg
-sudo apt-get install libdbd-sqlite3-perl
+sudo apt-get install libdbd-sqlite3-perl cppcheck libxml-simple-perl
 
 
 
