@@ -63,7 +63,38 @@ cpan -f WWW::HtmlUnit
 
 Also, Perl will need access to the database, so ensure DBI and sqlite3 DBD in installed
 eg
-sudo apt-get install libdbd-sqlite3-perl cppcheck libxml-simple-perl
+sudo apt-get install libdbd-sqlite3-perl cppcheck libxml-simple-perl valgrind
+
+Also, to ensure the tests compare like for like, you should set your sane test.conf with the following settings:
+  number_of_devices 1
+  mode Gray
+  depth 8
+  hand-scanner false
+  three-pass false
+  three-pass-order RGB
+  resolution_min 50.0
+  resolution_max 800.0
+  resolution_quant 1
+  resolution 50.0
+  test-picture "Color pattern"
+  invert-endianess false
+  read-limit false
+  read-limit-size 1
+  read-delay false
+  read-delay-duration 1000
+  read-status-code "Default"
+  fuzzy-parameters true
+  ppl-loss 0
+  non-blocking false
+  select-fd false
+  enable-test-options true
+  geometry_min 0.0
+  geometry_max 200.0
+  geometry_quant 1.0
+  tl_x 0.0
+  tl_y 0.0
+  br_x 80.0
+  br_y 100.0
 
 
 
