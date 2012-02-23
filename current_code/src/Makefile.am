@@ -59,6 +59,8 @@ opendias_SOURCES = \
 	validation.h    \
 	import_doc.c    \
 	import_doc.h    \
+	saneDispatcher.c    \
+	saneDispatcher.h    \
         simpleLinkedList.c    \
         simpleLinkedList.h
 

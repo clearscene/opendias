@@ -44,6 +44,7 @@
 #include "debug.h"
 #include "scan.h"
 #include "validation.h" // for con_info struct - move me to web_handler.h
+#include "saneDispatcher.h"
 
 
 /*
@@ -53,8 +54,11 @@
  */
 extern char *getScannerList() {
 
-  char *answer = NULL;
+  //char *answer = NULL;
+  char *answer = send_command( o_strdup("get_scanner_list") );
+o_log(ERROR, "RESPONSE WAS: %s", answer);
 #ifdef CAN_SCAN
+/*
   SANE_Status status;
   const SANE_Device **SANE_device_list;
   int scanOK = SANE_FALSE;
@@ -236,8 +240,8 @@ extern char *getScannerList() {
 
   o_log(DEBUGM, "sane_exit");
   sane_exit();
+*/
 #endif // CAN_SCAN //
-
   return answer;
 
 }

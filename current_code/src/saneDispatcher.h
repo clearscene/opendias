@@ -1,5 +1,5 @@
 /*
- * main.h
+ * saneDispatcher.h
  * Copyright (C) Clearscene Ltd 2008 <wbooth@essentialcollections.co.uk>
  * 
  * main.h is free software: you can redistribute it and/or modify it
@@ -7,7 +7,7 @@
  * Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
- * main.h is distributed in the hope that it will be useful, but
+ * saneDispatcher.h is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
@@ -16,32 +16,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MAIN
-#define MAIN
+#ifndef SANEDISPATCHER
+#define SANEDISPATCHER
 
-#define DEFAULT_CONF_FILE "/etc/opendias/opendias.conf"
+#define ADDRESS "saneCommandSocket"
 
-int DB_VERSION;
-char *BASE_DIR;
-unsigned short PORT;
+extern void dispatch_sane_work(int);
+extern char *send_command(char *);
 
-enum {
-  PLACE_HOLDER = 0,
-  ODF_FILETYPE,
-  SCAN_FILETYPE,
-  PDF_FILETYPE,
-  JPG_FILETYPE,
-};
-
-struct services {
-  int pid;
-  int log;
-  int db;
-  int sane;
-  int command;
-  int httpd;
-};
-
-extern void server_shutdown(void);
-
-#endif /* MAIN */
+#endif /* SANEDISPATCHER */

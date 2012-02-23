@@ -1,5 +1,7 @@
  0.8... Remove defunct speak functionality
         Implement Issue #7 - Document Linkage
+        Implement Issue #12 - Better Testing
+        Implement Issue #13 - Device Locking
 
  0.7.3  Issue #9 - Scanners with 'word_list' resolutions
         Fix spinner viability on searching for scanners.
