@@ -54,29 +54,32 @@
  */
 extern char *getScannerList() {
 
-  //char *answer = NULL;
-  char *answer = send_command( o_strdup("get_scanner_list") );
-o_log(ERROR, "RESPONSE WAS: %s", answer);
+  char *answer = send_command( o_strdup("internalGetScannerList") );
+  o_log(DEBUGM, "RESPONSE WAS: %s", answer);
+
+  return answer;
+}
+
+extern char *internalGetScannerList() {
+  char *answer = NULL;
 #ifdef CAN_SCAN
-/*
   SANE_Status status;
   const SANE_Device **SANE_device_list;
-  int scanOK = SANE_FALSE;
-  char *replyTemplate, *deviceList; 
+//  int scanOK = SANE_FALSE;
+//  char *replyTemplate, *deviceList; 
 
-  o_log(DEBUGM, "sane_init");
+/*  o_log(DEBUGM, "sane_init");
   status = sane_init(NULL, NULL);
 
   if(status != SANE_STATUS_GOOD) {
     o_log(ERROR, "sane did not start");
     return NULL;
   }
-
+*/
   status = sane_get_devices (&SANE_device_list, SANE_FALSE);
-
   if(status == SANE_STATUS_GOOD) {
     if (SANE_device_list && SANE_device_list[0]) {
-      scanOK = SANE_TRUE;
+      //scanOK = SANE_TRUE;
       o_log(DEBUGM, "device(s) found");
     }
     else
@@ -85,6 +88,7 @@ o_log(ERROR, "RESPONSE WAS: %s", answer);
   else
     o_log(WARNING, "Checking for devices failed");
 
+/*
   if(scanOK == SANE_TRUE) {
 
     int i = 0;
@@ -208,8 +212,8 @@ o_log(ERROR, "RESPONSE WAS: %s", answer);
       if(resolution <= minRes)
         resolution = minRes;
 
-      o_log(DEBUGM, "sane_cancel");
-      sane_cancel(openDeviceHandle);
+//      o_log(DEBUGM, "sane_cancel");
+//      sane_cancel(openDeviceHandle);
 
       o_log(DEBUGM, "sane_close");
       sane_close(openDeviceHandle);
@@ -237,10 +241,11 @@ o_log(ERROR, "RESPONSE WAS: %s", answer);
     answer = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScannerList><Devices>%s</Devices></ScannerList></Response>", deviceList);
     free(deviceList);
   }
-
-  o_log(DEBUGM, "sane_exit");
-  sane_exit();
 */
+  answer = o_strdup("This is the answer");
+
+//  o_log(DEBUGM, "sane_exit");
+//  sane_exit();
 #endif // CAN_SCAN //
   return answer;
 

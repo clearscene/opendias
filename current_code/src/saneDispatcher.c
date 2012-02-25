@@ -34,6 +34,8 @@
 #include "utils.h"
 #include "debug.h"
 
+#include "pageRender.h"
+
 extern char *get_scanner_list( char *param ) {
   o_log(DEBUGM, "CODE: Now doing the request.....");
   return o_strdup("This is the scanner list");
@@ -74,8 +76,8 @@ extern void dispatch_sane_work( int ns ) {
 
   o_log(INFORMATION, "SERVER: Sane dispatcher received the command: '%s' with param of '%s'", command, param);
 
-  if ( command && 0 == strcmp(command, "get_scanner_list") ) {
-      response = get_scanner_list( param );
+  if ( command && 0 == strcmp(command, "internalGetScannerList") ) {
+      response = internalGetScannerList( param );
   }
 /*    else if ( command && 0 == strcmp(command, "take_lock") ) {
       //response = take_lock( param );

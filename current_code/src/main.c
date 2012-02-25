@@ -153,10 +153,10 @@ extern void server_shutdown() {
     o_log(DEBUGM, "... sane command socket [done]");
   }
 
-  if( startedServices->sane ) {
-    o_log(DEBUGM, "... sane backend [done]");
-    sane_exit();
-  }
+//  if( startedServices->sane ) {
+//    o_log(DEBUGM, "... sane backend [done]");
+//    sane_exit();
+//  }
 #endif // CAN_SCAN //
 
   if( startedServices->db ) {
@@ -451,7 +451,18 @@ int main (int argc, char **argv) {
      *  Main loop - waiting for the threaded httpd connection to ask
      *              us to do some sane work for them
      */
+
+  if( SANE_STATUS_GOOD != sane_init(NULL, NULL) ) {
+    o_log(INFORMATION, "Could not start sane");
+//    server_shutdown();
+//    exit(EXIT_FAILURE);
+  }
+//  startedServices->sane = 1;
+//  o_log(INFORMATION, "Sane backend started");
+  
     dispatch_sane_work( ns );
+
+    sane_exit();
   }
 
   o_log(ERROR, "done waiting - should never get here");
