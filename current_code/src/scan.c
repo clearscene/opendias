@@ -27,7 +27,12 @@
 #include <FreeImage.h>  // 
 #include <sane/sane.h>  // Scanner Interface
 #include <sane/saneopts.h>  // Scanner Interface
-#include <pthread.h>    // Return from this thread
+#include <netinet/in.h>
+
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
 #include "scanner.h"
 #endif // CAN_SCAN //
 
@@ -424,7 +429,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
   SANE_Byte *buffer;
   SANE_Byte *raw_image;
   int progress = 0;
-  int received_length_from_sane_change = 0;
+  int proposed_buffer_length_change = 0;
   int noMoreReads = 0;
   int counter;
   int onlyReadxFromBlockofThree = 0;
@@ -433,17 +438,29 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
 
   // Initialise the initial buffer and blank image;
   o_log(DEBUGM, "Using a buff_requested_len of %d to collect a total of %d", *buff_requested_len, totbytes);
-  buffer = malloc( (size_t)( sizeof(SANE_Byte) * *buff_requested_len ) );
   raw_image = (unsigned char *)malloc( totbytes + readSoFar );
-  strcpy((char *)raw_image, header);
+  if( raw_image == NULL ) {
+    o_log(ERROR, "Out of memory, when assiging the new image storage.");
+    return NULL;
+  }
+  // Initialise the image to black.
   for (counter = readSoFar ; (size_t)counter < totbytes+readSoFar ; counter++) raw_image[counter]=125;
-  
+  strcpy((char *)raw_image, header);
+
+  buffer = malloc( (size_t)( sizeof(SANE_Byte) * *buff_requested_len ) );
+  if( buffer == NULL ) {
+    free(raw_image);
+    o_log(ERROR, "Out of memory, when assiging the reading buffer.");
+    return NULL;
+  }
 
   o_log(DEBUGM, "scan_read - start");
   do {
     // Set status as 'scanning'
     updateScanProgress(uuid, SCAN_SCANNING, progress);
 
+
+    //
     // Read buffer from sane (the scanner)
     readItteration++;
     status = sane_read (openDeviceHandle, buffer, *buff_requested_len, &received_length_from_sane);
@@ -455,6 +472,9 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
         o_log(ERROR, "something wrong while scanning: %s", sane_strstatus(status) );
     }
 
+
+    //
+    // Write the read 'buffer' onto 'raw_image'
     if( received_length_from_sane > 0 ) {
 
       if( expectFrames == 3 ) {
@@ -514,24 +534,29 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
       if(progress > 100)
         progress = 100;
 
-    }
+    } // get some data from sane
 
-    // Some sanity checks on result of multi-frames
+
+    //
+    // If were finished (EOF), then drop out of reading loop
     if( noMoreReads == 1 ) {
+      // Some sanity checks on result of multi-frames
       if( onlyReadxFromBlockofThree )
         o_log(ERROR, "Finished after only reading %d / 3 bytes from the last block", onlyReadxFromBlockofThree);
       break;
     }
 
-    // Update the buffer (based on read feedback
+    //
+    // Update the buffer (based on read feedback), in an attempt to 
+    // smooth the physical reading mechanisum
     if( *buff_requested_len == received_length_from_sane ) {
 
       // Try and increase the buffer size
-      received_length_from_sane_change = 10 * bpl / readItteration;
+      proposed_buffer_length_change = 10 * bpl / readItteration;
 
       // Don't trifel us with small increases      
-      if( received_length_from_sane_change > 300 ) {
-        *buff_requested_len += received_length_from_sane_change;
+      if( proposed_buffer_length_change > 300 ) {
+        *buff_requested_len += proposed_buffer_length_change;
         tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
         if( tmp_buffer == NULL ) {
           free(buffer);
@@ -547,9 +572,9 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
 
     // We received less than we asked for (but we did receive something)
     else if ( received_length_from_sane > 0 ) {
-      received_length_from_sane_change = ( *buff_requested_len - received_length_from_sane ) / readItteration;
-      if( received_length_from_sane_change > 100 ) {
-        *buff_requested_len -= received_length_from_sane_change;
+      proposed_buffer_length_change = ( *buff_requested_len - received_length_from_sane ) / readItteration;
+      if( proposed_buffer_length_change > 100 ) {
+        *buff_requested_len -= proposed_buffer_length_change;
         tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
         if( tmp_buffer == NULL ) {
           free(buffer);
@@ -619,7 +644,7 @@ void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int reques
 
 }
 
-extern void *doScanningOperation(void *uuid) {
+extern char *internalDoScanningOperation(char *uuid) {
 
   int request_resolution = 0;
   int buff_requested_len = 0; 
@@ -636,14 +661,6 @@ extern void *doScanningOperation(void *uuid) {
   char *total_requested_pages_s;
   char *devName;
   char *outFilename;
-
-
-  o_log(DEBUGM, "sane_init");
-  status = sane_init(NULL, NULL);
-  if(status != SANE_STATUS_GOOD) {
-    o_log(ERROR, "sane did not start");
-    return 0;
-  }
 
   // Open the device
   o_log(DEBUGM, "sane_open");
@@ -762,6 +779,12 @@ extern void *doScanningOperation(void *uuid) {
   //
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
 
+  /*
+   *
+   * Change this whole section for the method call in imageProcessing::reformatImage
+   *
+   */
+  FreeImage_Initialise(TRUE);
   FIMEMORY *hmem = FreeImage_OpenMemory(raw_image, (pars.pixels_per_line*pars.lines)+strlen(header));
   free(header);
   o_log(INFORMATION, "Convertion process: Initalised");
@@ -775,6 +798,7 @@ extern void *doScanningOperation(void *uuid) {
   FreeImage_Save(FIF_JPEG, src, outFilename, 95);
   free(outFilename);
   FreeImage_Unload(src);
+  FreeImage_DeInitialise();
   o_log(INFORMATION, "Conversion process: Complete");
 
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
@@ -788,15 +812,193 @@ extern void *doScanningOperation(void *uuid) {
   else
     updateScanProgress(uuid, SCAN_WAITING_ON_NEW_PAGE, ++current_page);
 
-  free(uuid);
   o_log(DEBUGM, "Page scan done.");
 
-  o_log(DEBUGM, "sane_exit");
-  sane_exit();
-
-  pthread_exit(0);
-
-  return "OK"; //mute!
+  return o_strdup("OK"); 
 }
 #endif // CAN_SCAN //
 
+
+extern char *internalGetScannerList() {
+  char *answer = NULL;
+#ifdef CAN_SCAN
+  SANE_Status status;
+  const SANE_Device **SANE_device_list;
+  int scanOK = SANE_FALSE;
+  char *replyTemplate, *deviceList; 
+
+  status = sane_get_devices (&SANE_device_list, SANE_FALSE);
+  if(status == SANE_STATUS_GOOD) {
+    if (SANE_device_list && SANE_device_list[0]) {
+      scanOK = SANE_TRUE;
+      o_log(DEBUGM, "device(s) found");
+    }
+    else
+      o_log(INFORMATION, "No devices found");
+  }
+  else
+    o_log(WARNING, "Checking for devices failed");
+
+  if(scanOK == SANE_TRUE) {
+
+    int i = 0;
+
+    replyTemplate = o_strdup("<Device><vendor>%s</vendor><model>%s</model><type>%s</type><name>%s</name><Formats>%s</Formats><max>%s</max><min>%s</min><default>%s</default><host>%s</host></Device>");
+    deviceList = o_strdup("");
+
+    for (i=0 ; SANE_device_list[i] ; i++) {
+
+      int hlp = 0, resolution = 300, minRes=50, maxRes=50;
+      char *vendor, *model, *type, *name, *format;
+      char *resolution_s, *maxRes_s, *minRes_s;
+      char *scannerHost;
+      SANE_Handle *openDeviceHandle;
+
+      o_log(DEBUGM, "sane_open");
+      status = sane_open (SANE_device_list[i]->name, (SANE_Handle)&openDeviceHandle);
+      if(status != SANE_STATUS_GOOD) {
+        o_log(ERROR, "Could not open: %s %s with error: %s", SANE_device_list[i]->vendor, SANE_device_list[i]->model, status);
+        return NULL;
+      }
+
+      vendor = o_strdup(SANE_device_list[i]->vendor);
+      model = o_strdup(SANE_device_list[i]->model);
+      type = o_strdup(SANE_device_list[i]->type);
+      name = o_strdup(SANE_device_list[i]->name);
+      format = o_strdup("<format>Grey Scale</format>");
+      propper(vendor);
+      propper(model);
+      propper(type);
+
+      // Find location of the device
+      if ( name && name == strstr(name, "net:") ) {
+
+        struct sockaddr_in sa;
+        char *ipandmore, *ip;
+        char host[NI_MAXHOST];
+        char service[NI_MAXSERV];
+        int len;
+
+        // Ignore the 'net:' part
+        ipandmore = name + 4;
+
+        // Find the length of the address part
+        len = strstr(ipandmore, ":") - ipandmore;
+
+        // Load 'ip' with the network addres
+        ip = malloc(1+(size_t)len);
+        (void) strncpy(ip,ipandmore,(size_t)len);
+        ip[len] = '\0';
+
+        // Convert into an inet address
+        memset(&sa, 0, sizeof(sa));
+        sa.sin_family = AF_INET;
+        sa.sin_addr.s_addr = inet_addr( ip );
+
+        // Lookup hostname from address
+        o_log(DEBUGM, "Going to lookup: %s", ip);
+        if ( getnameinfo((struct sockaddr *)&sa, sizeof sa, host, sizeof host, service, sizeof service, NI_NAMEREQD) == 0 ) {
+          o_log(DEBUGM, "found host: %s", host);
+          scannerHost = o_strdup(host);
+        } 
+        else {
+          o_log(DEBUGM, "Could not get hostname");
+          scannerHost = o_strdup(ip);
+        }
+
+        // Clean up
+        free(ip);
+      }
+      else {
+        scannerHost = o_strdup("opendias server");
+      }
+
+
+      // Find resolution ranges
+      for (hlp = 0; hlp < 9999; hlp++) {
+
+        const SANE_Option_Descriptor *sod;
+
+        sod = sane_get_option_descriptor (openDeviceHandle, hlp);
+        if (sod == NULL)
+          break;
+
+        // Just a placeholder
+        if (sod->type == SANE_TYPE_GROUP
+        || sod->name == NULL
+        || hlp == 0)
+          continue;
+
+        if ( 0 == strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) ) {
+          //log_option(hlp, sod);
+
+          // Some kind of sliding range
+          if (sod->constraint_type == SANE_CONSTRAINT_RANGE) {
+            o_log(DEBUGM, "Resolution setting detected as 'range'");
+
+            // Fixed resolution
+            if (sod->type == SANE_TYPE_FIXED)
+              maxRes = (int)SANE_UNFIX (sod->constraint.range->max);
+            else
+              maxRes = sod->constraint.range->max;
+          }
+
+          // A fixed list of options
+          else if (sod->constraint_type == SANE_CONSTRAINT_WORD_LIST) {
+            int lastIndex = sod->constraint.word_list[0];
+            o_log(DEBUGM, "Resolution setting detected as 'word list'");
+            maxRes = sod->constraint.word_list[lastIndex];
+          }
+
+          break; // we've found our resolution - no need to search more
+        }
+      }
+      o_log(DEBUGM, "Determined max resultion to be %d", maxRes);
+
+
+      // Define a default
+      if(resolution >= maxRes)
+        resolution = maxRes;
+      if(resolution <= minRes)
+        resolution = minRes;
+
+      o_log(DEBUGM, "sane_cancel");
+      sane_cancel(openDeviceHandle);
+
+      o_log(DEBUGM, "sane_close");
+      sane_close(openDeviceHandle);
+
+      // Build Reply
+      //
+      resolution_s = itoa(resolution,10);
+      maxRes_s = itoa(maxRes,10);
+      minRes_s = itoa(minRes,10);
+      o_concatf(&deviceList, replyTemplate, 
+                           vendor, model, type, name, format, maxRes_s, minRes_s, resolution_s, scannerHost);
+
+      free(vendor);
+      free(model);
+      free(type);
+      free(name);
+      free(format);
+      free(maxRes_s);
+      free(minRes_s);
+      free(resolution_s);
+      free(scannerHost);
+    }
+
+    free(replyTemplate);
+    // The escaped string placeholder will be interprited in the sane dispatcher client
+    answer = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScannerList><Devices>%s</Devices>%%s</ScannerList></Response>", deviceList);
+    free(deviceList);
+  }
+
+  else {
+    // No devices or sane failed.
+    answer = o_strdup( "<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScannerList></ScannerList>%%s</Response>");
+  }
+
+#endif // CAN_SCAN //
+  return answer;
+
+}
