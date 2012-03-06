@@ -1,5 +1,6 @@
 var baron = 0;
 var canon = 0;
+var PROGRESS_REFRESH_TIME = 400;
 
 function showStatus(dev, canv, prog) {
   if(canv == 1 && canon == 0) {
@@ -149,7 +150,7 @@ function getScanningProgress (progressId, device) {
                 getScanningProgress(progressId,device);
 
       } else if( action=='refresh' ) {
-        setTimeout("getScanningProgress('"+progressId+"','"+device+"')", 400);
+        setTimeout("getScanningProgress('"+progressId+"','"+device+"')", PROGRESS_REFRESH_TIME);
 
       } else {
         // do nothinog - just drop off and finish
