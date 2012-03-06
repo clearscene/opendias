@@ -54,9 +54,11 @@ AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
 
 
 
-
+dnl Special config options
 AC_ENABLE([werror],[OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS -Werror "])
-
+AC_ENABLE([thread_join],[
+	AC_DEFINE([THREAD_JOIN],[],[The main process will wait for child threads to finish.])
+])
 
 
 
