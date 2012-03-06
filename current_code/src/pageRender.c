@@ -25,7 +25,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <netdb.h>
+// #include <netdb.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -54,201 +54,24 @@
  */
 extern char *getScannerList() {
 
-  char *answer = send_command( o_strdup("internalGetScannerList") );
+  char *answer = send_command( o_strdup("internalGetScannerList") ); // scan.c
   o_log(DEBUGM, "RESPONSE WAS: %s", answer);
 
   return answer;
 }
 
-extern char *internalGetScannerList() {
-  char *answer = NULL;
-#ifdef CAN_SCAN
-  SANE_Status status;
-  const SANE_Device **SANE_device_list;
-//  int scanOK = SANE_FALSE;
-//  char *replyTemplate, *deviceList; 
+extern void *doScanningOperation(void *uuid) {
 
-/*  o_log(DEBUGM, "sane_init");
-  status = sane_init(NULL, NULL);
+  char *command = o_strdup("internalDoScanningOperation:");
+  conCat(&command, uuid);
+  free(uuid);
 
-  if(status != SANE_STATUS_GOOD) {
-    o_log(ERROR, "sane did not start");
-    return NULL;
-  }
-*/
-  status = sane_get_devices (&SANE_device_list, SANE_FALSE);
-  if(status == SANE_STATUS_GOOD) {
-    if (SANE_device_list && SANE_device_list[0]) {
-      //scanOK = SANE_TRUE;
-      o_log(DEBUGM, "device(s) found");
-    }
-    else
-      o_log(INFORMATION, "No devices found");
-  }
-  else
-    o_log(WARNING, "Checking for devices failed");
+  char *answer = send_command( command ); // scan.c
+  o_log(DEBUGM, "RESPONSE WAS: %s", answer);
 
-/*
-  if(scanOK == SANE_TRUE) {
+//  pthread_exit(0);
 
-    int i = 0;
-
-    replyTemplate = o_strdup("<Device><vendor>%s</vendor><model>%s</model><type>%s</type><name>%s</name><Formats>%s</Formats><max>%s</max><min>%s</min><default>%s</default><host>%s</host></Device>");
-    deviceList = o_strdup("");
-
-    for (i=0 ; SANE_device_list[i] ; i++) {
-
-      int hlp = 0, resolution = 300, minRes=50, maxRes=50;
-      char *vendor, *model, *type, *name, *format;
-      char *resolution_s, *maxRes_s, *minRes_s;
-      char *scannerHost;
-      SANE_Handle *openDeviceHandle;
-
-      o_log(DEBUGM, "sane_open");
-      status = sane_open (SANE_device_list[i]->name, (SANE_Handle)&openDeviceHandle);
-      if(status != SANE_STATUS_GOOD) {
-        o_log(ERROR, "Could not open: %s %s with error: %s", SANE_device_list[i]->vendor, SANE_device_list[i]->model, status);
-        return NULL;
-      }
-
-      vendor = o_strdup(SANE_device_list[i]->vendor);
-      model = o_strdup(SANE_device_list[i]->model);
-      type = o_strdup(SANE_device_list[i]->type);
-      name = o_strdup(SANE_device_list[i]->name);
-      format = o_strdup("<format>Grey Scale</format>");
-      propper(vendor);
-      propper(model);
-      propper(type);
-
-      // Find location of the device
-      if ( name && name == strstr(name, "net:") ) {
-
-        struct sockaddr_in sa;
-        char *ipandmore, *ip;
-        char host[NI_MAXHOST];
-        char service[NI_MAXSERV];
-        int len;
-
-        // Ignore the 'net:' part
-        ipandmore = name + 4;
-
-        // Find the length of the address part
-        len = strstr(ipandmore, ":") - ipandmore;
-
-        // Load 'ip' with the network addres
-        ip = malloc(1+(size_t)len);
-        (void) strncpy(ip,ipandmore,(size_t)len);
-        ip[len] = '\0';
-
-        // Convert into an inet address
-        memset(&sa, 0, sizeof(sa));
-        sa.sin_family = AF_INET;
-        sa.sin_addr.s_addr = inet_addr( ip );
-
-        // Lookup hostname from address
-        o_log(DEBUGM, "Going to lookup: %s", ip);
-        if ( getnameinfo((struct sockaddr *)&sa, sizeof sa, host, sizeof host, service, sizeof service, NI_NAMEREQD) == 0 ) {
-          o_log(DEBUGM, "found host: %s", host);
-          scannerHost = o_strdup(host);
-        } 
-        else {
-          o_log(DEBUGM, "Could not get hostname");
-          scannerHost = o_strdup(ip);
-        }
-
-        // Clean up
-        free(ip);
-      }
-      else {
-        scannerHost = o_strdup("opendias server");
-      }
-
-
-      // Find resolution ranges
-      for (hlp = 0; hlp < 9999; hlp++) {
-
-        const SANE_Option_Descriptor *sod;
-
-        sod = sane_get_option_descriptor (openDeviceHandle, hlp);
-        if (sod == NULL)
-          break;
-
-        // Just a placeholder
-        if (sod->type == SANE_TYPE_GROUP
-        || sod->name == NULL
-        || hlp == 0)
-          continue;
-
-        if ( 0 == strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) ) {
-          //log_option(hlp, sod);
-
-          // Some kind of sliding range
-          if (sod->constraint_type == SANE_CONSTRAINT_RANGE) {
-            o_log(DEBUGM, "Resolution setting detected as 'range'");
-
-            // Fixed resolution
-            if (sod->type == SANE_TYPE_FIXED)
-              maxRes = (int)SANE_UNFIX (sod->constraint.range->max);
-            else
-              maxRes = sod->constraint.range->max;
-          }
-
-          // A fixed list of options
-          else if (sod->constraint_type == SANE_CONSTRAINT_WORD_LIST) {
-            int lastIndex = sod->constraint.word_list[0];
-            o_log(DEBUGM, "Resolution setting detected as 'word list'");
-            maxRes = sod->constraint.word_list[lastIndex];
-          }
-
-          break; // we've found our resolution - no need to search more
-        }
-      }
-      o_log(DEBUGM, "Determined max resultion to be %d", maxRes);
-
-
-      // Define a default
-      if(resolution >= maxRes)
-        resolution = maxRes;
-      if(resolution <= minRes)
-        resolution = minRes;
-
-//      o_log(DEBUGM, "sane_cancel");
-//      sane_cancel(openDeviceHandle);
-
-      o_log(DEBUGM, "sane_close");
-      sane_close(openDeviceHandle);
-
-      // Build Reply
-      //
-      resolution_s = itoa(resolution,10);
-      maxRes_s = itoa(maxRes,10);
-      minRes_s = itoa(minRes,10);
-      o_concatf(&deviceList, replyTemplate, 
-                           vendor, model, type, name, format, maxRes_s, minRes_s, resolution_s, scannerHost);
-
-      free(vendor);
-      free(model);
-      free(type);
-      free(name);
-      free(format);
-      free(maxRes_s);
-      free(minRes_s);
-      free(resolution_s);
-      free(scannerHost);
-    }
-
-    free(replyTemplate);
-    answer = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScannerList><Devices>%s</Devices></ScannerList></Response>", deviceList);
-    free(deviceList);
-  }
-*/
-  answer = o_strdup("This is the answer");
-
-//  o_log(DEBUGM, "sane_exit");
-//  sane_exit();
-#endif // CAN_SCAN //
   return answer;
-
 }
 
 // Start the scanning process
@@ -281,19 +104,24 @@ extern char *doScan(char *deviceid, char *format, char *resolution, char *pages,
 
   // Create a new thread to start the scan process
   pthread_attr_init(&attr);
+#ifdef THREAD_JOIN
+  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+#else
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-  //pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-  rc = pthread_create(&thread, &attr, doScanningOperation, scanUuid);
-  //rc = pthread_create(&thread, NULL, (void *)doScanningOperation, (void *)scanUuid);
+#endif /* THREAD_JOIN */
+  rc = pthread_create(&thread, &attr, doScanningOperation, o_strdup(scanUuid) );
   if(rc != 0) {
     o_log(ERROR, "Failed to create a new thread - for scanning operation.");
     return NULL;
   }
-  //con_info->thread = thread;
+#ifdef THREAD_JOIN
+  con_info->thread = thread;
+#endif /* THREAD_JOIN */
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
   ret = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DoScan><scanuuid>%s</scanuuid></DoScan></Response>", scanUuid);
+  free(scanUuid);
 
 #endif // CAN_SCAN //
   return ret;
@@ -326,23 +154,27 @@ extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info
     int rc;
     // Create a new thread to start the scan process
     pthread_attr_init(&attr);
+#ifdef THREAD_JOIN
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+#else
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-    //pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+#endif /* THREAD_JOIN */
     rc = pthread_create(&thread, &attr, doScanningOperation, o_strdup(scanid));
-    //rc = pthread_create(&thread, NULL, (void *)doScanningOperation, (void *)o_strdup(scanid));
     if(rc != 0) {
       o_log(ERROR, "Failed to create a new thread - for scanning operation.");
       return NULL;
     }
-    //con_info->thread = thread;
+#ifdef THREAD_JOIN
+    con_info->thread = thread;
+#endif
   } else {
     o_log(WARNING, "scan id indicates a status not waiting for a new page signal.");
     return NULL;
   }
+#endif // CAN_SCAN //
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
-#endif // CAN_SCAN //
   return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><NextPageReady><result>OK</result></NextPageReady></Response>");
 }
 
