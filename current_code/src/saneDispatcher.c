@@ -18,6 +18,8 @@
 
 #include "config.h"
 #ifdef CAN_SCAN
+#include <string.h>
+
 // Required for socket work
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -37,6 +39,9 @@
 #include "debug.h"
 
 #include "scan.h"
+
+char *deviceListCache = NULL;
+static int inLongRunningOperation = 0;
 
 extern void dispatch_sane_work( int ns ) {
 
@@ -76,12 +81,10 @@ extern void dispatch_sane_work( int ns ) {
   if ( command && 0 == strcmp(command, "internalGetScannerList") ) {
     response = internalGetScannerList();
   }
-/*    else if ( command && 0 == strcmp(command, "take_lock") ) {
-      //response = take_lock( param );
-  }
-*/
   else if ( command && 0 == strcmp(command, "internalDoScanningOperation") ) {
+    inLongRunningOperation = 1;
     response = internalDoScanningOperation( param );
+    inLongRunningOperation = 0;
   }
   else {
     response = o_strdup("");
@@ -104,29 +107,6 @@ extern void dispatch_sane_work( int ns ) {
   free(response);
 }
 
-int change_blocking_mode( int socket, int blocking ) {
-  long arg;
-
-  if((arg = fcntl( socket, F_GETFL, NULL )) < 0) {
-    o_log(ERROR, "Could not get socket arguments.");
-    return 0;
-  }
-
-  if( blocking == 1 ) {  
-    arg |= O_NONBLOCK;
-  }
-  else {
-    arg &= (~O_NONBLOCK);
-  }
-
-  if(fcntl( socket, F_SETFL, arg) < 0) {
-    o_log(ERROR, "Could not set socket arguments.");
-    return 0;
-  }
-  return 1;
-
-}
-
 char *send_command(char *command) {
 
   char c;
@@ -134,6 +114,20 @@ char *send_command(char *command) {
   size_t len;
   int clientSocket;
   struct sockaddr_un saun;
+  char *result;
+  char *answer = o_strdup("");
+  int cacheResponse = 0;
+
+  if ( 0 == strcmp(command, "internalGetScannerList") ) {
+    if( 1 == inLongRunningOperation ) {
+      o_log(INFORMATION, "The SANE sub system is busy, trying to return a cached response.");
+      if( deviceListCache != NULL ) {
+        return o_strdup(deviceListCache);
+      }
+      o_log(INFORMATION, "We dont have a cache of the result, we're going to have to wait.");
+    }
+    cacheResponse = 1;
+  }
 
   o_log(DEBUGM, "CLIENT: The command structure has been initalised and wants to send the command of: %s.", command);
   saun.sun_family = AF_UNIX;
@@ -146,67 +140,10 @@ char *send_command(char *command) {
     return NULL;
   }
 
-
-  // Set non-blocking, so we can do a timeout select.later
-  if( ! change_blocking_mode( clientSocket, 1) ) {
-    close(clientSocket);
-    return NULL;
-  }
-
+  // Connect to server side
   len = sizeof(saun.sun_family) + strlen(saun.sun_path);
   if (connect(clientSocket, (struct sockaddr *) &saun, len) < 0) {
-    if( errno != EINPROGRESS ) {
-      o_log(ERROR, "Could not connect to the command socket: %d - %s", errno, strerror(errno));
-      close(clientSocket);
-      return NULL;
-    }
-  }
-  else {
-    // we have a conection already
-    o_log(ERROR, "no waiting - the doctor will see you now!\n");
-  }
-
-  struct timeval tv;
-  fd_set myset;
-  int res;
-
-  tv.tv_sec = 1;
-  tv.tv_usec = 0;
-  FD_ZERO(&myset);
-  FD_SET(clientSocket, &myset);
-
-  res = select(clientSocket+1, NULL, &myset, NULL, &tv);
-  if (res < 0 && errno != EINTR) {
-    o_log(ERROR, "Error connecting %d - %s\n", errno, strerror(errno));
-    close(clientSocket);
-    return NULL;
-  }
-  else if (res > 0) {
-    // Socket selected for write
-    int valopt;
-    socklen_t lon = sizeof(int);
-    if (getsockopt(clientSocket, SOL_SOCKET, SO_ERROR, (void*)(&valopt), &lon) < 0) {
-      o_log(ERROR, "Error in getsockopt() %d - %s\n", errno, strerror(errno));
-      close(clientSocket);
-      return NULL;
-    }
-    // Check the value returned...
-    if (valopt) {
-      o_log(ERROR, "Error in delayed connection() %d - %s\n", valopt, strerror(valopt));
-      close(clientSocket);
-      return NULL;
-    }
-    // We have a socket we can use
-  }
-  else {
-    o_log(ERROR, "Timeout in select() - Cancelling!\n");
-    close(clientSocket);
-    return NULL;
-  }
-
-
-  // Set blocking, so we can do normal send/receive io.
-  if( ! change_blocking_mode( clientSocket, 0) ) {
+    o_log(ERROR, "Could not connect to the command socket: %d - %s", errno, strerror(errno));
     close(clientSocket);
     return NULL;
   }
@@ -215,16 +152,14 @@ char *send_command(char *command) {
   // Send command
   o_concatf(&command, "%s", "\n"); // The command socket terminates on line break
   send(clientSocket, command, strlen(command), 0);
-  free(command);
 
 
   // Read response
-  char *result = o_strdup("");
   fp = fdopen(clientSocket, "r");
   while ((c = fgetc(fp)) != EOF) {
-    o_concatf(&result, "%c", c);
+    o_concatf(&answer, "%c", c);
   }
-  o_log(SQLDEBUG, "CLIENT: read final response : %s", result);
+  o_log(SQLDEBUG, "CLIENT: read final response : %s", answer);
 
 
   // Close and cleanup
@@ -232,7 +167,30 @@ char *send_command(char *command) {
   close(clientSocket);
   o_log(DEBUGM, "CLIENT: has closed its socket.");
 
+  // Save a cached respone, incase we need it later
+  if ( 1 == cacheResponse ) {
+    o_log(DEBUGM, "Caching the response.");
+    freeSaneCache();
+    // The getdevice call will return XML that contains a placholder.
+    // /Write into that placholder 'cached' for the cached value,
+    // and '' n(blank) for the actualy live result.
+    // All other responses don't have a placholder like this.
+    deviceListCache = o_printf(answer, "<cached />");
+    result = o_printf(answer, "");
+  }
+  else {
+    result = o_strdup(answer);
+  }
+
+  free(answer);
+  free(command);
+
   return result;
+}
+
+extern void freeSaneCache( void ) {
+  free(deviceListCache);
+
 }
 
 #endif // CAN_SCAN //

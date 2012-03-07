@@ -41,6 +41,8 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <errno.h>
 
 #include <sane/sane.h>
 #include "saneDispatcher.h"
@@ -67,6 +69,7 @@ int setup (char *configFile) {
   DB_VERSION = 6;
   PORT = 8988; // Default - but overridden by config settings before port is opened
   LOG_DIR = o_strdup("/var/log/opendias");
+  startedServices->log = 1;
   o_log(INFORMATION, "Setting default log verbosity to %d.", VERBOSITY);
 
   // Get 'DB' location
@@ -150,13 +153,14 @@ extern void server_shutdown() {
   if( startedServices->command ) {
     close( COMMSSOCKET );
     unlink( ADDRESS );
+    freeSaneCache();
     o_log(DEBUGM, "... sane command socket [done]");
   }
 
-//  if( startedServices->sane ) {
-//    o_log(DEBUGM, "... sane backend [done]");
-//    sane_exit();
-//  }
+  if( startedServices->sane ) {
+    o_log(DEBUGM, "... sane backend [done]");
+    sane_exit();
+  }
 #endif // CAN_SCAN //
 
   if( startedServices->db ) {
@@ -315,7 +319,7 @@ int createSocket(void) {
     return 1;
   }
 
-  if (listen(COMMSSOCKET, 5) < 0) {
+  if (listen(COMMSSOCKET, QUEUE_LENGTH) < 0) {
     o_log(ERROR, "Could not listen on the sane command socket");
     return 1;
   }
@@ -383,7 +387,6 @@ int main (int argc, char **argv) {
       printf("Could not startup. Check /var/log/opendias/ for the reason.\n");
     return 1;
   }
-  startedServices->log = 1;
 
 
 #ifdef CAN_SCAN
@@ -433,41 +436,28 @@ int main (int argc, char **argv) {
   //
   // Listen for SANE requests
   //
-  //int fromlen;
   int ns;
-  //while( ( ns = accept(COMMSSOCKET, &fsaun, &fromlen) ) ) {
-  while( ( ns = accept(COMMSSOCKET, NULL, NULL) ) ) {
+  /*  Main loop - waiting for the threaded httpd connection to ask
+   *              us to do some sane work for them.
+   *  This construct is here for two reasons: Both of which are requirement of the sane libs
+   *    1. It ensure that there is only one sane call at a time
+   *    2. It keeps all sane lib calls in the main process rather than in a thread (http request)
+   */
+  while( ( ns = accept(COMMSSOCKET, NULL, NULL) ) ) { // Client connections loop
     if( ns < 0 ) {
-      if( turnToDaemon==1 ) {
-        o_log(INFORMATION, "Could not create a client comms socket");
+      if( errno == EINTR ) {
+        o_log(INFORMATION, "Something happened? Most likly a 'Ctrl-C'....");
       }
       else {
-        o_log(INFORMATION, "Something happened? Most likly a 'Ctrl-C'....");
+        o_log(INFORMATION, "Could not create a client comms socket");
       }
       server_shutdown();
       exit(EXIT_FAILURE);
     }
-    /*
-     *  Main loop - waiting for the threaded httpd connection to ask
-     *              us to do some sane work for them
-     */
-
-  if( SANE_STATUS_GOOD != sane_init(NULL, NULL) ) {
-    o_log(INFORMATION, "Could not start sane");
-//    server_shutdown();
-//    exit(EXIT_FAILURE);
-  }
-//  startedServices->sane = 1;
-//  o_log(INFORMATION, "Sane backend started");
-  
     dispatch_sane_work( ns );
-
-    sane_exit();
-  }
+  } 
 
   o_log(ERROR, "done waiting - should never get here");
-  server_shutdown();
-  exit(EXIT_SUCCESS);
 #else
   if( turnToDaemon==1 ) {
     while(1) {
@@ -478,10 +468,10 @@ int main (int argc, char **argv) {
   else {
     printf("Hit [enter] to close the service.\n");
     getchar();
-    server_shutdown();
-    exit(EXIT_SUCCESS);
   }
 #endif // CAN_SCAN //
+  server_shutdown();
+  exit(EXIT_SUCCESS);
 
 }
 

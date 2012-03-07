@@ -20,6 +20,7 @@
 #define MAIN
 
 #define DEFAULT_CONF_FILE "/etc/opendias/opendias.conf"
+#define QUEUE_LENGTH 3
 
 int DB_VERSION;
 char *BASE_DIR;
