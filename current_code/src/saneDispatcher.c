@@ -118,15 +118,26 @@ char *send_command(char *command) {
   char *answer = o_strdup("");
   int cacheResponse = 0;
 
+
+  // Handle 'busy' cases.
   if ( 0 == strcmp(command, "internalGetScannerList") ) {
+    cacheResponse = 1;
     if( 1 == inLongRunningOperation ) {
       o_log(INFORMATION, "The SANE sub system is busy, trying to return a cached response.");
       if( deviceListCache != NULL ) {
+        free(command);
+        free(answer);
         return o_strdup(deviceListCache);
       }
       o_log(INFORMATION, "We dont have a cache of the result, we're going to have to wait.");
     }
-    cacheResponse = 1;
+  }
+  else if( 0 == strncmp(command,"internalDoScanningOperation", 27) ) {
+    if( 1 == inLongRunningOperation ) {
+      free(command);
+      free(answer);
+      return o_strdup("BUSY");
+    }
   }
 
   o_log(DEBUGM, "CLIENT: The command structure has been initalised and wants to send the command of: %s.", command);
@@ -152,6 +163,7 @@ char *send_command(char *command) {
   // Send command
   o_concatf(&command, "%s", "\n"); // The command socket terminates on line break
   send(clientSocket, command, strlen(command), 0);
+  free(command);
 
 
   // Read response
@@ -175,17 +187,15 @@ char *send_command(char *command) {
     // /Write into that placholder 'cached' for the cached value,
     // and '' n(blank) for the actualy live result.
     // All other responses don't have a placholder like this.
-    deviceListCache = o_printf(answer, "<cached />");
+    deviceListCache = o_printf(answer, " cached='true'");
     result = o_printf(answer, "");
+    free(answer);
+    return result;
   }
   else {
-    result = o_strdup(answer);
+    return answer;
   }
 
-  free(answer);
-  free(command);
-
-  return result;
 }
 
 extern void freeSaneCache( void ) {
