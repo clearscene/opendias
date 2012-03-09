@@ -90,7 +90,7 @@ getScannerList -> pageRender::getScannerList()
 	Outputs;
 		<?xml version='1.0' encoding='iso-8859-1'?>
 		<Response>
-		  <ScannerList>
+		  <ScannerList cached='true'>    -- optional param, present if data is returned from the cache
 		    <Devices>
 		      <Device>
 		        <Formats>
@@ -332,7 +332,7 @@ status
 10  SCAN_ERROR_CONVERTING_FORMAT,         // FreeImage error code
 11  SCAN_PERFORMING_OCR,
 12  SCAN_ERROR_PERFORMING_OCR,            // xxxxxx error code
-13  SCAN_RESERVED_3,                      // used to be FIXING_SKEW
+13  SCAN_SANE_BUSY,                       // used to be FIXING_SKEW
 14  SCAN_RESERVED_1,
 15  SCAN_RESERVED_2,
 16  SCAN_FINISHED                         // id of the saved doc
