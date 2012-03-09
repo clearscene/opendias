@@ -173,10 +173,9 @@ extern void server_shutdown() {
     free(LOG_DIR); // Cannot log anymore
   }
 
-  if( startedServices->pid) {
-    free(BASE_DIR);
-    close(pidFilehandle); 
-  }
+  free(BASE_DIR);
+  close(pidFilehandle); 
+  free(startedServices);
 }
 
 void signal_handler(int sig) {
