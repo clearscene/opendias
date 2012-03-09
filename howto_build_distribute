@@ -6,9 +6,10 @@ autoreconf -iv
 
 Hack away
 ---------
-Update changelog, source, api doc, builds. run autoscan, cppcheck and tests
-  run cppcheck: cppcheck --verbose --enable=all src/
-  run tests: cd test && ./setupRun.sh
+Update Changelog, source, api doc, builds. 
+Run autoscan, cppcheck and tests
+  cppcheck --verbose --enable=all src/
+  cd test && ./setupRun.sh
 merge (or request pull) into current development branch
 
 
