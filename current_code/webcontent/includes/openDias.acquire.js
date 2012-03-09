@@ -1,6 +1,7 @@
 var baron = 0;
 var canon = 0;
 var PROGRESS_REFRESH_TIME = 400;
+var doneAtLeastOnePage = 0;
 
 function showStatus(dev, canv, prog) {
   if(canv == 1 && canon == 0) {
@@ -118,7 +119,25 @@ function getScanningProgress (progressId, device) {
              alert("OCR Error: " + vvalue);
              action='finish';
 
-           } else if( status == 13 ) { // SCAN_RESERVED_3 (used to be FIXING_SKEW),
+           } else if( status == 13 ) { // SCAN_SANE_BUSY
+             // Put everything back like it was, ready for a new attempt.
+             showStatus(device, undefined, undefined);
+             $("#format_"+device).removeAttr('disabled');
+             $("#pagesSlider_"+device).slider({ disabled: false });
+             $("#resolutionSlider_"+device).slider({ disabled: false });
+             $("#ocr_"+device).removeAttr('disabled');
+             $("#lengthSlider_"+device).slider({ disabled: false });
+             $("#scanButton_"+device).removeAttr('disabled');
+             $("#resolutionGood_"+device).parent().removeClass("greyResolution");
+             $("#resolutionGood_"+device).removeClass("greySweetResolution");
+             $("#resolutionGood_"+device).addClass("sweetResolution");
+             $('#status_'+device).text("Try again in a minute or two.");
+             alert("The SANE backend is busy serving a required. Unfortunately SANE cannot handle more than one request at a time. Try again soon.");
+             action='finish';
+             if( doneAtLeastOnePage == 1 ) {
+               action=='postnewpage';
+             }
+
            } else if( status == 14 ) { // SCAN_RESERVED_1,
            } else if( status == 15 ) { // SCAN_RESERVED_2,
            } else if( status == 16 ) { // SCAN_FINISHED
@@ -133,6 +152,7 @@ function getScanningProgress (progressId, device) {
 
       if( action=='postnewpage' ) {
 
+               doneAtLeastOnePage = 1;
                $.ajax({ url: "/opendias/dynamic",
                       dataType: "xml",
                       data: {action: "nextPageReady",
@@ -178,6 +198,10 @@ $(document).ready(function() {
              return 1;
            }
            var deviceid=0;
+           if( $(data).find('ScannerList').attr("cached") ) {
+             $('#cached').show();
+           }
+
            $(data).find('ScannerList').find('Devices').find('Device').each( function() {
 
              deviceid++;
@@ -280,6 +304,7 @@ $(document).ready(function() {
                $("#resolutionGood_"+device).parent().addClass("greyResolution");
                $("#resolutionGood_"+device).removeClass("sweetResolution");
                $("#resolutionGood_"+device).addClass("greySweetResolution");
+               // Added something above - then also add it to recovery on SCAN_SANE_BUSY code
 
                $.ajax({ url: "/opendias/dynamic",
                         dataType: "xml",
