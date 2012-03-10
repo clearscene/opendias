@@ -769,39 +769,41 @@ extern char *internalDoScanningOperation(char *uuid) {
   sane_close(openDeviceHandle);
 
 
-
   // Do OCR - on this page
   // - OCR libs just wants the raw data and not the image header
   ocrImage( uuid, docid, raw_image+strlen(header), current_page, request_resolution, pars, totbytes );
 
 
-  // Convert Raw into JPEG
-  //
-  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
+
 
   /*
    *
    * Change this whole section for the method call in imageProcessing::reformatImage
    *
    */
+  // Convert Raw into JPEG
+  //
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 0);
   FreeImage_Initialise(TRUE);
   FIMEMORY *hmem = FreeImage_OpenMemory(raw_image, (pars.pixels_per_line*pars.lines)+strlen(header));
   free(header);
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
   o_log(INFORMATION, "Convertion process: Initalised");
 
   FIBITMAP *src = FreeImage_LoadFromMemory(FIF_PGMRAW, hmem, BMP_DEFAULT);
   FreeImage_CloseMemory(hmem);
   free(raw_image);
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 55);
   o_log(INFORMATION, "Convertion process: Loaded");
-
+ 
   outFilename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, current_page);
   FreeImage_Save(FIF_JPEG, src, outFilename, 95);
   free(outFilename);
   FreeImage_Unload(src);
   FreeImage_DeInitialise();
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   o_log(INFORMATION, "Conversion process: Complete");
 
-  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
 
 
   // cleaup && What should we do next
@@ -827,7 +829,7 @@ extern char *internalGetScannerList() {
   int scanOK = SANE_FALSE;
   char *replyTemplate, *deviceList; 
 
-  status = sane_get_devices (&SANE_device_list, SANE_FALSE);
+  status = sane_get_devices (&SANE_device_list, SANE_TRUE);
   if(status == SANE_STATUS_GOOD) {
     if (SANE_device_list && SANE_device_list[0]) {
       scanOK = SANE_TRUE;
@@ -989,13 +991,13 @@ extern char *internalGetScannerList() {
 
     free(replyTemplate);
     // The escaped string placeholder will be interprited in the sane dispatcher client
-    answer = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScannerList><Devices>%s</Devices>%%s</ScannerList></Response>", deviceList);
+    answer = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScannerList%%s><Devices>%s</Devices></ScannerList></Response>", deviceList);
     free(deviceList);
   }
 
   else {
     // No devices or sane failed.
-    answer = o_strdup( "<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScannerList></ScannerList>%%s</Response>");
+    answer = o_strdup( "<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScannerList%%s></ScannerList></Response>");
   }
 
 #endif // CAN_SCAN //

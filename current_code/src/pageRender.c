@@ -64,14 +64,61 @@ extern void *doScanningOperation(void *uuid) {
 
   char *command = o_strdup("internalDoScanningOperation:");
   conCat(&command, uuid);
-  free(uuid);
 
   char *answer = send_command( command ); // scan.c
   o_log(DEBUGM, "RESPONSE WAS: %s", answer);
 
-//  pthread_exit(0);
+  if( 0 == strcmp(answer, "BUSY") ) {
+    updateScanProgress(uuid, SCAN_SANE_BUSY, 0);
+  }
 
+
+  // Do OCR - on this page
+  // - OCR libs just wants the raw data and not the image header
+//  ocrImage( uuid, docid, raw_image+strlen(header), current_page, request_resolution, pars, totbytes );
+
+
+
+
+  /*
+   *
+   * Change this whole section for the method call in imageProcessing::reformatImage
+   *
+   */
+  // Convert Raw into JPEG
+  //
+/*  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 0);
+  FreeImage_Initialise(TRUE);
+  FIMEMORY *hmem = FreeImage_OpenMemory(raw_image, (pars.pixels_per_line*pars.lines)+strlen(header));
+  free(header);
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
+  o_log(INFORMATION, "Convertion process: Initalised");
+
+  FIBITMAP *src = FreeImage_LoadFromMemory(FIF_PGMRAW, hmem, BMP_DEFAULT);
+  FreeImage_CloseMemory(hmem);
+  free(raw_image);
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 55);
+  o_log(INFORMATION, "Convertion process: Loaded");
+
+  outFilename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, current_page);
+  FreeImage_Save(FIF_JPEG, src, outFilename, 95);
+  free(outFilename);
+  FreeImage_Unload(src);
+  FreeImage_DeInitialise();
+  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
+  o_log(INFORMATION, "Conversion process: Complete");
+*/
+
+
+
+
+  free(uuid);
+
+#ifdef THREAD_JOIN
+  pthread_exit(0);
+#else
   return answer;
+#endif
 }
 
 // Start the scanning process

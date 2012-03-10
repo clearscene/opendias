@@ -21,6 +21,14 @@
 
 #define ADDRESS "saneCommandSocket"
 
+/*
+#include "simpleLinkedList"
+
+struct dispatcherResponse {
+  char *response;
+  struct simpleLinkedList *data;
+};
+*/
 extern void dispatch_sane_work(int);
 extern char *send_command(char *);
 extern void freeSaneCache(void);

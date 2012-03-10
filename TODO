@@ -11,8 +11,6 @@ Frontend remembers user options
 
 Implement 'By Username/Password' access controls
 
-Scanner device locking
-
 TECHNICAL: Check the use of "extern" where it's used.
 
 
@@ -20,6 +18,8 @@ Version 0.9
 -----------
 
 Print documents
+
+Got a busy signal - then give option to keep polling until it's available.
 
 Implement 'OCR now' on document detail page.
 
