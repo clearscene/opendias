@@ -36,10 +36,10 @@ LOG-OUTPUT
 -date-:-thread-:INF: SERVER: Sane dispatcher received the command: 'internalGetScannerList' with param of ''
 -date-:-thread-:INF: Processing request for: doScan
 -date-:-thread-:INF: SERVER: Sane dispatcher received the command: 'internalDoScanningOperation' with param of '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]'
+-date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Scanner Parm : stat=Success form=0,lf=1,bpl=2362,pixpl=2362,lin=2362,dep=8
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Scanning done.
--date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Convertion process: Initalised
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Convertion process: Loaded

@@ -41,8 +41,6 @@
 ==XXXXX==       possibly lost: XXX bytes in XXX blocks
 ==XXXXX==     still reachable: XXX bytes in XXX blocks
 ==XXXXX==          suppressed: XXX bytes in XXX blocks
-==XXXXX==  Reachable blocks (those to which a pointer was found) are not shown.
-==XXXXX==  To see them, rerun with: --leak-check=full --show-reachable=yes
 ==XXXXX==  
 ==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
 ==XXXXX==  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: XXX from XXX)

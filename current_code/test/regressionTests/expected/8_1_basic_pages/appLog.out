@@ -21,6 +21,8 @@ LOG-OUTPUT
 -date-:-thread-:INF: Config setting: port = 8988
 -date-:-thread-:INF: Config setting: log_directory = /var/log/opendias
 -date-:-thread-:INF: Created directory.
+-date-:-thread-:INF: Sane backend started
+-date-:-thread-:INF: Sane command socket is open
 -date-:-thread-:INF: ... Starting up the openDias service.
 -date-:-thread-:INF: ready to accept connectons
 -date-:-thread-:INF: Serving request: /
@@ -44,6 +46,7 @@ LOG-OUTPUT
 -date-:-thread-:INF: Serving request: /style/common.css
 -date-:-thread-:INF: Serving request: /style/jquery-ui.css
 -date-:-thread-:INF: Processing request for: getScannerList
+-date-:-thread-:INF: SERVER: Sane dispatcher received the command: 'internalGetScannerList' with param of ''
 -date-:-thread-:INF: Serving request: /accessControls.html
 -date-:-thread-:INF: Serving request: /includes/jquery.js
 -date-:-thread-:INF: Serving request: /includes/openDias.getAccessDetails.js
@@ -54,4 +57,4 @@ LOG-OUTPUT
 -date-:-thread-:INF: Serving request: /style/common.css
 -date-:-thread-:INF: Received SIGUSR1 signal.
 -date-:-thread-:INF: openDias service is shutting down....
--date-:-thread-:INF: ....openDias service has shutdown
+-date-:-thread-:INF: openDias service has shutdown.
