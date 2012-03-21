@@ -54,7 +54,7 @@
 #include "debug.h"
 #include "web_handler.h"
 
-struct services *startedServices;
+struct services startedServices;
 struct MHD_Daemon *httpdaemon;
 int COMMSSOCKET;
 int pidFilehandle;
@@ -69,7 +69,7 @@ int setup (char *configFile) {
   DB_VERSION = 6;
   PORT = 8988; // Default - but overridden by config settings before port is opened
   LOG_DIR = o_strdup("/var/log/opendias");
-  startedServices->log = 1;
+  startedServices.log = 1;
   o_log(INFORMATION, "Setting default log verbosity to %d.", VERBOSITY);
 
   // Get 'DB' location
@@ -81,6 +81,7 @@ int setup (char *configFile) {
   o_log(INFORMATION, "Using config file: %s", conf);
   if( 0 == load_file_to_memory(conf, &location) ) {
     o_log(ERROR, "Cannot find main config file: %s", conf);
+    free(LOG_DIR);
     free(location);
     return 1;
   }
@@ -91,11 +92,12 @@ int setup (char *configFile) {
 
   // Open (& maybe update) the database.
   if(1 == connect_db(1)) { // 1 = create if required
+    free(LOG_DIR);
     free(BASE_DIR);
     free(location);
     return 1;
   }
-  startedServices->db = 1;
+  startedServices.db = 1;
 
   sql = o_strdup("SELECT config_option, config_value FROM config");
   rSet = runquery_db(sql);
@@ -144,38 +146,37 @@ int setup (char *configFile) {
 extern void server_shutdown() {
   o_log(INFORMATION, "openDias service is shutting down....");
 
-  if( startedServices->httpd ) {
+  if( startedServices.httpd ) {
     MHD_stop_daemon( httpdaemon );
     o_log(DEBUGM, "... httpd service [done]");
   }
 
 #ifdef CAN_SCAN
-  if( startedServices->command ) {
+  if( startedServices.command ) {
     close( COMMSSOCKET );
     unlink( ADDRESS );
     freeSaneCache();
     o_log(DEBUGM, "... sane command socket [done]");
   }
 
-  if( startedServices->sane ) {
+  if( startedServices.sane ) {
     o_log(DEBUGM, "... sane backend [done]");
     sane_exit();
   }
 #endif // CAN_SCAN //
 
-  if( startedServices->db ) {
+  if( startedServices.db ) {
     o_log(DEBUGM, "... database [done]");
     close_db();
   }
 
-  if( startedServices->log ) {
+  if( startedServices.log ) {
     o_log(INFORMATION, "openDias service has shutdown.");
     free(LOG_DIR); // Cannot log anymore
   }
 
   free(BASE_DIR);
   close(pidFilehandle); 
-  free(startedServices);
 }
 
 void signal_handler(int sig) {
@@ -230,9 +231,7 @@ void daemonize(char *rundir, char *pidfile) {
         return;
     }
 
-    /* Fork*/
     pid = fork();
- 
     if (pid < 0) {
         /* Could not fork */
         o_log(ERROR, "Could not fork.");
@@ -342,13 +341,12 @@ int main (int argc, char **argv) {
   char *configFile = NULL;
   int turnToDaemon = 1;
   int c;
-  startedServices = malloc( sizeof(struct services) );
-  startedServices->pid = 0;
-  startedServices->log = 0;
-  startedServices->db = 0;
-  startedServices->sane = 0;
-  startedServices->command = 0;
-  startedServices->httpd = 0;
+  startedServices.pid = 0;
+  startedServices.log = 0;
+  startedServices.db = 0;
+  startedServices.sane = 0;
+  startedServices.command = 0;
+  startedServices.httpd = 0;
 
   // Parse out the command line flags
   while ((c = getopt(argc, argv, "dc:ih")) != EOF) {
@@ -373,7 +371,7 @@ int main (int argc, char **argv) {
     // Turn into a meamon and write the pid file.
     o_log(INFORMATION, "Running in daemon mode.");
     daemonize("/tmp/", "/var/run/opendias.pid");
-    startedServices->pid = 1;
+    startedServices.pid = 1;
   }
   else {
     o_log(INFORMATION, "Running in interactive mode.");
@@ -395,7 +393,7 @@ int main (int argc, char **argv) {
     server_shutdown();
     exit(EXIT_FAILURE);
   }
-  startedServices->sane = 1;
+  startedServices.sane = 1;
   o_log(INFORMATION, "Sane backend started");
   
 
@@ -406,7 +404,7 @@ int main (int argc, char **argv) {
     server_shutdown();
     exit(EXIT_FAILURE);
   }
-  startedServices->command = 1;
+  startedServices.command = 1;
   o_log(INFORMATION, "Sane command socket is open");
 #endif // CAN_SCAN //
 
@@ -425,7 +423,7 @@ int main (int argc, char **argv) {
     server_shutdown();
     exit(EXIT_FAILURE);
   }
-  startedServices->httpd = 1;
+  startedServices.httpd = 1;
 
   setup_signal_handling();
   o_log(INFORMATION, "ready to accept connectons");
@@ -445,20 +443,25 @@ int main (int argc, char **argv) {
   while( ( ns = accept(COMMSSOCKET, NULL, NULL) ) ) { // Client connections loop
     if( ns < 0 ) {
       if( errno == EINTR ) {
-        o_log(INFORMATION, "Something happened? Most likly a 'Ctrl-C'....");
+        if( 1 != turnToDaemon ) {
+          o_log(INFORMATION, "Something happened? Most likly a 'Ctrl-C'....");
+          server_shutdown();
+          exit(EXIT_FAILURE);
+        }
       }
       else {
-        o_log(INFORMATION, "Could not create a client comms socket");
+        o_log(INFORMATION, "Could not create a client comms socket: %d - %s", errno, strerror(errno));
+        // Just try again.
       }
-      server_shutdown();
-      exit(EXIT_FAILURE);
     }
-    dispatch_sane_work( ns );
+    else {
+      dispatch_sane_work( ns );
+    }
   } 
 
-  o_log(ERROR, "done waiting - should never get here");
+  o_log(ERROR, "should never get here");
 #else
-  if( turnToDaemon==1 ) {
+  if( 1 == turnToDaemon ) {
     while(1) {
       sleep(500);
     }

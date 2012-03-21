@@ -769,13 +769,6 @@ extern char *internalDoScanningOperation(char *uuid) {
   sane_close(openDeviceHandle);
 
 
-  // Do OCR - on this page
-  // - OCR libs just wants the raw data and not the image header
-  ocrImage( uuid, docid, raw_image+strlen(header), current_page, request_resolution, pars, totbytes );
-
-
-
-
   /*
    *
    * Change this whole section for the method call in imageProcessing::reformatImage
@@ -786,13 +779,12 @@ extern char *internalDoScanningOperation(char *uuid) {
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 0);
   FreeImage_Initialise(TRUE);
   FIMEMORY *hmem = FreeImage_OpenMemory(raw_image, (pars.pixels_per_line*pars.lines)+strlen(header));
-  free(header);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
   o_log(INFORMATION, "Convertion process: Initalised");
 
   FIBITMAP *src = FreeImage_LoadFromMemory(FIF_PGMRAW, hmem, BMP_DEFAULT);
   FreeImage_CloseMemory(hmem);
-  free(raw_image);
+  //free(raw_image);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 55);
   o_log(INFORMATION, "Convertion process: Loaded");
  
@@ -803,6 +795,17 @@ extern char *internalDoScanningOperation(char *uuid) {
   FreeImage_DeInitialise();
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   o_log(INFORMATION, "Conversion process: Complete");
+
+
+
+
+  // Do OCR - on this page
+  // - OCR libs just wants the raw data and not the image header
+  ocrImage( uuid, docid, raw_image+strlen(header), current_page, request_resolution, pars, totbytes );
+  free(raw_image);
+  free(header);
+
+
 
 
 
