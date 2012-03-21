@@ -3,10 +3,25 @@ Copying default database
 STARTING app...
 Now ready
 No need for a web client for this test.
-Sending request = action=doScan&deviceid=test%3A0&format=Grey%20Scale&ocr=-&pagelength=100&pages=2&resolution=300
+Sending request = action=doScan&deviceid=test%3A0&format=Grey%20Scale&ocr=-&pagelength=100&pages=2&resolution=100
 startScan = $VAR1 = {
   'DoScan' => {
     'scanuuid' => '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]'
+  }
+};
+
+Sending request = action=doScan&deviceid=test%3A0&format=Grey%20Scale&ocr=-&pagelength=100&pages=2&resolution=100
+blocked Scan, request = $VAR1 = {
+  'DoScan' => {
+    'scanuuid' => '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]'
+  }
+};
+
+Sending request = action=getScanningProgress&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+blocked Scan, result = $VAR1 = {
+  'ScanningProgress' => {
+    'status' => '13',
+    'value' => '0'
   }
 };
 

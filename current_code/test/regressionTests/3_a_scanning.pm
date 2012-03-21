@@ -20,9 +20,13 @@ sub test {
     deviceid => 'test:0',
     format => 'Grey Scale',
     pages => 2,
-    resolution => '300',
+    resolution => '100',
     ocr => '-',
     pagelength => '100',
+  );
+  my %followup = (
+    action => 'getScanningProgress',
+    scanprogressid => 0,
   );
 
 
@@ -33,12 +37,19 @@ sub test {
   return 1 unless defined $scan_uuid && $scan_uuid ne '';
 
 
+  # Attempt a second scan - ensure it is rejected
+  sleep(1);
+  my $result = directRequest( \%scan );
+  o_log( "blocked Scan, request = " . Dumper( $result ) );
+  $followup{scanprogressid} = $result->{DoScan}->{scanuuid};
+  $result = directRequest( \%followup );
+  o_log( "blocked Scan, result = " . Dumper( $result ) );
+  $result = undef;
+
+
   # Wait for scanning of the first page to complete
   my $attempt = 0;
-  my %followup = (
-    action => 'getScanningProgress',
-    scanprogressid => $scan_uuid,
-  );
+  $followup{scanprogressid} = $scan_uuid;
   while( ! exists $result->{ScanningProgress} || $result->{ScanningProgress}->{status} ne '7' ) {
     sleep(1);
     $attempt++;
