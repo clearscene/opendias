@@ -50,6 +50,5 @@ $VAR1 = {
   }
 };
 
-Sending request = action=getScanningProgress&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 Stopping service
 Waiting for valgrind to finish.

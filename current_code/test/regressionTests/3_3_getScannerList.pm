@@ -39,21 +39,26 @@ sub test {
   my $scan_uuid =  $result->{DoScan}->{scanuuid};
 
   # Request device list - expect a cached response
+  sleep(3);
   o_log( "Scanner List" );
   o_log( Dumper( directRequest( \%data ) ) );
 
-  # Wait for the second page to finish scanning
+  # Wait for the page to finish scanning
+  my $dbh = DBI->connect( "dbi:SQLite:dbname=/tmp/opendiastest/openDIAS.sqlite3",
+                          "", "", { RaiseError => 1, AutoCommit => 1, sqlite_use_immediate_transaction => 1 } );
+  my $sth = $dbh->prepare("SELECT status FROM scan_progress WHERE client_id = ? ");
+
   my $attempt = 0;
-  my %followup = (
-    action => 'getScanningProgress',
-    scanprogressid => $scan_uuid,
-  );
-  while( ! exists $result->{ScanningProgress} || $result->{ScanningProgress}->{status} ne '16' ) {
+  while( 1 ) {
     sleep(1);
     $attempt++;
-    $result = directRequest( \%followup, $attempt );
+    $sth->execute($scan_uuid);
+    my $hashRef = $sth->fetchrow_hashref();
+    $sth->finish;
+    last if( $hashRef->{status} eq $SCAN_COMPLETE );
     last if( $attempt > 120 );
   }
+  $dbh->disconnect();
 
   return 0;
 }
