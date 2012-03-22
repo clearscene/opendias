@@ -17,34 +17,11 @@ blocked Scan, request = $VAR1 = {
   }
 };
 
-Sending request = action=getScanningProgress&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
-blocked Scan, result = $VAR1 = {
-  'ScanningProgress' => {
-    'status' => '13',
-    'value' => '0'
-  }
-};
-
-Sending request = action=getScanningProgress&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
-Message stating, were waiting = $VAR1 = {
-  'ScanningProgress' => {
-    'status' => '7',
-    'value' => '2'
-  }
-};
-
+blocked Scan, result = Correctly Marked as blocked
 Sending request = action=nextPageReady&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 Result of page turn request = $VAR1 = {
   'NextPageReady' => {
     'result' => 'OK'
-  }
-};
-
-Sending request = action=getScanningProgress&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
-Final response = $VAR1 = {
-  'ScanningProgress' => {
-    'status' => '16',
-    'value' => '5'
   }
 };
 
