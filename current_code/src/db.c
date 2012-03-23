@@ -126,6 +126,18 @@ extern int connect_db (int createIfRequired) {
     free(upgradeSQL);
   }
 
+  // If we just created a DB from scratch, then update some config
+  if( version == 0 ) {
+    char *sql = o_strdup("UPDATE config SET config_value = ? WHERE config_option = 'scan_directory'");
+
+    struct simpleLinkedList *vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, o_strdup(BASE_DIR) );
+
+    runUpdate_db(sql, vars);
+    free(sql);
+  }
+
   return 0;
 }
 
