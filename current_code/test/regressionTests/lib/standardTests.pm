@@ -347,7 +347,7 @@ sub dumpQueryResult {
   my ($sql, ) = @_;
 
   my $dbh = DBI->connect( "dbi:SQLite:dbname=/tmp/opendiastest/openDIAS.sqlite3",
-                          "", "", { RaiseError => 1, AutoCommit => 0 } );
+                          "", "", { RaiseError => 1, AutoCommit => 1, sqlite_use_immediate_transaction => 1 } );
 
   my $sth = $dbh->prepare( $sql );
   $sth->execute();
