@@ -127,7 +127,6 @@ AC_CHECK_LIB(zzipwrap, main,
 if test "x$xml" = "xyes" && test "x$zzip" = "xyes" && test "x$archive" = "xyes" ; then
 	AC_DEFINE([CAN_READODF],[],[Have everything that is needed to read ODF documents])
 	OPENDIAS_LIBS="$OPENDIAS_LIBS -larchive -lxml2 -lzzip "
-	OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS $xml2_cflags " 
 else
 	AC_MSG_WARN(You wll not be able to import any ODF document.)
 fi
