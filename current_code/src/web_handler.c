@@ -222,16 +222,19 @@ void request_completed (void *cls, struct MHD_Connection *connection, void **con
     sll_destroy( sll_findFirstElement( con_info->post_data ) );
   }
 
-  //pthread_t t = con_info->thread;
+#ifdef THREAD_JOIN
+  pthread_t t = con_info->thread;
+#endif /* THREAD_JOIN */
   free (con_info);
   *con_cls = NULL;
-  //if(t != NULL) {
-  //  o_log(ERROR, "Waiting for child thread %X to finish", t);
-  //  pthread_join(t, NULL);
-  //  o_log(ERROR, "finish waiting for the child to come home");
-  //}
-  //o_log(DEBUGM, "end of REQUEST COMPLETE");
-
+#ifdef THREAD_JOIN
+  if(t != NULL) {
+    o_log(ERROR, "Waiting for child thread %X to finish", t);
+    pthread_join(t, NULL);
+    o_log(ERROR, "finish waiting for the child to come home");
+  }
+  o_log(DEBUGM, "end of REQUEST COMPLETE");
+#endif /* THREAD_JOIN */
 }
 
 static char *accessChecks(struct MHD_Connection *connection, const char *url, struct priverlage *privs) {
@@ -363,11 +366,12 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     con_info = malloc (sizeof (struct connection_info_struct));
     if (NULL == con_info)
       return MHD_NO;
-    //con_info->thread = NULL;
+#ifdef THREAD_JOIN
+    con_info->thread = NULL;
+#endif /* THREAD_JOIN */
 
     if (0 == strcmp (method, "POST")) {
       con_info->post_data = sll_init();
-      ////////con_info->post_data = g_hash_table_new_full(g_str_hash, g_str_equal, (GDestroyNotify)g_free, (GDestroyNotify)post_data_free);
       con_info->postprocessor = MHD_create_post_processor (connection, POSTBUFFERSIZE, iterate_post, (void *) con_info);
       if (NULL == con_info->postprocessor) {
         free (con_info);

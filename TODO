@@ -16,10 +16,15 @@ UNDERWAY: Scanner device locking
 TECHNICAL: Make 64-bit
 
 
+
+
+
 Version 0.9
 -----------
 
 Print documents
+
+Got a busy signal - then give option to keep polling until it's available.
 
 Implement 'OCR now' on document detail page.
 

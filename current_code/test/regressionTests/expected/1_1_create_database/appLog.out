@@ -226,18 +226,32 @@ CREATE TABLE doc_links (
 CREATE INDEX doc_links_linkid_idx
 ON doc_links(docid ASC);
 
+CREATE TEMPORARY TABLE t1_backup("status" INTEGER, "value" INTEGER, "client_id" CHAR(36));
+INSERT INTO t1_backup SELECT status, value, client_id FROM scan_progress;
+DROP TABLE scan_progress;
+CREATE TABLE scan_progress (
+    "status" INTEGER NOT NULL DEFAULT (0),
+    "value" INTEGER,
+    "client_id" CHAR(36) NOT NULL DEFAULT (' ')
+);
+INSERT INTO scan_progress SELECT status, value, client_id FROM t1_backup;
+CREATE UNIQUE INDEX "client_id" on "scan_progress" (client_id ASC);
+DROP TABLE t1_backup;
+
 COMMIT;
 
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:INF: Config setting: log_verbosity = 3
 -date-:-thread-:INF: Moving log verbosity from 4 to 3
--date-:-thread-:INF: Config setting: scan_directory = /var/lib/opendias
+-date-:-thread-:INF: Config setting: scan_directory = /tmp/opendiastest/
 -date-:-thread-:INF: Config setting: show_all_available = 1
 -date-:-thread-:INF: Config setting: port = 8988
 -date-:-thread-:INF: Config setting: log_directory = /var/log/opendias
 -date-:-thread-:INF: Created directory.
+-date-:-thread-:INF: Sane backend started
+-date-:-thread-:INF: Sane command socket is open
 -date-:-thread-:INF: ... Starting up the openDias service.
 -date-:-thread-:INF: ready to accept connectons
 -date-:-thread-:INF: Received SIGUSR1 signal.
 -date-:-thread-:INF: openDias service is shutting down....
--date-:-thread-:INF: ....openDias service has shutdown
+-date-:-thread-:INF: openDias service has shutdown.

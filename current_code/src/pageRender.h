@@ -21,7 +21,8 @@
 
 #include "validation.h" // for con_info struct - move me to web_handler.h
 
-char *getScannerList();
+char *getScannerList();  // Command port frontend to the internalGetScannerList function
+void *doScanningOperation(void *); //command port frontend to the internalDoScanningOperation function
 char *getScanningProgress(char *);
 char *doScan(char *, char *, char *, char *, char *, char *, struct connection_info_struct *);
 char *docFilter(char *, char *, char *, char *, char *, char *, char *, char *, char *, char *);

@@ -99,7 +99,7 @@ sub test {
   binmode(FILE);
   my $md5 = Digest::MD5->new->addfile(*FILE)->hexdigest;
   close(FILE);
-  if( $md5 ne "72cf69345fd9255e2e1adf27db49f215" ) {
+  if( $md5 ne "bb958d7e9621f2b6b492adbb6029afa5" ) {
     o_log("Scanned file looks different to the expected. ".$md5);
     return 1;
   }

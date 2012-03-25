@@ -80,6 +80,7 @@ You can build and install by issuing the following commands:
 If you downloaded the source from, the GIT tree at GitHub.
 You need to pre configure the source:
 
+  install autoconf tools
   cd current_code
   autoreconf -iv
   ./configure -C

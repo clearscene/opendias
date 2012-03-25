@@ -25,5 +25,30 @@ $VAR1 = {
   }
 };
 
+Start long running scan
+Sending request = action=doScan&deviceid=test%3A0&format=Grey%20Scale&ocr=-&pagelength=100&pages=1&resolution=50
+Scanner List
+Sending request = action=getScannerList
+$VAR1 = {
+  'ScannerList' => {
+    'Devices' => {
+      'Device' => {
+        'Formats' => {
+          'format' => 'Grey Scale'
+        },
+        'default' => '300',
+        'host' => 'opendias server',
+        'max' => '800',
+        'min' => '50',
+        'model' => 'Frontend-tester',
+        'name' => 'test:0',
+        'type' => 'Virtual Device',
+        'vendor' => 'Noname'
+      }
+    },
+    'cached' => 'true'
+  }
+};
+
 Stopping service
 Waiting for valgrind to finish.

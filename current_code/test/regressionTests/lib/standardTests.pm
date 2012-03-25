@@ -18,7 +18,7 @@ use WWW::HtmlUnit
 
 require Exporter;
 @ISA = qw(Exporter);
-@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client getNextJSAlert castTo_HtmlInput castTo_HtmlButton removeDuplicateLines directRequest inTestSQL dumpQueryResult $testpath $testcasename );
+@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client getNextJSAlert castTo_HtmlInput castTo_HtmlButton removeDuplicateLines directRequest inTestSQL dumpQueryResult $testpath $testcasename $SCAN_COMPLETE $SCAN_BLOCKED $SCAN_WAIT_NEXT_PAGE );
 
 use strict;
 
@@ -28,6 +28,9 @@ our $true = 1;#$Java::lang::true;
 our $false = 0;#$Java::lang::false;
 our $testpath;
 our $testcasename;
+our $SCAN_COMPLETE = '16';
+our $SCAN_BLOCKED = '13';
+our $SCAN_WAIT_NEXT_PAGE = '7';
 
 $Data::Dumper::Indent = 1;
 $Data::Dumper::Sortkeys = 1;
@@ -344,7 +347,7 @@ sub dumpQueryResult {
   my ($sql, ) = @_;
 
   my $dbh = DBI->connect( "dbi:SQLite:dbname=/tmp/opendiastest/openDIAS.sqlite3",
-                          "", "", { RaiseError => 1, AutoCommit => 0 } );
+                          "", "", { RaiseError => 1, AutoCommit => 1, sqlite_use_immediate_transaction => 1 } );
 
   my $sth = $dbh->prepare( $sql );
   $sth->execute();

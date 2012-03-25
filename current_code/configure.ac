@@ -27,6 +27,8 @@ AC_CHECK_FUNCS([strdup],[],AC_MSG_ERROR([Missing function strdup]))
 AC_CHECK_FUNCS([strstr],[],AC_MSG_ERROR([Missing function strstr]))
 AC_CHECK_FUNCS([memset],[],AC_MSG_ERROR([Missing function memset])) 
 AC_CHECK_FUNCS([mkdir],[],AC_MSG_ERROR([Missing function mkdir]))
+AC_CHECK_FUNCS([socket],[],AC_MSG_ERROR([Missing function socket]))
+AC_CHECK_FUNCS([strerror],[],AC_MSG_ERROR([Missing function strerror]))
 AC_CHECK_HEADERS([arpa/inet.h],[],AC_MSG_ERROR([Missing header arpa/inet.h]))
 AC_CHECK_HEADERS([fcntl.h],[],AC_MSG_ERROR([Missing header fcntl.h]))
 AC_CHECK_HEADERS([netdb.h],[],AC_MSG_ERROR([Missing header netdb.h]))
@@ -53,9 +55,11 @@ AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
 
 
 
-
+dnl Special config options
 AC_ENABLE([werror],[OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS -Werror "])
-
+AC_ENABLE([thread_join],[
+	AC_DEFINE([THREAD_JOIN],[],[The main process will wait for child threads to finish.])
+])
 
 
 

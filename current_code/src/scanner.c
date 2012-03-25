@@ -16,6 +16,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* Collection of sane related helper functions */
+
 #include "config.h"
 
 #include <stdlib.h>
@@ -26,7 +28,6 @@
 #endif // CAN_SCAN //
 
 #include "scanner.h"
-//#include "main.h"
 #include "utils.h"
 #include "debug.h"
 

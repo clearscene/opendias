@@ -30,12 +30,12 @@
 ==XXXXX==  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: XXX from XXX)
 ==XXXXX==  
 ==XXXXX==  FILE DESCRIPTORS: 1 open at exit.
-==XXXXX==  Open file descriptor 3: [FILE PATH]
+==XXXXX==  Open file descriptor 5: [FILE PATH]
 ==XXXXX==     at 0x47D1C6A: open64 (open64.c:46)
 ==XXXXX==     by 0x40F5165: ??? (in /lib/i386-linux-gnu/libuuid.so.1.3.0)
 ==XXXXX==     by 0x40F61BE: uuid_generate (in /lib/i386-linux-gnu/libuuid.so.1.3.0)
-==XXXXX==     by 0x8061E18: doScan (pageRender.c:259)
-==XXXXX==     by 0x805FD47: answer_to_connection (web_handler.c:606)
+==XXXXX==     by 0x806166D: doScan (pageRender.c:106)
+==XXXXX==     by 0x805FE16: answer_to_connection (web_handler.c:606)
 ==XXXXX==     by 0x40EC0CF: call_connection_handler (connection.c:1158)
 ==XXXXX==     by 0x40ED216: MHD_connection_handle_idle (connection.c:2055)
 ==XXXXX==     by 0x40EF528: MHD_select (daemon.c:1050)
@@ -54,8 +54,6 @@
 ==XXXXX==       possibly lost: XXX bytes in XXX blocks
 ==XXXXX==     still reachable: XXX bytes in XXX blocks
 ==XXXXX==          suppressed: XXX bytes in XXX blocks
-==XXXXX==  Reachable blocks (those to which a pointer was found) are not shown.
-==XXXXX==  To see them, rerun with: --leak-check=full --show-reachable=yes
 ==XXXXX==  
 ==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
 ==XXXXX==  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: XXX from XXX)
