@@ -42,7 +42,7 @@ void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
 /*
  * Convert Raw into JPEG
  */
-extern void reformatImage(FREE_IMAGE_FORMAT fromFormat, char *fromFilename, FREE_IMAGE_FORMAT toFormat, char *outFilename ) { 
+void reformatImage(FREE_IMAGE_FORMAT fromFormat, char *fromFilename, FREE_IMAGE_FORMAT toFormat, char *outFilename ) { 
   char *resultMessage;
   int resultVerbosity;
   FIBITMAP *bitmap;
@@ -74,7 +74,7 @@ extern void reformatImage(FREE_IMAGE_FORMAT fromFormat, char *fromFilename, FREE
 #endif // CAN_SCAN //
 
 
-extern char *getTextFromImage(const unsigned char *pic, int bpl, int ppl, int lines, char *lang) {
+char *getTextFromImage(const unsigned char *pic, int bpl, int ppl, int lines, char *lang) {
 
   char *txt = NULL;
 

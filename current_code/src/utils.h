@@ -27,24 +27,24 @@ struct dateParts {
   char *day;
 };
 
-extern char *o_strdup(const char *);
-extern char *itoa(long int, int);
-extern size_t load_file_to_memory(const char *, char **);
-extern void createDir_ifRequired(char *);
-extern void fcopy(char *, char *);
-extern int max(int, int);
-extern int min(int, int);
-extern char *dateHuman(char *, char *, char *);
-extern void conCat(char **, const char *);
-extern char *getTimeStr();
-extern char *getTimeStr_iso8601();
-extern void propper(char *);
-extern void lower(char *);
-extern void chop(char *);
-extern struct dateParts *dateStringToDateParts(char *);
-extern void addFileExt(char **, int);
-extern void replace(char *, char*, char*);
-extern char *o_printf(const char *, ...);
-extern void o_concatf(char **, const char *, ...);
+char *o_strdup(const char *);
+char *itoa(long int, int);
+size_t load_file_to_memory(const char *, char **);
+void createDir_ifRequired(char *);
+void fcopy(char *, char *);
+int max(int, int);
+int min(int, int);
+char *dateHuman(char *, char *, char *);
+void conCat(char **, const char *);
+char *getTimeStr();
+char *getTimeStr_iso8601();
+void propper(char *);
+void lower(char *);
+void chop(char *);
+struct dateParts *dateStringToDateParts(char *);
+void addFileExt(char **, int);
+void replace(char *, char*, char*);
+char *o_printf(const char *, ...);
+void o_concatf(char **, const char *, ...);
 
 #endif /* UTILS */

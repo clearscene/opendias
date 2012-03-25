@@ -186,7 +186,7 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
   return MHD_YES;
 }
 
-extern void request_completed (void *cls, struct MHD_Connection *connection, void **con_cls, enum MHD_RequestTerminationCode toe) {
+void request_completed (void *cls, struct MHD_Connection *connection, void **con_cls, enum MHD_RequestTerminationCode toe) {
 
   struct simpleLinkedList *row;
   struct post_data_struct *data_struct;
@@ -326,7 +326,7 @@ static void postDumper(struct simpleLinkedList *table) {
   }
 }
 
-extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
+int answer_to_connection (void *cls, struct MHD_Connection *connection,
               const char *url_orig, const char *method,
               const char *version, const char *upload_data,
               size_t *upload_data_size, void **con_cls) {

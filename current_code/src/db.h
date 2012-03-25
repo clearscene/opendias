@@ -26,13 +26,13 @@
 #define DB_INT "int"
 #define DB_DOUBLE "double"
 
-extern int connect_db (int);
-extern void close_db (void);
-extern void free_recordset (struct simpleLinkedList *);
-extern int last_insert(void);
-extern int runUpdate_db (char *, struct simpleLinkedList *);
-extern struct simpleLinkedList *runquery_db (char *);
-extern char *readData_db (struct simpleLinkedList *, char *);
-extern int nextRow (struct simpleLinkedList *);
+int connect_db (int);
+void close_db (void);
+void free_recordset (struct simpleLinkedList *);
+int last_insert(void);
+int runUpdate_db (char *, struct simpleLinkedList *);
+struct simpleLinkedList *runquery_db (char *);
+char *readData_db (struct simpleLinkedList *, char *);
+int nextRow (struct simpleLinkedList *);
 
 #endif /* DB */

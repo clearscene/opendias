@@ -38,6 +38,6 @@ struct scanCallInfo {
 #define OCR_LANG_BPORTUGUESE "por"   /*Brasilian Portuguese */
 #define OCR_LANG_VIETNAMESE  "vie"   /*Vietnamese */
 
-extern void runocr(struct scanCallInfo*);
+void runocr(struct scanCallInfo*);
 
 #endif /* OCR_PLUG */

@@ -124,7 +124,7 @@ int setup (char *configFile) {
 
 }
 
-extern void server_shutdown() {
+void server_shutdown() {
   o_log(INFORMATION, "openDias service is shutting down....");
 
   o_log(DEBUGM, "cleanup sane");

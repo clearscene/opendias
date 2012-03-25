@@ -39,25 +39,25 @@ enum {                                  // Value indicate ...
   SCAN_FINISHED                         // id of the saved doc
 };
 
-extern int setScanParam(char *, int, char *);
-extern char *getScanParam(char *, int);
-extern void addScanProgress (char *);
-extern void updateScanProgress(char *, int, int);
-extern void updateNewScannedPage (int, char *, int); // Frees both chars
-extern char *addNewScannedDoc (int, int, int, int);
-extern char *addNewFileDoc (int, char *);
-extern int updateDocValue_int (char *, char *, int);
-extern int updateDocValue (char *, char *, char *);
-extern int addTagToDoc (char *, char *);
-extern int removeTagFromDoc (char *, char *);
-extern int addDocToDoc (char *, char *);
-extern int removeDocFromDoc (char *, char *);
-extern void removeDocTags (char *);
-extern void removeDocLinks (char *);
-extern void removeDoc (char *);
-extern void addLocation(char *, int);
-extern char *getTagId(char *);
-extern int countDocsWithTag(char *);
-extern void deleteTag(char *);
+int setScanParam(char *, int, char *);
+char *getScanParam(char *, int);
+void addScanProgress (char *);
+void updateScanProgress(char *, int, int);
+void updateNewScannedPage (int, char *, int); // Frees both chars
+char *addNewScannedDoc (int, int, int, int);
+char *addNewFileDoc (int, char *);
+int updateDocValue_int (char *, char *, int);
+int updateDocValue (char *, char *, char *);
+int addTagToDoc (char *, char *);
+int removeTagFromDoc (char *, char *);
+int addDocToDoc (char *, char *);
+int removeDocFromDoc (char *, char *);
+void removeDocTags (char *);
+void removeDocLinks (char *);
+void removeDoc (char *);
+void addLocation(char *, int);
+char *getTagId(char *);
+int countDocsWithTag(char *);
+void deleteTag(char *);
 
 #endif /* DBACCESS */

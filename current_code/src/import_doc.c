@@ -33,7 +33,7 @@
 #include "imageProcessing.h"
 #endif // CAN_OCR //
 
-extern char *uploadfile(char *filename, char *ftype) {
+char *uploadfile(char *filename, char *ftype) {
 
   int itype = PLACE_HOLDER;
   char *docid, *to_name, *tmp, *ocrText = NULL;

@@ -49,7 +49,7 @@ long int ritoa(long int val, long int topval, char *s, int base) {
  *- mallocs a string of the right length
  * - calls ritoa to fill in the string for a given base
  */
-extern char * itoa(long int val, int base) {
+char * itoa(long int val, int base) {
 
   int len;
   char *s,*buf;
@@ -72,7 +72,7 @@ extern char * itoa(long int val, int base) {
 
 
 /* load a file into a buffer */
-extern size_t load_file_to_memory(const char *p_filename, char **result) {
+size_t load_file_to_memory(const char *p_filename, char **result) {
 
   size_t size = 0;
   FILE *p_f = fopen(p_filename, "r");
@@ -105,7 +105,7 @@ extern size_t load_file_to_memory(const char *p_filename, char **result) {
 }
 
 
-extern void createDir_ifRequired(char *dir) {
+void createDir_ifRequired(char *dir) {
 
   if ( 0 != access(dir, F_OK) ) {
     // Create the directory
@@ -123,7 +123,7 @@ extern void createDir_ifRequired(char *dir) {
 
 
 /* fcopy - copy a file contents to new location */
-extern void fcopy(char *fnsource, char *fntarget) {
+void fcopy(char *fnsource, char *fntarget) {
 
   FILE *fpin = fopen(fnsource, "rb");
 
@@ -141,7 +141,7 @@ extern void fcopy(char *fnsource, char *fntarget) {
 
 }
 
-extern int max(int a, int b) {
+int max(int a, int b) {
 
   if(a >= b)
     return a;
@@ -150,7 +150,7 @@ extern int max(int a, int b) {
 
 }
 
-extern int min(int a, int b) {
+int min(int a, int b) {
 
   if(a <= b)
     return a;
@@ -159,7 +159,7 @@ extern int min(int a, int b) {
 
 }
 
-extern char *dateHuman(char *a, char *b, char *c) {
+char *dateHuman(char *a, char *b, char *c) {
 
   // This will need to be converted, to use current machines LOCALE
 
@@ -194,7 +194,7 @@ extern char *dateHuman(char *a, char *b, char *c) {
   }
 }
 
-extern char *o_strdup(const char *source) {
+char *o_strdup(const char *source) {
 
   size_t size = strlen(source);
   char *newArea = malloc(size + 1);
@@ -203,7 +203,7 @@ extern char *o_strdup(const char *source) {
 
 }
 
-extern void conCat(char **mainStr, const char *addStr) {
+void conCat(char **mainStr, const char *addStr) {
 
   char *tmp, *tmp2;
 
@@ -216,11 +216,11 @@ extern void conCat(char **mainStr, const char *addStr) {
 
 }
 
-extern void chop( char *s ) {
+void chop( char *s ) {
     s[strcspn ( s, "\n" )] = '\0';
 }
 
-extern char *getTimeStr() {
+char *getTimeStr() {
   time_t ttime;
   struct tm *stTime;
   size_t size;
@@ -235,7 +235,7 @@ extern char *getTimeStr() {
   return strdate;
 }
 
-extern char *getTimeStr_iso8601() {
+char *getTimeStr_iso8601() {
   time_t ttime;
   struct tm *stTime;
   size_t size;
@@ -250,7 +250,7 @@ extern char *getTimeStr_iso8601() {
   return strdate;
 }
 
-extern void propper(char *inStr) {
+void propper(char *inStr) {
 
   char *ptr = inStr;
 
@@ -268,7 +268,7 @@ extern void propper(char *inStr) {
   }
 }
 
-extern void lower(char *inStr) {
+void lower(char *inStr) {
   char *ptr = inStr;
 
   /* going thru string */
@@ -278,7 +278,7 @@ extern void lower(char *inStr) {
   }
 }
 
-extern void replace(char *inStr, char *findStr, char *replaceStr) {
+void replace(char *inStr, char *findStr, char *replaceStr) {
 
   char *ptr = inStr;
 
@@ -289,7 +289,7 @@ extern void replace(char *inStr, char *findStr, char *replaceStr) {
 
 }
 
-extern struct dateParts *dateStringToDateParts(char *dateString) {
+struct dateParts *dateStringToDateParts(char *dateString) {
 
   struct dateParts *dp = malloc(sizeof(struct dateParts));
 
@@ -311,7 +311,7 @@ extern struct dateParts *dateStringToDateParts(char *dateString) {
   return dp;
 }
 
-extern void addFileExt(char **fname, int ftype) {
+void addFileExt(char **fname, int ftype) {
 
   char *ext;
 
@@ -336,7 +336,7 @@ char *i_printf(const char *fmt, va_list inargs) {
   return str;
 }
 
-extern char *o_printf(const char *fmt, ...) {
+char *o_printf(const char *fmt, ...) {
 
   va_list inargs;
   char *str;
@@ -348,7 +348,7 @@ extern char *o_printf(const char *fmt, ...) {
   return str;
 }
 
-extern void o_concatf(char **mainStr, const char *fmt, ...) {
+void o_concatf(char **mainStr, const char *fmt, ...) {
 
   va_list inargs;
   char *str;

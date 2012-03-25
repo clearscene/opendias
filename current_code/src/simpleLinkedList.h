@@ -30,16 +30,16 @@ struct simpleLinkedList {
   struct simpleLinkedList *next;
 };
 
-extern struct simpleLinkedList *sll_init();
-extern struct simpleLinkedList *sll_createNewElement( void * );
-extern struct simpleLinkedList *sll_findLastElement( struct simpleLinkedList * );
-extern struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList * );
-extern struct simpleLinkedList *sll_getNext( struct simpleLinkedList * );
-extern struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *, const char * );
-extern struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList * );
-extern void sll_append( struct simpleLinkedList *, void * );
-extern void sll_insert( struct simpleLinkedList *, char *, void * );
-extern void sll_destroy( struct simpleLinkedList * );
-extern void sll_delete( struct simpleLinkedList * );
+struct simpleLinkedList *sll_init();
+struct simpleLinkedList *sll_createNewElement( void * );
+struct simpleLinkedList *sll_findLastElement( struct simpleLinkedList * );
+struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList * );
+struct simpleLinkedList *sll_getNext( struct simpleLinkedList * );
+struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *, const char * );
+struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList * );
+void sll_append( struct simpleLinkedList *, void * );
+void sll_insert( struct simpleLinkedList *, char *, void * );
+void sll_destroy( struct simpleLinkedList * );
+void sll_delete( struct simpleLinkedList * );
 
 #endif /* SIMPLELINKEDLIST */

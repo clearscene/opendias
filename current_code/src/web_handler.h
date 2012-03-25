@@ -37,7 +37,7 @@
 #define MIMETYPE_PDF "application/pdf"
 #define MIMETYPE_ODT "application/vnd.oasis.opendocument.text"
 
-extern int answer_to_connection (void *, struct MHD_Connection *, const char *, const char *, const char *, const char *, size_t *, void **);
-extern void request_completed (void *, struct MHD_Connection *, void **, enum MHD_RequestTerminationCode );
+int answer_to_connection (void *, struct MHD_Connection *, const char *, const char *, const char *, const char *, size_t *, void **);
+void request_completed (void *, struct MHD_Connection *, void **, enum MHD_RequestTerminationCode );
 
 #endif /* WEBHANDLER */

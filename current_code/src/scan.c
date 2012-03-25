@@ -621,7 +621,7 @@ void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int reques
 
 }
 
-extern void *doScanningOperation(void *uuid) {
+void *doScanningOperation(void *uuid) {
 
   int request_resolution = 0;
   int buff_requested_len = 0; 
