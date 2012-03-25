@@ -574,7 +574,9 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
 void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int request_resolution, SANE_Parameters pars, double totbytes ) {
   char *ocrText;
   char *ocrLang;
+#ifdef CAN_SCAN
   char *ocrScanText;
+#endif // CAN_OCR //
 
   ocrLang = getScanParam(uuid, SCAN_PARAM_DO_OCR);
 #ifdef CAN_OCR
