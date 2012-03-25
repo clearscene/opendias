@@ -26,6 +26,7 @@
 #endif // CAN_OCR //
 #ifdef CAN_SCAN
 #include <FreeImage.h>
+#include "imageProcessing.h"
 
 /*
  *

@@ -153,7 +153,7 @@ void signal_handler(int sig) {
             break;
         default:
             signame = strsignal(sig);
-            o_log(INFORMATION, "Received signal %s. IGNORING. Try SIGUSR1 to stop the service.", signame );
+            o_log(INFORMATION, "Received signal '%s'. IGNORING. Try SIGUSR1 to stop the service.", signame );
             break;
     }
 }

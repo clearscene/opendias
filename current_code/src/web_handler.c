@@ -171,8 +171,9 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
       if ((fp = fopen(filename, "ab")) == NULL)
         o_log(ERROR, "could not open http post binary data file for output");
       else {
+        size_t wrote;
         fseek(fp, 0, SEEK_END);
-        size_t wrote = fwrite (data, sizeof (char), size, fp);
+        wrote = fwrite (data, sizeof (char), size, fp);
         if( size != wrote )
           o_log(ERROR, "Did not write the full amount of data. Ecpected to write %d, but wrote %d", size, wrote);
         fclose(fp);

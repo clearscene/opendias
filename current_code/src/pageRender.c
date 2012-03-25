@@ -474,10 +474,10 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
     // Which way
     char *direction;
     if( ( sortorder != NULL ) && (0 == strcmp(sortorder, "1") ) ) {
-      direction = strdup("DESC");
+      direction = o_strdup("DESC");
     }
     else {
-      direction = strdup("ASC");
+      direction = o_strdup("ASC");
     }
 
     switch(atoi(sortfield)) {
@@ -511,7 +511,7 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
     page_ret = o_printf("<page>%s</page>", page);
   }
   else {
-    page_ret = strdup("");
+    page_ret = o_strdup("");
   }
 
   // Get Results

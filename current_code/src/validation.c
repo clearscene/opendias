@@ -89,9 +89,10 @@ static int checkKeys(struct simpleLinkedList *postdata, struct simpleLinkedList 
 
 // Ensure the value is effectivly an int
 static int checkStringIsInt(char *StrInt) {
+  char *prt;
   if( StrInt == NULL ) return 1;
 
-  char *ptr = StrInt;
+  ptr = StrInt;
   while(*ptr) {
     char *schar = strndup( ptr, 1 );
     if( 0 == strstr("0123456789", schar) ) {
@@ -287,10 +288,10 @@ static int checkTag(char *val) {
 }
 
 static int checkUUID(char *val) {
-  if( val == NULL ) return 1;
   char *in = val;
   char *hex = "abcdefABCDEF0123456789";
   char *template = "hhhhhhhh-hhhh-hhhh-hhhh-hhhhhhhhhhhh";
+  if( val == NULL ) return 1;
   while( *in && *template ) {
     char *schar = strndup( in, 1 );
     char *echar = strndup( template, 1 );

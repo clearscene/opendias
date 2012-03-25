@@ -36,7 +36,6 @@ struct simpleLinkedList *sll_findLastElement( struct simpleLinkedList * );
 struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList * );
 struct simpleLinkedList *sll_getNext( struct simpleLinkedList * );
 struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *, const char * );
-struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList * );
 void sll_append( struct simpleLinkedList *, void * );
 void sll_insert( struct simpleLinkedList *, char *, void * );
 void sll_destroy( struct simpleLinkedList * );

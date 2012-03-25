@@ -18,6 +18,7 @@
 
 
 #include "config.h"
+#include "import_doc.h"
 #include "main.h"
 #include "dbaccess.h"
 #include "utils.h"
