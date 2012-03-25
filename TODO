@@ -11,9 +11,7 @@ Frontend remembers user options
 
 Implement 'By Username/Password' access controls
 
-Scanner device locking
-
-UPDERWAY: Check the use of "extern" where it's used.
+UNDERWAY: Scanner device locking
 
 TECHNICAL: Make 64-bit
 
