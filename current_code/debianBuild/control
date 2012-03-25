@@ -1,0 +1,13 @@
+Source: opendias
+Section: net
+Priority: extra
+Maintainer: computer <skm42@users.sf.net>
+Build-Depends: debhelper (>= 7), autotools-dev
+Standards-Version: 3.8.3
+Homepage: http://opendias.essentialcollections.co.uk/
+
+Package: opendias
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: open Document Information Archive System
+ openDIAS (Document Imaging Archive System) provides document imaging with OCR. You can scan documents (with SANE) or import ODF documents, and then assign tags. It can store all your letters, bills, statements, etc. in a convenient, safe, and easily retrievable way.  The openDIAS project is a new OpenSource offering to bring professional document scanning and storage utility to the home user.

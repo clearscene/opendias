@@ -76,6 +76,8 @@ extern char *getScanParam(char *scanid, int param_option) {
   char *sql, *vvalue = NULL;
   struct simpleLinkedList *rSet;
 
+	o_log(DEBUGM,"Entering getScanParam");
+
   sql = o_printf("SELECT param_value \
                   FROM scan_params \
                   WHERE client_id = '%s' \
@@ -87,6 +89,7 @@ extern char *getScanParam(char *scanid, int param_option) {
   }
   free_recordset( rSet );
   free(sql);
+	o_log(DEBUGM,"Leaving getScanParam");
 
   return vvalue;
 }

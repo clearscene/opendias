@@ -77,6 +77,7 @@ extern int connect_db (int createIfRequired) {
 
   // Test to see if a DB file exsists
   db = o_printf("%s/openDIAS.sqlite3", BASE_DIR);
+  o_log(DEBUGM,"database file is %s\n",db);
   if( 0 == access(db, F_OK) ) {
     o_log(DEBUGM, "Dir structure is in-place, database should exist");
     if(open_db (db)) {
@@ -88,7 +89,7 @@ extern int connect_db (int createIfRequired) {
   }
 
   if( !version && createIfRequired ) {
-    o_log(INFORMATION, "Creating new database");
+    o_log(INFORMATION, "Creating new database %s (BASE_DIR = %s)",db,BASE_DIR);
     if(open_db (db)) {
       o_log(WARNING, "Could not create/connect to new database");
       o_log(WARNING, "%s", db);
@@ -290,7 +291,7 @@ extern void free_recordset (struct simpleLinkedList *rSet) {
 
   struct simpleLinkedList *field, *row;
 
-  o_log(DEBUGM, "Free recordset (%x)", rSet);
+  o_log(DEBUGM, "Entering free_recordset rSet(%x)", rSet);
 
   if( rSet && ( rSet != NULL ) ) {
     if( rSet->data != NULL ) {
@@ -311,6 +312,7 @@ extern void free_recordset (struct simpleLinkedList *rSet) {
     o_log(SQLDEBUG, "Free a record set pointer (%s)", rSet);
     sll_delete(rSet);
   }
+  o_log(DEBUGM, "Leaving free_recordset");
 }
 
 
