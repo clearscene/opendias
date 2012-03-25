@@ -34,8 +34,8 @@ struct post_data_struct {
   char *data;
 };
 
-extern char *getPostData(struct simpleLinkedList *, char *);
-extern int basicValidation(struct simpleLinkedList *);
-extern int validate(struct simpleLinkedList *, char *);
+char *getPostData(struct simpleLinkedList *, char *);
+int basicValidation(struct simpleLinkedList *);
+int validate(struct simpleLinkedList *, char *);
 
 #endif /* VALIDATION */

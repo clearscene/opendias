@@ -124,7 +124,7 @@ int setup (char *configFile) {
 
 }
 
-extern void server_shutdown() {
+void server_shutdown() {
   o_log(INFORMATION, "openDias service is shutting down....");
 
   o_log(DEBUGM, "cleanup sane");
@@ -153,7 +153,7 @@ void signal_handler(int sig) {
             break;
         default:
             signame = strsignal(sig);
-            o_log(INFORMATION, "Received signal %s. IGNORING. Try SIGUSR1 to stop the service.", signame );
+            o_log(INFORMATION, "Received signal '%s'. IGNORING. Try SIGUSR1 to stop the service.", signame );
             break;
     }
 }

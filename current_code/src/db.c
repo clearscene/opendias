@@ -69,7 +69,7 @@ int get_db_version() {
   return version;
 }
 
-extern int connect_db (int createIfRequired) {
+int connect_db (int createIfRequired) {
 
   int version = 0, i;
   char *db, *data;
@@ -166,12 +166,12 @@ static int callback(void *rSetIn, int argc, char **argv, char **azColName){
   return 0;
 }
 
-extern int last_insert() {
+int last_insert() {
 
   return (int)sqlite3_last_insert_rowid(DBH);
 }
 
-extern int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
+int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
 
   sqlite3_stmt *stmt;
   struct simpleLinkedList *tmpList = NULL;
@@ -229,7 +229,7 @@ The error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(D
     return 0;
 }
 
-extern struct simpleLinkedList *runquery_db (char *sql) {
+struct simpleLinkedList *runquery_db (char *sql) {
 
   int rc;
   char *zErrMsg;
@@ -261,7 +261,7 @@ extern struct simpleLinkedList *runquery_db (char *sql) {
 }
 
 
-extern char *readData_db (struct simpleLinkedList *rSet, char *field_db) {
+char *readData_db (struct simpleLinkedList *rSet, char *field_db) {
 
   struct simpleLinkedList *row;
   struct simpleLinkedList *field;
@@ -279,7 +279,7 @@ extern char *readData_db (struct simpleLinkedList *rSet, char *field_db) {
 }
 
 
-extern int nextRow (struct simpleLinkedList *rSet) {
+int nextRow (struct simpleLinkedList *rSet) {
 
   struct simpleLinkedList *row;
   int ret = 0;
@@ -296,7 +296,7 @@ extern int nextRow (struct simpleLinkedList *rSet) {
   return ret;
 }
 
-extern void free_recordset (struct simpleLinkedList *rSet) {
+void free_recordset (struct simpleLinkedList *rSet) {
 
   struct simpleLinkedList *field, *row;
 
@@ -324,7 +324,7 @@ extern void free_recordset (struct simpleLinkedList *rSet) {
 }
 
 
-extern void close_db () {
+void close_db () {
 
   o_log(DEBUGM, "Closing database");
   sqlite3_close(DBH);

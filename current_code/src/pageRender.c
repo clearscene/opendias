@@ -51,7 +51,7 @@
  * Public Functions
  *
  */
-extern char *getScannerList() {
+char *getScannerList() {
 
   char *answer = NULL;
 #ifdef CAN_SCAN
@@ -244,7 +244,7 @@ extern char *getScannerList() {
 
 // Start the scanning process
 //
-extern char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *ocr, char *pagelength, struct connection_info_struct *con_info) {
+char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *ocr, char *pagelength, struct connection_info_struct *con_info) {
 
   char *ret = NULL;
 #ifdef CAN_SCAN
@@ -290,7 +290,7 @@ extern char *doScan(char *deviceid, char *format, char *resolution, char *pages,
   return ret;
 }
 
-extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
+char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
 
 #ifdef CAN_SCAN
   pthread_t thread;
@@ -338,7 +338,7 @@ extern char *nextPageReady(char *scanid, struct connection_info_struct *con_info
 }
 
 
-extern char *getScanningProgress(char *scanid) {
+char *getScanningProgress(char *scanid) {
 
   struct simpleLinkedList *rSet;
   char *sql, *status=0, *value=0, *ret;
@@ -366,7 +366,7 @@ extern char *getScanningProgress(char *scanid) {
   return ret;
 }
 
-extern char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder ) {
+char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder ) {
 
   struct simpleLinkedList *rSet;
   char *docList, *actionrequired, *title, *docid, *humanReadableDate, *type, 
@@ -474,10 +474,10 @@ extern char *docFilter(char *subaction, char *textSearch, char *isActionRequired
     // Which way
     char *direction;
     if( ( sortorder != NULL ) && (0 == strcmp(sortorder, "1") ) ) {
-      direction = strdup("DESC");
+      direction = o_strdup("DESC");
     }
     else {
-      direction = strdup("ASC");
+      direction = o_strdup("ASC");
     }
 
     switch(atoi(sortfield)) {
@@ -511,7 +511,7 @@ extern char *docFilter(char *subaction, char *textSearch, char *isActionRequired
     page_ret = o_printf("<page>%s</page>", page);
   }
   else {
-    page_ret = strdup("");
+    page_ret = o_strdup("");
   }
 
   // Get Results
@@ -572,7 +572,7 @@ extern char *docFilter(char *subaction, char *textSearch, char *isActionRequired
   return docList;
 }
 
-extern char *getAccessDetails() {
+char *getAccessDetails() {
 
   char *userAccess, *access;
 
@@ -609,7 +609,7 @@ extern char *getAccessDetails() {
   return access;
 }
 
-extern char *controlAccess(char *submethod, char *location, char *user, char *password, int role) {
+char *controlAccess(char *submethod, char *location, char *user, char *password, int role) {
 
   if(!strcmp(submethod, "addLocation")) {
     o_log(INFORMATION, "Adding access %i to location %s", role, location);
@@ -637,7 +637,7 @@ extern char *controlAccess(char *submethod, char *location, char *user, char *pa
   return o_strdup("<html><HEAD><title>refresh</title><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/opendias/accessControls.html\"></HEAD><body></body></html>");
 }
 
-extern char *titleAutoComplete(char *startsWith, char *notLinkedTo) {
+char *titleAutoComplete(char *startsWith, char *notLinkedTo) {
 
   char *docid, *title, *data;
   char *result = o_strdup("{\"results\":[");
@@ -684,7 +684,7 @@ extern char *titleAutoComplete(char *startsWith, char *notLinkedTo) {
   return result;
 }
 
-extern char *tagsAutoComplete(char *startsWith, char *docid) {
+char *tagsAutoComplete(char *startsWith, char *docid) {
 
   struct simpleLinkedList *rSet;
   char *title, *data;

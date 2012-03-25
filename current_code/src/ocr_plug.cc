@@ -58,7 +58,7 @@ void signal_handler(int sig) {
 }
 */
 
-extern "C" void runocr(struct scanCallInfo *info) {
+"C" void runocr(struct scanCallInfo *info) {
 
     char *ret;
     TessBaseAPI *a = new TessBaseAPI();

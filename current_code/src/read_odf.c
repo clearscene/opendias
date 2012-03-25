@@ -168,7 +168,7 @@ size_t LIBARCHIVEgetEntry(char *name, char *contentFile, char **ptr) {
 }
 
 
-extern char *get_odf_Text (const char *filename) {
+char *get_odf_Text (const char *filename) {
 
   char *text="";
   char *xml;
@@ -182,7 +182,7 @@ extern char *get_odf_Text (const char *filename) {
   return text;
 }
 
-extern void get_odf_Thumb (const char *filename) {
+void get_odf_Thumb (const char *filename) {
 
   char *imageData;
   size_t size;

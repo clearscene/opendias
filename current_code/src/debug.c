@@ -77,7 +77,7 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
 
 }
 
-extern void o_log(const int verbosity, const char *message, ... ) {
+void o_log(const int verbosity, const char *message, ... ) {
 
   if( verbosity <= VERBOSITY ) {
     va_list inargs;

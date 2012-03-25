@@ -32,7 +32,7 @@
 
 #ifdef CAN_SCAN
 
-extern void handleSaneErrors(char *defaultMessage, SANE_Status st, int retCode) {
+void handleSaneErrors(char *defaultMessage, SANE_Status st, int retCode) {
 
   o_log(ERROR, "%s: sane error = %d (%s), return code = %d", defaultMessage, st, sane_strstatus(st), retCode);
 
@@ -42,7 +42,7 @@ extern void handleSaneErrors(char *defaultMessage, SANE_Status st, int retCode) 
  * Pritty much from here down is lifted from 'simple-scan'. 
  */
 
-extern const char *get_status_string (SANE_Status status) {
+const char *get_status_string (SANE_Status status) {
     struct {
         SANE_Status status;
         const char *name;
@@ -77,7 +77,7 @@ extern const char *get_status_string (SANE_Status status) {
 }
 
 
-extern const char *get_action_string (SANE_Action action) {
+const char *get_action_string (SANE_Action action) {
     struct {
         SANE_Action action;
         const char *name;
@@ -102,7 +102,7 @@ extern const char *get_action_string (SANE_Action action) {
     return action_names[i].name;
 }
 
-extern void log_option (SANE_Int index, const SANE_Option_Descriptor *option) {
+void log_option (SANE_Int index, const SANE_Option_Descriptor *option) {
     char *string;
     SANE_Word i;
     SANE_Int cap;
@@ -246,7 +246,7 @@ extern void log_option (SANE_Int index, const SANE_Option_Descriptor *option) {
 //      o_log(DEBUGM, "  Description: %s", option->desc);
 }
 
-extern SANE_Status control_option (SANE_Handle handle, const SANE_Option_Descriptor *option, SANE_Int index, SANE_Action action, void *value, int *ret) {
+SANE_Status control_option (SANE_Handle handle, const SANE_Option_Descriptor *option, SANE_Int index, SANE_Action action, void *value, int *ret) {
     SANE_Status status;
     char *old_value;
 
@@ -311,7 +311,7 @@ extern SANE_Status control_option (SANE_Handle handle, const SANE_Option_Descrip
     return status;
 }
 
-extern int setDefaultScannerOption(SANE_Handle *devHandle, const SANE_Option_Descriptor *sod, int option ) {
+int setDefaultScannerOption(SANE_Handle *devHandle, const SANE_Option_Descriptor *sod, int option ) {
   if ( sod->cap & SANE_CAP_AUTOMATIC ) {
     int paramSetRet;
     int status = control_option (devHandle, sod, option, SANE_ACTION_SET_AUTO, NULL, &paramSetRet);

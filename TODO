@@ -13,7 +13,7 @@ Implement 'By Username/Password' access controls
 
 Scanner device locking
 
-TECHNICAL: Check the use of "extern" where it's used.
+UPDERWAY: Check the use of "extern" where it's used.
 
 TECHNICAL: Make 64-bit
 

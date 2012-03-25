@@ -21,14 +21,14 @@
 
 #include "validation.h" // for con_info struct - move me to web_handler.h
 
-extern char *getScannerList();
-extern char *getScanningProgress(char *);
-extern char *doScan(char *, char *, char *, char *, char *, char *, struct connection_info_struct *);
-extern char *docFilter(char *, char *, char *, char *, char *, char *, char *, char *, char *, char *);
-extern char *nextPageReady(char *, struct connection_info_struct *);
-extern char *getAccessDetails();
-extern char *controlAccess(char *, char *, char *, char *, int);
-extern char *titleAutoComplete(char *, char *);
-extern char *tagsAutoComplete(char *, char *);
+char *getScannerList();
+char *getScanningProgress(char *);
+char *doScan(char *, char *, char *, char *, char *, char *, struct connection_info_struct *);
+char *docFilter(char *, char *, char *, char *, char *, char *, char *, char *, char *, char *);
+char *nextPageReady(char *, struct connection_info_struct *);
+char *getAccessDetails();
+char *controlAccess(char *, char *, char *, char *, int);
+char *titleAutoComplete(char *, char *);
+char *tagsAutoComplete(char *, char *);
 
 #endif /* PAGERENDER */

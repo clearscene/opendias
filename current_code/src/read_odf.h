@@ -20,8 +20,8 @@
 #ifndef READ_ODF
 #define READ_ODF
 
-extern char *get_odf_Text (const char *);
-extern void get_odf_Thumb (const char *);
+char *get_odf_Text (const char *);
+void get_odf_Thumb (const char *);
 
 #endif /* READ_ODF */
 #endif // CAN_READODF //

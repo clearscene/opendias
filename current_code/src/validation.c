@@ -24,7 +24,7 @@
 #include "utils.h"
 #include "ocr_plug.h"
 
-extern char *getPostData(struct simpleLinkedList *post_hash, char *key) {
+char *getPostData(struct simpleLinkedList *post_hash, char *key) {
   struct simpleLinkedList *data = sll_searchKeys(post_hash, key);
   struct post_data_struct *data_struct = NULL;
   if( data != NULL && data->data != NULL )
@@ -89,9 +89,10 @@ static int checkKeys(struct simpleLinkedList *postdata, struct simpleLinkedList 
 
 // Ensure the value is effectivly an int
 static int checkStringIsInt(char *StrInt) {
+  char *prt;
   if( StrInt == NULL ) return 1;
 
-  char *ptr = StrInt;
+  ptr = StrInt;
   while(*ptr) {
     char *schar = strndup( ptr, 1 );
     if( 0 == strstr("0123456789", schar) ) {
@@ -287,10 +288,10 @@ static int checkTag(char *val) {
 }
 
 static int checkUUID(char *val) {
-  if( val == NULL ) return 1;
   char *in = val;
   char *hex = "abcdefABCDEF0123456789";
   char *template = "hhhhhhhh-hhhh-hhhh-hhhh-hhhhhhhhhhhh";
+  if( val == NULL ) return 1;
   while( *in && *template ) {
     char *schar = strndup( in, 1 );
     char *echar = strndup( template, 1 );
@@ -323,7 +324,7 @@ static int checkUUID(char *val) {
  */
 
 // Do some basic validation on the post message (constructs)
-extern int basicValidation(struct simpleLinkedList *postdata) {
+int basicValidation(struct simpleLinkedList *postdata) {
 
   struct simpleLinkedList *row = NULL;
 
@@ -373,7 +374,7 @@ extern int basicValidation(struct simpleLinkedList *postdata) {
 
 
 // Checks on each calling method (suitability)
-extern int validate(struct simpleLinkedList *postdata, char *action) {
+int validate(struct simpleLinkedList *postdata, char *action) {
 
   int ret = 0;
   char *data;

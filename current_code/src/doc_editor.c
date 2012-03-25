@@ -38,7 +38,7 @@
 //#define FALSE 0
 //#define TRUE !FALSE
 
-extern char *doDelete (char *documentId) {
+char *doDelete (char *documentId) {
 
   int pages, i;
   char *docTemplate, *docPath;
@@ -80,7 +80,7 @@ extern char *doDelete (char *documentId) {
 
 
 
-extern char *getDocDetail (char *documentId) {
+char *getDocDetail (char *documentId) {
 
   struct simpleLinkedList *rSet;
   char *sql, *tags, *tagsTemplate, *title, *humanReadableDate,
@@ -218,7 +218,7 @@ extern char *getDocDetail (char *documentId) {
 
 
 
-extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
+char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
 
   int rc = 0;
 
@@ -260,7 +260,7 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
   else return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><UpdateDocDetails><status>OK</status></UpdateDocDetails></Response>");
 }
 
-extern char *updateTagLinkage(char *docid, char *link, char *subaction) {
+char *updateTagLinkage(char *docid, char *link, char *subaction) {
 
   int rc = 0;
 

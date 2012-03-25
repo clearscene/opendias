@@ -27,29 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
-/*
-extern int checkScannerLock(char *device) {
-
-  char *sql = o_printf("SELECT pa.client_id, status, value \
-                        FROM scan_params pa join scan_progress pr \
-                          ON pa.client_id = pr.client_id \
-                        WHERE pa.param_option=1 \
-                          AND pr.status != 16 \
-                          AND pa.param_value='%s'", device);
-  if(runquery_db("2", sql)) {
-    vvalue = o_strdup(".");
-    do {
-      free(vvalue);
-      vvalue = o_strdup(readData_db("2", "param_value"));
-    } while (nextRow("2"));
-  }
-  free_recordset("2");
-  free(sql);
-
-}
-*/
-
-extern int setScanParam(char *uuid, int param, char *vvalue) {
+int setScanParam(char *uuid, int param, char *vvalue) {
 
   int rc;
   char *sql = o_strdup("INSERT OR REPLACE \
@@ -71,7 +49,7 @@ extern int setScanParam(char *uuid, int param, char *vvalue) {
   return rc;
 }
 
-extern char *getScanParam(char *scanid, int param_option) {
+char *getScanParam(char *scanid, int param_option) {
 
   char *sql, *vvalue = NULL;
   struct simpleLinkedList *rSet;
@@ -91,7 +69,7 @@ extern char *getScanParam(char *scanid, int param_option) {
   return vvalue;
 }
 
-extern void addScanProgress (char *uuid) {
+void addScanProgress (char *uuid) {
 
   char *sql = o_strdup("INSERT INTO scan_progress (client_id, status, value) VALUES (?, ?, 0);");
 
@@ -108,7 +86,7 @@ extern void addScanProgress (char *uuid) {
   free(sql);
 }
 
-extern void updateScanProgress (char *uuid, int status, int value) {
+void updateScanProgress (char *uuid, int status, int value) {
 
   char *progressUpdate = o_strdup("UPDATE scan_progress \
                                    SET status = ?, \
@@ -159,15 +137,15 @@ static char *addNewDoc (int ftype, int getLines, int ppl, int resolution, int pa
 
 }
 
-extern char *addNewScannedDoc (int getLines, int ppl, int resolution, int pageCount) {
+char *addNewScannedDoc (int getLines, int ppl, int resolution, int pageCount) {
   return addNewDoc(SCAN_FILETYPE, getLines, ppl, resolution, pageCount, o_strdup("") );
 }
 
-extern char *addNewFileDoc (int ftype, char *ocrText) {
+char *addNewFileDoc (int ftype, char *ocrText) {
   return addNewDoc(ftype, 0, 0, 0, 1, ocrText);
 }
 
-extern void updateNewScannedPage (int docid, char *ocrText, int page) {
+void updateNewScannedPage (int docid, char *ocrText, int page) {
 
   char *sql = o_strdup("UPDATE docs SET pages = ?, ocrText = ocrText || ? WHERE docid = ?");
 
@@ -184,7 +162,7 @@ extern void updateNewScannedPage (int docid, char *ocrText, int page) {
 
 }
 
-extern int doUpdateDocValue (char *kkey, struct simpleLinkedList *vars) {
+int doUpdateDocValue (char *kkey, struct simpleLinkedList *vars) {
 
   char *sql;
   int rc = 0;
@@ -197,7 +175,7 @@ extern int doUpdateDocValue (char *kkey, struct simpleLinkedList *vars) {
   return rc;
 }
 
-extern int updateDocValue_int (char *docid, char *kkey, int vvalue) {
+int updateDocValue_int (char *docid, char *kkey, int vvalue) {
 
   struct simpleLinkedList *vars = sll_init();
   int *v = &vvalue;
@@ -209,7 +187,7 @@ extern int updateDocValue_int (char *docid, char *kkey, int vvalue) {
   return doUpdateDocValue(kkey, vars);
 }
 
-extern int updateDocValue (char *docid, char *kkey, char *vvalue) {
+int updateDocValue (char *docid, char *kkey, char *vvalue) {
 
   struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_TEXT );
@@ -234,31 +212,31 @@ static int addRemoveTagOnDocument (char *sql, char *docid, char *tagid) {
   return rc;
 }
 
-extern int addTagToDoc (char *docid, char *tagid) {
+int addTagToDoc (char *docid, char *tagid) {
 
   char *sql = o_strdup("INSERT INTO doc_tags (docid, tagid) VALUES (?, ?) ");
   return addRemoveTagOnDocument(sql, docid, tagid);
 }
 
-extern int removeTagFromDoc (char *docid, char *tagid) {
+int removeTagFromDoc (char *docid, char *tagid) {
 
   char *sql = o_strdup("DELETE FROM doc_tags WHERE docid = ? AND tagid = ? ");
   return addRemoveTagOnDocument(sql, docid, tagid);
 }
 
-extern int addDocToDoc (char *docid, char *linkdocid) {
+int addDocToDoc (char *docid, char *linkdocid) {
 
   char *sql = o_strdup("INSERT INTO doc_links (docid, linkeddocid) VALUES (?, ?) ");
   return addRemoveTagOnDocument(sql, docid, linkdocid);
 }
 
-extern int removeDocFromDoc (char *docid, char *linkdocid) {
+int removeDocFromDoc (char *docid, char *linkdocid) {
 
   char *sql = o_strdup("DELETE FROM doc_links WHERE docid = ? AND linkeddocid = ? ");
   return addRemoveTagOnDocument(sql, docid, linkdocid);
 }
 
-extern void removeDocTags (char *docid) {
+void removeDocTags (char *docid) {
   char *sql = o_strdup("DELETE FROM doc_tags WHERE docid = ?");
   int docid_i = atoi(docid);
 
@@ -270,7 +248,7 @@ extern void removeDocTags (char *docid) {
   free(sql);
 }
 
-extern void removeDocLinks (char *docid) {
+void removeDocLinks (char *docid) {
   char *sql = o_strdup("DELETE FROM doc_links WHERE docid = ?");
   int docid_i = atoi(docid);
 
@@ -291,7 +269,7 @@ extern void removeDocLinks (char *docid) {
   free(sql);
 }
 
-extern void removeDoc (char *docid) {
+void removeDoc (char *docid) {
   char *sql = o_strdup("DELETE FROM docs WHERE docid = ?");
   int docid_i = atoi(docid);
 
@@ -303,7 +281,7 @@ extern void removeDoc (char *docid) {
   free(sql);
 }
 
-extern void addLocation(char *location, int role) {
+void addLocation(char *location, int role) {
 
   char *sql = o_strdup("INSERT INTO location_access (location, role) VALUES (?, ?);");
   struct simpleLinkedList *vars = sll_init();
@@ -316,7 +294,7 @@ extern void addLocation(char *location, int role) {
   free(sql);
 }
 
-extern char *getTagId(char *tagname) {
+char *getTagId(char *tagname) {
 
   struct simpleLinkedList *vars, *rSet;
   char *sql2, *ret = NULL;
@@ -346,7 +324,7 @@ extern char *getTagId(char *tagname) {
   return ret;
 }
 
-extern int countDocsWithTag( char *tagid ) {
+int countDocsWithTag( char *tagid ) {
 
   char *sql = o_printf("SELECT COUNT(tagid) ct FROM doc_tags WHERE tagid = '%s'", tagid);
   int ret = 0;
@@ -362,7 +340,7 @@ extern int countDocsWithTag( char *tagid ) {
   return ret;
 }
 
-extern void deleteTag( char *tagid ) {
+void deleteTag( char *tagid ) {
   char *sql = o_strdup("DELETE FROM tags WHERE tagid = ?");
   int tagid_i = atoi(tagid);
 
