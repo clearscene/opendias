@@ -6,7 +6,8 @@ sql_DATA = \
 	openDIAS.sqlite3.dmp.v2.sql \
 	openDIAS.sqlite3.dmp.v3.sql \
 	openDIAS.sqlite3.dmp.v4.sql \
-	openDIAS.sqlite3.dmp.v5.sql
+	openDIAS.sqlite3.dmp.v5.sql \
+	openDIAS.sqlite3.dmp.v6.sql 
 
 sqldir = \
 	$(pkgdatadir)
