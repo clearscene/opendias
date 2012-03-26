@@ -206,6 +206,7 @@ function processData( in_data, thispage ){
     // Gather data
     var docid = $(rw).find('docid').text();
     var actionrequired = $(rw).find('actionrequired').text();
+    var hardcopyKept = $(rw).find('hardcopyKept').text();
     var title = $(rw).find('title').text();
     var type = $(rw).find('type').text();
     var date = $(rw).find('date').text();

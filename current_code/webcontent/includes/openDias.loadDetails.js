@@ -57,6 +57,12 @@ $(document).ready(function() {
               $("#actionrequired").attr({checked: false});
            }
 
+           if( $(data).find('DocDetail').find('hardcopyKept').text() == "1" ) {
+              $("#hardcopyKept").attr({checked: true}); 
+           }
+           else {
+              $("#hardcopyKept").attr({checked: false});
+           }
            //
            // Doc type display options.
            if( $(data).find('DocDetail').find('type').text() == "1" ) { // ODF Documents
