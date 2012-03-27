@@ -245,7 +245,7 @@ extern char *getTimeStr_iso8601() {
   stTime = gmtime(&ttime);
   size = strftime(strdate, 32, "%Y-%m-%d %H:%M:%S", stTime);
   if( 31 != size )
-    o_log(ERROR, "Count not write entire data block.");
+    o_log(ERROR, "Count not write entire data block.%s",strdate);
 
   return strdate;
 }

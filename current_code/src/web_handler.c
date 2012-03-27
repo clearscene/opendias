@@ -63,6 +63,7 @@ static size_t getFromFile_fullPath(const char *url, char **data) {
 }
 
 static size_t getFromFile(const char *url, char **data) {
+	o_log(DEBUGM,"enterting getFromFile: ");
 
   // Build Document Root
   char *htmlFrag = o_printf("%s/opendias/webcontent%s", PACKAGE_DATA_DIR, url);
@@ -828,7 +829,7 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
       size = 0;
     }
 
-    o_log(DEBUGM, "%s", content);
+    o_log(DEBUGM, "Serving the following content: %s", content);
     return send_page (connection, content, status, mimetype, size);
   }
 

@@ -40,6 +40,8 @@ int setup (char *configFile) {
   struct simpleLinkedList *rSet;
   char *location, *conf, *sql, *config_option, *config_value;
 
+	printf("entering setup\n");
+
   // Defaults
   VERBOSITY = DEBUGM;
   DB_VERSION = 4;
@@ -112,6 +114,9 @@ void close_all() {
 void update_config_option( char *option, char *value ) {
   char *sql = o_strdup("update config SET config_value = ? WHERE config_option = ?"); 
   struct simpleLinkedList *vars = sll_init();
+
+	o_log(DEBUGM,"entering update_config_option\n");
+
   sll_append(vars, DB_TEXT );
   sll_append(vars, value );
   sll_append(vars, DB_TEXT );
@@ -124,6 +129,7 @@ void update_config_option( char *option, char *value ) {
   else {
     o_log(INFORMATION, "|    Successful.");
   }
+	o_log(DEBUGM,"leaving update_config_option\n");
 }
 
 int main (int argc, char **argv) {

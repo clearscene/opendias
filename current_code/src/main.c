@@ -44,6 +44,8 @@ int setup (char *configFile) {
   struct simpleLinkedList *rSet;
   char *location, *conf, *sql, *config_option, *config_value;
 
+	o_log(DEBUGM,"setup launched\n");
+
   // Defaults
   VERBOSITY = DEBUGM;
   DB_VERSION = 6;
@@ -74,6 +76,7 @@ int setup (char *configFile) {
     return 1;
   }
 
+  	o_log(INFORMATION, "database opened");
   sql = o_strdup("SELECT config_option, config_value FROM config");
   rSet = runquery_db(sql);
   if( rSet != NULL ) {
@@ -128,6 +131,7 @@ extern void server_shutdown() {
 
   o_log(INFORMATION, "....openDias service has shutdown");
   close(pidFilehandle); 
+  o_log(DEBUGM, "pidfile closed");
   free(LOG_DIR); // Cannot log anymore
   free(BASE_DIR);
 }
@@ -214,7 +218,7 @@ void daemonize(char *rundir, char *pidfile) {
  
     if (pidFilehandle == -1 ) {
         /* Couldn't open lock file */
-        printf("Could not daemonise [3]. Try running with the -d option or as super user\n");
+        printf("Could not daemonise [3] pidfile %s. Try running with the -d option or as super user\n",pidfile);
         o_log(ERROR, "Could not open PID lock file. Exiting");
         exit(EXIT_FAILURE);
     }
@@ -292,6 +296,8 @@ int main (int argc, char **argv) {
 
   if(setup (configFile))
     return 1;
+
+	o_log(DEBUGM,"config retrieved");
 
   o_log(INFORMATION, "... Starting up the openDias service.");
   httpdaemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 

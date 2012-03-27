@@ -253,6 +253,8 @@ extern char *doScan(char *deviceid, char *format, char *resolution, char *pages,
   int rc=0;
   uuid_t uu;
   char *scanUuid;
+	
+	o_log(DEBUGM,"Entering doScan");
 
   // Generate a uuid and scanning params object
   scanUuid = malloc(36+1); 
@@ -267,6 +269,7 @@ extern char *doScan(char *deviceid, char *format, char *resolution, char *pages,
   setScanParam(scanUuid, SCAN_PARAM_REQUESTED_RESOLUTION, resolution);
   setScanParam(scanUuid, SCAN_PARAM_LENGTH, pagelength);
 
+	o_log(DEBUGM,"doScan setScanParam completed ");
   // save scan progress db record
   addScanProgress(scanUuid);
 
@@ -274,6 +277,7 @@ extern char *doScan(char *deviceid, char *format, char *resolution, char *pages,
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
   //pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+	o_log(DEBUGM,"doScan launching doScanningOperation");
   rc = pthread_create(&thread, &attr, doScanningOperation, scanUuid);
   //rc = pthread_create(&thread, NULL, (void *)doScanningOperation, (void *)scanUuid);
   if(rc != 0) {
@@ -285,6 +289,7 @@ extern char *doScan(char *deviceid, char *format, char *resolution, char *pages,
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
   ret = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DoScan><scanuuid>%s</scanuuid></DoScan></Response>", scanUuid);
+	o_log(DEBUGM,"Leaving doScan");
 
 #endif // CAN_SCAN //
   return ret;

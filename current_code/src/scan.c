@@ -639,17 +639,20 @@ extern void *doScanningOperation(void *uuid) {
   size_t size;
 
 
-  o_log(DEBUGM, "sane_init");
+  o_log(DEBUGM, "Entering doScanningOperation: sane_init");
   status = sane_init(NULL, NULL);
   if(status != SANE_STATUS_GOOD) {
     o_log(ERROR, "sane did not start");
     return 0;
   }
 
+  o_log(DEBUGM, "doScanningOperation: sane initialized uuid(%s)",(char *)uuid);
   // Open the device
   o_log(DEBUGM, "sane_open");
   updateScanProgress(uuid, SCAN_WAITING_ON_SCANNER, 0);
+  o_log(DEBUGM, "doScanningOperation: updateScanProgess done");
   devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
+	o_log(DEBUGM,"getScanParam ready devName(%s)",devName);
   status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {
     handleSaneErrors("Cannot open device", status, 0);
@@ -663,7 +666,7 @@ extern void *doScanningOperation(void *uuid) {
   if ( ! setOptions( (char *)uuid, openDeviceHandle, &request_resolution, &buff_requested_len ) )
     return 0;
 
-  o_log(DEBUGM, "sane_start");
+  o_log(DEBUGM, "sane_start: setOptions returned request_resolution %d\n",request_resolution);
   status = sane_start (openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {  
     handleSaneErrors("Cannot start scanning", status, 0);
