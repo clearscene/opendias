@@ -29,6 +29,9 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
   FILE *fp;
   char *logFile;
 
+	va_list ap;
+	va_copy(ap,inargs);
+
   if( verbosity <= VERBOSITY ) {
 
     char *thumb = o_strdup("%s:%X:%s: ");
@@ -55,15 +58,22 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
     if( message == strstr(message,"|") ) {
       vprintf((char *)message+1,inargs);
       printf("\n");
+	//need to reset inargs to saved ap. reason vprintf function do not do so.
+	va_end(inargs);
+	va_copy(inargs,ap);
     }
+
 
     // Output to file
     logFile = o_strdup(LOG_DIR);
+	//printf("running conCat %s !!!\n",logFile);
+
+
     conCat(&logFile, "/opendias.log");
     if((fp = fopen(logFile, "a"))==NULL) {
-      fprintf(stderr,"Cannot open log file.\n");
+      fprintf(stderr,"Cannot open log file %s.\n",logFile);
       exit(1);
-    }
+    } 
     fprintf(fp,thumb,ltime,pthread_self(),vb);
     vfprintf(fp,message,inargs);
     fprintf(fp,"\n");
