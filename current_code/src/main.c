@@ -243,14 +243,28 @@ void daemonize(char *rundir, char *pidfile) {
 
     /* close all descriptors */
     free(str);
-    for (i = getdtablesize(); i >= 0; --i) {
+    for (i = getdtablesize(); i > 2; --i) {
         close(i);
     }
  
     /* Route I/O connections */
     close(STDIN_FILENO);
-    close(STDOUT_FILENO);
-    close(STDERR_FILENO);
+    //close(STDOUT_FILENO);
+    //close(STDERR_FILENO);
+
+	//open STDOUT and STDOUT again and bind them to null device. (ensure potentially outputted data 
+	//can be written properly.
+		//if((pid=fork()) == -1)
+	
+	int devnull;	
+	if ( (devnull=open("/dev/null",O_APPEND)) == -1 ) {
+		o_log(ERROR,"cannot open /dev/null");
+		exit(1);
+	}
+
+	dup2(devnull,STDOUT_FILENO);
+	dup2(devnull,STDERR_FILENO);
+
  
     i = chdir(rundir); /* change running directory */
 }
