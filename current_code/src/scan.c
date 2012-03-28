@@ -573,7 +573,6 @@ void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int reques
   char *ocrText;
   char *ocrLang;
   char *ocrScanText;
-  int counter;
 
   ocrLang = getScanParam(uuid, SCAN_PARAM_DO_OCR);
 #ifdef CAN_OCR
@@ -584,6 +583,7 @@ void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int reques
       o_log(DEBUGM, "attempting OCR");
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
+  	int counter;
       // sharpen the image
       for (counter = 0 ; (size_t)counter < totbytes ; counter++) {
         if( raw_image[counter] > 100 ) {
