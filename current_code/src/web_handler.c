@@ -26,6 +26,9 @@
 #include <arpa/inet.h>
 #include <uuid/uuid.h>
 #include <pthread.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "web_handler.h"
 #include "main.h"
@@ -168,21 +171,30 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
     }
 
     if(0 == strcmp(key, "uploadfile")) {
-      FILE *fp;
-      char *filename = o_printf("/tmp/%s.dat", data_struct->data);
-      if ((fp = fopen(filename, "ab")) == NULL)
-        o_log(ERROR, "could not open http post binary data file for output");
-      else {
-        fseek(fp, 0, SEEK_END);
-        if( size > fwrite (data, size, sizeof (char), fp) )
-          o_log(ERROR, "Did not write the fill amount of data.");
-        fclose(fp);
-/*        if( data_struct->size != size ) {
-          data_struct->size += size;
-          g_hash_table_replace(con_info->post_data, (gpointer)key, (gpointer)data_struct);
-        }
-*/      }
-      free(filename);
+	FILE *fp;
+	int fd;
+	char *filename = o_printf("%s/%s.dat",TMPLOCATION, data_struct->data);
+	struct stat fstat;
+
+	mode_t fmode;
+	fmode=S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP;
+	int flags;
+	if (stat(filename,&fstat) == -1 ) {
+		flags=O_CREAT|O_WRONLY;
+	} else {
+		flags=O_RDWR;
+	}
+	if ((fd = open(filename, flags, fmode)) == -1 )
+		o_log(ERROR, "could not open http post binary data file for output");
+	else {
+		lseek(fd,0,SEEK_END);
+		size_t written;
+		if ( (written=write(fd,data,size)) == -1 ) {
+			o_log(ERROR,"uploadfile iterate_postdata: write to %s failed",filename);
+		}
+		close(fd);
+	}
+	free(filename);
     }
 
     free(trimedData);
