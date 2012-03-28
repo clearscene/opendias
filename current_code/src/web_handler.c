@@ -407,7 +407,8 @@ extern int answer_to_connection (void *cls, struct MHD_Connection *connection,
     o_log(INFORMATION, "Serving request: %s", url);
 
     // A 'root' request needs to be mapped to an actual file
-    if( strlen(url)==1 && 0!=strstr(url,"/") ) {
+    if( (strlen(url) == 1  && 0!=strstr(url,"/")) || strlen(url) == 0 ) {
+    	o_log(DEBUGM, "Serving root request ");
       size = getFromFile("/body.html", &content);
       if( size > 0 ) 
         content = build_page(content);
