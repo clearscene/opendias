@@ -188,8 +188,20 @@ extern char *getScannerList() {
           // A fixed list of options
           else if (sod->constraint_type == SANE_CONSTRAINT_WORD_LIST) {
             int lastIndex = sod->constraint.word_list[0];
-            o_log(DEBUGM, "Resolution setting detected as 'word list'");
-            maxRes = sod->constraint.word_list[lastIndex];
+            o_log(DEBUGM, "Resolution setting detected as 'word list': lastIndex = %d",lastIndex);
+
+            	//maxRes = sod->constraint.word_list[lastIndex];
+		//resolution list cannot be treated as low to high ordered list 
+		//remark: impl capability to select scan resolution in webInterface
+		int n=0;
+		maxRes = 0;
+		for (n=1; n<=lastIndex; n++ ) {
+			o_log(DEBUGM, "index results %d --> %d", n ,(int)sod->constraint.word_list[n]);
+			if ( maxRes < sod->constraint.word_list[n] ) {
+				maxRes=sod->constraint.word_list[n];
+			}
+		}
+
           }
 
           break; // we've found our resolution - no need to search more
