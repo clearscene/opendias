@@ -29,7 +29,7 @@ function getScanningProgress (progressId, device) {
 
   $.ajax({ url: "/opendias/dynamic",
 	 dataType: "xml",
-         async: false,
+         timeout: 10000,
 	 data: {action: "getScanningProgress", 
 		scanprogressid: progressId,
 	       },
@@ -147,13 +147,19 @@ function getScanningProgress (progressId, device) {
              action='finish';
 
            }
-	 }
-       });
-
-      if( action=='postnewpage' ) {
-
+	 },
+         error: function( x, t, m ) {
+           if(t=="timeout") {
+             alert("Timeout while talking to the server");
+           } else {
+             alert("Error while talking to the server: "+t);
+           }
+         },
+         complete: function() {
+           if( action=='postnewpage' ) {
                doneAtLeastOnePage = 1;
                $.ajax({ url: "/opendias/dynamic",
+                      timeout: 10000,
                       dataType: "xml",
                       data: {action: "nextPageReady",
                              scanprogressid: progressId,
@@ -165,18 +171,24 @@ function getScanningProgress (progressId, device) {
                           alert("Error signalling the scanner to restart for the next page: "+$(dta2).find('error').text());
                           return 1;
                         }
-                      }
+                      },
+                      error: function( x, t, m ) {
+                        if(t=="timeout") {
+                          alert("Timeout while talking to the server.");
+                        } else {
+                          alert("Error while talking to the server: ".t);
+                        }
+                      },
                     });
                 getScanningProgress(progressId,device);
 
-      } else if( action=='refresh' ) {
-        setTimeout("getScanningProgress('"+progressId+"','"+device+"')", PROGRESS_REFRESH_TIME);
-
-      } else {
-        // do nothinog - just drop off and finish
-
-      }
-
+           } else if( action=='refresh' ) {
+             setTimeout("getScanningProgress('"+progressId+"','"+device+"')", PROGRESS_REFRESH_TIME);
+           } else {
+             // do nothinog - just drop off and finish
+           }
+         },
+       });
 }
 
 
@@ -188,6 +200,7 @@ $(document).ready(function() {
 
   $.ajax({ url: "/opendias/dynamic",
          dataType: "xml",
+         timeout: 10000,
          data: {action: "getScannerList"},
          cache: false,
          type: "POST",
@@ -308,6 +321,7 @@ $(document).ready(function() {
 
                $.ajax({ url: "/opendias/dynamic",
                         dataType: "xml",
+                        timeout: 10000,
                         data: {action: "doScan", 
                                deviceid: $("#deviceid_"+device).val(),
                                format: $("#format_"+device).val(),
@@ -325,13 +339,27 @@ $(document).ready(function() {
                           }
                           scanuuid = $(data).find('DoScan').find('scanuuid').text();
                           getScanningProgress(scanuuid, device);
-                        }
+                        },
+                        error: function( x, t, m ) {
+                          if(t=="timeout") {
+                            alert("Timeout while talking to the server");
+                          } else {
+                            alert("Error while talking to the server: "+t);
+                          }
+                        },
                       });
              });
            });
          $('#loading').canvasLoaderHalt();
          $('#scanning').hide();
-         }
+         },
+         error: function( x, t, m ) {
+           if(t=="timeout") {
+             alert("Timeout while talking to the server");
+           } else {
+             alert("Error while talking to the server: "+t);
+           }
+         },
   });
 
 });
