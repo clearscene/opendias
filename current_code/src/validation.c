@@ -89,7 +89,7 @@ static int checkKeys(struct simpleLinkedList *postdata, struct simpleLinkedList 
 
 // Ensure the value is effectivly an int
 static int checkStringIsInt(char *StrInt) {
-  char *prt;
+  char *ptr;
   if( StrInt == NULL ) return 1;
 
   ptr = StrInt;
