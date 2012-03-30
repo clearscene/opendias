@@ -5,6 +5,7 @@ function sendUpdate(kkey, vvalue) {
     lockForm();
     $.ajax({ url: "/opendias/dynamic",
              dataType: "xml",
+             timeout: 10000,
              data: {action: "updateDocDetails", 
                     docid: $('#docid').text(),
                     kkey: kkey,
@@ -12,6 +13,13 @@ function sendUpdate(kkey, vvalue) {
                    },
              cache: false,
              type: "POST",
+             error: function( x, t, m ) {
+               if(t=="timeout") {
+                 alert("Timeout while talking to the server.");
+               } else {
+                 alert("Error while talking to the server: ".t);
+               }
+             },
              success: function(data){
                if( $(data).find('error').text() ) {
                  alert("An error occured while updating the information.");
@@ -29,6 +37,7 @@ function moveTag(tag, docid, action) {
     lockForm();
     $.ajax({ url: "/opendias/dynamic",
              dataType: "xml",
+             timeout: 10000,
              data: {action: "moveTag",
                     subaction: action, 
                     docid: docid,
@@ -36,6 +45,13 @@ function moveTag(tag, docid, action) {
                    },
              cache: false,
              type: "POST",
+             error: function( x, t, m ) {
+               if(t=="timeout") {
+                 alert("Timeout while talking to the server.");
+               } else {
+                 alert("Error while talking to the server: ".t);
+               }
+             },
              success: function(data){
                if( $(data).find('error').text() ) {
                  alert("An error occured while updating the information.");
@@ -104,11 +120,19 @@ $(document).ready(function() {
     if (answer){
       $.ajax({ url: "/opendias/dynamic",
              dataType: "xml",
+             timeout: 10000,
              data: {action: "deleteDoc", 
                     docid: $('#docid').text(),
                    },
              cache: false,
              type: "POST",
+             error: function( x, t, m ) {
+               if(t=="timeout") {
+                 alert("Timeout while talking to the server.");
+               } else {
+                 alert("Error while talking to the server: ".t);
+               }
+             },
              success: function(data){
                if( $(data).find('error').text() ) {
                  alert("An error occured deleting the document.");

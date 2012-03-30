@@ -5,8 +5,6 @@
 Version 0.8
 -----------
 
-Get the frontend to timeout/complain on failed AJAX calls.
-
 Frontend remembers user options
 
 Implement 'By Username/Password' access controls

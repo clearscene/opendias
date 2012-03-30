@@ -28,6 +28,7 @@ $(document).ready(function() {
       source: function( request, response ) {
         $.ajax({
           url: "/opendias/dynamic",
+          timeout: 10000,
           dataType: "json",
           type: "POST",
           data: {
@@ -42,7 +43,14 @@ $(document).ready(function() {
                 value: item.tag
               }
             }));
-          }
+          },
+          error: function( x, t, m ) {
+            if(t=="timeout") {
+              alert("Timeout while talking to the server.");
+            } else {
+              alert("Error while talking to the server: ".t);
+            }
+          },
         });
       },
       minLength: 1, // because most tags are so short - and there are not that many tags,
@@ -147,6 +155,7 @@ function loadListData(currentPage) {
   $('#loading').css({ display: 'block' });
 
   $.ajax({ url: "dynamic",
+         timeout: 10000,
          dataType: "xml",
          data: {  action: "docFilter",
                   subaction: "fullList",
@@ -192,7 +201,14 @@ function loadListData(currentPage) {
               $('#loading').css({ display: 'none' });
               check_result_block = 0;
             }
-         }
+         },
+         error: function( x, t, m ) {
+           if(t=="timeout") {
+             alert("Timeout while talking to the server.");
+           } else {
+             alert("Error while talking to the server: ".t);
+           }
+         },
        });
   return 1;
 }

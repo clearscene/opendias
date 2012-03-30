@@ -46,6 +46,7 @@ $(document).ready(function() {
 
   $.ajax({ url: "/opendias/dynamic",
          dataType: "xml",
+         timeout: 10000,
          data: {action: "getAccessDetails"},
          cache: false,
          type: "POST",
@@ -64,7 +65,14 @@ $(document).ready(function() {
                                 $(this).find("role").text()
                                 );
            });
-         }
+         },
+         error: function( x, t, m ) {
+           if(t=="timeout") {
+             alert("Timeout while talking to the server.");
+           } else {
+             alert("Error while talking to the server: ".t);
+           }
+         },
   });
 
 });

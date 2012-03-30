@@ -14,10 +14,18 @@ $(document).ready(function() {
 
   $.ajax({ url: "/opendias/dynamic",
          dataType: "xml",
+         timeout: 10000,
          data: {action: "getDocDetail", 
                 docid: getUrlVars()['docid']},
          cache: false,
          type: "POST",
+         error: function( x, t, m ) {
+           if(t=="timeout") {
+             alert("Timeout while talking to the server.");
+           } else {
+             alert("Error while talking to the server: ".t);
+           }
+         },
          success: function(data){
            if( $(data).find('error').text() ){
              alert("Unable to get document details: "+$(data).find('error').text());
@@ -104,11 +112,19 @@ $(document).ready(function() {
                  $.ajax({
                    url: "/opendias/dynamic",
                    dataType: "json",
+                   timeout: 10000,
                    type: "POST",
                    data: {
                      action: "tagsAutoComplete",
                      startsWith: request.term,
                      docid: officialDocId
+                   },
+                   error: function( x, t, m ) {
+                     if(t=="timeout") {
+                       alert("Timeout while talking to the server.");
+                     } else {
+                       alert("Error while talking to the server: ".t);
+                     }
                    },
                    success: function( data ) {
                      response( $.map( data.results, function( item ) {
@@ -156,11 +172,19 @@ $(document).ready(function() {
                  $.ajax({
                    url: "/opendias/dynamic",
                    dataType: "json",
+                   timeout: 10000,
                    type: "POST",
                    data: {
                      action: "titleAutoComplete",
                      startsWith: request.term,
                      notLinkedTo: officialDocId,
+                   },
+                   error: function( x, t, m ) {
+                     if(t=="timeout") {
+                       alert("Timeout while talking to the server.");
+                     } else {
+                       alert("Error while talking to the server: ".t);
+                     }
                    },
                    success: function( data ) {
                      response( $.map( data.results, function( item ) {
@@ -198,10 +222,18 @@ $(document).ready(function() {
         $.ajax({
           url: "/opendias/dynamic",
           dataType: "json",
+          timeout: 10000,
           type: "POST",
           data: {
             action: "titleAutoComplete",
             startsWith: request.term
+          },
+          error: function( x, t, m ) {
+            if(t=="timeout") {
+              alert("Timeout while talking to the server.");
+            } else {
+              alert("Error while talking to the server: ".t);
+            }
           },
           success: function( data ) {
             response( $.map( data.results, function( item ) {

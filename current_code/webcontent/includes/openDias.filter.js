@@ -25,6 +25,7 @@ $(document).ready(function(){
 function getRecordCount() {
     $.ajax({ url: "/opendias/dynamic",
              dataType: "xml",
+             timeout: 10000,
              data: {action: "docFilter",
                     subaction: "count",
                     textSearch: $('#textSearch').val(),
@@ -41,7 +42,14 @@ function getRecordCount() {
                } else {
                  $('#filterProgress').text( "Will return an estimated "+$(data).find('DocFilter').find('count').text()+" docs" );
                }
-             }
+             },
+             error: function( x, t, m ) {
+               if(t=="timeout") {
+                 alert("Timeout while talking to the server.");
+               } else {
+                 alert("Error while talking to the server: ".t);
+               }
+             },
            });
 }
 
