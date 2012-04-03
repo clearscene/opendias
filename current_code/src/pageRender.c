@@ -103,7 +103,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
 
   // Generate a uuid and scanning params object
   scanUuid = malloc(36+1); 
-  uuid_generate(uu);
+  uuid_generate_time(uu); // Not uuid_generate, since this keeps open a file handle to /dev/[su]random, which we can't close - which mucks up valgrind output.
   uuid_unparse(uu, scanUuid);
 
   // Save requested parameters
