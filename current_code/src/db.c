@@ -132,7 +132,7 @@ int connect_db (int createIfRequired) {
 
     struct simpleLinkedList *vars = sll_init();
     sll_append(vars, DB_TEXT );
-    sll_append(vars, o_strdup(BASE_DIR) );
+    sll_append(vars, BASE_DIR );
 
     runUpdate_db(sql, vars);
     free(sql);
