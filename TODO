@@ -11,7 +11,7 @@ Implement 'By Username/Password' access controls
 
 TECHNICAL: Make 64-bit
 
-TECHNICAL: Ensure I/O is UTF8
+IN PROGRESS: Ensure I/O is UTF8
 
 
 
