@@ -44,7 +44,7 @@ sub test {
 
   # Attempt a second scan - ensure it is rejected
   sleep(1);
-  my $result = directRequest( \%scan );
+  $result = directRequest( \%scan );
   o_log( "blocked Scan, request = " . Dumper( $result ) );
   sleep(1);
   $result = get_progress( $sth, $result->{DoScan}->{scanuuid} );
