@@ -175,7 +175,7 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
         fseek(fp, 0, SEEK_END);
         wrote = fwrite (data, sizeof (char), size, fp);
         if( size != wrote )
-          o_log(ERROR, "Did not write the full amount of data. Ecpected to write %d, but wrote %d", size, wrote);
+          o_log(ERROR, "Did not write the full amount of data. Expected to write %d, but wrote %d", size, wrote);
         fclose(fp);
       }
       free(filename);
