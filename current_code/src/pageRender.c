@@ -135,7 +135,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
-  ret = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DoScan><scanuuid>%s</scanuuid></DoScan></Response>", scanUuid);
+  ret = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><DoScan><scanuuid>%s</scanuuid></DoScan></Response>", scanUuid);
   free(scanUuid);
 
 #endif // CAN_SCAN //
@@ -190,7 +190,7 @@ char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
-  return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><NextPageReady><result>OK</result></NextPageReady></Response>");
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><NextPageReady><result>OK</result></NextPageReady></Response>");
 }
 
 
@@ -215,7 +215,7 @@ char *getScanningProgress(char *scanid) {
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
-  ret = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScanningProgress><status>%s</status><value>%s</value></ScanningProgress></Response>", status, value);
+  ret = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScanningProgress><status>%s</status><value>%s</value></ScanningProgress></Response>", status, value);
   free(status);
   free(value);
 
@@ -421,7 +421,7 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   }
   free(sql);
 
-  docList = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DocFilter><count>%i</count>%s<Results>%s</Results></DocFilter></Response>", count, page_ret, rows);
+  docList = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><DocFilter><count>%i</count>%s<Results>%s</Results></DocFilter></Response>", count, page_ret, rows);
   free(rows);
   free(page_ret);
 
@@ -458,7 +458,7 @@ char *getAccessDetails() {
   }
   free(sql);
 
-  access = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><AccessDetails><LocationAccess>%s</LocationAccess><UserAccess>%s</UserAccess></AccessDetails></Response>", locationAccess, userAccess);
+  access = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><AccessDetails><LocationAccess>%s</LocationAccess><UserAccess>%s</UserAccess></AccessDetails></Response>", locationAccess, userAccess);
   free(locationAccess);
   free(userAccess);
 

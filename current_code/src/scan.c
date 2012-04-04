@@ -996,13 +996,13 @@ extern char *internalGetScannerList() {
 
     free(replyTemplate);
     // The escaped string placeholder will be interprited in the sane dispatcher client
-    answer = o_printf("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScannerList%%s><Devices>%s</Devices></ScannerList></Response>", deviceList);
+    answer = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s><Devices>%s</Devices></ScannerList></Response>", deviceList);
     free(deviceList);
   }
 
   else {
     // No devices or sane failed.
-    answer = o_strdup( "<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><ScannerList%%s></ScannerList></Response>");
+    answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s></ScannerList></Response>");
   }
 
 #endif // CAN_SCAN //

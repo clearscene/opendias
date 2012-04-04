@@ -44,8 +44,8 @@ char *requesterrorpage = "<html><body>Your request did not fit the form 'http://
 char *fileexistspage = "<html><body>File exists</body></html>";
 char *completepage = "<html><body>All Done</body></html>";
 char *denied = "<h1>Access Denied</h1>";
-char *noaccessxml = "<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>You do not have permissions to complete the request</error></Response>";
-char *errorxml= "<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>Your request could not be processed</error></Response>";
+char *noaccessxml = "<?xml version='1.0' encoding='utf-8'?>\n<Response><error>You do not have permissions to complete the request</error></Response>";
+char *errorxml= "<?xml version='1.0' encoding='utf-8'?>\n<Response><error>Your request could not be processed</error></Response>";
 static unsigned int nr_of_clients = 0;
 
 struct priverlage {
@@ -734,7 +734,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             else if ( validate( con_info->post_data, action ) ) 
               content = o_strdup(errorxml);
             else {
-              content = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><Audio<<filename>BabyBeat.ogg</filename></Audio></Response>");
+              content = o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Audio<<filename>BabyBeat.ogg</filename></Audio></Response>");
             }
             mimetype = MIMETYPE_XML;
             size = strlen(content);
