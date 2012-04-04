@@ -34,7 +34,7 @@ sub test {
 
   # Update doc details
   o_log( "Add a tag linkage" );
-  $updateData{tag} = 'new tag';
+  $updateData{tag} = 'new Ϋ tag';
   $updateData{subaction} = 'addTag';
   o_log( Dumper( directRequest( \%updateData ) ) );
 

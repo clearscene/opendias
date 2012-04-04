@@ -20,7 +20,7 @@ One Row = $VAR1 = {
         'actionrequired' => '0',
         'date' => '2010/12/31',
         'docid' => '1',
-        'title' => 'Test Title',
+        'title' => "Test \x{3ab} Title",
         'type' => 'Scaned Doc'
       }
     },
@@ -52,7 +52,7 @@ Date Order = $VAR1 = {
           'actionrequired' => '0',
           'date' => '2010/12/31',
           'docid' => '1',
-          'title' => 'Test Title',
+          'title' => "Test \x{3ab} Title",
           'type' => 'Scaned Doc'
         }
       ]
@@ -78,7 +78,7 @@ Date Order reverse = $VAR1 = {
           'actionrequired' => '0',
           'date' => '2010/12/31',
           'docid' => '1',
-          'title' => 'Test Title',
+          'title' => "Test \x{3ab} Title",
           'type' => 'Scaned Doc'
         },
         {
@@ -135,7 +135,7 @@ Sort by type, all records = $VAR1 = {
           'actionrequired' => '0',
           'date' => '2010/12/31',
           'docid' => '1',
-          'title' => 'Test Title',
+          'title' => "Test \x{3ab} Title",
           'type' => 'Scaned Doc'
         },
         {
@@ -161,7 +161,7 @@ Sort by title, all records = $VAR1 = {
           'actionrequired' => '0',
           'date' => '2010/12/31',
           'docid' => '1',
-          'title' => 'Test Title',
+          'title' => "Test \x{3ab} Title",
           'type' => 'Scaned Doc'
         },
         {
@@ -222,7 +222,7 @@ Sort by docid, all records = $VAR1 = {
           'actionrequired' => '0',
           'date' => '2010/12/31',
           'docid' => '1',
-          'title' => 'Test Title',
+          'title' => "Test \x{3ab} Title",
           'type' => 'Scaned Doc'
         }
       ]
@@ -241,7 +241,7 @@ Sort by reverse-docid, all records = $VAR1 = {
           'actionrequired' => '0',
           'date' => '2010/12/31',
           'docid' => '1',
-          'title' => 'Test Title',
+          'title' => "Test \x{3ab} Title",
           'type' => 'Scaned Doc'
         },
         {
