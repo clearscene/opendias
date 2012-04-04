@@ -73,7 +73,7 @@ char *doDelete (char *documentId) {
   removeDocLinks(documentId);
   removeDoc(documentId);
 
-  return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DeleteDoc><status>OK</status></DeleteDoc></Response>");;
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><DeleteDoc><status>OK</status></DeleteDoc></Response>");
 }
 
 
@@ -182,7 +182,7 @@ char *getDocDetail (char *documentId) {
 
   // Build Response
   //
-  returnXMLtemplate = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\
+  returnXMLtemplate = o_strdup("<?xml version='1.0' encoding='utf-8'?>\
 <Response>\
  <DocDetail>\
   <docid>%s</docid>\
@@ -257,7 +257,7 @@ char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
     rc = updateDocValue(docid, kkey, vvalue);
 
   if(rc) return NULL;
-  else return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><UpdateDocDetails><status>OK</status></UpdateDocDetails></Response>");
+  else return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateDocDetails><status>OK</status></UpdateDocDetails></Response>");
 }
 
 char *updateTagLinkage(char *docid, char *link, char *subaction) {
@@ -294,7 +294,7 @@ char *updateTagLinkage(char *docid, char *link, char *subaction) {
   }
 
   if(rc != 0) return NULL;
-  else return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><MoveTag><status>OK</status></MoveTag></Response>");
+  else return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><MoveTag><status>OK</status></MoveTag></Response>");
 }
 
 
