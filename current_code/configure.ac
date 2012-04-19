@@ -89,16 +89,34 @@ AC_CHECK_LIB(tiff, TIFFOpen,
         	tiff=yes,
         	AC_MSG_WARN(You are missing the development headers for the tiff libs))], 
 	AC_MSG_WARN(You are missing the tiff libs) )
+
 tesseract="no"
+tesseractage="old"
+
+dnl Would have liked to use AC_CHECK_HEADER, but the checking does not recognise the C++ nature of this header! 
 AC_CHECK_LIB(tesseract_full, main,
-	dnl Would have liked to use AC_CHECK_HEADER, but the checking does not recognise the C++ nature of this header! 
 	[AC_CHECK_FILE(/usr/include/tesseract/baseapi.h,
-        	tesseract=yes,
-        	AC_MSG_WARN(You are missing the development headers for the tesseract libs))], 
-	AC_MSG_WARN(You are missing the tesseract libs) )
+        	tesseract=yes
+        	tesseractage=old,
+        	AC_MSG_WARN(You are missing the development headers for the tesseract libs))],
+AC_CHECK_LIB(tesseract, main,
+	[AC_CHECK_FILE(/usr/include/tesseract/baseapi.h,
+        	tesseract=yes
+		tesseractage=new,
+        	AC_MSG_WARN(You are missing the development headers for the tesseract libs))],
+	AC_MSG_WARN(You are missing the tesseract libs)
+		)  
+	) 
+
 if test "x$tesseract" = "xyes" && test "x$tiff" = "xyes" ; then
 	AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
+if test "x$tesseractage" = "xnew" ; then
+	OPENDIAS_LIBS="$OPENDIAS_LIBS -ltesseract -ltiff "
+else
+	AC_MSG_WARN(You are using the old API tesseract libs, support for these will be depricated soon.)
 	OPENDIAS_LIBS="$OPENDIAS_LIBS -ltesseract_full -ltiff "
+	AC_DEFINE([OCR_OLD],[],[OCR libs are old style])
+fi
 else
 	AC_MSG_WARN(You wll not be able to OCR any document.)
 fi

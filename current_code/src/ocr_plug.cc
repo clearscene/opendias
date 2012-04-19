@@ -61,22 +61,30 @@ void signal_handler(int sig) {
 extern "C" void runocr(struct scanCallInfo *info) {
 
     char *ret;
-    TessBaseAPI *a = new TessBaseAPI();
+#ifdef OCR_OLD
+    TessBaseAPI *tessObject = new TessBaseAPI();
+#else // OCR_OLD //
+    tesseract::TessBaseAPI *tessObject = new tesseract::TessBaseAPI();
+#endif // OCR_OLD //
     sigset_t newSigSet;
 
     sigaddset(&newSigSet, SIGCHLD);  /* ignore child - i.e. we don't need to wait for it */
 
     // Language is the code of the language for which the data will be loaded.
     // (Codes follow ISO 639-2.) If it is NULL, english (eng) will be loaded.
-    a->InitWithLanguage("/usr/share/tesseract-ocr/tessdata", NULL, info->language, NULL, false, 0, NULL);
+#ifdef OCR_OLD
+    tessObject->InitWithLanguage("/usr/share/tesseract-ocr/tessdata", NULL, info->language, NULL, false, 0, NULL);
+#else // OCR_OLD //
+    tessObject->Init("/usr/share/tesseract-ocr/tessdata", info->language);
+#endif // OCR_OLD //
 
-    ret = a->TesseractRect(info->imagedata, info->bytes_per_pixel, info->bytes_per_line,
+    ret = tessObject->TesseractRect(info->imagedata, info->bytes_per_pixel, info->bytes_per_line,
                                         2, 2, info->width -2, info->height -2);
     info->ret = strdup(ret);
 
     delete [] ret;
-    a->ClearAdaptiveClassifier();
-    a->End();
+    tessObject->ClearAdaptiveClassifier();
+    tessObject->End();
 
 }
 
