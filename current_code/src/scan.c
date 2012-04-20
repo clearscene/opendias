@@ -840,11 +840,13 @@ extern char *internalGetScannerList() {
       scanOK = SANE_TRUE;
       o_log(DEBUGM, "device(s) found");
     }
-    else
+    else {
       o_log(INFORMATION, "No devices found");
+    }
   }
-  else
+  else {
     o_log(WARNING, "Checking for devices failed");
+  }
 
   if(scanOK == SANE_TRUE) {
 
@@ -1002,7 +1004,7 @@ extern char *internalGetScannerList() {
 
   else {
     // No devices or sane failed.
-    answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s></ScannerList></Response>");
+    answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
   }
 
 #endif // CAN_SCAN //

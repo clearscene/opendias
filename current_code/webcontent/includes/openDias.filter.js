@@ -45,9 +45,9 @@ function getRecordCount() {
              },
              error: function( x, t, m ) {
                if(t=="timeout") {
-                 alert("Timeout while talking to the server.");
+                 alert("[f001] Timeout while talking to the server.");
                } else {
-                 alert("Error while talking to the server: ".t);
+                 alert("[f001] Error while talking to the server: ".t);
                }
              },
            });

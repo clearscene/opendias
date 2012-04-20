@@ -150,9 +150,9 @@ function getScanningProgress (progressId, device) {
 	 },
          error: function( x, t, m ) {
            if(t=="timeout") {
-             alert("Timeout while talking to the server");
+             alert("[a001] Timeout while talking to the server");
            } else {
-             alert("Error while talking to the server: "+t);
+             alert("[a002] Error while talking to the server: "+t);
            }
          },
          complete: function() {
@@ -174,9 +174,9 @@ function getScanningProgress (progressId, device) {
                       },
                       error: function( x, t, m ) {
                         if(t=="timeout") {
-                          alert("Timeout while talking to the server.");
+                          alert("[a003] Timeout while talking to the server.");
                         } else {
-                          alert("Error while talking to the server: ".t);
+                          alert("[a004] Error while talking to the server: "+t);
                         }
                       },
                     });
@@ -342,9 +342,9 @@ $(document).ready(function() {
                         },
                         error: function( x, t, m ) {
                           if(t=="timeout") {
-                            alert("Timeout while talking to the server");
+                            alert("[a005] Timeout while talking to the server");
                           } else {
-                            alert("Error while talking to the server: "+t);
+                            alert("[a006] Error while talking to the server: "+t);
                           }
                         },
                       });
@@ -355,9 +355,9 @@ $(document).ready(function() {
          },
          error: function( x, t, m ) {
            if(t=="timeout") {
-             alert("Timeout while talking to the server");
+             alert("[a007] Timeout while talking to the server");
            } else {
-             alert("Error while talking to the server: "+t);
+             alert("[a008] Error while talking to the server: "+t);
            }
          },
   });

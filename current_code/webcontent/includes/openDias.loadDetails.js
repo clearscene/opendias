@@ -21,9 +21,9 @@ $(document).ready(function() {
          type: "POST",
          error: function( x, t, m ) {
            if(t=="timeout") {
-             alert("Timeout while talking to the server.");
+             alert("[d001] Timeout while talking to the server.");
            } else {
-             alert("Error while talking to the server: ".t);
+             alert("[d002] Error while talking to the server: ".t);
            }
          },
          success: function(data){
@@ -121,9 +121,9 @@ $(document).ready(function() {
                    },
                    error: function( x, t, m ) {
                      if(t=="timeout") {
-                       alert("Timeout while talking to the server.");
+                       alert("[d003] Timeout while talking to the server.");
                      } else {
-                       alert("Error while talking to the server: ".t);
+                       alert("[d004] Error while talking to the server: ".t);
                      }
                    },
                    success: function( data ) {
@@ -181,9 +181,9 @@ $(document).ready(function() {
                    },
                    error: function( x, t, m ) {
                      if(t=="timeout") {
-                       alert("Timeout while talking to the server.");
+                       alert("[d005] Timeout while talking to the server.");
                      } else {
-                       alert("Error while talking to the server: ".t);
+                       alert("[d006] Error while talking to the server: ".t);
                      }
                    },
                    success: function( data ) {
@@ -230,9 +230,9 @@ $(document).ready(function() {
           },
           error: function( x, t, m ) {
             if(t=="timeout") {
-              alert("Timeout while talking to the server.");
+              alert("[d007] Timeout while talking to the server.");
             } else {
-              alert("Error while talking to the server: ".t);
+              alert("[d008] Error while talking to the server: ".t);
             }
           },
           success: function( data ) {
