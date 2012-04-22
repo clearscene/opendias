@@ -19,7 +19,7 @@
 #ifndef SANEDISPATCHER
 #define SANEDISPATCHER
 
-#define ADDRESS "saneCommandSocket"
+#define ADDRESS "/var/run/saneCommandSocket"
 
 /*
 #include "simpleLinkedList"

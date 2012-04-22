@@ -103,7 +103,7 @@ int setup (char *configFile) {
   }
   startedServices.db = 1;
 
-  	o_log(INFORMATION, "database opened");
+  o_log(INFORMATION, "database opened");
   sql = o_strdup("SELECT config_option, config_value FROM config");
   rSet = runquery_db(sql);
   if( rSet != NULL ) {
