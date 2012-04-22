@@ -84,10 +84,9 @@ struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *element, const
     if( element->key && ( element->key != NULL ) && ( 0 == strcmp(element->key, key) ) ) {
       return element;
     }
-	//o_log(DEBUGM,"sll_searchKeys %s does not match element key %s",key,element->key);
     return sll_searchKeys( sll_getNext( element ), key );
   }
-	o_log(DEBUGM,"sll_searchKeys key %s was not found ",key);
+  o_log(DEBUGM,"sll_searchKeys key %s was not found ",key);
   return NULL;
 }
 
@@ -113,13 +112,11 @@ struct simpleLinkedList *sll_getNext( struct simpleLinkedList *element ) {
 }
 
 void sll_destroy( struct simpleLinkedList *element ) {
-	//o_log(DEBUGM,"Entering sll_destropy");
   if( element && ( element != NULL ) ) {
     o_log(SQLDEBUG, "preparing to delete element: %x, with prev=%x, and next=%x", element, element->prev, element->next);
     sll_destroy( sll_getNext( element ) );
     sll_delete( element );
   }
-	//o_log(DEBUGM,"Leaving sll_destropy");
 }
 
 void sll_delete( struct simpleLinkedList *element ) {
