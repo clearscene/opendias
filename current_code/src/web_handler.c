@@ -136,8 +136,11 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
   struct connection_info_struct *con_info = coninfo_cls;
   struct simpleLinkedList *post_element = sll_searchKeys(con_info->post_data, key);
   struct post_data_struct *data_struct = NULL;
-  if( post_element && ( post_element != NULL ) && ( post_element->data != NULL ) )
+  if( post_element && ( post_element != NULL ) && ( post_element->data != NULL ) ) {
     data_struct = (struct post_data_struct *)post_element->data;
+  }
+
+  o_log(DEBUGM, "Language setting is: %s", MHD_lookup_connection_value( coninfo_cls, kind, MHD_HTTP_HEADER_ACCEPT_LANGUAGE) );
 
   if(size > 0) {
     char *trimedData = calloc(size+1, sizeof(char));
