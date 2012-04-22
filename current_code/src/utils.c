@@ -245,7 +245,7 @@ char *getTimeStr_iso8601() {
   stTime = gmtime(&ttime);
   size = strftime(strdate, 20, "%Y-%m-%d %H:%M:%S", stTime);
   if( 19 != size )
-    o_log(ERROR, "Count not write entire data block.");
+    o_log(ERROR, "Count not write entire data block.%s",strdate);
 
   return strdate;
 }
@@ -326,14 +326,57 @@ void addFileExt(char **fname, int ftype) {
 }
 
 char *i_printf(const char *fmt, va_list inargs) {
-  size_t len;
+  va_list ap;
   char *str;
-  len = (size_t)vsnprintf(NULL, 0, fmt, inargs);
-  str = malloc((len + 1) * sizeof(char));
-  if( (int)(len+1) != vsnprintf(str, len + 1, fmt, inargs) )
-    return str; //o_log(ERROR, "Count not write the entire data block.");
-  
-  return str;
+  size_t xs;
+  FILE *DEVZERO;
+	/*printf("i_printf working on format %s:",fmt);
+	vprintf(fmt,inargs);
+
+	printf("\nsecond call\n");
+	printf("i_printf working on format %s:",fmt);
+	vprintf(fmt,inargs);
+
+	printf("\n");
+	exit(43);	*/
+	/* in order to allocate sufficient amount of memory, use the following approach:
+		+ copy initial argument state
+		+ vfprintf to /dev/null to examine buffer size 
+		+ allocate memory
+		+ reset argument pointer
+		+ use vsnprintf to write result in str
+	*/
+	//printf("entering i_printf fmt = %s\n",fmt);
+
+	va_copy(ap,inargs);
+
+	//open dev zero as stream
+	if ( (DEVZERO=fopen("/dev/null","w+")) == NULL ) {
+		printf("cannot open /dev/null.");
+		exit(110);	
+	}
+	xs=(size_t)vfprintf(DEVZERO,fmt,inargs);
+	//printf("\n%d bytes written\n",(int)xs);
+	fclose(DEVZERO);
+
+	xs=xs+sizeof(*str);
+	if ( (str=(char*)malloc(xs)) == NULL ) {
+                printf("memory allocation error\n");
+                exit(1);
+        }
+	//printf("allocated %d bytes\n",(int)xs);
+
+	va_end(inargs);
+	va_copy(inargs,ap);
+	
+	if (vsnprintf(str,xs,fmt,inargs) > (int)xs) {
+		printf("serious memory problem\n");
+		exit(110);
+	}
+	
+
+	//printf("leaving i_printf result = %s\n",str);
+	return(str);
 }
 
 char *o_printf(const char *fmt, ...) {

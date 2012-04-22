@@ -64,6 +64,8 @@ int setup (char *configFile) {
   struct simpleLinkedList *rSet;
   char *location, *conf, *sql, *config_option, *config_value;
 
+	o_log(DEBUGM,"setup launched\n");
+
   // Defaults
   VERBOSITY = DEBUGM;
   DB_VERSION = 6;
@@ -73,10 +75,12 @@ int setup (char *configFile) {
   o_log(INFORMATION, "Setting default log verbosity to %d.", VERBOSITY);
 
   // Get 'DB' location
-  if (configFile != NULL)
+  if (configFile != NULL) {
     conf = configFile;
-  else
+  } else {
     conf = DEFAULT_CONF_FILE;
+  }
+
 
   o_log(INFORMATION, "Using config file: %s", conf);
   if( 0 == load_file_to_memory(conf, &location) ) {
@@ -99,6 +103,7 @@ int setup (char *configFile) {
   }
   startedServices.db = 1;
 
+  	o_log(INFORMATION, "database opened");
   sql = o_strdup("SELECT config_option, config_value FROM config");
   rSet = runquery_db(sql);
   if( rSet != NULL ) {
@@ -247,7 +252,7 @@ void daemonize(char *rundir, char *pidfile) {
  
     /* Child continues */
 
-    (void)umask(027); /* Set file permissions 750 */
+    (void)umask(027); /* Set file permissions 750 ? that's 640 but that's fine */
  
     /* Get a new process group */
     sid = setsid();
@@ -262,7 +267,7 @@ void daemonize(char *rundir, char *pidfile) {
  
     if (pidFilehandle == -1 ) {
         /* Couldn't open lock file */
-        printf("Could not daemonise [3]. Try running with the -d option or as super user\n");
+        printf("Could not daemonise [3] pidfile %s. Try running with the -d option or as super user\n",pidfile);
         o_log(ERROR, "Could not open PID lock file. Exiting");
         exit(EXIT_FAILURE);
     }
@@ -285,14 +290,28 @@ void daemonize(char *rundir, char *pidfile) {
 
     /* close all descriptors */
     free(str);
-    for (i = getdtablesize(); i >= 0; --i) {
+    for (i = getdtablesize(); i > 2; --i) {
         close(i);
     }
  
     /* Route I/O connections */
     close(STDIN_FILENO);
-    close(STDOUT_FILENO);
-    close(STDERR_FILENO);
+    //close(STDOUT_FILENO);
+    //close(STDERR_FILENO);
+
+	//open STDOUT and STDOUT again and bind them to null device. (ensure potentially outputted data 
+	//can be written properly.
+		//if((pid=fork()) == -1)
+	
+	int devnull;	
+	if ( (devnull=open("/dev/null",O_APPEND)) == -1 ) {
+		o_log(ERROR,"cannot open /dev/null");
+		exit(1);
+	}
+
+	dup2(devnull,STDOUT_FILENO);
+	dup2(devnull,STDERR_FILENO);
+
  
     i = chdir(rundir); /* change running directory */
 }
@@ -384,7 +403,6 @@ int main (int argc, char **argv) {
       printf("Could not startup. Check /var/log/opendias/ for the reason.\n");
     return 1;
   }
-
 
 #ifdef CAN_SCAN
   // Start sane

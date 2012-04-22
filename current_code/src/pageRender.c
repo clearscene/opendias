@@ -100,6 +100,8 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
   int rc=0;
   uuid_t uu;
   char *scanUuid;
+	
+	o_log(DEBUGM,"Entering doScan");
 
   // Generate a uuid and scanning params object
   scanUuid = malloc(36+1); 
@@ -114,6 +116,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
   setScanParam(scanUuid, SCAN_PARAM_REQUESTED_RESOLUTION, resolution);
   setScanParam(scanUuid, SCAN_PARAM_LENGTH, pagelength);
 
+	o_log(DEBUGM,"doScan setScanParam completed ");
   // save scan progress db record
   addScanProgress(scanUuid);
 
@@ -124,6 +127,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
 #else
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 #endif /* THREAD_JOIN */
+  o_log(DEBUGM,"doScan launching doScanningOperation");
   rc = pthread_create(&thread, &attr, doScanningOperation, o_strdup(scanUuid) );
   if(rc != 0) {
     o_log(ERROR, "Failed to create a new thread - for scanning operation.");
@@ -136,6 +140,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
   ret = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><DoScan><scanuuid>%s</scanuuid></DoScan></Response>", scanUuid);
+  o_log(DEBUGM,"Leaving doScan");
   free(scanUuid);
 
 #endif // CAN_SCAN //

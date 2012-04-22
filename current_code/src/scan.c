@@ -601,7 +601,7 @@ void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int reques
   char *ocrLang;
 #ifdef CAN_SCAN
   char *ocrScanText;
-#endif // CAN_OCR //
+#endif // CAN_SCAN //
 
   ocrLang = getScanParam(uuid, SCAN_PARAM_DO_OCR);
 #ifdef CAN_OCR
@@ -613,6 +613,7 @@ void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int reques
       o_log(INFORMATION, "Attempting OCR in lang of %s", ocrLang);
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
+  	int counter;
       // sharpen the image
       for (counter = 0 ; (size_t)counter < totbytes ; counter++) {
         if( raw_image[counter] > 100 ) {
@@ -663,11 +664,17 @@ char *internalDoScanningOperation(char *uuid) {
   char *total_requested_pages_s;
   char *devName;
   char *outFilename;
+  char *tmpFile;
+  FILE *scanOutFile;
+  size_t size;
 
+  o_log(DEBUGM, "doScanningOperation: sane initialized uuid(%s)",(char *)uuid);
   // Open the device
   o_log(DEBUGM, "sane_open");
   updateScanProgress(uuid, SCAN_WAITING_ON_SCANNER, 0);
+  o_log(DEBUGM, "doScanningOperation: updateScanProgess done");
   devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
+  o_log(DEBUGM,"getScanParam ready devName(%s)",devName);
   status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {
     handleSaneErrors("Cannot open device", status, 0);
@@ -681,7 +688,7 @@ char *internalDoScanningOperation(char *uuid) {
   if ( ! setOptions( (char *)uuid, openDeviceHandle, &request_resolution, &buff_requested_len ) )
     return 0;
 
-  o_log(DEBUGM, "sane_start");
+  o_log(DEBUGM, "sane_start: setOptions returned request_resolution %d\n",request_resolution);
   status = sane_start (openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {  
     handleSaneErrors("Cannot start scanning", status, 0);
@@ -955,8 +962,20 @@ extern char *internalGetScannerList() {
           // A fixed list of options
           else if (sod->constraint_type == SANE_CONSTRAINT_WORD_LIST) {
             int lastIndex = sod->constraint.word_list[0];
-            o_log(DEBUGM, "Resolution setting detected as 'word list'");
-            maxRes = sod->constraint.word_list[lastIndex];
+            o_log(DEBUGM, "Resolution setting detected as 'word list': lastIndex = %d",lastIndex);
+
+            // maxRes = sod->constraint.word_list[lastIndex];
+            // resolution list cannot be treated as low to high ordered list 
+            // remark: impl capability to select scan resolution in webInterface
+            int n=0;
+            maxRes = 0;
+            for (n=1; n<=lastIndex; n++ ) {
+              o_log(DEBUGM, "index results %d --> %d", n ,(int)sod->constraint.word_list[n]);
+              if ( maxRes < sod->constraint.word_list[n] ) {
+                maxRes=sod->constraint.word_list[n];
+              }
+            }
+
           }
 
           break; // we've found our resolution - no need to search more

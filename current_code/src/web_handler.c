@@ -26,6 +26,9 @@
 #include <arpa/inet.h>
 #include <uuid/uuid.h>
 #include <pthread.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "web_handler.h"
 #include "main.h"
@@ -63,6 +66,7 @@ static size_t getFromFile_fullPath(const char *url, char **data) {
 }
 
 static size_t getFromFile(const char *url, char **data) {
+	o_log(DEBUGM,"enterting getFromFile: ");
 
   // Build Document Root
   char *htmlFrag = o_printf("%s/opendias/webcontent%s", PACKAGE_DATA_DIR, url);
@@ -167,18 +171,31 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
 
     if(0 == strcmp(key, "uploadfile")) {
       FILE *fp;
-      char *filename = o_printf("/tmp/%s.dat", data_struct->data);
-      if ((fp = fopen(filename, "ab")) == NULL)
+      int fd;
+      char *filename = o_printf("%s/%s.dat",TMPLOCATION, data_struct->data);
+      struct stat fstat;
+
+      mode_t fmode;
+      fmode = S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP;
+      int flags;
+      if (stat(filename,&fstat) == -1 ) {
+        flags=O_CREAT|O_WRONLY;
+      } 
+      else {
+        flags=O_RDWR;
+      }
+
+      if ((fd = open(filename, flags, fmode)) == -1 )
         o_log(ERROR, "could not open http post binary data file for output");
       else {
-        size_t wrote;
-        fseek(fp, 0, SEEK_END);
-        wrote = fwrite (data, sizeof (char), size, fp);
-        if( size != wrote )
-          o_log(ERROR, "Did not write the full amount of data. Expected to write %d, but wrote %d", size, wrote);
-        fclose(fp);
+        lseek(fd,0,SEEK_END);
+        size_t written;
+        if ( (written=write(fd,data,size)) == -1 ) {
+          o_log(ERROR,"uploadfile iterate_postdata: write to %s failed",filename);
+        }
+        close(fd);
       }
-      free(filename);
+    free(filename);
     }
 
     free(trimedData);
@@ -410,7 +427,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     o_log(INFORMATION, "Serving request: %s", url);
 
     // A 'root' request needs to be mapped to an actual file
-    if( strlen(url)==1 && 0!=strstr(url,"/") ) {
+    if( (strlen(url) == 1  && 0!=strstr(url,"/")) || strlen(url) == 0 ) {
+    	o_log(DEBUGM, "Serving root request ");
       size = getFromFile("/body.html", &content);
       if( size > 0 ) 
         content = build_page(content);
@@ -844,7 +862,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
       size = 0;
     }
 
-    o_log(DEBUGM, "%s", content);
+    o_log(DEBUGM, "Serving the following content: %s", content);
     return send_page (connection, content, status, mimetype, size);
   }
 

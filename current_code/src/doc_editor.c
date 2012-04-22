@@ -196,14 +196,16 @@ char *getDocDetail (char *documentId) {
   <y>%s</y>\
   <Tags>%s</Tags>\
   <DocLinks>%s</DocLinks>\
+  <hardcopyKept>%s</hardcopyKept>\
   <actionrequired>%s</actionrequired>\
  </DocDetail>\
 </Response>");
   returnXML = o_printf(returnXMLtemplate, 
                             documentId, title, readData_db(rSet, "entrydate"), readData_db(rSet, "filetype"), 
                             humanReadableDate, readData_db(rSet, "pages"), readData_db(rSet, "ocrtext"), 
-                            readData_db(rSet, "ppl"), readData_db(rSet, "lines"), tags, docs, 
-                            readData_db(rSet, "actionrequired") );
+                            readData_db(rSet, "ppl"), readData_db(rSet, "lines"), tags, docs,
+                            readData_db(rSet, "hardcopyKept"),
+			    readData_db(rSet, "actionrequired") );
 
   free_recordset(rSet);
   free(sql);
@@ -252,6 +254,14 @@ char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
       rc = updateDocValue_int(docid, kkey, 0);
     }
   } 
+
+	else if ( 0 == strcmp(kkey, "hardcopyKept") ) {
+		if ( vvalue && 0 == strcmp(vvalue,"true") ) {
+			rc = updateDocValue_int(docid,kkey ,1);
+		} else {
+			rc = updateDocValue_int(docid,kkey, 0);
+		}
+	}
 
   else 
     rc = updateDocValue(docid, kkey, vvalue);
