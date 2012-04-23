@@ -134,9 +134,9 @@ void fcopy(char *fnsource, char *fntarget) {
       while((ch = getc(fpin)) != EOF) {
         putc(ch, fpout);
       }
-      fclose(fpin);
+      fclose(fpout);
     }
-    fclose(fpout);
+    fclose(fpin);
   }
 
 }
