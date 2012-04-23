@@ -170,7 +170,6 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
     }
 
     if(0 == strcmp(key, "uploadfile")) {
-      FILE *fp;
       int fd;
       char *filename = o_printf("/tmp/%s.dat", data_struct->data);
       struct stat fstat;

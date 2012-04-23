@@ -663,9 +663,10 @@ char *internalDoScanningOperation(char *uuid) {
   char *total_requested_pages_s;
   char *devName;
   char *outFilename;
-  char *tmpFile;
+  /*char *tmpFile;
   FILE *scanOutFile;
   size_t size;
+  placeholders for possible 'exec' of OCR */
 
   o_log(DEBUGM, "doScanningOperation: sane initialized uuid(%s)",(char *)uuid);
   // Open the device
