@@ -249,6 +249,7 @@ static int checkUpdateKey(char *val) {
   if( val == NULL ) return 1;
   if ( 0 != strcmp(val, "title") 
     && 0 != strcmp(val, "isActionRequired") 
+    && 0 != strcmp(val, "hardcopyKept") 
     && 0 != strcmp(val, "ocrtext") 
     && 0 != strcmp(val, "docDate") ) {
     o_log(ERROR, "trying to update an invalid doc field: %s.", val);
