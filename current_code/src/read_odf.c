@@ -32,14 +32,6 @@
 #include "debug.h"
 
 
-struct mydata {
-  char *name;
-  int fd;
-  char buff[10240];
-};
-
-
-
 void xmlAllNodeGetContent(xmlNode *parent, char **str) {
 
   xmlNode *node = parent->children; //childs;
@@ -99,74 +91,6 @@ size_t getEntry(const char *name, char *contentFile, char **ptr) {
 
   return size;
 }
-
-
-ssize_t myread(struct archive *a, void *client_data, const void **buff) {
-  struct mydata *mydata = client_data;
-
-  *buff = mydata->buff;
-  return (read(mydata->fd, mydata->buff, 10240));
-}
-
-int myopen(struct archive *a, void *client_data) {
-  struct mydata *mydata = client_data;
-
-  mydata->fd = open(mydata->name, O_RDONLY);
-  return (mydata->fd >= 0 ? ARCHIVE_OK : ARCHIVE_FATAL);
-}
-
-int myclose(struct archive *a, void *client_data) {
-  struct mydata *mydata = client_data;
-
-  if (mydata->fd > 0)
-  close(mydata->fd);
-  return (ARCHIVE_OK);
-}
-
-size_t LIBARCHIVEgetEntry(char *name, char *contentFile, char **ptr) {
-  struct mydata *mydata;
-  struct archive *a;
-  struct archive_entry *entry;
-  char *buf;
-  size_t size = 0;
-
-  mydata = (struct mydata*)malloc(sizeof(struct mydata));
-  a = archive_read_new();
-  mydata->name = name;
-  archive_read_support_format_all(a);
-  archive_read_support_compression_all(a);
-  if (archive_read_open(a, mydata, myopen, myread, myclose) == ARCHIVE_FATAL) {
-    fprintf(stderr, "failed to open %s\n", mydata->name);
-    free(mydata->name);
-    free(mydata);
-    return 0;
-  }
-
-  while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
-    if( 0 == strcmp(archive_entry_pathname(entry), contentFile)) {
-      o_log(DEBUGM, "%s", (char *)archive_compression_name(a));
-      o_log(DEBUGM, "%s", (char *)archive_format_name(a));
-      o_log(DEBUGM, "%s", (char *)archive_entry_pathname(entry));
-      size = archive_entry_size(entry);
-      if(size <= 0)
-        o_log(DEBUGM, "zero size");
-      if ((buf = (char *)malloc(size+1)) == NULL)
-        o_log(ERROR, "cannot allocate memory");
-      if ((size_t)archive_read_data(a, buf, size) != size)
-        o_log(DEBUGM, "cannot read data");
-      buf[size] = '\0';
-      *ptr = buf;
-    }
-    else
-      archive_read_data_skip(a);
-  }
-
-  archive_read_close(a);
-  archive_read_finish(a);
-  free(mydata);
-  return size;
-}
-
 
 char *get_odf_Text (const char *filename) {
 
