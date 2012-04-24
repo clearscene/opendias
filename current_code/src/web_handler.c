@@ -188,8 +188,7 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
         o_log(ERROR, "could not open http post binary data file for output");
       else {
         lseek(fd,0,SEEK_END);
-        size_t written;
-        if ( (written=write(fd,data,size)) == -1 ) {
+        if ( write(fd,data,size) <= 0 ) {
           o_log(ERROR,"uploadfile iterate_postdata: write to %s failed",filename);
         }
         close(fd);
