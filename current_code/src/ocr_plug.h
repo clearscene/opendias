@@ -19,13 +19,17 @@
 #ifndef OCR_PLUG
 #define OCR_PLUG
 
+#include <leptonica/allheaders.h>
+
 struct scanCallInfo {
   const char* language;
-  const unsigned char* imagedata;
+  const unsigned char *imagedata;
+  PIX *image_pix;
   int bytes_per_pixel;
   int bytes_per_line;
   int width;
   int height;
+  int ppi;
   char *ret;
 };
 

@@ -24,6 +24,7 @@
 #include <math.h>       // for fmod
 
 #ifdef CAN_SCAN
+#include <leptonica/allheaders.h>
 #include <FreeImage.h>  // 
 #include <sane/sane.h>  // Scanner Interface
 #include <sane/saneopts.h>  // Scanner Interface
@@ -436,6 +437,8 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
   int readItteration = 0;
   size_t readSoFar = strlen(header);
 
+*buff_requested_len = bpl;
+
   // Initialise the initial buffer and blank image;
   o_log(DEBUGM, "Using a buff_requested_len of %d to collect a total of %d", *buff_requested_len, totbytes);
   raw_image = (unsigned char *)malloc( totbytes + readSoFar );
@@ -443,6 +446,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
     o_log(ERROR, "Out of memory, when assiging the new image storage.");
     return NULL;
   }
+
   // Initialise the image to black.
   for (counter = readSoFar ; (size_t)counter < totbytes+readSoFar ; counter++) raw_image[counter]=125;
   strcpy((char *)raw_image, header);
@@ -552,10 +556,10 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
     if( *buff_requested_len == received_length_from_sane ) {
 
       // Try and increase the buffer size
-      proposed_buffer_length_change = 10 * bpl / readItteration;
+      proposed_buffer_length_change = bpl; //10 * bpl / readItteration;
 
       // Don't trifel us with small increases      
-      if( proposed_buffer_length_change > 300 ) {
+      //if( proposed_buffer_length_change > 300 ) {
         *buff_requested_len += proposed_buffer_length_change;
         tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
         if( tmp_buffer == NULL ) {
@@ -567,13 +571,13 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
           buffer = tmp_buffer;
           o_log(DEBUGM, "Increasing read buffer to %d bytes.", *buff_requested_len);
         }
-      }
+      //}
     }
-
+/*
     // We received less than we asked for (but we did receive something)
     else if ( received_length_from_sane > 0 ) {
-      proposed_buffer_length_change = ( *buff_requested_len - received_length_from_sane ) / readItteration;
-      if( proposed_buffer_length_change > 100 ) {
+      proposed_buffer_length_change = bpl; //( *buff_requested_len - received_length_from_sane ) / readItteration;
+      //if( proposed_buffer_length_change > 100 ) {
         *buff_requested_len -= proposed_buffer_length_change;
         tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
         if( tmp_buffer == NULL ) {
@@ -585,9 +589,9 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
           buffer = tmp_buffer;
           o_log(DEBUGM, "Decreasing read buffer to %d bytes.", *buff_requested_len);
         }
-      }
+      //}
     }
-
+*/
   } while (1);
   o_log(DEBUGM, "scan_read - end");
 
@@ -596,7 +600,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
   return raw_image;
 }
 
-void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int request_resolution, SANE_Parameters pars, double totbytes ) {
+void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int request_resolution, SANE_Parameters pars, double totbytes, PIX *pix ) {
   char *ocrText;
   char *ocrLang;
 #ifdef CAN_SCAN
@@ -625,7 +629,13 @@ void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int reques
 
       // Even if we have a scanner with three frames, we've already condenced
       // that down to grey-scale (1 bpp) - hense the hard coded 1
-      ocrScanText = getTextFromImage((const unsigned char*)raw_image, pars.pixels_per_line, pars.pixels_per_line, pars.lines, ocrLang);
+#ifdef OCR_OLD
+      ocrScanText = getTextFromImage((const unsigned char*)raw_image, pars.pixels_per_line, pars.pixels_per_line, pars.lines, ocrLang, NULL, 0);
+#else
+      //char *filename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, page);
+      ocrScanText = getTextFromImage(NULL, pars.pixels_per_line, pars.pixels_per_line, pars.lines, ocrLang, pix, request_resolution);
+      //free(filename);
+#endif // OCR_OLD //
 
       ocrText = o_printf("---------------- page %d ----------------\n%s\n", page, ocrScanText);
       free(ocrScanText);
@@ -786,22 +796,31 @@ char *internalDoScanningOperation(char *uuid) {
   // Convert Raw into JPEG
   //
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 0);
-  FreeImage_Initialise(TRUE);
-  FIMEMORY *hmem = FreeImage_OpenMemory(raw_image, (pars.pixels_per_line*pars.lines)+strlen(header));
-  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
-  o_log(INFORMATION, "Convertion process: Initalised");
+  PIX *pix;
+  if ( ( pix = pixReadMem( raw_image, (pars.pixels_per_line*pars.lines)+strlen(header) ) ) == NULL) {
+    o_log(ERROR, "Could not load the image data into a PIX");
+  }
+  o_log(INFORMATION, "Image depth is %d", pixGetDepth(pix) );
 
-  FIBITMAP *src = FreeImage_LoadFromMemory(FIF_PGMRAW, hmem, BMP_DEFAULT);
-  FreeImage_CloseMemory(hmem);
-  //free(raw_image);
+  //FreeImage_Initialise(TRUE);
+  //FIMEMORY *hmem = FreeImage_OpenMemory(raw_image, (pars.pixels_per_line*pars.lines)+strlen(header));
+  //updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
+  //o_log(INFORMATION, "Convertion process: Initalised");
+
+  //FIBITMAP *src = FreeImage_LoadFromMemory(FIF_PGMRAW, hmem, BMP_DEFAULT);
+  //FreeImage_CloseMemory(hmem);
+  ////free(raw_image);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 55);
   o_log(INFORMATION, "Convertion process: Loaded");
- 
+
   outFilename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, current_page);
-  FreeImage_Save(FIF_JPEG, src, outFilename, 95);
+  pixWriteJpeg(outFilename, pix, 95, 0);
+  pixWrite(outFilename, pix, IFF_JFIF_JPEG);
+
+  //FreeImage_Save(FIF_JPEG, src, outFilename, 95);
   free(outFilename);
-  FreeImage_Unload(src);
-  FreeImage_DeInitialise();
+  //FreeImage_Unload(src);
+  //FreeImage_DeInitialise();
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   o_log(INFORMATION, "Conversion process: Complete");
 
@@ -810,7 +829,7 @@ char *internalDoScanningOperation(char *uuid) {
 
   // Do OCR - on this page
   // - OCR libs just wants the raw data and not the image header
-  ocrImage( uuid, docid, raw_image+strlen(header), current_page, request_resolution, pars, totbytes );
+  ocrImage( uuid, docid, raw_image+strlen(header), current_page, request_resolution, pars, totbytes, pix );
   free(raw_image);
   free(header);
 

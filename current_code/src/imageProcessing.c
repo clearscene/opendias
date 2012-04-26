@@ -26,6 +26,7 @@
 #endif // CAN_OCR //
 #ifdef CAN_SCAN
 #include <FreeImage.h>
+#include <leptonica/allheaders.h>
 #include "imageProcessing.h"
 
 /*
@@ -75,7 +76,7 @@ void reformatImage(FREE_IMAGE_FORMAT fromFormat, char *fromFilename, FREE_IMAGE_
 #endif // CAN_SCAN //
 
 
-char *getTextFromImage(const unsigned char *pic, int bpl, int ppl, int lines, char *lang) {
+char *getTextFromImage(const unsigned char *pic, int bpl, int ppl, int lines, char *lang, PIX *pix, int ppi) {
 
   char *txt = NULL;
 
@@ -83,9 +84,11 @@ char *getTextFromImage(const unsigned char *pic, int bpl, int ppl, int lines, ch
   struct scanCallInfo infoData;
   infoData.language = (const char*)lang;
   infoData.imagedata = (const unsigned char*)pic;
+  infoData.image_pix = pix;
   infoData.bytes_per_pixel = 1;
   infoData.bytes_per_line = bpl;
   infoData.width = ppl;
+  infoData.ppi = ppi;
   infoData.height = lines;
 
   o_log(DEBUGM, "Just about to extract the text form the image. Expecting to read in the '%s' language", lang);
