@@ -62,22 +62,25 @@ AC_ENABLE([thread_join],[
 ])
 
 
+imageprocessing="no"
+AC_CHECK_LIB(lept, main, 
+	[AC_CHECK_HEADER(/usr/include/leptonica/allheaders.h,
+                imageprocessing=yes,
+        	AC_MSG_WARN(You are missing the development headers for the leptonica libs))], 
+	AC_MSG_WARN(You are missing the leptonica libs) )
 
-imagehandling="no"
-AC_CHECK_LIB(freeimage, FreeImage_Load, 
-	[AC_CHECK_HEADER(FreeImage.h,
-        	imagehandling=yes,
-        	AC_MSG_WARN(You are missing the development headers for the freeimage libs))], 
-	AC_MSG_WARN(You are missing the freeimage libs) )
+
 scanning="no"
 AC_CHECK_LIB(sane, main, 
 	[AC_CHECK_HEADER(sane/sane.h,
         	scanning=yes,
         	AC_MSG_WARN(You are missing the development headers for the sane libs))], 
 	AC_MSG_WARN(You are missing the sane libs) )
-if test "x$scanning" = "xyes" && test "x$imagehandling" = "xyes" ; then
+
+
+if test "x$scanning" = "xyes" && test "x$imageprocessing" = "xyes" ; then
 	AC_DEFINE([CAN_SCAN],[],[Have everything that is needed for scanning documents])
-	OPENDIAS_LIBS="$OPENDIAS_LIBS -lsane -lfreeimage "
+	OPENDIAS_LIBS="$OPENDIAS_LIBS -lsane -llept "
 else
 	AC_MSG_WARN(You wll not be able to scan in any document.)
 fi
@@ -85,68 +88,17 @@ fi
 
 
 dnl Would have liked to use AC_CHECK_HEADER, but the checking does not recognise the C++ nature of this header! 
-tesseractage="old"
-tesseract="no"
-AC_CHECK_LIB(tesseract_full, main,
-	[AC_CHECK_FILE(/usr/include/tesseract/baseapi.h,
-        	tesseract=yes
-        	tesseractage=old,
-        	AC_MSG_WARN(You are missing the development headers for the tesseract libs))],
+ocr="no"
 AC_CHECK_LIB(tesseract, main,
 	[AC_CHECK_FILE(/usr/include/tesseract/baseapi.h,
-        	tesseract=yes
-		tesseractage=new,
-        	AC_MSG_WARN(You are missing the development headers for the tesseract libs))],
-	AC_MSG_WARN(You are missing the tesseract libs)
-		)  
-	) 
+        	ocr=yes,
+        	AC_MSG_WARN(You are missing the development headers for the tesseract v3 libs))],
+	AC_MSG_WARN(You are missing the tesseract v3 libs) )  
 
-dnl What supporting libs does tesseract need? (tiff for v2; leptonica for v3)
-leptonica="no"
-tiff="no"
-if test "x$tesseractage" = "xnew" ; then
-tiff="na"
-AC_CHECK_LIB(lept, main, 
-	[AC_CHECK_HEADER(/usr/include/leptonica/allheaders.h,
-                leptonica=yes,
-        	AC_MSG_WARN(You are missing the development headers for the leptonica libs))], 
-	AC_MSG_WARN(You are missing the leptonica libs) )
-else
-leptonica="na"
-AC_CHECK_LIB(tiff, TIFFOpen, 
-	[AC_CHECK_HEADER(tiff.h,
-        	tiff=yes,
-        	AC_MSG_WARN(You are missing the development headers for the tiff libs))], 
-	AC_MSG_WARN(You are missing the tiff libs) )
 
-fi
-
-if test "x$tesseract" = "xyes" ; then
-
- if test "x$tesseractage" = "xnew" ; then
-
-  dnl New tesseract libs (v3)
-  if test "x$leptonica" = "xyes" ; then
-   AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
-   OPENDIAS_LIBS="$OPENDIAS_LIBS -ltesseract -llept "
-  else
-   AC_MSG_WARN(You wll not be able to OCR any document.)
-  fi
-
- else 
-
-  dnl Old tesseract libs (v2)
-  AC_MSG_WARN(You are using the old API tesseract libs, support for these will be depricated soon.)
-  if test "x$tiff" = "xyes" ; then
-   AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
-   OPENDIAS_LIBS="$OPENDIAS_LIBS -ltesseract_full -ltiff "
-   AC_DEFINE([OCR_OLD],[],[OCR libs are old style])
-  else
-   AC_MSG_WARN(You wll not be able to OCR any document.)
-  fi
-
- fi
-
+if test "x$ocr" = "xyes" && test "x$imageprocessing" = "xyes" ; then
+ AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
+ OPENDIAS_LIBS="$OPENDIAS_LIBS -ltesseract -llept "
 else
  AC_MSG_WARN(You wll not be able to OCR any document.)
 fi

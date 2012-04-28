@@ -39,14 +39,9 @@
 #endif
 
 struct scanCallInfo {
-    const char* language;
-    const unsigned char* imagedata;
     PIX *image_pix;
-    int bytes_per_pixel;
-    int bytes_per_line;
-    int width;
-    int height;
     int ppi;
+    const char* language;
     char *ret;
 };
 
@@ -66,48 +61,6 @@ void signal_handler(int sig) {
 */
 
 extern "C" void runocr(struct scanCallInfo *info) {
-/*
-
-int main() {
-        // [1]
-        tesseract::TessBaseAPI *myOCR = 
-                new tesseract::TessBaseAPI();
-
-
-        // [2]
-        printf(“Tesseract-ocr version: %s\n”,
-               myOCR->Version());
-        printf(“Leptonica version: %s\n”,
-               getLeptonicaVersion());
-
-        // [3]
-        if (myOCR->Init(NULL, “eng”)) {
-          fprintf(stderr, “Could not initialize tesseract.\n”);
-          exit(1);
-        }
-
-        // [4]
-        Pix *pix = pixRead(“phototest.tif”);
-        myOCR->SetImage(pix);
-
-        // [5]
-        char* outText = myOCR->GetUTF8Text();
-        printf(“OCR output:\n\n”);
-        printf(outText);
-
-        // [6]
-        myOCR->Clear();
-        myOCR->End();
-        delete [] outText;
-        pixDestroy(&pix);
-        return 0;
-}
-
-g++ test_simple.cpp -o test_simple \
-  -I/usr/include/leptonica \
-  -I/usr/local/include/tesseract \
-  -llept -ltesseract
-*/
 
     char *ret;
     sigset_t newSigSet;
@@ -115,30 +68,18 @@ g++ test_simple.cpp -o test_simple \
 
     // Language is the code of the language for which the data will be loaded.
     // (Codes follow ISO 639-2.) If it is NULL, english (eng) will be loaded.
-#ifdef OCR_OLD
-    TessBaseAPI *tessObject = new TessBaseAPI();
-    tessObject->InitWithLanguage("/usr/share/tesseract-ocr/tessdata", NULL, info->language, NULL, false, 0, NULL);
-    ret = tessObject->TesseractRect(info->imagedata, info->bytes_per_pixel, info->bytes_per_line,
-                                        2, 2, info->width -2, info->height -2);
-    info->ret = strdup(ret);
-
-    tessObject->ClearAdaptiveClassifier();
-    tessObject->End();
-#else 
     tesseract::TessBaseAPI *tessObject = new tesseract::TessBaseAPI();
     o_log(DEBUGM, "Tesseract-ocr version: %s", tessObject->Version() );
     o_log(DEBUGM, "Leptonica version: %s", getLeptonicaVersion() );
 
-    if ( tessObject->Init( "/usr/share/tesseract-ocr/tessdata", info->language, tesseract::OEM_TESSERACT_ONLY ) ) {
+    if ( tessObject->Init( "/usr/share/tesseract-ocr/tessdata", info->language ) ) {
       o_log(ERROR, "Could not initialize tesseract.");
       tessObject->End();
       return;
     }
     o_log(DEBUGM, "Initalised language was: %s", tessObject->GetInitLanguagesAsString() );
 
-    //Pix *pix = pixRead( info->image_filename );
     tessObject->SetImage( info->image_pix );
-    //tessObject->SetImage( info->imagedata, info->width, info->height, info->bytes_per_pixel, info->bytes_per_line );
     tessObject->SetSourceResolution( info->ppi );
 
     ret = tessObject->GetUTF8Text();
@@ -147,7 +88,6 @@ g++ test_simple.cpp -o test_simple \
     tessObject->Clear();
     tessObject->End();
     //pixDestroy(&pix);
-#endif // OCR_OLD //
 
     delete [] ret;
 

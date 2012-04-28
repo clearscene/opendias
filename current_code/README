@@ -36,10 +36,11 @@ openDias - Document Imaging Archive System
 
   2.2.1 For scanning
     sane
-    freeimage
+    leptonica
 
   2.2.2 For OCR
     tesseract-ocr
+    leptonica
 
   2.2.3 For ODF import
     xml2
@@ -52,8 +53,8 @@ openDias - Document Imaging Archive System
 On, Debian or Ubuntu, you can do this by running:
 
   sudo apt-get install build-essential libsqlite3-dev libsane-dev \
-    libmicrohttpd-dev uuid-dev libfreeimage-dev \
-    tesseract-ocr-dev libxml2-dev libzzip-dev libarchive-dev
+    libmicrohttpd-dev uuid-dev libleptonica-dev \
+    libtesseract-dev libxml2-dev libzzip-dev libarchive-dev
 
 On, RedHat or Fedora, you can do this by running:
 

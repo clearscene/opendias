@@ -600,7 +600,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
   return raw_image;
 }
 
-void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int request_resolution, SANE_Parameters pars, double totbytes, PIX *pix ) {
+void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix ) {
   char *ocrText;
   char *ocrLang;
 #ifdef CAN_SCAN
@@ -612,30 +612,13 @@ void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int reques
   if(ocrLang && 0 != strcmp(ocrLang, "-") ) {
 
     if(request_resolution >= 300 && request_resolution <= 400) {
-      int counter;
 
       o_log(INFORMATION, "Attempting OCR in lang of %s", ocrLang);
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
-      // sharpen the image
-      for (counter = 0 ; (size_t)counter < totbytes ; counter++) {
-        if( raw_image[counter] > 100 ) {
-          raw_image[counter] = 255;
-        }
-        else {
-          raw_image[counter] = 0;
-        }
-      }
-
       // Even if we have a scanner with three frames, we've already condenced
       // that down to grey-scale (1 bpp) - hense the hard coded 1
-#ifdef OCR_OLD
-      ocrScanText = getTextFromImage((const unsigned char*)raw_image, pars.pixels_per_line, pars.pixels_per_line, pars.lines, ocrLang, NULL, 0);
-#else
-      //char *filename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, page);
-      ocrScanText = getTextFromImage(NULL, pars.pixels_per_line, pars.pixels_per_line, pars.lines, ocrLang, pix, request_resolution);
-      //free(filename);
-#endif // OCR_OLD //
+      ocrScanText = getTextFromImage(pix, request_resolution, ocrLang);
 
       ocrText = o_printf("---------------- page %d ----------------\n%s\n", page, ocrScanText);
       free(ocrScanText);
@@ -771,7 +754,7 @@ char *internalDoScanningOperation(char *uuid) {
   totbytes = (double)((pars.bytes_per_line * pars.lines) / expectFrames);
 
   if( buff_requested_len <= 1 )
-    buff_requested_len = 3 * pars.bytes_per_line * pars.depth;
+    buff_requested_len = 30 * pars.bytes_per_line * pars.depth;
 
   char *header = o_printf ("P5\n# SANE data follows\n%d %d\n%d\n", 
     pars.pixels_per_line, pars.lines,
@@ -790,7 +773,7 @@ char *internalDoScanningOperation(char *uuid) {
 
   /*
    *
-   * Change this whole section for the method call in imageProcessing::reformatImage
+   * Change this whole section for the method call in imageProcessing
    *
    */
   // Convert Raw into JPEG
@@ -800,27 +783,15 @@ char *internalDoScanningOperation(char *uuid) {
   if ( ( pix = pixReadMem( raw_image, (pars.pixels_per_line*pars.lines)+strlen(header) ) ) == NULL) {
     o_log(ERROR, "Could not load the image data into a PIX");
   }
-  o_log(INFORMATION, "Image depth is %d", pixGetDepth(pix) );
-
-  //FreeImage_Initialise(TRUE);
-  //FIMEMORY *hmem = FreeImage_OpenMemory(raw_image, (pars.pixels_per_line*pars.lines)+strlen(header));
-  //updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
-  //o_log(INFORMATION, "Convertion process: Initalised");
-
-  //FIBITMAP *src = FreeImage_LoadFromMemory(FIF_PGMRAW, hmem, BMP_DEFAULT);
-  //FreeImage_CloseMemory(hmem);
-  ////free(raw_image);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 55);
-  o_log(INFORMATION, "Convertion process: Loaded");
+  o_log(INFORMATION, "Convertion process: Loaded (depth: %d)", pixGetDepth(pix));
+  free(raw_image);
+  free(header);
 
   outFilename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, current_page);
-  pixWriteJpeg(outFilename, pix, 95, 0);
+  //pixWriteJpeg(outFilename, pix, 95, 0);
   pixWrite(outFilename, pix, IFF_JFIF_JPEG);
-
-  //FreeImage_Save(FIF_JPEG, src, outFilename, 95);
   free(outFilename);
-  //FreeImage_Unload(src);
-  //FreeImage_DeInitialise();
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   o_log(INFORMATION, "Conversion process: Complete");
 
@@ -829,10 +800,10 @@ char *internalDoScanningOperation(char *uuid) {
 
   // Do OCR - on this page
   // - OCR libs just wants the raw data and not the image header
-  ocrImage( uuid, docid, raw_image+strlen(header), current_page, request_resolution, pars, totbytes, pix );
-  free(raw_image);
-  free(header);
-
+  ocrImage( uuid, docid, current_page, request_resolution, pix );
+  //free(raw_image);
+  //free(header);
+  pixDestroy( &pix );
 
 
 
