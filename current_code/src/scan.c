@@ -112,9 +112,6 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
           *request_resolution = atoi(request_resolution_s);
           free(request_resolution_s);
 
-          if( (sod->constraint_type == SANE_CONSTRAINT_RANGE) && (sod->constraint.range->quant != 0) ) 
-            *buff_requested_len = sod->constraint.range->quant; // q seam to be a good buffer size to use!
-
           if (sod->type == SANE_TYPE_FIXED) {
             v_f = SANE_FIX( *request_resolution );
             status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
@@ -454,6 +451,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
     return NULL;
   }
 
+  o_log(DEBUGM, "setting non-blocking mode was %s", sane_strstatus( sane_set_io_mode (openDeviceHandle, SANE_TRUE) ) );
   o_log(DEBUGM, "scan_read - start");
   do {
     // Set status as 'scanning'
@@ -530,7 +528,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
 
       // Update the progress info
       progress = (int)((readSoFar*100) / totbytes);
-      o_log(DEBUGM, "readSoFar = %d, totalbytes = %d, progress = %d", readSoFar, totbytes, progress);
+      //o_log(DEBUGM, "readSoFar = %d, totalbytes = %d, progress = %d", readSoFar, totbytes, progress);
       if(progress > 100)
         progress = 100;
 
@@ -551,40 +549,31 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
     // smooth the physical reading mechanisum
     if( *buff_requested_len == received_length_from_sane ) {
 
-      // Try and increase the buffer size
-      proposed_buffer_length_change = 10 * bpl / readItteration;
-
-      // Don't trifel us with small increases      
-      if( proposed_buffer_length_change > 300 ) {
-        *buff_requested_len += proposed_buffer_length_change;
-        tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
-        if( tmp_buffer == NULL ) {
-          free(buffer);
-          o_log(ERROR, "Out of memory, when assiging new scan reading buffer.");
-          break;
-        }
-        else {
-          buffer = tmp_buffer;
-          o_log(DEBUGM, "Increasing read buffer to %d bytes.", *buff_requested_len);
-        }
+      *buff_requested_len += bpl;
+      tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
+      if( tmp_buffer == NULL ) {
+        free(buffer);
+        o_log(ERROR, "Out of memory, when assiging new scan reading buffer.");
+        break;
+      }
+      else {
+        buffer = tmp_buffer;
+        o_log(DEBUGM, "Increasing read buffer to %d bytes.", *buff_requested_len);
       }
     }
 
     // We received less than we asked for (but we did receive something)
     else if ( received_length_from_sane > 0 ) {
-      proposed_buffer_length_change = ( *buff_requested_len - received_length_from_sane ) / readItteration;
-      if( proposed_buffer_length_change > 100 ) {
-        *buff_requested_len -= proposed_buffer_length_change;
-        tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
-        if( tmp_buffer == NULL ) {
-          free(buffer);
-          o_log(ERROR, "Out of memory, when assiging new scan reading buffer.");
-          break;
-        }
-        else {
-          buffer = tmp_buffer;
-          o_log(DEBUGM, "Decreasing read buffer to %d bytes.", *buff_requested_len);
-        }
+      *buff_requested_len -= bpl;
+      tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
+      if( tmp_buffer == NULL ) {
+        free(buffer);
+        o_log(ERROR, "Out of memory, when assiging new scan reading buffer.");
+        break;
+      }
+      else {
+        buffer = tmp_buffer;
+        o_log(DEBUGM, "Decreasing read buffer to %d bytes.", *buff_requested_len);
       }
     }
 
@@ -761,7 +750,7 @@ char *internalDoScanningOperation(char *uuid) {
   totbytes = (double)((pars.bytes_per_line * pars.lines) / expectFrames);
 
   if( buff_requested_len <= 1 )
-    buff_requested_len = 3 * pars.bytes_per_line * pars.depth;
+    buff_requested_len = totbytes; //30 * pars.bytes_per_line * pars.depth;
 
   char *header = o_printf ("P5\n# SANE data follows\n%d %d\n%d\n", 
     pars.pixels_per_line, pars.lines,

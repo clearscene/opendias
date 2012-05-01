@@ -26,7 +26,7 @@
 #include <string.h>
 #include <signal.h>
 
-#include "debug.h"
+//#include "debug.h"
 #include "main.h"
 
 #ifndef NULL
@@ -79,6 +79,7 @@ extern "C" void runocr(struct scanCallInfo *info) {
 #endif // OCR_OLD //
 
     ret = tessObject->TesseractRect(info->imagedata, info->bytes_per_pixel, info->bytes_per_line,
+
                                         2, 2, info->width -2, info->height -2);
     info->ret = strdup(ret);
 

@@ -26,6 +26,9 @@
 #ifdef CAN_READODF
 #include "read_odf.h"
 #endif // CAN_READODF //
+#ifdef CAN_PDF
+#include "pdf_plug.h"
+#endif // CAN_PDF //
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -37,30 +40,28 @@
 char *uploadfile(char *filename, char *ftype) {
 
   int itype = PLACE_HOLDER;
-  char *docid, *to_name, *tmp, *ocrText = NULL;
+  char *to_name, *tmp, *ocrText = NULL;
+  const char *docid;
 
   // Save Record
   o_log(DEBUGM, "Saving doc import record");
 
+
+  // --------------------------------------
   if(0==strcmp("PDF", ftype)) {
-    int s;
     itype = PDF_FILETYPE;
 
-    // REPLACE ME WITH SOME LIB METHOD TO DO THE SAME
-    // 
-    tmp = o_printf("/usr/bin/pdftotext /tmp/%s.dat /tmp/%s.txt", filename, filename);
-    s = system(tmp);
+    tmp = o_printf("/tmp/%s.dat", filename);
+    get_image_from_pdf( tmp );
+    ocrText = get_text_from_pdf( tmp );
     free(tmp);
-    // 
 
-    tmp = o_printf("/tmp/%s.txt", filename);
-    if( ( s != 0 ) || ( 0 == load_file_to_memory(tmp, &ocrText) ) )
-      ocrText = o_strdup("--unable to read the PDF file--");
-    free(tmp);
-    replace(ocrText, "\f", ".");
-
-    // --------------------------------------
+    if( ocrText == NULL ) {
+      ocrText = o_strdup("fdsdfsdfsdf");
+    }
   }
+
+  // --------------------------------------
   else if(0==strcmp("ODF", ftype)) {
     itype = ODF_FILETYPE;
     tmp = o_printf("/tmp/%s.dat", filename);
@@ -71,6 +72,8 @@ char *uploadfile(char *filename, char *ftype) {
       ocrText = o_strdup("--text could not be extracted--");
     free(tmp);
   }
+
+  // --------------------------------------
   else if(0==strcmp("jpg", ftype)) {
     itype = JPG_FILETYPE;
 //    char *pic = NULL;
@@ -78,6 +81,7 @@ char *uploadfile(char *filename, char *ftype) {
     ocrText = o_strdup("--text not extracted--");
   }
 
+  // --------------------------------------
   if(itype == PLACE_HOLDER) {
     o_log(ERROR, "unknown file type.");
     return NULL;

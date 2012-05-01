@@ -1,13 +1,13 @@
 /*
- * debug.h
+ * ocr_plug.h
  * Copyright (C) Clearscene Ltd 2008 <wbooth@essentialcollections.co.uk>
  * 
- * debug.h is free software: you can redistribute it and/or modify it
+ * ocr_plug.h is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
- * debug.h is distributed in the hope that it will be useful, but
+ * ocr_plug.h is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
@@ -16,37 +16,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DEBUG
-#define DEBUG
+#ifndef PDF_PLUG
+#define PDF_PLUG
 
-#include <stdarg.h>
+#ifdef CAN_PDF
 
+extern void get_image_from_pdf(char *);
+extern const char *get_text_from_pdf(char *);
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#endif // CAN_PDF //
 
-
-enum {
-  SILENT = 0,
-  ERROR,
-  WARNING,
-  INFORMATION,
-  DEBUGM,
-  SQLDEBUG
-};
-
-/*
- * a VERBOSITY setting of INFORMATION, will throw 'information, warning, error'
- */
-int VERBOSITY;
-char *LOG_DIR;
-
-void o_log(const int, const char *, ...);
-
-#ifdef __cplusplus
-}
-#endif
-
-
-#endif /* DEBUG */
+#endif // PDF_PLUG //

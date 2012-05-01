@@ -48,7 +48,7 @@ AC_TYPE_UINT64_T
 
 
 
-PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid])
+PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid poppler-cpp])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
@@ -150,9 +150,24 @@ if test "x$xml" = "xyes" && test "x$zzip" = "xyes" && test "x$archive" = "xyes" 
 	AC_DEFINE([CAN_READODF],[],[Have everything that is needed to read ODF documents])
 	OPENDIAS_LIBS="$OPENDIAS_LIBS -larchive -lxml2 -lzzip "
 else
-	AC_MSG_WARN(You wll not be able to import any ODF document.)
+	AC_MSG_WARN(You wll not be able to import any ODF documents.)
 fi
 
+
+
+dnl pdf="no"
+dnl AC_CHECK_LIB(poppler-cpp, main, 
+dnl 	[AC_CHECK_HEADER(poppler/cpp/poppler-document.h,
+dnl           pdf=yes,
+dnl         	AC_MSG_WARN(You are missing the development headers for the poppler libs))], 
+dnl 	AC_MSG_WARN(You are missing the poppler libs) )
+dnl if test "x$pdf" = "xyes"; then
+	AC_DEFINE([CAN_PDF],[],[Have everything that is needed to import PDF documents])
+dnl   OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS -I/usr/include/poppler "
+dnl 	OPENDIAS_LIBS="$OPENDIAS_LIBS -lpoppler-cpp "
+dnl else
+dnl 	AC_MSG_WARN(You wll not be able to import any PDF documents.)
+dnl fi
 
 OPENDIAS_LIBS="$OPENDIAS_LIBS -lpthread "
 
