@@ -427,14 +427,11 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
   SANE_Byte *buffer;
   SANE_Byte *raw_image;
   int progress = 0;
-  int proposed_buffer_length_change = 0;
   int noMoreReads = 0;
   int counter;
   int onlyReadxFromBlockofThree = 0;
   int readItteration = 0;
   size_t readSoFar = strlen(header);
-
-*buff_requested_len = bpl;
 
   // Initialise the initial buffer and blank image;
   o_log(DEBUGM, "Using a buff_requested_len of %d to collect a total of %d", *buff_requested_len, totbytes);
