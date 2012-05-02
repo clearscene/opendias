@@ -22,23 +22,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-/*#include <poppler-config.h>
-#include <goo/gmem.h> /////////////////////
-#include <goo/GooString.h>
-#include <GlobalParams.h> ////////////////////////
-#include <Object.h> /////////////////////////
-#include <PDFDoc.h>
-#include <PDFDocFactory.h>
-#include <splash/SplashBitmap.h> //////////////////
-#include <splash/Splash.h>
-#include <SplashOutputDev.h>
-*/
-
 #include <poppler-document.h>
 #include <poppler-image.h>
 #include <poppler-page.h>
 #include <poppler-page-renderer.h>
-
 #include <cstdlib>
 #include <iostream>
 #include <memory>
@@ -50,7 +37,7 @@
 #define NULL 0L
 #endif
 
-extern "C" void get_image_from_pdf(char *pdf_filename, char *out_filename) {
+extern "C" void get_image_from_pdf(const char *pdf_filename, const char *out_filename) {
 
   if (!poppler::page_renderer::can_render()) {
     o_log(ERROR, "renderer compiled without Splash support");
@@ -93,7 +80,7 @@ extern "C" void get_image_from_pdf(char *pdf_filename, char *out_filename) {
 
 }
 
-extern "C" const char *get_text_from_pdf(char *pdf_filename) {
+extern "C" const char *get_text_from_pdf(const char *pdf_filename) {
 
   if (!poppler::page_renderer::can_render()) {
     o_log(ERROR, "renderer compiled without Splash support");
@@ -121,13 +108,11 @@ extern "C" const char *get_text_from_pdf(char *pdf_filename) {
     o_log(ERROR, "NULL page");
   }
  
-  //char *ocrText = reinterpret_cast<std::ustring>( p->text(p->page_rect(), poppler::page::physical_layout) ); 
   poppler::byte_array ocr_text_ba = p->text(p->page_rect(), poppler::page::physical_layout).to_utf8(); 
   ocr_text_ba.push_back(0);
   std::string ocr_text( ocr_text_ba.begin(), ocr_text_ba.end() );
-  o_log(ERROR, ocr_text.c_str() ); 
 
-  return ocr_text.c_str();
+  return strdup( ocr_text.c_str() );
 }
 
 #endif // CAN_PDF //

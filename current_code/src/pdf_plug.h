@@ -21,8 +21,8 @@
 
 #ifdef CAN_PDF
 
-extern void get_image_from_pdf(char *);
-extern const char *get_text_from_pdf(char *);
+extern void get_image_from_pdf(const char *, const char *);
+extern const char *get_text_from_pdf(const char *);
 
 #endif // CAN_PDF //
 

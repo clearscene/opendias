@@ -21,7 +21,7 @@
 #define READ_ODF
 
 char *get_odf_Text (const char *);
-void get_odf_Thumb (const char *);
+void get_odf_Thumb (const char *, const char *);
 
 #endif /* READ_ODF */
 #endif // CAN_READODF //

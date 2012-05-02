@@ -51,7 +51,7 @@ void xmlAllNodeGetContent(xmlNode *parent, char **str) {
 
 char *xmlToText(char *xml, size_t size) {
 
-  char *text="";
+  char *text = o_strdup("");
 
   xmlDocPtr doc = xmlParseMemory(xml, (int)size);
   xmlNodePtr root = xmlDocGetRootElement(doc);
@@ -68,9 +68,11 @@ size_t getEntry(const char *name, char *contentFile, char **ptr) {
   ZZIP_FILE *file;
   char *buf;
 
+  o_log(ERROR, "opening %s", name);
+
   dir = zzip_dir_open(name, 0);
   if (!dir) {
-    fprintf(stderr, "failed to open %s\n", name);
+    o_log(ERROR, "failed to open %s", name);
     return 0;
   }
 
@@ -94,7 +96,7 @@ size_t getEntry(const char *name, char *contentFile, char **ptr) {
 
 char *get_odf_Text (const char *filename) {
 
-  char *text="";
+  char *text = o_strdup("");
   char *xml;
   size_t size;
 
@@ -103,17 +105,18 @@ char *get_odf_Text (const char *filename) {
   if(size > 0)
     text = xmlToText(xml, size);
 
+  free(xml);
   return text;
 }
 
-void get_odf_Thumb (const char *filename) {
+void get_odf_Thumb (const char *filename, const char *outfile) {
 
   char *imageData;
   size_t size;
 
   size = getEntry(filename, "Thumbnails/thumbnail.png", &imageData);
   if(size > 0) {
-    int tmpFile = open("/tmp/tmpImg.png", O_CREAT|O_WRONLY, 775);
+    int tmpFile = open(outfile, O_CREAT|O_WRONLY, 775);
     if((ssize_t)size != write(tmpFile, imageData, size) )
       o_log(ERROR, "Could not write all data.");;
     close(tmpFile);
