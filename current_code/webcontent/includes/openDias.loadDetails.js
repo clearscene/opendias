@@ -52,10 +52,18 @@ $(document).ready(function() {
            else {
               $("#hardcopyKept").attr({checked: false});
            }
+
            //
            // Doc type display options.
            if( $(data).find('DocDetail').find('type').text() == "1" ) { // ODF Documents
-              $("#slider").append("<a href='/opendias/scans/"+officialDocId+".odt' target='_new'>Download ODF Document</a>");
+              $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage' " + 
+                                     "alt='' src='/opendias/scans/"+officialDocId+"_thumb.png' />" + 
+                                     "</div><button id='openImg'>Open ODF Document</button></li>");
+              $("#scanImage").css("width", "300px");
+              $("#openImg").bind('click', { docId: officialDocId }, 
+                                  function(e){ 
+                                      window.open("/opendias/scans/"+e.data.docId+".odt"); 
+                                  });
            }
 
            else if( $(data).find('DocDetail').find('type').text() == "2" || $(data).find('DocDetail').find('type').text() == "4") {
@@ -91,7 +99,14 @@ $(document).ready(function() {
            }
 
            else if( $(data).find('DocDetail').find('type').text() == "3" ) { // PDF Documents
-              $("#slider").append("<a href='/opendias/scans/"+officialDocId+".pdf' target='_new'>Download PDF Document</a>");
+              $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage' " + 
+                                     "alt='' src='/opendias/scans/"+officialDocId+"_thumb.jpg' />" + 
+                                     "</div><button id='openImg'>Open PDF Document</button></li>");
+              $("#scanImage").css("width", "300px");
+              $("#openImg").bind('click', { docId: officialDocId }, 
+                                  function(e){ 
+                                      window.open("/opendias/scans/"+e.data.docId+".pdf"); 
+                                  });
            }
 
            $("#docDate").datepicker( {dateFormat:"yy/mm/dd"} );
