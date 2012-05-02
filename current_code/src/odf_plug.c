@@ -1,13 +1,13 @@
  /*
- * read_odf.c
+ * odf_plug.c
  * Copyright (C) Clearscene Ltd 2008 <wbooth@essentialcollections.co.uk>
  * 
- * read_odf.c is free software: you can redistribute it and/or modify it
+ * odf_plug.c is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
- * read_odf.c is distributed in the hope that it will be useful, but
+ * odf_plug.c is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
@@ -27,7 +27,7 @@
 #include <fcntl.h>
 #include <libxml/parser.h>
 #include <zzip/lib.h>
-#include "read_odf.h"
+#include "odf_plug.h"
 #include "utils.h"
 #include "debug.h"
 

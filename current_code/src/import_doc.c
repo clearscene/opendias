@@ -28,7 +28,7 @@
 #include "utils.h"
 #include "debug.h"
 #ifdef CAN_READODF
-#include "read_odf.h"
+#include "odf_plug.h"
 #endif // CAN_READODF //
 #ifdef CAN_PDF
 #include "pdf_plug.h"
@@ -70,7 +70,7 @@ char *uploadfile(char *filename, char *ftype) {
 #ifdef CAN_READODF
     outfile = o_printf("/tmp/%s.thumb", filename);
     get_odf_Thumb( datafile, outfile );
-    ocrText = get_odf_Text( datafile ); // read_odf.c 
+    ocrText = get_odf_Text( datafile ); // odf_plug.c 
     free(outfile);
     thumbext = o_strdup("png");
 #endif // CAN_READODF //

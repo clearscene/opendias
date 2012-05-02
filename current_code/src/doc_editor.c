@@ -28,7 +28,7 @@
 #include "utils.h"
 #include "debug.h"
 #ifdef CAN_READODF
-#include "read_odf.h"
+#include "odf_plug.h"
 #endif // CAN_READODF //
 
 #include <sys/types.h>

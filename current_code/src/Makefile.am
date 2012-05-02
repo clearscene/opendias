@@ -51,8 +51,8 @@ opendias_SOURCES = \
 	utils.c    \
 	utils.h    \
 	main.c    \
-	read_odf.c    \
-	read_odf.h    \
+	odf_plug.c    \
+	odf_plug.h    \
 	dbaccess.c    \
 	dbaccess.h    \
 	imageProcessing.h    \
