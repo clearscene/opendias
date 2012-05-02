@@ -17,27 +17,27 @@
  */
 
 #include "config.h"
+
 #ifdef CAN_OCR
-//#include "ocr_plug.h"
 #include <tesseract/baseapi.h>
-#ifdef OCR_OLD
-#else
 #include <leptonica/allheaders.h>
 #include <sys/time.h>
-#endif
 #include <utils.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
 
-//#include "debug.h"
+#include "debug.h"
 #include "main.h"
+
+#include "ocr_plug.h"
 
 #ifndef NULL
 #define NULL 0L
 #endif
 
+/*
 struct scanCallInfo {
     PIX *image_pix;
     int ppi;
@@ -45,7 +45,6 @@ struct scanCallInfo {
     char *ret;
 };
 
-/*
 void signal_handler(int sig) {
     switch(sig) {
         case SIGUSR1:
@@ -63,8 +62,8 @@ void signal_handler(int sig) {
 extern "C" void runocr(struct scanCallInfo *info) {
 
     char *ret;
-    sigset_t newSigSet;
-    sigaddset(&newSigSet, SIGCHLD);  /* ignore child - i.e. we don't need to wait for it */
+    //sigset_t newSigSet;
+    //sigaddset(&newSigSet, SIGCHLD);  /* ignore child - i.e. we don't need to wait for it */
 
     // Language is the code of the language for which the data will be loaded.
     // (Codes follow ISO 639-2.) If it is NULL, english (eng) will be loaded.

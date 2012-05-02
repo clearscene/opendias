@@ -17,6 +17,7 @@
  */
 
 #include "config.h"
+
 #ifdef CAN_PDF
 #include <utils.h>
 #include <stdio.h>
@@ -31,7 +32,7 @@
 #include <memory>
 
 #include "debug.h"
-//#include "pdf_plug.h"
+#include "pdf_plug.h"
 
 #ifndef NULL
 #define NULL 0L
@@ -80,7 +81,7 @@ extern "C" void get_image_from_pdf(const char *pdf_filename, const char *out_fil
 
 }
 
-extern "C" const char *get_text_from_pdf(const char *pdf_filename) {
+extern "C" char *get_text_from_pdf(const char *pdf_filename) {
 
   if (!poppler::page_renderer::can_render()) {
     o_log(ERROR, "renderer compiled without Splash support");
