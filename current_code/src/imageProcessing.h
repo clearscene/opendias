@@ -19,12 +19,10 @@
 #ifndef IMAGEPROCESSING
 #define IMAGEPROCESSING
 
-#ifdef CAN_SCAN
-#include <FreeImage.h>
+#ifdef CAN_OCR
+#include <leptonica/allheaders.h>
 
-void FreeImageErrorHandler(FREE_IMAGE_FORMAT, const char *);
-void reformatImage(FREE_IMAGE_FORMAT, char *, FREE_IMAGE_FORMAT, char *);
-#endif // CAN_SCAN //
-char *getTextFromImage(const unsigned char *, int, int, int, char *);
+char *getTextFromImage(PIX *, int, char *);
+#endif // CAN_OCR //
 
 #endif /* IMAGEPROCESSING */

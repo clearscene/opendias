@@ -42,11 +42,14 @@ enum {
 int VERBOSITY;
 char *LOG_DIR;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void o_log(const int, const char *, ...);
 
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif /* DEBUG */

@@ -86,7 +86,7 @@ struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *element, const
     }
     return sll_searchKeys( sll_getNext( element ), key );
   }
-  o_log(DEBUGM,"sll_searchKeys key %s was not found ",key);
+  o_log(SQLDEBUG,"sll_searchKeys key %s was not found ",key);
   return NULL;
 }
 

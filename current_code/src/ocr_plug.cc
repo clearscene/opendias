@@ -20,6 +20,11 @@
 #ifdef CAN_OCR
 //#include "ocr_plug.h"
 #include <tesseract/baseapi.h>
+#ifdef OCR_OLD
+#else
+#include <leptonica/allheaders.h>
+#include <sys/time.h>
+#endif
 #include <utils.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,12 +39,9 @@
 #endif
 
 struct scanCallInfo {
+    PIX *image_pix;
+    int ppi;
     const char* language;
-    const unsigned char* imagedata;
-    int bytes_per_pixel;
-    int bytes_per_line;
-    int width;
-    int height;
     char *ret;
 };
 
@@ -61,31 +63,33 @@ void signal_handler(int sig) {
 extern "C" void runocr(struct scanCallInfo *info) {
 
     char *ret;
-#ifdef OCR_OLD
-    TessBaseAPI *tessObject = new TessBaseAPI();
-#else // OCR_OLD //
-    tesseract::TessBaseAPI *tessObject = new tesseract::TessBaseAPI();
-#endif // OCR_OLD //
     sigset_t newSigSet;
-
     sigaddset(&newSigSet, SIGCHLD);  /* ignore child - i.e. we don't need to wait for it */
 
     // Language is the code of the language for which the data will be loaded.
     // (Codes follow ISO 639-2.) If it is NULL, english (eng) will be loaded.
-#ifdef OCR_OLD
-    tessObject->InitWithLanguage("/usr/share/tesseract-ocr/tessdata", NULL, info->language, NULL, false, 0, NULL);
-#else // OCR_OLD //
-    tessObject->Init("/usr/share/tesseract-ocr/tessdata", info->language);
-#endif // OCR_OLD //
+    tesseract::TessBaseAPI *tessObject = new tesseract::TessBaseAPI();
+    o_log(DEBUGM, "Tesseract-ocr version: %s", tessObject->Version() );
+    o_log(DEBUGM, "Leptonica version: %s", getLeptonicaVersion() );
 
-    ret = tessObject->TesseractRect(info->imagedata, info->bytes_per_pixel, info->bytes_per_line,
+    if ( tessObject->Init( "/usr/share/tesseract-ocr/tessdata", info->language ) ) {
+      o_log(ERROR, "Could not initialize tesseract.");
+      tessObject->End();
+      return;
+    }
+    o_log(DEBUGM, "Initalised language was: %s", tessObject->GetInitLanguagesAsString() );
 
-                                        2, 2, info->width -2, info->height -2);
+    tessObject->SetImage( info->image_pix );
+    tessObject->SetSourceResolution( info->ppi );
+
+    ret = tessObject->GetUTF8Text();
     info->ret = strdup(ret);
 
-    delete [] ret;
-    tessObject->ClearAdaptiveClassifier();
+    tessObject->Clear();
     tessObject->End();
+    //pixDestroy(&pix);
+
+    delete [] ret;
 
 }
 

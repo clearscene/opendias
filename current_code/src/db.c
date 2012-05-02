@@ -313,7 +313,7 @@ void free_recordset (struct simpleLinkedList *rSet) {
 
   struct simpleLinkedList *field, *row;
 
-  o_log(DEBUGM, "Entering free_recordset rSet(%x)", rSet);
+  o_log(SQLDEBUG, "Entering free_recordset rSet(%x)", rSet);
 
   if( rSet && ( rSet != NULL ) ) {
     if( rSet->data != NULL ) {
@@ -336,7 +336,7 @@ void free_recordset (struct simpleLinkedList *rSet) {
     o_log(SQLDEBUG, "Free a record set pointer (%s)", rSet);
     sll_delete(rSet);
   }
-  o_log(DEBUGM, "Leaving free_recordset");
+  o_log(SQLDEBUG, "Leaving free_recordset");
 }
 
 
