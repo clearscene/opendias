@@ -21,6 +21,10 @@
 
 #include <leptonica/allheaders.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct scanCallInfo {
   PIX *image_pix;
   int ppi;
@@ -38,5 +42,9 @@ struct scanCallInfo {
 #define OCR_LANG_VIETNAMESE  "vie"   /*Vietnamese */
 
 extern void runocr(struct scanCallInfo*);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* OCR_PLUG */

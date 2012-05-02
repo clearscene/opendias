@@ -16,14 +16,22 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef CAN_PDF
+
 #ifndef PDF_PLUG
 #define PDF_PLUG
 
-#ifdef CAN_PDF
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 extern void get_image_from_pdf(const char *, const char *);
-extern const char *get_text_from_pdf(const char *);
+extern char *get_text_from_pdf(const char *);
 
-#endif // CAN_PDF //
+#ifdef __cplusplus
+}
+#endif
 
 #endif // PDF_PLUG //
+
+#endif // CAN_PDF //

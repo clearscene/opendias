@@ -24,8 +24,18 @@
 
 #ifdef __cplusplus
 extern "C" {
+/*
+ * a VERBOSITY setting of INFORMATION, will throw 'information, warning, error'
+ */
+extern int VERBOSITY;
+extern char *LOG_DIR;
+#else
+/*
+ * a VERBOSITY setting of INFORMATION, will throw 'information, warning, error'
+ */
+int VERBOSITY;
+char *LOG_DIR;
 #endif
-
 
 enum {
   SILENT = 0,
@@ -35,16 +45,6 @@ enum {
   DEBUGM,
   SQLDEBUG
 };
-
-/*
- * a VERBOSITY setting of INFORMATION, will throw 'information, warning, error'
- */
-int VERBOSITY;
-char *LOG_DIR;
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 void o_log(const int, const char *, ...);
 
