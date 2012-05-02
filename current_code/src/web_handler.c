@@ -478,7 +478,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     }
 
     // Serve 'scans' content [image|pdf|odf]
-    else if( 0!=strstr(url,"/scans/") && (0!=strstr(url,".jpg") || 0!=strstr(url,".pdf") || 0!=strstr(url,".odt") ) ) {
+    else if( 0!=strstr(url,"/scans/") && (0!=strstr(url,".jpg") || 0!=strstr(url,".pdf") || 0!=strstr(url,".odt") || 0!=strstr(url,"_thumb.png") ) ) {
       if ( accessPrivs.view_doc == 0 ) {
         content = o_strdup(noaccessxml);
         size = strlen(content);
@@ -495,6 +495,9 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         }
         else if (0!=strstr(url,".pdf")) {
           mimetype = MIMETYPE_PDF;
+        }
+        else if (0!=strstr(url,".png")) {
+          mimetype = MIMETYPE_PNG;
         }
         else
           size = 0;
