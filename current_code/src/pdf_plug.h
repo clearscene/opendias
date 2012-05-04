@@ -25,8 +25,7 @@
 extern "C" {
 #endif
 
-extern void get_image_from_pdf(const char *, const char *);
-extern char *get_text_from_pdf(const char *);
+extern char *parse_pdf( const char *, const char *);
 
 #ifdef __cplusplus
 }

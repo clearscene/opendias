@@ -79,7 +79,9 @@ extern "C" void runocr(struct scanCallInfo *info) {
     o_log(DEBUGM, "Initalised language was: %s", tessObject->GetInitLanguagesAsString() );
 
     tessObject->SetImage( info->image_pix );
-    tessObject->SetSourceResolution( info->ppi );
+    if( info->ppi > 0 ) {
+      tessObject->SetSourceResolution( info->ppi );
+    }
 
     ret = tessObject->GetUTF8Text();
     info->ret = strdup(ret);

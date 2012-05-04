@@ -52,12 +52,11 @@ char *uploadfile(char *filename, char *ftype) {
 
   // --------------------------------------
   if( 0 == strcmp("PDF", ftype) ) {
-    char *outfile;
     itype = PDF_FILETYPE;
 #ifdef CAN_PDF
+    char *outfile;
     outfile = o_printf("/tmp/%s.thumb", filename);
-    get_image_from_pdf( datafile, outfile ); // pdf_plug.cc
-    ocrText = get_text_from_pdf( datafile ); // pdf_plug.cc
+    ocrText = parse_pdf( datafile, outfile ); // pdf_plug.cc [create thumbnail and return body text] 
     free(outfile);
     thumbext = o_strdup("jpg");
 #endif // CAN_PDF //
@@ -79,9 +78,13 @@ char *uploadfile(char *filename, char *ftype) {
   // --------------------------------------
   else if( 0 == strcmp("jpg", ftype) ) {
     itype = JPG_FILETYPE;
-//    char *pic = NULL;
-//    ocrText = getTextFromImage((const unsigned char *)pic, 1, 1, 1);
-    ocrText = o_strdup("--text not extracted--");
+    PIX *pix;
+    if ( ( pix = pixRead( datafile ) ) == NULL) {
+      o_log(ERROR, "Could not load the image data into a PIX");
+    }
+    o_log(INFORMATION, "Convertion process: Loaded (depth: %d)", pixGetDepth(pix));
+    ocrText = getTextFromImage(pix, 0, "eng");
+    pixDestroy( &pix );
   }
 
   // --------------------------------------
@@ -112,7 +115,7 @@ char *uploadfile(char *filename, char *ftype) {
     to_name = o_printf("%s/scans/%s_thumb.%s", BASE_DIR, docid, thumbext); // any thumbnails are postfixed with "_thumb"
     tmp = o_printf("/tmp/%s.thumb", filename);
     fcopy(tmp, to_name);
-    unlink(tmp);
+    remove(tmp);
     free(tmp);
     free(to_name);
     free(thumbext);
