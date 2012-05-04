@@ -12,15 +12,6 @@ AC_HEADER_STDC
 
 
 
-dnl ***************************************************************************
-dnl Internatinalization
-dnl ***************************************************************************
-dnl GETTEXT_PACKAGE=opendias
-dnl AC_SUBST(GETTEXT_PACKAGE)
-dnl AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [GETTEXT package name])
-dnl AM_GLIB_GNU_GETTEXT
-dnl IT_PROG_INTLTOOL([0.35.0])
-
 AC_CHECK_FUNCS([strcspn],[],AC_MSG_ERROR([Missing function strcspn]))
 AC_CHECK_FUNCS([strndup],[],AC_MSG_ERROR([Missing function strndup]))
 AC_CHECK_FUNCS([strdup],[],AC_MSG_ERROR([Missing function strdup]))
@@ -29,12 +20,14 @@ AC_CHECK_FUNCS([memset],[],AC_MSG_ERROR([Missing function memset]))
 AC_CHECK_FUNCS([mkdir],[],AC_MSG_ERROR([Missing function mkdir]))
 AC_CHECK_FUNCS([socket],[],AC_MSG_ERROR([Missing function socket]))
 AC_CHECK_FUNCS([strerror],[],AC_MSG_ERROR([Missing function strerror]))
+AC_CHECK_FUNCS([dup2],[],AC_MSG_ERROR([Missing header dup2]))
 AC_CHECK_HEADERS([arpa/inet.h],[],AC_MSG_ERROR([Missing header arpa/inet.h]))
 AC_CHECK_HEADERS([fcntl.h],[],AC_MSG_ERROR([Missing header fcntl.h]))
 AC_CHECK_HEADERS([netdb.h],[],AC_MSG_ERROR([Missing header netdb.h]))
 AC_CHECK_HEADERS([netinet/in.h],[],AC_MSG_ERROR([Missing header netinet/in.h]))
 AC_CHECK_HEADERS([sys/param.h],[],AC_MSG_ERROR([Missing header sys/param.h]))
 AC_CHECK_HEADERS([sys/socket.h],[],AC_MSG_ERROR([Missing header sys/socket.h]))
+AC_CHECK_HEADERS([sys/time.h],[],AC_MSG_ERROR([Missing header sys/time.h]))
 AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
@@ -43,15 +36,18 @@ AC_TYPE_PID_T
 AC_TYPE_SIZE_T
 AC_TYPE_SSIZE_T
 AC_TYPE_UINT64_T
+AC_TYPE_MODE_T
 
 
 
 
 
-PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid poppler-cpp])
+PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
+
+
 
 
 
@@ -137,19 +133,20 @@ fi
 
 
 
-dnl pdf="no"
-dnl AC_CHECK_LIB(poppler-cpp, main, 
-dnl 	[AC_CHECK_HEADER(poppler/cpp/poppler-document.h,
-dnl           pdf=yes,
-dnl         	AC_MSG_WARN(You are missing the development headers for the poppler libs))], 
-dnl 	AC_MSG_WARN(You are missing the poppler libs) )
-dnl if test "x$pdf" = "xyes"; then
-	AC_DEFINE([CAN_PDF],[],[Have everything that is needed to import PDF documents])
-dnl   OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS -I/usr/include/poppler "
-dnl 	OPENDIAS_LIBS="$OPENDIAS_LIBS -lpoppler-cpp "
-dnl else
-dnl 	AC_MSG_WARN(You wll not be able to import any PDF documents.)
-dnl fi
+pdf="no"
+AC_LANG_PUSH([C++])
+AC_CHECK_LIB(poppler-cpp, _ZN7poppler8document14load_from_fileERKSsS2_S2_, 
+	[AC_CHECK_HEADER(poppler/cpp/poppler-document.h,
+         pdf=yes,
+       	AC_MSG_WARN(You are missing the development headers for the poppler libs))], 
+  AC_MSG_WARN(You are missing the poppler libs) )
+AC_LANG_POP([C++])
+if test "x$pdf" = "xyes"; then
+  AC_DEFINE([CAN_PDF],[],[Have everything that is needed to import PDF documents])
+  OPENDIAS_LIBS="$OPENDIAS_LIBS -lpoppler-cpp "
+else
+  AC_MSG_WARN(You wll not be able to import any PDF documents.)
+fi
 
 OPENDIAS_LIBS="$OPENDIAS_LIBS -lpthread "
 
