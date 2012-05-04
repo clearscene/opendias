@@ -54,9 +54,9 @@ current_code/src/opendiasconfig.o
 current_code/src/pageRender.gcda
 current_code/src/pageRender.gcno
 current_code/src/pageRender.o
-current_code/src/read_odf.gcda
-current_code/src/read_odf.gcno
-current_code/src/read_odf.o
+current_code/src/odf_plug.gcda
+current_code/src/odf_plug.gcno
+current_code/src/odf_plug.o
 current_code/src/pdf_plug.gcda
 current_code/src/pdf_plug.gcno
 current_code/src/pdf_plug.o
