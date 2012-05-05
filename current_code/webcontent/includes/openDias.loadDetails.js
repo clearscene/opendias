@@ -99,10 +99,40 @@ $(document).ready(function() {
            }
 
            else if( $(data).find('DocDetail').find('type').text() == "3" ) { // PDF Documents
-              $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage' " + 
-                                     "alt='' src='/opendias/scans/"+officialDocId+"_thumb.jpg' />" + 
-                                     "</div><button id='openImg'>Open PDF Document</button></li>");
+              $("#slider ul").append("<li><div id='pdf' class='scanImageContainer'><img id='scanImage' /></div>" + 
+                                     "<button id='openImg'>Open PDF Document</button></li>");
               $("#scanImage").css("width", "300px");
+              $("#scanImage").bind('error', { docId: officialDocId }, function (e) {
+                                    $("#pdf").html("<div style='text-align: center; width: 100%'><p>PDF Thumbnail is not available.</p><p>Attempt to generate now.</p><button id='regenThumb'>Regenerate Thumbnail</button></div>");
+                                    $('#regenThumb').bind('click', {docId: e.data.docId },
+                                        function(d) {
+                                            $.ajax({  url: "/opendias/dynamic",
+                                                      dataType: "xml",
+                                                      timeout: 10000,
+                                                      data: { action: "regenerateThumb",
+                                                              docid: d.data.docId},
+                                                      cache: false,
+                                                      type: "POST",
+                                                      error: function( x, t, m ) {
+                                                        if(t=="timeout") {
+                                                          alert("[d001] Timeout while talking to the server.");
+                                                        } else {
+                                                          alert("[d002] Error while talking to the server: ".t);
+                                                        }
+                                                      },
+                                                      success: function(data){
+                                                        if( $(data).find('error').text() ){
+                                                          alert("Unable to generate thumbnail: "+$(data).find('error').text());
+                                                          return 1;
+                                                        }
+                                                        $("#pdf").html("<img id='scanImage' />");
+                                                        $("#scanImage").css("width", "300px");
+                                                        $("#scanImage").attr("src", "/opendias/scans/"+d.data.docId+"_thumb.jpg");
+                                                      }
+                                                    });
+                                        });
+                                    });
+              $("#scanImage").attr("src", "/opendias/scans/"+officialDocId+"_thumb.jpg");
               $("#openImg").bind('click', { docId: officialDocId }, 
                                   function(e){ 
                                       window.open("/opendias/scans/"+e.data.docId+".pdf"); 

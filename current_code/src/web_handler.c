@@ -746,14 +746,18 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             size = strlen(content);
           }
   
-          else if ( action && 0 == strcmp(action, "getAudio") ) {
-            o_log(INFORMATION, "Processing request for: getAudio");
-            if ( accessPrivs.view_doc == 0 )
+          else if ( action && 0 == strcmp(action, "regenerateThumb") ) {
+            o_log(INFORMATION, "Processing request for: regenerateThumb");
+            if ( accessPrivs.edit_doc == 0 )
               content = o_strdup(noaccessxml);
             else if ( validate( con_info->post_data, action ) ) 
               content = o_strdup(errorxml);
             else {
-              content = o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Audio<<filename>BabyBeat.ogg</filename></Audio></Response>");
+              char *docid = getPostData(con_info->post_data, "docid");
+              content = extractThumbnail( docid );
+              if(content == (void *)NULL) {
+                content = o_strdup(errorxml);
+              }
             }
             mimetype = MIMETYPE_XML;
             size = strlen(content);

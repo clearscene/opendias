@@ -21,6 +21,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <string.h>
 
 #include "main.h"
@@ -39,11 +40,29 @@
 
 #include "import_doc.h"
 
+char *extractThumbnail(char *docid) {
+
+  char *source_file, *target_file, *ocrText;
+
+  source_file = o_printf("%s/scans/%s.pdf", BASE_DIR, docid); 
+  target_file = o_printf("%s/scans/%s_thumb.jpg", BASE_DIR, docid);
+
+#ifdef CAN_PDF
+  ocrText = parse_pdf( source_file, target_file ); // pdf_plug.cc [create thumbnail and return body text] 
+  free(ocrText);
+#endif // CAN_PDF //
+
+  free(source_file);
+  free(target_file);
+
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><NextPageReady><result>OK</result></NextPageReady></Response>");
+}
+
 char *uploadfile(char *filename, char *ftype) {
 
   int itype = PLACE_HOLDER;
   char *to_name, *datafile, *ocrText = NULL, *thumbext = NULL, *tmp;
-  const char *docid;
+  char *docid;
 
   // Save Record
   o_log(DEBUGM, "Saving doc import record");
@@ -115,7 +134,7 @@ char *uploadfile(char *filename, char *ftype) {
     to_name = o_printf("%s/scans/%s_thumb.%s", BASE_DIR, docid, thumbext); // any thumbnails are postfixed with "_thumb"
     tmp = o_printf("/tmp/%s.thumb", filename);
     fcopy(tmp, to_name);
-    remove(tmp);
+    unlink(tmp);
     free(tmp);
     free(to_name);
     free(thumbext);

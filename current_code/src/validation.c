@@ -351,7 +351,7 @@ int basicValidation(struct simpleLinkedList *postdata) {
     && 0 != strcmp(action, "moveTag") 
     && 0 != strcmp(action, "docFilter") 
     && 0 != strcmp(action, "deleteDoc") 
-    && 0 != strcmp(action, "getAudio")
+    && 0 != strcmp(action, "regenerateThumb")
     && 0 != strcmp(action, "uploadfile")
     && 0 != strcmp(action, "getAccessDetails")
     && 0 != strcmp(action, "titleAutoComplete")
@@ -491,7 +491,9 @@ int validate(struct simpleLinkedList *postdata, char *action) {
   }
 
   if ( 0 == strcmp(action, "getAudio") ) {
+    sll_insert(vars, "docid", "m" );
     ret += checkKeys(postdata, vars );
+    ret += checkDocId(getPostData(postdata, "docid"));
   }
 
   if ( 0 == strcmp(action, "getAccessDetails") ) {
