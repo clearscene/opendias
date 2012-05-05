@@ -42,6 +42,11 @@ AC_TYPE_MODE_T
 
 
 
+
+dnl
+dnl Ensure weve got everything we need to even start!
+dnl
+
 PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
@@ -50,105 +55,131 @@ AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
 
 
 
-
+dnl 
 dnl Special config options
-AC_ENABLE([werror],[OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS -Werror "])
+dnl 
+
+AC_ENABLE([werror],[OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS -Werror"])
 AC_ENABLE([thread_join],[
 	AC_DEFINE([THREAD_JOIN],[],[The main process will wait for child threads to finish.])
 ])
+OPENDIAS_LIBS="$OPENDIAS_LIBS -lpthread "
 
+
+
+
+dnl 
+dnl Find out what we've got to work with
+dnl
 
 imageprocessing="no"
 AC_CHECK_LIB(lept, main, 
-	[AC_CHECK_HEADER(/usr/include/leptonica/allheaders.h,
-                imageprocessing=yes,
-        	AC_MSG_WARN(You are missing the development headers for the leptonica libs))], 
+	[AC_CHECK_HEADER(leptonica/allheaders.h,
+    imageprocessing="yes",
+    AC_MSG_WARN(You are missing the development headers for the leptonica libs))], 
 	AC_MSG_WARN(You are missing the leptonica libs) )
 
 
 scanning="no"
 AC_CHECK_LIB(sane, main, 
-	[AC_CHECK_HEADER(sane/sane.h,
-        	scanning=yes,
-        	AC_MSG_WARN(You are missing the development headers for the sane libs))], 
-	AC_MSG_WARN(You are missing the sane libs) )
+  [AC_CHECK_HEADER(sane/sane.h,
+    scanning="yes",
+    AC_MSG_WARN(You are missing the development headers for the sane libs))], 
+  AC_MSG_WARN(You are missing the sane libs) )
 
 
-if test "x$scanning" = "xyes" && test "x$imageprocessing" = "xyes" ; then
-	AC_DEFINE([CAN_SCAN],[],[Have everything that is needed for scanning documents])
-	OPENDIAS_LIBS="$OPENDIAS_LIBS -lsane -llept "
-else
-	AC_MSG_WARN(You wll not be able to scan in any document.)
-fi
-
-
-
-dnl Would have liked to use AC_CHECK_HEADER, but the checking does not recognise the C++ nature of this header! 
 ocr="no"
+AC_LANG_PUSH([C++])
 AC_CHECK_LIB(tesseract, main,
-	[AC_CHECK_FILE(/usr/include/tesseract/baseapi.h,
-        	ocr=yes,
-        	AC_MSG_WARN(You are missing the development headers for the tesseract v3 libs))],
-	AC_MSG_WARN(You are missing the tesseract v3 libs) )  
-
-
-if test "x$ocr" = "xyes" && test "x$imageprocessing" = "xyes" ; then
- AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
- OPENDIAS_LIBS="$OPENDIAS_LIBS -ltesseract -llept "
-else
- AC_MSG_WARN(You wll not be able to OCR any document.)
-fi
-
-
-
-xml="no"
-AC_CHECK_LIB(xml2, xmlParseExternalEntity, 
-	[AC_PATH_PROG(XML2_CONFIG,xml2-config,no)
-	 if test "$XML2_CONFIG" != "no"; then
-		xml2_cflags=`$XML2_CONFIG --cflags`
-		CPPFLAGS="$CPPFLAGS $xml2_cflags"
-	 fi
-	 AC_CHECK_HEADER(libxml/parser.h,
-        	xml=yes,
-        	AC_MSG_WARN(You are missing the development headers for the xml libs))], 
-	AC_MSG_WARN(You are missing the xml libs) )
-archive="no"
-AC_CHECK_LIB(archive, main, 
-	[AC_CHECK_HEADER(archive.h,
-        	archive=yes,
-        	AC_MSG_WARN(You are missing the development headers for the archive libs))], 
-	AC_MSG_WARN(You are missing the archive libs) )
-zzip="no"
-AC_CHECK_LIB(zzipwrap, main, 
-	[AC_CHECK_HEADER(zzip/lib.h,
-        	zzip=yes,
-        	AC_MSG_WARN(You are missing the development headers for the zzip libs))], 
-	AC_MSG_WARN(You are missing the zzip libs) )
-if test "x$xml" = "xyes" && test "x$zzip" = "xyes" && test "x$archive" = "xyes" ; then
-	AC_DEFINE([CAN_READODF],[],[Have everything that is needed to read ODF documents])
-	OPENDIAS_LIBS="$OPENDIAS_LIBS -larchive -lxml2 -lzzip "
-else
-	AC_MSG_WARN(You wll not be able to import any ODF documents.)
-fi
-
+  [AC_CHECK_HEADER(tesseract/baseapi.h,
+    ocr="yes",
+    AC_MSG_WARN(You are missing the development headers for the tesseract v3 libs))],
+  AC_MSG_WARN(You are missing the tesseract v3 libs) )  
+AC_LANG_POP([C++])
 
 
 pdf="no"
 AC_LANG_PUSH([C++])
 AC_CHECK_LIB(poppler-cpp, _ZN7poppler8document14load_from_fileERKSsS2_S2_, 
-	[AC_CHECK_HEADER(poppler/cpp/poppler-document.h,
-         pdf=yes,
-       	AC_MSG_WARN(You are missing the development headers for the poppler libs))], 
+  [AC_CHECK_HEADER(poppler/cpp/poppler-document.h,
+    pdf="yes",
+    AC_MSG_WARN(You are missing the development headers for the poppler libs))], 
   AC_MSG_WARN(You are missing the poppler libs) )
 AC_LANG_POP([C++])
+
+
+archive="no"
+AC_CHECK_LIB(archive, main, 
+  [AC_CHECK_HEADER(archive.h,
+    archive="yes",
+    AC_MSG_WARN(You are missing the development headers for the archive libs))], 
+  AC_MSG_WARN(You are missing the archive libs) )
+
+
+zzip="no"
+AC_CHECK_LIB(zzipwrap, main, 
+  [AC_CHECK_HEADER(zzip/lib.h,
+    zzip="yes",
+    AC_MSG_WARN(You are missing the development headers for the zzip libs))], 
+  AC_MSG_WARN(You are missing the zzip libs) )
+
+
+xml="no"
+AC_CHECK_LIB(xml2, xmlParseExternalEntity, 
+  [AC_PATH_PROG(XML2_CONFIG,xml2-config,no)
+  if test "$XML2_CONFIG" != "no"; then
+    xml2_cflags=`$XML2_CONFIG --cflags`
+    CPPFLAGS="$CPPFLAGS $xml2_cflags"
+  fi
+  AC_CHECK_HEADER(libxml/parser.h,
+    xml="yes",
+    AC_MSG_WARN(You are missing the development headers for the xml libs))], 
+  AC_MSG_WARN(You are missing the xml libs) )
+
+
+
+
+dnl
+dnl Determin what service we can provide based on available libs
+dnl
+
+if test "x$scanning" = "xyes" && test "x$imageprocessing" = "xyes" ; then
+	AC_DEFINE([CAN_SCAN],[],[Have everything that is needed for scanning documents])
+	OPENDIAS_LIBS="$OPENDIAS_LIBS -lsane -llept"
+else
+	AC_MSG_WARN(You wll not be able to scan in any document.)
+fi
+
+
+if test "x$ocr" = "xyes" && test "x$imageprocessing" = "xyes" ; then
+ AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
+ OPENDIAS_LIBS="$OPENDIAS_LIBS -ltesseract -llept"
+else
+ AC_MSG_WARN(You wll not be able to OCR any document.)
+fi
+
+
+if test "x$xml" = "xyes" && test "x$zzip" = "xyes" && test "x$archive" = "xyes" ; then
+	AC_DEFINE([CAN_READODF],[],[Have everything that is needed to read ODF documents])
+	OPENDIAS_LIBS="$OPENDIAS_LIBS -larchive -lxml2 -lzzip"
+else
+	AC_MSG_WARN(You wll not be able to import any ODF documents.)
+fi
+
+
 if test "x$pdf" = "xyes"; then
   AC_DEFINE([CAN_PDF],[],[Have everything that is needed to import PDF documents])
-  OPENDIAS_LIBS="$OPENDIAS_LIBS -lpoppler-cpp "
+  OPENDIAS_LIBS="$OPENDIAS_LIBS -lpoppler-cpp"
 else
   AC_MSG_WARN(You wll not be able to import any PDF documents.)
 fi
 
-OPENDIAS_LIBS="$OPENDIAS_LIBS -lpthread "
+
+
+
+dnl
+dnl Write what we've learnt
+dnl
 
 AC_OUTPUT([
 Makefile
