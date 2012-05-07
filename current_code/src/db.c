@@ -16,16 +16,20 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <sqlite3.h>
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
+
 #include "utils.h"
-#include "db.h"
 #include "simpleLinkedList.h"
 #include "main.h"
 #include "debug.h"
+
+#include "db.h"
 
 sqlite3 *DBH;
 

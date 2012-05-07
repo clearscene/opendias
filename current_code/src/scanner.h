@@ -19,6 +19,8 @@
 #ifndef SCANNER
 #define SCANNER
 
+#include "config.h"
+
 #ifdef CAN_SCAN
 void handleSaneErrors(char *, SANE_Status, int);
 const char * get_status_string (SANE_Status);

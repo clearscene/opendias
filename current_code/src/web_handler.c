@@ -16,6 +16,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -30,7 +32,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "web_handler.h"
 #include "main.h"
 #include "utils.h"
 #include "debug.h"
@@ -41,6 +42,8 @@
 #include "import_doc.h"
 #include "simpleLinkedList.h"
 
+#include "web_handler.h"
+
 char *busypage = "<html><body>This server is busy, please try again later.</body></html>";
 char *servererrorpage = "<html><body>An internal server error has occured.</body></html>";
 char *requesterrorpage = "<html><body>Your request did not fit the form 'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)'.</body></html>";
@@ -48,7 +51,8 @@ char *fileexistspage = "<html><body>File exists</body></html>";
 char *completepage = "<html><body>All Done</body></html>";
 char *denied = "<h1>Access Denied</h1>";
 char *noaccessxml = "<?xml version='1.0' encoding='utf-8'?>\n<Response><error>You do not have permissions to complete the request</error></Response>";
-char *errorxml= "<?xml version='1.0' encoding='utf-8'?>\n<Response><error>Your request could not be processed</error></Response>";
+char *errorxml = "<?xml version='1.0' encoding='utf-8'?>\n<Response><error>Your request could not be processed</error></Response>";
+char *missingsupport = "<?xml version='1.0' encoding='utf-8'?>\n<Response><error>Support for this feature has not been compiled in</error></Response>";
 static unsigned int nr_of_clients = 0;
 
 struct priverlage {
@@ -596,6 +600,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   
           else if ( action && 0 == strcmp(action, "getScannerList") ) {
             o_log(INFORMATION, "Processing request for: getScannerList");
+#ifdef CAN_SCAN
             if ( accessPrivs.add_scan == 0 )
               content = o_strdup(noaccessxml);
             else if ( validate( con_info->post_data, action ) ) 
@@ -606,12 +611,17 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
                 content = o_strdup(errorxml);
               }
             }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_strdup(missingsupport);
+#endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
   
           else if ( action && 0 == strcmp(action, "doScan") ) {
             o_log(INFORMATION, "Processing request for: doScan");
+#ifdef CAN_SCAN
             if ( accessPrivs.add_scan == 0 )
               content = o_strdup(noaccessxml);
             else if ( validate( con_info->post_data, action ) ) 
@@ -628,12 +638,17 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
                 content = o_strdup(errorxml);
               }
             }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_strdup(missingsupport);
+#endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
   
           else if ( action && 0 == strcmp(action, "getScanningProgress") ) {
             o_log(INFORMATION, "Processing request for: getScanning Progress");
+#ifdef CAN_SCAN
             if ( accessPrivs.add_scan == 0 )
               content = o_strdup(noaccessxml);
             else if ( validate( con_info->post_data, action ) ) 
@@ -645,12 +660,17 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
                 content = o_strdup(errorxml);
               }
             }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_strdup(missingsupport);
+#endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
   
           else if ( action && 0 == strcmp(action, "nextPageReady") ) {
             o_log(INFORMATION, "Processing request for: restart scan after page change");
+#ifdef CAN_SCAN
             if ( accessPrivs.add_scan == 0 )
               content = o_strdup(noaccessxml);
             else if ( validate( con_info->post_data, action ) ) 
@@ -662,6 +682,10 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
                 content = o_strdup(errorxml);
               }
             }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_strdup(missingsupport);
+#endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -745,9 +769,10 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
-  
+
           else if ( action && 0 == strcmp(action, "regenerateThumb") ) {
             o_log(INFORMATION, "Processing request for: regenerateThumb");
+#ifdef CAN_PDF
             if ( accessPrivs.edit_doc == 0 )
               content = o_strdup(noaccessxml);
             else if ( validate( con_info->post_data, action ) ) 
@@ -759,10 +784,14 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
                 content = o_strdup(errorxml);
               }
             }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_strdup(missingsupport);
+#endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
-  
+
           else if ( action && 0 == strcmp(action, "uploadfile") ) {
             o_log(INFORMATION, "Processing request for: uploadfile");
             if ( accessPrivs.add_import == 0 )

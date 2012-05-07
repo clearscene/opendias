@@ -35,7 +35,7 @@ Error Response
 	Any of the API calls could return an error message. Fontends 
 	should check for this error and take appropriate action.
 	Outputs:
-		<?xml version='1.0' encoding='iso-8859-1'?>
+		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  error - a message describing the problem
 		</Response>
@@ -58,7 +58,7 @@ getScanningProgress -> pageRender::getScanningProgress()
 	Inputs:	action: fixed string 'getScanningProgress'
 		scanprogressid: The uuid of the scanning process (as returned by 'doScan')
 	Outputs:
-		<?xml version='1.0' encoding='iso-8859-1'?>
+		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <ScanningProgress>
 		    status* - the current action being done by the system
@@ -74,7 +74,7 @@ nextPageReady -> pageRender::nextPageReady()
 	Inputs:	action: fixed string 'nextPageReady'
 		scanprogressid: The uuid of the scanning process (as returned by 'doScan')
 	Outputs;
-		<?xml version='1.0' encoding='iso-8859-1'?>
+		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <NextPageReady>
 		    result - indication if the next page command was accepted, currently a fixed string 'ok'
@@ -88,7 +88,7 @@ getScannerList -> pageRender::getScannerList()
 	Purpose: Get a list of scanners (and their usage parameters) that the application can use.
 	Inputs:	action: fixed string 'getScannerList'
 	Outputs;
-		<?xml version='1.0' encoding='iso-8859-1'?>
+		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <ScannerList cached='true'>    -- optional param, present if data is returned from the cache
 		    <Devices>
@@ -124,7 +124,7 @@ doScan -> pageRender::doScan()
                 ocr: Flag to indicate if an OCR process should be performed and in what language,
                 pagelength: The length of the page to scan, Percent, in relation to the maximum available by the scanner.
 	Outputs;
-		<?xml version='1.0' encoding='iso-8859-1'?>
+		<?xml version='1.0' encoding='utf-8'?>
 		</Response>
 		  </DoScan>
 		    scanuuid - The application uniq id for the scanning process.
@@ -148,14 +148,14 @@ docFilter -> pageRender::docFilter
                 sortfield*: Order the results by column
                 sortorder: present results in acending/decending order ['0','1']
 	Outputs;
-		<?xml version='1.0' encoding='iso-8859-1'?>
+		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <DocFilter>
-                    count - The count of matching documents
-                    page - The requested page
+        count - The count of matching documents
+        page - The requested page
 		    <Results>
 		      docid - the document id of a found document
-                      actionrequired - indicator flag
+          actionrequired - indicator flag
 		      title - the user defined title of the found document
 		      type* - the style of document
 		      date - the user defined date of the found document
@@ -170,7 +170,7 @@ getAccessDetails -> pageRender::getAccessDetails
 	Purpose: Get a list of specific grants that have been setup
 	Inputs:	action: fixed string 'getAccessDetails'
 	Outputs;
-		<?xml version='1.0' encoding='iso-8859-1'?>
+		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <AccessDetails>
 		    <LocationAccess>
@@ -199,7 +199,7 @@ getAudio -> [stump - not currently implemented]
 	Inputs:	action: fixed string 'getAudio'
 		docid: the documents id
 	Outputs;
-		<?xml version='1.0' encoding='iso-8859-1'?>
+		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <Audio>
 		    filename - the filename that contains the audio of the selected doc 
@@ -214,7 +214,7 @@ getDocDetail -> docEditor::getDocDetail
 	Inputs:	action: fixed string 'getDocDetail'
 		docid: the documents id
 	Outputs;
-		<?xml version='1.0' encoding='iso-8859-1'?>
+		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <DocDetail>
 		    docid - the docid of the selected doc
@@ -224,7 +224,8 @@ getDocDetail -> docEditor::getDocDetail
 		    scanDate - the date that the document was added to the application.
 		    type* - the style of document
 		    pages - the number of pages used by the document
-                    actionrequired - indication if the document has been flagged as requiring an action
+        actionrequired - indication if the document has been flagged as requiring an action
+        hardcopyKept - indication if the original document has been retained
 		    x - the number of horizontal pizel required by the document
 		    y - the number of lines required by the document
 		    <Taqs>
@@ -250,10 +251,10 @@ updateDocDetails -> docEditor::updateDocDetails
 	Purpose: Update a documents field with a specific value. 
 	Inputs:	action: fixed string 'updateDocDetails'
 		docid: the documents id
-		kkey: the name of the field that is being updated ['ocrtext','title','docDate','actionrequired']
+		kkey: the name of the field that is being updated ['ocrtext','title','docDate','actionrequired','hardcopyKept']
 		vvalue: the new value to set the field to
 	Outputs;
-		<?xml version='1.0' encoding='iso-8859-1'?>
+		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <UpdateDocDetails>
 		    status - indication of the update process - currently a static string 'OK'

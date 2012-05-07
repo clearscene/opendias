@@ -19,18 +19,13 @@
 #ifndef SANEDISPATCHER
 #define SANEDISPATCHER
 
+#include "config.h"
+
+#ifdef CAN_SCAN
 #define ADDRESS "/var/run/saneCommandSocket"
-
-/*
-#include "simpleLinkedList"
-
-struct dispatcherResponse {
-  char *response;
-  struct simpleLinkedList *data;
-};
-*/
 extern void dispatch_sane_work(int);
 extern char *send_command(char *);
 extern void freeSaneCache(void);
+#endif // CAN_SCAN //
 
 #endif /* SANEDISPATCHER */

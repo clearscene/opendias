@@ -19,6 +19,9 @@
 #ifndef SCAN
 #define SCAN
 
+#include "config.h"
+
+#ifdef CAN_SCAN
 enum {
   SCAN_PARAM_do_not_use = 0,
   SCAN_PARAM_DEVNAME,
@@ -34,5 +37,6 @@ enum {
 
 char *internalDoScanningOperation(char *);
 char *internalGetScannerList(); // The workhorse for the command port request
+#endif // CAN_SCAN //
 
 #endif /* SCAN */

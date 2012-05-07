@@ -32,6 +32,7 @@
 #include <memory>
 
 #include "debug.h"
+
 #include "pdf_plug.h"
 
 #ifndef NULL
@@ -93,6 +94,5 @@ extern "C" char *parse_pdf( const char *pdf_filename, const char *out_filename )
 
   return strdup( ocr_text.c_str() );
 }
-
 
 #endif // CAN_PDF //

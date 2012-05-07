@@ -16,10 +16,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <microhttpd.h>
-
 #ifndef WEBHANDLER
 #define WEBHANDLER
+
+#include <microhttpd.h>
 
 #define POSTBUFFERSIZE 512
 #define MAXCLIENTS 5

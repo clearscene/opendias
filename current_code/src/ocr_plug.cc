@@ -88,7 +88,6 @@ extern "C" void runocr(struct scanCallInfo *info) {
 
     tessObject->Clear();
     tessObject->End();
-    //pixDestroy(&pix);
 
     delete [] ret;
 

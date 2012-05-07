@@ -16,33 +16,28 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include "config.h"
-#include "db.h"
-#include "dbaccess.h"
-#include "doc_editor.h"
-#include "main.h"
-#include "utils.h"
-#include "debug.h"
-#ifdef CAN_READODF
-#include "odf_plug.h"
-#endif // CAN_READODF //
-
 #include <sys/types.h>
 #include <sys/dir.h>
 #include <sys/param.h>
+
+#include "db.h"
+#include "dbaccess.h"
+#include "main.h"
+#include "utils.h"
+#include "debug.h"
  
-//#define FALSE 0
-//#define TRUE !FALSE
+#include "doc_editor.h"
 
 char *doDelete (char *documentId) {
 
   int pages, i;
   char *docTemplate, *docPath;
-
 
   char *sql = o_printf("SELECT pages FROM docs WHERE docid = %s", documentId);
   struct simpleLinkedList *rSet = runquery_db(sql);
@@ -51,7 +46,8 @@ char *doDelete (char *documentId) {
     pages = atoi(pages_s);
     o_log(INFORMATION, "%s", pages_s);
     free(pages_s);
-  } else {
+  } 
+  else {
     o_log(ERROR, "Could not select record %s.", documentId);
     free_recordset( rSet );
     free(sql);
@@ -201,10 +197,10 @@ char *getDocDetail (char *documentId) {
  </DocDetail>\
 </Response>");
   returnXML = o_printf(returnXMLtemplate, 
-                            documentId, title, readData_db(rSet, "entrydate"), readData_db(rSet, "filetype"), 
-                            humanReadableDate, readData_db(rSet, "pages"), readData_db(rSet, "ocrtext"), 
-                            readData_db(rSet, "ppl"), readData_db(rSet, "lines"), tags, docs,
-                            readData_db(rSet, "hardcopyKept"),
+          documentId, title, readData_db(rSet, "entrydate"), readData_db(rSet, "filetype"), 
+          humanReadableDate, readData_db(rSet, "pages"), readData_db(rSet, "ocrtext"), 
+          readData_db(rSet, "ppl"), readData_db(rSet, "lines"), tags, docs,
+          readData_db(rSet, "hardcopyKept"),
 			    readData_db(rSet, "actionrequired") );
 
   free_recordset(rSet);
@@ -281,6 +277,7 @@ char *updateTagLinkage(char *docid, char *link, char *subaction) {
     rc = addTagToDoc(docid, tagid);
     free(tagid);
   }
+
   else if(0 == strcmp(subaction, "removeTag")) {
     char *tagid = getTagId( link );
     rc = removeTagFromDoc (docid, tagid);
@@ -293,6 +290,7 @@ char *updateTagLinkage(char *docid, char *link, char *subaction) {
     rc = addDocToDoc(docid, link);
     rc += addDocToDoc(link, docid);
   }
+
   else if(0 == strcmp(subaction, "removeDoc")) {
     rc = removeDocFromDoc(docid, link);
     rc += removeDocFromDoc(link, docid);

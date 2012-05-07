@@ -19,6 +19,9 @@
 #ifndef DBACCESS
 #define DBACCESS
 
+#include "config.h"
+
+#ifdef CAN_SCAN
 enum {                                  // Value indicate ...
   SCAN_IDLE = 0,
   SCAN_INTERNAL_ERROR,
@@ -45,6 +48,7 @@ void addScanProgress (char *);
 void updateScanProgress(char *, int, int);
 void updateNewScannedPage (int, char *, int); // Frees both chars
 char *addNewScannedDoc (int, int, int, int);
+#endif // CAN_SCAN //
 char *addNewFileDoc (int, char *);
 int updateDocValue_int (char *, char *, int);
 int updateDocValue (char *, char *, char *);

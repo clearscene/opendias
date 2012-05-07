@@ -19,6 +19,9 @@
 #ifndef OCR_PLUG
 #define OCR_PLUG
 
+#include "config.h"
+
+#ifdef CAN_OCR
 #include <leptonica/allheaders.h>
 
 #ifdef __cplusplus
@@ -46,5 +49,7 @@ extern void runocr(struct scanCallInfo*);
 #ifdef __cplusplus
 }
 #endif
+
+#endif // CAN_OCR //
 
 #endif /* OCR_PLUG */

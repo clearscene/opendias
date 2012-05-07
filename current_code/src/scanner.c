@@ -20,18 +20,17 @@
 
 #include "config.h"
 
+#ifdef CAN_SCAN
 #include <stdlib.h>
 #include <string.h>     // compares
-#ifdef CAN_SCAN
 #include <sane/sane.h>  // Scanner Interface
 #include <sane/saneopts.h>  // Scanner Interface
-#endif // CAN_SCAN //
 
-#include "scanner.h"
 #include "utils.h"
 #include "debug.h"
 
-#ifdef CAN_SCAN
+#include "scanner.h"
+
 
 void handleSaneErrors(char *defaultMessage, SANE_Status st, int retCode) {
 

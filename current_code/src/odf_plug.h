@@ -16,12 +16,14 @@
  * windation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
  
-#ifdef CAN_READODF
 #ifndef READ_ODF
 #define READ_ODF
 
+#include "config.h"
+
+#ifdef CAN_READODF
 char *get_odf_Text (const char *);
 void get_odf_Thumb (const char *, const char *);
+#endif // CAN_READODF //
 
 #endif /* READ_ODF */
-#endif // CAN_READODF //

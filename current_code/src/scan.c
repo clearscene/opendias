@@ -18,33 +18,29 @@
 
 #include "config.h"
 
+#ifdef CAN_SCAN
 #include <stdlib.h>
 #include <stdio.h>      // printf, file operations
 #include <string.h>     // compares
 #include <math.h>       // for fmod
 
-#ifdef CAN_SCAN
 #include <leptonica/allheaders.h>
 #include <FreeImage.h>  // 
 #include <sane/sane.h>  // Scanner Interface
 #include <sane/saneopts.h>  // Scanner Interface
 #include <netinet/in.h>
-
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
 
 #include "scanner.h"
-#endif // CAN_SCAN //
-
-#include "scan.h"
 #include "imageProcessing.h"
 #include "dbaccess.h"
 #include "main.h"
 #include "utils.h"
 #include "debug.h"
 
-#ifdef CAN_SCAN
+#include "scan.h"
 
 int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resolution, int *buff_requested_len ) {
 
@@ -573,15 +569,13 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
 void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix ) {
   char *ocrText;
   char *ocrLang;
-#ifdef CAN_SCAN
-  char *ocrScanText;
-#endif // CAN_SCAN //
 
   ocrLang = getScanParam(uuid, SCAN_PARAM_DO_OCR);
 #ifdef CAN_OCR
   if(ocrLang && 0 != strcmp(ocrLang, "-") ) {
 
     if(request_resolution >= 300 && request_resolution <= 400) {
+      char *ocrScanText;
 
       o_log(INFORMATION, "Attempting OCR in lang of %s", ocrLang);
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
@@ -626,10 +620,6 @@ char *internalDoScanningOperation(char *uuid) {
   char *total_requested_pages_s;
   char *devName;
   char *outFilename;
-  /*char *tmpFile;
-  FILE *scanOutFile;
-  size_t size;
-  placeholders for possible 'exec' of OCR */
 
   o_log(DEBUGM, "doScanningOperation: sane initialized uuid(%s)",(char *)uuid);
   // Open the device
@@ -790,12 +780,10 @@ char *internalDoScanningOperation(char *uuid) {
 
   return o_strdup("OK"); 
 }
-#endif // CAN_SCAN //
 
 
 extern char *internalGetScannerList() {
   char *answer = NULL;
-#ifdef CAN_SCAN
   SANE_Status status;
   const SANE_Device **SANE_device_list;
   int scanOK = SANE_FALSE;
@@ -986,7 +974,8 @@ extern char *internalGetScannerList() {
     answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
   }
 
-#endif // CAN_SCAN //
   return answer;
 
 }
+
+#endif // CAN_SCAN //

@@ -19,14 +19,18 @@
 #ifndef PAGERENDER
 #define PAGERENDER
 
+#include "config.h"
+
 #include "validation.h" // for con_info struct - move me to web_handler.h
 
+#ifdef CAN_SCAN
 char *getScannerList();  // Command port frontend to the internalGetScannerList function
 void *doScanningOperation(void *); //command port frontend to the internalDoScanningOperation function
 char *getScanningProgress(char *);
 char *doScan(char *, char *, char *, char *, char *, char *, struct connection_info_struct *);
-char *docFilter(char *, char *, char *, char *, char *, char *, char *, char *, char *, char *);
 char *nextPageReady(char *, struct connection_info_struct *);
+#endif // CAN_SCAN //
+char *docFilter(char *, char *, char *, char *, char *, char *, char *, char *, char *, char *);
 char *getAccessDetails();
 char *controlAccess(char *, char *, char *, char *, int);
 char *titleAutoComplete(char *, char *);

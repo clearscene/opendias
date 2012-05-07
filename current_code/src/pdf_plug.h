@@ -16,10 +16,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef CAN_PDF
-
 #ifndef PDF_PLUG
 #define PDF_PLUG
+
+#include "config.h"
+
+#ifdef CAN_PDF
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,6 +33,6 @@ extern char *parse_pdf( const char *, const char *);
 }
 #endif
 
-#endif // PDF_PLUG //
-
 #endif // CAN_PDF //
+
+#endif // PDF_PLUG //

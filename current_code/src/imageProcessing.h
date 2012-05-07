@@ -19,6 +19,8 @@
 #ifndef IMAGEPROCESSING
 #define IMAGEPROCESSING
 
+#include "config.h"
+
 #ifdef CAN_OCR
 #include <leptonica/allheaders.h>
 

@@ -40,6 +40,7 @@
 
 #include "import_doc.h"
 
+#ifdef CAN_PDF
 char *extractThumbnail(char *docid) {
 
   char *source_file, *target_file, *ocrText;
@@ -47,16 +48,15 @@ char *extractThumbnail(char *docid) {
   source_file = o_printf("%s/scans/%s.pdf", BASE_DIR, docid); 
   target_file = o_printf("%s/scans/%s_thumb.jpg", BASE_DIR, docid);
 
-#ifdef CAN_PDF
   ocrText = parse_pdf( source_file, target_file ); // pdf_plug.cc [create thumbnail and return body text] 
   free(ocrText);
-#endif // CAN_PDF //
 
   free(source_file);
   free(target_file);
 
   return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><NextPageReady><result>OK</result></NextPageReady></Response>");
 }
+#endif // CAN_PDF //
 
 char *uploadfile(char *filename, char *ftype) {
 
@@ -83,9 +83,9 @@ char *uploadfile(char *filename, char *ftype) {
 
   // --------------------------------------
   else if( 0 == strcmp("ODF", ftype) ) {
-    char *outfile;
     itype = ODF_FILETYPE;
 #ifdef CAN_READODF
+    char *outfile;
     outfile = o_printf("/tmp/%s.thumb", filename);
     get_odf_Thumb( datafile, outfile );
     ocrText = get_odf_Text( datafile ); // odf_plug.c 
@@ -97,6 +97,7 @@ char *uploadfile(char *filename, char *ftype) {
   // --------------------------------------
   else if( 0 == strcmp("jpg", ftype) ) {
     itype = JPG_FILETYPE;
+#ifdef CAN_OCR
     PIX *pix;
     if ( ( pix = pixRead( datafile ) ) == NULL) {
       o_log(ERROR, "Could not load the image data into a PIX");
@@ -104,6 +105,7 @@ char *uploadfile(char *filename, char *ftype) {
     o_log(INFORMATION, "Convertion process: Loaded (depth: %d)", pixGetDepth(pix));
     ocrText = getTextFromImage(pix, 0, "eng");
     pixDestroy( &pix );
+#endif // CAN_OCR //
   }
 
   // --------------------------------------
@@ -119,7 +121,7 @@ char *uploadfile(char *filename, char *ftype) {
   free(datafile);
 
   // Save the record to the DB
-  docid = addNewFileDoc(itype, ocrText); //ocrText get freed in this method
+  docid = addNewFileDoc(itype, ocrText); // ocrText get freed in this method
 
   // Move the datafile to the file store location
   to_name = o_printf("%s/scans/%s", BASE_DIR, docid); // imported docs, are stored with no "_x" postfix.

@@ -17,22 +17,21 @@
  */
 
 #include "config.h"
+
+#ifdef CAN_OCR
 #include <stdlib.h>
 #include <stdio.h>
-#include "debug.h"
-#ifdef CAN_OCR
-#include "ocr_plug.h"
 #include <leptonica/allheaders.h>
-#endif // CAN_OCR //
+
+#include "debug.h"
+#include "ocr_plug.h"
+
 #include "imageProcessing.h"
 
 
-#ifdef CAN_OCR
 char *getTextFromImage(PIX *pix, int ppi, char *lang) {
 
   char *txt = NULL;
-
-  //Pix *pix = pixRead( info->image_filename );
 
   struct scanCallInfo infoData;
   infoData.image_pix = pix;

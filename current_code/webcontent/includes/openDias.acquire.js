@@ -147,7 +147,7 @@ function getScanningProgress (progressId, device) {
              action='finish';
 
            }
-	 },
+         },
          error: function( x, t, m ) {
            if(t=="timeout") {
              alert("[a001] Timeout while talking to the server");
@@ -207,7 +207,7 @@ $(document).ready(function() {
          success: function(data){
            if( $(data).find('error').text() ){
              $('#loading').canvasLoaderHalt();
-             $('#loading').text("Unable to fetch a list of available scanners: "+$(data).find('error').text());
+             $('#scanning').text("Unable to fetch a list of available scanners: "+$(data).find('error').text());
              return 1;
            }
            var deviceid=0;

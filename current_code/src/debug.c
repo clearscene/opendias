@@ -16,13 +16,17 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
-#include "debug.h"
+
 #include "utils.h"
+
+#include "debug.h"
 
 void i_o_log(const int verbosity, const char *message, va_list inargs) {
 

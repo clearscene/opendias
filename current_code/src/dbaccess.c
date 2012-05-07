@@ -17,16 +17,20 @@
  */
 
 #include "config.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "db.h"
 #include "utils.h"
 #include "simpleLinkedList.h"
 #include "main.h"
 #include "debug.h"
-#include "dbaccess.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
+#include "dbaccess.h"
+
+#ifdef CAN_SCAN
 int setScanParam(char *uuid, int param, char *vvalue) {
 
   int rc;
@@ -108,6 +112,7 @@ void updateScanProgress (char *uuid, int status, int value) {
   free(progressUpdate);
 
 }
+#endif // CAN_SCAN //
 
 static char *addNewDoc (int ftype, int getLines, int ppl, int resolution, int pageCount, char *ocrText) {
 

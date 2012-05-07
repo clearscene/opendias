@@ -16,6 +16,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -23,8 +25,10 @@
 #include <unistd.h> // for getpid & readlink
 #include <sys/stat.h> // for mkdir
 #include <ctype.h>
+
 #include "main.h"
 #include "debug.h"
+
 #include "utils.h"
 
 static char *ItoaDigits = 

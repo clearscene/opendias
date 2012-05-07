@@ -17,6 +17,7 @@
  */
 
 #include "config.h"
+
 #ifdef CAN_READODF
 #include <unistd.h>
 #include <archive.h>
@@ -27,10 +28,11 @@
 #include <fcntl.h>
 #include <libxml/parser.h>
 #include <zzip/lib.h>
-#include "odf_plug.h"
+
 #include "utils.h"
 #include "debug.h"
 
+#include "odf_plug.h"
 
 void xmlAllNodeGetContent(xmlNode *parent, char **str) {
 
