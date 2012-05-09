@@ -79,8 +79,8 @@ int connect_db (int createIfRequired) {
   char *db, *data;
 
   // Test to see if a DB file exsists
-  db = o_printf("%s/openDIAS.sqlite3", BASE_DIR);
-  o_log(DEBUGM,"database file is %s\n",db);
+  db = o_printf("%sopenDIAS.sqlite3", BASE_DIR);
+  o_log(DEBUGM,"database file is %s",db);
   if( 0 == access(db, F_OK) ) {
     o_log(DEBUGM, "Dir structure is in-place, database should exist");
     if(open_db (db)) {
@@ -317,7 +317,7 @@ void free_recordset (struct simpleLinkedList *rSet) {
 
   struct simpleLinkedList *field, *row;
 
-  o_log(SQLDEBUG, "Entering free_recordset rSet(%x)", rSet);
+  o_log(DEBUGM, "Free recordset (%x)", rSet);
 
   if( rSet && ( rSet != NULL ) ) {
     if( rSet->data != NULL ) {

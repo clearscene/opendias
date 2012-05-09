@@ -4,7 +4,8 @@ LOG-OUTPUT
 -date-:-thread-:INF: Setting default log verbosity to 4.
 -date-:-thread-:INF: Using config file: [CONFIG_FILE]
 -date-:-thread-:INF: Which says the database is at: /tmp/opendiastest/
--date-:-thread-:INF: Creating new database
+-date-:-thread-:DBG: database file is /tmp/opendiastest/openDIAS.sqlite3
+-date-:-thread-:INF: Creating new database /tmp/opendiastest/openDIAS.sqlite3 (BASE_DIR = /tmp/opendiastest/)
 -date-:-thread-:DBG: Checking for a populated database
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:DBG: No database tables found.
@@ -256,6 +257,9 @@ CREATE TABLE doc_links (
 CREATE INDEX doc_links_linkid_idx
 ON doc_links(docid ASC);
 
+ALTER TABLE docs
+ADD COLUMN hardcopyKept NUMERIC DEFAULT 1;
+
 CREATE TEMPORARY TABLE t1_backup("status" INTEGER, "value" INTEGER, "client_id" CHAR(36));
 INSERT INTO t1_backup SELECT status, value, client_id FROM scan_progress;
 DROP TABLE scan_progress;
@@ -270,6 +274,7 @@ DROP TABLE t1_backup;
 
 COMMIT;
 
+-date-:-thread-:INF: database opened
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:INF: Config setting: log_verbosity = 3
 -date-:-thread-:INF: Moving log verbosity from 4 to 3

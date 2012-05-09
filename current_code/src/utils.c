@@ -93,12 +93,14 @@ size_t load_file_to_memory(const char *p_filename, char **result) {
 
   if((*result = (char *)malloc(size+1)) == NULL) {
     o_log(ERROR, "Out of memory while reading file information");
+    fclose(p_f);
     return (size_t)0;
   }
 
   if (size != fread(*result, sizeof(char), size, p_f)) {
     free(*result);
     o_log(ERROR, "Error reading from file");
+    fclose(p_f);
     return (size_t)0; // means file reading fail
   }
 
@@ -330,6 +332,7 @@ void addFileExt(char **fname, int ftype) {
 }
 
 char *i_printf(const char *fmt, va_list inargs) {
+
   va_list ap;
   char *str;
   size_t xs;
@@ -351,7 +354,6 @@ char *i_printf(const char *fmt, va_list inargs) {
 		+ use vsnprintf to write result in str
 	*/
 	//printf("entering i_printf fmt = %s\n",fmt);
-
 	va_copy(ap,inargs);
 
 	//open dev zero as stream
@@ -365,9 +367,9 @@ char *i_printf(const char *fmt, va_list inargs) {
 
 	xs=xs+sizeof(*str);
 	if ( (str=(char*)malloc(xs)) == NULL ) {
-                printf("memory allocation error\n");
-                exit(1);
-        }
+    printf("memory allocation error\n");
+    exit(1);
+  }
 	//printf("allocated %d bytes\n",(int)xs);
 
 	va_end(inargs);
@@ -378,7 +380,6 @@ char *i_printf(const char *fmt, va_list inargs) {
 		exit(110);
 	}
 	
-
 	//printf("leaving i_printf result = %s\n",str);
 	return(str);
 }

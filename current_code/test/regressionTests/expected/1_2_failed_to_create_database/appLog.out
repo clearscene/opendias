@@ -4,6 +4,7 @@ LOG-OUTPUT
 -date-:-thread-:INF: Setting default log verbosity to 4.
 -date-:-thread-:INF: Using config file: [CONFIG_FILE]
 -date-:-thread-:INF: Which says the database is at: /root
+-date-:-thread-:DBG: database file is /root/openDIAS.sqlite3
 -date-:-thread-:INF: Creating new database
 -date-:-thread-:ERR: Can't open database: [ERROR]
 -date-:-thread-:DBG: Closing database

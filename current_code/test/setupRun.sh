@@ -1,3 +1,4 @@
+#!/bin/bash
 
 usage() {
   echo "Usage: [-h] [-r] [-m] [-s] [-c] [<tests>]"
@@ -112,15 +113,15 @@ if [ "$NOBUILD" == "" ]; then
 
   echo Performing code analysis ...
   cd ../
-  cppcheck --verbose --enable=all --error-exitcode=1 src/ &> test/results/buildLog2.out
-  if [ "$?" -ne "0" ]; then
-    echo "Code analysis found a problem. Check the buildLog.out for details."
-    cd test
-    # unfortunatly bash cannot support "&>>" - yet!
-    cat results/buildLog2.out >> results/buildLog.out
-    rm results/buildLog2.out
-    exit
-  fi
+#  cppcheck --verbose --enable=all --error-exitcode=1 src/ &> test/results/buildLog2.out
+#  if [ "$?" -ne "0" ]; then
+#    echo "Code analysis found a problem. Check the buildLog.out for details."
+#    cd test
+#    # unfortunatly bash cannot support "&>>" - yet!
+#    cat results/buildLog2.out >> results/buildLog.out
+#    rm results/buildLog2.out
+#    exit
+#  fi
   cd test
   # unfortunatly bash cannot support "&>>" - yet!
   cat results/buildLog2.out >> results/buildLog.out
