@@ -6,7 +6,18 @@
 ==XXXXX==  
 ==XXXXX==  Warning: invalid file descriptor [system specific]
 ==XXXXX==  
-==XXXXX==  FILE DESCRIPTORS: 4 open at exit.
+==XXXXX==  FILE DESCRIPTORS: 5 open at exit.
+==XXXXX==  Open file descriptor 4: [FILE PATH]
+==XXXXX==     at 0x4A95C63: __open_nocancel (syscall-template.S:82)
+==XXXXX==     by 0x4A2BA2B: _IO_file_open (fileops.c:233)
+==XXXXX==     by 0x4A2BBE7: _IO_file_fopen@@GLIBC_2.1 (fileops.c:338)
+==XXXXX==     by 0x4A1FCE6: __fopen_internal (iofopen.c:93)
+==XXXXX==     by 0x4A1FD4A: fopen@@GLIBC_2.1 (iofopen.c:107)
+==XXXXX==     by 0x4BA9472: libjpeg_general_init (in /usr/lib/i386-linux-gnu/libjpeg.so.8.0.2)
+==XXXXX==     by 0x400EE9A: call_init (dl-init.c:85)
+==XXXXX==     by 0x400EF83: _dl_init (dl-init.c:134)
+==XXXXX==     by 0x400120E: ??? (in /lib/i386-linux-gnu/ld-2.15.so)
+==XXXXX==  
 ==XXXXX==  Open file descriptor 3: [FILE PATH]
 ==XXXXX==     <inherited from parent>
 ==XXXXX==  
@@ -24,7 +35,12 @@
 ==XXXXX==      in use at exit: XXX bytes in XXX blocks
 ==XXXXX==    total heap usage: XXXX allocs, XXXX frees, XXX bytes allocated
 ==XXXXX==  
-==XXXXX==  All heap blocks were freed -- no leaks are possible
+==XXXXX==  LEAK SUMMARY:
+==XXXXX==     definitely lost: XXX bytes in XXX blocks
+==XXXXX==     indirectly lost: XXX bytes in XXX blocks
+==XXXXX==       possibly lost: XXX bytes in XXX blocks
+==XXXXX==     still reachable: XXX bytes in XXX blocks
+==XXXXX==          suppressed: XXX bytes in XXX blocks
 ==XXXXX==  
 ==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
 ==XXXXX==  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: XXX from XXX)
@@ -35,7 +51,12 @@
 ==XXXXX==      in use at exit: XXX bytes in XXX blocks
 ==XXXXX==    total heap usage: XXXX allocs, XXXX frees, XXX bytes allocated
 ==XXXXX==  
-==XXXXX==  All heap blocks were freed -- no leaks are possible
+==XXXXX==  LEAK SUMMARY:
+==XXXXX==     definitely lost: XXX bytes in XXX blocks
+==XXXXX==     indirectly lost: XXX bytes in XXX blocks
+==XXXXX==       possibly lost: XXX bytes in XXX blocks
+==XXXXX==     still reachable: XXX bytes in XXX blocks
+==XXXXX==          suppressed: XXX bytes in XXX blocks
 ==XXXXX==  
 ==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
 ==XXXXX==  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: XXX from XXX)

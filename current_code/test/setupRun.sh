@@ -111,17 +111,23 @@ if [ "$NOBUILD" == "" ]; then
   make clean &> test/results/buildLog2.out
   cd test
 
+  echo Recording current installed package versions off all dependencies
+  dpkg -l `apt-rdepends build-essential libsqlite3-dev libsane-dev libmicrohttpd-dev uuid-dev libleptonica-dev libpoppler-cpp-dev libtesseract-dev libxml2-dev libzzip-dev libarchive-dev | grep -v "^ " | sort` &> results/buildLog2.out
+  # unfortunatly bash cannot support "&>>" - yet!
+  cat results/buildLog2.out >> results/buildLog.out
+  rm results/buildLog2.out
+
   echo Performing code analysis ...
   cd ../
-#  cppcheck --verbose --enable=all --error-exitcode=1 src/ &> test/results/buildLog2.out
-#  if [ "$?" -ne "0" ]; then
-#    echo "Code analysis found a problem. Check the buildLog.out for details."
-#    cd test
-#    # unfortunatly bash cannot support "&>>" - yet!
-#    cat results/buildLog2.out >> results/buildLog.out
-#    rm results/buildLog2.out
-#    exit
-#  fi
+  cppcheck --verbose --enable=all --error-exitcode=1 src/ &> test/results/buildLog2.out
+  if [ "$?" -ne "0" ]; then
+    echo "Code analysis found a problem. Check the buildLog.out for details."
+    cd test
+    # unfortunatly bash cannot support "&>>" - yet!
+    cat results/buildLog2.out >> results/buildLog.out
+    rm results/buildLog2.out
+    exit
+  fi
   cd test
   # unfortunatly bash cannot support "&>>" - yet!
   cat results/buildLog2.out >> results/buildLog.out
