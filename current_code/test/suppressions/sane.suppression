@@ -50,3 +50,11 @@
    fun:do_dlopen
    fun:clone
 }
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   fun:__libc_start_main
+   obj:*
+}
