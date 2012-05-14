@@ -139,6 +139,8 @@ int setup (char *configFile) {
 }
 
 void server_shutdown() {
+  int i;
+
   o_log(INFORMATION, "openDias service is shutting down....");
 
   if( startedServices.httpd ) {
@@ -175,6 +177,12 @@ void server_shutdown() {
   close(STDOUT_FILENO);
   close(STDERR_FILENO);
   close(STDIN_FILENO);
+
+  // close handles to files opened by libs, who 'forgot' to close them themselves
+  for (i = getdtablesize()-1; i > 0; --i) {
+    close(i);
+  }
+
 }
 
 void signal_handler(int sig) {
@@ -240,6 +248,9 @@ void daemonize(char *rundir, char *pidfile) {
     if (pid > 0) {
         /* Child created ok, so exit parent process */
         o_log(INFORMATION, "Child process created %d", pid);
+        for (i = getdtablesize()-1; i > 0; --i) {
+          close(i);
+        }
         exit(EXIT_SUCCESS);
     }
  
@@ -280,32 +291,23 @@ void daemonize(char *rundir, char *pidfile) {
     size = strlen(str);
     if(size != (size_t)write(pidFilehandle, str, size) )
       o_log(ERROR, "Could not write entire data.");
-
-    /* close all descriptors */
     free(str);
-    for (i = getdtablesize(); i > 2; --i) {
-        close(i);
-    }
- 
+
     /* Route I/O connections */
     close(STDIN_FILENO);
-    //close(STDOUT_FILENO);
-    //close(STDERR_FILENO);
+    close(STDOUT_FILENO);
+    close(STDERR_FILENO);
 
-	//open STDOUT and STDOUT again and bind them to null device. (ensure potentially outputted data 
-	//can be written properly.
-		//if((pid=fork()) == -1)
-	
-	int devnull;	
-	if ( (devnull=open("/dev/null",O_APPEND)) == -1 ) {
-		o_log(ERROR,"cannot open /dev/null");
-		exit(1);
-	}
+    int devnull;	
+    if ( (devnull=open("/dev/null",O_APPEND)) == -1 ) {
+      o_log(ERROR,"cannot open /dev/null");
+      exit(1);
+    }
 
-	dup2(devnull,STDOUT_FILENO);
-	dup2(devnull,STDERR_FILENO);
+    dup2(devnull,STDOUT_FILENO);
+    dup2(devnull,STDERR_FILENO);
 
-  i = chdir(rundir); /* change running directory */
+    i = chdir(rundir); /* change running directory */
 }
 
 #ifdef CAN_SCAN
