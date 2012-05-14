@@ -88,12 +88,6 @@ if [ "$?" -eq "0" ]; then
 fi
 rm -f /var/log/opendias/opendias.log
 
-grep -q "^test" /etc/sane.d/dll.conf
-if [ "$?" -ne "0" ]; then
-  echo enable sane testing by commenting in "test" in "/etc/sane.d/dll.conf"
-  exit
-fi
-
 #
 # Cleanup
 #
@@ -202,6 +196,14 @@ if [ "$SKIPMEMORY" == "" ]; then
 #else
 #  VALGRIND="strace "
 fi
+
+
+#
+# Use testing sane config (so testers do not have to update their environment)
+#
+mkdir -p /tmp/opendiassaneconfig
+cp config/sane/* /tmp/opendiassaneconfig/
+export SANE_CONFIG_DIR=/tmp/opendiassaneconfig/
 
 
 PWD=`pwd`
