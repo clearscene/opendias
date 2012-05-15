@@ -41,7 +41,7 @@ sub test {
     }
   }
 
-  # Ensure there are no unexpected tabs
+  # Ensure there are no missing tabs
   if( $x != @expected ) {
     o_log("Missing tabs.");
     return 1;
@@ -71,7 +71,7 @@ sub test {
   $page = $scanButton->click();
 
   # Wait for the scan to happen
-  my $scanTimeout = 300; # seconds = 5 mins (valgrind can slow things down)
+  my $scanTimeout = 300; # seconds = 5 mins
   my $runningTime = 0;
   my $newpage;
   do {
@@ -90,7 +90,7 @@ sub test {
   o_log( $el2->[0]->getTextContent() );
 
   # Check the scanned output
-  my $loaded = open(FILE, "/tmp/opendiastest/scans/2_1.jpg");
+  my $loaded = open(FILE, "/tmp/opendiastest/scans/1_1.jpg");
   unless ( $loaded ) {
     o_log("Can't open scanned file: $!");
     return 1;
@@ -99,7 +99,7 @@ sub test {
   binmode(FILE);
   my $md5 = Digest::MD5->new->addfile(*FILE)->hexdigest;
   close(FILE);
-  if( $md5 ne "bb958d7e9621f2b6b492adbb6029afa5" ) {
+  if( $md5 ne "090d21d1c1714a38e931ba4a542b0cee" ) {
     o_log("Scanned file looks different to the expected. ".$md5);
     return 1;
   }
