@@ -90,7 +90,7 @@ sub test {
   o_log( $el2->[0]->getTextContent() );
 
   # Check the scanned output
-  my $loaded = open(FILE, "/tmp/opendiastest/scans/1_1.jpg");
+  my $loaded = open(FILE, "/tmp/opendiastest/scans/2_1.jpg");
   unless ( $loaded ) {
     o_log("Can't open scanned file: $!");
     return 1;
