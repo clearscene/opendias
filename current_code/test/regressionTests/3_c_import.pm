@@ -29,6 +29,7 @@ sub test {
   );
 
   my $ua = LWP::UserAgent->new;
+  $ua->timeout( 600 ); # 10 mins
   $ua->agent($default{__agent});
 
   my $file = "./regressionTests/inputs/3_c_import/test.pdf";
@@ -50,7 +51,7 @@ sub test {
     o_log( "response was = " . Dumper( $result ) );
   }
   else {
-    o_log( "Did not get a successful response." );
+    o_log( "Did not get a successful response.\n".Dumper($res)."\n".Dumper($ua) );
     return 1;
   }
 
