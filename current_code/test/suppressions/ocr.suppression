@@ -1,10 +1,87 @@
 {
    <insert_a_suppression_name_here>
    Memcheck:Leak
+   fun:_Znaj
+   fun:_ZN13GenericVectorIPN9tesseract11StringParamEE7reserveEi
+   fun:_ZN13GenericVectorIPN9tesseract11StringParamEE15double_the_sizeEv
+   fun:_ZN13GenericVectorIPN9tesseract11StringParamEE9push_backES2_
+   fun:_ZN9tesseract11StringParamC1EPKcS2_S2_bPNS_13ParamsVectorsE
+   obj:/usr/lib/libtesseract.so.3.0.2
+   obj:/usr/lib/libtesseract.so.3.0.2
+   fun:call_init
+   fun:_dl_init
+   obj:/lib/i386-linux-gnu/ld-2.15.so
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:_Znaj
+   fun:_ZN13GenericVectorIPN9tesseract11DoubleParamEE7reserveEi
+   fun:_ZN13GenericVectorIPN9tesseract11DoubleParamEE15double_the_sizeEv
+   fun:_ZN13GenericVectorIPN9tesseract11DoubleParamEE9push_backES2_
+   fun:_ZN9tesseract11DoubleParamC1EdPKcS2_bPNS_13ParamsVectorsE
+   obj:/usr/lib/libtesseract.so.3.0.2
+   obj:/usr/lib/libtesseract.so.3.0.2
+   fun:call_init
+   fun:_dl_init
+   obj:/lib/i386-linux-gnu/ld-2.15.so
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:_Znaj
+   fun:_ZN13GenericVectorIPN9tesseract9BoolParamEE7reserveEi
+   fun:_ZN13GenericVectorIPN9tesseract9BoolParamEE15double_the_sizeEv
+   fun:_ZN13GenericVectorIPN9tesseract9BoolParamEE9push_backES2_
+   fun:_ZN9tesseract9BoolParamC1EbPKcS2_bPNS_13ParamsVectorsE
+   obj:/usr/lib/libtesseract.so.3.0.2
+   obj:/usr/lib/libtesseract.so.3.0.2
+   fun:call_init
+   fun:_dl_init
+   obj:/lib/i386-linux-gnu/ld-2.15.so
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:_Znaj
+   fun:_ZN13GenericVectorIPN9tesseract8IntParamEE7reserveEi
+   fun:_ZN13GenericVectorIPN9tesseract8IntParamEE15double_the_sizeEv
+   fun:_ZN13GenericVectorIPN9tesseract8IntParamEE9push_backES2_
+   fun:_ZN9tesseract8IntParamC1EiPKcS2_bPNS_13ParamsVectorsE
+   obj:/usr/lib/libtesseract.so.3.0.2
+   obj:/usr/lib/libtesseract.so.3.0.2
+   fun:call_init
+   fun:_dl_init
+   obj:/lib/i386-linux-gnu/ld-2.15.so
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
    fun:_Znwj
-   fun:runocr
-   fun:getTextFromImage
-   fun:doScanningOperation
-   fun:start_thread
-   fun:clone
+   fun:_Z12GlobalParamsv
+   obj:/usr/lib/libtesseract.so.3.0.2
+   obj:/usr/lib/libtesseract.so.3.0.2
+   fun:call_init
+   fun:_dl_init
+   obj:/lib/i386-linux-gnu/ld-2.15.so
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:__fopen_internal
+   fun:fopen@@GLIBC_2.1
+   fun:libjpeg_general_init
+   fun:call_init
+   fun:_dl_init
+   obj:/lib/i386-linux-gnu/ld-2.15.so
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:libjpeg_general_init
+   fun:call_init
+   fun:_dl_init
+   obj:/lib/i386-linux-gnu/ld-2.15.so
 }

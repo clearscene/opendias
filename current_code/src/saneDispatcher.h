@@ -22,7 +22,7 @@
 #include "config.h"
 
 #ifdef CAN_SCAN
-#define ADDRESS "/var/run/saneCommandSocket"
+#define ADDRESS "/tmp/opendias"
 extern void dispatch_sane_work(int);
 extern char *send_command(char *);
 extern void freeSaneCache(void);

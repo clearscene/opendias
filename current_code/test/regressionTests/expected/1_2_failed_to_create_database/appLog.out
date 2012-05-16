@@ -3,9 +3,12 @@ STDOUT
 LOG-OUTPUT
 -date-:-thread-:INF: Setting default log verbosity to 4.
 -date-:-thread-:INF: Using config file: [CONFIG_FILE]
--date-:-thread-:INF: Which says the database is at: /root
--date-:-thread-:INF: Creating new database
+-date-:-thread-:INF: Which says the database is at: /root/
+-date-:-thread-:DBG: database file is /root/openDIAS.sqlite3
+-date-:-thread-:INF: Creating new database /root/openDIAS.sqlite3 (BASE_DIR = /root/)
 -date-:-thread-:ERR: Can't open database: [ERROR]
 -date-:-thread-:DBG: Closing database
 -date-:-thread-:WRN: Could not create/connect to new database
 -date-:-thread-:WRN: /root/openDIAS.sqlite3
+-date-:-thread-:INF: openDias service is shutting down....
+-date-:-thread-:INF: openDias service has shutdown.

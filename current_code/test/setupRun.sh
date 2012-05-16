@@ -1,3 +1,4 @@
+#!/bin/bash
 
 usage() {
   echo "Usage: [-h] [-r] [-m] [-s] [-c] [<tests>]"
@@ -87,12 +88,6 @@ if [ "$?" -eq "0" ]; then
 fi
 rm -f /var/log/opendias/opendias.log
 
-grep -q "^test" /etc/sane.d/dll.conf
-if [ "$?" -ne "0" ]; then
-  echo enable sane testing by commenting in "test" in "/etc/sane.d/dll.conf"
-  exit
-fi
-
 #
 # Cleanup
 #
@@ -109,6 +104,12 @@ if [ "$NOBUILD" == "" ]; then
   cd ../
   make clean &> test/results/buildLog2.out
   cd test
+
+  echo Recording current installed package versions off all dependencies
+  dpkg -l `apt-rdepends build-essential libsqlite3-dev libsane-dev libmicrohttpd-dev uuid-dev libleptonica-dev libpoppler-cpp-dev libtesseract-dev libxml2-dev libzzip-dev libarchive-dev | grep -v "^ " | sort` &> results/buildLog2.out
+  # unfortunatly bash cannot support "&>>" - yet!
+  cat results/buildLog2.out >> results/buildLog.out
+  rm results/buildLog2.out
 
   echo Performing code analysis ...
   cd ../
@@ -195,6 +196,14 @@ if [ "$SKIPMEMORY" == "" ]; then
 #else
 #  VALGRIND="strace "
 fi
+
+
+#
+# Use testing sane config (so testers do not have to update their environment)
+#
+mkdir -p /tmp/opendiassaneconfig
+cp config/sane/* /tmp/opendiassaneconfig/
+export SANE_CONFIG_DIR=/tmp/opendiassaneconfig/
 
 
 PWD=`pwd`

@@ -62,6 +62,7 @@ int setup (char *configFile) {
   VERBOSITY = DEBUGM;
   DB_VERSION = 6;
   PORT = 8988; // Default - but overridden by config settings before port is opened
+  BASE_DIR = NULL;
   LOG_DIR = o_strdup("/var/log/opendias");
   startedServices.log = 1;
   o_log(INFORMATION, "Setting default log verbosity to %d.", VERBOSITY);
@@ -77,7 +78,6 @@ int setup (char *configFile) {
   o_log(INFORMATION, "Using config file: %s", conf);
   if( 0 == load_file_to_memory(conf, &location) ) {
     o_log(ERROR, "Cannot find main config file: %s", conf);
-    free(LOG_DIR);
     free(location);
     return 1;
   }
@@ -88,8 +88,6 @@ int setup (char *configFile) {
 
   // Open (& maybe update) the database.
   if(1 == connect_db(1)) { // 1 = create if required
-    free(LOG_DIR);
-    free(BASE_DIR);
     free(location);
     return 1;
   }
@@ -141,6 +139,8 @@ int setup (char *configFile) {
 }
 
 void server_shutdown() {
+  int i;
+
   o_log(INFORMATION, "openDias service is shutting down....");
 
   if( startedServices.httpd ) {
@@ -174,6 +174,15 @@ void server_shutdown() {
 
   free(BASE_DIR);
   close(pidFilehandle); 
+  close(STDOUT_FILENO);
+  close(STDERR_FILENO);
+  close(STDIN_FILENO);
+
+  // close handles to files opened by libs, who 'forgot' to close them themselves
+  for (i = getdtablesize()-1; i > 0; --i) {
+    close(i);
+  }
+
 }
 
 void signal_handler(int sig) {
@@ -239,6 +248,9 @@ void daemonize(char *rundir, char *pidfile) {
     if (pid > 0) {
         /* Child created ok, so exit parent process */
         o_log(INFORMATION, "Child process created %d", pid);
+        for (i = getdtablesize()-1; i > 0; --i) {
+          close(i);
+        }
         exit(EXIT_SUCCESS);
     }
  
@@ -279,32 +291,23 @@ void daemonize(char *rundir, char *pidfile) {
     size = strlen(str);
     if(size != (size_t)write(pidFilehandle, str, size) )
       o_log(ERROR, "Could not write entire data.");
-
-    /* close all descriptors */
     free(str);
-    for (i = getdtablesize(); i > 2; --i) {
-        close(i);
-    }
- 
+
     /* Route I/O connections */
     close(STDIN_FILENO);
-    //close(STDOUT_FILENO);
-    //close(STDERR_FILENO);
+    close(STDOUT_FILENO);
+    close(STDERR_FILENO);
 
-	//open STDOUT and STDOUT again and bind them to null device. (ensure potentially outputted data 
-	//can be written properly.
-		//if((pid=fork()) == -1)
-	
-	int devnull;	
-	if ( (devnull=open("/dev/null",O_APPEND)) == -1 ) {
-		o_log(ERROR,"cannot open /dev/null");
-		exit(1);
-	}
+    int devnull;	
+    if ( (devnull=open("/dev/null",O_APPEND)) == -1 ) {
+      o_log(ERROR,"cannot open /dev/null");
+      exit(1);
+    }
 
-	dup2(devnull,STDOUT_FILENO);
-	dup2(devnull,STDERR_FILENO);
+    dup2(devnull,STDOUT_FILENO);
+    dup2(devnull,STDERR_FILENO);
 
-  i = chdir(rundir); /* change running directory */
+    i = chdir(rundir); /* change running directory */
 }
 
 #ifdef CAN_SCAN
@@ -324,11 +327,13 @@ int createSocket(void) {
 
   if (bind(COMMSSOCKET, (struct sockaddr *) &saun, len) < 0) {
     o_log(ERROR, "Could not bind to the sane command socket");
+    close( COMMSSOCKET );
     return 1;
   }
 
   if (listen(COMMSSOCKET, QUEUE_LENGTH) < 0) {
     o_log(ERROR, "Could not listen on the sane command socket");
+    close( COMMSSOCKET );
     return 1;
   }
 
@@ -392,7 +397,8 @@ int main (int argc, char **argv) {
   if( setup(configFile) == 1 ) {
     if( turnToDaemon!=1 ) 
       printf("Could not startup. Check /var/log/opendias/ for the reason.\n");
-    return 1;
+    server_shutdown();
+    exit(EXIT_FAILURE);
   }
 
 #ifdef CAN_SCAN
@@ -407,8 +413,7 @@ int main (int argc, char **argv) {
   
 
   // Create the sane command socket
-  createSocket();
-  if ( COMMSSOCKET < 0 ) {
+  if ( createSocket() || COMMSSOCKET < 0 ) {
     o_log(INFORMATION, "Could not create a comms port");
     server_shutdown();
     exit(EXIT_FAILURE);

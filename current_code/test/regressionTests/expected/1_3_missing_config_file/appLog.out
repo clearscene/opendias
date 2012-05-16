@@ -5,3 +5,5 @@ LOG-OUTPUT
 -date-:-thread-:INF: Using config file: [CONFIG_FILE]
 -date-:-thread-:ERR: Could not open file: [PATH]/test/config/testappMISSING.conf
 -date-:-thread-:ERR: Cannot find main config file: [PATH]/test/config/testappMISSING.conf
+-date-:-thread-:INF: openDias service is shutting down....
+-date-:-thread-:INF: openDias service has shutdown.
