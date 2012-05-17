@@ -105,11 +105,16 @@ if [ "$NOBUILD" == "" ]; then
   make clean &> test/results/buildLog2.out
   cd test
 
-  echo Recording current installed package versions off all dependencies
-  dpkg -l `apt-rdepends build-essential libsqlite3-dev libsane-dev libmicrohttpd-dev uuid-dev libleptonica-dev libpoppler-cpp-dev libtesseract-dev libxml2-dev libzzip-dev libarchive-dev | grep -v "^ " | sort` &> results/buildLog2.out
-  # unfortunatly bash cannot support "&>>" - yet!
-  cat results/buildLog2.out >> results/buildLog.out
-  rm results/buildLog2.out
+  which apt-rdepends > /dev/null
+  if [ "$?" -ne "0" ]; then
+    echo Could not determine the installed packages. If you\'re on debian based system, install apt-rdepends
+  else
+    echo Recording current installed package versions off all dependencies
+    dpkg -l `apt-rdepends build-essential libsqlite3-dev libsane-dev libmicrohttpd-dev uuid-dev libleptonica-dev libpoppler-cpp-dev libtesseract-dev libxml2-dev libzzip-dev libarchive-dev 2> /dev/null | grep -v "^ " | sort` &> results/buildLog2.out
+    # unfortunatly bash cannot support "&>>" - yet!
+    cat results/buildLog2.out >> results/buildLog.out
+    rm results/buildLog2.out
+  fi
 
   echo Performing code analysis ...
   cd ../
