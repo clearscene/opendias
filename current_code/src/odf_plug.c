@@ -36,14 +36,17 @@
 
 void xmlAllNodeGetContent(xmlNode *parent, char **str) {
 
+  xmlChar *content;
   xmlNode *node = parent->children; //childs;
   char *text;
 
   while(node != 0) {
     if (node->type == XML_TEXT_NODE) {
-      text = o_printf("%s ", (char *)xmlNodeGetContent(node));
+      content = xmlNodeGetContent(node);
+      text = o_printf("%s ", (char *)content);
       conCat(str, text);
       free(text);
+      xmlFree(content);
     }
     xmlAllNodeGetContent(node, str);
     node = node->next;
@@ -57,7 +60,11 @@ char *xmlToText(char *xml, size_t size) {
 
   xmlDocPtr doc = xmlParseMemory(xml, (int)size);
   xmlNodePtr root = xmlDocGetRootElement(doc);
+
   xmlAllNodeGetContent(root, &text);
+
+  xmlFreeDoc(doc);
+  xmlCleanupParser();
 
   return text;
 }
@@ -68,29 +75,35 @@ size_t getEntry(const char *name, char *contentFile, char **ptr) {
   ZZIP_DIR *dir;
   ZZIP_DIRENT entry;
   ZZIP_FILE *file;
+  zzip_error_t error;
   char *buf;
 
-  o_log(ERROR, "opening %s", name);
+  o_log(DEBUGM, "opening %s", name);
 
-  dir = zzip_dir_open(name, 0);
+  dir = zzip_dir_open(name, &error);
   if (!dir) {
     o_log(ERROR, "failed to open %s", name);
     return 0;
   }
 
-  zzip_dir_read(dir, &entry);
+  while(zzip_dir_read(dir, &entry)) {
 
-  file = zzip_file_open(dir, contentFile, 0);
+    if( 0 == strcmp(entry.d_name, contentFile) ) {
 
-  (void)zzip_seek(file, 0, SEEK_END);
-  size = zzip_tell(file);
-  (void)zzip_seek(file, 0, SEEK_SET);
-  buf = (char *)malloc(size+1);
-  (void)zzip_read(file, buf, size);
-  buf[size] = '\0';
-  *ptr = buf;
+      file = zzip_file_open(dir, contentFile, O_RDONLY);
 
-  zzip_file_close(file);
+      (void)zzip_seek(file, 0, SEEK_END);
+      size = zzip_tell(file);
+      (void)zzip_seek(file, 0, SEEK_SET);
+
+      buf = (char *)malloc(size+1);
+      (void)zzip_read(file, buf, size);
+      buf[size] = '\0';
+      *ptr = buf;
+
+      zzip_file_close(file);
+    }
+  }
   zzip_dir_close(dir);
 
   return size;
@@ -98,14 +111,18 @@ size_t getEntry(const char *name, char *contentFile, char **ptr) {
 
 char *get_odf_Text (const char *filename) {
 
-  char *text = o_strdup("");
+  char *text;
   char *xml;
   size_t size;
 
   size = getEntry(filename, "content.xml", &xml);
   o_log(DEBUGM, "Found message of size %d. Message reads\n %s", size, xml);
-  if(size > 0)
+  if(size > 0) {
     text = xmlToText(xml, size);
+  }
+  else {
+    text = o_strdup("");
+  }
 
   free(xml);
   return text;
@@ -123,6 +140,7 @@ void get_odf_Thumb (const char *filename, const char *outfile) {
       o_log(ERROR, "Could not write all data.");;
     close(tmpFile);
   }
+  free(imageData);
 
 }
 

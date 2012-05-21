@@ -32,27 +32,34 @@ sub test {
   $ua->timeout( 600 ); # 10 mins
   $ua->agent($default{__agent});
 
-  my $file = "./regressionTests/inputs/3_c_import/test.pdf";
-  my $req = POST(
-                $default{__proto} . $default{__domain} . $default{__uri},
-                Content_Type => 'form-data',
-                Content => [
-                    action => 'uploadfile',
-                    uploadfile => ["$file"],
-                    ftype => 'PDF',
-                    ],
+  my %details = (
+                PDF => './regressionTests/inputs/3_c_import/test.pdf',
+                ODF => './regressionTests/inputs/3_c_import/test.odt',
                 );
 
-  my $res = $ua->request( $req );
+  foreach my $type (sort {$a cmp $b} (keys %details)) {
+    o_log( "Uploading file of type $type..." );
+    my $req = POST(
+                  $default{__proto} . $default{__domain} . $default{__uri},
+                  Content_Type => 'form-data',
+                  Content => [
+                      action => 'uploadfile',
+                      uploadfile => ["$details{$type}"],
+                      ftype => $type,
+                      ],
+                  );
 
-  my $result;
-  if ($res->is_success) {
-    $result = $res->content;
-    o_log( "response was = " . Dumper( $result ) );
-  }
-  else {
-    o_log( "Did not get a successful response.\n".Dumper($res)."\n".Dumper($ua) );
-    return 1;
+    my $res = $ua->request( $req );
+
+    my $result;
+    if ($res->is_success) {
+      $result = $res->content;
+      o_log( "response was = " . Dumper( $result ) );
+    }
+    else {
+      o_log( "Did not get a successful response.\n".Dumper($res)."\n".Dumper($ua) );
+      return 1;
+    }
   }
 
   return 0;

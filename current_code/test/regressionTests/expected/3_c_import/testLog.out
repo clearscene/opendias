@@ -3,7 +3,11 @@ Copying default database
 STARTING app...
 Now ready
 No need for a web client for this test.
+Uploading file of type ODF...
 response was = $VAR1 = '<html><HEAD><META HTTP-EQUIV="refresh" CONTENT="0;URL=/opendias/docDetail.html?docid=5"></HEAD><body></body></html>';
+
+Uploading file of type PDF...
+response was = $VAR1 = '<html><HEAD><META HTTP-EQUIV="refresh" CONTENT="0;URL=/opendias/docDetail.html?docid=6"></HEAD><body></body></html>';
 
 Stopping service
 Waiting for valgrind to finish.
