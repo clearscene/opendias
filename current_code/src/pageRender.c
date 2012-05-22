@@ -17,6 +17,7 @@
  */
 
 #include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
@@ -25,26 +26,22 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-// #include <netdb.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include <uuid/uuid.h>
 
 #include "main.h"
-#include "pageRender.h"
 #include "db.h"
 #include "dbaccess.h"
-#ifdef CAN_SCAN
-#include <sane/sane.h>
-#include <sane/saneopts.h>
-#include "scanner.h"
-#endif // CAN_SCAN //
 #include "utils.h"
 #include "debug.h"
-#include "scan.h"
 #include "validation.h" // for con_info struct - move me to web_handler.h
+#ifdef CAN_SCAN
+#include "scan.h"
 #include "saneDispatcher.h"
+#endif // CAN_SCAN //
+
+#include "pageRender.h"
 
 
 /*
@@ -52,6 +49,7 @@
  * Public Functions
  *
  */
+#ifdef CAN_SCAN
 char *getScannerList() {
 
   char *answer = send_command( o_strdup("internalGetScannerList") ); // scan.c
@@ -94,16 +92,18 @@ extern void *doScanningOperation(void *uuid) {
 char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *ocr, char *pagelength, struct connection_info_struct *con_info) {
 
   char *ret = NULL;
-#ifdef CAN_SCAN
+
   pthread_t thread;
   pthread_attr_t attr;
   int rc=0;
   uuid_t uu;
   char *scanUuid;
+	
+	o_log(DEBUGM,"Entering doScan");
 
   // Generate a uuid and scanning params object
   scanUuid = malloc(36+1); 
-  uuid_generate_time(uu); // Not uuid_generate, since this keeps open a file handle to /dev/[su]random, which we can't close - which mucks up valgrind output.
+  uuid_generate(uu); // Note uuid_generate keeps open a file handle to /dev/[su]random, which we can't close - which mucks up valgrind output.
   uuid_unparse(uu, scanUuid);
 
   // Save requested parameters
@@ -114,6 +114,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
   setScanParam(scanUuid, SCAN_PARAM_REQUESTED_RESOLUTION, resolution);
   setScanParam(scanUuid, SCAN_PARAM_LENGTH, pagelength);
 
+	o_log(DEBUGM,"doScan setScanParam completed ");
   // save scan progress db record
   addScanProgress(scanUuid);
 
@@ -124,6 +125,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
 #else
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 #endif /* THREAD_JOIN */
+  o_log(DEBUGM,"doScan launching doScanningOperation");
   rc = pthread_create(&thread, &attr, doScanningOperation, o_strdup(scanUuid) );
   if(rc != 0) {
     o_log(ERROR, "Failed to create a new thread - for scanning operation.");
@@ -136,15 +138,14 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
   ret = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><DoScan><scanuuid>%s</scanuuid></DoScan></Response>", scanUuid);
+  o_log(DEBUGM,"Leaving doScan");
   free(scanUuid);
 
-#endif // CAN_SCAN //
   return ret;
 }
 
 char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
 
-#ifdef CAN_SCAN
   pthread_t thread;
   pthread_attr_t attr;
   char *sql;
@@ -186,7 +187,6 @@ char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
     o_log(WARNING, "scan id indicates a status not waiting for a new page signal.");
     return NULL;
   }
-#endif // CAN_SCAN //
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
@@ -221,6 +221,7 @@ char *getScanningProgress(char *scanid) {
 
   return ret;
 }
+#endif // CAN_SCAN //
 
 char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder ) {
 
@@ -549,9 +550,9 @@ char *tagsAutoComplete(char *startsWith, char *docid) {
   char *sql = o_printf(
     "SELECT tagname \
     FROM tags LEFT JOIN \
-    (SELECT docid, tagid \
-    FROM doc_tags \
-    WHERE docid=%s) dt \
+      (SELECT docid, tagid \
+      FROM doc_tags \
+      WHERE docid=%s) dt \
     ON tags.tagid = dt.tagid \
     WHERE dt.docid IS NULL \
     AND tagname like '%s%%' \

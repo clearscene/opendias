@@ -19,10 +19,10 @@ opendiasconfig_SOURCES = \
 	debug.h    \
 	utils.c    \
 	utils.h    \
-        opendiasconfig.h \
-        opendiasconfig.c \
-        simpleLinkedList.c    \
-        simpleLinkedList.h
+  opendiasconfig.h \
+  opendiasconfig.c \
+  simpleLinkedList.c    \
+  simpleLinkedList.h
 
 opendiasconfig_LDFLAGS = 
 
@@ -42,6 +42,8 @@ opendias_SOURCES = \
 	main.h    \
 	ocr_plug.cc    \
 	ocr_plug.h    \
+	pdf_plug.cc    \
+	pdf_plug.h    \
 	scan.c    \
 	scan.h    \
 	scanner.c    \
@@ -49,8 +51,8 @@ opendias_SOURCES = \
 	utils.c    \
 	utils.h    \
 	main.c    \
-	read_odf.c    \
-	read_odf.h    \
+	odf_plug.c    \
+	odf_plug.h    \
 	dbaccess.c    \
 	dbaccess.h    \
 	imageProcessing.h    \
@@ -61,8 +63,8 @@ opendias_SOURCES = \
 	import_doc.h    \
 	saneDispatcher.c    \
 	saneDispatcher.h    \
-        simpleLinkedList.c    \
-        simpleLinkedList.h
+  simpleLinkedList.c    \
+  simpleLinkedList.h
 
 opendias_LDFLAGS = 
 

@@ -6,6 +6,7 @@ web_DATA = \
         docList.html \
 	docDetail.html\
 	body.html \
+	buglist.html \
 	acquire.html 
 
 webdir = \

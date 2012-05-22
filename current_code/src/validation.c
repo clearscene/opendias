@@ -17,12 +17,15 @@
  */
 
 #include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
-#include "validation.h"
+
 #include "debug.h"
 #include "utils.h"
 #include "ocr_plug.h"
+
+#include "validation.h"
 
 char *getPostData(struct simpleLinkedList *post_hash, char *key) {
   struct simpleLinkedList *data = sll_searchKeys(post_hash, key);
@@ -192,20 +195,8 @@ static int checkDate(char *val) {
   return x;
 }
 
-static int checkDeviceId(char *val) {
-  if( val == NULL ) return 1;
-  return checkVal(val);
-}
-
-//
-static int checkFormat(char *val) {
-  if( val == NULL ) return 1;
-  lower(val); // convert the whole string to lower case
-  if ( 0 == strcmp(val, "grey scale") ) return 0;
-  o_log(ERROR, "Validation failed: scan format check");
-  return 1;
-}
-
+#ifdef CAN_SCAN
+#ifdef CAN_OCR
 //
 static int checkOCRLanguage(char *val) {
   if( val == NULL ) return 1;
@@ -221,6 +212,21 @@ static int checkOCRLanguage(char *val) {
     return 0;
   }
   o_log(ERROR, "Validation failed: Unknown ocr language");
+  return 1;
+}
+#endif // CAN_OCR //
+
+static int checkDeviceId(char *val) {
+  if( val == NULL ) return 1;
+  return checkVal(val);
+}
+
+//
+static int checkFormat(char *val) {
+  if( val == NULL ) return 1;
+  lower(val); // convert the whole string to lower case
+  if ( 0 == strcmp(val, "grey scale") ) return 0;
+  o_log(ERROR, "Validation failed: scan format check");
   return 1;
 }
 
@@ -244,11 +250,13 @@ static int checkResolution(char *val) {
   if(checkSaneRange(val, 10, 3000)) return 1;
   return 0;
 }
+#endif // CAN_SCAN //
 
 static int checkUpdateKey(char *val) {
   if( val == NULL ) return 1;
   if ( 0 != strcmp(val, "title") 
     && 0 != strcmp(val, "isActionRequired") 
+    && 0 != strcmp(val, "hardcopyKept") 
     && 0 != strcmp(val, "ocrtext") 
     && 0 != strcmp(val, "docDate") ) {
     o_log(ERROR, "trying to update an invalid doc field: %s.", val);
@@ -350,7 +358,7 @@ int basicValidation(struct simpleLinkedList *postdata) {
     && 0 != strcmp(action, "moveTag") 
     && 0 != strcmp(action, "docFilter") 
     && 0 != strcmp(action, "deleteDoc") 
-    && 0 != strcmp(action, "getAudio")
+    && 0 != strcmp(action, "regenerateThumb")
     && 0 != strcmp(action, "uploadfile")
     && 0 != strcmp(action, "getAccessDetails")
     && 0 != strcmp(action, "titleAutoComplete")
@@ -387,6 +395,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkDocId(getPostData(postdata, "docid"));
   }
 
+#ifdef CAN_SCAN
   if ( 0 == strcmp(action, "getScannerList") ) {
     ret += checkKeys(postdata, vars );
   }
@@ -396,14 +405,20 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     sll_insert(vars, "format", "m" );
     sll_insert(vars, "resolution", "m" );
     sll_insert(vars, "pages", "m" );
+#ifdef CAN_OCR
     sll_insert(vars, "ocr", "m" );
+#else
+    sll_insert(vars, "ocr", "m" );
+#endif // CAN_OCR //
     sll_insert(vars, "pagelength", "m" );
     ret += checkKeys(postdata, vars );
     ret += checkDeviceId(getPostData(postdata, "deviceid"));
     ret += checkFormat(getPostData(postdata, "format"));
     ret += checkResolution(getPostData(postdata, "resolution"));
     ret += checkPages(getPostData(postdata, "pages"));
+#ifdef CAN_OCR
     ret += checkOCRLanguage(getPostData(postdata, "ocr"));
+#endif // CAN_OCR //
     ret += checkPageLength(getPostData(postdata, "pagelength"));
   }
 
@@ -418,6 +433,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkKeys(postdata, vars );
     ret += checkUUID(getPostData(postdata, "scanprogressid"));
   }
+#endif // CAN_SCAN //
 
   if ( 0 == strcmp(action, "updateDocDetails") ) {
     sll_insert(vars, "docid", "m" );
@@ -489,9 +505,13 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkDocId(getPostData(postdata, "docid"));
   }
 
-  if ( 0 == strcmp(action, "getAudio") ) {
+#ifdef CAN_PDF
+  if ( 0 == strcmp(action, "regenerateThumb") ) {
+    sll_insert(vars, "docid", "m" );
     ret += checkKeys(postdata, vars );
+    ret += checkDocId(getPostData(postdata, "docid"));
   }
+#endif // CAN_PDF //
 
   if ( 0 == strcmp(action, "getAccessDetails") ) {
     ret += checkKeys(postdata, vars );

@@ -19,6 +19,7 @@
 #ifndef IMPORTDOC
 #define IMPORTDOC
 
+char *extractThumbnail(char *);
 char *uploadfile(char *, char *);
 
 #endif /* IMPORTDOC */

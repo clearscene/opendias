@@ -4,6 +4,7 @@ LOG-OUTPUT
 -date-:-thread-:INF: Setting default log verbosity to 4.
 -date-:-thread-:INF: Using config file: [CONFIG_FILE]
 -date-:-thread-:INF: Which says the database is at: /tmp/opendiastest/
+-date-:-thread-:DBG: database file is /tmp/opendiastest/openDIAS.sqlite3
 -date-:-thread-:DBG: Dir structure is in-place, database should exist
 -date-:-thread-:DBG: Checking for a populated database
 -date-:-thread-:DBG: Run Query [RECORDSET]
@@ -13,6 +14,7 @@ LOG-OUTPUT
 -date-:-thread-:DBG: Database reports that it is version: 6
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:INF: Connected to database
+-date-:-thread-:INF: database opened
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:INF: Config setting: log_verbosity = 3
 -date-:-thread-:INF: Moving log verbosity from 4 to 3
@@ -39,10 +41,11 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Scanner Parm : stat=Success form=0,lf=1,bpl=2362,pixpl=2362,lin=2362,dep=8
 -date-:-thread-:INF: Processing request for: getScanning Progress
--date-:-thread-:INF: Scanning done.
--date-:-thread-:INF: Convertion process: Initalised
+ ----- line duplicated more than three times ----- 
 -date-:-thread-:INF: Processing request for: getScanning Progress
--date-:-thread-:INF: Convertion process: Loaded
+-date-:-thread-:INF: Scanning done.
+-date-:-thread-:INF: Processing request for: getScanning Progress
+-date-:-thread-:INF: Convertion process: Loaded (depth: 8)
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Conversion process: Complete
 -date-:-thread-:INF: Attempting OCR in lang of eng

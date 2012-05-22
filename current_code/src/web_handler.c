@@ -16,6 +16,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -26,8 +28,10 @@
 #include <arpa/inet.h>
 #include <uuid/uuid.h>
 #include <pthread.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
-#include "web_handler.h"
 #include "main.h"
 #include "utils.h"
 #include "debug.h"
@@ -38,6 +42,8 @@
 #include "import_doc.h"
 #include "simpleLinkedList.h"
 
+#include "web_handler.h"
+
 char *busypage = "<html><body>This server is busy, please try again later.</body></html>";
 char *servererrorpage = "<html><body>An internal server error has occured.</body></html>";
 char *requesterrorpage = "<html><body>Your request did not fit the form 'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)'.</body></html>";
@@ -45,7 +51,8 @@ char *fileexistspage = "<html><body>File exists</body></html>";
 char *completepage = "<html><body>All Done</body></html>";
 char *denied = "<h1>Access Denied</h1>";
 char *noaccessxml = "<?xml version='1.0' encoding='utf-8'?>\n<Response><error>You do not have permissions to complete the request</error></Response>";
-char *errorxml= "<?xml version='1.0' encoding='utf-8'?>\n<Response><error>Your request could not be processed</error></Response>";
+char *errorxml = "<?xml version='1.0' encoding='utf-8'?>\n<Response><error>Your request could not be processed</error></Response>";
+char *missingsupport = "<?xml version='1.0' encoding='utf-8'?>\n<Response><error>Support for this feature has not been compiled in</error></Response>";
 static unsigned int nr_of_clients = 0;
 
 struct priverlage {
@@ -63,6 +70,7 @@ static size_t getFromFile_fullPath(const char *url, char **data) {
 }
 
 static size_t getFromFile(const char *url, char **data) {
+	o_log(DEBUGM,"enterting getFromFile: ");
 
   // Build Document Root
   char *htmlFrag = o_printf("%s/opendias/webcontent%s", PACKAGE_DATA_DIR, url);
@@ -155,6 +163,7 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
           uuid_generate(uu);
           uuid_unparse(uu, fileid);
           data_struct->data = o_strdup(fileid);
+          o_log("DEBUGM, "Generated upload handlename %s", data_struct->data);
           free(fileid);
       }
       else {
@@ -169,17 +178,28 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
     }
 
     if(0 == strcmp(key, "uploadfile")) {
-      FILE *fp;
+      int fd;
       char *filename = o_printf("/tmp/%s.dat", data_struct->data);
-      if ((fp = fopen(filename, "ab")) == NULL)
+      struct stat fstat;
+
+      mode_t fmode;
+      fmode = S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP;
+      int flags;
+      if (stat(filename,&fstat) == -1 ) {
+        flags=O_CREAT|O_WRONLY;
+      } 
+      else {
+        flags=O_RDWR;
+      }
+
+      if ((fd = open(filename, flags, fmode)) == -1 )
         o_log(ERROR, "could not open http post binary data file for output");
       else {
-        size_t wrote;
-        fseek(fp, 0, SEEK_END);
-        wrote = fwrite (data, sizeof (char), size, fp);
-        if( size != wrote )
-          o_log(ERROR, "Did not write the full amount of data. Expected to write %d, but wrote %d", size, wrote);
-        fclose(fp);
+        lseek(fd,0,SEEK_END);
+        if ( write(fd,data,size) <= 0 ) {
+          o_log(ERROR,"uploadfile iterate_postdata: write to %s failed",filename);
+        }
+        close(fd);
       }
       free(filename);
     }
@@ -413,7 +433,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     o_log(INFORMATION, "Serving request: %s", url);
 
     // A 'root' request needs to be mapped to an actual file
-    if( strlen(url)==1 && 0!=strstr(url,"/") ) {
+    if( (strlen(url) == 1  && 0!=strstr(url,"/")) || strlen(url) == 0 ) {
+      o_log(DEBUGM, "Serving root request ");
       size = getFromFile("/body.html", &content);
       if( size > 0 ) 
         content = build_page(content);
@@ -465,7 +486,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     }
 
     // Serve 'scans' content [image|pdf|odf]
-    else if( 0!=strstr(url,"/scans/") && (0!=strstr(url,".jpg") || 0!=strstr(url,".pdf") || 0!=strstr(url,".odt") ) ) {
+    else if( 0!=strstr(url,"/scans/") && (0!=strstr(url,".jpg") || 0!=strstr(url,".pdf") || 0!=strstr(url,".odt") || 0!=strstr(url,"_thumb.png") ) ) {
       if ( accessPrivs.view_doc == 0 ) {
         content = o_strdup(noaccessxml);
         size = strlen(content);
@@ -482,6 +503,9 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         }
         else if (0!=strstr(url,".pdf")) {
           mimetype = MIMETYPE_PDF;
+        }
+        else if (0!=strstr(url,".png")) {
+          mimetype = MIMETYPE_PNG;
         }
         else
           size = 0;
@@ -580,6 +604,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   
           else if ( action && 0 == strcmp(action, "getScannerList") ) {
             o_log(INFORMATION, "Processing request for: getScannerList");
+#ifdef CAN_SCAN
             if ( accessPrivs.add_scan == 0 )
               content = o_strdup(noaccessxml);
             else if ( validate( con_info->post_data, action ) ) 
@@ -590,12 +615,17 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
                 content = o_strdup(errorxml);
               }
             }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_strdup(missingsupport);
+#endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
   
           else if ( action && 0 == strcmp(action, "doScan") ) {
             o_log(INFORMATION, "Processing request for: doScan");
+#ifdef CAN_SCAN
             if ( accessPrivs.add_scan == 0 )
               content = o_strdup(noaccessxml);
             else if ( validate( con_info->post_data, action ) ) 
@@ -612,12 +642,17 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
                 content = o_strdup(errorxml);
               }
             }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_strdup(missingsupport);
+#endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
   
           else if ( action && 0 == strcmp(action, "getScanningProgress") ) {
             o_log(INFORMATION, "Processing request for: getScanning Progress");
+#ifdef CAN_SCAN
             if ( accessPrivs.add_scan == 0 )
               content = o_strdup(noaccessxml);
             else if ( validate( con_info->post_data, action ) ) 
@@ -629,12 +664,17 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
                 content = o_strdup(errorxml);
               }
             }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_strdup(missingsupport);
+#endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
   
           else if ( action && 0 == strcmp(action, "nextPageReady") ) {
             o_log(INFORMATION, "Processing request for: restart scan after page change");
+#ifdef CAN_SCAN
             if ( accessPrivs.add_scan == 0 )
               content = o_strdup(noaccessxml);
             else if ( validate( con_info->post_data, action ) ) 
@@ -646,6 +686,10 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
                 content = o_strdup(errorxml);
               }
             }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_strdup(missingsupport);
+#endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -729,20 +773,29 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
-  
-          else if ( action && 0 == strcmp(action, "getAudio") ) {
-            o_log(INFORMATION, "Processing request for: getAudio");
-            if ( accessPrivs.view_doc == 0 )
+
+          else if ( action && 0 == strcmp(action, "regenerateThumb") ) {
+            o_log(INFORMATION, "Processing request for: regenerateThumb");
+#ifdef CAN_PDF
+            if ( accessPrivs.edit_doc == 0 )
               content = o_strdup(noaccessxml);
             else if ( validate( con_info->post_data, action ) ) 
               content = o_strdup(errorxml);
             else {
-              content = o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Audio<<filename>BabyBeat.ogg</filename></Audio></Response>");
+              char *docid = getPostData(con_info->post_data, "docid");
+              content = extractThumbnail( docid );
+              if(content == (void *)NULL) {
+                content = o_strdup(errorxml);
+              }
             }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_strdup(missingsupport);
+#endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
-  
+
           else if ( action && 0 == strcmp(action, "uploadfile") ) {
             o_log(INFORMATION, "Processing request for: uploadfile");
             if ( accessPrivs.add_import == 0 )
@@ -847,7 +900,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
       size = 0;
     }
 
-    o_log(DEBUGM, "%s", content);
+    o_log(DEBUGM, "Serving the following content: %s", content);
     return send_page (connection, content, status, mimetype, size);
   }
 

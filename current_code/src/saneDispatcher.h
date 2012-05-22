@@ -19,18 +19,13 @@
 #ifndef SANEDISPATCHER
 #define SANEDISPATCHER
 
-#define ADDRESS "saneCommandSocket"
+#include "config.h"
 
-/*
-#include "simpleLinkedList"
-
-struct dispatcherResponse {
-  char *response;
-  struct simpleLinkedList *data;
-};
-*/
+#ifdef CAN_SCAN
+#define ADDRESS "/tmp/opendias"
 extern void dispatch_sane_work(int);
 extern char *send_command(char *);
 extern void freeSaneCache(void);
+#endif // CAN_SCAN //
 
 #endif /* SANEDISPATCHER */

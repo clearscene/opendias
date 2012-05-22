@@ -16,10 +16,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <microhttpd.h>
-
 #ifndef WEBHANDLER
 #define WEBHANDLER
+
+#include <microhttpd.h>
 
 #define POSTBUFFERSIZE 512
 #define MAXCLIENTS 5
@@ -36,6 +36,7 @@
 #define MIMETYPE_JSON "text/x-json"
 #define MIMETYPE_PDF "application/pdf"
 #define MIMETYPE_ODT "application/vnd.oasis.opendocument.text"
+#define MIMETYPE_PNG "image/png"
 
 int answer_to_connection (void *, struct MHD_Connection *, const char *, const char *, const char *, const char *, size_t *, void **);
 void request_completed (void *, struct MHD_Connection *, void **, enum MHD_RequestTerminationCode );

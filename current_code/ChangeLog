@@ -2,6 +2,13 @@
         Implement Issue #7 - Document Linkage
         Implement Issue #12 - Better Testing
         Implement Issue #13 - Device Locking
+        PDF, ODF and Image imports, now correct have a thumbnail and OCR performed.
+        Now works on 64-bit machines
+        Migrated to tesseract v3
+        IO is all utf8
+        Frontend will now timeout, rather than hang on error.
+        Document list is now autoloaded, rather than using a paged table.
+        various bug fixes and cleanups.
 
  0.7.3  Issue #9 - Scanners with 'word_list' resolutions
         Fix spinner viability on searching for scanners.

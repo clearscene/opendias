@@ -43,6 +43,8 @@ current_code/src/main.gcno
 current_code/src/main.o
 current_code/src/Makefile
 current_code/src/Makefile.in
+current_code/src/ocr_plug.gcda
+current_code/src/ocr_plug.gcno
 current_code/src/ocr_plug.o
 current_code/src/opendias
 current_code/src/opendiasconfig
@@ -52,9 +54,12 @@ current_code/src/opendiasconfig.o
 current_code/src/pageRender.gcda
 current_code/src/pageRender.gcno
 current_code/src/pageRender.o
-current_code/src/read_odf.gcda
-current_code/src/read_odf.gcno
-current_code/src/read_odf.o
+current_code/src/odf_plug.gcda
+current_code/src/odf_plug.gcno
+current_code/src/odf_plug.o
+current_code/src/pdf_plug.gcda
+current_code/src/pdf_plug.gcno
+current_code/src/pdf_plug.o
 current_code/src/saneDispatcher.gcda
 current_code/src/saneDispatcher.gcno
 current_code/src/saneDispatcher.o

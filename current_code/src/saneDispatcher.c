@@ -17,10 +17,9 @@
  */
 
 #include "config.h"
+
 #ifdef CAN_SCAN
 #include <string.h>
-
-// Required for socket work
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -28,17 +27,15 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
-
-// Required for sane
 #include <sane/sane.h>
 #include <sane/saneopts.h>
-#include "scanner.h"
 
-#include "saneDispatcher.h"
+#include "scanner.h"
 #include "utils.h"
 #include "debug.h"
-
 #include "scan.h"
+
+#include "saneDispatcher.h"
 
 char *deviceListCache = NULL;
 static int inLongRunningOperation = 0;

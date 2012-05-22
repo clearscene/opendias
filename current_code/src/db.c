@@ -16,16 +16,20 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <sqlite3.h>
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
+
 #include "utils.h"
-#include "db.h"
 #include "simpleLinkedList.h"
 #include "main.h"
 #include "debug.h"
+
+#include "db.h"
 
 sqlite3 *DBH;
 
@@ -75,7 +79,8 @@ int connect_db (int createIfRequired) {
   char *db, *data;
 
   // Test to see if a DB file exsists
-  db = o_printf("%s/openDIAS.sqlite3", BASE_DIR);
+  db = o_printf("%sopenDIAS.sqlite3", BASE_DIR);
+  o_log(DEBUGM,"database file is %s",db);
   if( 0 == access(db, F_OK) ) {
     o_log(DEBUGM, "Dir structure is in-place, database should exist");
     if(open_db (db)) {
@@ -87,7 +92,7 @@ int connect_db (int createIfRequired) {
   }
 
   if( !version && createIfRequired ) {
-    o_log(INFORMATION, "Creating new database");
+    o_log(INFORMATION, "Creating new database %s (BASE_DIR = %s)",db,BASE_DIR);
     if(open_db (db)) {
       o_log(WARNING, "Could not create/connect to new database");
       o_log(WARNING, "%s", db);
@@ -317,15 +322,17 @@ void free_recordset (struct simpleLinkedList *rSet) {
   if( rSet && ( rSet != NULL ) ) {
     if( rSet->data != NULL ) {
       for( row = sll_findFirstElement((struct simpleLinkedList *)rSet->data) ; row != NULL ; row = sll_getNext(row) ) {
-        if( row && ( row != NULL ) && ( row->data != NULL ) ) {
-          for( field = sll_findFirstElement((struct simpleLinkedList *)row->data) ; field != NULL ; field = sll_getNext(field) ) {
-            o_log(SQLDEBUG, "Freeing: %s = %s", field->key, field->data);
-            free(field->key);
-            free(field->data);
+        if( row && ( row != NULL ) ) {
+          if( row->data != NULL ) {
+            for( field = sll_findFirstElement((struct simpleLinkedList *)row->data) ; field != NULL ; field = sll_getNext(field) ) {
+              o_log(SQLDEBUG, "Freeing: %s = %s", field->key, field->data);
+              free(field->key);
+              free(field->data);
+            }
           }
+          o_log(SQLDEBUG, "Freeing field data"); 
+          sll_destroy((struct simpleLinkedList *)row->data);
         }
-        o_log(SQLDEBUG, "Freeing field data"); 
-        sll_destroy((struct simpleLinkedList *)row->data);
       }
       o_log(SQLDEBUG, "Freeing a row");
       sll_destroy( sll_findFirstElement( (struct simpleLinkedList *)rSet->data ) );
@@ -333,6 +340,7 @@ void free_recordset (struct simpleLinkedList *rSet) {
     o_log(SQLDEBUG, "Free a record set pointer (%s)", rSet);
     sll_delete(rSet);
   }
+  o_log(SQLDEBUG, "Leaving free_recordset");
 }
 
 

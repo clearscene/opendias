@@ -1,4 +1,4 @@
-formFields = new Array( 'title', 'actionrequired', 'docDate', 'ocrtext' );
+formFields = new Array( 'title', 'actionrequired', 'docDate', 'ocrtext', 'hardcopyKept' );
 
 function sendUpdate(kkey, vvalue) {
 

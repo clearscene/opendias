@@ -16,18 +16,25 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
-#include "debug.h"
+
 #include "utils.h"
+
+#include "debug.h"
 
 void i_o_log(const int verbosity, const char *message, va_list inargs) {
 
   FILE *fp;
   char *logFile;
+
+	va_list ap;
+	va_copy(ap,inargs);
 
   if( verbosity <= VERBOSITY ) {
 
@@ -55,15 +62,22 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
     if( message == strstr(message,"|") ) {
       vprintf((char *)message+1,inargs);
       printf("\n");
+	//need to reset inargs to saved ap. reason vprintf function do not do so.
+	va_end(inargs);
+	va_copy(inargs,ap);
     }
+
 
     // Output to file
     logFile = o_strdup(LOG_DIR);
+	//printf("running conCat %s !!!\n",logFile);
+
+
     conCat(&logFile, "/opendias.log");
     if((fp = fopen(logFile, "a"))==NULL) {
-      fprintf(stderr,"Cannot open log file.\n");
+      fprintf(stderr,"Cannot open log file %s.\n",logFile);
       exit(1);
-    }
+    } 
     fprintf(fp,thumb,ltime,pthread_self(),vb);
     vfprintf(fp,message,inargs);
     fprintf(fp,"\n");
@@ -77,7 +91,7 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
 
 }
 
-void o_log(const int verbosity, const char *message, ... ) {
+extern void o_log(const int verbosity, const char *message, ... ) {
 
   if( verbosity <= VERBOSITY ) {
     va_list inargs;

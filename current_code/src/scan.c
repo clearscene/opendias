@@ -18,32 +18,29 @@
 
 #include "config.h"
 
+#ifdef CAN_SCAN
 #include <stdlib.h>
 #include <stdio.h>      // printf, file operations
 #include <string.h>     // compares
 #include <math.h>       // for fmod
 
-#ifdef CAN_SCAN
+#include <leptonica/allheaders.h>
 #include <FreeImage.h>  // 
 #include <sane/sane.h>  // Scanner Interface
 #include <sane/saneopts.h>  // Scanner Interface
 #include <netinet/in.h>
-
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
 
 #include "scanner.h"
-#endif // CAN_SCAN //
-
-#include "scan.h"
 #include "imageProcessing.h"
 #include "dbaccess.h"
 #include "main.h"
 #include "utils.h"
 #include "debug.h"
 
-#ifdef CAN_SCAN
+#include "scan.h"
 
 int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resolution, int *buff_requested_len ) {
 
@@ -111,9 +108,6 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
           request_resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
           *request_resolution = atoi(request_resolution_s);
           free(request_resolution_s);
-
-          if( (sod->constraint_type == SANE_CONSTRAINT_RANGE) && (sod->constraint.range->quant != 0) ) 
-            *buff_requested_len = sod->constraint.range->quant; // q seam to be a good buffer size to use!
 
           if (sod->type == SANE_TYPE_FIXED) {
             v_f = SANE_FIX( *request_resolution );
@@ -429,7 +423,6 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
   SANE_Byte *buffer;
   SANE_Byte *raw_image;
   int progress = 0;
-  int proposed_buffer_length_change = 0;
   int noMoreReads = 0;
   int counter;
   int onlyReadxFromBlockofThree = 0;
@@ -443,6 +436,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
     o_log(ERROR, "Out of memory, when assiging the new image storage.");
     return NULL;
   }
+
   // Initialise the image to black.
   for (counter = readSoFar ; (size_t)counter < totbytes+readSoFar ; counter++) raw_image[counter]=125;
   strcpy((char *)raw_image, header);
@@ -454,6 +448,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
     return NULL;
   }
 
+  o_log(DEBUGM, "setting non-blocking mode was %s", sane_strstatus( sane_set_io_mode (openDeviceHandle, SANE_TRUE) ) );
   o_log(DEBUGM, "scan_read - start");
   do {
     // Set status as 'scanning'
@@ -530,7 +525,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
 
       // Update the progress info
       progress = (int)((readSoFar*100) / totbytes);
-      o_log(DEBUGM, "readSoFar = %d, totalbytes = %d, progress = %d", readSoFar, totbytes, progress);
+      //o_log(DEBUGM, "readSoFar = %d, totalbytes = %d, progress = %d", readSoFar, totbytes, progress);
       if(progress > 100)
         progress = 100;
 
@@ -551,43 +546,18 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
     // smooth the physical reading mechanisum
     if( *buff_requested_len == received_length_from_sane ) {
 
-      // Try and increase the buffer size
-      proposed_buffer_length_change = 10 * bpl / readItteration;
-
-      // Don't trifel us with small increases      
-      if( proposed_buffer_length_change > 300 ) {
-        *buff_requested_len += proposed_buffer_length_change;
-        tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
-        if( tmp_buffer == NULL ) {
-          free(buffer);
-          o_log(ERROR, "Out of memory, when assiging new scan reading buffer.");
-          break;
-        }
-        else {
-          buffer = tmp_buffer;
-          o_log(DEBUGM, "Increasing read buffer to %d bytes.", *buff_requested_len);
-        }
+      *buff_requested_len += bpl;
+      tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
+      if( tmp_buffer == NULL ) {
+        free(buffer);
+        o_log(ERROR, "Out of memory, when assiging new scan reading buffer.");
+        break;
+      }
+      else {
+        buffer = tmp_buffer;
+        o_log(DEBUGM, "Increasing read buffer to %d bytes.", *buff_requested_len);
       }
     }
-
-    // We received less than we asked for (but we did receive something)
-    else if ( received_length_from_sane > 0 ) {
-      proposed_buffer_length_change = ( *buff_requested_len - received_length_from_sane ) / readItteration;
-      if( proposed_buffer_length_change > 100 ) {
-        *buff_requested_len -= proposed_buffer_length_change;
-        tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
-        if( tmp_buffer == NULL ) {
-          free(buffer);
-          o_log(ERROR, "Out of memory, when assiging new scan reading buffer.");
-          break;
-        }
-        else {
-          buffer = tmp_buffer;
-          o_log(DEBUGM, "Decreasing read buffer to %d bytes.", *buff_requested_len);
-        }
-      }
-    }
-
   } while (1);
   o_log(DEBUGM, "scan_read - end");
 
@@ -596,36 +566,23 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
   return raw_image;
 }
 
-void ocrImage( char *uuid, int docid, SANE_Byte *raw_image, int page, int request_resolution, SANE_Parameters pars, double totbytes ) {
+void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix ) {
   char *ocrText;
   char *ocrLang;
-#ifdef CAN_SCAN
-  char *ocrScanText;
-#endif // CAN_OCR //
 
   ocrLang = getScanParam(uuid, SCAN_PARAM_DO_OCR);
 #ifdef CAN_OCR
   if(ocrLang && 0 != strcmp(ocrLang, "-") ) {
 
     if(request_resolution >= 300 && request_resolution <= 400) {
-      int counter;
+      char *ocrScanText;
 
       o_log(INFORMATION, "Attempting OCR in lang of %s", ocrLang);
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
-      // sharpen the image
-      for (counter = 0 ; (size_t)counter < totbytes ; counter++) {
-        if( raw_image[counter] > 100 ) {
-          raw_image[counter] = 255;
-        }
-        else {
-          raw_image[counter] = 0;
-        }
-      }
-
       // Even if we have a scanner with three frames, we've already condenced
       // that down to grey-scale (1 bpp) - hense the hard coded 1
-      ocrScanText = getTextFromImage((const unsigned char*)raw_image, pars.pixels_per_line, pars.pixels_per_line, pars.lines, ocrLang);
+      ocrScanText = getTextFromImage(pix, request_resolution, ocrLang);
 
       ocrText = o_printf("---------------- page %d ----------------\n%s\n", page, ocrScanText);
       free(ocrScanText);
@@ -664,10 +621,13 @@ char *internalDoScanningOperation(char *uuid) {
   char *devName;
   char *outFilename;
 
+  o_log(DEBUGM, "doScanningOperation: sane initialized uuid(%s)",(char *)uuid);
   // Open the device
   o_log(DEBUGM, "sane_open");
   updateScanProgress(uuid, SCAN_WAITING_ON_SCANNER, 0);
+  o_log(DEBUGM, "doScanningOperation: updateScanProgess done");
   devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
+  o_log(DEBUGM,"getScanParam ready devName(%s)",devName);
   status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {
     handleSaneErrors("Cannot open device", status, 0);
@@ -681,7 +641,7 @@ char *internalDoScanningOperation(char *uuid) {
   if ( ! setOptions( (char *)uuid, openDeviceHandle, &request_resolution, &buff_requested_len ) )
     return 0;
 
-  o_log(DEBUGM, "sane_start");
+  o_log(DEBUGM, "sane_start: setOptions returned request_resolution %d\n",request_resolution);
   status = sane_start (openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {  
     handleSaneErrors("Cannot start scanning", status, 0);
@@ -754,7 +714,7 @@ char *internalDoScanningOperation(char *uuid) {
   totbytes = (double)((pars.bytes_per_line * pars.lines) / expectFrames);
 
   if( buff_requested_len <= 1 )
-    buff_requested_len = 3 * pars.bytes_per_line * pars.depth;
+    buff_requested_len = 30 * pars.bytes_per_line * pars.depth;
 
   char *header = o_printf ("P5\n# SANE data follows\n%d %d\n%d\n", 
     pars.pixels_per_line, pars.lines,
@@ -773,28 +733,25 @@ char *internalDoScanningOperation(char *uuid) {
 
   /*
    *
-   * Change this whole section for the method call in imageProcessing::reformatImage
+   * Change this whole section for the method call in imageProcessing
    *
    */
   // Convert Raw into JPEG
   //
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 0);
-  FreeImage_Initialise(TRUE);
-  FIMEMORY *hmem = FreeImage_OpenMemory(raw_image, (pars.pixels_per_line*pars.lines)+strlen(header));
-  updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 10);
-  o_log(INFORMATION, "Convertion process: Initalised");
-
-  FIBITMAP *src = FreeImage_LoadFromMemory(FIF_PGMRAW, hmem, BMP_DEFAULT);
-  FreeImage_CloseMemory(hmem);
-  //free(raw_image);
+  PIX *pix;
+  if ( ( pix = pixReadMem( raw_image, (pars.pixels_per_line*pars.lines)+strlen(header) ) ) == NULL) {
+    o_log(ERROR, "Could not load the image data into a PIX");
+  }
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 55);
-  o_log(INFORMATION, "Convertion process: Loaded");
- 
+  o_log(INFORMATION, "Convertion process: Loaded (depth: %d)", pixGetDepth(pix));
+  free(raw_image);
+  free(header);
+
   outFilename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, current_page);
-  FreeImage_Save(FIF_JPEG, src, outFilename, 95);
+  //pixWriteJpeg(outFilename, pix, 95, 0);
+  pixWrite(outFilename, pix, IFF_JFIF_JPEG);
   free(outFilename);
-  FreeImage_Unload(src);
-  FreeImage_DeInitialise();
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   o_log(INFORMATION, "Conversion process: Complete");
 
@@ -803,10 +760,10 @@ char *internalDoScanningOperation(char *uuid) {
 
   // Do OCR - on this page
   // - OCR libs just wants the raw data and not the image header
-  ocrImage( uuid, docid, raw_image+strlen(header), current_page, request_resolution, pars, totbytes );
-  free(raw_image);
-  free(header);
-
+  ocrImage( uuid, docid, current_page, request_resolution, pix );
+  //free(raw_image);
+  //free(header);
+  pixDestroy( &pix );
 
 
 
@@ -823,12 +780,10 @@ char *internalDoScanningOperation(char *uuid) {
 
   return o_strdup("OK"); 
 }
-#endif // CAN_SCAN //
 
 
 extern char *internalGetScannerList() {
   char *answer = NULL;
-#ifdef CAN_SCAN
   SANE_Status status;
   const SANE_Device **SANE_device_list;
   int scanOK = SANE_FALSE;
@@ -955,8 +910,20 @@ extern char *internalGetScannerList() {
           // A fixed list of options
           else if (sod->constraint_type == SANE_CONSTRAINT_WORD_LIST) {
             int lastIndex = sod->constraint.word_list[0];
-            o_log(DEBUGM, "Resolution setting detected as 'word list'");
-            maxRes = sod->constraint.word_list[lastIndex];
+            o_log(DEBUGM, "Resolution setting detected as 'word list': lastIndex = %d",lastIndex);
+
+            // maxRes = sod->constraint.word_list[lastIndex];
+            // resolution list cannot be treated as low to high ordered list 
+            // remark: impl capability to select scan resolution in webInterface
+            int n=0;
+            maxRes = 0;
+            for (n=1; n<=lastIndex; n++ ) {
+              o_log(DEBUGM, "index results %d --> %d", n ,(int)sod->constraint.word_list[n]);
+              if ( maxRes < sod->constraint.word_list[n] ) {
+                maxRes=sod->constraint.word_list[n];
+              }
+            }
+
           }
 
           break; // we've found our resolution - no need to search more
@@ -1007,7 +974,8 @@ extern char *internalGetScannerList() {
     answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
   }
 
-#endif // CAN_SCAN //
   return answer;
 
 }
+
+#endif // CAN_SCAN //

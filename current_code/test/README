@@ -50,8 +50,16 @@ To check the code base does not include common errors:
   cppcheck --verbose --enable=all src/
   splint -posix-lib -DHAVE_CONFIG_H -I. -I..  -DPACKAGE_LOCALE_DIR=\""/usr/local//locale"\" -DPACKAGE_SRC_DIR=\""."\" -DPACKAGE_DATA_DIR=\""/usr/local/share"\" -I/usr/include/uuid -I/usr/include/libxml2 -D__USE_XOPEN2K8=1 -D__builtin_va_list=va_list -weak src/*.c
 
-3. Getting the GUI testing environment working
-----------------------------------------------
+3. Setting up the test environment
+----------------------------------
+
+3.1 Getting the harness to compile
+-----------------------------------
+The main harness has the following dependencies:
+sudo apt-get install valgrind lcov cppcheck libdbd-sqlite3-perl libxml-simple-perl libwww-perl apt-rdepends 
+
+3.2 Getting the GUI testing environment working
+-----------------------------------------------
 In order to run the frontend tests (8_* range), you will need the Java wrapper installed.
 The Java wrapper provides JUnit, a library that simulates browser behaviour.
 You will need to install Java and the Perl JUnit wrapper
@@ -61,43 +69,12 @@ apt-get install default-jdk
 JAVA_HOME=/usr/lib/jvm/default-java cpan -f Inline::Java
 cpan -f WWW::HtmlUnit
 
-Also, Perl will need access to the database, so ensure DBI and sqlite3 DBD in installed
-eg
-sudo apt-get install libdbd-sqlite3-perl cppcheck libxml-simple-perl valgrind
-
-Also, to ensure the tests compare like for like, you should set your sane test.conf with the following settings:
-  number_of_devices 1
-  mode Gray
-  depth 8
-  hand-scanner false
-  three-pass false
-  three-pass-order RGB
-  resolution_min 50.0
-  resolution_max 800.0
-  resolution_quant 1
-  resolution 50.0
-  test-picture "Color pattern"
-  invert-endianess false
-  read-limit false
-  read-limit-size 1
-  read-delay false
-  read-delay-duration 1000
-  read-status-code "Default"
-  fuzzy-parameters true
-  ppl-loss 0
-  non-blocking false
-  select-fd false
-  enable-test-options true
-  geometry_min 0.0
-  geometry_max 200.0
-  geometry_quant 1.0
-  tl_x 0.0
-  tl_y 0.0
-  br_x 80.0
-  br_y 100.0
-
-
-
+3.3 Setting up the machine
+--------------------------
+- The user that runs the test harness, will need access to:
+  * /var/log/opendias
+  * /var/run/
+  
 4. How to run the tests (automated).
 -------------------------------------
 cd test

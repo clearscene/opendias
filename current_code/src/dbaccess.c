@@ -17,16 +17,20 @@
  */
 
 #include "config.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "db.h"
 #include "utils.h"
 #include "simpleLinkedList.h"
 #include "main.h"
 #include "debug.h"
-#include "dbaccess.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
+#include "dbaccess.h"
+
+#ifdef CAN_SCAN
 int setScanParam(char *uuid, int param, char *vvalue) {
 
   int rc;
@@ -54,6 +58,8 @@ char *getScanParam(char *scanid, int param_option) {
   char *sql, *vvalue = NULL;
   struct simpleLinkedList *rSet;
 
+	o_log(DEBUGM,"Entering getScanParam");
+
   sql = o_printf("SELECT param_value \
                   FROM scan_params \
                   WHERE client_id = '%s' \
@@ -65,6 +71,7 @@ char *getScanParam(char *scanid, int param_option) {
   }
   free_recordset( rSet );
   free(sql);
+	o_log(DEBUGM,"Leaving getScanParam");
 
   return vvalue;
 }
@@ -105,6 +112,7 @@ void updateScanProgress (char *uuid, int status, int value) {
   free(progressUpdate);
 
 }
+#endif // CAN_SCAN //
 
 static char *addNewDoc (int ftype, int getLines, int ppl, int resolution, int pageCount, char *ocrText) {
 

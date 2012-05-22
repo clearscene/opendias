@@ -19,13 +19,19 @@
 #ifndef OCR_PLUG
 #define OCR_PLUG
 
+#include "config.h"
+
+#ifdef CAN_OCR
+#include <leptonica/allheaders.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct scanCallInfo {
+  PIX *image_pix;
+  int ppi;
   const char* language;
-  const unsigned char* imagedata;
-  int bytes_per_pixel;
-  int bytes_per_line;
-  int width;
-  int height;
   char *ret;
 };
 
@@ -39,5 +45,11 @@ struct scanCallInfo {
 #define OCR_LANG_VIETNAMESE  "vie"   /*Vietnamese */
 
 extern void runocr(struct scanCallInfo*);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // CAN_OCR //
 
 #endif /* OCR_PLUG */
