@@ -160,6 +160,7 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
           uuid_generate(uu);
           uuid_unparse(uu, fileid);
           data_struct->data = o_strdup(fileid);
+          o_log("DEBUGM, "Generated upload handlename %s", data_struct->data);
           free(fileid);
       }
       else {
@@ -197,7 +198,7 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
         }
         close(fd);
       }
-    free(filename);
+      free(filename);
     }
 
     free(trimedData);
