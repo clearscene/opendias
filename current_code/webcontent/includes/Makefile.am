@@ -14,7 +14,8 @@ web_DATA = \
 	openDias.filter.js \
 	openDias.loadDetails.js \
 	openDias.saveDetails.js \
-	openDias.getAccessDetails.js
+	openDias.getAccessDetails.js \
+  openDias.language.js 
 
 webdir = \
 	$(pkgdatadir)/webcontent/includes

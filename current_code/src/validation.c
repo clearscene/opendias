@@ -559,3 +559,13 @@ int validate(struct simpleLinkedList *postdata, char *action) {
   return ret;
 }
 
+int validateLanguage( const char *requestedLang ) {
+
+  if ( ( 0 == strcmp(requestedLang, "en") ) 
+    || ( 0 == strcmp(requestedLang, "de") ) ) {
+    return 1;
+  }
+
+  return 0;
+}
+

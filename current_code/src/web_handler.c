@@ -64,18 +64,37 @@ struct priverlage {
   int add_scan;
 };
 
-static size_t getFromFile_fullPath(const char *url, char **data) {
+static size_t getFromFile_fullPath(const char *url, const char *lang, char **data) {
 
-  return load_file_to_memory(url, data);
+  size_t size;
+  char *localised = NULL;
+
+  // Could the file were getting have a localised version?
+  if( 0!=strstr(url,".html") || 0!=strstr(url,".txt") || 0!=strstr(url,".resource") ) {
+    localised = o_printf("%s.%s", url, lang);
+    // Check localised version is available
+    if( 0 != access(localised, F_OK) ) {
+      o_log(ERROR, "File '%s' is not readable", localised);
+      free( localised );
+      localised = NULL;
+    } 
+  }
+  if ( localised == NULL ) {
+    localised = o_printf("%s", url);
+  }
+
+  size = load_file_to_memory(localised, data);
+  free(localised);
+  return size;
 }
 
-static size_t getFromFile(const char *url, char **data) {
+static size_t getFromFile(const char *url, const char *lang, char **data) {
 	o_log(DEBUGM,"enterting getFromFile: ");
 
   // Build Document Root
   char *htmlFrag = o_printf("%s/opendias/webcontent%s", PACKAGE_DATA_DIR, url);
 
-  size_t size = getFromFile_fullPath(htmlFrag, data);
+  size_t size = getFromFile_fullPath(htmlFrag, lang, data);
   free(htmlFrag);
   return size;
 }
@@ -83,13 +102,13 @@ static size_t getFromFile(const char *url, char **data) {
 /*
  * Top and tail the page with header/footer HTML
  */
-static char *build_page (char *page) {
+static char *build_page (char *page, const char *lang) {
   char *output;
   char *tmp;
   size_t size;
 
   // Load the std header
-  size = getFromFile("/includes/header.txt", &output);
+  size = getFromFile("/includes/header.txt", lang, &output);
 
   // Add the payload
   if(size > 1) {
@@ -98,14 +117,13 @@ static char *build_page (char *page) {
   }
 
   // Load the std footer
-  size = getFromFile("/includes/footer.txt", &tmp);
+  size = getFromFile("/includes/footer.txt", lang, &tmp);
   if(size > 1) {
     conCat(&output, tmp);
     free(tmp);
   }
 
   return output;
-
 }
 
 // struct connection_info_struct 
@@ -148,8 +166,6 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
     data_struct = (struct post_data_struct *)post_element->data;
   }
 
-  o_log(DEBUGM, "Language setting is: %s", MHD_lookup_connection_value( coninfo_cls, kind, MHD_HTTP_HEADER_ACCEPT_LANGUAGE) );
-
   if(size > 0) {
     char *trimedData = calloc(size+1, sizeof(char));
     strncat(trimedData, data, size);
@@ -163,7 +179,7 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
           uuid_generate(uu);
           uuid_unparse(uu, fileid);
           data_struct->data = o_strdup(fileid);
-          o_log("DEBUGM, "Generated upload handlename %s", data_struct->data);
+          o_log(DEBUGM, "Generated upload handlename %s", data_struct->data);
           free(fileid);
       }
       else {
@@ -219,6 +235,7 @@ void request_completed (void *cls, struct MHD_Connection *connection, void **con
   if (NULL == con_info)
     return;
 
+  free(con_info->lang);
   if (con_info->connectiontype == POST) {
     if (NULL != con_info->postprocessor) {
       MHD_destroy_post_processor (con_info->postprocessor);
@@ -324,7 +341,7 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
 
   if ( locationLimited == 1 || userLimited == 1 ) {
     // requires some access grant
-    if ( locationAccess == 1 ) { //|| userAccess == 1 ) {
+    if ( locationAccess == 1 ) { //|| userAccess == 1 ) 
       o_log(DEBUGM, "Access 'granted' to user on %s for request: %s", client_address, url);
       return NULL; // User has access
     }
@@ -341,6 +358,58 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
     privs->add_scan=1;
     return NULL; // No limitation
   }
+}
+
+char *userLanguage( struct MHD_Connection *connection ) {
+
+  char *lang;
+
+  const char *cookieValue = MHD_lookup_connection_value (connection, MHD_COOKIE_KIND, "requested_lang" );
+  if( ( cookieValue == NULL ) || ( 0 == validateLanguage(cookieValue) ) ) {
+    char *reqLang;
+
+    o_log(SQLDEBUG, "No requested language cookie set." );
+    const char *headerValue = MHD_lookup_connection_value( connection, MHD_HEADER_KIND, MHD_HTTP_HEADER_ACCEPT_LANGUAGE);
+    o_log(SQLDEBUG, "Given a language header of '%s'", headerValue);
+    char *pch_orig = o_strdup(headerValue);
+    char *pch = strtok(pch_orig, ", ");
+
+    while (pch != NULL) {
+      o_log(SQLDEBUG, "pasing language element of '%s'", pch);
+
+      // Remove 'quality' part
+      reqLang = pch;
+      if( ( pch = strstr(pch, ";") ) != 0 ) {
+        o_log(SQLDEBUG, "Found a quality seperator. reqLang = '%s', pch = '%s'", reqLang, pch);
+        *pch = '\0';
+        ++pch;
+        o_log(SQLDEBUG, "pointers now point to reqLang = '%s', pch = '%s'", reqLang, pch);
+      }
+      
+      o_log(SQLDEBUG, "Checking if header lang '%s' is available.", reqLang );
+      if ( validateLanguage( reqLang ) == 1 ) {
+        o_log(SQLDEBUG, "Language '%s' is available.", reqLang );
+        break;
+      }
+      o_log(SQLDEBUG, "Nope - that language preference is '%s' not yet available.", reqLang);
+      pch = strtok(NULL, ", ");
+    }
+
+    if( pch == NULL ) {
+      o_log(DEBUGM, "No requested language header set. Defaulting to 'en'" );
+      lang = o_strdup("en");
+    }
+    else {
+      o_log(DEBUGM, "Language setting (from header) is: %s", reqLang );
+      lang = o_strdup(reqLang);
+    }
+    free( pch_orig );
+  }
+  else {
+    o_log(DEBUGM, "Language setting (from cookie) is: %s", cookieValue );
+    lang = o_strdup(cookieValue);
+  }
+  return lang;
 }
 
 static void postDumper(struct simpleLinkedList *table) {
@@ -372,26 +441,27 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   url = url_orig;
   if( 0 != strncmp(url,"/opendias", 9) ) {
     o_log(ERROR, "request '%s' does not start '/opendias'", url_orig);
-    return send_page_bin (connection, build_page((char *)o_strdup(requesterrorpage)), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
+    return send_page_bin (connection, build_page((char *)o_strdup(requesterrorpage), "en"), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
   }
   url += 9;
 
   // First Validate the request basic fields
   if( 0 != strstr(url, "..") ) {
     o_log(DEBUGM, "request trys to move outside the document root");
-    return send_page_bin (connection, build_page((char *)o_strdup(servererrorpage)), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
+    return send_page_bin (connection, build_page((char *)o_strdup(servererrorpage), "en"), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
   }
 
   // Discover Params
   if (NULL == *con_cls) {
     if (nr_of_clients >= MAXCLIENTS)
-      return send_page_bin (connection, build_page(o_strdup(busypage)), MHD_HTTP_SERVICE_UNAVAILABLE, MIMETYPE_HTML);
+      return send_page_bin (connection, build_page(o_strdup(busypage), "en"), MHD_HTTP_SERVICE_UNAVAILABLE, MIMETYPE_HTML);
     con_info = malloc (sizeof (struct connection_info_struct));
     if (NULL == con_info)
       return MHD_NO;
 #ifdef THREAD_JOIN
     con_info->thread = NULL;
 #endif /* THREAD_JOIN */
+    con_info->lang = userLanguage(connection);
 
     if (0 == strcmp (method, "POST")) {
       con_info->post_data = sll_init();
@@ -409,6 +479,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     *con_cls = (void *) con_info;
     return MHD_YES;
   }
+  con_info = *con_cls;
 
   accessPrivs.update_access = 0;
   accessPrivs.view_doc = 0;
@@ -422,7 +493,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     if ((0 == strcmp (method, "GET") && (0!=strstr(url,".html") || 0!=strstr(url,"/scans/"))) || 0 == strcmp(method,"POST")) {
       char *accessError = accessChecks(connection, url, &accessPrivs);
       if(accessError != NULL) {
-        char *accessErrorPage = build_page(accessError);
+        char *accessErrorPage = build_page(accessError, con_info->lang);
         size = strlen(accessErrorPage);
         return send_page (connection, accessErrorPage, MHD_HTTP_UNAUTHORIZED, MIMETYPE_HTML, size);
       }
@@ -435,16 +506,16 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     // A 'root' request needs to be mapped to an actual file
     if( (strlen(url) == 1  && 0!=strstr(url,"/")) || strlen(url) == 0 ) {
       o_log(DEBUGM, "Serving root request ");
-      size = getFromFile("/body.html", &content);
+      size = getFromFile("/body.html", con_info->lang, &content);
       if( size > 0 ) 
-        content = build_page(content);
+        content = build_page(content, con_info->lang);
       mimetype = MIMETYPE_HTML;
       size = strlen(content);
     }
 
     // Serve up content that needs a top and tailed
     else if( 0!=strstr(url,".html") ) {
-      size = getFromFile(url, &content);
+      size = getFromFile(url, con_info->lang, &content);
       if( 0 == size ) {
         free(content);
         content = o_strdup("");
@@ -452,7 +523,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         size = 0;
       }
       else {
-        content = build_page(content);
+        content = build_page(content, con_info->lang);
         size = strlen(content);
       }
       mimetype = MIMETYPE_HTML;
@@ -460,7 +531,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
     // Serve 'image' content
     else if( 0!=strstr(url,"/images/") && 0!=strstr(url,".png") ) {
-      size = getFromFile(url, &content);
+      size = getFromFile(url, con_info->lang, &content);
       if( 0 == size ) {
         free(content);
         content = o_strdup("");
@@ -473,7 +544,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     }
 
     else if( 0!=strstr(url,"/images/") && 0!=strstr(url,".jpg") ) {
-      size = getFromFile(url, &content);
+      size = getFromFile(url, con_info->lang, &content);
       if( 0 == size ) {
         free(content);
         content = o_strdup("");
@@ -493,7 +564,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
       }
       else {
         dir = o_printf("%s%s", BASE_DIR, url);
-        size = getFromFile_fullPath(dir, &content);
+        size = getFromFile_fullPath(dir, con_info->lang, &content);
         free(dir);
         if(0!=strstr(url,".jpg")) {
           mimetype = MIMETYPE_JPG;
@@ -521,8 +592,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     }
 
     // Serve 'js' content
-    else if( 0!=strstr(url,"/includes/") && 0!=strstr(url,".js") ) {
-      size = getFromFile(url, &content);
+    else if( 0!=strstr(url,"/includes/") && ( 0!=strstr(url,".js") || 0!=strstr(url,".resource") ) ) {
+      size = getFromFile(url, con_info->lang, &content);
       if( 0 == size ) {
         free(content);
         content = o_strdup("");
@@ -536,7 +607,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
     // Serve 'style sheet' content
     else if( 0!=strstr(url,"/style/") && 0!=strstr(url,".css") ) {
-      size = getFromFile(url, &content);
+      size = getFromFile(url, con_info->lang, &content);
       if( 0 == size ) {
         free(content);
         content = o_strdup("");
@@ -562,7 +633,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   if (0 == strcmp (method, "POST")) {
     // Serve up content that needs a top and tailed
     if( 0!=strstr(url,"/dynamic") ) {
-      struct connection_info_struct *con_info = *con_cls;
+      //struct connection_info_struct *con_info = *con_cls;
+      con_info = *con_cls;
       if (0 != *upload_data_size) {
         MHD_post_process (con_info->postprocessor, upload_data, *upload_data_size);
         *upload_data_size = 0;
@@ -831,7 +903,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
           else if ( action && 0 == strcmp(action, "controlAccess") ) {
             o_log(INFORMATION, "Processing request for: controlAccess");
             if ( accessPrivs.update_access == 0 )
-              content = build_page(denied);
+              content = build_page(denied, con_info->lang);
             else if ( validate( con_info->post_data, action ) ) 
               content = o_strdup(errorxml);
             else {
@@ -904,6 +976,6 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     return send_page (connection, content, status, mimetype, size);
   }
 
-  return send_page_bin (connection, build_page(servererrorpage), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
+  return send_page_bin (connection, build_page(servererrorpage, con_info->lang), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
 }
 
