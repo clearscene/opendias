@@ -101,5 +101,7 @@ current_code/webcontent/includes/Makefile
 current_code/webcontent/includes/Makefile.in
 current_code/webcontent/Makefile
 current_code/webcontent/Makefile.in
+current_code/webcontent/includes/local/Makefile
+current_code/webcontent/includes/local/Makefile.in
 current_code/webcontent/style/Makefile
 current_code/webcontent/style/Makefile.in

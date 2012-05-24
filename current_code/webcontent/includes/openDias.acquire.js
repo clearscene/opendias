@@ -29,15 +29,15 @@ function getScanningProgress (progressId, device) {
 
   $.ajax({ url: "/opendias/dynamic",
 	 dataType: "xml",
-         timeout: 10000,
+   timeout: 10000,
 	 data: {action: "getScanningProgress", 
-		scanprogressid: progressId,
+          scanprogressid: progressId,
 	       },
 	 cache: false,
 	 type: "POST",
 	 success: function(dta) {
            if( $(dta).find('error').text() ){
-             alert("Error getting scan progress: "+$(dta).find('error').text());
+             alert(LOCAL_error_getting_scan_progress+": "+$(dta).find('error').text());
              return 1;
            }
 
@@ -45,49 +45,49 @@ function getScanningProgress (progressId, device) {
            vvalue = parseInt( $(dta).find('ScanningProgress').find('value').text() );
 
            if( status == 0 ) { // SCAN_IDLE,
-             $('#status_'+device).text("Setting up.");
+             $('#status_'+device).text( LOCAL_setting_up );
              showStatus(device, undefined, undefined);
              // Give us a chance ....
 
            } else if( status == 1 ) { // SCAN_INTERNAL_ERROR,
-             $('#status_'+device).text("Internal Error.");
+             $('#status_'+device).text( LOCAL_internal_error );
              showStatus(device, undefined, undefined);
-             alert("Internal Error: " + vvalue);
+             alert( LOCAL_internal_error + ": " + vvalue);
              action='finish';
 
            } else if( status == 2 ) { // SCAN_DB_WORKING,
-             $('#status_'+device).text("Waiting on the database.");
+             $('#status_'+device).text( LOCAL_waiting_on_the_database );
              showStatus(device, undefined, undefined);
              // Give us a chance ....
 
            } else if( status == 5 ) { // SCAN_DB_ERROR // DB error code
              showStatus(device, undefined, undefined);
-             $('#status_'+device).text("Error while scanning.");
-             alert("Scanner Error: " + vvalue);
+             $('#status_'+device).text( LOCAL_error_while_scanning );
+             alert( LOCAL_error_while_scanning + ": " + vvalue);
              action='finish';
 
            } else if( status == 4 ) { // SCAN_WAITING_ON_SCANNER,
              showStatus(device, undefined, undefined);
-             $('#status_'+device).text("Setting up the scanner.");
+             $('#status_'+device).text( LOCAL_setting_up_the_scanner );
              // Give us a chance ....
 
            } else if( status == 5 ) { // SCAN_ERRO_FROM_SCANNER,// SANE error code
              showStatus(device, undefined, undefined);
-             $('#status_'+device).text("Error while scanning.");
-             alert("Scanner Error: " + vvalue);
+             $('#status_'+device).text( LOCAL_error_while_scanning );
+             alert( LOCAL_error_while_scanning + ": " + vvalue);
              action='finish';
 
            } else if( status == 6 ) { // SCAN_SCANNING,// Current progress
-             $('#status_'+device).text("Scanning in progress.");
+             $('#status_'+device).text( LOCAL_scanning_in_progress );
              showStatus(device, undefined, vvalue);
-	     $("#progressbar_"+device).progressbar({
-	       value: vvalue,
-	     });
+             $("#progressbar_"+device).progressbar({
+               value: vvalue,
+             });
 
            } else if( status == 7 ) { // SCAN_WAITING_ON_NEW_PAGE,// Waiting for page [x]
              showStatus(device, undefined, undefined);
-             $('#status_'+device).text("Please insert page "+vvalue+".");
-             if(confirm("Please insert page "+vvalue+".")) {
+             $('#status_'+device).text( LOCAL_please_insert_page + ": "+vvalue+".");
+             if(confirm( LOCAL_please_insert_page + ": "+vvalue+".")) {
                action='postnewpage';
              } else {
                action='finish';
@@ -95,28 +95,28 @@ function getScanningProgress (progressId, device) {
 
            } else if( status == 8 ) { // SCAN_TIMEOUT_WAITING_ON_NEW_PAGE,
              showStatus(device, undefined, undefined);
-             $('#status_'+device).text("Timeout while waiting for the next page.");
-             alert("Timeout waiting on the new page insert.");
+             $('#status_'+device).text( LOCAL_timeout_waiting_for_next_page );
+             alert( LOCAL_timeout_waiting_for_next_page );
              action='finish';
 
            } else if( status == 9 ) { // SCAN_CONVERTING_FORMAT,
-             $('#status_'+device).text("Converting scanned image format.");
+             $('#status_'+device).text( LOCAL_converting_image_format );
              showStatus(device, 1, undefined);
 
            } else if( status == 10 ) { // SCAN_ERROR_CONVERTING_FORMAT,// FreeImage error code
              showStatus(device, undefined, undefined);
-             $('#status_'+device).text("Error while converting scanned image format.");
-             alert("Image Processing Error: " + vvalue);
+             $('#status_'+device).text( LOCAL_error_converting_image_format );
+             alert( LOCAL_error_converting_image_format + ": " + vvalue);
              action='finish';
 
            } else if( status == 11 ) { // SCAN_PERFORMING_OCR,
              showStatus(device, 1, undefined);
-             $('#status_'+device).text("Performing OCR on scanned image.");
+             $('#status_'+device).text( LOCAL_performing_ocr_on_image );
 
            } else if( status == 12 ) { // SCAN_ERROR_PERFORMING_OCR,// xxxxxx error code
              showStatus(device, undefined, undefined);
-             $('#status_'+device).text("Error while performing OCR operation.");
-             alert("OCR Error: " + vvalue);
+             $('#status_'+device).text( LOCAL_error_while_performing_ocr );
+             alert( LOCAL_error_while_performing_ocr + ": " + vvalue);
              action='finish';
 
            } else if( status == 13 ) { // SCAN_SANE_BUSY
@@ -131,8 +131,8 @@ function getScanningProgress (progressId, device) {
              $("#resolutionGood_"+device).parent().removeClass("greyResolution");
              $("#resolutionGood_"+device).removeClass("greySweetResolution");
              $("#resolutionGood_"+device).addClass("sweetResolution");
-             $('#status_'+device).text("Try again in a minute or two.");
-             alert("The SANE backend is busy serving a required. Unfortunately SANE cannot handle more than one request at a time. Try again soon.");
+             $('#status_'+device).text( LOCAL_try_again_in_a_minute );
+             alert( LOCAL_sane_is_busy );
              action='finish';
              if( doneAtLeastOnePage == 1 ) {
                action=='postnewpage';
@@ -142,7 +142,7 @@ function getScanningProgress (progressId, device) {
            } else if( status == 15 ) { // SCAN_RESERVED_2,
            } else if( status == 16 ) { // SCAN_FINISHED
              showStatus(device, undefined, undefined);
-             $('#status_'+device).text("Scan operation complete.");
+             $('#status_'+device).text( LOCAL_scan_complete );
              document.location.href = "/opendias/docDetail.html?docid="+vvalue;
              action='finish';
 
@@ -150,9 +150,9 @@ function getScanningProgress (progressId, device) {
          },
          error: function( x, t, m ) {
            if(t=="timeout") {
-             alert("[a001] Timeout while talking to the server");
+             alert("[a001] " + LOCAL_timeout_talking_to_server);
            } else {
-             alert("[a002] Error while talking to the server: "+t);
+             alert("[a002] " + LOCAL_error_talking_to_server + ": "+t);
            }
          },
          complete: function() {
@@ -168,15 +168,15 @@ function getScanningProgress (progressId, device) {
                       type: "POST",
                       success: function(dta2) {
                         if( $(dta2).find('error').text() ){
-                          alert("Error signalling the scanner to restart for the next page: "+$(dta2).find('error').text());
+                          alert( LOCAL_error_starting_next_page + ": "+$(dta2).find('error').text());
                           return 1;
                         }
                       },
                       error: function( x, t, m ) {
                         if(t=="timeout") {
-                          alert("[a003] Timeout while talking to the server.");
+                          alert("[a003] " + LOCAL_timeout_talking_to_server );
                         } else {
-                          alert("[a004] Error while talking to the server: "+t);
+                          alert("[a004] " + LOCAL_error_talking_to_server + ": "+t);
                         }
                       },
                     });
@@ -207,7 +207,7 @@ $(document).ready(function() {
          success: function(data){
            if( $(data).find('error').text() ){
              $('#loading').canvasLoaderHalt();
-             $('#scanning').text("Unable to fetch a list of available scanners: "+$(data).find('error').text());
+             $('#scanning').text( LOCAL_failed_to_get_list_of_scanners + ": "+$(data).find('error').text());
              return 1;
            }
            var deviceid=0;
@@ -334,7 +334,7 @@ $(document).ready(function() {
                         type: "POST",
                         success: function(data){
                           if( $(data).find('error').text() ){
-                            alert("Unable to start the scaning process: "+$(data).find('error').text());
+                            alert( LOCAL_unable_to_start_scanning + ": "+$(data).find('error').text());
                             return 1;
                           }
                           scanuuid = $(data).find('DoScan').find('scanuuid').text();
@@ -342,9 +342,9 @@ $(document).ready(function() {
                         },
                         error: function( x, t, m ) {
                           if(t=="timeout") {
-                            alert("[a005] Timeout while talking to the server");
+                            alert("[a005] " + LOCAL_timeout_talking_to_server );
                           } else {
-                            alert("[a006] Error while talking to the server: "+t);
+                            alert("[a006] " + LOCAL_error_talking_to_server + ": "+t);
                           }
                         },
                       });
@@ -355,9 +355,9 @@ $(document).ready(function() {
          },
          error: function( x, t, m ) {
            if(t=="timeout") {
-             alert("[a007] Timeout while talking to the server");
+             alert("[a007] " + LOCAL_timeout_talking_to_server );
            } else {
-             alert("[a008] Error while talking to the server: "+t);
+             alert("[a008] " + LOCAL_error_talking_to_server + ": "+t);
            }
          },
   });

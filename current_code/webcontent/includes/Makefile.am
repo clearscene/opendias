@@ -1,3 +1,4 @@
+SUBDIRS = local
 
 web_DATA = \
         header.txt \
