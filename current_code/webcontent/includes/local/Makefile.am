@@ -1,5 +1,6 @@
 
 web_DATA = \
+  generic.resource.en \
   openDias.acquire.js.resource.en 
 
 webdir = \

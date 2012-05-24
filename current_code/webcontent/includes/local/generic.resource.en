@@ -1,0 +1,3 @@
+LOCAL_timeout_talking_to_server = 'Timeout while talking to the server';
+LOCAL_error_talking_to_server = 'Error while talking to the server';
+
