@@ -2,11 +2,11 @@
 SUBDIRS = style includes images
 
 web_DATA = \
-  accessControls.html \
+  accessControls.html.en \
   docList.html.en \
   docDetail.html.en \
   body.html.en \
-  buglist.html \
+  buglist.html.en \
   acquire.html.en
 
 webdir = \
