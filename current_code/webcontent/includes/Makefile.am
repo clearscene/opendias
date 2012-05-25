@@ -1,8 +1,8 @@
 SUBDIRS = local
 
 web_DATA = \
-        header.txt \
-        footer.txt \
+        header.txt.en \
+        footer.txt.en \
 	jquery.canvas-loader.js \
 	jquery.easySlider.js \
 	jquery.gzoom.js \
