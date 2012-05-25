@@ -78,6 +78,7 @@ static size_t getFromFile_fullPath(const char *url, const char *lang, char **dat
       free( localised );
       localised = NULL;
     } 
+    localised = o_printf("%s.en", url);
   }
   if ( localised == NULL ) {
     localised = o_printf("%s", url);
