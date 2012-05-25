@@ -124,4 +124,6 @@
 -->
 
 </div>
+<script type="text/javascript" src="/opendias/includes/local/generic.js.resource"></script>
+<script type="text/javascript" src="/opendias/includes/local/openDias.getAccessDetails.js.resource"></script>
 <script type="text/javascript" src="/opendias/includes/openDias.getAccessDetails.js"></script>
