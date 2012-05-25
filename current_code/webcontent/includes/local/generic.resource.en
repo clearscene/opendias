@@ -1,3 +1,8 @@
 LOCAL_timeout_talking_to_server = 'Timeout while talking to the server';
 LOCAL_error_talking_to_server = 'Error while talking to the server';
-
+LOCAL_date_format = 'yy/mm/dd';
+LOCAL_odf_doc = 'ODF Document';
+LOCAL_scanned_doc = 'Scanned Document';
+LOCAL_pdf_doc = 'PDF Document';
+LOCAL_jpeg_img = 'JPEG Images';
+LOCAL_unknown = 'unknown';

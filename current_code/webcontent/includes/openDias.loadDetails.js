@@ -21,14 +21,14 @@ $(document).ready(function() {
          type: "POST",
          error: function( x, t, m ) {
            if(t=="timeout") {
-             alert("[d001] Timeout while talking to the server.");
+             alert("[d001] " + LOCAL_timeout_talking_to_server );
            } else {
-             alert("[d002] Error while talking to the server: ".t);
+             alert("[d002] " + LOCAL_error_talking_to_server + ": " + t);
            }
          },
          success: function(data){
            if( $(data).find('error').text() ){
-             alert("Unable to get document details: "+$(data).find('error').text());
+             alert( LOCAL_unable_to_get_doc_details + ": "+$(data).find('error').text());
              return 1;
            }
            officialDocId = $(data).find('DocDetail').find('docid').text();
@@ -58,7 +58,7 @@ $(document).ready(function() {
            if( $(data).find('DocDetail').find('type').text() == "1" ) { // ODF Documents
               $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage' " + 
                                      "alt='' src='/opendias/scans/"+officialDocId+"_thumb.png' />" + 
-                                     "</div><button id='openImg'>Open ODF Document</button></li>");
+                                     "</div><button id='openImg'>" + LOCAL_open_odf_doc + "</button></li>");
               $("#scanImage").css("width", "300px");
               $("#openImg").bind('click', { docId: officialDocId }, 
                                   function(e){ 
@@ -71,7 +71,7 @@ $(document).ready(function() {
              for( x=1 ; x<=parseInt($(data).find('DocDetail').find('pages').text()) ; x++ ) {
                $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage"+x+"' " + 
                                       "alt='' src='/opendias/scans/"+officialDocId+"_"+x+".jpg' />" + 
-                                      "</div><button id='openImg_"+x+"'>Open "+x+" Fullsize</button></li>");
+                                      "</div><button id='openImg_"+x+"'>"+LOCAL_open_page+" "+x+" "+LOCAL_fullsize+"</button></li>");
                $("#scanImage"+x).css("width", "300px");
                $("#openImg_"+x).bind('click', { page: x, docId: officialDocId }, 
                                   function(e){ 
@@ -100,10 +100,10 @@ $(document).ready(function() {
 
            else if( $(data).find('DocDetail').find('type').text() == "3" ) { // PDF Documents
               $("#slider ul").append("<li><div id='pdf' class='scanImageContainer'><img id='scanImage' /></div>" + 
-                                     "<button id='openImg'>Open PDF Document</button></li>");
+                                     "<button id='openImg'>"+LOCAL_open_pdf_doc+"</button></li>");
               $("#scanImage").css("width", "300px");
               $("#scanImage").bind('error', { docId: officialDocId }, function (e) {
-                                    $("#pdf").html("<div style='text-align: center; width: 100%'><p>PDF Thumbnail is not available.</p><p>Attempt to generate now.</p><button id='regenThumb'>Regenerate Thumbnail</button></div>");
+                                    $("#pdf").html("<div style='text-align: center; width: 100%'><p>"+LOCAL_pdf_thumb_not_available+".</p><p>"+LOCAL_attempt_to_generate_now+".</p><button id='regenThumb'>"+LOCAL_generate_thumbnail+"</button></div>");
                                     $('#regenThumb').bind('click', {docId: e.data.docId },
                                         function(d) {
                                             $.ajax({  url: "/opendias/dynamic",
@@ -115,14 +115,14 @@ $(document).ready(function() {
                                                       type: "POST",
                                                       error: function( x, t, m ) {
                                                         if(t=="timeout") {
-                                                          alert("[d001] Timeout while talking to the server.");
+                                                          alert("[d001] " + LOCAL_timeout_talking_to_server );
                                                         } else {
-                                                          alert("[d002] Error while talking to the server: ".t);
+                                                          alert("[d002] " + LOCAL_error_talking_to_server + ": " + t);
                                                         }
                                                       },
                                                       success: function(data){
                                                         if( $(data).find('error').text() ){
-                                                          alert("Unable to generate thumbnail: "+$(data).find('error').text());
+                                                          alert( LOCAL_error_generating_thumbnail + ": "+$(data).find('error').text());
                                                           return 1;
                                                         }
                                                         $("#pdf").html("<img id='scanImage' />");
@@ -139,7 +139,7 @@ $(document).ready(function() {
                                   });
            }
 
-           $("#docDate").datepicker( {dateFormat:"yy/mm/dd"} );
+           $("#docDate").datepicker( {dateFormat: LOCAL_date_format} );
 
 
            //
@@ -172,9 +172,9 @@ $(document).ready(function() {
                    },
                    error: function( x, t, m ) {
                      if(t=="timeout") {
-                       alert("[d003] Timeout while talking to the server.");
+                       alert("[d003] " + LOCAL_timeout_talking_to_server );
                      } else {
-                       alert("[d004] Error while talking to the server: ".t);
+                       alert("[d004] " + LOCAL_error_talking_to_server + ": " + t);
                      }
                    },
                    success: function( data ) {
@@ -232,9 +232,9 @@ $(document).ready(function() {
                    },
                    error: function( x, t, m ) {
                      if(t=="timeout") {
-                       alert("[d005] Timeout while talking to the server.");
+                       alert("[d005] " + LOCAL_timeout_talking_to_server );
                      } else {
-                       alert("[d006] Error while talking to the server: ".t);
+                       alert("[d006] " + LOCAL_error_talking_to_server + ": " + t);
                      }
                    },
                    success: function( data ) {
@@ -281,9 +281,9 @@ $(document).ready(function() {
           },
           error: function( x, t, m ) {
             if(t=="timeout") {
-              alert("[d007] Timeout while talking to the server.");
+              alert("[d007] " + LOCAL_timeout_talking_to_server );
             } else {
-              alert("[d008] Error while talking to the server: ".t);
+              alert("[d008] " + LOCAL_error_talking_to_server + ": " + t);
             }
           },
           success: function( data ) {
@@ -315,15 +315,15 @@ $(document).ready(function() {
 function getTypeDescription(iType) {
 
   if( iType == "1" ) {
-    return "ODF Document";
+    return LOCAL_odf_doc;
   } else if( iType == "2" ) {
-    return "Scanned Document";
+    return LOCAL_scanned_doc;
   } else if( iType == "3" ) {
-    return "PDF Document";
+    return LOCAL_pdf_doc;
   } else if( iType == "4" ) {
-    return "JPEG Image";
+    return LOCAL_jpeg_img;
   } else {
-    return "[unknown]";
+    return "["+LOCAL_unknown+"]";
   }
 
 }
@@ -335,7 +335,7 @@ function createDocLinkHtml( val, lab ) {
           + "  " + lab
           + " </a>&nbsp;&nbsp;"
           + " </span>"
-          + "<span id='deleteDocLink_"+val+"' class='clickable' title='Removing tag'>x</span>";
+          + "<span id='deleteDocLink_"+val+"' class='clickable' title='"+LOCAL_removing_tag+"'>x</span>";
 
   $('<span>').addClass('tag').append( ret ).insertBefore( '#doclinks_addTag' );
 
