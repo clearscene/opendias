@@ -76,13 +76,13 @@ static size_t getFromFile_fullPath(const char *url, const char *lang, char **dat
     if( 0 != access(localised, F_OK) ) {
       o_log(ERROR, "File '%s' is not readable", localised);
       free( localised );
-      localised = NULL;
+      localised = o_printf("%s.en", url);
     } 
-    localised = o_printf("%s.en", url);
   }
   if ( localised == NULL ) {
     localised = o_printf("%s", url);
   }
+	o_log(DEBUGM,"enterting getFromFile: %s", localised);
 
   size = load_file_to_memory(localised, data);
   free(localised);
