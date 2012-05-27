@@ -1,10 +1,8 @@
 LOCAL_unable_to_get_doc_details = 'Unable to get document'; 
 LOCAL_open_odf_doc = 'Open ODF Document';
-LOCAL_open_page = 'Open page';
-LOCAL_fullsize = 'fullsize';
+LOCAL_open_page_fullsize = 'Open page %s fillsize';
 LOCAL_open_pdf_doc = 'Open PDF Document';
-LOCAL_pdf_thumb_not_available = 'PDF Thumbnail is not available';
-LOCAL_attempt_to_generate_now = 'Attempt to generate now';
+LOCAL_pdf_thumb_not_available_attempt_to_generate_now = '<p>PDF Thumbnail is not available</p><p>Attempt to generate now.</p>';
 LOCAL_generate_thumbnail = 'Regenerate Thumbnail';
 LOCAL_error_generating_thumbnail = 'Unable to generate thumbnail';
 LOCAL_removing_tag = 'Removing tag';

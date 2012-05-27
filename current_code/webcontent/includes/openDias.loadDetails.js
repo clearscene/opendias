@@ -69,9 +69,10 @@ $(document).ready(function() {
            else if( $(data).find('DocDetail').find('type').text() == "2" || $(data).find('DocDetail').find('type').text() == "4") {
              // Set images and default width
              for( x=1 ; x<=parseInt($(data).find('DocDetail').find('pages').text()) ; x++ ) {
+               buttonText = springf( LOCAL_open_page_fullsize, x);
                $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage"+x+"' " + 
                                       "alt='' src='/opendias/scans/"+officialDocId+"_"+x+".jpg' />" + 
-                                      "</div><button id='openImg_"+x+"'>"+LOCAL_open_page+" "+x+" "+LOCAL_fullsize+"</button></li>");
+                                      "</div><button id='openImg_"+x+"'>"+buttonText+"</button></li>");
                $("#scanImage"+x).css("width", "300px");
                $("#openImg_"+x).bind('click', { page: x, docId: officialDocId }, 
                                   function(e){ 
@@ -103,7 +104,7 @@ $(document).ready(function() {
                                      "<button id='openImg'>"+LOCAL_open_pdf_doc+"</button></li>");
               $("#scanImage").css("width", "300px");
               $("#scanImage").bind('error', { docId: officialDocId }, function (e) {
-                                    $("#pdf").html("<div style='text-align: center; width: 100%'><p>"+LOCAL_pdf_thumb_not_available+".</p><p>"+LOCAL_attempt_to_generate_now+".</p><button id='regenThumb'>"+LOCAL_generate_thumbnail+"</button></div>");
+                                    $("#pdf").html("<div style='text-align: center; width: 100%'>" + LOCAL_pdf_thumb_not_available_attempt_to_generate_now + "<button id='regenThumb'>"+LOCAL_generate_thumbnail+"</button></div>");
                                     $('#regenThumb').bind('click', {docId: e.data.docId },
                                         function(d) {
                                             $.ajax({  url: "/opendias/dynamic",

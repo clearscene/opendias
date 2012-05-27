@@ -1,8 +1,8 @@
 SUBDIRS = local
 
 web_DATA = \
-        header.txt.en \
-        footer.txt.en \
+  header.txt.en \
+  footer.txt.en \
 	jquery.canvas-loader.js \
 	jquery.easySlider.js \
 	jquery.gzoom.js \
@@ -10,6 +10,7 @@ web_DATA = \
 	jquery.js \
 	jquery.mousewheel.js \
 	jquery-ui.min.js \
+  sprintf-0.7-beta1.js \
 	openDias.acquire.js \
 	openDias.docList.js \
 	openDias.filter.js \

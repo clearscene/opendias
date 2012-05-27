@@ -1,3 +1,2 @@
 LOCAL_unable_to_get_filtered_list = 'Unable to get a filtered list';
-LOCAL_will_return_estimated = 'Will return an estimated';
-LOCAL_documents_abv = 'docs';
+LOCAL_will_return_estimated_x_docs = 'Will return an estimated %s docs';

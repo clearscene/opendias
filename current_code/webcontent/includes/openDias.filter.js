@@ -40,7 +40,7 @@ function getRecordCount() {
                if( $(data).find('error').text() ) {
                  alert( LOCAL_unable_to_get_filtered_list + ": "+$(data).find('error').text());
                } else {
-                 $('#filterProgress').text( LOCAL_will_return_estimated + " " + $(data).find('DocFilter').find('count').text() + " " + LOCAL_documents_abv );
+                 $('#filterProgress').text( sprintf( LOCAL_will_return_estimated, $(data).find('DocFilter').find('count').text() ) );
                }
              },
              error: function( x, t, m ) {
