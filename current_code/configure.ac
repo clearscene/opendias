@@ -185,6 +185,7 @@ AC_OUTPUT([
 Makefile
 src/Makefile
 sql/Makefile
+i18n/Makefile
 webcontent/Makefile
 webcontent/style/Makefile
 webcontent/includes/Makefile

@@ -41,6 +41,7 @@
 #include "doc_editor.h"
 #include "import_doc.h"
 #include "simpleLinkedList.h"
+#include "localisation.h"
 
 #include "web_handler.h"
 
