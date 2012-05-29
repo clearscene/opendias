@@ -11,6 +11,8 @@ current_code/config.log
 current_code/config.status
 current_code/configure
 current_code/configure.scan
+current_code/i18n/Makefile
+current_code/i18n/Makefile.in
 current_code/INSTALL
 current_code/Makefile
 current_code/Makefile.in
