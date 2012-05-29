@@ -40,6 +40,9 @@ current_code/src/imageProcessing.o
 current_code/src/import_doc.gcda
 current_code/src/import_doc.gcno
 current_code/src/import_doc.o
+current_code/src/localisation.gcda
+current_code/src/localisation.gcno
+current_code/src/localisation.o
 current_code/src/main.gcda
 current_code/src/main.gcno
 current_code/src/main.o
