@@ -28,6 +28,7 @@
 #include "dbaccess.h"
 #include "utils.h"
 #include "debug.h"
+#include "localisation.h"
 #ifdef CAN_READODF
 #include "odf_plug.h"
 #endif // CAN_READODF //
@@ -58,7 +59,7 @@ char *extractThumbnail(char *docid) {
 }
 #endif // CAN_PDF //
 
-char *uploadfile(char *filename, char *ftype) {
+char *uploadfile(char *filename, char *ftype, char *lang) {
 
   int itype = PLACE_HOLDER;
   char *to_name, *datafile, *ocrText = NULL, *thumbext = NULL, *tmp;
@@ -116,7 +117,7 @@ char *uploadfile(char *filename, char *ftype) {
   }
 
   if(ocrText == NULL) {
-    ocrText = o_strdup("--text could not be extracted--");
+    ocrText = o_strdup( getString("LOCAL_ocr_default_text", lang ) );
   }
   free(datafile);
 
