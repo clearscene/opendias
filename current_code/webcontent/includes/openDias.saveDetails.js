@@ -17,7 +17,7 @@ function sendUpdate(kkey, vvalue) {
                if(t=="timeout") {
                  alert("[s001] " + LOCAL_timeout_talking_to_server);
                } else {
-                 alert("[s001] " + LOCAL_error_talking_to_server+": "+t);
+                 alert("[s001] " + LOCAL_error_talking_to_server+": "+t+"\n"+m);
                }
              },
              success: function(data){
@@ -49,7 +49,7 @@ function moveTag(tag, docid, action) {
                if(t=="timeout") {
                  alert("[s002] " + LOCAL_timeout_talking_to_server);
                } else {
-                 alert("[s002] " + LOCAL_error_talking_to_server+": "+t);
+                 alert("[s002] " + LOCAL_error_talking_to_server+": "+t+"\n"+m);
                }
              },
              success: function(data){
@@ -130,7 +130,7 @@ $(document).ready(function() {
                if(t=="timeout") {
                  alert("[s003] " + LOCAL_timeout_talking_to_server);
                } else {
-                 alert("[s003] " + LOCAL_error_talking_to_server+": "+t);
+                 alert("[s003] " + LOCAL_error_talking_to_server+": "+t+"\n"+m);
                }
              },
              success: function(data){

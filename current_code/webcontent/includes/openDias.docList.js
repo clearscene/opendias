@@ -48,7 +48,7 @@ $(document).ready(function() {
             if(t=="timeout") {
               alert("[l001] " + LOCAL_timeout_talking_to_server );
             } else {
-              alert("[l001] " + LOCAL_error_talking_to_server + ": "+t);
+              alert("[l001] " + LOCAL_error_talking_to_server + ": "+t+"\n"+m);
             }
           },
         });
@@ -206,7 +206,7 @@ function loadListData(currentPage) {
            if(t=="timeout") {
              alert("[l002] " + LOCAL_timeout_talking_to_server );
            } else {
-             alert("[l002] " + LOCAL_error_talking_to_server + ": "+t);
+             alert("[l002] " + LOCAL_error_talking_to_server + ": "+t+"\n"+m);
            }
          },
        });

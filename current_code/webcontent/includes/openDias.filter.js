@@ -47,7 +47,7 @@ function getRecordCount() {
                if(t=="timeout") {
                  alert("[f001] " + LOCAL_timeout_talking_to_server );
                } else {
-                 alert("[f001] " + LOCAL_error_talking_to_server + ": " + t);
+                 alert("[f001] " + LOCAL_error_talking_to_server + ": " + t+"\n"+m);
                }
              },
            });

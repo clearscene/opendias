@@ -70,7 +70,7 @@ $(document).ready(function() {
            if(t=="timeout") {
              alert("[c001] " + LOCAL_timeout_talking_to_server);
            } else {
-             alert("[c001] " + LOCAL_error_talking_to_server + ": " + t);
+             alert("[c001] " + LOCAL_error_talking_to_server + ": " + t+"\n"+m);
            }
          },
   });

@@ -152,7 +152,7 @@ function getScanningProgress (progressId, device) {
            if(t=="timeout") {
              alert("[a001] " + LOCAL_timeout_talking_to_server);
            } else {
-             alert("[a002] " + LOCAL_error_talking_to_server + ": "+t);
+             alert("[a002] " + LOCAL_error_talking_to_server + ": "+t+"\n"+m);
            }
          },
          complete: function() {
@@ -176,7 +176,7 @@ function getScanningProgress (progressId, device) {
                         if(t=="timeout") {
                           alert("[a003] " + LOCAL_timeout_talking_to_server );
                         } else {
-                          alert("[a004] " + LOCAL_error_talking_to_server + ": "+t);
+                          alert("[a004] " + LOCAL_error_talking_to_server + ": "+t+"\n"+m);
                         }
                       },
                     });
@@ -344,7 +344,7 @@ $(document).ready(function() {
                           if(t=="timeout") {
                             alert("[a005] " + LOCAL_timeout_talking_to_server );
                           } else {
-                            alert("[a006] " + LOCAL_error_talking_to_server + ": "+t);
+                            alert("[a006] " + LOCAL_error_talking_to_server + ": "+t+"\n"+m);
                           }
                         },
                       });
@@ -357,7 +357,7 @@ $(document).ready(function() {
            if(t=="timeout") {
              alert("[a007] " + LOCAL_timeout_talking_to_server );
            } else {
-             alert("[a008] " + LOCAL_error_talking_to_server + ": "+t);
+             alert("[a008] " + LOCAL_error_talking_to_server + ": "+t+"\n"+m);
            }
          },
   });

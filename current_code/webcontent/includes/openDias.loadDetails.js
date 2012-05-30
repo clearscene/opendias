@@ -23,7 +23,7 @@ $(document).ready(function() {
            if(t=="timeout") {
              alert("[d001] " + LOCAL_timeout_talking_to_server );
            } else {
-             alert("[d002] " + LOCAL_error_talking_to_server + ": " + t);
+             alert("[d002] " + LOCAL_error_talking_to_server + ": " + t+"\n"+m);
            }
          },
          success: function(data){
@@ -118,7 +118,7 @@ $(document).ready(function() {
                                                         if(t=="timeout") {
                                                           alert("[d001] " + LOCAL_timeout_talking_to_server );
                                                         } else {
-                                                          alert("[d002] " + LOCAL_error_talking_to_server + ": " + t);
+                                                          alert("[d002] " + LOCAL_error_talking_to_server + ": " + t+"\n"+m);
                                                         }
                                                       },
                                                       success: function(data){
@@ -175,7 +175,7 @@ $(document).ready(function() {
                      if(t=="timeout") {
                        alert("[d003] " + LOCAL_timeout_talking_to_server );
                      } else {
-                       alert("[d004] " + LOCAL_error_talking_to_server + ": " + t);
+                       alert("[d004] " + LOCAL_error_talking_to_server + ": " + t+"\n"+m);
                      }
                    },
                    success: function( data ) {
@@ -235,7 +235,7 @@ $(document).ready(function() {
                      if(t=="timeout") {
                        alert("[d005] " + LOCAL_timeout_talking_to_server );
                      } else {
-                       alert("[d006] " + LOCAL_error_talking_to_server + ": " + t);
+                       alert("[d006] " + LOCAL_error_talking_to_server + ": " + t+"\n"+m);
                      }
                    },
                    success: function( data ) {
@@ -284,7 +284,7 @@ $(document).ready(function() {
             if(t=="timeout") {
               alert("[d007] " + LOCAL_timeout_talking_to_server );
             } else {
-              alert("[d008] " + LOCAL_error_talking_to_server + ": " + t);
+              alert("[d008] " + LOCAL_error_talking_to_server + ": " + t+"\n"+m);
             }
           },
           success: function( data ) {
