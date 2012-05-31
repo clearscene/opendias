@@ -540,6 +540,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     sll_insert(vars, "user", "o" );
     sll_insert(vars, "password", "o" );
     sll_insert(vars, "role", "o" );
+    sll_insert(vars, "addButton", "o" ); // Ultimatly ignored
     ret += checkKeys(postdata, vars );
     ret += checkControlAccessMethod(getPostData(postdata, "submethod"));
     ret += checkRole(getPostData(postdata, "role"));

@@ -70,7 +70,7 @@ static size_t getFromFile_fullPath(const char *url, char **data) {
 }
 
 static size_t getFromFile(const char *url, char **data) {
-	o_log(DEBUGM,"enterting getFromFile: ");
+	o_log(SQLDEBUG,"enterting getFromFile: ");
 
   // Build Document Root
   char *htmlFrag = o_printf("%s/opendias/webcontent%s", PACKAGE_DATA_DIR, url);
