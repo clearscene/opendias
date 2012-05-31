@@ -15,14 +15,14 @@ function sendUpdate(kkey, vvalue) {
              type: "POST",
              error: function( x, t, m ) {
                if(t=="timeout") {
-                 alert("Timeout while talking to the server.");
+                 alert("[s001] " + LOCAL_timeout_talking_to_server);
                } else {
-                 alert("Error while talking to the server: ".t);
+                 alert("[s001] " + LOCAL_error_talking_to_server+": "+t+"\n"+m);
                }
              },
              success: function(data){
                if( $(data).find('error').text() ) {
-                 alert("An error occured while updating the information.");
+                 alert( LOCAL_error_while_updating );
                  unlockForm(0);
                } else {
                  unlockForm(1);
@@ -47,14 +47,14 @@ function moveTag(tag, docid, action) {
              type: "POST",
              error: function( x, t, m ) {
                if(t=="timeout") {
-                 alert("Timeout while talking to the server.");
+                 alert("[s002] " + LOCAL_timeout_talking_to_server);
                } else {
-                 alert("Error while talking to the server: ".t);
+                 alert("[s002] " + LOCAL_error_talking_to_server+": "+t+"\n"+m);
                }
              },
              success: function(data){
                if( $(data).find('error').text() ) {
-                 alert("An error occured while updating the information.");
+                 alert( LOCAL_error_while_updating );
                  unlockForm(0);
                } else {
                  unlockForm(1);
@@ -85,21 +85,21 @@ function changeFormState(state) {
 function oncloseEvent() {
   var notComplete = 0;
   var msg = "";
-  if(document.getElementById('title').value == "New (untitled) document.") {
+  if(document.getElementById('title').value == LOCAL_default_title ) {
     notComplete = 1;
-    msg += "Document Title is still the default. ";
+    msg += LOCAL_default_title_warning + ". ";
   }
-  if(document.getElementById('docDate').value == " - No date set -") {
+  if(document.getElementById('docDate').value == LOCAL_default_date ) {
     notComplete = 1;
-    msg += "Document Date is still the default. ";
+    msg += LOCAL_default_date_warning + ". ";
   }
   if(document.getElementById('selected').getElementsByTagName('tr').length == 1) {
     notComplete = 1;
-    msg += "Document has not assigned tags. ";
+    msg += LOCAL_no_tags_assigned + ". ";
   }
 
   if(notComplete == 1) {
-    return "Document details are incomplete: "+msg;
+    return LOCAL_doc_incomplete_warning + ": "+msg;
   }
 }
 
@@ -116,7 +116,7 @@ $(document).ready(function() {
   }
 
   $('#delete').click( function() {
-    var answer = confirm("Delete this document. Are you sure?");
+    var answer = confirm( LOCAL_sure_to_delete_doc );
     if (answer){
       $.ajax({ url: "/opendias/dynamic",
              dataType: "xml",
@@ -128,14 +128,14 @@ $(document).ready(function() {
              type: "POST",
              error: function( x, t, m ) {
                if(t=="timeout") {
-                 alert("Timeout while talking to the server.");
+                 alert("[s003] " + LOCAL_timeout_talking_to_server);
                } else {
-                 alert("Error while talking to the server: ".t);
+                 alert("[s003] " + LOCAL_error_talking_to_server+": "+t+"\n"+m);
                }
              },
              success: function(data){
                if( $(data).find('error').text() ) {
-                 alert("An error occured deleting the document.");
+                 alert( LOCAL_error_while_deleting_doc );
                  unlockForm(0);
                } else {
                  document.location.href = "/opendias/";

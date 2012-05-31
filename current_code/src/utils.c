@@ -165,9 +165,9 @@ int min(int a, int b) {
 
 }
 
-char *dateHuman(char *a, char *b, char *c) {
+char *dateHuman(char *a, char *b, char *c, char *LOCAL_no_date_set) {
 
-  // This will need to be converted, to use current machines LOCALE
+  // This will need to be converted, to use current users 'lang' LOCALE
 
   char *m;
 
@@ -196,7 +196,7 @@ char *dateHuman(char *a, char *b, char *c) {
     free(a);
     free(b);
     free(c);
-    return o_strdup(" - No date set -");
+    return o_strdup(LOCAL_no_date_set);
   }
 }
 

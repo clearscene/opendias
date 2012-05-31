@@ -2,9 +2,13 @@
 <link rel="stylesheet" href="/opendias/style/jquery-ui.css" type="text/css" />
 <link rel="stylesheet" href="/opendias/style/jquery.tagsinput.css" type="text/css" />
 
+<script type="text/javascript" src="/opendias/includes/sprintf-0.7-beta1.js"></script>
 <script type="text/javascript" src="/opendias/includes/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/opendias/includes/jquery.tagsinput.js"></script>
+<script type="text/javascript" src="/opendias/includes/local/generic.js.resource"></script>
+<script type="text/javascript" src="/opendias/includes/local/openDias.docList.js.resource"></script>
 <script type="text/javascript" src="/opendias/includes/openDias.docList.js"></script>
+<script type="text/javascript" src="/opendias/includes/local/openDias.filter.js.resource"></script>
 <script type="text/javascript" src="/opendias/includes/openDias.filter.js"></script>
 
 <div id='filter'>

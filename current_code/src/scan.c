@@ -39,6 +39,7 @@
 #include "main.h"
 #include "utils.h"
 #include "debug.h"
+#include "localisation.h"
 
 #include "scan.h"
 
@@ -566,7 +567,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_req
   return raw_image;
 }
 
-void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix ) {
+void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix, char *lang ) {
   char *ocrText;
   char *ocrLang;
 
@@ -584,12 +585,12 @@ void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix
       // that down to grey-scale (1 bpp) - hense the hard coded 1
       ocrScanText = getTextFromImage(pix, request_resolution, ocrLang);
 
-      ocrText = o_printf("---------------- page %d ----------------\n%s\n", page, ocrScanText);
+      ocrText = o_printf( getString("LOCAL_page_delimiter", lang), page, ocrScanText);
       free(ocrScanText);
     }
     else {
       o_log(DEBUGM, "OCR was requested, but the specified resolution means it's not safe to be attempted");
-      ocrText = o_printf("---------------- page %d ----------------\nResolution set outside safe range to attempt OCR.\n");
+      ocrText = o_printf( getString("LOCAL_resolution_outside_range_to_attempt", lang) );
     }
   }
   else
@@ -603,7 +604,7 @@ void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix
 
 }
 
-char *internalDoScanningOperation(char *uuid) {
+char *internalDoScanningOperation(char *uuid, char *lang) {
 
   int request_resolution = 0;
   int buff_requested_len = 0; 
@@ -760,7 +761,7 @@ char *internalDoScanningOperation(char *uuid) {
 
   // Do OCR - on this page
   // - OCR libs just wants the raw data and not the image header
-  ocrImage( uuid, docid, current_page, request_resolution, pix );
+  ocrImage( uuid, docid, current_page, request_resolution, pix, lang );
   //free(raw_image);
   //free(header);
   pixDestroy( &pix );
@@ -782,7 +783,7 @@ char *internalDoScanningOperation(char *uuid) {
 }
 
 
-extern char *internalGetScannerList() {
+extern char *internalGetScannerList(char *lang) {
   char *answer = NULL;
   SANE_Status status;
   const SANE_Device **SANE_device_list;
@@ -874,7 +875,7 @@ extern char *internalGetScannerList() {
         free(ip);
       }
       else {
-        scannerHost = o_strdup("opendias server");
+        scannerHost = o_strdup( getString("LOCAL_opendias_server", lang) );
       }
 
 

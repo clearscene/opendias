@@ -11,6 +11,8 @@ current_code/config.log
 current_code/config.status
 current_code/configure
 current_code/configure.scan
+current_code/i18n/Makefile
+current_code/i18n/Makefile.in
 current_code/INSTALL
 current_code/Makefile
 current_code/Makefile.in
@@ -38,6 +40,9 @@ current_code/src/imageProcessing.o
 current_code/src/import_doc.gcda
 current_code/src/import_doc.gcno
 current_code/src/import_doc.o
+current_code/src/localisation.gcda
+current_code/src/localisation.gcno
+current_code/src/localisation.o
 current_code/src/main.gcda
 current_code/src/main.gcno
 current_code/src/main.o
@@ -101,5 +106,7 @@ current_code/webcontent/includes/Makefile
 current_code/webcontent/includes/Makefile.in
 current_code/webcontent/Makefile
 current_code/webcontent/Makefile.in
+current_code/webcontent/includes/local/Makefile
+current_code/webcontent/includes/local/Makefile.in
 current_code/webcontent/style/Makefile
 current_code/webcontent/style/Makefile.in

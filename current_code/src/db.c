@@ -292,7 +292,7 @@ char *readData_db (struct simpleLinkedList *rSet, char *field_db) {
     return field->data;
   }
 
-  return "[Unable to get data]";
+  return "[Unable to get data]"; // Not localised, since this is a system error
 }
 
 

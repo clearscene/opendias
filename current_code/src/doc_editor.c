@@ -31,6 +31,7 @@
 #include "main.h"
 #include "utils.h"
 #include "debug.h"
+#include "localisation.h"
  
 #include "doc_editor.h"
 
@@ -76,7 +77,7 @@ char *doDelete (char *documentId) {
 
 
 
-char *getDocDetail (char *documentId) {
+char *getDocDetail (char *documentId, char *lang ) {
 
   struct simpleLinkedList *rSet;
   char *sql, *tags, *tagsTemplate, *title, *humanReadableDate,
@@ -167,12 +168,15 @@ char *getDocDetail (char *documentId) {
   title = o_strdup(readData_db(rSet, "title"));
   if( 0 == strcmp(title, "NULL") ) {
     free(title);
-    title = o_strdup("New (untitled) document.");
+    title = getString( "LOCAL_default_title", lang );
   }
 
+  char *nodate = getString( "LOCAL_no_date_set", lang);
   humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")),
                                  o_strdup(readData_db(rSet, "docdatem")),
-                                 o_strdup(readData_db(rSet, "docdated")) );
+                                 o_strdup(readData_db(rSet, "docdated")),
+                                 nodate );
+  free(nodate);
 
 
 

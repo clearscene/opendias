@@ -46,9 +46,9 @@ $(document).ready(function() {
           },
           error: function( x, t, m ) {
             if(t=="timeout") {
-              alert("Timeout while talking to the server.");
+              alert("[l001] " + LOCAL_timeout_talking_to_server );
             } else {
-              alert("Error while talking to the server: ".t);
+              alert("[l001] " + LOCAL_error_talking_to_server + ": "+t+"\n"+m);
             }
           },
         });
@@ -204,9 +204,9 @@ function loadListData(currentPage) {
          },
          error: function( x, t, m ) {
            if(t=="timeout") {
-             alert("Timeout while talking to the server.");
+             alert("[l002] " + LOCAL_timeout_talking_to_server );
            } else {
-             alert("Error while talking to the server: ".t);
+             alert("[l002] " + LOCAL_error_talking_to_server + ": "+t+"\n"+m);
            }
          },
        });

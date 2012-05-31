@@ -27,6 +27,7 @@ struct connection_info_struct {
   struct MHD_PostProcessor *postprocessor;
   struct simpleLinkedList *post_data;
   pthread_t thread;
+  char *lang;
 };
 
 struct post_data_struct {
@@ -37,5 +38,6 @@ struct post_data_struct {
 char *getPostData(struct simpleLinkedList *, char *);
 int basicValidation(struct simpleLinkedList *);
 int validate(struct simpleLinkedList *, char *);
+int validateLanguage(const char *);
 
 #endif /* VALIDATION */

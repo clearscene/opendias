@@ -36,6 +36,7 @@
 #include "utils.h"
 #include "debug.h"
 #include "validation.h" // for con_info struct - move me to web_handler.h
+#include "localisation.h"
 #ifdef CAN_SCAN
 #include "scan.h"
 #include "saneDispatcher.h"
@@ -50,24 +51,24 @@
  *
  */
 #ifdef CAN_SCAN
-char *getScannerList() {
+char *getScannerList(void *lang) {
 
-  char *answer = send_command( o_strdup("internalGetScannerList") ); // scan.c
+  char *answer = send_command( o_printf("internalGetScannerList:%s", (char *)lang) ); // scan.c
   o_log(DEBUGM, "RESPONSE WAS: %s", answer);
 
   return answer;
 }
 
-extern void *doScanningOperation(void *uuid) {
+extern void *doScanningOperation(void *saneOpData) {
 
-  char *command = o_strdup("internalDoScanningOperation:");
-  conCat(&command, uuid);
+  struct doScanOpData *tr = saneOpData;
+  char *command = o_printf("internalDoScanningOperation:%s,%s", tr->uuid, tr->lang);
 
   char *answer = send_command( command ); // scan.c
   o_log(DEBUGM, "RESPONSE WAS: %s", answer);
 
   if( 0 == strcmp(answer, "BUSY") ) {
-    updateScanProgress(uuid, SCAN_SANE_BUSY, 0);
+    updateScanProgress(tr->uuid, SCAN_SANE_BUSY, 0);
   }
   free(answer);
 
@@ -78,7 +79,8 @@ extern void *doScanningOperation(void *uuid) {
   // to here (or at least the calls to do it are here).
 
 
-  free(uuid);
+  free(tr->uuid);
+  free(tr);
 
 #ifdef THREAD_JOIN
   pthread_exit(0);
@@ -125,8 +127,12 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
 #else
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 #endif /* THREAD_JOIN */
+
+  struct doScanOpData *tr = malloc( sizeof(struct doScanOpData) );
+  tr->uuid = scanUuid;
+  tr->lang = con_info->lang;
   o_log(DEBUGM,"doScan launching doScanningOperation");
-  rc = pthread_create(&thread, &attr, doScanningOperation, o_strdup(scanUuid) );
+  rc = pthread_create(&thread, &attr, doScanningOperation, (void *)tr );
   if(rc != 0) {
     o_log(ERROR, "Failed to create a new thread - for scanning operation.");
     return NULL;
@@ -175,7 +181,10 @@ char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
 #else
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 #endif /* THREAD_JOIN */
-    rc = pthread_create(&thread, &attr, doScanningOperation, o_strdup(scanid));
+    struct doScanOpData *tr = malloc( sizeof(struct doScanOpData) );
+    tr->uuid = NULL;
+    tr->lang = con_info->lang;
+    rc = pthread_create(&thread, &attr, doScanningOperation, (void *)tr);
     if(rc != 0) {
       o_log(ERROR, "Failed to create a new thread - for scanning operation.");
       return NULL;
@@ -223,7 +232,7 @@ char *getScanningProgress(char *scanid) {
 }
 #endif // CAN_SCAN //
 
-char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder ) {
+char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder, char *lang ) {
 
   struct simpleLinkedList *rSet;
   char *docList, *actionrequired, *title, *docid, *humanReadableDate, *type, 
@@ -384,27 +393,30 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
       if( 0 == strcmp(subaction, "fullList") ) {
         count++;
         if( 0 == strcmp(readData_db(rSet, "filetype"), "1") ) {
-          type = o_strdup("Imported ODF Doc");
+          type = getString( "LOCAL_file_type_odf", lang );
         }
         else if( 0 == strcmp(readData_db(rSet, "filetype"), "3") ) {
-          type = o_strdup("Imported PDF Doc");
+          type = getString( "LOCAL_file_type_pdf", lang );
         }
         else if( 0 == strcmp(readData_db(rSet, "filetype"), "4") ) {
-          type = o_strdup("Imported Image");
+          type = getString( "LOCAL_file_type_image", lang );
         }
         else {
-          type = o_strdup("Scaned Doc");
+          type = getString( "LOCAL_file_type_scanned", lang );
         }
         actionrequired = o_strdup(readData_db(rSet, "actionrequired"));
         title = o_strdup(readData_db(rSet, "title"));
         docid = o_strdup(readData_db(rSet, "docid"));
         if( 0 == strcmp(title, "NULL") ) {
           free(title);
-          title = o_strdup("New (untitled) document.");
+          title = getString( "LOCAL_default_title", lang ); 
         }
+        char *nodate = getString( "LOCAL_no_date_set", lang);
         humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")), 
                                        o_strdup(readData_db(rSet, "docdatem")), 
-                                       o_strdup(readData_db(rSet, "docdated")) );
+                                       o_strdup(readData_db(rSet, "docdated")),
+                                       nodate );
+        free(nodate);
 
         o_concatf(&rows, "<Row><docid>%s</docid><actionrequired>%s</actionrequired><title><![CDATA[%s]]></title><type>%s</type><date>%s</date></Row>", 
                            docid, actionrequired, title, type, humanReadableDate);

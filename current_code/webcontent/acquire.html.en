@@ -148,4 +148,6 @@
   </div>
 </div>
 
+<script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
+<script type="text/javascript" src="/opendias/includes/local/openDias.acquire.js.resource"></script>
 <script type="text/javascript" src="/opendias/includes/openDias.acquire.js"></script>

@@ -1,10 +1,10 @@
 
 function applyLocationRow(location, role) {
-  applyNewRow('location', "Anyone accessing from ", location, role);
+  applyNewRow('location', LOCAL_anyone_accessing_from, location, role);
 }
 
 function applyUserRow(user, role) {
-  applyNewRow('user', "User with logon of ", user, role);
+  applyNewRow('user', LOCAL_user_with_logon_of, user, role);
 }
 
 function applyNewRow(type, human, prop, role) {
@@ -22,12 +22,12 @@ function applyNewRow(type, human, prop, role) {
   var strong2 = document.createElement("strong");
   strong2.appendChild(document.createTextNode(role));
   var role_td = document.createElement("td");
-  role_td.appendChild(document.createTextNode("will get the "));
+  role_td.appendChild(document.createTextNode( LOCAL_will_get_the ));
   role_td.appendChild(strong2);
-  role_td.appendChild(document.createTextNode(" role"));
+  role_td.appendChild(document.createTextNode( LOCAL_role ));
 
   var button = document.createElement("button");
-  button.appendChild(document.createTextNode("Delete"));
+  button.appendChild(document.createTextNode( LOCAL_delete ));
   var dele_td = document.createElement("td");
   dele_td.appendChild(button);
 
@@ -52,7 +52,7 @@ $(document).ready(function() {
          type: "POST",
          success: function(data){
            if( $(data).find('error').text() ){
-             alert("Unable to get access information: "+$(data).find('error').text());
+             alert( LOCAL_unable_to_get_access_info + ": " + $(data).find('error').text());
              return 1;
            }
            $(data).find('AccessDetails').find('LocationAccess').find('Access').each( function() {
@@ -68,9 +68,9 @@ $(document).ready(function() {
          },
          error: function( x, t, m ) {
            if(t=="timeout") {
-             alert("Timeout while talking to the server.");
+             alert("[c001] " + LOCAL_timeout_talking_to_server);
            } else {
-             alert("Error while talking to the server: ".t);
+             alert("[c001] " + LOCAL_error_talking_to_server + ": " + t+"\n"+m);
            }
          },
   });

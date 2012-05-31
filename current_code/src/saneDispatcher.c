@@ -76,11 +76,15 @@ extern void dispatch_sane_work( int ns ) {
   o_log(INFORMATION, "SERVER: Sane dispatcher received the command: '%s' with param of '%s'", command, param);
 
   if ( command && 0 == strcmp(command, "internalGetScannerList") ) {
-    response = internalGetScannerList();
+    response = internalGetScannerList( param );
   }
   else if ( command && 0 == strcmp(command, "internalDoScanningOperation") ) {
     inLongRunningOperation = 1;
-    response = internalDoScanningOperation( param );
+    char *p1 = strtok(o_strdup(param), ","); // uuid
+    char *p2 = strtok( NULL, ","); // lang
+    response = internalDoScanningOperation( p1, p2 );
+    free(p1);
+    free(p2);
     inLongRunningOperation = 0;
   }
   else {
@@ -117,7 +121,7 @@ char *send_command(char *command) {
 
 
   // Handle 'busy' cases.
-  if ( 0 == strcmp(command, "internalGetScannerList") ) {
+  if ( 0 == strncmp(command, "internalGetScannerList", 22) ) {
     cacheResponse = 1;
     if( 1 == inLongRunningOperation ) {
       o_log(INFORMATION, "The SANE sub system is busy, trying to return a cached response.");

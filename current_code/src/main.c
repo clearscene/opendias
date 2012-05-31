@@ -43,6 +43,7 @@
 #include "utils.h"
 #include "debug.h"
 #include "web_handler.h"
+#include "localisation.h"
 
 #include "main.h"
 
@@ -400,6 +401,9 @@ int main (int argc, char **argv) {
     server_shutdown();
     exit(EXIT_FAILURE);
   }
+
+  // Initalise localisaion storage.
+  locale_init( "en" );
 
 #ifdef CAN_SCAN
   // Start sane

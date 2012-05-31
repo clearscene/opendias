@@ -185,9 +185,11 @@ AC_OUTPUT([
 Makefile
 src/Makefile
 sql/Makefile
+i18n/Makefile
 webcontent/Makefile
 webcontent/style/Makefile
 webcontent/includes/Makefile
+webcontent/includes/local/Makefile
 webcontent/images/Makefile
 webcontent/images/datepicker/Makefile
 webcontent/images/easySlider/Makefile

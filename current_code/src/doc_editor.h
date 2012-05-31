@@ -19,7 +19,7 @@
 #ifndef DOCEDITOR
 #define DOCEDITOR
 
-char *getDocDetail (char *);
+char *getDocDetail (char *, char *);
 char *updateDocDetails(char *, char *, char *);
 char *updateTagLinkage(char *, char *, char *);
 char *doDelete (char *);

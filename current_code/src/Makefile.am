@@ -57,6 +57,8 @@ opendias_SOURCES = \
 	dbaccess.h    \
 	imageProcessing.h    \
 	imageProcessing.c    \
+	localisation.h    \
+	localisation.c    \
 	validation.c    \
 	validation.h    \
 	import_doc.c    \

@@ -1,0 +1,9 @@
+LOCAL_error_while_updating = 'An error occured while updating the information';
+LOCAL_error_while_deleting_doc = 'An error occured deleting the document.';
+LOCAL_sure_to_delete_doc = 'Delete this document. Are you sure?';
+LOCAL_default_title = 'New (untitled) document.';
+LOCAL_default_title_warning = 'Document Title is still the default';
+LOCAL_default_date = ' - No date -';
+LOCAL_default_date_warning = 'Document Date is still the default';
+LOCAL_no_tags_assigned = 'Document has not assigned tags';
+LOCAL_doc_incomplete_warning = 'Document details are incomplete';
