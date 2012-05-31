@@ -367,6 +367,7 @@ char *userLanguage( struct MHD_Connection *connection ) {
     char *pch_orig = o_strdup(headerValue);
     char *pch = strtok(pch_orig, ", ");
 
+    reqLang = NULL;
     while (pch != NULL) {
       o_log(SQLDEBUG, "pasing language element of '%s'", pch);
 
@@ -388,7 +389,7 @@ char *userLanguage( struct MHD_Connection *connection ) {
       pch = strtok(NULL, ", ");
     }
 
-    if( pch == NULL ) {
+    if( reqLang == NULL ) {
       o_log(DEBUGM, "No requested language header set. Defaulting to 'en'" );
       lang = o_strdup("en");
     }
