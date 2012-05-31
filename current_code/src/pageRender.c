@@ -411,9 +411,12 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
           free(title);
           title = getString( "LOCAL_default_title", lang ); 
         }
+        char *nodate = getString( "LOCAL_no_date_set", lang);
         humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")), 
                                        o_strdup(readData_db(rSet, "docdatem")), 
-                                       o_strdup(readData_db(rSet, "docdated")) );
+                                       o_strdup(readData_db(rSet, "docdated")),
+                                       nodate );
+        free(nodate);
 
         o_concatf(&rows, "<Row><docid>%s</docid><actionrequired>%s</actionrequired><title><![CDATA[%s]]></title><type>%s</type><date>%s</date></Row>", 
                            docid, actionrequired, title, type, humanReadableDate);

@@ -9,7 +9,6 @@
 #   saneDispatcher.c
 #   scanner.c
 #   simpleLinkedList.c
-#   utils.c
 #   validation.c
 #
 
@@ -42,6 +41,14 @@ LOCAL_file_type_pdf|Imported PDF Doc
 LOCAL_file_type_image|Imported Image
 LOCAL_file_type_scanned|Scanned Doc
 LOCAL_default_title|New (untitled) document.
+
+#########################################
+
+#
+# utils.c
+#
+
+LOCAL_no_date_set| - No date set -
 
 #########################################
 

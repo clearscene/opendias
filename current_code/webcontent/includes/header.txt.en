@@ -36,7 +36,7 @@
         <li><select id='language'>
               <option value='--'>Browsers Default Language</option>
               <option value='en'>English</option>
-              <option value='hh'>Test Language</option>
+              <option value='de'>Deutsche</option>
             </select></li>
       </ul>
     </div>

@@ -18,7 +18,11 @@
 
 #include "config.h"
 
+#ifndef LOCAL
+#define LOCAL
+
 void locale_init( char * );
 char *getString( char *, char * );
 struct simpleLinkedList *loadLangList( char * );
 
+#endif /* LOCAL */

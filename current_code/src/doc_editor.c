@@ -171,9 +171,12 @@ char *getDocDetail (char *documentId, char *lang ) {
     title = getString( "LOCAL_default_title", lang );
   }
 
+  char *nodate = getString( "LOCAL_no_date_set", lang);
   humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")),
                                  o_strdup(readData_db(rSet, "docdatem")),
-                                 o_strdup(readData_db(rSet, "docdated")) );
+                                 o_strdup(readData_db(rSet, "docdated")),
+                                 nodate );
+  free(nodate);
 
 
 

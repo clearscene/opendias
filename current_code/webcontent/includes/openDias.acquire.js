@@ -243,7 +243,7 @@ $(document).ready(function() {
              // Bring the tab contents up-2-date
              var host = "";
              if( $(this).find("host").text() != "" ) {
-               host = " (on host '" + $(this).find("host").text() + "')";
+               host = " (" + LOCAL_on_host + " '" + $(this).find("host").text() + "')";
              }
              $('#title_'+device).text( $(this).find("type").text() + ": " +
                                       $(this).find("vendor").text() + " - " +

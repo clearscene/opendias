@@ -1,10 +1,10 @@
 
 function applyLocationRow(location, role) {
-  applyNewRow('location', "Anyone accessing from ", location, role);
+  applyNewRow('location', LOCAL_anyone_accessing_from, location, role);
 }
 
 function applyUserRow(user, role) {
-  applyNewRow('user', "User with logon of ", user, role);
+  applyNewRow('user', LOCAL_user_with_logon_of, user, role);
 }
 
 function applyNewRow(type, human, prop, role) {

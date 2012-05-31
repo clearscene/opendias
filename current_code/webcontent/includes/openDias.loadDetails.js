@@ -151,6 +151,7 @@ $(document).ready(function() {
            });
            $("#tags").val( tags.join() );
            $('#tags').tagsInput({
+                defaultText: LOCAL_add_tag_default_text,
                 autocomplete_url: '', // Were going to use the ui.autocomplete (since the plugins autocomplete stuff doesn't seam to work correctly. However, added this here as a hack to handle bluring correctly.
                 onAddTag:function(tag) {
                           moveTag(tag,officialDocId,"addTag");
