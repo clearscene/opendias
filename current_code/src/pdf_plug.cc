@@ -56,12 +56,12 @@ extern "C" char *parse_pdf( const char *pdf_filename, const char *out_filename )
     o_log(ERROR, "encrypted document");
   }
 
-  // try to get page 2, but if the doc has only one page, then get that.
+  // try to get page 1, but if the doc has only one page, then get that.
   // reemmber, we're 0 indexed.
-  int doc_page = 1; 
-  if ( doc_page >= doc->pages() ) {
-    doc_page = 0;
-  }
+  int doc_page = 0; 
+  //if ( doc_page >= doc->pages() ) {
+  //  doc_page = 0;
+  //}
 
   std::auto_ptr<poppler::page> p( doc->create_page(doc_page) );
 
