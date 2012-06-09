@@ -84,7 +84,6 @@ extern void dispatch_sane_work( int ns ) {
     char *p2 = strtok( NULL, ","); // lang
     response = internalDoScanningOperation( p1, p2 );
     free(p1);
-    free(p2);
     inLongRunningOperation = 0;
   }
   else {

@@ -78,8 +78,8 @@ extern void *doScanningOperation(void *saneOpData) {
   //   do OCR
   // to here (or at least the calls to do it are here).
 
-
   free(tr->uuid);
+  free(tr->lang);
   free(tr);
 
 #ifdef THREAD_JOIN
@@ -129,8 +129,8 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
 #endif /* THREAD_JOIN */
 
   struct doScanOpData *tr = malloc( sizeof(struct doScanOpData) );
-  tr->uuid = scanUuid;
-  tr->lang = con_info->lang;
+  tr->uuid = o_strdup(scanUuid);
+  tr->lang = o_strdup(con_info->lang);
   o_log(DEBUGM,"doScan launching doScanningOperation");
   rc = pthread_create(&thread, &attr, doScanningOperation, (void *)tr );
   if(rc != 0) {
@@ -182,8 +182,8 @@ char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 #endif /* THREAD_JOIN */
     struct doScanOpData *tr = malloc( sizeof(struct doScanOpData) );
-    tr->uuid = NULL;
-    tr->lang = con_info->lang;
+    tr->uuid = o_strdup(scanid);
+    tr->lang = o_strdup(con_info->lang);
     rc = pthread_create(&thread, &attr, doScanningOperation, (void *)tr);
     if(rc != 0) {
       o_log(ERROR, "Failed to create a new thread - for scanning operation.");
