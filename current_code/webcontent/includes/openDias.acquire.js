@@ -29,7 +29,7 @@ function getScanningProgress (progressId, device) {
 
   $.ajax({ url: "/opendias/dynamic",
 	 dataType: "xml",
-   timeout: 10000,
+         timeout: 30000,
 	 data: {action: "getScanningProgress", 
           scanprogressid: progressId,
 	       },
