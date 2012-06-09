@@ -4,6 +4,7 @@
 <script type="text/javascript" src="/opendias/includes/jquery.gzoom.js"></script>
 <script type="text/javascript" src="/opendias/includes/jquery.easySlider.js"></script>
 <script type="text/javascript" src="/opendias/includes/jquery.tagsinput.js"></script>
+<script type="text/javascript" src="/opendias/includes/sprintf-0.7-beta1.js"></script>
 <link rel="stylesheet" href="/opendias/style/jquery-ui.css" type="text/css" media="screen" /> 
 <link rel="stylesheet" href="/opendias/style/jquery.gzoom.css" type="text/css" media="screen" /> 
 <link rel="stylesheet" href="/opendias/style/jquery.easyslider.css" type="text/css" />

@@ -69,7 +69,7 @@ $(document).ready(function() {
            else if( $(data).find('DocDetail').find('type').text() == "2" || $(data).find('DocDetail').find('type').text() == "4") {
              // Set images and default width
              for( x=1 ; x<=parseInt($(data).find('DocDetail').find('pages').text()) ; x++ ) {
-               buttonText = springf( LOCAL_open_page_fullsize, x);
+               buttonText = sprintf( LOCAL_open_page_fullsize, x);
                $("#slider ul").append("<li><div class='scanImageContainer zoom'><img id='scanImage"+x+"' " + 
                                       "alt='' src='/opendias/scans/"+officialDocId+"_"+x+".jpg' />" + 
                                       "</div><button id='openImg_"+x+"'>"+buttonText+"</button></li>");
