@@ -101,7 +101,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
   uuid_t uu;
   char *scanUuid;
 	
-	o_log(DEBUGM,"Entering doScan");
+  o_log(DEBUGM,"Entering doScan");
 
   // Generate a uuid and scanning params object
   scanUuid = malloc(36+1); 
@@ -116,7 +116,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
   setScanParam(scanUuid, SCAN_PARAM_REQUESTED_RESOLUTION, resolution);
   setScanParam(scanUuid, SCAN_PARAM_LENGTH, pagelength);
 
-	o_log(DEBUGM,"doScan setScanParam completed ");
+  o_log(DEBUGM,"doScan setScanParam completed ");
   // save scan progress db record
   addScanProgress(scanUuid);
 
@@ -192,6 +192,7 @@ char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
 #ifdef THREAD_JOIN
     con_info->thread = thread;
 #endif
+    updateScanProgress(scanid, SCAN_WAITING_ON_SCANNER, 0);
   } else {
     o_log(WARNING, "scan id indicates a status not waiting for a new page signal.");
     return NULL;
