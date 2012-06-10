@@ -40,7 +40,7 @@
 
   <div id="office">
     <h3>Document Import</h3>
-    <p>Select a PDF, ODF document or JPEG image for upload into your achive.</p>
+    <p>Select a PDF, ODF document or JPEG image for upload into your archive.</p>
     <form action='/opendias/dynamic' method='post' enctype="multipart/form-data">
       <input name='action' type='hidden' value='uploadfile' />
       <div class='row'>
@@ -124,7 +124,7 @@
       </div>
     </div>
     <div class='row'>
-      <div class='label' title='How much of the page do you want to scan. If your scanning a document smaller than the max length than your scanner supports. dont waist time and space.'>Page Length:</div>
+      <div class='label' title='How much of the page do you want to scan. If your scanning a document smaller than the max length than your scanner supports. don't waste time and space.'>Page Length:</div>
       <div class='data'>
         <input id='length_DEVICE' type='hidden' value='100' />
         <div id='lengthDisplay_DEVICE' class='innerLeftDisplay'>100 %</div>
