@@ -34,7 +34,7 @@
     <p>In the first tab, you can add files to your store. 
       Including: PDF or ODF documents and images, perhaps that you 
       have scanned in independently from opendias.</p>
-    <p>Any additional tabs represent various scanning imput devices.</p>
+    <p>Any additional tabs represent various scanning input devices.</p>
     <p id='scanning'><span id='loading'></span>&nbsp;Scanning for devices...</p>
   </div>
 
