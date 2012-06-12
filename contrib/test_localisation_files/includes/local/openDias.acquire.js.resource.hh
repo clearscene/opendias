@@ -18,3 +18,4 @@ LOCAL_error_starting_next_page = '##### ########## ### ####### ## ####### ### ##
 LOCAL_failed_to_get_list_of_scanners = '###### ## ##### # #### ## ######### ########';
 LOCAL_unable_to_start_scanning = '###### ## ##### ### ####### #######';
 LOCAL_on_host = '## ####';
+LOCAL_x_pages = '%s #####';

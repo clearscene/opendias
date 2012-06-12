@@ -303,7 +303,7 @@ $(document).ready(function() {
                max: 10,
                slide: function(event, ui) {
                  $("#pages_"+device).val( ui.value );
-                 $("#pagesDisplay_"+device).text( ui.value + " pages" );
+                 $("#pagesDisplay_"+device).text( sprintf( LOCAL_x_pages, ui.value ) );
                }
              });
              $("#scanButton_"+device).click( function() {
