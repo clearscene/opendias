@@ -1,6 +1,7 @@
 
 <script type="text/javascript" src="/opendias/includes/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/opendias/includes/jquery.canvas-loader.js"></script>
+<script type="text/javascript" src="/opendias/includes/sprintf-0.7-beta1.js"></script>
 <link rel="stylesheet" href="/opendias/style/jquery-ui.css" type="text/css" media="screen" /> 
 <style>
   .ui-progressbar-value { background-image: url(/opendias/images/jquery-ui/pbar-ani.png); }
