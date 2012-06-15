@@ -306,6 +306,15 @@ sub directRequest {
   $ua->agent($default{__agent});
 
   my $req = HTTP::Request->new(POST => $default{__proto} . $default{__domain} . $default{__uri});
+
+  foreach my $key (sort {$a cmp $b} (keys %$params)) {
+    if( $key =~ /^__header_/ ) {
+      my $headerkey = $key;
+      $headerkey =~ s/__header_//;
+      $req->header($headerkey) = $params->{$key};
+    }
+  }
+
   $req->content_type($default{__encoding});
   $req->content($payload);
 
