@@ -89,8 +89,8 @@ o_log(ERROR, "loading translation file: %s", resourceFile);
     if (line != NULL) {
       free(line);
     }
+    fclose( translations );
   }
-  fclose( translations );
   free( resourceFile );
   return trList;
 }

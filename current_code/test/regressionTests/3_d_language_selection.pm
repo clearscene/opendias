@@ -1,4 +1,4 @@
-package regressionTests::3_d_language_election;
+package regressionTests::3_d_language_selection;
 
 use lib qw( regressionTests/lib );
 use DBI;
