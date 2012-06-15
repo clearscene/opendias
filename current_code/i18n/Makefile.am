@@ -2,7 +2,8 @@
 sql_SCRIPTS = 
 
 sql_DATA = \
-	language.resource.en
+	language.resource.en \
+	language.resource.de
 
 sqldir = \
 	$(pkgdatadir)
