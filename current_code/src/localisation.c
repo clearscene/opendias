@@ -33,6 +33,32 @@ void locale_init( char *lang ) {
   sll_insert( langList, o_strdup(lang), loadLangList( lang ) );
 }
 
+void locale_cleanup() {
+  if( langList != NULL ) {
+    struct simpleLinkedList *langPack = NULL;
+    for( langPack = sll_findFirstElement( langList ) ; langPack != NULL ; langPack = sll_getNext(langPack) ) {
+      free(langPack->key); // lang name
+      langPack->key = NULL;
+      struct simpleLinkedList *localisedValues = (struct simpleLinkedList *)langPack->data;
+    
+      if( localisedValues != NULL ) {
+        struct simpleLinkedList *localisedPhrase = NULL;
+        for( localisedPhrase = sll_findFirstElement( localisedValues ) ; localisedPhrase != NULL ; localisedPhrase = sll_getNext(localisedPhrase) ) {
+          free(localisedPhrase->key); // lang name
+          localisedPhrase->key = NULL;
+          if( localisedPhrase->data != NULL ) {
+            free(localisedPhrase->data);
+            localisedPhrase->data = NULL;
+          }
+        }
+        sll_destroy( sll_findFirstElement( localisedValues ) );
+      }
+
+    }
+    sll_destroy( sll_findFirstElement( langList ) );
+  }
+}
+
 char *getString( char *phrase, char *lang) {
   struct simpleLinkedList *tmp;
   struct simpleLinkedList *keysList;
@@ -64,7 +90,8 @@ char *getString( char *phrase, char *lang) {
 struct simpleLinkedList *loadLangList( char *lang ) {
   struct simpleLinkedList *trList = NULL;
   char *resourceFile = o_printf("%s/opendias/language.resource.%s", PACKAGE_DATA_DIR, lang);
-o_log(ERROR, "loading translation file: %s", resourceFile);
+
+  o_log(DEBUGM, "loading translation file: %s", resourceFile);
   FILE *translations = fopen(resourceFile, "r");
   if( translations != NULL) {
     trList = sll_init();
@@ -75,12 +102,12 @@ o_log(ERROR, "loading translation file: %s", resourceFile);
       chop(line);
       if( line[0] == '#' || line[0] == 0 ) {
         //free(line);
-        o_log(ERROR, "Rejecting line: %s", line);
+        o_log(SQLDEBUG, "Rejecting line: %s", line);
         continue;
       }
       char *pch = strtok(line, "|");
       if (pch != NULL) {
-        o_log(ERROR, "Adding key=%s, value=%s", pch, pch+strlen(pch)+1);
+        o_log(SQLDEBUG, "Adding key=%s, value=%s", pch, pch+strlen(pch)+1);
         sll_insert( trList, o_strdup(pch), o_strdup(pch+strlen(pch)+1) );
       }
       //free(pch);

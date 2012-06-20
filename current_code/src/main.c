@@ -163,6 +163,11 @@ void server_shutdown() {
   }
 #endif // CAN_SCAN //
 
+  if( startedServices.locale ) {
+    o_log(DEBUGM, "... locale [done]");
+    locale_cleanup();
+  }
+
   if( startedServices.db ) {
     o_log(DEBUGM, "... database [done]");
     close_db();
@@ -360,6 +365,7 @@ int main (int argc, char **argv) {
   startedServices.pid = 0;
   startedServices.log = 0;
   startedServices.db = 0;
+  startedServices.locale = 0;
   startedServices.sane = 0;
   startedServices.command = 0;
   startedServices.httpd = 0;
@@ -404,6 +410,7 @@ int main (int argc, char **argv) {
 
   // Initalise localisaion storage.
   locale_init( "en" );
+  startedServices.locale = 1;
 
 #ifdef CAN_SCAN
   // Start sane

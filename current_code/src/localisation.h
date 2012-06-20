@@ -22,6 +22,7 @@
 #define LOCAL
 
 void locale_init( char * );
+void locale_cleanup( void );
 char *getString( char *, char * );
 struct simpleLinkedList *loadLangList( char * );
 
