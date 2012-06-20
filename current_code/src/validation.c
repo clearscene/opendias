@@ -562,6 +562,8 @@ int validate(struct simpleLinkedList *postdata, char *action) {
 
 int validateLanguage( const char *requestedLang ) {
 
+  // Must always have "en" - the default lang.
+  // "hh" is the test lang (hash-hash).
   if ( ( 0 == strcmp(requestedLang, "en") ) 
     || ( 0 == strcmp(requestedLang, "de") ) 
     || ( 0 == strcmp(requestedLang, "hh") ) ) {
