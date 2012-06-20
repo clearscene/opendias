@@ -73,7 +73,7 @@ o_log(ERROR, "loading translation file: %s", resourceFile);
     while ( getline( &line, &size, translations ) > 0) {
       // Handle commented and blank lines
       chop(line);
-      if( line[0] == '#' || line[0] == NULL ) {
+      if( line[0] == '#' || line[0] == 0 ) {
         //free(line);
         o_log(ERROR, "Rejecting line: %s", line);
         continue;
