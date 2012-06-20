@@ -363,6 +363,11 @@ char *userLanguage( struct MHD_Connection *connection ) {
 
     o_log(SQLDEBUG, "No requested language cookie set." );
     const char *headerValue = MHD_lookup_connection_value( connection, MHD_HEADER_KIND, MHD_HTTP_HEADER_ACCEPT_LANGUAGE);
+    if( headerValue == NULL ) {
+      o_log(INFORMATION, "No language header found - resorting to 'en'.");
+      return o_strdup("en");
+    }
+
     o_log(SQLDEBUG, "Given a language header of '%s'", headerValue);
     char *pch_orig = o_strdup(headerValue);
     char *pch = strtok(pch_orig, ", ");
