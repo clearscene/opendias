@@ -1,0 +1,52 @@
+Copying pre defined environment
+Copying default database
+STARTING app...
+Now ready
+No need for a web client for this test.
+Sending request = action=docFilter&isActionRequired=false&page=1&range=3&sortfield=3&sortorder=1&subaction=fullList
+No language indication = $VAR1 = {
+  'DocFilter' => {
+    'Results' => {},
+    'count' => '0',
+    'page' => '1'
+  }
+};
+
+Sending request = action=docFilter&isActionRequired=false&page=1&range=3&sortfield=3&sortorder=1&subaction=fullList
+header says en = $VAR1 = {
+  'DocFilter' => {
+    'Results' => {},
+    'count' => '0',
+    'page' => '1'
+  }
+};
+
+Sending request = action=docFilter&isActionRequired=false&page=1&range=3&sortfield=3&sortorder=1&subaction=fullList
+header says de = $VAR1 = {
+  'DocFilter' => {
+    'Results' => {},
+    'count' => '0',
+    'page' => '1'
+  }
+};
+
+Sending request = action=docFilter&isActionRequired=false&page=1&range=3&sortfield=3&sortorder=1&subaction=fullList
+bad cookie, header says de = $VAR1 = {
+  'DocFilter' => {
+    'Results' => {},
+    'count' => '0',
+    'page' => '1'
+  }
+};
+
+Sending request = action=docFilter&isActionRequired=false&page=1&range=3&sortfield=3&sortorder=1&subaction=fullList
+bad cookie, header says de = $VAR1 = {
+  'DocFilter' => {
+    'Results' => {},
+    'count' => '0',
+    'page' => '1'
+  }
+};
+
+Stopping service
+Waiting for valgrind to finish.

@@ -1,0 +1,120 @@
+STDOUT
+--------------------------------------------------
+LOG-OUTPUT
+-date-:-thread-:INF: Setting default log verbosity to 4.
+-date-:-thread-:INF: Using config file: [CONFIG_FILE]
+-date-:-thread-:INF: Which says the database is at: /tmp/opendiastest/
+-date-:-thread-:DBG: database file is /tmp/opendiastest/openDIAS.sqlite3
+-date-:-thread-:DBG: Dir structure is in-place, database should exist
+-date-:-thread-:DBG: Checking for a populated database
+-date-:-thread-:DBG: Run Query [RECORDSET]
+-date-:-thread-:DBG: We have one. So will check to see what verstion it is.
+-date-:-thread-:DBG: Free recordset [RECORDSET]
+-date-:-thread-:DBG: Run Query [RECORDSET]
+-date-:-thread-:DBG: Database reports that it is version: 6
+-date-:-thread-:DBG: Free recordset [RECORDSET]
+-date-:-thread-:INF: Connected to database
+-date-:-thread-:INF: database opened
+-date-:-thread-:DBG: Run Query [RECORDSET]
+-date-:-thread-:INF: Config setting: log_verbosity = 3
+-date-:-thread-:INF: Moving log verbosity from 4 to 3
+-date-:-thread-:INF: Config setting: scan_directory = /tmp/opendiastest/
+-date-:-thread-:INF: Config setting: show_all_available = 1
+-date-:-thread-:INF: Config setting: port = 8988
+-date-:-thread-:INF: Config setting: log_directory = /var/log/opendias
+-date-:-thread-:INF: Created directory.
+-date-:-thread-:ERR: loading translation file: /usr/local/share/opendias/language.resource.en
+-date-:-thread-:ERR: Rejecting line: # No translations required in:
+-date-:-thread-:ERR: Rejecting line: #   dbaccess.c
+-date-:-thread-:ERR: Rejecting line: #   db.c
+-date-:-thread-:ERR: Rejecting line: #   debug.c
+-date-:-thread-:ERR: Rejecting line: #   imageProcessing.c
+-date-:-thread-:ERR: Rejecting line: #   localisation.c
+-date-:-thread-:ERR: Rejecting line: #   main.c
+-date-:-thread-:ERR: Rejecting line: #   odf_plug.c
+-date-:-thread-:ERR: Rejecting line: #   saneDispatcher.c
+-date-:-thread-:ERR: Rejecting line: #   scanner.c
+-date-:-thread-:ERR: Rejecting line: #   simpleLinkedList.c
+-date-:-thread-:ERR: Rejecting line: #   validation.c
+-date-:-thread-:ERR: Rejecting line: #
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: #########################################
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: #
+-date-:-thread-:ERR: Rejecting line: # doc_editor.c
+-date-:-thread-:ERR: Rejecting line: #
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: # getDocDetail() - see docFilter
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: #########################################
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: #
+-date-:-thread-:ERR: Rejecting line: # import_doc.c
+-date-:-thread-:ERR: Rejecting line: #
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: # uploadfile()
+-date-:-thread-:ERR: Adding key=LOCAL_ocr_default_text, value=--text could not be extracted--
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: #########################################
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: #
+-date-:-thread-:ERR: Rejecting line: # pageRender.c
+-date-:-thread-:ERR: Rejecting line: #
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: # docFilter() - shared with getDocDetail
+-date-:-thread-:ERR: Adding key=LOCAL_file_type_odf, value=Imported ODF Doc
+-date-:-thread-:ERR: Adding key=LOCAL_file_type_pdf, value=Imported PDF Doc
+-date-:-thread-:ERR: Adding key=LOCAL_file_type_image, value=Imported Image
+-date-:-thread-:ERR: Adding key=LOCAL_file_type_scanned, value=Scanned Doc
+-date-:-thread-:ERR: Adding key=LOCAL_default_title, value=New (untitled) document.
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: #########################################
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: #
+-date-:-thread-:ERR: Rejecting line: # utils.c
+-date-:-thread-:ERR: Rejecting line: #
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Adding key=LOCAL_no_date_set, value= - No date set -
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: #########################################
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: #
+-date-:-thread-:ERR: Rejecting line: # scan.c
+-date-:-thread-:ERR: Rejecting line: #
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: # ocrImage()
+-date-:-thread-:ERR: Adding key=LOCAL_page_delimiter, value=---------------- page %d ----------------\n%s\n
+-date-:-thread-:ERR: Adding key=LOCAL_resolution_outside_range_to_attempt_ocr, value=Resolution set outside safe range to attempt OCR.\n 
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: # internalDoScanningOperation()
+-date-:-thread-:ERR: Adding key=LOCAL_opendias_server, value=opendias server
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: #########################################
+-date-:-thread-:ERR: Rejecting line: 
+-date-:-thread-:ERR: Rejecting line: #
+-date-:-thread-:ERR: Rejecting line: # web_handler.c
+-date-:-thread-:ERR: Rejecting line: #
+-date-:-thread-:ERR: Adding key=LOCAL_server_busy, value=This server is busy, please try again later.
+-date-:-thread-:ERR: Adding key=LOCAL_server_error, value=An internal server error has occured.
+-date-:-thread-:ERR: Adding key=LOCAL_request_error, value=Your request did not fit the form 'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)'.
+-date-:-thread-:ERR: Adding key=LOCAL_access_denied, value=Access Denied
+-date-:-thread-:ERR: Adding key=LOCAL_no_access, value=You do not have permissions to complete the request
+-date-:-thread-:ERR: Adding key=LOCAL_processing_error, value=Your request could not be processed
+-date-:-thread-:ERR: Adding key=LOCAL_missing_support, value=Support for this feature has not been compiled in
+-date-:-thread-:INF: Sane backend started
+-date-:-thread-:INF: Sane command socket is open
+-date-:-thread-:INF: ... Starting up the openDias service.
+-date-:-thread-:INF: ready to accept connectons
+-date-:-thread-:INF: No language header found - resorting to 'en'.
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:INF: No language header found - resorting to 'en'.
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:INF: No language header found - resorting to 'en'.
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:INF: No language header found - resorting to 'en'.
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:INF: No language header found - resorting to 'en'.
+-date-:-thread-:INF: Processing request for: Doc List Filter
+-date-:-thread-:INF: Received SIGUSR1 signal.
+-date-:-thread-:INF: openDias service is shutting down....
+-date-:-thread-:INF: openDias service has shutdown.
