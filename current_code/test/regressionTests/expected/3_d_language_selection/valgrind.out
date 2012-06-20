@@ -30,58 +30,6 @@
 ==XXXXX==      in use at exit: XXX bytes in XXX blocks
 ==XXXXX==    total heap usage: XXXX allocs, XXXX frees, XXX bytes allocated
 ==XXXXX==  
-==XXXXX==  XXX bytes in XXX blocks are still reachable in loss record 1 of 12
-==XXXXX==     at 0x402BE68: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==XXXXX==     by 0x8059D0C: o_strdup (utils.c:206)
-==XXXXX==     by 0x49D64D2: __libc_start_main (libc-start.c:226)
-==XXXXX==     by 0x804B1D0: ??? (in /home/wbooth/git/clearscene-src-opendias/current_code/src/opendias)
-==XXXXX==  
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:malloc
-   fun:o_strdup
-   fun:__libc_start_main
-   obj:/home/wbooth/git/clearscene-src-opendias/current_code/src/opendias
-}
-==XXXXX==  XXX bytes in XXX blocks are still reachable in loss record 4 of 12
-==XXXXX==     at 0x402BE68: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==XXXXX==     by 0x8061E5C: generate_new_element (simpleLinkedList.c:41)
-==XXXXX==     by 0x49D64D2: __libc_start_main (libc-start.c:226)
-==XXXXX==     by 0x804B1D0: ??? (in /home/wbooth/git/clearscene-src-opendias/current_code/src/opendias)
-==XXXXX==  
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:malloc
-   fun:generate_new_element
-   fun:__libc_start_main
-   obj:/home/wbooth/git/clearscene-src-opendias/current_code/src/opendias
-}
-==XXXXX==  XXX bytes in XXX blocks are still reachable in loss record 7 of 12
-==XXXXX==     at 0x402BE68: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==XXXXX==     by 0x8061E5C: generate_new_element (simpleLinkedList.c:41)
-==XXXXX==     by 0x51566BF: ???
-==XXXXX==  
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:malloc
-   fun:generate_new_element
-   obj:*
-}
-==XXXXX==  XXX bytes in XXX blocks are still reachable in loss record 11 of 12
-==XXXXX==     at 0x402BE68: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==XXXXX==     by 0x8059D0C: o_strdup (utils.c:206)
-==XXXXX==     by 0x51566BF: ???
-==XXXXX==  
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:malloc
-   fun:o_strdup
-   obj:*
-}
 ==XXXXX==  LEAK SUMMARY:
 ==XXXXX==     definitely lost: XXX bytes in XXX blocks
 ==XXXXX==     indirectly lost: XXX bytes in XXX blocks

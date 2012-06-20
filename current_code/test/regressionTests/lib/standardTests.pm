@@ -276,6 +276,7 @@ sub directRequest {
 
   my ($params, $supressLogOfRequest ) = @_;
   my %default = (
+    '__method' => 'POST',
     '__proto' => 'http://',
     '__domain' => 'localhost:8988',
     '__uri' => '/opendias/dynamic',
@@ -305,13 +306,13 @@ sub directRequest {
   my $ua = LWP::UserAgent->new;
   $ua->agent($default{__agent});
 
-  my $req = HTTP::Request->new(POST => $default{__proto} . $default{__domain} . $default{__uri});
+  my $req = HTTP::Request->new($default{__method} => $default{__proto} . $default{__domain} . $default{__uri});
 
   foreach my $key (sort {$a cmp $b} (keys %$params)) {
     if( $key =~ /^__header_/ ) {
       my $headerkey = $key;
       $headerkey =~ s/__header_//;
-      $req->header($headerkey) = $params->{$key};
+      $req->header($headerkey, $params->{$key} );
     }
   }
 
