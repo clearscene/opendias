@@ -29,14 +29,14 @@ $VAR1 = {
           'date' => '2011/01/01',
           'docid' => '3',
           'title' => 'Test 2 Title text',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         },
         {
           'actionrequired' => '0',
           'date' => '2010/12/31',
           'docid' => '1',
           'title' => 'Test Titletext',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         },
         {
           'actionrequired' => '0',
@@ -78,7 +78,7 @@ $VAR1 = {
           'date' => '2011/01/01',
           'docid' => '3',
           'title' => 'Test 2 Title text',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         }
       ]
     },
@@ -124,7 +124,7 @@ $VAR1 = {
           'date' => '2010/12/31',
           'docid' => '1',
           'title' => 'Test Titletext',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         },
         {
           'actionrequired' => '0',
@@ -159,7 +159,7 @@ $VAR1 = {
           'date' => '2011/01/01',
           'docid' => '3',
           'title' => 'Test 2 Title text',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         },
         {
           'actionrequired' => '0',
@@ -194,14 +194,14 @@ $VAR1 = {
           'date' => '2011/01/01',
           'docid' => '3',
           'title' => 'Test 2 Title text',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         },
         {
           'actionrequired' => '0',
           'date' => '2010/12/31',
           'docid' => '1',
           'title' => 'Test Titletext',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         }
       ]
     },
@@ -228,7 +228,7 @@ $VAR1 = {
         'date' => '2010/12/31',
         'docid' => '1',
         'title' => 'Test Titletext',
-        'type' => 'Scaned Doc'
+        'type' => 'Scanned Doc'
       }
     },
     'count' => '1',
@@ -254,7 +254,7 @@ $VAR1 = {
         'date' => '2011/01/01',
         'docid' => '3',
         'title' => 'Test 2 Title text',
-        'type' => 'Scaned Doc'
+        'type' => 'Scanned Doc'
       }
     },
     'count' => '1',
@@ -288,7 +288,7 @@ $VAR1 = {
           'date' => '2011/01/01',
           'docid' => '3',
           'title' => 'Test 2 Title text',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         }
       ]
     },

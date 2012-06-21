@@ -282,6 +282,7 @@ sub directRequest {
     '__uri' => '/opendias/dynamic',
     '__encoding' => 'application/x-www-form-urlencoded',
     '__agent' => 'opendias-api-testing',
+    '__header_Accept-Language' => 'en,de;q=0.8,##;q=0.1',
   );
 
   #
@@ -308,11 +309,11 @@ sub directRequest {
 
   my $req = HTTP::Request->new($default{__method} => $default{__proto} . $default{__domain} . $default{__uri});
 
-  foreach my $key (sort {$a cmp $b} (keys %$params)) {
+  foreach my $key (sort {$a cmp $b} (keys %default)) {
     if( $key =~ /^__header_/ ) {
       my $headerkey = $key;
       $headerkey =~ s/__header_//;
-      $req->header($headerkey, $params->{$key} );
+      $req->header( $headerkey => $default{$key} );
     }
   }
 

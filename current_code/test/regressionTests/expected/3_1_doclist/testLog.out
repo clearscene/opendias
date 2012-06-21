@@ -21,7 +21,7 @@ One Row = $VAR1 = {
         'date' => '2010/12/31',
         'docid' => '1',
         'title' => "Test \x{3ab} Title",
-        'type' => 'Scaned Doc'
+        'type' => 'Scanned Doc'
       }
     },
     'count' => '1',
@@ -46,14 +46,14 @@ Date Order = $VAR1 = {
           'date' => '2011/01/01',
           'docid' => '3',
           'title' => 'Test 2 Title',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         },
         {
           'actionrequired' => '0',
           'date' => '2010/12/31',
           'docid' => '1',
           'title' => "Test \x{3ab} Title",
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         }
       ]
     },
@@ -79,14 +79,14 @@ Date Order reverse = $VAR1 = {
           'date' => '2010/12/31',
           'docid' => '1',
           'title' => "Test \x{3ab} Title",
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         },
         {
           'actionrequired' => '1',
           'date' => '2011/01/01',
           'docid' => '3',
           'title' => 'Test 2 Title',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         }
       ]
     },
@@ -136,14 +136,14 @@ Sort by type, all records = $VAR1 = {
           'date' => '2010/12/31',
           'docid' => '1',
           'title' => "Test \x{3ab} Title",
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         },
         {
           'actionrequired' => '1',
           'date' => '2011/01/01',
           'docid' => '3',
           'title' => 'Test 2 Title',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         }
       ]
     },
@@ -162,7 +162,7 @@ Sort by title, all records = $VAR1 = {
           'date' => '2010/12/31',
           'docid' => '1',
           'title' => "Test \x{3ab} Title",
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         },
         {
           'actionrequired' => '1',
@@ -176,7 +176,7 @@ Sort by title, all records = $VAR1 = {
           'date' => '2011/01/01',
           'docid' => '3',
           'title' => 'Test 2 Title',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         },
         {
           'actionrequired' => '0',
@@ -209,7 +209,7 @@ Sort by docid, all records = $VAR1 = {
           'date' => '2011/01/01',
           'docid' => '3',
           'title' => 'Test 2 Title',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         },
         {
           'actionrequired' => '1',
@@ -223,7 +223,7 @@ Sort by docid, all records = $VAR1 = {
           'date' => '2010/12/31',
           'docid' => '1',
           'title' => "Test \x{3ab} Title",
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         }
       ]
     },
@@ -242,7 +242,7 @@ Sort by reverse-docid, all records = $VAR1 = {
           'date' => '2010/12/31',
           'docid' => '1',
           'title' => "Test \x{3ab} Title",
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         },
         {
           'actionrequired' => '1',
@@ -256,7 +256,7 @@ Sort by reverse-docid, all records = $VAR1 = {
           'date' => '2011/01/01',
           'docid' => '3',
           'title' => 'Test 2 Title',
-          'type' => 'Scaned Doc'
+          'type' => 'Scanned Doc'
         },
         {
           'actionrequired' => '0',

@@ -29,12 +29,17 @@ LOG-OUTPUT
 -date-:-thread-:INF: ready to accept connectons
 -date-:-thread-:INF: Serving request: /docDetail.html
 -date-:-thread-:INF: Serving request: /includes/jquery.js
+-date-:-thread-:INF: Serving request: /includes/openDias.language.js
 -date-:-thread-:INF: Serving request: /includes/jquery-ui.min.js
 -date-:-thread-:INF: Serving request: /includes/jquery.mousewheel.js
 -date-:-thread-:INF: Serving request: /includes/jquery.gzoom.js
 -date-:-thread-:INF: Serving request: /includes/jquery.easySlider.js
 -date-:-thread-:INF: Serving request: /includes/jquery.tagsinput.js
+-date-:-thread-:INF: Serving request: /includes/sprintf-0.7-beta1.js
+-date-:-thread-:INF: Serving request: /includes/local/generic.resource
+-date-:-thread-:INF: Serving request: /includes/local/openDias.saveDetails.js.resource
 -date-:-thread-:INF: Serving request: /includes/openDias.saveDetails.js
+-date-:-thread-:INF: Serving request: /includes/local/openDias.loadDetails.js.resource
 -date-:-thread-:INF: Serving request: /includes/openDias.loadDetails.js
 -date-:-thread-:INF: Serving request: /style/common.css
 -date-:-thread-:INF: Serving request: /style/jquery-ui.css
