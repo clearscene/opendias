@@ -391,6 +391,7 @@ char *userLanguage( struct MHD_Connection *connection ) {
         break;
       }
       o_log(SQLDEBUG, "Nope - that language preference is '%s' not yet available.", reqLang);
+      reqLang = NULL; // incase were the last 'suggested' lang.
       pch = strtok(NULL, ", ");
     }
 

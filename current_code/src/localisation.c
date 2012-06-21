@@ -59,7 +59,7 @@ void locale_cleanup() {
   }
 }
 
-char *getString( char *phrase, char *lang) {
+const char *getString( char *phrase, char *lang) {
   struct simpleLinkedList *tmp;
   struct simpleLinkedList *keysList;
 
@@ -78,13 +78,13 @@ char *getString( char *phrase, char *lang) {
   if( tmp == NULL || tmp->data == NULL ) {
     if( 0 == strcmp (lang, "en") ) {
       o_log(ERROR, "cannot find result - returning the key instead");
-      return o_printf("--[%s]--", phrase); // cannot find ay translation - just return back the key
+      return phrase; // cannot find ay translation - just return back the key
     }
-    o_log(ERROR, "Cannot find key, trying for english instead");
+    o_log(DEBUGM, "Cannot find key, trying for english instead");
     return getString( phrase, "en" ); // the defaulting lang translation
   }
-  o_log(ERROR, "Found string");
-  return o_strdup((char *)tmp->data); // the translation we found
+  o_log(SQLDEBUG, "Found string");
+  return (char *)tmp->data; // the translation we found
 }
 
 struct simpleLinkedList *loadLangList( char *lang ) {
@@ -101,7 +101,6 @@ struct simpleLinkedList *loadLangList( char *lang ) {
       // Handle commented and blank lines
       chop(line);
       if( line[0] == '#' || line[0] == 0 ) {
-        //free(line);
         o_log(SQLDEBUG, "Rejecting line: %s", line);
         continue;
       }
@@ -110,8 +109,6 @@ struct simpleLinkedList *loadLangList( char *lang ) {
         o_log(SQLDEBUG, "Adding key=%s, value=%s", pch, pch+strlen(pch)+1);
         sll_insert( trList, o_strdup(pch), o_strdup(pch+strlen(pch)+1) );
       }
-      //free(pch);
-      //free(line);
     }
     if (line != NULL) {
       free(line);

@@ -168,16 +168,14 @@ char *getDocDetail (char *documentId, char *lang ) {
   title = o_strdup(readData_db(rSet, "title"));
   if( 0 == strcmp(title, "NULL") ) {
     free(title);
-    title = getString( "LOCAL_default_title", lang );
+    title = o_strdup( getString( "LOCAL_default_title", lang ) );
   }
 
-  char *nodate = getString( "LOCAL_no_date_set", lang);
+  const char *nodate = getString( "LOCAL_no_date_set", lang);
   humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")),
                                  o_strdup(readData_db(rSet, "docdatem")),
                                  o_strdup(readData_db(rSet, "docdated")),
                                  nodate );
-  free(nodate);
-
 
 
   // Build Response

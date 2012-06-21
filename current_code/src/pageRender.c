@@ -236,7 +236,8 @@ char *getScanningProgress(char *scanid) {
 char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder, char *lang ) {
 
   struct simpleLinkedList *rSet;
-  char *docList, *actionrequired, *title, *docid, *humanReadableDate, *type, 
+  const char *type;
+  char *docList, *actionrequired, *title, *docid, *humanReadableDate, 
     *rows, *token, *olds, *sql, *textWhere=NULL, *dateWhere=NULL, 
     *tagWhere=NULL, *actionWhere=NULL, *page_ret;
   int count = 0;
@@ -410,20 +411,18 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
         docid = o_strdup(readData_db(rSet, "docid"));
         if( 0 == strcmp(title, "NULL") ) {
           free(title);
-          title = getString( "LOCAL_default_title", lang ); 
+          title = o_strdup( getString( "LOCAL_default_title", lang ) ); 
         }
-        char *nodate = getString( "LOCAL_no_date_set", lang);
+        const char *nodate = getString( "LOCAL_no_date_set", lang);
         humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")), 
                                        o_strdup(readData_db(rSet, "docdatem")), 
                                        o_strdup(readData_db(rSet, "docdated")),
                                        nodate );
-        free(nodate);
 
         o_concatf(&rows, "<Row><docid>%s</docid><actionrequired>%s</actionrequired><title><![CDATA[%s]]></title><type>%s</type><date>%s</date></Row>", 
                            docid, actionrequired, title, type, humanReadableDate);
         free(docid);
         free(title);
-        free(type);
         free(humanReadableDate);
         free(actionrequired);
       }
