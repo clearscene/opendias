@@ -70,6 +70,11 @@ static size_t getFromFile_fullPath(const char *url, const char *lang, char **dat
       free( localised );
       localised = o_printf("%s.en", url);
     } 
+    if( 0 != access(localised, F_OK) ) {
+      o_log(ERROR, "File '%s' is not readable", localised);
+      free( localised );
+      localised = NULL;
+    } 
   }
   if ( localised == NULL ) {
     localised = o_printf("%s", url);
@@ -524,7 +529,10 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         size = 0;
       }
       else {
-        content = build_page(content, con_info->lang);
+        if( 0 == strstr(url,"clientTesting.html") ) {
+          // Client test does not need the narmal page furnature
+          content = build_page(content, con_info->lang);
+        }
         size = strlen(content);
       }
       mimetype = MIMETYPE_HTML;
