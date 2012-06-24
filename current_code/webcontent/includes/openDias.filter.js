@@ -4,7 +4,7 @@ var master;
 $(document).ready(function(){
 
   $('#filterTab').click( function() { 
-	$('#filterOptions').slideToggle('slow');
+	  $('#filterOptions').slideToggle('slow');
   });
 
   $('#startDate').datepicker( {dateFormat:'yy-mm-dd'} );
