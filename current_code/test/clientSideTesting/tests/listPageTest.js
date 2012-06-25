@@ -5,15 +5,15 @@
         setup : function(){
           if( ! listPageTestDoneSetup ) {
             stop();
-            $q('#testframe').attr('src', "/opendias/docList.html");
 	          $q('#testframe').one('load', function() { 
               $ = window.frames[0].jQuery; 
               listPageTestDoneSetup = 1; 
               start();
             });
+            $q('#testframe').attr('src', "/opendias/docList.html");
             window.setTimeout( function() {
               if( ! listPageTestDoneSetup ) {
-                ok( 0, "Did not load the page.");
+                ok( 0, "Did not load the list page.");
               }
             }, 5000);
           }
