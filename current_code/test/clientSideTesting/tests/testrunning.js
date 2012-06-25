@@ -9,6 +9,7 @@ $q(function() {
 
   var tests = [
               'listPageTest',
+              'acquirePageTest',
               ];
   var runners = [];
 
@@ -25,11 +26,6 @@ $q(function() {
     });
   });
   $q.ajaxSetup({async:true});
-
-  $q.each(runners, function(i,v) {
-    console.log('calling: '+v+'()');
-    window[v]();
-  });
 
 });
 

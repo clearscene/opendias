@@ -1,14 +1,21 @@
-function listPageTest() {
 
-  var doneSetup = 0;
+  var listPageTestDoneSetup = 0;
     // ================================================
     module("Filter", {
         setup : function(){
-          if( ! doneSetup ) {
+          if( ! listPageTestDoneSetup ) {
             stop();
             $q('#testframe').attr('src', "/opendias/docList.html");
-	          $q('#testframe').one('load', function() { $ = window.frames[0].jQuery; start(); } );
-            doneSetup = 1;
+	          $q('#testframe').one('load', function() { 
+              $ = window.frames[0].jQuery; 
+              listPageTestDoneSetup = 1; 
+              start();
+            });
+            window.setTimeout( function() {
+              if( ! listPageTestDoneSetup ) {
+                ok( 0, "Did not load the page.");
+              }
+            }, 5000);
           }
         },
         teardown : function(){ }
@@ -105,4 +112,3 @@ function listPageTest() {
 
 		});
 
-}
