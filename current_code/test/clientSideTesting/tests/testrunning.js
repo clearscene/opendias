@@ -8,9 +8,9 @@ $q(function() {
   $q.getScript("http://testswarmhost/testswarm/js/inject.js");
 
   var tests = [
-              'homePageTest',
               'listPageTest',
               'acquirePageTest',
+              'homePageTest',
               ];
   var runners = [];
 
