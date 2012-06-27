@@ -2,7 +2,7 @@
 
 2. How are the tests constructed.
 ---------------------------------
-Tests are generally categorised into three areas.
+Tests are generally categorised into four areas.
 
  * (1_*) Appplication tests
     * Test Coverage - ensure the testsi code coverage are exhaustive.
@@ -14,6 +14,9 @@ Tests are generally categorised into three areas.
     * Does the backend return what it's supposed to.
  * (8_*) GUI Excersise
     * Does the webpages function as expected.
+ * QUnit tests
+    * Detailed client side funcationality (see ./clientSideTesting/)
+
 
 These are the main components:
 
@@ -74,6 +77,14 @@ cpan -f WWW::HtmlUnit
 - The user that runs the test harness, will need access to:
   * /var/log/opendias
   * /var/run/
+
+3.4 Deploying files
+-------------------
+Even though the test suit build opendias from source, it does not deploy the 'shared'
+files to the system. (At least for the time being) you will need to make and install
+the app first.
+You should also deploy the test language pack, by running:
+  ./deploy_test_lang_pack.sh
   
 4. How to run the tests (automated).
 -------------------------------------
