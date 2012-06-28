@@ -92,13 +92,44 @@
       $('#startDate').val("").change();
       $('#endDate').val("").change();
       waitForValue( $('#filterProgress'), 1000 );
-
 		});
 
+    // ------------------------------------------------
+		asyncTest('filter - tag autoselect popup', 1, function() {
+      console.log("8. Running: tag autoselect populate");
+
+      setupWaitForValue( $('body > ul.ui-autocomplete'), "WagesWater" );
+      $('#tags_tag').trigger('keydown').val("w").trigger("keyup");
+      waitForValue( $('body > ul.ui-autocomplete'), 1000 );
+		});
+
+    // ------------------------------------------------
+//		asyncTest('filter - tag select', 1, function() {
+//      console.log("9. Running: tag filter down");
+//
+//      setupWaitForValue( $('#filterProgress'), "Will return an estimated 1 docs" );
+//      // I can't get to select an option from the autocomplete dropdown !!!
+//      //$('body > ul.ui-autocomplete > li:first > a').focus();
+//      //$('body > ul.ui-autocomplete > li:first > a').click();
+//      //$('#tags_tag').autocomplete('search', 'wages').select().close();
+//      //$('#tags').select();
+//      //$('#tags_tag').select();
+//      //waitForValue( $('#filterProgress'), 1000 );
+//		});
+
+    // ------------------------------------------------
+		asyncTest('filter - tag autoselect remove', 1, function() {
+      console.log("8. Running: tag autoselect remove");
+
+      setupWaitForValue( $('body > ul.ui-autocomplete'), null );
+      $('#tags_tag').trigger('keydown').val("").trigger("keyup");
+      $('#doFilter').focus();
+      waitForValue( $('body > ul.ui-autocomplete'), 1000 );
+		});
 
     // ------------------------------------------------
 		asyncTest('close filter form', 2, function() {  
-      console.log("8. Running: close filter form");
+      console.log(". Running: close filter form");
 
 			ok( $('#filterInner').is(':visible'), 'Filter form should start out visible');  
 
