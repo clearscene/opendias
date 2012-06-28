@@ -5,7 +5,7 @@
         setup : function(){
           if( ! acquirePageTestDoneSetup ) {
             stop();
-	          $q('#testframe').one('load', function() { 
+            $q('#testframe').one('load', function() { 
               $ = window.frames[0].jQuery; 
               acquirePageTestDoneSetup = 1;
               start();
@@ -22,11 +22,11 @@
     });
 
     // ------------------------------------------------
-		asyncTest('loading', 1, function() {
+    asyncTest('loading', 1, function() {
       console.log("2. Running: title - filters down");
 
       ok( 1, "1 was expteded to be OK" );
       start();
-		});
+    });
 
 
