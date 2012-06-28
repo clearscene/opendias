@@ -35,26 +35,43 @@ $q(function() {
 var delay = 100;
 
 function setupWaitForValue( element, expected ) {
-  window.waitForValue_original = element.text();
+  if(expected == null) {
+    window.waitForValue_original = element.is(':visible');
+  } 
+  else {
+    window.waitForValue_original = element.text();
+  }
   window.waitForValue_expected = expected;
 }
 
 function waitForValue( element, timeout) {
   console.log( "waitForValue called with a timeout of "+timeout );
-  if (element.text() != window.waitForValue_original) {
-    equal( element.text(), window.waitForValue_expected, element.attr('id') + " was expected to be " + window.waitForValue_expected );
-    start();
+
+  if ( window.waitForValue_expected == null ) {
+    if ( element.is(':visible') != window.waitForValue_original) {
+      ok( 1, element.attr('id') + " has changed visibility" );
+      start();
+      return;
+    }
+  }
+
+  else {
+    if (element.text() != window.waitForValue_original) {
+      equal( element.text(), window.waitForValue_expected, element.attr('id') + " was expected to be " + window.waitForValue_expected );
+      start();
+      return;
+    }
+  }
+
+  timeout = timeout - delay;
+  if( timeout > 0 ) {
+    window.setTimeout( function() { waitForValue(element, timeout) }, delay);
   }
   else {
-    timeout = timeout - delay;
-    if( timeout > 0 ) {
-      window.setTimeout( function() { waitForValue(element, timeout) }, delay);
-    }
-    else {
-      ok( 0, "Timeout while waiting for "+element.attr('id')+" to change.");
-      start();
-    }
+    ok( 0, "Timeout while waiting for "+element.attr('id')+" to change.");
+    start();
   }
+
 }
 
 function getCookie(name) {
