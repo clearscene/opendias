@@ -10,6 +10,7 @@ $q(function() {
   var tests = [
               'listPageTest',
               'acquirePageTest',
+              'detailPageTest',
               'homePageTest',
               ];
   var runners = [];
