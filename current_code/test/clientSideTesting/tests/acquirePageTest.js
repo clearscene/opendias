@@ -1,19 +1,19 @@
-
-  var acquirePageTestDoneSetup = 0;
+(function(){
+  var doneload = 0;
   var initial = null;
   // ================================================
   module("Acquire", {
       setup : function(){
-        if( ! acquirePageTestDoneSetup ) {
+        if( ! doneload ) {
           stop();
           $q('#testframe').one("load", function() { 
             $ = window.frames[0].jQuery; 
-            acquirePageTestDoneSetup = 1;
+            doneload = 1;
             start();
           });
           $q('#testframe').attr('src', "/opendias/acquire.html");
           window.setTimeout( function() {
-            if( ! acquirePageTestDoneSetup ) {
+            if( ! doneload ) {
               ok( 0, "Did not load the acquire page.");
             }
           }, 5000);
@@ -55,10 +55,10 @@
     ok( ! $('#deviceTab_1 .resolutionQuality').hasClass("poorResolution"), "Is the quality indicator in the green" );
 
     var s = $('#resolutionSlider_1').slider();
-    s.slider( 'value', 50 );
-    s.slider('option','slide').call(s,null,{ handle: $('.ui-slider-handle', s), value: 50 });
+    s.slider( 'value', 100 );
+    s.slider('option','slide').call(s,null,{ handle: $('.ui-slider-handle', s), value: 100 });
 
-    equal( $('#resolutionDisplay_1').text(), "50 dpi", "Did the slider update the reported resolution");
+    equal( $('#resolutionDisplay_1').text(), "100 dpi", "Did the slider update the reported resolution");
 
     ok( ! $('#ocr_1').is(':enabled'), "Has the OCR langauge selection gone grey" );
     ok( $('#deviceTab_1 .resolutionQuality').hasClass('poorResolution'), "Has the quality indicator gone grey" );
@@ -67,10 +67,59 @@
   });
 
   // ------------------------------------------------
-  asyncTest('Scanning', 1, function() {
-    console.log("2. Running: Scanning");
+  asyncTest('Scanning 1/5', 2, function() {
+    console.log("2. Running: Scanning 1/5");
 
-    ok( 1, "DO SOME SCANNING TESTS");
-    start();
+    equal( $('#status_1').text(), "", "Expecting the status to be blank at the start");
+
+    setupWaitForValue( $('#status_1'), "Setting up the scanner" );
+    $('#scanButton_1').click();
+    waitForValue( $('#status_1'), 3000 );
+
+    stop();
+    setTimeout( function() {
+      start();
+    }, 30);
   });
 
+  // ------------------------------------------------
+  asyncTest('Scanning 2/5', 1, function() {
+    console.log("2. Running: Scanning 2/5");
+
+    setupWaitForValue( $('#status_1'), "Waiting on the database" );
+    waitForValue( $('#status_1'), 3000 );
+  });
+
+  // ------------------------------------------------
+  asyncTest('Scanning 3/5', 1, function() {
+    console.log("2. Running: Scanning 3/5");
+
+    setupWaitForValue( $('#status_1'), "Scanning in progress" );
+    waitForValue( $('#status_1'), 3000 );
+  });
+
+  // ------------------------------------------------
+  asyncTest('Scanning 3a/5', 1, function() {
+    console.log("2. Running: Scanning 3a/5");
+
+    setupWaitForValue( $('#status_1'), "Waiting on the database" );
+    waitForValue( $('#status_1'), 3000 );
+  });
+
+  // ------------------------------------------------
+  asyncTest('Scanning 4/5', 1, function() {
+    console.log("2. Running: Scanning 4/5");
+
+    setupWaitForValue( $('#status_1'), "Converting image format" );
+    waitForValue( $('#status_1'), 3000 );
+  });
+
+  // ------------------------------------------------
+  asyncTest('Scanning 5/5', 1, function() {
+    console.log("2. Running: Scanning 5/5");
+
+    setupWaitForValue( $('#status_1'), "Scan operation complete" );
+    waitForValue( $('#status_1'), 3000 );
+  });
+
+})();
