@@ -1,5 +1,6 @@
+(function(){
 
-  var homePageTestDoneSetup = 0;
+  var doneload = 0;
 
   // delete any language cookie that may be present
   var date = new Date();
@@ -10,16 +11,16 @@
   // ================================================
   module("Homepage", {
       setup : function(){
-        if( ! homePageTestDoneSetup ) {
+        if( ! doneload ) {
           stop();
           $q('#testframe').one('load', function() { 
             $ = window.frames[0].jQuery; 
-            homePageTestDoneSetup = 1;
+            doneload = 1;
             start();
           });
           $q('#testframe').attr('src', "/opendias/");
           window.setTimeout( function() {
-            if( ! homePageTestDoneSetup ) {
+            if( ! doneload ) {
               ok( 0, "Did not load the home page.");
             }
           }, 5000);
@@ -107,3 +108,4 @@
     }, 5000);
   });
 
+})();

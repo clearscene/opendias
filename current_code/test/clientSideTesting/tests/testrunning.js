@@ -34,13 +34,16 @@ $q(function() {
 // ====================================
 
 var delay = 100;
+var waitOnSetting;
 
 function setupWaitForValue( element, expected ) {
+  waitOnSetting = 0;
   if(expected == null) {
     window.waitForValue_original = element.is(':visible');
   } 
   else {
     window.waitForValue_original = element.text();
+    console.log( "Saving original value as: " + window.waitForValue_original );
   }
   window.waitForValue_expected = expected;
 }
@@ -51,14 +54,18 @@ function waitForValue( element, timeout) {
   if ( window.waitForValue_expected == null ) {
     if ( element.is(':visible') != window.waitForValue_original) {
       ok( 1, element.attr('id') + " has changed visibility" );
+      waitOnSetting = 1;
       start();
       return;
     }
   }
 
   else {
+    console.log( "Checking : " + element.text() + " / " + window.waitForValue_original );
     if (element.text() != window.waitForValue_original) {
+      console.log( "actual = " + element.text() + "      started at = " + window.waitForValue_original );
       equal( element.text(), window.waitForValue_expected, element.attr('id') + " was expected to be " + window.waitForValue_expected );
+      waitOnSetting = 1;
       start();
       return;
     }

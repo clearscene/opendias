@@ -1,18 +1,19 @@
+(function(){
 
-  var listPageTestDoneSetup = 0;
+  var doneload = 0;
   // ================================================
   module("Filter", {
       setup : function(){
-        if( ! listPageTestDoneSetup ) {
+        if( ! doneload ) {
           stop();
           $q('#testframe').one('load', function() { 
             $ = window.frames[0].jQuery; 
-            listPageTestDoneSetup = 1; 
+            doneload = 1; 
             start();
           });
           $q('#testframe').attr('src', "/opendias/docDetail.html?docid=1");
           window.setTimeout( function() {
-            if( ! listPageTestDoneSetup ) {
+            if( ! doneload ) {
               ok( 0, "Did not load the list page.");
             }
           }, 5000);
@@ -32,3 +33,4 @@
     start();
   });
 
+})();

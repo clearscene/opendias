@@ -1,18 +1,20 @@
+(function(){
 
-  var listPageTestDoneSetup = 0;
+  var doneload = 0;
+  var fulllist = '';
   // ================================================
   module("Filter", {
       setup : function(){
-        if( ! listPageTestDoneSetup ) {
+        if( ! doneload ) {
           stop();
           $q('#testframe').one('load', function() { 
             $ = window.frames[0].jQuery; 
-            listPageTestDoneSetup = 1; 
+            doneload = 1; 
             start();
           });
           $q('#testframe').attr('src', "/opendias/docList.html");
           window.setTimeout( function() {
-            if( ! listPageTestDoneSetup ) {
+            if( ! doneload ) {
               ok( 0, "Did not load the list page.");
             }
           }, 5000);
@@ -29,13 +31,32 @@
 
     $('#filterTab').click();  
     $('#filterOptions').promise().done( function() {
-
       ok( $('#filterInner').is(':visible'), 'Filter form should be visible');
       equal( $('#filterProgress').text(), "", "Estimated results was expected to be blank" );
-
       start();
-
     });
+  });
+
+  // ------------------------------------------------
+  asyncTest('action required - filters down', 1, function() {
+    console.log("4. Running: action required filter down");
+
+    setupWaitForValue( $('#filterProgress'), "Will return an estimated 0 docs" );
+    $('#isActionRequired').prop("checked", true).change();
+    waitForValue( $('#filterProgress'), 1000 );
+  });
+
+  // ------------------------------------------------
+  asyncTest('action required - show all', 2, function() {
+    console.log("5. Running: action required show all");
+
+    $('#isActionRequired').prop("checked", false).change();
+    setTimeout( function() {
+      fulllist = $('#filterProgress').text();
+      notEqual( fulllist, "", "Expected to show a full list count.");
+      notEqual( fulllist, "Will return an estimated 0 docs", "Expected to show a full list count.");
+      start();
+    }, 1000 );
   });
 
   // ------------------------------------------------
@@ -51,26 +72,8 @@
   asyncTest('title - show all', 1, function() {
     console.log("3. Running: title show all");
 
-    setupWaitForValue( $('#filterProgress'), "Will return an estimated 8 docs" );
+    setupWaitForValue( $('#filterProgress'), fulllist );
     $('#textSearch').val("").change();
-    waitForValue( $('#filterProgress'), 1000 );
-  });
-
-  // ------------------------------------------------
-  asyncTest('action required - filters down', 1, function() {
-    console.log("4. Running: action required filter down");
-
-    setupWaitForValue( $('#filterProgress'), "Will return an estimated 0 docs" );
-    $('#isActionRequired').prop("checked", true).change();
-    waitForValue( $('#filterProgress'), 1000 );
-  });
-
-  // ------------------------------------------------
-  asyncTest('action required - show all', 1, function() {
-    console.log("5. Running: action required show all");
-
-    setupWaitForValue( $('#filterProgress'), "Will return an estimated 8 docs" );
-    $('#isActionRequired').prop("checked", false).change();
     waitForValue( $('#filterProgress'), 1000 );
   });
 
@@ -88,7 +91,7 @@
   asyncTest('date - show all', 1, function() {
     console.log("7. Running: date show all");
 
-    setupWaitForValue( $('#filterProgress'), "Will return an estimated 8 docs" );
+    setupWaitForValue( $('#filterProgress'), fulllist );
     $('#startDate').val("").change();
     $('#endDate').val("").change();
     waitForValue( $('#filterProgress'), 1000 );
@@ -143,3 +146,4 @@
 
   });
 
+})();
