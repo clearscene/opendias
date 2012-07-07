@@ -48,7 +48,7 @@ function setupWaitForValue( element, expected ) {
   window.waitForValue_expected = expected;
 }
 
-function waitForValue( element, timeout) {
+function waitForValue( element, timeout, ignore ) {
   console.log( "waitForValue called with a timeout of "+timeout );
 
   if ( window.waitForValue_expected == null ) {
@@ -62,18 +62,24 @@ function waitForValue( element, timeout) {
 
   else {
     console.log( "Checking : " + element.text() + " / " + window.waitForValue_original );
-    if (element.text() != window.waitForValue_original) {
-      console.log( "actual = " + element.text() + "      started at = " + window.waitForValue_original );
-      equal( element.text(), window.waitForValue_expected, element.attr('id') + " was expected to be " + window.waitForValue_expected );
-      waitOnSetting = 1;
-      start();
-      return;
+    current = element.text();
+    if ( current != window.waitForValue_original) {
+      if( current == ignore) {
+        window.waitForValue_original = current;
+      }
+      else {
+        console.log( "actual = " + current + "      started at = " + window.waitForValue_original );
+        equal( current, window.waitForValue_expected, element.attr('id') + " was expected to be " + window.waitForValue_expected );
+        waitOnSetting = 1;
+        start();
+        return;
+      }
     }
   }
 
   timeout = timeout - delay;
   if( timeout > 0 ) {
-    window.setTimeout( function() { waitForValue(element, timeout) }, delay);
+    window.setTimeout( function() { waitForValue(element, timeout, ignore) }, delay);
   }
   else {
     ok( 0, "Timeout while waiting for "+element.attr('id')+" to change.");

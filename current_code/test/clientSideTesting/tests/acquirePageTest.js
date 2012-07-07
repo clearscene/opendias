@@ -67,59 +67,39 @@
   });
 
   // ------------------------------------------------
-  asyncTest('Scanning 1/5', 2, function() {
-    console.log("2. Running: Scanning 1/5");
+  asyncTest('Scanning 1/4', 2, function() {
+    console.log("2. Running: Scanning 1/4");
 
     equal( $('#status_1').text(), "", "Expecting the status to be blank at the start");
 
     setupWaitForValue( $('#status_1'), "Setting up the scanner" );
     $('#scanButton_1').click();
     waitForValue( $('#status_1'), 3000 );
-
-    stop();
-    setTimeout( function() {
-      start();
-    }, 30);
   });
 
-  // ------------------------------------------------
-  asyncTest('Scanning 2/5', 1, function() {
-    console.log("2. Running: Scanning 2/5");
-
-    setupWaitForValue( $('#status_1'), "Waiting on the database" );
-    waitForValue( $('#status_1'), 3000 );
-  });
 
   // ------------------------------------------------
-  asyncTest('Scanning 3/5', 1, function() {
-    console.log("2. Running: Scanning 3/5");
+  asyncTest('Scanning 2/4', 1, function() {
+    console.log("2. Running: Scanning 2/4");
 
     setupWaitForValue( $('#status_1'), "Scanning in progress" );
-    waitForValue( $('#status_1'), 3000 );
+    waitForValue( $('#status_1'), 3000, "Waiting on the database" );
   });
 
   // ------------------------------------------------
-  asyncTest('Scanning 3a/5', 1, function() {
-    console.log("2. Running: Scanning 3a/5");
-
-    setupWaitForValue( $('#status_1'), "Waiting on the database" );
-    waitForValue( $('#status_1'), 3000 );
-  });
-
-  // ------------------------------------------------
-  asyncTest('Scanning 4/5', 1, function() {
-    console.log("2. Running: Scanning 4/5");
+  asyncTest('Scanning 3/4', 1, function() {
+    console.log("2. Running: Scanning 3/4");
 
     setupWaitForValue( $('#status_1'), "Converting image format" );
-    waitForValue( $('#status_1'), 3000 );
+    waitForValue( $('#status_1'), 3000, "Waiting on the database" );
   });
 
   // ------------------------------------------------
-  asyncTest('Scanning 5/5', 1, function() {
-    console.log("2. Running: Scanning 5/5");
+  asyncTest('Scanning 4/4', 1, function() {
+    console.log("2. Running: Scanning 4/4");
 
     setupWaitForValue( $('#status_1'), "Scan operation complete" );
-    waitForValue( $('#status_1'), 3000 );
+    waitForValue( $('#status_1'), 3000, "Waiting on the database" );
   });
 
 })();
