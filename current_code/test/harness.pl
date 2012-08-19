@@ -22,8 +22,12 @@ my $startCmd=`cat config/startAppCommands`;
 # Read Ops
 my $GENERATE="";
 my $SKIPMEMORY="";
-our ($opt_r, $opt_m, $opt_g, );
-getopts('rmg');
+our ($opt_z, $opt_r, $opt_m, $opt_g, );
+getopts('zrmg');
+
+# An unpublished flag to ensure we're only called from setupRun.sh
+die "You probably wanted to run ./setupRun.sh. Spotted" unless $opt_z;
+
 if( defined $opt_r ) {
   $GENERATE="(GENERATED)"
 }
