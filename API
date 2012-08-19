@@ -94,17 +94,17 @@ getScannerList -> pageRender::getScannerList()
 		    <Devices>
 		      <Device>
 		        <Formats>
-			  format - the format that a scan can be performed in. currently only fixed string 'grey scale'
+              format - the format that a scan can be performed in. currently only fixed string 'grey scale'
 		          ...
-			</Formats>
-			type - sane text that describes the scanning device (eg 'flat bed')
-                        vendor - sane text that names the scanning device
-                        model - sane text that names the scanning device
-			host - text representation of the location of the scanner
-             		name - the machine id for the scanning device
-			default - the default resolution
-			min - the minimum resolution allowed by the scanning decice
-		        max - the maximum resolution allowed by the scanning device
+            </Formats>
+            type - sane text that describes the scanning device (eg 'flat bed')
+            vendor - sane text that names the scanning device
+            model - sane text that names the scanning device
+            host - text representation of the location of the scanner
+            name - the machine id for the scanning device
+            default - the default resolution
+            min - the minimum resolution allowed by the scanning decice
+            max - the maximum resolution allowed by the scanning device
 		      </Device>
 		      ...
 		    </Devices>
@@ -117,12 +117,12 @@ doScan -> pageRender::doScan()
 	Called from: openDias.acquire.js :: ananoumouse()
 	Purpose: Starts a scanning process.
 	Inputs:	action: fixed string "doScan",
-                deviceid: The sane device id, as provided by getScannerList : Response.ScannerList.Devices.Device.name
-                format: The format to use for scannsing, one of getScanningList : Response.ScanningList.Devices.Device.Formats.format
-                pages: The number of pages that make up the document,
-                resolution: The resolution to set the scanner to, between Response.ScannerList.Devices.Device.min and Response.ScannerList.Devices.Device.max,
-                ocr: Flag to indicate if an OCR process should be performed and in what language,
-                pagelength: The length of the page to scan, Percent, in relation to the maximum available by the scanner.
+          deviceid: The sane device id, as provided by getScannerList : Response.ScannerList.Devices.Device.name
+          format: The format to use for scannsing, one of getScanningList : Response.ScanningList.Devices.Device.Formats.format
+          pages: The number of pages that make up the document,
+          resolution: The resolution to set the scanner to, between Response.ScannerList.Devices.Device.min and Response.ScannerList.Devices.Device.max,
+          ocr: Flag to indicate if an OCR process should be performed and in what language,
+          pagelength: The length of the page to scan, Percent, in relation to the maximum available by the scanner.
 	Outputs;
 		<?xml version='1.0' encoding='utf-8'?>
 		</Response>
@@ -137,16 +137,16 @@ docFilter -> pageRender::docFilter
 	Called from: openDias.filter.js :: ananoumouse()
 	Purpose: Get a list of documents that fit a specific set of cryteria
 	Inputs:	action: fixed string 'docFilter'
-                subaction: Get all details or just the count of matching docs ['count','fullList']
-		textSearch: Text that a document must match (title or ocr text)
-                isActionRequired: If 'true' return only records that are marked as 'action required'.
-                startDate: The first date that a document could fit into
-                endDate: The last date that a document could fit into
-                tags: Comma delimetered list of tagnames.
-                page: The number of 'range' offsets to apply before the first returned row.
-                range: The number of records to return in a single request.
-                sortfield*: Order the results by column
-                sortorder: present results in acending/decending order ['0','1']
+          subaction: Get all details or just the count of matching docs ['count','fullList']
+          textSearch: Text that a document must match (title or ocr text)
+          isActionRequired: If 'true' return only records that are marked as 'action required'.
+          startDate: The first date that a document could fit into
+          endDate: The last date that a document could fit into
+          tags: Comma delimetered list of tagnames.
+          page: The number of 'range' offsets to apply before the first returned row.
+          range: The number of records to return in a single request.
+          sortfield*: Order the results by column
+          sortorder: present results in acending/decending order ['0','1']
 	Outputs;
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
@@ -197,7 +197,7 @@ getAudio -> [stump - not currently implemented]
 	Called from: openDias.loadDetails.js :: ananoumouse()
 	Purpose: Get the web accessable filename that contains the read OCR 
 	Inputs:	action: fixed string 'getAudio'
-		docid: the documents id
+          docid: the documents id
 	Outputs;
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
@@ -212,7 +212,7 @@ getDocDetail -> docEditor::getDocDetail
 	Called from: openDias.loadDetails.js :: ananoumouse()
 	Purpose: Get all the current information about a document 
 	Inputs:	action: fixed string 'getDocDetail'
-		docid: the documents id
+          docid: the documents id
 	Outputs;
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
@@ -237,7 +237,7 @@ getDocDetail -> docEditor::getDocDetail
 		    <DocLinks>
 		      <doc>
 		        targetDocid - the docid of the linked doc
-                        targetTitle - the user defined title of the linked doc
+            targetTitle - the user defined title of the linked doc
 		      </doc>
 		      ...
 		    </DocLinks>
@@ -250,9 +250,9 @@ updateDocDetails -> docEditor::updateDocDetails
 	Called from: openDias.saveDetails.js :: ananoumouse()
 	Purpose: Update a documents field with a specific value. 
 	Inputs:	action: fixed string 'updateDocDetails'
-		docid: the documents id
-		kkey: the name of the field that is being updated ['ocrtext','title','docDate','actionrequired','hardcopyKept']
-		vvalue: the new value to set the field to
+          docid: the documents id
+          kkey: the name of the field that is being updated ['ocrtext','title','docDate','actionrequired','hardcopyKept']
+          vvalue: the new value to set the field to
 	Outputs;
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
@@ -266,9 +266,9 @@ moveTag -> docEditor::updateTagLinkage
 	Called from: openDias.saveDetails.js :: ananoumouse()
 	Purpose: Updates links between documents n tags, and document n documents
 	Inputs:	action: fixed string 'moveTag'
-		docid: the documents id
-		tag: the tag that is being (un)linked
-		subaction: flag to indicate if the tag should be added or removed ['addTag','removeTag','addDoc','removeDoc']
+          docid: the documents id
+          tag: the tag that is being (un)linked
+          subaction: flag to indicate if the tag should be added or removed ['addTag','removeTag','addDoc','removeDoc']
 	Outputs;
 		<Response>
 		  </MoveTag>
@@ -281,7 +281,7 @@ deleteDoc -> docEditor::doDelete
 	Called from: openDias.saveDetails.js :: ananoumouse()
 	Purpose: Removes a document from the database and scanned images store.
 	Inputs:	action: fixed string 'deleteDoc'
-		docid: the documents id
+          docid: the documents id
 	Outputs;
 		<Response>
 		  </DeleteDoc>
