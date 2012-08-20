@@ -34,7 +34,7 @@ void createDir_ifRequired(char *);
 void fcopy(char *, char *);
 int max(int, int);
 int min(int, int);
-char *dateHuman(char *, char *, char *, char *);
+char *dateHuman(char *, char *, char *, const char *);
 void conCat(char **, const char *);
 char *getTimeStr();
 char *getTimeStr_iso8601();

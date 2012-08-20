@@ -2,14 +2,6 @@
 ## EDITED THIS DOC? NOW GO UPDATE essesntialcollections.co.uk/opendias_website/todo.shtml ##
 ####################################################################################
 
-Version 0.8
------------
-
-Frontend remembers user options
-
-Implement 'By Username/Password' access controls
-
-TECHNICAL: Make 64-bit
 
 
 Version 0.9
@@ -19,11 +11,15 @@ Print documents
 
 Got a busy signal - then give option to keep polling until it's available.
 
+Implement 'By Username/Password' access controls
+
 Implement 'OCR now' on document detail page.
 
 Package into .deb and .rpm and get included into major repositories
 
 Implement the remainder of the test plan 'current_code/test/regressionTests/testplan'
+
+Frontend remembers user options
 
 
 Version 1.0
@@ -31,12 +27,10 @@ Version 1.0
 
 Turn OCR into a plugin
 
-Add Localization framework to the application;
 
 
-
-Phase 4 (possible ideas)
--------
+After That (possible ideas)
+----------
 
  * Print doc details label (to stick onto doc after scanning)
  * document workflow

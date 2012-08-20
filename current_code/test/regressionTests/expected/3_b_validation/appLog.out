@@ -43,7 +43,7 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: document details
 -date-:-thread-:ERR: Missing manditory post data with key of docid
 -date-:-thread-:INF: Processing request for: getScannerList
--date-:-thread-:INF: SERVER: Sane dispatcher received the command: 'internalGetScannerList' with param of ''
+-date-:-thread-:INF: SERVER: Sane dispatcher received the command: 'internalGetScannerList' with param of 'en'
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:ERR: Missing manditory post data with key of scanprogressid
 -date-:-thread-:INF: Processing request for: Move Tag

@@ -2,6 +2,7 @@
 
 use lib qw( regressionTests regressionTests/lib );
 use Getopt::Std;
+use Time::HiRes qw( gettimeofday tv_interval );
 use standardTests;
 
 $| = 1;
@@ -21,8 +22,12 @@ my $startCmd=`cat config/startAppCommands`;
 # Read Ops
 my $GENERATE="";
 my $SKIPMEMORY="";
-our ($opt_r, $opt_m, $opt_g, );
-getopts('rmg');
+our ($opt_z, $opt_r, $opt_m, $opt_g, );
+getopts('zrmg');
+
+# An unpublished flag to ensure we're only called from setupRun.sh
+die "You probably wanted to run ./setupRun.sh. Spotted" unless $opt_z;
+
 if( defined $opt_r ) {
   $GENERATE="(GENERATED)"
 }
@@ -50,6 +55,7 @@ print OUTPUTINDEX <<EOS;
       <tr>
         <th>Result</th>
         <th>Test</th>
+        <th>Time</th>
         <th colspan=2>Memory</th>
         <th colspan=2>Test Log</th>
         <th colspan=2>App Log</th>
@@ -122,6 +128,7 @@ for my $requested (@runTests) {
     my $MEM_RES="";
     my $TEST_RES="";
     my $APP_RES="";
+    my $testTime = 0;
 
     eval ( "require '$TEST' " );
 
@@ -174,7 +181,9 @@ for my $requested (@runTests) {
       # Run the test
       unless( $RES ) {
         printProgressLine($TEST, "Running");
+        my $t0 = [gettimeofday];
         eval "\$RES = regressionTests::".$TESTCASENAME."::test()";
+        $testTime = sprintf("%.2f", tv_interval( $t0, [gettimeofday]) );
         o_log("Error while running test: $@") if ($@);
         printProgressLine($TEST, "Stopping");
         stopService();
@@ -271,6 +280,7 @@ for my $requested (@runTests) {
     # Output result line
     print OUTPUTINDEX <<EOS;
       <td><a href='./$TESTCASENAME/'>$TESTCASENAME</a></td>
+      <td style='text-align: right'>$testTime</td>
       $MEM_RES
       $TEST_RES
       $APP_RES 

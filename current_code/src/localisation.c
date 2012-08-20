@@ -33,7 +33,33 @@ void locale_init( char *lang ) {
   sll_insert( langList, o_strdup(lang), loadLangList( lang ) );
 }
 
-char *getString( char *phrase, char *lang) {
+void locale_cleanup() {
+  if( langList != NULL ) {
+    struct simpleLinkedList *langPack = NULL;
+    for( langPack = sll_findFirstElement( langList ) ; langPack != NULL ; langPack = sll_getNext(langPack) ) {
+      free(langPack->key); // lang name
+      langPack->key = NULL;
+      struct simpleLinkedList *localisedValues = (struct simpleLinkedList *)langPack->data;
+    
+      if( localisedValues != NULL ) {
+        struct simpleLinkedList *localisedPhrase = NULL;
+        for( localisedPhrase = sll_findFirstElement( localisedValues ) ; localisedPhrase != NULL ; localisedPhrase = sll_getNext(localisedPhrase) ) {
+          free(localisedPhrase->key); // lang name
+          localisedPhrase->key = NULL;
+          if( localisedPhrase->data != NULL ) {
+            free(localisedPhrase->data);
+            localisedPhrase->data = NULL;
+          }
+        }
+        sll_destroy( sll_findFirstElement( localisedValues ) );
+      }
+
+    }
+    sll_destroy( sll_findFirstElement( langList ) );
+  }
+}
+
+const char *getString( char *phrase, char *lang) {
   struct simpleLinkedList *tmp;
   struct simpleLinkedList *keysList;
 
@@ -52,19 +78,20 @@ char *getString( char *phrase, char *lang) {
   if( tmp == NULL || tmp->data == NULL ) {
     if( 0 == strcmp (lang, "en") ) {
       o_log(ERROR, "cannot find result - returning the key instead");
-      return o_printf("--[%s]--", phrase); // cannot find ay translation - just return back the key
+      return phrase; // cannot find ay translation - just return back the key
     }
-    o_log(ERROR, "Cannot find key, trying for english instead");
+    o_log(DEBUGM, "Cannot find key, trying for english instead");
     return getString( phrase, "en" ); // the defaulting lang translation
   }
-  o_log(ERROR, "Found string");
-  return o_strdup((char *)tmp->data); // the translation we found
+  o_log(SQLDEBUG, "Found string");
+  return (char *)tmp->data; // the translation we found
 }
 
 struct simpleLinkedList *loadLangList( char *lang ) {
   struct simpleLinkedList *trList = NULL;
   char *resourceFile = o_printf("%s/opendias/language.resource.%s", PACKAGE_DATA_DIR, lang);
-o_log(ERROR, "loading translation file: %s", resourceFile);
+
+  o_log(DEBUGM, "loading translation file: %s", resourceFile);
   FILE *translations = fopen(resourceFile, "r");
   if( translations != NULL) {
     trList = sll_init();
@@ -73,24 +100,21 @@ o_log(ERROR, "loading translation file: %s", resourceFile);
     while ( getline( &line, &size, translations ) > 0) {
       // Handle commented and blank lines
       chop(line);
-      if( line[0] == '#' || line[0] == NULL ) {
-        //free(line);
-        o_log(ERROR, "Rejecting line: %s", line);
+      if( line[0] == '#' || line[0] == 0 ) {
+        o_log(SQLDEBUG, "Rejecting line: %s", line);
         continue;
       }
       char *pch = strtok(line, "|");
       if (pch != NULL) {
-        o_log(ERROR, "Adding key=%s, value=%s", pch, pch+strlen(pch)+1);
+        o_log(SQLDEBUG, "Adding key=%s, value=%s", pch, pch+strlen(pch)+1);
         sll_insert( trList, o_strdup(pch), o_strdup(pch+strlen(pch)+1) );
       }
-      //free(pch);
-      //free(line);
     }
     if (line != NULL) {
       free(line);
     }
+    fclose( translations );
   }
-  fclose( translations );
   free( resourceFile );
   return trList;
 }

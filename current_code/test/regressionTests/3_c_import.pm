@@ -42,6 +42,7 @@ sub test {
     my $req = POST(
                   $default{__proto} . $default{__domain} . $default{__uri},
                   Content_Type => 'form-data',
+                  'Accept-Language' => 'en',
                   Content => [
                       action => 'uploadfile',
                       uploadfile => ["$details{$type}"],

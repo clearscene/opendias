@@ -1,0 +1,8 @@
+
+1. Make and isntall openDIAS
+
+2. Start openDIAS
+
+3. Deploy the testing files, using ./deploy.sh
+
+4. Send clients to http://host[:port]/opendias/clientTesting.html, eg using 'testswarm'

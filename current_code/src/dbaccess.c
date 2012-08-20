@@ -71,7 +71,7 @@ char *getScanParam(char *scanid, int param_option) {
   }
   free_recordset( rSet );
   free(sql);
-	o_log(DEBUGM,"Leaving getScanParam");
+  o_log(DEBUGM,"Leaving getScanParam");
 
   return vvalue;
 }

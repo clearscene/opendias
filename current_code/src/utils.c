@@ -165,7 +165,7 @@ int min(int a, int b) {
 
 }
 
-char *dateHuman(char *a, char *b, char *c, char *LOCAL_no_date_set) {
+char *dateHuman(char *a, char *b, char *c, const char *LOCAL_no_date_set) {
 
   // This will need to be converted, to use current users 'lang' LOCALE
 

@@ -93,6 +93,7 @@ You need to pre configure the source:
   cd test
   [get setup by following the local README file]
   ./setupRun.sh 
+  [run client side tests test/clientSideTesting/README]
   [refer to ../howto_build_distribute for details on publishing]
 
 -----------------------------------

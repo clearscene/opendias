@@ -37,6 +37,7 @@ enum {
 struct services {
   int pid;
   int log;
+  int locale;
   int db;
   int sane;
   int command;

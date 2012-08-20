@@ -220,8 +220,8 @@ echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP ../src/opendias -c $PWD/config/t
 #######################################
 # Run automated tests
 echo Starting test harness ...
-#echo perl ./harness.pl $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@
-perl ./harness.pl $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@ 2> /dev/null
+#echo perl ./harness.pl -z $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@
+perl ./harness.pl -z $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@ 2> /dev/null
 #######################################
 #######################################
 
