@@ -16,6 +16,6 @@ LOCAL_sane_is_busy = 'The SANE backend is busy serving a request. Unfortunately 
 LOCAL_scan_complete = 'Scan operation complete';
 LOCAL_error_starting_next_page = 'Error signalling the scanner to restart for the next page';
 LOCAL_failed_to_get_list_of_scanners = 'Unable to fetch a list of available scanners';
-LOCAL_unable_to_start_scanning = 'Unable to start the scaning process';
+LOCAL_unable_to_start_scanning = 'Unable to start the scanning process';
 LOCAL_on_host = 'on host';
 LOCAL_x_pages = '%s pages';

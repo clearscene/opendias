@@ -1,0 +1,8 @@
+LOCAL_timeout_talking_to_server = 'Timeout während des Gesprächs mit dem Server';
+LOCAL_error_talking_to_server = 'Fehler beim Gespräch mit dem Server';
+LOCAL_date_format = 'yy/mm/dd';
+LOCAL_odf_doc = 'ODF Dokument';
+LOCAL_scanned_doc = 'Gescannt Dokument';
+LOCAL_pdf_doc = 'PDF Dokument';
+LOCAL_jpeg_img = 'JPEG Bilder';
+LOCAL_unknown = 'unbekannt';

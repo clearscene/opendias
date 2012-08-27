@@ -1,0 +1,8 @@
+LOCAL_anyone_accessing_from = 'Jeder Zugriff von ';
+LOCAL_user_with_user_of = 'User with logon of ';
+LOCAL_will_get_the = 'erhalten die ';
+LOCAL_role = ' rolle';
+LOCAL_delete = 'löschen';
+LOCAL_unable_to_get_access_info = 'Keinen Zugang Informationen zu erhalten';
+LOCAL_anyone_accessing_from = 'Jeder Zugriff von ';
+LOCAL_user_with_logon_of = 'Benutzer mit Anmeldung des ';
