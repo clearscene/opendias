@@ -19,9 +19,9 @@
 #ifndef DOCEDITOR
 #define DOCEDITOR
 
-extern char *getDocDetail (char *);
-extern char *updateDocDetails(char *, char *, char *);
-extern char *updateTagLinkage(char *, char *, char *);
-extern char *doDelete (char *);
+char *getDocDetail (char *, char *);
+char *updateDocDetails(char *, char *, char *);
+char *updateTagLinkage(char *, char *, char *);
+char *doDelete (char *);
 
 #endif /* DOCEDITOR */

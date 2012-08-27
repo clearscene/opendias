@@ -28,10 +28,14 @@
  *                     ---
 */
 
-#include "debug.h"
-#include "simpleLinkedList.h"
+#include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
+
+#include "debug.h"
+
+#include "simpleLinkedList.h"
 
 struct simpleLinkedList *generate_new_element( char *key, void *data ) {
   struct simpleLinkedList *element = malloc( sizeof(struct simpleLinkedList) );
@@ -86,6 +90,7 @@ struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *element, const
     }
     return sll_searchKeys( sll_getNext( element ), key );
   }
+  o_log(SQLDEBUG,"sll_searchKeys key %s was not found ",key);
   return NULL;
 }
 

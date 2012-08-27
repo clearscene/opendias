@@ -1,0 +1,14 @@
+Copying pre defined environment
+Copying default database
+No need for valgrind on this test.
+STARTING app...
+Now ready
+Asked to start a web clinet.
+Starting Web Client
+Fetching page: /acquire.html
+Checking that the page has finished.
+Checking that the page has finished.
+New page has loaded
+Document Detail
+Stopping service
+Waiting for valgrind to finish.

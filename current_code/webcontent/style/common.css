@@ -113,6 +113,17 @@
   #menu li a:hover {
    color: #ddd;
   }
+  #menu li select {
+   background-color: #000;
+   border-color: #000;
+   color: #aaa;
+   font-family: arial;
+  }
+  #menu li select option {
+   background-color: #333;
+   border-color: #444;
+   color: #bbb;
+  }
 
   #body {
    position: relative;
@@ -155,6 +166,13 @@
 
   .alert {
     color: #cc0000;
+  }
+  .warning {
+    border: 1px solid #bbccbb; 
+    background-color: #eeeeff; 
+    margin: 0px 150px 10px 25px; 
+    padding: 0px 15px 5px 15px; 
+    display: none;
   }
 
   /*  ------- Page Elements ------ */
@@ -432,4 +450,17 @@
     display: none; 
     font-size: 2em; 
     padding: 10px;
+  }
+  div.tagsinput span.tag span a {
+    color: #216384;
+    font-family: helvetica;
+    font-size: 13px;
+    font-weight: normal;
+    text-decoration: underline
+  }
+  .clickable {
+    cursor: pointer; cursor: hand;   
+  }
+  .divider {
+    border-top: 1px dotted #888;
   }

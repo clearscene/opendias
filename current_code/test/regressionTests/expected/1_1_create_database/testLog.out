@@ -1,0 +1,8 @@
+STARTING app...
+Now ready
+No need for a web client for this test.
+Correct DB version.
+Diff of generated-to-reference database: 
+
+Stopping service
+Waiting for valgrind to finish.

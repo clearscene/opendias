@@ -1,26 +1,47 @@
-1_1-StartStop-createDB
-1_3-StartStop-loadDB
-1_4-StartStop-loadDBnoPermission
-2_1-MainWindow-display
-2_2-MainWindow-dbDisplay
-2_3-MainWindow-fieldSorting
-2_4-MainWindow-tagFiltering
-2_5-MainWindow-menusCredits
-2_6-MainWindow-docSelectOptions
-2_7-MainWindow-changeDocRoot
-3_1-DocDetails-display
-3_2-DocDetails-populatesFields
-3_3-DocDetails-savesToDB
-3_4-DocDetails-pagination
-3_5-DocDetails-zoomPan
-3_6-DocDetails-delete
-3_7-DocDetails-noEmptyImage
-3_8-DocDetails-loadSeveral
-4_1-AcquireNoScanner-display
-5_1-AcquireScanner-display
-5_2-AcquireScanner-optionsPopulated
-5_3-AcquireScanner-scanProcess
-6_1-AcquireODF-display
-6_2-AcquireODF-importProcess
-7_1-AcquireOCR-ocr
+* 1_1_create_database
+* 1_2_failed_to_create_database
+* 1_3_missing_config_file
+* 1_4_various_kills_are_ignored
+* 1_5_could_not_start_http_service
+  1_6_no_permission_read_create_db
+
+* 3_1_doclist
+* 3_2_doclist_search
+o 3_3_getScannerList (see issue #XXXXX)
+* 3_4_getDocDetails
+* 3_5_updateDocDetails
+* 3_6_moveTag
+o 3_7_deleteDoc (see issue #XXXXX)
+* 3_8_autoComplete
+  3_9_access
+* 3_a_scanning
+  3_b_validation
+
+* 8_1_basic_pages
+* 8_2_doc_detail
+* 8_3_doc_detail_missing
+* 8_4_scan
+
+  8_11-MainWindow-display
+  8_12-MainWindow-dbDisplay
+  8_13-MainWindow-fieldSorting
+  8_14-MainWindow-tagFiltering
+  8_15-MainWindow-menusCredits
+  8_16-MainWindow-docSelectOptions
+  8_17-MainWindow-changeDocRoot
+  8_21-DocDetails-display
+  8_22-DocDetails-populatesFields
+  8_23-DocDetails-savesToDB
+  8_24-DocDetails-pagination
+  8_25-DocDetails-zoomPan
+  8_26-DocDetails-delete
+  8_27-DocDetails-noEmptyImage
+  8_28-DocDetails-loadSeveral
+  8_31-AcquireNoScanner-display
+  8_41-AcquireScanner-display
+  8_42-AcquireScanner-optionsPopulated
+  8_43-AcquireScanner-scanProcess
+  8_51-AcquireODF-display
+  8_52-AcquireODF-importProcess
+  8_61-AcquireOCR-ocr
 

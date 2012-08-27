@@ -1,0 +1,9 @@
+LOCAL_error_while_updating = 'Fehler beim Aktualisieren der Informationen';
+LOCAL_error_while_deleting_doc = 'Ein Fehler ist aufgetreten Löschen Sie das Dokument.';
+LOCAL_sure_to_delete_doc = 'Löschen Sie dieses Dokument. Sind Sie sicher?';
+LOCAL_default_title = 'Neu (untitled) Dokument.';
+LOCAL_default_title_warning = 'Document Title ist immer noch der Standard.';
+LOCAL_default_date = ' - Kein Datum -';
+LOCAL_default_date_warning = 'Dokument Datum ist immer noch der Standard.';
+LOCAL_no_tags_assigned = 'Dokument wurde nicht zugewiesenen Tags';
+LOCAL_doc_incomplete_warning = 'Document Details sind unvollständig';

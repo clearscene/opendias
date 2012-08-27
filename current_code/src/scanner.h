@@ -19,13 +19,15 @@
 #ifndef SCANNER
 #define SCANNER
 
+#include "config.h"
+
 #ifdef CAN_SCAN
-extern void handleSaneErrors(char *, SANE_Status, int);
-extern const char * get_status_string (SANE_Status);
-extern const char * get_action_string (SANE_Action);
-extern void log_option (SANE_Int, const SANE_Option_Descriptor *);
-extern SANE_Status control_option (SANE_Handle, const SANE_Option_Descriptor *, SANE_Int, SANE_Action, void *, int *);
-extern int setDefaultScannerOption(SANE_Handle *, const SANE_Option_Descriptor *, int);
+void handleSaneErrors(char *, SANE_Status, int);
+const char * get_status_string (SANE_Status);
+const char * get_action_string (SANE_Action);
+void log_option (SANE_Int, const SANE_Option_Descriptor *);
+SANE_Status control_option (SANE_Handle, const SANE_Option_Descriptor *, SANE_Int, SANE_Action, void *, int *);
+int setDefaultScannerOption(SANE_Handle *, const SANE_Option_Descriptor *, int);
 #endif /* CAN_SCAN */
 
 #endif /* SCANNER */

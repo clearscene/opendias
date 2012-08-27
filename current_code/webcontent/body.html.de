@@ -1,0 +1,91 @@
+
+<h2>Startseite</h2>
+
+ <div id='home'>
+
+  <div style='float: left; width:570px;'>
+
+  <h3>Willkommen</h3>
+  <p><strong>Willkommen</strong>, um openDias. Die <strong>D</strong>ocument <strong>I</strong>maging <strong>A</strong>rchive <strong>S</strong>ystem.</p>
+  <p>openDias wurde entwickelt, um jedem Haushalt zu bewegen 'papierlosen'. Verwenden Sie es, Korrespondenz zu speichern, dass Sie normale empfangen in gedruckter Form - dh Aussagen, Rechnungen, Briefe, Lohnabrechnungen, etc...</p>
+
+
+  <h3>Key Features</h3>
+  <p>Es gibt eine Reihe von Möglichkeiten, um Ihnen den Überblick über Ihre Dokumente, sobald sie archiviert werden:</p>
+  <ul>
+    <li>OCR (optical character recognition) der Inhalt von Dokumenten, die auf durchsucht werden können;</li>
+    <li>Weisen Sie Dokumente mit mehreren "Tags", wodurch es leichter zu finden und zu Gruppe Dokumente;</li>
+    <li>Suche nach Belegdatum;</li>
+  </ul>
+
+  <p>Außerdem haben wir einige nützliche Features hinzugefügt, während die Sie sehen, oder bearbeiten Sie Ihr Dokument:</p>
+  <ul>
+    <li>Zoom in auf einer gleitenden mehrere Seiten Ansicht Ihres Dokuments;</li>
+    <li>Live-spart zurück in die Datenbank (keine 'sparen Taste');</li>
+  </ul>
+
+  <h3>Architektur</h3>
+  <span style='float: right; width: 146px; padding-left: 6px'>
+    <a href='/opendias/images/opendias.jpg'>
+      <img src='/opendias/images/opendias.jpg' style='width: 130px; border: 1px solid black;' />
+    </a>
+  </span>
+  <p>openDias architektur wurde so konzipiert, dass viele Anwender auf das System zuzugreifen.</p>
+  <ul>
+    <li>Die Anwendung verbindet sich 'SANE' was Ihnen an verschiedene Scan-Geräte zugreifen, sowohl
+      lokal oder über das Netzwerk (siehe SANE Konfigurations-Einstellung für die Anleitung, wie).</li> 
+    <li>Gescannte Bilder und die Haupt-Datenbank auf dem Server gespeichert.</li>
+    <li>Kunden können von jedem Standort aus, die den Server sehen eine Verbindung herstellen können, über einen Standard-Webbrowser.</li>
+    <li>Zugriffskontrolle kann durch den Kunden von Standort "oder" Benutzernamen und Passwort angemeldet 'gesetzt werden.</li>
+  </ul>
+
+  <h3>Coming soon...</h3>
+  <p>Wir sind über das Hinzufügen von mehr <a href='http://opendias.essentialcollections.co.uk/todo.shtml'>features</a> nur so schnell wie wir können.</p> 
+
+	<h3>Bekannte Fehler...</h3>
+	<p>Bekannte Fehler finden <a href="buglist.html">hier</a>.
+	</p>
+
+  <h3>Machen Sie mit und Support.</h3>
+  <p>openDias ist ein OpenSource Projekt, das es gibt mehrere Möglichkeiten zu helfen bedeutet. Wir freuen uns über
+    alles, was Sie tun können.</p>
+    <div class='row'>
+      <div style='float: left; width: 23%'>
+        <strong>Test/Feedback</strong>
+        <p>Wir freuen uns immer, von jedem, der opendias verwendet hat zu hören. Sagen Sie uns <a href='https://groups.google.com/forum/#!forum/opendias' target='_blank'>was Sie</a>, gut oder schlecht.</p>
+        <p>Übernehmen keinerlei <a href='http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40' target='_blank'>Ideen / Anregungen?</a> oder wollen Abstimmung über die aktuelle Liste der Ideen.</li>
+      </div>
+      <div style='float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;'>
+        <strong>Veröffentlichen Sie</strong>
+        <p>Wir möchten möglichst viele Menschen zu opendias wie möglich zu nutzen, und das bedeutet, dass man möglichst viele Menschen davon zu hören wie möglich. Also, los, das Wort zu verbreiten.</p>
+        <p>Wir versuchen, die <a href='http://opendias.blogspot.com/'>opendias blog</a> bis-2-Termin so weit wie möglich.</p>
+      </div>
+      <div style='float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;'>
+        <strong>Hackers Benötigte</strong>
+        <p>Wenn Sie verfügbare Zeit haben, in Kontakt zu treten, gibt es mehrere Projekte aufgereiht.</p>
+        <p>Oonst fühlen Sie sich frei, um einen Patch (wie <a href='https://github.com/clearscene/opendias'>GitHub</a>) zu verbessern / fix die aktuelle Systemzeit.</p>
+      </div>
+      <div style='float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;'>
+        <strong>Spenden</strong>
+        <p>Jede Spende wird dankbar angenommen, und werden verwendet, um Hardware zu kaufen, um gegen. testen.</p>
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post"  style='float: left'>
+          <input type="hidden" name="cmd" value="_donations" />
+          <input type="hidden" name="business" value="booth@clearscene.net" />
+          <input type="hidden" name="item_name" value="openDIAS Project" />
+          <input type="hidden" name="no_shipping" value="0" />
+          <input type="hidden" name="no_note" value="1" />
+          <input type="hidden" name="currency_code" value="GBP" />
+          <input type="hidden" name="tax" value="0" />
+          <input type="hidden" name="lc" value="GB" />
+          <input type="hidden" name="bn" value="PP-DonationsBF" />
+          <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online." />
+          <img alt="" border="0" src="https://www.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1" />
+        </form>
+        <p>Vielen Dank an alle, die dies bereits.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style='float: right; width:227px; padding: 3px; border: 1px solid black'><img src='/opendias/images/cabinet.jpg' style='border: 1px solid black' /></div>
+
+ </div>

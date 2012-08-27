@@ -20,6 +20,7 @@
 #define MAIN
 
 #define DEFAULT_CONF_FILE "/etc/opendias/opendias.conf"
+#define QUEUE_LENGTH 3
 
 int DB_VERSION;
 char *BASE_DIR;
@@ -33,6 +34,16 @@ enum {
   JPG_FILETYPE,
 };
 
-extern void server_shutdown(void);
+struct services {
+  int pid;
+  int log;
+  int locale;
+  int db;
+  int sane;
+  int command;
+  int httpd;
+};
+
+void server_shutdown(void);
 
 #endif /* MAIN */

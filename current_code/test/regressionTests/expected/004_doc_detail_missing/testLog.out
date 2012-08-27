@@ -1,9 +1,0 @@
-Copying pre defined environment
-STARTING app...
-Now ready
-Starting Web Client
-Fetching page: /docDetail.html?docid=999
-Checking that the page has finished.
-Correctly informed - no such doc
-Stopping service
-Waiting for valgrind to finish.

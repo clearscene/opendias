@@ -1,3 +1,4 @@
+#!/bin/bash
 
 usage() {
   echo "Usage: [-h] [-r] [-m] [-s] [-c] [<tests>]"
@@ -87,12 +88,6 @@ if [ "$?" -eq "0" ]; then
 fi
 rm -f /var/log/opendias/opendias.log
 
-grep -q "^test" /etc/sane.d/dll.conf
-if [ "$?" -ne "0" ]; then
-  echo enable sane testing by commenting in "test" in "/etc/sane.d/dll.conf"
-  exit
-fi
-
 #
 # Cleanup
 #
@@ -107,8 +102,35 @@ if [ "$NOBUILD" == "" ]; then
   #
   echo Cleaning ...
   cd ../
-  make clean > test/results/buildLog.out
+  make clean &> test/results/buildLog2.out
   cd test
+
+  which apt-rdepends > /dev/null
+  if [ "$?" -ne "0" ]; then
+    echo Could not determine the installed packages. If you\'re on debian based system, install apt-rdepends
+  else
+    echo Recording current installed package versions off all dependencies
+    dpkg -l `apt-rdepends build-essential libsqlite3-dev libsane-dev libmicrohttpd-dev uuid-dev libleptonica-dev libpoppler-cpp-dev libtesseract-dev libxml2-dev libzzip-dev libarchive-dev 2> /dev/null | grep -v "^ " | sort` &> results/buildLog2.out
+    # unfortunatly bash cannot support "&>>" - yet!
+    cat results/buildLog2.out >> results/buildLog.out
+    rm results/buildLog2.out
+  fi
+
+  echo Performing code analysis ...
+  cd ../
+  cppcheck --verbose --enable=all --error-exitcode=1 src/ &> test/results/buildLog2.out
+  if [ "$?" -ne "0" ]; then
+    echo "Code analysis found a problem. Check the buildLog.out for details."
+    cd test
+    # unfortunatly bash cannot support "&>>" - yet!
+    cat results/buildLog2.out >> results/buildLog.out
+    rm results/buildLog2.out
+    exit
+  fi
+  cd test
+  # unfortunatly bash cannot support "&>>" - yet!
+  cat results/buildLog2.out >> results/buildLog.out
+  rm results/buildLog2.out
 
   # if the file is here, then last time configure was run was in this script
   # so no need to re-do it.
@@ -116,10 +138,10 @@ if [ "$NOBUILD" == "" ]; then
   cd ../
   if [ "$SKIPCOVERAGE" == "-c" ]; then
     echo " (without coverage) ..."
-    ./configure -C CFLAGS=' -g3 -O0 ' &> test/results/buildLog2.out
+    ./configure --enable-werror -C CFLAGS=' -g -O ' &> test/results/buildLog2.out
   else
     echo " (with coverage) ..."
-    ./configure -C CFLAGS=' -g3 -O0 --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
+    ./configure --enable-werror -C CFLAGS=' -g -O --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
   fi
   cd test
   # unfortunatly bash cannot support "&>>" - yet!
@@ -130,6 +152,14 @@ if [ "$NOBUILD" == "" ]; then
   echo Making ...
   cd ../
   make &> test/results/buildLog2.out
+  if [ "$?" -ne "0" ]; then
+    echo "Compile stage failed. Check the buildLog.out for details."
+    cd test
+    # unfortunatly bash cannot support "&>>" - yet!
+    cat results/buildLog2.out >> results/buildLog.out
+    rm results/buildLog2.out
+    exit
+  fi
   cd test
   # unfortunatly bash cannot support "&>>" - yet!
   cat results/buildLog2.out >> results/buildLog.out
@@ -164,13 +194,21 @@ if [ "$SKIPMEMORY" == "" ]; then
       done
     fi
   fi
-  VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=results/resultsFiles/valgrind.out --show-below-main=yes --track-origins=yes --track-fds=yes "
+  VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=results/resultsFiles/valgrind.out --show-below-main=yes --track-origins=yes --track-fds=yes --show-reachable=yes "
   # "-v --trace-children=yes "
   GENSUPP="--gen-suppressions=all "
   VALGRIND="valgrind "
 #else
 #  VALGRIND="strace "
 fi
+
+
+#
+# Use testing sane config (so testers do not have to update their environment)
+#
+mkdir -p /tmp/opendiassaneconfig
+cp config/sane/* /tmp/opendiassaneconfig/
+export SANE_CONFIG_DIR=/tmp/opendiassaneconfig/
 
 
 PWD=`pwd`
@@ -182,8 +220,8 @@ echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP ../src/opendias -c $PWD/config/t
 #######################################
 # Run automated tests
 echo Starting test harness ...
-echo perl ./harness.pl $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@
-perl ./harness.pl $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@ 2> /dev/null
+#echo perl ./harness.pl -z $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@
+perl ./harness.pl -z $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@ 2> /dev/null
 #######################################
 #######################################
 

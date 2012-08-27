@@ -36,15 +36,19 @@ openDias - Document Imaging Archive System
 
   2.2.1 For scanning
     sane
-    freeimage
+    leptonica
 
   2.2.2 For OCR
     tesseract-ocr
+    leptonica
 
   2.2.3 For ODF import
     xml2
     zzip
     archive
+
+  2.2.4 For PDF import
+    poppler-cpp
 
 2.3 Short cut
 -------------
@@ -52,8 +56,8 @@ openDias - Document Imaging Archive System
 On, Debian or Ubuntu, you can do this by running:
 
   sudo apt-get install build-essential libsqlite3-dev libsane-dev \
-    libmicrohttpd-dev uuid-dev libfreeimage-dev \
-    tesseract-ocr-dev libxml2-dev libzzip-dev libarchive-dev
+    libmicrohttpd-dev uuid-dev libleptonica-dev libpoppler-cpp-dev \
+    libtesseract-dev libxml2-dev libzzip-dev libarchive-dev
 
 On, RedHat or Fedora, you can do this by running:
 
@@ -77,22 +81,20 @@ You can build and install by issuing the following commands:
 
 3.2 As a developer
 ------------------
-If you downloaded the source from, the GIT tree at sf.net.
+If you downloaded the source from, the GIT tree at GitHub.
 You need to pre configure the source:
 
-  [ensure the you have the GNU auto* tools installed]
-  autoreconf -v
-  automake --add-missing
-  autoreconf -v
-
-before running:
-
+  install autoconf tools
+  cd current_code
+  autoreconf -iv
   ./configure -C
   make
   make install
   cd test
   [get setup by following the local README file]
-  ./setupRun.sh  
+  ./setupRun.sh 
+  [run client side tests test/clientSideTesting/README]
+  [refer to ../howto_build_distribute for details on publishing]
 
 -----------------------------------
 
@@ -120,4 +122,5 @@ or use a forwarding proxy (eg Apache) to remove the port number. eg:
 to be able to point a web browser at:
 
   http://myproxyServer.com/opendias
+
 

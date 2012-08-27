@@ -2,6 +2,7 @@
 
 use lib qw( regressionTests regressionTests/lib );
 use Getopt::Std;
+use Time::HiRes qw( gettimeofday tv_interval );
 use standardTests;
 
 $| = 1;
@@ -21,8 +22,12 @@ my $startCmd=`cat config/startAppCommands`;
 # Read Ops
 my $GENERATE="";
 my $SKIPMEMORY="";
-our ($opt_r, $opt_m, $opt_g, );
-getopts('rmg');
+our ($opt_z, $opt_r, $opt_m, $opt_g, );
+getopts('zrmg');
+
+# An unpublished flag to ensure we're only called from setupRun.sh
+die "You probably wanted to run ./setupRun.sh. Spotted" unless $opt_z;
+
 if( defined $opt_r ) {
   $GENERATE="(GENERATED)"
 }
@@ -50,6 +55,7 @@ print OUTPUTINDEX <<EOS;
       <tr>
         <th>Result</th>
         <th>Test</th>
+        <th>Time</th>
         <th colspan=2>Memory</th>
         <th colspan=2>Test Log</th>
         <th colspan=2>App Log</th>
@@ -62,10 +68,12 @@ EOS
 ####################################
 # Format the request, add a generic "all", if nothing was given.
 @runTests = @ARGV;
-push(@runTests, "'*'") unless @runTests;
+push(@runTests, "''") unless @runTests;
 
 # Loop over each request.
 for my $requested (@runTests) {
+
+  $requested .= '*'; # So we only have to specify the prefix
 
   # Find all tests that match this request (eg. "1*", given "1_1_General" and "1_2_GeneralFiles")
   my $found = "find $TESTPATH -maxdepth 1 -type f -name $requested.pm | sort";
@@ -76,6 +84,9 @@ for my $requested (@runTests) {
 
     # Create results area and cleanup any old test results
     my ($TESTCASENAME) = $TEST =~ /$TESTPATH\/(.*)\.pm/;
+
+    $standardTests::testpath = $TESTPATH;
+    $standardTests::testcasename = $TESTCASENAME;
 
     system("rm -rf $outputDir/$TESTCASENAME/*");
     system("rm -rf /tmp/opendiastest");
@@ -93,6 +104,11 @@ for my $requested (@runTests) {
       if( -d "$TESTPATH/inputs/$TESTCASENAME/homeDir" ) {
         o_log("Copying pre defined environment");
         system("cp -r $TESTPATH/inputs/$TESTCASENAME/homeDir/* /tmp/opendiastest/");
+      }
+      if( -e "/tmp/opendiastest/DEFAULTDB" ) {
+        o_log("Copying default database");
+        system("cp -r config/defaultdatabase.sqlite3 /tmp/opendiastest/openDIAS.sqlite3");
+        system("rm -f /tmp/opendiastest/DEFAULTDB");
       }
       opendir(DIR, "$TESTPATH/inputs/$TESTCASENAME/" ) or die "Cannot read SQL directory $TESTPATH/inputs/$TESTCASENAME/, because: $!\n";
       while( ($filename = readdir(DIR))) {
@@ -112,12 +128,13 @@ for my $requested (@runTests) {
     my $MEM_RES="";
     my $TEST_RES="";
     my $APP_RES="";
+    my $testTime = 0;
 
     eval ( "require '$TEST' " );
 
     if($@) {
 
-      printProgressLine($TEST, "Crashed!");
+      printProgressLine($TEST, "Crashed!\n");
       print OUTPUTINDEX "<tr class='fail'><td>CRASH</td>";
       $TEST_RES="<td colspan=6>$@</td>";
       $failCount++;
@@ -126,17 +143,47 @@ for my $requested (@runTests) {
 
     else {
 
-      printProgressLine($TEST, "Starting service");
-      $RES = 1 unless startService($startCmd, "regressionTests::".$TESTCASENAME."::updateStartCommand");
+      my $startCommand = $startCmd;
 
-      unless( $RES ) {
-        printProgressLine($TEST,  "Starting client");
-        $RES = 1 unless setupClient($opt_g);
+      my $testProfile = eval("regressionTests::".$TESTCASENAME."::testProfile();");
+
+      if( $testProfile->{updateStartCommand} ) {
+        eval "regressionTests::${TESTCASENAME}::".$testProfile->{updateStartCommand}."(\\\$startCommand)";
       }
 
+
+      # Start opendias
+      if( $testProfile->{valgrind} && $testProfile->{valgrind} == 1 ) {
+        printProgressLine($TEST, "Starting service (valgrind)");
+      }
+      else {
+        printProgressLine($TEST, "Starting service");
+        $startCommand =~ s{^.*\.\./src/opendias}
+                      {../src/opendias}xms;
+        o_log("No need for valgrind on this test.");
+      }
+      $RES = 1 unless startService( $startCommand, $testProfile->{startTimeout} );
+
+
+      # Start a web client
+      unless( $RES ) {
+        printProgressLine($TEST,  "Starting client");
+        if ( $testProfile->{client} && $testProfile->{client} == 1 ) {
+          o_log("Asked to start a web clinet.");
+          $RES = 1 unless setupClient($opt_g);
+        }
+        else {
+          o_log("No need for a web client for this test.");
+        }
+      }
+
+
+      # Run the test
       unless( $RES ) {
         printProgressLine($TEST, "Running");
+        my $t0 = [gettimeofday];
         eval "\$RES = regressionTests::".$TESTCASENAME."::test()";
+        $testTime = sprintf("%.2f", tv_interval( $t0, [gettimeofday]) );
         o_log("Error while running test: $@") if ($@);
         printProgressLine($TEST, "Stopping");
         stopService();
@@ -146,24 +193,29 @@ for my $requested (@runTests) {
       ############
       # memory log - output from valgrind
       unless( length $SKIPMEMORY ) {
-        # copy and parse out changeable content
-        system("mv $outputDir/valgrind.out $outputDir/$TESTCASENAME/valgrind.out");
-        system("sed -f config/valgrindUnify.sed < $outputDir/$TESTCASENAME/valgrind.out > $outputDir/$TESTCASENAME/valgrind4Compare.out");
+        if( -f "$outputDir/valgrind.out" ) {
+          # copy and parse out changeable content
+          system("mv $outputDir/valgrind.out $outputDir/$TESTCASENAME/valgrind.out");
+          system("sed -f config/valgrindUnify.sed < $outputDir/$TESTCASENAME/valgrind.out > $outputDir/$TESTCASENAME/valgrind4Compare.out");
 
-        # Make this the expected, if required
-        if( length $GENERATE ) {
-          system("cp $outputDir/$TESTCASENAME/valgrind4Compare.out $TESTPATH/expected/$TESTCASENAME/valgrind.out");
-        }
+          # Make this the expected, if required
+          if( length $GENERATE ) {
+            system("cp $outputDir/$TESTCASENAME/valgrind4Compare.out $TESTPATH/expected/$TESTCASENAME/valgrind.out");
+          }
 
-        $MEM_RES="<td class='none'><a href='./$TESTCASENAME/valgrind.out'>actual</a></td>";
-        system("diff -ydN $TESTPATH/expected/$TESTCASENAME/valgrind.out $outputDir/$TESTCASENAME/valgrind4Compare.out > $outputDir/$TESTCASENAME/valgrindDiff.out");
-        if($? >> 8 == 0) {
-          system("rm $outputDir/$TESTCASENAME/valgrindDiff.out");
-          $MEM_RES .= "<td class='ok'>OK</td>";
+          $MEM_RES="<td class='none'><a href='./$TESTCASENAME/valgrind.out'>actual</a></td>";
+          system("diff -ydN $TESTPATH/expected/$TESTCASENAME/valgrind.out $outputDir/$TESTCASENAME/valgrind4Compare.out > $outputDir/$TESTCASENAME/valgrindDiff.out");
+          if($? >> 8 == 0) {
+            system("rm $outputDir/$TESTCASENAME/valgrindDiff.out");
+            $MEM_RES .= "<td class='ok'>OK</td>";
+          }
+          else {
+            $MEM_RES .= "<td><a href='./$TESTCASENAME/valgrindDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../$TESTPATH/expected/$TESTCASENAME/valgrind.out'>expected</a></td>";
+            $RES=1
+          }
         }
         else {
-          $MEM_RES .= "<td><a href='./$TESTCASENAME/valgrindDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../$TESTPATH/expected/$TESTCASENAME/valgrind.out'>expected</a></td>";
-          $RES=1
+          $MEM_RES="<td colspan=2 class='none'>-- NA --</td>"
         }
       }
       else {
@@ -172,11 +224,12 @@ for my $requested (@runTests) {
 
       ##########
       # test log - output from the testing harness
+      system("sed -f config/testLogUnify.sed < $outputDir/$TESTCASENAME/testLog.out > $outputDir/$TESTCASENAME/testLog4Compare.out");
       if( length $GENERATE ) {
-        system("cp $outputDir/$TESTCASENAME/testLog.out $TESTPATH/expected/$TESTCASENAME/testLog.out");
+        system("cp $outputDir/$TESTCASENAME/testLog4Compare.out $TESTPATH/expected/$TESTCASENAME/testLog.out");
       }
       $TEST_RES="<td class='none'><a href='./$TESTCASENAME/testLog.out'>actual</a></td>";
-      system("diff -ydN $TESTPATH/expected/$TESTCASENAME/testLog.out $outputDir/$TESTCASENAME/testLog.out > $outputDir/$TESTCASENAME/testLogDiff.out");
+      system("diff -ydN $TESTPATH/expected/$TESTCASENAME/testLog.out $outputDir/$TESTCASENAME/testLog4Compare.out > $outputDir/$TESTCASENAME/testLogDiff.out");
       if( $? >> 8 == 0 ) {
         system("rm $outputDir/$TESTCASENAME/testLogDiff.out");
         $TEST_RES .= "<td class='ok'>OK</td>";
@@ -227,6 +280,7 @@ for my $requested (@runTests) {
     # Output result line
     print OUTPUTINDEX <<EOS;
       <td><a href='./$TESTCASENAME/'>$TESTCASENAME</a></td>
+      <td style='text-align: right'>$testTime</td>
       $MEM_RES
       $TEST_RES
       $APP_RES 

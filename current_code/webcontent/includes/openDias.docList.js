@@ -28,6 +28,7 @@ $(document).ready(function() {
       source: function( request, response ) {
         $.ajax({
           url: "/opendias/dynamic",
+          timeout: 10000,
           dataType: "json",
           type: "POST",
           data: {
@@ -42,7 +43,14 @@ $(document).ready(function() {
                 value: item.tag
               }
             }));
-          }
+          },
+          error: function( x, t, m ) {
+            if(t=="timeout") {
+              alert("[l001] " + LOCAL_timeout_talking_to_server );
+            } else {
+              alert("[l001] " + LOCAL_error_talking_to_server + ": "+t+"\n"+m);
+            }
+          },
         });
       },
       minLength: 1, // because most tags are so short - and there are not that many tags,
@@ -147,6 +155,7 @@ function loadListData(currentPage) {
   $('#loading').css({ display: 'block' });
 
   $.ajax({ url: "dynamic",
+         timeout: 10000,
          dataType: "xml",
          data: {  action: "docFilter",
                   subaction: "fullList",
@@ -192,7 +201,14 @@ function loadListData(currentPage) {
               $('#loading').css({ display: 'none' });
               check_result_block = 0;
             }
-         }
+         },
+         error: function( x, t, m ) {
+           if(t=="timeout") {
+             alert("[l002] " + LOCAL_timeout_talking_to_server );
+           } else {
+             alert("[l002] " + LOCAL_error_talking_to_server + ": "+t+"\n"+m);
+           }
+         },
        });
   return 1;
 }
@@ -206,6 +222,7 @@ function processData( in_data, thispage ){
     // Gather data
     var docid = $(rw).find('docid').text();
     var actionrequired = $(rw).find('actionrequired').text();
+    var hardcopyKept = $(rw).find('hardcopyKept').text();
     var title = $(rw).find('title').text();
     var type = $(rw).find('type').text();
     var date = $(rw).find('date').text();

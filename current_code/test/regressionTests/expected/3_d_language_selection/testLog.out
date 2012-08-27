@@ -1,0 +1,778 @@
+Copying pre defined environment
+Copying default database
+STARTING app...
+Now ready
+No need for a web client for this test.
+Sending request = 
+No language indication = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <title>openDias</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.language.js"></script>
+
+  <!--[if lt IE 7]>
+  <meta http-equiv="X-UA-Compatible" content="IE=8" />
+  <link rel="stylesheet" href="/opendias/style/ieFix.css" type="text/css" />
+  <![endif]-->
+
+ </head>
+
+<body>
+<div id=\'getdown\'>
+
+  <div id=\'header\'>
+    <div class="container">
+      <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
+    </div>
+  </div>
+
+  <div id=\'menu\'>
+    <div class="container">
+      <ul>
+        <li><a id=\'homeLink\' href=\'/opendias/\'>Home</a></li>
+        <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
+        <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
+        <li><a id=\'accessLink\' href=\'/opendias/accessControls.html\'>Access Controls</a></li>
+        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
+        <li><select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+            </select></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id=\'body\'>
+    <div class="container">
+
+
+<h2>Home</h2>
+
+ <div id=\'home\'>
+
+  <div style=\'float: left; width:570px;\'>
+
+  <h3>Welcome</h3>
+  <p><strong>Welcome</strong> to openDias. The <strong>D</strong>ocument <strong>I</strong>maging <strong>A</strong>rchive <strong>S</strong>ystem.</p>
+  <p>openDias has been developed to help every household move \'paperless\'. Use it to store correspondence that you would normal receive in a paper format - eg Statements, Bills, Letters, Pay Slips, etc...</p>
+
+
+  <h3>Key Features</h3>
+  <p>There are a number of ways to help you keep track of your documents once they are archived:</p>
+  <ul>
+    <li>OCR (optical character recognition) of the document contents, that can be searched on;</li>
+    <li>Assign documents with multiple \'Tags\', making it easier to find and group documents;</li>
+    <li>Search by document date;</li>
+  </ul>
+
+  <p>Also, we have added some useful features while you\'re viewing or editing your document:</p>
+  <ul>
+    <li>Zoom in on a sliding multiple pages view of your document;</li>
+    <li>Live saves back to the database (no \'save button\');</li>
+  </ul>
+
+  <h3>Architecture</h3>
+  <span style=\'float: right; width: 146px; padding-left: 6px\'>
+    <a href=\'/opendias/images/opendias.jpg\'>
+      <img src=\'/opendias/images/opendias.jpg\' style=\'width: 130px; border: 1px solid black;\' />
+    </a>
+  </span>
+  <p>The openDias architecture has been designed to allow many users to access the system.</p>
+  <ul>
+    <li>The application connects to \'SANE\' which gives you access to various scanning devices, both 
+      locally or via the network (see SANE config setting for instructions how).</li>
+    <li>Scanned images and the main database are stored on the server.</li>
+    <li>Clients can connect from any location that can see the server, using a standard web browser.</li>
+    <li>Access controls can be set up by \'clients location\' or \'traditional username and password\'.</li>
+  </ul>
+
+  <h3>Coming soon...</h3>
+  <p>We are planning on adding more <a href=\'http://opendias.essentialcollections.co.uk/todo.shtml\'>features</a> just as soon as we can.</p> 
+
+	<h3>Known Bugs...</h3>
+	<p>Known bugs can be found <a href="buglist.html">here</a>.
+	</p>
+
+  <h3>Get involved and Support.</h3>
+  <p>openDias is an opensource project, which means there are several ways you can help. We appreciate
+    anything you can do.</p>
+    <div class=\'row\'>
+      <div style=\'float: left; width: 23%\'>
+        <strong>Test/Feedback</strong>
+        <p>We are always happy to hear from anyone who has used opendias. Tell us <a href=\'https://groups.google.com/forum/#!forum/opendias\' target=\'_blank\'>what you think</a>, good or bad.</p>
+        <p>Have any <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>ideas/ suggestions?</a> or want to vote on the current list of ideas.</li>
+      </div>
+      <div style=\'float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Publicise</strong>
+        <p>We want as many people to use opendias as possible, and that means getting as many people to hear about it as possible. So, go, spread the word.</p>
+        <p>We try to keep the <a href=\'http://opendias.blogspot.com/\'>opendias blog</a> up-2-date as much as possible.</p>
+      </div>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Hackers Needed</strong>
+        <p>If you have available time, get in contact, there are several projects lined up.</p>
+        <p>Otherwise, feel free to submit a patch (as <a href=\'https://github.com/clearscene/opendias\'>GitHub</a>) to improve/fix the current system.</p>
+      </div>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Donate</strong>
+        <p>Any donation are gratefully received, and are used to buy hardware to test against.</p>
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post"  style=\'float: left\'>
+          <input type="hidden" name="cmd" value="_donations" />
+          <input type="hidden" name="business" value="booth@clearscene.net" />
+          <input type="hidden" name="item_name" value="openDIAS Project" />
+          <input type="hidden" name="no_shipping" value="0" />
+          <input type="hidden" name="no_note" value="1" />
+          <input type="hidden" name="currency_code" value="GBP" />
+          <input type="hidden" name="tax" value="0" />
+          <input type="hidden" name="lc" value="GB" />
+          <input type="hidden" name="bn" value="PP-DonationsBF" />
+          <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online." />
+          <img alt="" border="0" src="https://www.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1" />
+        </form>
+        <p>Thank you to everyone who has done so already.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style=\'float: right; width:227px; padding: 3px; border: 1px solid black\'><img src=\'/opendias/images/cabinet.jpg\' style=\'border: 1px solid black\' /></div>
+
+ </div>
+
+    </div>
+  </div>
+
+  <div id=\'footerpadding\'></div>
+
+  <div id=\'footer\'>
+      <p>Copyright Clearscene Ltd 2010</p>
+  </div>
+
+</div>
+</body>
+</html>
+';
+
+Sending request = 
+header says en = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <title>openDias</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.language.js"></script>
+
+  <!--[if lt IE 7]>
+  <meta http-equiv="X-UA-Compatible" content="IE=8" />
+  <link rel="stylesheet" href="/opendias/style/ieFix.css" type="text/css" />
+  <![endif]-->
+
+ </head>
+
+<body>
+<div id=\'getdown\'>
+
+  <div id=\'header\'>
+    <div class="container">
+      <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
+    </div>
+  </div>
+
+  <div id=\'menu\'>
+    <div class="container">
+      <ul>
+        <li><a id=\'homeLink\' href=\'/opendias/\'>Home</a></li>
+        <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
+        <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
+        <li><a id=\'accessLink\' href=\'/opendias/accessControls.html\'>Access Controls</a></li>
+        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
+        <li><select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+            </select></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id=\'body\'>
+    <div class="container">
+
+
+<h2>Home</h2>
+
+ <div id=\'home\'>
+
+  <div style=\'float: left; width:570px;\'>
+
+  <h3>Welcome</h3>
+  <p><strong>Welcome</strong> to openDias. The <strong>D</strong>ocument <strong>I</strong>maging <strong>A</strong>rchive <strong>S</strong>ystem.</p>
+  <p>openDias has been developed to help every household move \'paperless\'. Use it to store correspondence that you would normal receive in a paper format - eg Statements, Bills, Letters, Pay Slips, etc...</p>
+
+
+  <h3>Key Features</h3>
+  <p>There are a number of ways to help you keep track of your documents once they are archived:</p>
+  <ul>
+    <li>OCR (optical character recognition) of the document contents, that can be searched on;</li>
+    <li>Assign documents with multiple \'Tags\', making it easier to find and group documents;</li>
+    <li>Search by document date;</li>
+  </ul>
+
+  <p>Also, we have added some useful features while you\'re viewing or editing your document:</p>
+  <ul>
+    <li>Zoom in on a sliding multiple pages view of your document;</li>
+    <li>Live saves back to the database (no \'save button\');</li>
+  </ul>
+
+  <h3>Architecture</h3>
+  <span style=\'float: right; width: 146px; padding-left: 6px\'>
+    <a href=\'/opendias/images/opendias.jpg\'>
+      <img src=\'/opendias/images/opendias.jpg\' style=\'width: 130px; border: 1px solid black;\' />
+    </a>
+  </span>
+  <p>The openDias architecture has been designed to allow many users to access the system.</p>
+  <ul>
+    <li>The application connects to \'SANE\' which gives you access to various scanning devices, both 
+      locally or via the network (see SANE config setting for instructions how).</li>
+    <li>Scanned images and the main database are stored on the server.</li>
+    <li>Clients can connect from any location that can see the server, using a standard web browser.</li>
+    <li>Access controls can be set up by \'clients location\' or \'traditional username and password\'.</li>
+  </ul>
+
+  <h3>Coming soon...</h3>
+  <p>We are planning on adding more <a href=\'http://opendias.essentialcollections.co.uk/todo.shtml\'>features</a> just as soon as we can.</p> 
+
+	<h3>Known Bugs...</h3>
+	<p>Known bugs can be found <a href="buglist.html">here</a>.
+	</p>
+
+  <h3>Get involved and Support.</h3>
+  <p>openDias is an opensource project, which means there are several ways you can help. We appreciate
+    anything you can do.</p>
+    <div class=\'row\'>
+      <div style=\'float: left; width: 23%\'>
+        <strong>Test/Feedback</strong>
+        <p>We are always happy to hear from anyone who has used opendias. Tell us <a href=\'https://groups.google.com/forum/#!forum/opendias\' target=\'_blank\'>what you think</a>, good or bad.</p>
+        <p>Have any <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>ideas/ suggestions?</a> or want to vote on the current list of ideas.</li>
+      </div>
+      <div style=\'float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Publicise</strong>
+        <p>We want as many people to use opendias as possible, and that means getting as many people to hear about it as possible. So, go, spread the word.</p>
+        <p>We try to keep the <a href=\'http://opendias.blogspot.com/\'>opendias blog</a> up-2-date as much as possible.</p>
+      </div>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Hackers Needed</strong>
+        <p>If you have available time, get in contact, there are several projects lined up.</p>
+        <p>Otherwise, feel free to submit a patch (as <a href=\'https://github.com/clearscene/opendias\'>GitHub</a>) to improve/fix the current system.</p>
+      </div>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Donate</strong>
+        <p>Any donation are gratefully received, and are used to buy hardware to test against.</p>
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post"  style=\'float: left\'>
+          <input type="hidden" name="cmd" value="_donations" />
+          <input type="hidden" name="business" value="booth@clearscene.net" />
+          <input type="hidden" name="item_name" value="openDIAS Project" />
+          <input type="hidden" name="no_shipping" value="0" />
+          <input type="hidden" name="no_note" value="1" />
+          <input type="hidden" name="currency_code" value="GBP" />
+          <input type="hidden" name="tax" value="0" />
+          <input type="hidden" name="lc" value="GB" />
+          <input type="hidden" name="bn" value="PP-DonationsBF" />
+          <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online." />
+          <img alt="" border="0" src="https://www.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1" />
+        </form>
+        <p>Thank you to everyone who has done so already.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style=\'float: right; width:227px; padding: 3px; border: 1px solid black\'><img src=\'/opendias/images/cabinet.jpg\' style=\'border: 1px solid black\' /></div>
+
+ </div>
+
+    </div>
+  </div>
+
+  <div id=\'footerpadding\'></div>
+
+  <div id=\'footer\'>
+      <p>Copyright Clearscene Ltd 2010</p>
+  </div>
+
+</div>
+</body>
+</html>
+';
+
+Sending request = 
+header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+ <head>
+  <title>openDias</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.language.js"></script>
+
+  <!--[if lt IE 7]>
+  <meta http-equiv="X-UA-Compatible" content="IE=8" />
+  <link rel="stylesheet" href="/opendias/style/ieFix.css" type="text/css" />
+  <![endif]-->
+
+ </head>
+
+<body>
+<div id=\'getdown\'>
+
+  <div id=\'header\'>
+    <div class="container">
+      <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
+    </div>
+  </div>
+
+  <div id=\'menu\'>
+    <div class="container">
+      <ul>
+        <li><a id=\'homeLink\' href=\'/opendias/\'>Zuhause</a></li>
+        <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Dokumentenliste</a></li>
+        <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Akquirieren</a></li>
+        <li><a id=\'accessLink\' href=\'/opendias/accessControls.html\'>Zugreifen</a></li>
+        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a></li>
+        <li><select id=\'language\'>
+              <option value=\'--\'>Voreinstellen sprachlich</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+            <option value="hh">#### ########</option><option value="hh">#### ########</option></select></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id=\'body\'>
+    <div class="container">
+
+
+<h2>Startseite</h2>
+
+ <div id=\'home\'>
+
+  <div style=\'float: left; width:570px;\'>
+
+  <h3>Willkommen</h3>
+  <p><strong>Willkommen</strong>, um openDias. Die <strong>D</strong>ocument <strong>I</strong>maging <strong>A</strong>rchive <strong>S</strong>ystem.</p>
+  <p>openDias wurde entwickelt, um jedem Haushalt zu bewegen \'papierlosen\'. Verwenden Sie es, Korrespondenz zu speichern, dass Sie normale empfangen in gedruckter Form - dh Aussagen, Rechnungen, Briefe, Lohnabrechnungen, etc...</p>
+
+
+  <h3>Key Features</h3>
+  <p>Es gibt eine Reihe von Möglichkeiten, um Ihnen den Überblick über Ihre Dokumente, sobald sie archiviert werden:</p>
+  <ul>
+    <li>OCR (optical character recognition) der Inhalt von Dokumenten, die auf durchsucht werden können;</li>
+    <li>Weisen Sie Dokumente mit mehreren "Tags", wodurch es leichter zu finden und zu Gruppe Dokumente;</li>
+    <li>Suche nach Belegdatum;</li>
+  </ul>
+
+  <p>Außerdem haben wir einige nützliche Features hinzugefügt, während die Sie sehen, oder bearbeiten Sie Ihr Dokument:</p>
+  <ul>
+    <li>Zoom in auf einer gleitenden mehrere Seiten Ansicht Ihres Dokuments;</li>
+    <li>Live-spart zurück in die Datenbank (keine \'sparen Taste\');</li>
+  </ul>
+
+  <h3>Architektur</h3>
+  <span style=\'float: right; width: 146px; padding-left: 6px\'>
+    <a href=\'/opendias/images/opendias.jpg\'>
+      <img src=\'/opendias/images/opendias.jpg\' style=\'width: 130px; border: 1px solid black;\' />
+    </a>
+  </span>
+  <p>openDias architektur wurde so konzipiert, dass viele Anwender auf das System zuzugreifen.</p>
+  <ul>
+    <li>Die Anwendung verbindet sich \'SANE\' was Ihnen an verschiedene Scan-Geräte zugreifen, sowohl
+      lokal oder über das Netzwerk (siehe SANE Konfigurations-Einstellung für die Anleitung, wie).</li> 
+    <li>Gescannte Bilder und die Haupt-Datenbank auf dem Server gespeichert.</li>
+    <li>Kunden können von jedem Standort aus, die den Server sehen eine Verbindung herstellen können, über einen Standard-Webbrowser.</li>
+    <li>Zugriffskontrolle kann durch den Kunden von Standort "oder" Benutzernamen und Passwort angemeldet \'gesetzt werden.</li>
+  </ul>
+
+  <h3>Coming soon...</h3>
+  <p>Wir sind über das Hinzufügen von mehr <a href=\'http://opendias.essentialcollections.co.uk/todo.shtml\'>features</a> nur so schnell wie wir können.</p> 
+
+	<h3>Bekannte Fehler...</h3>
+	<p>Bekannte Fehler finden <a href="buglist.html">hier</a>.
+	</p>
+
+  <h3>Machen Sie mit und Support.</h3>
+  <p>openDias ist ein OpenSource Projekt, das es gibt mehrere Möglichkeiten zu helfen bedeutet. Wir freuen uns über
+    alles, was Sie tun können.</p>
+    <div class=\'row\'>
+      <div style=\'float: left; width: 23%\'>
+        <strong>Test/Feedback</strong>
+        <p>Wir freuen uns immer, von jedem, der opendias verwendet hat zu hören. Sagen Sie uns <a href=\'https://groups.google.com/forum/#!forum/opendias\' target=\'_blank\'>was Sie</a>, gut oder schlecht.</p>
+        <p>Übernehmen keinerlei <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>Ideen / Anregungen?</a> oder wollen Abstimmung über die aktuelle Liste der Ideen.</li>
+      </div>
+      <div style=\'float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Veröffentlichen Sie</strong>
+        <p>Wir möchten möglichst viele Menschen zu opendias wie möglich zu nutzen, und das bedeutet, dass man möglichst viele Menschen davon zu hören wie möglich. Also, los, das Wort zu verbreiten.</p>
+        <p>Wir versuchen, die <a href=\'http://opendias.blogspot.com/\'>opendias blog</a> bis-2-Termin so weit wie möglich.</p>
+      </div>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Hackers Benötigte</strong>
+        <p>Wenn Sie verfügbare Zeit haben, in Kontakt zu treten, gibt es mehrere Projekte aufgereiht.</p>
+        <p>Oonst fühlen Sie sich frei, um einen Patch (wie <a href=\'https://github.com/clearscene/opendias\'>GitHub</a>) zu verbessern / fix die aktuelle Systemzeit.</p>
+      </div>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Spenden</strong>
+        <p>Jede Spende wird dankbar angenommen, und werden verwendet, um Hardware zu kaufen, um gegen. testen.</p>
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post"  style=\'float: left\'>
+          <input type="hidden" name="cmd" value="_donations" />
+          <input type="hidden" name="business" value="booth@clearscene.net" />
+          <input type="hidden" name="item_name" value="openDIAS Project" />
+          <input type="hidden" name="no_shipping" value="0" />
+          <input type="hidden" name="no_note" value="1" />
+          <input type="hidden" name="currency_code" value="GBP" />
+          <input type="hidden" name="tax" value="0" />
+          <input type="hidden" name="lc" value="GB" />
+          <input type="hidden" name="bn" value="PP-DonationsBF" />
+          <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online." />
+          <img alt="" border="0" src="https://www.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1" />
+        </form>
+        <p>Vielen Dank an alle, die dies bereits.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style=\'float: right; width:227px; padding: 3px; border: 1px solid black\'><img src=\'/opendias/images/cabinet.jpg\' style=\'border: 1px solid black\' /></div>
+
+ </div>
+
+    </div>
+  </div>
+
+  <div id=\'footerpadding\'></div>
+
+  <div id=\'footer\'>
+      <p>Urheberrecht Clearscene Ltd 2010</p>
+  </div>
+
+</div>
+</body>
+</html>
+';
+
+Sending request = 
+bad cookie, header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+ <head>
+  <title>openDias</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.language.js"></script>
+
+  <!--[if lt IE 7]>
+  <meta http-equiv="X-UA-Compatible" content="IE=8" />
+  <link rel="stylesheet" href="/opendias/style/ieFix.css" type="text/css" />
+  <![endif]-->
+
+ </head>
+
+<body>
+<div id=\'getdown\'>
+
+  <div id=\'header\'>
+    <div class="container">
+      <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
+    </div>
+  </div>
+
+  <div id=\'menu\'>
+    <div class="container">
+      <ul>
+        <li><a id=\'homeLink\' href=\'/opendias/\'>Zuhause</a></li>
+        <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Dokumentenliste</a></li>
+        <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Akquirieren</a></li>
+        <li><a id=\'accessLink\' href=\'/opendias/accessControls.html\'>Zugreifen</a></li>
+        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a></li>
+        <li><select id=\'language\'>
+              <option value=\'--\'>Voreinstellen sprachlich</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+            <option value="hh">#### ########</option><option value="hh">#### ########</option></select></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id=\'body\'>
+    <div class="container">
+
+
+<h2>Startseite</h2>
+
+ <div id=\'home\'>
+
+  <div style=\'float: left; width:570px;\'>
+
+  <h3>Willkommen</h3>
+  <p><strong>Willkommen</strong>, um openDias. Die <strong>D</strong>ocument <strong>I</strong>maging <strong>A</strong>rchive <strong>S</strong>ystem.</p>
+  <p>openDias wurde entwickelt, um jedem Haushalt zu bewegen \'papierlosen\'. Verwenden Sie es, Korrespondenz zu speichern, dass Sie normale empfangen in gedruckter Form - dh Aussagen, Rechnungen, Briefe, Lohnabrechnungen, etc...</p>
+
+
+  <h3>Key Features</h3>
+  <p>Es gibt eine Reihe von Möglichkeiten, um Ihnen den Überblick über Ihre Dokumente, sobald sie archiviert werden:</p>
+  <ul>
+    <li>OCR (optical character recognition) der Inhalt von Dokumenten, die auf durchsucht werden können;</li>
+    <li>Weisen Sie Dokumente mit mehreren "Tags", wodurch es leichter zu finden und zu Gruppe Dokumente;</li>
+    <li>Suche nach Belegdatum;</li>
+  </ul>
+
+  <p>Außerdem haben wir einige nützliche Features hinzugefügt, während die Sie sehen, oder bearbeiten Sie Ihr Dokument:</p>
+  <ul>
+    <li>Zoom in auf einer gleitenden mehrere Seiten Ansicht Ihres Dokuments;</li>
+    <li>Live-spart zurück in die Datenbank (keine \'sparen Taste\');</li>
+  </ul>
+
+  <h3>Architektur</h3>
+  <span style=\'float: right; width: 146px; padding-left: 6px\'>
+    <a href=\'/opendias/images/opendias.jpg\'>
+      <img src=\'/opendias/images/opendias.jpg\' style=\'width: 130px; border: 1px solid black;\' />
+    </a>
+  </span>
+  <p>openDias architektur wurde so konzipiert, dass viele Anwender auf das System zuzugreifen.</p>
+  <ul>
+    <li>Die Anwendung verbindet sich \'SANE\' was Ihnen an verschiedene Scan-Geräte zugreifen, sowohl
+      lokal oder über das Netzwerk (siehe SANE Konfigurations-Einstellung für die Anleitung, wie).</li> 
+    <li>Gescannte Bilder und die Haupt-Datenbank auf dem Server gespeichert.</li>
+    <li>Kunden können von jedem Standort aus, die den Server sehen eine Verbindung herstellen können, über einen Standard-Webbrowser.</li>
+    <li>Zugriffskontrolle kann durch den Kunden von Standort "oder" Benutzernamen und Passwort angemeldet \'gesetzt werden.</li>
+  </ul>
+
+  <h3>Coming soon...</h3>
+  <p>Wir sind über das Hinzufügen von mehr <a href=\'http://opendias.essentialcollections.co.uk/todo.shtml\'>features</a> nur so schnell wie wir können.</p> 
+
+	<h3>Bekannte Fehler...</h3>
+	<p>Bekannte Fehler finden <a href="buglist.html">hier</a>.
+	</p>
+
+  <h3>Machen Sie mit und Support.</h3>
+  <p>openDias ist ein OpenSource Projekt, das es gibt mehrere Möglichkeiten zu helfen bedeutet. Wir freuen uns über
+    alles, was Sie tun können.</p>
+    <div class=\'row\'>
+      <div style=\'float: left; width: 23%\'>
+        <strong>Test/Feedback</strong>
+        <p>Wir freuen uns immer, von jedem, der opendias verwendet hat zu hören. Sagen Sie uns <a href=\'https://groups.google.com/forum/#!forum/opendias\' target=\'_blank\'>was Sie</a>, gut oder schlecht.</p>
+        <p>Übernehmen keinerlei <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>Ideen / Anregungen?</a> oder wollen Abstimmung über die aktuelle Liste der Ideen.</li>
+      </div>
+      <div style=\'float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Veröffentlichen Sie</strong>
+        <p>Wir möchten möglichst viele Menschen zu opendias wie möglich zu nutzen, und das bedeutet, dass man möglichst viele Menschen davon zu hören wie möglich. Also, los, das Wort zu verbreiten.</p>
+        <p>Wir versuchen, die <a href=\'http://opendias.blogspot.com/\'>opendias blog</a> bis-2-Termin so weit wie möglich.</p>
+      </div>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Hackers Benötigte</strong>
+        <p>Wenn Sie verfügbare Zeit haben, in Kontakt zu treten, gibt es mehrere Projekte aufgereiht.</p>
+        <p>Oonst fühlen Sie sich frei, um einen Patch (wie <a href=\'https://github.com/clearscene/opendias\'>GitHub</a>) zu verbessern / fix die aktuelle Systemzeit.</p>
+      </div>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Spenden</strong>
+        <p>Jede Spende wird dankbar angenommen, und werden verwendet, um Hardware zu kaufen, um gegen. testen.</p>
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post"  style=\'float: left\'>
+          <input type="hidden" name="cmd" value="_donations" />
+          <input type="hidden" name="business" value="booth@clearscene.net" />
+          <input type="hidden" name="item_name" value="openDIAS Project" />
+          <input type="hidden" name="no_shipping" value="0" />
+          <input type="hidden" name="no_note" value="1" />
+          <input type="hidden" name="currency_code" value="GBP" />
+          <input type="hidden" name="tax" value="0" />
+          <input type="hidden" name="lc" value="GB" />
+          <input type="hidden" name="bn" value="PP-DonationsBF" />
+          <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online." />
+          <img alt="" border="0" src="https://www.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1" />
+        </form>
+        <p>Vielen Dank an alle, die dies bereits.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style=\'float: right; width:227px; padding: 3px; border: 1px solid black\'><img src=\'/opendias/images/cabinet.jpg\' style=\'border: 1px solid black\' /></div>
+
+ </div>
+
+    </div>
+  </div>
+
+  <div id=\'footerpadding\'></div>
+
+  <div id=\'footer\'>
+      <p>Urheberrecht Clearscene Ltd 2010</p>
+  </div>
+
+</div>
+</body>
+</html>
+';
+
+Sending request = 
+bad cookie, header says ## = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <title>openDias</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.language.js"></script>
+
+  <!--[if lt IE 7]>
+  <meta http-equiv="X-UA-Compatible" content="IE=8" />
+  <link rel="stylesheet" href="/opendias/style/ieFix.css" type="text/css" />
+  <![endif]-->
+
+ </head>
+
+<body>
+<div id=\'getdown\'>
+
+  <div id=\'header\'>
+    <div class="container">
+      <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
+    </div>
+  </div>
+
+  <div id=\'menu\'>
+    <div class="container">
+      <ul>
+        <li><a id=\'homeLink\' href=\'/opendias/\'>####</a></li>
+        <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>######## ####</a></li>
+        <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>####### ###</a></li>
+        <li><a id=\'accessLink\' href=\'/opendias/accessControls.html\'>###### ########</a></li>
+        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>####### ####</a></li>
+        <li><select id=\'language\'>
+              <option value=\'--\'>######## ####### ########</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'hh\'>#### #########</option>
+            <option value="hh">#### ########</option></select></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id=\'body\'>
+    <div class="container">
+
+
+<h2>####</h2>
+
+ <div id=\'home\'>
+
+  <div style=\'float: left; width:570px;\'>
+
+  <h3>#######</h3>
+  <p><strong>#######</strong> ## openDias. ### <strong>D</strong>ocument <strong>I</strong>maging <strong>A</strong>rchive <strong>S</strong>ystem.</p>
+  <p>openDias ### #### ######### ## #### ##### ######### #### \'#########\'. ### ## ## ##### ############## #### ### ##### ###### ####### ## # ##### ###### - ## ##########, #####, #######, ### #####, ###...</p>
+
+
+  <h3>### ########</h3>
+  <p>##### ### # ###### ## #### ## #### ### #### ##### ## #### ######### #### #### ### ########:</p>
+  <ul>
+    <li>OCR (####### ######### ###########) ## ### ######## ########, #### ### ## ######## ##;</li>
+    <li>###### ######### #### ######## \'####\', ###### ## ###### ## #### ### ##### #########;</li>
+    <li>###### ## ######## ####;</li>
+  </ul>
+
+  <p>####, ## #### ##### #### ###### ######## ##### ###\'## ####### ## ####### #### ########:</p>
+  <ul>
+    <li>#### ## ## # ####### ######## ##### #### ## #### ########;</li>
+    <li>#### ##### #### ## ### ######## (## \'#### ######\');</li>
+  </ul>
+
+  <h3>Architecture</h3>
+  <span style=\'float: right; width: 146px; padding-left: 6px\'>
+    <a href=\'/opendias/images/opendias.jpg\'>
+      <img src=\'/opendias/images/opendias.jpg\' style=\'width: 130px; border: 1px solid black;\' />
+    </a>
+  </span>
+  <p>### openDias ############ ### #### ######## ## ##### #### ##### ## ###### ### ######.</p>
+  <ul>
+    <li>### ########### ######## ## \'SANE\' ##### ##### ### ###### ## ####### ######## #######, #### 
+      ####### ## ### ### ####### (### SANE ###### ####### ### ############ ###).</li>
+    <li>####### ###### ### ### #### ######## ### ###### ## ### ######.</li>
+    <li>####### ### ####### #### ### ######## #### ### ### ### ######, ##### # ######## ### #######.</li>
+    <li>###### ######## ### ## ### ## ## \'####### ########\' ## \'########### ######## ### ########\'.</li>
+  </ul>
+
+  <h3>###### ####...</h3>
+  <p>## ### ######## ## ###### #### <a href=\'http://opendias.essentialcollections.co.uk/todo.shtml\'>########</a> #### ## #### ## ## ###.</p> 
+
+	<h3>##### ####...</h3>
+	<p>##### #### ### ## ##### <a href="buglist.html">####</a>.
+	</p>
+
+  <h3>### ######## ### #######.</h3>
+  <p>openDias ## ## ########## #######, ##### ##### ##### ### ####### #### ### ### ####. ## ##########
+    ######## ### ### ##.</p>
+    <div class=\'row\'>
+      <div style=\'float: left; width: 23%\'>
+        <strong>####/########</strong>
+        <p>## ### ###### ##### ## #### #### ###### ### ### #### ########. #### ## <a href=\'https://groups.google.com/forum/#!forum/opendias\' target=\'_blank\'>#### ### #####</a>, #### ## ###.</p>
+        <p>#### ### <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>#####/ ###########?</a> ## #### ## #### ## ### ####### #### ## #####.</li>
+      </div>
+      <div style=\'float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>#########</strong>
+        <p>## #### ## #### ###### ## ### opendias ## ########, ### #### ##### ####### ## #### ###### ## #### ##### ## ## ########. ##, ##, ###### ### ####.</p>
+        <p>## ### ## #### ### <a href=\'http://opendias.blogspot.com/\'>opendias ####</a> ##-#-#### ## #### ## ########.</p>
+      </div>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>####### ######</strong>
+        <p>## ### #### ######### ####, ### ## #######, ##### ### ####### ######## ##### ##.</p>
+        <p>#########, #### #### ## ###### # ##### (as <a href=\'https://github.com/clearscene/opendias\'>GitHub</a>) ## #######/### ### ####### ######.</p>
+      </div>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>######</strong>
+        <p>### ######## ### ########## ########, ### ### #### ## ### ######## ## #### #######.</p>
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post"  style=\'float: left\'>
+          <input type="hidden" name="cmd" value="_donations" />
+          <input type="hidden" name="business" value="booth@clearscene.net" />
+          <input type="hidden" name="item_name" value="openDIAS Project" />
+          <input type="hidden" name="no_shipping" value="0" />
+          <input type="hidden" name="no_note" value="1" />
+          <input type="hidden" name="currency_code" value="GBP" />
+          <input type="hidden" name="tax" value="0" />
+          <input type="hidden" name="lc" value="GB" />
+          <input type="hidden" name="bn" value="PP-DonationsBF" />
+          <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online." />
+          <img alt="" border="0" src="https://www.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1" />
+        </form>
+        <p>##### ### ## ######## ### ### #### ## #######.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style=\'float: right; width:227px; padding: 3px; border: 1px solid black\'><img src=\'/opendias/images/cabinet.jpg\' style=\'border: 1px solid black\' /></div>
+
+ </div>
+
+    </div>
+  </div>
+
+  <div id=\'footerpadding\'></div>
+
+  <div id=\'footer\'>
+      <p>######### Clearscene Ltd 2010</p>
+  </div>
+
+</div>
+</body>
+</html>
+';
+
+Stopping service
+Waiting for valgrind to finish.

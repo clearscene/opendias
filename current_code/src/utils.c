@@ -16,6 +16,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -23,8 +25,10 @@
 #include <unistd.h> // for getpid & readlink
 #include <sys/stat.h> // for mkdir
 #include <ctype.h>
+
 #include "main.h"
 #include "debug.h"
+
 #include "utils.h"
 
 static char *ItoaDigits = 
@@ -49,7 +53,7 @@ long int ritoa(long int val, long int topval, char *s, int base) {
  *- mallocs a string of the right length
  * - calls ritoa to fill in the string for a given base
  */
-extern char * itoa(long int val, int base) {
+char * itoa(long int val, int base) {
 
   int len;
   char *s,*buf;
@@ -72,7 +76,7 @@ extern char * itoa(long int val, int base) {
 
 
 /* load a file into a buffer */
-extern size_t load_file_to_memory(const char *p_filename, char **result) {
+size_t load_file_to_memory(const char *p_filename, char **result) {
 
   size_t size = 0;
   FILE *p_f = fopen(p_filename, "r");
@@ -89,12 +93,14 @@ extern size_t load_file_to_memory(const char *p_filename, char **result) {
 
   if((*result = (char *)malloc(size+1)) == NULL) {
     o_log(ERROR, "Out of memory while reading file information");
+    fclose(p_f);
     return (size_t)0;
   }
 
   if (size != fread(*result, sizeof(char), size, p_f)) {
     free(*result);
     o_log(ERROR, "Error reading from file");
+    fclose(p_f);
     return (size_t)0; // means file reading fail
   }
 
@@ -105,7 +111,7 @@ extern size_t load_file_to_memory(const char *p_filename, char **result) {
 }
 
 
-extern void createDir_ifRequired(char *dir) {
+void createDir_ifRequired(char *dir) {
 
   if ( 0 != access(dir, F_OK) ) {
     // Create the directory
@@ -123,7 +129,7 @@ extern void createDir_ifRequired(char *dir) {
 
 
 /* fcopy - copy a file contents to new location */
-extern void fcopy(char *fnsource, char *fntarget) {
+void fcopy(char *fnsource, char *fntarget) {
 
   FILE *fpin = fopen(fnsource, "rb");
 
@@ -134,14 +140,14 @@ extern void fcopy(char *fnsource, char *fntarget) {
       while((ch = getc(fpin)) != EOF) {
         putc(ch, fpout);
       }
-      fclose(fpin);
+      fclose(fpout);
     }
-    fclose(fpout);
+    fclose(fpin);
   }
 
 }
 
-extern int max(int a, int b) {
+int max(int a, int b) {
 
   if(a >= b)
     return a;
@@ -150,7 +156,7 @@ extern int max(int a, int b) {
 
 }
 
-extern int min(int a, int b) {
+int min(int a, int b) {
 
   if(a <= b)
     return a;
@@ -159,9 +165,9 @@ extern int min(int a, int b) {
 
 }
 
-extern char *dateHuman(char *a, char *b, char *c) {
+char *dateHuman(char *a, char *b, char *c, const char *LOCAL_no_date_set) {
 
-  // This will need to be converted, to use current machines LOCALE
+  // This will need to be converted, to use current users 'lang' LOCALE
 
   char *m;
 
@@ -190,11 +196,11 @@ extern char *dateHuman(char *a, char *b, char *c) {
     free(a);
     free(b);
     free(c);
-    return o_strdup(" - No date set -");
+    return o_strdup(LOCAL_no_date_set);
   }
 }
 
-extern char *o_strdup(const char *source) {
+char *o_strdup(const char *source) {
 
   size_t size = strlen(source);
   char *newArea = malloc(size + 1);
@@ -203,7 +209,7 @@ extern char *o_strdup(const char *source) {
 
 }
 
-extern void conCat(char **mainStr, const char *addStr) {
+void conCat(char **mainStr, const char *addStr) {
 
   char *tmp, *tmp2;
 
@@ -216,11 +222,11 @@ extern void conCat(char **mainStr, const char *addStr) {
 
 }
 
-extern void chop( char *s ) {
+void chop( char *s ) {
     s[strcspn ( s, "\n" )] = '\0';
 }
 
-extern char *getTimeStr() {
+char *getTimeStr() {
   time_t ttime;
   struct tm *stTime;
   size_t size;
@@ -235,22 +241,22 @@ extern char *getTimeStr() {
   return strdate;
 }
 
-extern char *getTimeStr_iso8601() {
+char *getTimeStr_iso8601() {
   time_t ttime;
   struct tm *stTime;
   size_t size;
-  char *strdate = malloc(32);
+  char *strdate = malloc(20);
 
   size = time(&ttime);
   stTime = gmtime(&ttime);
-  size = strftime(strdate, 32, "%Y-%m-%d %H:%M:%S", stTime);
-  if( 31 != size )
-    o_log(ERROR, "Count not write entire data block.");
+  size = strftime(strdate, 20, "%Y-%m-%d %H:%M:%S", stTime);
+  if( 19 != size )
+    o_log(ERROR, "Count not write entire data block.%s",strdate);
 
   return strdate;
 }
 
-extern void propper(char *inStr) {
+void propper(char *inStr) {
 
   char *ptr = inStr;
 
@@ -268,7 +274,17 @@ extern void propper(char *inStr) {
   }
 }
 
-extern void replace(char *inStr, char *findStr, char *replaceStr) {
+void lower(char *inStr) {
+  char *ptr = inStr;
+
+  /* going thru string */
+  while(*ptr) {
+    *ptr = tolower(*ptr);
+    ++ptr;
+  }
+}
+
+void replace(char *inStr, char *findStr, char *replaceStr) {
 
   char *ptr = inStr;
 
@@ -279,7 +295,7 @@ extern void replace(char *inStr, char *findStr, char *replaceStr) {
 
 }
 
-extern struct dateParts *dateStringToDateParts(char *dateString) {
+struct dateParts *dateStringToDateParts(char *dateString) {
 
   struct dateParts *dp = malloc(sizeof(struct dateParts));
 
@@ -301,7 +317,7 @@ extern struct dateParts *dateStringToDateParts(char *dateString) {
   return dp;
 }
 
-extern void addFileExt(char **fname, int ftype) {
+void addFileExt(char **fname, int ftype) {
 
   char *ext;
 
@@ -316,17 +332,59 @@ extern void addFileExt(char **fname, int ftype) {
 }
 
 char *i_printf(const char *fmt, va_list inargs) {
-  size_t len;
+
+  va_list ap;
   char *str;
-  len = (size_t)vsnprintf(NULL, 0, fmt, inargs);
-  str = malloc((len + 1) * sizeof(char));
-  if( (int)(len+1) != vsnprintf(str, len + 1, fmt, inargs) )
-    return str; //o_log(ERROR, "Count not write the entire data block.");
-  
-  return str;
+  size_t xs;
+  FILE *DEVZERO;
+	/*printf("i_printf working on format %s:",fmt);
+	vprintf(fmt,inargs);
+
+	printf("\nsecond call\n");
+	printf("i_printf working on format %s:",fmt);
+	vprintf(fmt,inargs);
+
+	printf("\n");
+	exit(43);	*/
+	/* in order to allocate sufficient amount of memory, use the following approach:
+		+ copy initial argument state
+		+ vfprintf to /dev/null to examine buffer size 
+		+ allocate memory
+		+ reset argument pointer
+		+ use vsnprintf to write result in str
+	*/
+	//printf("entering i_printf fmt = %s\n",fmt);
+	va_copy(ap,inargs);
+
+	//open dev zero as stream
+	if ( (DEVZERO=fopen("/dev/null","w+")) == NULL ) {
+		printf("cannot open /dev/null.");
+		exit(110);	
+	}
+	xs=(size_t)vfprintf(DEVZERO,fmt,inargs);
+	//printf("\n%d bytes written\n",(int)xs);
+	fclose(DEVZERO);
+
+	xs=xs+sizeof(*str);
+	if ( (str=(char*)malloc(xs)) == NULL ) {
+    printf("memory allocation error\n");
+    exit(1);
+  }
+	//printf("allocated %d bytes\n",(int)xs);
+
+	va_end(inargs);
+	va_copy(inargs,ap);
+	
+	if (vsnprintf(str,xs,fmt,inargs) > (int)xs) {
+		printf("serious memory problem\n");
+		exit(110);
+	}
+	
+	//printf("leaving i_printf result = %s\n",str);
+	return(str);
 }
 
-extern char *o_printf(const char *fmt, ...) {
+char *o_printf(const char *fmt, ...) {
 
   va_list inargs;
   char *str;
@@ -338,7 +396,7 @@ extern char *o_printf(const char *fmt, ...) {
   return str;
 }
 
-extern void o_concatf(char **mainStr, const char *fmt, ...) {
+void o_concatf(char **mainStr, const char *fmt, ...) {
 
   va_list inargs;
   char *str;

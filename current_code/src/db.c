@@ -16,16 +16,20 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <sqlite3.h>
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
+
 #include "utils.h"
-#include "db.h"
 #include "simpleLinkedList.h"
 #include "main.h"
 #include "debug.h"
+
+#include "db.h"
 
 sqlite3 *DBH;
 
@@ -69,14 +73,14 @@ int get_db_version() {
   return version;
 }
 
-extern int connect_db (int createIfRequired) {
+int connect_db (int createIfRequired) {
 
   int version = 0, i;
   char *db, *data;
-  struct simpleLinkedList *rSet;
 
   // Test to see if a DB file exsists
-  db = o_printf("%s/openDIAS.sqlite3", BASE_DIR);
+  db = o_printf("%sopenDIAS.sqlite3", BASE_DIR);
+  o_log(DEBUGM,"database file is %s",db);
   if( 0 == access(db, F_OK) ) {
     o_log(DEBUGM, "Dir structure is in-place, database should exist");
     if(open_db (db)) {
@@ -88,7 +92,7 @@ extern int connect_db (int createIfRequired) {
   }
 
   if( !version && createIfRequired ) {
-    o_log(INFORMATION, "Creating new database");
+    o_log(INFORMATION, "Creating new database %s (BASE_DIR = %s)",db,BASE_DIR);
     if(open_db (db)) {
       o_log(WARNING, "Could not create/connect to new database");
       o_log(WARNING, "%s", db);
@@ -118,11 +122,25 @@ extern int connect_db (int createIfRequired) {
 
     if( 0 != load_file_to_memory(upgradeSQL, &data) ) {
       o_log(DEBUGM, "%s", data);
-      rSet = runquery_db(data);
-      free_recordset( rSet );
+      if( 1 == runUpdate_db(data, NULL) ) {
+        o_log(ERROR, "Could not update the database to version %d.", i);
+        return 1;
+      }
       free(data);
     }
     free(upgradeSQL);
+  }
+
+  // If we just created a DB from scratch, then update some config
+  if( version == 0 ) {
+    char *sql = o_strdup("UPDATE config SET config_value = ? WHERE config_option = 'scan_directory'");
+
+    struct simpleLinkedList *vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, BASE_DIR );
+
+    runUpdate_db(sql, vars);
+    free(sql);
   }
 
   return 0;
@@ -165,51 +183,60 @@ static int callback(void *rSetIn, int argc, char **argv, char **azColName){
   return 0;
 }
 
-extern int last_insert() {
+int last_insert() {
 
   return (int)sqlite3_last_insert_rowid(DBH);
 }
 
-extern int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
+int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
 
   sqlite3_stmt *stmt;
   struct simpleLinkedList *tmpList = NULL;
-  int col = 0, rc;
+  int rc;
   char *type;
 
   o_log(SQLDEBUG, "%s", sql);
-  sqlite3_prepare(DBH, sql, (int)strlen(sql), &stmt, NULL);
 
-  tmpList = vars;
-  do {
-    col++;
-    type = tmpList->data;
-    tmpList = sll_getNext(tmpList);
-    if ( 0 == strcmp (type, DB_NULL ) ) {
-      sqlite3_bind_null(stmt, col);
-    }
-    else if ( 0 == strcmp (type, DB_TEXT ) ) {
-      sqlite3_bind_text(stmt, col, (char *)tmpList->data, (int)strlen(tmpList->data), SQLITE_TRANSIENT );
+  if(vars != NULL) {
+    int col = 0;
+    sqlite3_prepare(DBH, sql, (int)strlen(sql), &stmt, NULL);
+    tmpList = vars;
+    do {
+      col++;
+      type = tmpList->data;
+      tmpList = sll_getNext(tmpList);
+      if ( 0 == strcmp (type, DB_NULL ) ) {
+        sqlite3_bind_null(stmt, col);
+      }
+      else if ( 0 == strcmp (type, DB_TEXT ) ) {
+        sqlite3_bind_text(stmt, col, (char *)tmpList->data, (int)strlen(tmpList->data), SQLITE_TRANSIENT );
 //      free(tmpList->data);
-    }
-    else if ( 0 == strcmp (type, DB_INT ) ) {
-      int *m = tmpList->data;
-      sqlite3_bind_int(stmt, col, *m );
-    }
+      }
+      else if ( 0 == strcmp (type, DB_INT ) ) {
+        int *m = tmpList->data;
+        sqlite3_bind_int(stmt, col, *m );
+      }
 //    else if ( 0 == strcmp (type, DB_DOUBLE ) ) {
 //        sqlite3_bind_double(stmt, col, tmpList->data );
 //    }
-    tmpList = sll_getNext(tmpList);
-  } while (tmpList != NULL);
+      tmpList = sll_getNext(tmpList);
+    } while (tmpList != NULL);
 
-  rc = sqlite3_step(stmt);
-  if( rc != SQLITE_DONE ) {
-    o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);
-    return 1;
+    rc = sqlite3_step(stmt);
+    if( rc != SQLITE_DONE ) {
+      o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);
+      sll_destroy(vars);
+      return 1;
+    }
+
+    rc = sqlite3_finalize(stmt);
+    sll_destroy(vars);
+  }
+  else {
+    char *zErrMsg;
+    rc = sqlite3_exec(DBH, sql, NULL, NULL, &zErrMsg);
   }
 
-  rc = sqlite3_finalize(stmt);
-  sll_destroy(vars);
   if( rc != SQLITE_OK ) {
     o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\n\
 The error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);
@@ -219,7 +246,7 @@ The error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(D
     return 0;
 }
 
-extern struct simpleLinkedList *runquery_db (char *sql) {
+struct simpleLinkedList *runquery_db (char *sql) {
 
   int rc;
   char *zErrMsg;
@@ -251,7 +278,7 @@ extern struct simpleLinkedList *runquery_db (char *sql) {
 }
 
 
-extern char *readData_db (struct simpleLinkedList *rSet, char *field_db) {
+char *readData_db (struct simpleLinkedList *rSet, char *field_db) {
 
   struct simpleLinkedList *row;
   struct simpleLinkedList *field;
@@ -265,11 +292,11 @@ extern char *readData_db (struct simpleLinkedList *rSet, char *field_db) {
     return field->data;
   }
 
-  return "[Unable to get data]";
+  return "[Unable to get data]"; // Not localised, since this is a system error
 }
 
 
-extern int nextRow (struct simpleLinkedList *rSet) {
+int nextRow (struct simpleLinkedList *rSet) {
 
   struct simpleLinkedList *row;
   int ret = 0;
@@ -286,7 +313,7 @@ extern int nextRow (struct simpleLinkedList *rSet) {
   return ret;
 }
 
-extern void free_recordset (struct simpleLinkedList *rSet) {
+void free_recordset (struct simpleLinkedList *rSet) {
 
   struct simpleLinkedList *field, *row;
 
@@ -295,15 +322,17 @@ extern void free_recordset (struct simpleLinkedList *rSet) {
   if( rSet && ( rSet != NULL ) ) {
     if( rSet->data != NULL ) {
       for( row = sll_findFirstElement((struct simpleLinkedList *)rSet->data) ; row != NULL ; row = sll_getNext(row) ) {
-        if( row && ( row != NULL ) && ( row->data != NULL ) ) {
-          for( field = sll_findFirstElement((struct simpleLinkedList *)row->data) ; field != NULL ; field = sll_getNext(field) ) {
-            o_log(SQLDEBUG, "Freeing: %s = %s", field->key, field->data);
-            free(field->key);
-            free(field->data);
+        if( row && ( row != NULL ) ) {
+          if( row->data != NULL ) {
+            for( field = sll_findFirstElement((struct simpleLinkedList *)row->data) ; field != NULL ; field = sll_getNext(field) ) {
+              o_log(SQLDEBUG, "Freeing: %s = %s", field->key, field->data);
+              free(field->key);
+              free(field->data);
+            }
           }
+          o_log(SQLDEBUG, "Freeing field data"); 
+          sll_destroy((struct simpleLinkedList *)row->data);
         }
-        o_log(SQLDEBUG, "Freeing field data"); 
-        sll_destroy((struct simpleLinkedList *)row->data);
       }
       o_log(SQLDEBUG, "Freeing a row");
       sll_destroy( sll_findFirstElement( (struct simpleLinkedList *)rSet->data ) );
@@ -311,10 +340,11 @@ extern void free_recordset (struct simpleLinkedList *rSet) {
     o_log(SQLDEBUG, "Free a record set pointer (%s)", rSet);
     sll_delete(rSet);
   }
+  o_log(SQLDEBUG, "Leaving free_recordset");
 }
 
 
-extern void close_db () {
+void close_db () {
 
   o_log(DEBUGM, "Closing database");
   sqlite3_close(DBH);

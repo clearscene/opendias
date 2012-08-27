@@ -1,0 +1,9 @@
+LOCAL_unable_to_get_doc_details = 'Kann Dokument zu erhalten'; 
+LOCAL_open_odf_doc = 'Öffnen ODF Dokument';
+LOCAL_open_page_fullsize = 'Öffnen Sie die Seite %s fillsize';
+LOCAL_open_pdf_doc = 'Öffnen PDF Dokument';
+LOCAL_pdf_thumb_not_available_attempt_to_generate_now = '<p>PDF Thumbnail ist nicht verfügbar</p><p>Versuchen Sie jetzt generieren.</p>';
+LOCAL_generate_thumbnail = 'regenerieren Thumbnail';
+LOCAL_error_generating_thumbnail = 'Kann Thumbnail generieren';
+LOCAL_removing_tag = 'Entfernen tag';
+LOCAL_add_tag_default_text = 'Add a tag';

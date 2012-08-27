@@ -16,36 +16,29 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include "config.h"
-#include "db.h"
-#include "dbaccess.h"
-#include "doc_editor.h"
-#ifdef CAN_SPEAK
-#include "speak.h"
-#endif // CAN_SPEAK //
-#include "main.h"
-#include "utils.h"
-#include "debug.h"
-#ifdef CAN_READODF
-#include "read_odf.h"
-#endif // CAN_READODF //
-
 #include <sys/types.h>
 #include <sys/dir.h>
 #include <sys/param.h>
- 
-//#define FALSE 0
-//#define TRUE !FALSE
 
-extern char *doDelete (char *documentId) {
+#include "db.h"
+#include "dbaccess.h"
+#include "main.h"
+#include "utils.h"
+#include "debug.h"
+#include "localisation.h"
+ 
+#include "doc_editor.h"
+
+char *doDelete (char *documentId) {
 
   int pages, i;
   char *docTemplate, *docPath;
-
 
   char *sql = o_printf("SELECT pages FROM docs WHERE docid = %s", documentId);
   struct simpleLinkedList *rSet = runquery_db(sql);
@@ -54,8 +47,9 @@ extern char *doDelete (char *documentId) {
     pages = atoi(pages_s);
     o_log(INFORMATION, "%s", pages_s);
     free(pages_s);
-  } else {
-    o_log(ERROR, "Could not select record.");
+  } 
+  else {
+    o_log(ERROR, "Could not select record %s.", documentId);
     free_recordset( rSet );
     free(sql);
     return NULL;
@@ -73,35 +67,25 @@ extern char *doDelete (char *documentId) {
   free(docTemplate);
 
   removeDocTags(documentId);
+  removeDocLinks(documentId);
   removeDoc(documentId);
 
-  return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><DeleteDoc><status>OK</status></DeleteDoc></Response>");;
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><DeleteDoc><status>OK</status></DeleteDoc></Response>");
 }
 
 
-#ifdef CAN_SPEAK
-void readTextParser () {
-
-  char *textToRead = "";
-
-  textToRead = o_strdup("TEST TEXT");
-  readText(textToRead);
-  free(textToRead);
-
-}
-#endif // CAN_SPEAK //
 
 
 
-
-
-
-extern char *getDocDetail (char *documentId) {
+char *getDocDetail (char *documentId, char *lang ) {
 
   struct simpleLinkedList *rSet;
   char *sql, *tags, *tagsTemplate, *title, *humanReadableDate,
-      *returnXMLtemplate, *returnXML;
+      *docs, *docsTemplate, *returnXMLtemplate, *returnXML;
 
+  // Remove any trailing '#' marks
+  replace(documentId, "#", "");
+ 
   // Validate document id
   //
   sql = o_printf("SELECT docid FROM docs WHERE docid = %s", documentId);
@@ -142,12 +126,38 @@ extern char *getDocDetail (char *documentId) {
 
 
 
+
+
+  // Get a list of linked docs
+  //
+  docs = o_strdup("");
+  docsTemplate = o_strdup("<doc><targetDocid>%s</targetDocid><targetTitle>%s</targetTitle></doc>");
+  sql = o_printf(
+    "SELECT l.linkeddocid, d.title \
+    FROM doc_links l JOIN docs d \
+    ON l.linkeddocid = d.docid \
+    WHERE l.docid = %s \
+    ORDER BY d.title", documentId);
+
+  rSet = runquery_db(sql);
+  if( rSet ) {
+    do  {
+      o_concatf(&docs, docsTemplate, readData_db(rSet, "linkeddocid"), readData_db(rSet, "title") );
+    } while ( nextRow( rSet ) );
+  }
+  free_recordset( rSet );
+  free(sql);
+  free(docsTemplate);
+
+
+
+
   // Get docinformation
   //
   sql = o_printf("SELECT * FROM docs WHERE docid = %s", documentId);
   rSet = runquery_db(sql);
   if( rSet == NULL ) {
-    o_log(ERROR, "Could not select record.");
+    o_log(ERROR, "Could not select record %s.", documentId);
     free_recordset( rSet );
     free(sql);
     return NULL;
@@ -158,18 +168,19 @@ extern char *getDocDetail (char *documentId) {
   title = o_strdup(readData_db(rSet, "title"));
   if( 0 == strcmp(title, "NULL") ) {
     free(title);
-    title = o_strdup("New (untitled) document.");
+    title = o_strdup( getString( "LOCAL_default_title", lang ) );
   }
 
+  const char *nodate = getString( "LOCAL_no_date_set", lang);
   humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")),
                                  o_strdup(readData_db(rSet, "docdatem")),
-                                 o_strdup(readData_db(rSet, "docdated")) );
-
+                                 o_strdup(readData_db(rSet, "docdated")),
+                                 nodate );
 
 
   // Build Response
   //
-  returnXMLtemplate = o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\
+  returnXMLtemplate = o_strdup("<?xml version='1.0' encoding='utf-8'?>\
 <Response>\
  <DocDetail>\
   <docid>%s</docid>\
@@ -182,13 +193,17 @@ extern char *getDocDetail (char *documentId) {
   <x>%s</x>\
   <y>%s</y>\
   <Tags>%s</Tags>\
+  <DocLinks>%s</DocLinks>\
+  <hardcopyKept>%s</hardcopyKept>\
   <actionrequired>%s</actionrequired>\
  </DocDetail>\
 </Response>");
   returnXML = o_printf(returnXMLtemplate, 
-                            documentId, title, readData_db(rSet, "entrydate"), readData_db(rSet, "filetype"), 
-                            humanReadableDate, readData_db(rSet, "pages"), readData_db(rSet, "ocrtext"), 
-                            readData_db(rSet, "ppl"), readData_db(rSet, "lines"), tags, readData_db(rSet, "actionrequired") );
+          documentId, title, readData_db(rSet, "entrydate"), readData_db(rSet, "filetype"), 
+          humanReadableDate, readData_db(rSet, "pages"), readData_db(rSet, "ocrtext"), 
+          readData_db(rSet, "ppl"), readData_db(rSet, "lines"), tags, docs,
+          readData_db(rSet, "hardcopyKept"),
+			    readData_db(rSet, "actionrequired") );
 
   free_recordset(rSet);
   free(sql);
@@ -196,13 +211,14 @@ extern char *getDocDetail (char *documentId) {
   free(title);
   free(humanReadableDate);
   free(tags);
+  free(docs);
 
   return returnXML;
 }
 
 
 
-extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
+char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
 
   int rc = 0;
 
@@ -237,36 +253,58 @@ extern char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
     }
   } 
 
+	else if ( 0 == strcmp(kkey, "hardcopyKept") ) {
+		if ( vvalue && 0 == strcmp(vvalue,"true") ) {
+			rc = updateDocValue_int(docid,kkey ,1);
+		} else {
+			rc = updateDocValue_int(docid,kkey, 0);
+		}
+	}
+
   else 
     rc = updateDocValue(docid, kkey, vvalue);
 
   if(rc) return NULL;
-  else return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><UpdateDocDetails><status>OK</status></UpdateDocDetails></Response>");
+  else return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateDocDetails><status>OK</status></UpdateDocDetails></Response>");
 }
 
-extern char *updateTagLinkage(char *docid, char *tag, char *subaction) {
+char *updateTagLinkage(char *docid, char *link, char *subaction) {
 
   int rc = 0;
 
   // Check if their is a tag of this name, if not add one
-  char *tagid = getTagId( tag );
 
   if(0 == strcmp(subaction, "addTag")) {
+    char *tagid = getTagId( link );
     rc = addTagToDoc(docid, tagid);
+    free(tagid);
   }
+
   else if(0 == strcmp(subaction, "removeTag")) {
+    char *tagid = getTagId( link );
     rc = removeTagFromDoc (docid, tagid);
     if( 0 == countDocsWithTag( tagid ) )
       deleteTag( tagid );
+    free(tagid);
   }
+
+  else if(0 == strcmp(subaction, "addDoc")) {
+    rc = addDocToDoc(docid, link);
+    rc += addDocToDoc(link, docid);
+  }
+
+  else if(0 == strcmp(subaction, "removeDoc")) {
+    rc = removeDocFromDoc(docid, link);
+    rc += removeDocFromDoc(link, docid);
+  }
+
   else {
     o_log(ERROR, "Unknown subaction.");
     rc = 1;
   }
 
-  free(tagid);
-  if(rc == 1) return NULL;
-  else return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><MoveTag><status>OK</status></MoveTag></Response>");
+  if(rc != 0) return NULL;
+  else return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><MoveTag><status>OK</status></MoveTag></Response>");
 }
 
 

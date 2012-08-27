@@ -1,0 +1,77 @@
+# No translations required in:
+#   dbaccess.c
+#   db.c
+#   debug.c
+#   imageProcessing.c
+#   localisation.c
+#   main.c
+#   odf_plug.c
+#   saneDispatcher.c
+#   scanner.c
+#   simpleLinkedList.c
+#   validation.c
+#
+
+#########################################
+
+#
+# doc_editor.c
+#
+
+# getDocDetail() - see docFilter
+
+#########################################
+
+#
+# import_doc.c
+#
+
+# uploadfile()
+LOCAL_ocr_default_text|--text konnte nicht extrahiert werden--
+
+#########################################
+
+#
+# pageRender.c
+#
+
+# docFilter() - shared with getDocDetail
+LOCAL_file_type_odf|Importiert ODF Dok
+LOCAL_file_type_pdf|Importiert PDF Dok
+LOCAL_file_type_image|Importiert Image
+LOCAL_file_type_scanned|Gescannt Dok
+LOCAL_default_title|Neues Dokument ohne Titel
+
+#########################################
+
+#
+# utils.c
+#
+
+LOCAL_no_date_set| - kein Termin festgelegt -
+
+#########################################
+
+#
+# scan.c
+#
+
+# ocrImage()
+LOCAL_page_delimiter|---------------- seite %d ----------------\n%s\n
+LOCAL_resolution_outside_range_to_attempt_ocr|Auflösung eingestellt außerhalb sicherer Bereich zu versuchen OCR.\n 
+
+# internalDoScanningOperation()
+LOCAL_opendias_server|opendias server
+
+#########################################
+
+#
+# web_handler.c
+#
+LOCAL_server_busy|Dieser Server ist ausgelastet, bitte versuchen Sie es später erneut.
+LOCAL_server_error|Ein interner Fehler ist aufgetreten.
+LOCAL_request_error|Ihre Anfrage passte nicht bitte das Formular 'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)'.
+LOCAL_access_denied|Zugriff verweigert
+LOCAL_no_access|Sie haben keine Berechtigung, um die Anforderung abzuschließen
+LOCAL_processing_error|Ihre Anfrage konnte nicht verarbeitet werden
+LOCAL_missing_support|Unterstützung für diese Funktion ist nicht in zusammengestellt

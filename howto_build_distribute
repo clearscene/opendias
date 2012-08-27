@@ -1,21 +1,29 @@
 
 Generate a buildable source tree (after git checkout)
 --------------------------------
-automake --add-missing
-autoreconf -v
+autoreconf -iv
 
 
 Hack away
 ---------
-Update source, build and tests
-run tests: cd test && ./setupRun.sh
+Update Changelog, source, api doc, builds. 
+Run autoscan, cppcheck and tests
+  cppcheck --verbose --enable=all src/
+  cd test && ./setupRun.sh
+merge (or request pull) into current development branch
+
+
+Merge development branch
+------------------------
+Get the api doc diffs and update the website
+git merge the development branch into master
+bump the configure.ac version number
+consolidate Changelog
 
 
 Create a source tarball (suitable for distribution)
 -----------------------
-Update: Changelog
-bump version in configure.ac
-autoreconf -v
+autoreconf -iv
 autoscan
 make distcheck
 
