@@ -63,8 +63,9 @@ On, RedHat or Fedora, you can do this by running:
 
   su - 
   yum install gcc-c++ make sqlite-devel libmicrohttpd-devel \
-    libuuid-devel sane-backends-devel freeimage-devel \
-    tesseract-devel libxml2-devel zziplib-devel libarchive-devel 
+    libuuid-devel sane-backends-devel freeimage-devel leptonica-devel \
+    tesseract-devel libxml2-devel zziplib-devel libarchive-devel \
+    poppler-cpp-devel
 
 -----------------------------------
 

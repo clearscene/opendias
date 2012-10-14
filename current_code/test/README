@@ -59,7 +59,8 @@ To check the code base does not include common errors:
 3.1 Getting the harness to compile
 -----------------------------------
 The main harness has the following dependencies:
-sudo apt-get install valgrind lcov cppcheck libdbd-sqlite3-perl libxml-simple-perl libwww-perl apt-rdepends 
+  sudo apt-get install valgrind lcov cppcheck libdbd-sqlite3-perl libxml-simple-perl libwww-perl apt-rdepends 
+  sudo yum install valgrind lcov cppcheck perl-DBD-SQLite perl-XML-Simple perl-libwww-perl
 
 3.2 Getting the GUI testing environment working
 -----------------------------------------------
