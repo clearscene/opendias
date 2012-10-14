@@ -68,7 +68,9 @@ extern "C" void runocr(struct scanCallInfo *info) {
     // Language is the code of the language for which the data will be loaded.
     // (Codes follow ISO 639-2.) If it is NULL, english (eng) will be loaded.
     tesseract::TessBaseAPI *tessObject = new tesseract::TessBaseAPI();
+#ifdef EXTENDED_OCR
     o_log(DEBUGM, "Tesseract-ocr version: %s", tessObject->Version() );
+#endif // EXTENDED_OCR //
     o_log(DEBUGM, "Leptonica version: %s", getLeptonicaVersion() );
 
     if ( tessObject->Init( "/usr/share/tesseract-ocr/tessdata", info->language ) ) {
@@ -76,12 +78,16 @@ extern "C" void runocr(struct scanCallInfo *info) {
       tessObject->End();
       return;
     }
+#ifdef EXTENDED_OCR
     o_log(DEBUGM, "Initalised language was: %s", tessObject->GetInitLanguagesAsString() );
+#endif // EXTENDED_OCR //
 
     tessObject->SetImage( info->image_pix );
+#ifdef EXTENDED_OCR
     if( info->ppi > 0 ) {
       tessObject->SetSourceResolution( info->ppi );
     }
+#endif // EXTENDED_OCR //
 
     ret = tessObject->GetUTF8Text();
     info->ret = strdup(ret);

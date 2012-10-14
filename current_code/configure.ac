@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(opendias, [0.8], [wbooth@clearscene.net])
+AC_INIT(opendias, [0.8.1], [wbooth@clearscene.net])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AM_CONFIG_HEADER([config.h])
@@ -90,9 +90,11 @@ AC_CHECK_LIB(sane, main,
 
 ocr="no"
 AC_LANG_PUSH([C++])
-AC_CHECK_LIB(tesseract, main,
+AC_SEARCH_LIBS([_ZN9tesseract11TessBaseAPI8SetImageEPK3Pix], [tesseract tesseract_api],
   [AC_CHECK_HEADER(tesseract/baseapi.h,
-    ocr="yes",
+    ocr="yes"
+    AC_SEARCH_LIBS([_ZNK9tesseract11TessBaseAPI24GetInitLanguagesAsStringEv], [tesseract tesseract_api],
+      AC_DEFINE([EXTENDED_OCR],[],[Have everything that is needed to OCR documents])),
     AC_MSG_WARN(You are missing the development headers for the tesseract v3 libs))],
   AC_MSG_WARN(You are missing the tesseract v3 libs) )  
 AC_LANG_POP([C++])
@@ -153,7 +155,8 @@ fi
 
 if test "x$ocr" = "xyes" && test "x$imageprocessing" = "xyes" ; then
  AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
- OPENDIAS_LIBS="$OPENDIAS_LIBS -ltesseract -llept"
+ OPENDIAS_LIBS="$OPENDIAS_LIBS -llept"
+ #OPENDIAS_LIBS="$OPENDIAS_LIBS -ltesseract -llept"
 else
  AC_MSG_WARN(You wll not be able to OCR any document.)
 fi
