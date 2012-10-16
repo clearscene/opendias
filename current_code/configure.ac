@@ -110,14 +110,6 @@ AC_CHECK_LIB(poppler-cpp, _ZN7poppler8document14load_from_fileERKSsS2_S2_,
 AC_LANG_POP([C++])
 
 
-archive="no"
-AC_CHECK_LIB(archive, main, 
-  [AC_CHECK_HEADER(archive.h,
-    archive="yes",
-    AC_MSG_WARN(You are missing the development headers for the archive libs))], 
-  AC_MSG_WARN(You are missing the archive libs) )
-
-
 zzip="no"
 AC_CHECK_LIB(zzipwrap, main, 
   [AC_CHECK_HEADER(zzip/lib.h,
@@ -156,15 +148,14 @@ fi
 if test "x$ocr" = "xyes" && test "x$imageprocessing" = "xyes" ; then
  AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
  OPENDIAS_LIBS="$OPENDIAS_LIBS -llept"
- #OPENDIAS_LIBS="$OPENDIAS_LIBS -ltesseract -llept"
 else
  AC_MSG_WARN(You wll not be able to OCR any document.)
 fi
 
 
-if test "x$xml" = "xyes" && test "x$zzip" = "xyes" && test "x$archive" = "xyes" ; then
+if test "x$xml" = "xyes" && test "x$zzip" = "xyes" ; then
 	AC_DEFINE([CAN_READODF],[],[Have everything that is needed to read ODF documents])
-	OPENDIAS_LIBS="$OPENDIAS_LIBS -larchive -lxml2 -lzzip"
+	OPENDIAS_LIBS="$OPENDIAS_LIBS -lxml2 -lzzip"
 else
 	AC_MSG_WARN(You wll not be able to import any ODF documents.)
 fi

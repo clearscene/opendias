@@ -20,8 +20,6 @@
 
 #ifdef CAN_READODF
 #include <unistd.h>
-#include <archive.h>
-#include <archive_entry.h>
 #include <memory.h>
 #include <stdio.h>
 #include <string.h>
