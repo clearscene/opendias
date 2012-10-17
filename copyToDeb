@@ -1,4 +1,0 @@
-rsync --exclude=Makefile* -acvp --progress current_code/webcontent/ ../clearscene-deb-opendias/webcontent/
-rsync --exclude=Makefile* -acvp --progress current_code/sql/ ../clearscene-deb-opendias/conf/sql/
-rsync --exclude=Makefile* -acvp --progress current_code/src/opendias ../clearscene-deb-opendias/bin/
-rsync --exclude=Makefile* -acvp --progress current_code/src/opendiasconfig ../clearscene-deb-opendias/bin/
