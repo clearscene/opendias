@@ -15,7 +15,7 @@ Implement 'By Username/Password' access controls
 
 Implement 'OCR now' on document detail page.
 
-Package into .deb and .rpm and get included into major repositories
+Get included into major repositories
 
 Implement the remainder of the test plan 'current_code/test/regressionTests/testplan'
 
@@ -24,6 +24,8 @@ Frontend remembers user options
 
 Version 1.0
 -----------
+
+Implement webservice to allow backend datastores
 
 Turn OCR into a plugin
 
