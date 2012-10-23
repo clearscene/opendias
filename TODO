@@ -9,9 +9,11 @@ Version 0.9
 
 Configurable install locations
 
-Allow tests to be run without special permission on dirs (eg /var/run/)
+Allow tests to be run without special permission on dirs (eg /var/run/). ie remove 3.3 from tests/README
 
-Fix intermittent test failures.
+Migrate 8_* tests to use QUnit instead of HTMLUnit. ie remove 2.3 from tests/README
+
+Fix intermittent test failures (log timings mainly).
 
 Implement 'By Username/Password' access controls
 
