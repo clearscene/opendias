@@ -1,6 +1,7 @@
 openDias - Document Imaging Archive System
 
   1. Introduction
+    1.1 Quick Start
   2. Satisfying Dependencies
     2.1 Required
     2.2 Optional
@@ -9,12 +10,29 @@ openDias - Document Imaging Archive System
     3.1 As a user
     3.2 As a developer
   4. Running
+  5. Developing
+    5.1 Before submitting a 'pull request'
+    5.2 Accepting a pull request
+    5.3 Distribution
 
 -----------------------------------
 
 1. Introduction
 
   [please add]
+
+1.1 Quick Start
+---------------
+Download the latest tarball (opendias-x.y.x.tar.gz) from http://opendias.essentialcollections.co.uk/downloads
+  tar -xvfz opendias-x.y.z.tar.gz
+  cd opendias-x.y.z
+  ./configure
+  make
+  make install
+Start the application:
+  sudo /usr/local/bin/opendias
+Use the application, by visiting:
+  http://localhost:8988/opendias
 
 -----------------------------------
 
@@ -39,13 +57,12 @@ openDias - Document Imaging Archive System
     leptonica
 
   2.2.2 For OCR
-    tesseract-ocr
+    tesseract3-ocr
     leptonica
 
   2.2.3 For ODF import
     xml2
     zzip
-    archive
 
   2.2.4 For PDF import
     poppler-cpp
@@ -63,7 +80,7 @@ On, RedHat or Fedora, you can do this by running:
 
   su - 
   yum install gcc-c++ make sqlite-devel libmicrohttpd-devel \
-    libuuid-devel sane-backends-devel freeimage-devel leptonica-devel \
+    libuuid-devel sane-backends-devel leptonica-devel \
     tesseract-devel libxml2-devel zziplib-devel poppler-cpp-devel
 
 -----------------------------------
@@ -94,7 +111,7 @@ You need to pre configure the source:
   [get setup by following the local README file]
   ./setupRun.sh 
   [run client side tests test/clientSideTesting/README]
-  [refer to ../howto_build_distribute for details on publishing]
+  [refer '5. Developing' for details on publishing]
 
 -----------------------------------
 
@@ -122,5 +139,50 @@ or use a forwarding proxy (eg Apache) to remove the port number. eg:
 to be able to point a web browser at:
 
   http://myproxyServer.com/opendias
+
+
+
+-----------------------------------
+
+5. Developing
+
+5.1 Before submitting a 'pull request'
+--------------------------------------
+ * Ensure you are working against the most current codebase
+ * Create a git branch off the current development branch (eg development_0_9)
+ * Hack away
+ * Update Changelog, api doc, builds file (eg. Make.am or configure.ac).
+ * Write new tests to cover your new functionality
+ * Update current tests where appropriate
+ * Run autoscan, cppcheck.
+    autoscan
+    cppcheck --verbose --enable=all src/
+ * Ensure all tests pass
+    cd test && ./setupRun.sh
+ * Submit a 'pull request' into current development branch
+
+
+5.2 Accepting a pull request
+----------------------------
+ * Inspect the diffs between the current development branch and the end of the authors branch.
+ * Submit update feedback to the author, if required.
+ * Checkout the authors branch and ensure the tests pass.
+ * git merge the authors branch into the development branch.
+ * bump the configure.ac version number.
+ * consolidate Changelog
+
+
+5.3 Distribution
+----------------
+ * git merge the development branch into master
+ * Checkout master and ensure the tests pass.
+ * Ensure the general checks are satisfied
+    autoreconf -iv
+    autoscan
+    cppcheck --verbose --enable=all src/
+ * Get the api doc and Changelog diffs, and update the website.
+ * bump the configure.ac version number
+ * Generate distribution tarball
+    make distcheck
 
 
