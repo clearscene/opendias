@@ -7,11 +7,17 @@
 Version 0.9
 -----------
 
-Print documents
+Configurable install locations
 
-Got a busy signal - then give option to keep polling until it's available.
+Allow tests to be run without special permission on dirs (eg /var/run/)
+
+Fix intermittent test failures.
 
 Implement 'By Username/Password' access controls
+
+Print documents
+
+Got a SANE busy signal - then give option to keep polling until it's available.
 
 Implement 'OCR now' on document detail page.
 
@@ -25,7 +31,7 @@ Frontend remembers user options
 Version 1.0
 -----------
 
-Implement webservice to allow backend datastores
+Implement webservice to allow cloud backend datastores
 
 Turn OCR into a plugin
 
@@ -45,11 +51,11 @@ After That (possible ideas)
 +-----------------------------------------------+
 |          RPM          |           DEB         |
 +-----------------------------------------------+
-| Package Built         |  Package Built    Y   |
-| rpmfusion.org         |  getdeb.net           |
-| Fedora                |  Debian               |
-| OpenSUSE              |  Ubuntu               |
-| Mandriva              |                       |
+| Package Built      Y  |  Package Built     Y  |
+| rpmfusion.org         |  software center   Y  |
+| Fedora                |  getdeb.net           |
+| OpenSUSE              |  Debian               |
+| Mandriva              |  Ubuntu               |
 +-----------------------------------------------+
 
 
