@@ -7,7 +7,7 @@
 Version 0.9
 -----------
 
-Configurable install locations
+[wpb] Configurable install locations
 
 Allow tests to be run without special permission on dirs (eg /var/run/). ie remove 3.3 from tests/README
 
