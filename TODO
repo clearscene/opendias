@@ -13,6 +13,8 @@ Allow tests to be run without special permission on dirs (eg /var/run/). ie remo
 
 Migrate 8_* tests to use QUnit instead of HTMLUnit. ie remove 2.3 from tests/README
 
+Implement the remainder of the test plan 'current_code/test/regressionTests/testplan', check coverage.
+
 Fix intermittent test failures (log timings mainly).
 
 Implement 'By Username/Password' access controls
@@ -24,8 +26,6 @@ Got a SANE busy signal - then give option to keep polling until it's available.
 Implement 'OCR now' on document detail page.
 
 Get included into major repositories
-
-Implement the remainder of the test plan 'current_code/test/regressionTests/testplan'
 
 Frontend remembers user options
 
