@@ -51,7 +51,6 @@ the application (via the perl test script).
 -------------------
 To check the code base does not include common errors:
   cppcheck --verbose --enable=all src/
-  splint -posix-lib -DHAVE_CONFIG_H -I. -I..  -DPACKAGE_LOCALE_DIR=\""/usr/local//locale"\" -DPACKAGE_SRC_DIR=\""."\" -DPACKAGE_DATA_DIR=\""/usr/local/share"\" -I/usr/include/uuid -I/usr/include/libxml2 -D__USE_XOPEN2K8=1 -D__builtin_va_list=va_list -weak src/*.c
 
 3. Setting up the test environment
 ----------------------------------
