@@ -114,7 +114,7 @@ int connect_db (int createIfRequired) {
 
   // Bring the DB up-2-date
   for(i=version+1 ; i <= DB_VERSION ; i++) {
-    char *upgradeSQL = o_strdup(PACKAGE_DATA_DIR);
+    char *upgradeSQL = o_strdup(SHARE_DIR);
     o_concatf(&upgradeSQL, "/opendias/openDIAS.sqlite3.dmp.v%d.sql", i);
 
     o_log(INFORMATION, "Bringing BD upto version: %d", i);

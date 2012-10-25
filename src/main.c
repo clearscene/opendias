@@ -64,15 +64,16 @@ int setup (char *configFile) {
   DB_VERSION = 6;
   PORT = 8988; // Default - but overridden by config settings before port is opened
   BASE_DIR = NULL;
-  LOG_DIR = o_strdup("/var/log/opendias");
+  LOG_DIR = o_printf("%s/log/opendias", VAR_DIR);
   startedServices.log = 1;
   o_log(INFORMATION, "Setting default log verbosity to %d.", VERBOSITY);
 
   // Get 'DB' location
   if (configFile != NULL) {
-    conf = configFile;
-  } else {
-    conf = DEFAULT_CONF_FILE;
+    conf = o_strdup(configFile);
+  } 
+  else {
+    conf = o_printf("%s/opendias/opendias.conf", ETC_DIR);
   }
 
 
@@ -80,8 +81,10 @@ int setup (char *configFile) {
   if( 0 == load_file_to_memory(conf, &location) ) {
     o_log(ERROR, "Cannot find main config file: %s", conf);
     free(location);
+    free(conf);
     return 1;
   }
+  free(conf);
 
   chop(location);
   BASE_DIR = o_strdup(location);
@@ -392,7 +395,9 @@ int main (int argc, char **argv) {
   if( turnToDaemon==1 ) {
     // Turn into a meamon and write the pid file.
     o_log(INFORMATION, "Running in daemon mode.");
-    daemonize("/tmp/", "/var/run/opendias.pid");
+    char* pidfile = o_printf("%s/run/opendias.pid", VAR_DIR);
+    daemonize("/tmp/", pidfile);
+    free(pidfile);
     startedServices.pid = 1;
   }
   else {
@@ -402,8 +407,8 @@ int main (int argc, char **argv) {
 
   // Open logs, read the config file, start the database, etc...
   if( setup(configFile) == 1 ) {
-    if( turnToDaemon!=1 ) 
-      printf("Could not startup. Check /var/log/opendias/ for the reason.\n");
+    if( turnToDaemon != 1 )
+      printf("Could not startup. Check %s for the reason.\n", LOG_DIR);
     server_shutdown();
     exit(EXIT_FAILURE);
   }
