@@ -15,5 +15,3 @@ sqldir = \
 EXTRA_DIST = \
 	$(sql_DATA)
 
-## File created by the gnome-build tools
-
