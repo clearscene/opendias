@@ -15,7 +15,7 @@ sub testProfile {
 
 sub updateStartCommand {
   my $startCommand = shift;
-  $$startCommand =~ s/testapp\.conf/testappMISSING.conf/g;
+  $$startCommand =~ s/bin\/opendias/bin\/opendias -c \/tmp\/opendias_test\/etc\/opendias\/testappMISSING.conf/g;
   o_log("Updated start command to specify a mmissing config file.");
 }
 
