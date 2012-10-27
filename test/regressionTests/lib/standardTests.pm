@@ -135,7 +135,7 @@ sub stopService {
   }
 
   o_log("Stopping service");
-  system("kill -s USR1 `cat /var/run/opendias.pid`");
+  system("kill -s USR1 `cat /tmp/opendias_test/var/run/opendias.pid`");
 
   # We need valgrind (if running) so finish it's work nad write it's log
   o_log("Waiting for valgrind to finish.");

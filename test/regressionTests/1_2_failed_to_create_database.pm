@@ -15,7 +15,7 @@ sub testProfile {
 
 sub updateStartCommand {
   my $startCommand = shift;
-  $$startCommand =~ s/testapp\.conf/testappUnableToCreate.conf/g;
+  $$startCommand =~ s/bin\/opendias/bin\/opendias -c conf\/testappUnableToCreate.conf/g;
   o_log("Updated start command to stop the database from being created.");
 }
 

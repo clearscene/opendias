@@ -57,16 +57,16 @@ int setup (char *configFile) {
   struct simpleLinkedList *rSet;
   char *location, *conf, *sql, *config_option, *config_value;
 
-	o_log(DEBUGM,"setup launched\n");
+	o_log(DEBUGM,"setup launched");
 
   // Defaults
-  VERBOSITY = DEBUGM;
+  // Log verbosity has already been set in main()
   DB_VERSION = 6;
   PORT = 8988; // Default - but overridden by config settings before port is opened
   BASE_DIR = NULL;
   LOG_DIR = o_printf("%s/log/opendias", VAR_DIR);
   startedServices.log = 1;
-  o_log(INFORMATION, "Setting default log verbosity to %d.", VERBOSITY);
+  o_log(INFORMATION, "Setting default log (%s) verbosity to %d.", LOG_DIR, VERBOSITY);
 
   // Get 'DB' location
   if (configFile != NULL) {
@@ -238,7 +238,7 @@ void setup_signal_handling() {
     sigaction(SIGUSR2, &newSigAction, NULL);    /* catch user 2 signal */
 }
  
-void daemonize(char *rundir, char *pidfile) {
+void daemonize(char *rundir) {
     int pid, sid, i;
     char *str;
     size_t size;
@@ -280,14 +280,17 @@ void daemonize(char *rundir, char *pidfile) {
     }
  
     /* Ensure only one copy */
+    char* pidfile = o_printf("%s/run/opendias.pid", VAR_DIR);
     pidFilehandle = open(pidfile, O_RDWR|O_CREAT, 0600);
  
     if (pidFilehandle == -1 ) {
         /* Couldn't open lock file */
         printf("Could not daemonise [3] pidfile %s. Try running with the -d option or as super user\n",pidfile);
         o_log(ERROR, "Could not open PID lock file. Exiting");
+        free( pidfile );
         exit(EXIT_FAILURE);
     }
+    free( pidfile );
  
     /* Try to lock file */
     if (lockf(pidFilehandle,F_TLOCK,0) == -1) {
@@ -394,14 +397,14 @@ int main (int argc, char **argv) {
     }
   }
 
+  // Set default log verbosity
+  VERBOSITY = DEBUGM;
 
   // Disconnect from the tty
   if( turnToDaemon==1 ) {
     // Turn into a meamon and write the pid file.
     o_log(INFORMATION, "Running in daemon mode.");
-    char* pidfile = o_printf("%s/run/opendias.pid", VAR_DIR);
-    daemonize("/tmp/", pidfile);
-    free(pidfile);
+    daemonize("/tmp/");
     startedServices.pid = 1;
   }
   else {

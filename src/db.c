@@ -79,7 +79,7 @@ int connect_db (int createIfRequired) {
   char *db, *data;
 
   // Test to see if a DB file exsists
-  db = o_printf("%sopenDIAS.sqlite3", BASE_DIR);
+  db = o_printf("%s/openDIAS.sqlite3", BASE_DIR);
   o_log(DEBUGM,"database file is %s",db);
   if( 0 == access(db, F_OK) ) {
     o_log(DEBUGM, "Dir structure is in-place, database should exist");

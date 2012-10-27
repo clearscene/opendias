@@ -74,9 +74,8 @@ cpan -f WWW::HtmlUnit
 
 3.3 Setting up the machine
 --------------------------
-- The user that runs the test harness, will need access to:
-  * /var/log/opendias
-  * /var/run/
+The test setupRun script will configure and build the application using a prefix of '/tmp/opendias_test'. 
+Therefore no special permission are required to before running tests.
 
 3.4 Deploying files
 -------------------
@@ -91,3 +90,4 @@ You should also deploy the test language pack, by running:
 cd test
 ./setupRun.sh
 view './index.html' for the test results
+
