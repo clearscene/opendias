@@ -7,9 +7,6 @@
 Version 0.9
 -----------
 
-[wpb] Configurable install locations
-[wpb] Allow tests to be run without special permission on dirs (eg /var/run/). ie remove 3.3 from tests/README
-
 Migrate 8_* tests to use QUnit instead of HTMLUnit. ie remove 2.3 from tests/README
 
 Implement the remainder of the test plan 'current_code/test/regressionTests/testplan', check coverage.
