@@ -1,25 +1,17 @@
 ## Process this file with automake to produce Makefile.in
-## Created by Anjuta
 
 SUBDIRS = src sql webcontent i18n 
 
 opendiasdocdir = ${prefix}/doc/opendias
-
 opendiasdoc_DATA = ChangeLog
-
 EXTRA_DIST = $(opendiasdoc_DATA)
 
 install-exec-hook:
-	test ! -e /var/log/opendias && mkdir /var/log/opendias || echo Log directory already exists
-	test ! -e /var/lib/opendias && mkdir /var/lib/opendias || echo Lib directory already exists
-	test ! -e /etc/opendias && mkdir /etc/opendias || echo openDIAS config directory already exists
-	test ! -e /etc/opendias/opendias.conf && echo /var/lib/opendias >> /etc/opendias/opendias.conf || echo config file already exists
-
-## Copy all the spec files. Of cource, only one is actually used.
-#dist-hook:
-#	for specfile in *.spec; do \
-#		if test -f $$specfile; then \
-#			cp -p $$specfile $(distdir); \
-#		fi \
-#	done
+	test ! -e ${localstatedir}/run && mkdir -p ${localstatedir}/run || echo Run directory already exists
+	test ! -e ${localstatedir}/log/opendias && mkdir -p ${localstatedir}/log/opendias || echo Log directory already exists
+	test ! -e ${libdir}/opendias && mkdir -p ${libdir}/opendias || echo Lib directory already exists
+	test ! -e ${sysconfdir}/opendias && mkdir -p ${sysconfdir}/opendias || echo openDIAS config directory already exists
+	test ! -e ${sysconfdir}/opendias/opendias.conf && echo ${libdir}/opendias >> ${sysconfdir}/opendias/opendias.conf || echo config file already exists
+	perl -pi -e 's|__libdir__|$(libdir)|g' $(pkgdatadir)/openDIAS.sqlite3.dmp.*.sql
+	perl -pi -e 's|__localstatedir__|$(localstatedir)|g' $(pkgdatadir)/openDIAS.sqlite3.dmp.*.sql
 

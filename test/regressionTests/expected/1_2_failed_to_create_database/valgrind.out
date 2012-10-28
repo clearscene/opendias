@@ -1,7 +1,7 @@
 ==XXXXX==  Memcheck, a memory error detector
 ==XXXXX==  Copyright [details]
 ==XXXXX==  Using Valgrind [version and build info]
-==XXXXX==  Command: ../src/opendias -c [CONFIG_FILE]
+==XXXXX==  Command: /tmp/opendias_test/bin/opendias -c /tmp/opendias_test/etc/opendias/testappUnableToCreate.conf
 ==XXXXX==  Parent PID: XXXXX.
 ==XXXXX==  
 ==XXXXX==  

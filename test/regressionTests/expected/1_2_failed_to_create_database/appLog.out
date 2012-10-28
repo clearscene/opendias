@@ -1,11 +1,14 @@
 STDOUT
 --------------------------------------------------
 LOG-OUTPUT
--date-:-thread-:INF: Setting default log verbosity to 4.
+-date-:-thread-:INF: Running in daemon mode.
+-date-:-thread-:INF: Child process created [CONFIG_FILE]
+-date-:-thread-:DBG: setup launched
+-date-:-thread-:INF: Setting default log (/tmp/opendias_test/var/log/opendias) verbosity to 4.
 -date-:-thread-:INF: Using config file: [CONFIG_FILE]
--date-:-thread-:INF: Which says the database is at: /root/
+-date-:-thread-:INF: Which says the database is at: /root
 -date-:-thread-:DBG: database file is /root/openDIAS.sqlite3
--date-:-thread-:INF: Creating new database /root/openDIAS.sqlite3 (BASE_DIR = /root/)
+-date-:-thread-:INF: Creating new database /root/openDIAS.sqlite3 (BASE_DIR = /root)
 -date-:-thread-:ERR: Can't open database: [ERROR]
 -date-:-thread-:DBG: Closing database
 -date-:-thread-:WRN: Could not create/connect to new database

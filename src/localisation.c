@@ -89,7 +89,7 @@ const char *getString( char *phrase, char *lang) {
 
 struct simpleLinkedList *loadLangList( char *lang ) {
   struct simpleLinkedList *trList = NULL;
-  char *resourceFile = o_printf("%s/opendias/language.resource.%s", PACKAGE_DATA_DIR, lang);
+  char *resourceFile = o_printf("%s/opendias/language.resource.%s", SHARE_DIR, lang);
 
   o_log(DEBUGM, "loading translation file: %s", resourceFile);
   FILE *translations = fopen(resourceFile, "r");

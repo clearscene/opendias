@@ -158,8 +158,7 @@ for my $requested (@runTests) {
       }
       else {
         printProgressLine($TEST, "Starting service");
-        $startCommand =~ s{^.*\.\./src/opendias}
-                      {../src/opendias}xms;
+        $startCommand =~ s{^.*\s([a-z_\/]*/bin/opendias)}{$1}xms;
         o_log("No need for valgrind on this test.");
       }
       $RES = 1 unless startService( $startCommand, $testProfile->{startTimeout} );
@@ -245,8 +244,8 @@ for my $requested (@runTests) {
       system("cat $outputDir/appLog.out >> $outputDir/$TESTCASENAME/appLog.out");
       system("echo -------------------------------------------------- >> $outputDir/$TESTCASENAME/appLog.out");
       system("echo LOG-OUTPUT >> $outputDir/$TESTCASENAME/appLog.out");
-      system("cat /var/log/opendias/opendias.log >> $outputDir/$TESTCASENAME/appLog.out");
-      unlink("/var/log/opendias/opendias.log");
+      system("cat /tmp/opendias_test/var/log/opendias/opendias.log >> $outputDir/$TESTCASENAME/appLog.out");
+      unlink("/tmp/opendias_test/var/log/opendias/opendias.log");
       system("sed -f config/appLogUnify.sed < $outputDir/$TESTCASENAME/appLog.out > $outputDir/$TESTCASENAME/appLog4Compare.out");
       removeDuplicateLines("$outputDir/$TESTCASENAME/appLog4Compare.out");
       if( length $GENERATE ) {

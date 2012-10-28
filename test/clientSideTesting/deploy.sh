@@ -1,17 +1,19 @@
 #
 
-BASEDIR="/usr/local/share/opendias"
+BASEDIR="/tmp/opendias_test/share/opendias"
 
-cd ../
-./deploy_test_lang_pack.sh
+cp test_localisation_files/*.hh $BASEDIR/webcontent/
+cp test_localisation_files/i18n/*.hh $BASEDIR/
+cp test_localisation_files/includes/*.hh $BASEDIR/webcontent/includes/
+cp test_localisation_files/includes/local/*.hh $BASEDIR/webcontent/includes/local/
+perl -pi -e 's/<\/select>/<option value="hh">#### ########<\/option><\/select>/g' `grep -L '<option value="hh">#### ########' $BASEDIR/webcontent/includes/header.txt.* `
 
-cd clientSideTesting
-sudo mkdir -p $BASEDIR/webcontent/includes/tests/
-sudo cp clientTesting.html $BASEDIR/webcontent/clientTesting.html
-sudo cp jquery.qunit.css $BASEDIR/webcontent/style/jquery.qunit.css
-sudo cp jquery.qunit.js $BASEDIR/webcontent/includes/jquery.qunit.js
+mkdir -p $BASEDIR/webcontent/includes/tests/
+cp clientTesting.html $BASEDIR/webcontent/clientTesting.html
+cp jquery.qunit.css $BASEDIR/webcontent/style/jquery.qunit.css
+cp jquery.qunit.js $BASEDIR/webcontent/includes/jquery.qunit.js
 cd tests
-sudo cp *.js $BASEDIR/webcontent/includes/tests/
+cp *.js $BASEDIR/webcontent/includes/tests/
 
 cd ../
 echo Now start opendias and visit http://host[:port]/opendias/clientTesting.html

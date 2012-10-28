@@ -43,7 +43,7 @@ No language indication = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
               <option value=\'--\'>Browsers Default Language</option>
               <option value=\'en\'>English</option>
               <option value=\'de\'>Deutsche</option>
-            </select></li>
+            <option value="hh">#### ########</option></select></li>
       </ul>
     </div>
   </div>
@@ -197,7 +197,7 @@ header says en = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
               <option value=\'--\'>Browsers Default Language</option>
               <option value=\'en\'>English</option>
               <option value=\'de\'>Deutsche</option>
-            </select></li>
+            <option value="hh">#### ########</option></select></li>
       </ul>
     </div>
   </div>
@@ -351,7 +351,7 @@ header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
               <option value=\'--\'>Voreinstellen sprachlich</option>
               <option value=\'en\'>English</option>
               <option value=\'de\'>Deutsche</option>
-            <option value="hh">#### ########</option><option value="hh">#### ########</option></select></li>
+            <option value="hh">#### ########</option></select></li>
       </ul>
     </div>
   </div>
@@ -505,7 +505,7 @@ bad cookie, header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
               <option value=\'--\'>Voreinstellen sprachlich</option>
               <option value=\'en\'>English</option>
               <option value=\'de\'>Deutsche</option>
-            <option value="hh">#### ########</option><option value="hh">#### ########</option></select></li>
+            <option value="hh">#### ########</option></select></li>
       </ul>
     </div>
   </div>

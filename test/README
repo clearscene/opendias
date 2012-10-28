@@ -51,7 +51,6 @@ the application (via the perl test script).
 -------------------
 To check the code base does not include common errors:
   cppcheck --verbose --enable=all src/
-  splint -posix-lib -DHAVE_CONFIG_H -I. -I..  -DPACKAGE_LOCALE_DIR=\""/usr/local//locale"\" -DPACKAGE_SRC_DIR=\""."\" -DPACKAGE_DATA_DIR=\""/usr/local/share"\" -I/usr/include/uuid -I/usr/include/libxml2 -D__USE_XOPEN2K8=1 -D__builtin_va_list=va_list -weak src/*.c
 
 3. Setting up the test environment
 ----------------------------------
@@ -75,20 +74,12 @@ cpan -f WWW::HtmlUnit
 
 3.3 Setting up the machine
 --------------------------
-- The user that runs the test harness, will need access to:
-  * /var/log/opendias
-  * /var/run/
+The test setupRun script will configure and build the application using a prefix of '/tmp/opendias_test'. 
+Therefore no special permission are required to before running tests.
 
-3.4 Deploying files
--------------------
-Even though the test suit build opendias from source, it does not deploy the 'shared'
-files to the system. (At least for the time being) you will need to make and install
-the app first.
-You should also deploy the test language pack, by running:
-  ./deploy_test_lang_pack.sh
-  
 4. How to run the tests (automated).
 -------------------------------------
 cd test
 ./setupRun.sh
 view './index.html' for the test results
+

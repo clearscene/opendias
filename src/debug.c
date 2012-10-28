@@ -62,18 +62,18 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
     if( message == strstr(message,"|") ) {
       vprintf((char *)message+1,inargs);
       printf("\n");
-	//need to reset inargs to saved ap. reason vprintf function do not do so.
-	va_end(inargs);
-	va_copy(inargs,ap);
+      //need to reset inargs to saved ap. reason vprintf function do not do so.
+      va_end(inargs);
+      va_copy(inargs,ap);
     }
 
-
     // Output to file
-    logFile = o_strdup(LOG_DIR);
-	//printf("running conCat %s !!!\n",logFile);
-
-
-    conCat(&logFile, "/opendias.log");
+    if( LOG_DIR ) {
+      logFile = o_printf("%s/opendias.log", LOG_DIR);
+    }
+    else {
+      logFile = o_printf("%s/log/opendias/opendias.log", VAR_DIR);
+    }
     if((fp = fopen(logFile, "a"))==NULL) {
       fprintf(stderr,"Cannot open log file %s.\n",logFile);
       exit(1);

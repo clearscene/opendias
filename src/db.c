@@ -79,7 +79,7 @@ int connect_db (int createIfRequired) {
   char *db, *data;
 
   // Test to see if a DB file exsists
-  db = o_printf("%sopenDIAS.sqlite3", BASE_DIR);
+  db = o_printf("%s/openDIAS.sqlite3", BASE_DIR);
   o_log(DEBUGM,"database file is %s",db);
   if( 0 == access(db, F_OK) ) {
     o_log(DEBUGM, "Dir structure is in-place, database should exist");
@@ -114,7 +114,7 @@ int connect_db (int createIfRequired) {
 
   // Bring the DB up-2-date
   for(i=version+1 ; i <= DB_VERSION ; i++) {
-    char *upgradeSQL = o_strdup(PACKAGE_DATA_DIR);
+    char *upgradeSQL = o_strdup(SHARE_DIR);
     o_concatf(&upgradeSQL, "/opendias/openDIAS.sqlite3.dmp.v%d.sql", i);
 
     o_log(INFORMATION, "Bringing BD upto version: %d", i);

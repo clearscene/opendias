@@ -90,7 +90,7 @@ static size_t getFromFile(const char *url, const char *lang, char **data) {
 	o_log(SQLDEBUG,"enterting getFromFile: ");
 
   // Build Document Root
-  char *htmlFrag = o_printf("%s/opendias/webcontent%s", PACKAGE_DATA_DIR, url);
+  char *htmlFrag = o_printf("%s/opendias/webcontent%s", SHARE_DIR, url);
 
   size_t size = getFromFile_fullPath(htmlFrag, lang, data);
   free(htmlFrag);

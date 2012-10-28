@@ -45,20 +45,22 @@ int setup (char *configFile) {
   // Defaults
   VERBOSITY = DEBUGM;
   DB_VERSION = 4;
-  LOG_DIR = o_strdup("/var/log/opendias");
+  LOG_DIR = o_printf("%s/log/opendias", VAR_DIR);
 
   // Get 'DB' location
   if (configFile != NULL)
-    conf = configFile;
+    conf = o_strdup(configFile);
   else
-    conf = DEFAULT_CONF_FILE;
+    conf = o_printf("%s/opendias/opendias.conf", ETC_DIR);
 
   o_log(INFORMATION, "|Using config file: %s", conf);
   if( 0 == load_file_to_memory(conf, &location) ) {
     o_log(ERROR, "|Cannot find main config file: %s", conf);
     free(location);
+    free(conf);
     return 1;
   }
+  free(conf);
 
   chop(location);
   BASE_DIR = o_strdup(location);

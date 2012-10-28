@@ -57,31 +57,38 @@ int setup (char *configFile) {
   struct simpleLinkedList *rSet;
   char *location, *conf, *sql, *config_option, *config_value;
 
-	o_log(DEBUGM,"setup launched\n");
+	o_log(DEBUGM,"setup launched");
 
   // Defaults
-  VERBOSITY = DEBUGM;
+  // Log verbosity has already been set in main()
   DB_VERSION = 6;
   PORT = 8988; // Default - but overridden by config settings before port is opened
   BASE_DIR = NULL;
-  LOG_DIR = o_strdup("/var/log/opendias");
+  LOG_DIR = o_printf("%s/log/opendias", VAR_DIR);
   startedServices.log = 1;
-  o_log(INFORMATION, "Setting default log verbosity to %d.", VERBOSITY);
+  o_log(INFORMATION, "Setting default log (%s) verbosity to %d.", LOG_DIR, VERBOSITY);
 
   // Get 'DB' location
   if (configFile != NULL) {
-    conf = configFile;
-  } else {
-    conf = DEFAULT_CONF_FILE;
+    conf = o_strdup(configFile);
+  } 
+  else {
+    conf = o_printf("%s/opendias/opendias.conf", ETC_DIR);
+    if( 0 != access(conf, F_OK) ) {
+      o_log(INFORMATION, "Config not in GNU location: %s. Attempting system config dir /etc/opendias/opendias.conf", conf);
+      free(conf);
+      conf = o_strdup("/etc/opendias/opendias.conf");
+    }
   }
-
 
   o_log(INFORMATION, "Using config file: %s", conf);
   if( 0 == load_file_to_memory(conf, &location) ) {
     o_log(ERROR, "Cannot find main config file: %s", conf);
     free(location);
+    free(conf);
     return 1;
   }
+  free(conf);
 
   chop(location);
   BASE_DIR = o_strdup(location);
@@ -231,7 +238,7 @@ void setup_signal_handling() {
     sigaction(SIGUSR2, &newSigAction, NULL);    /* catch user 2 signal */
 }
  
-void daemonize(char *rundir, char *pidfile) {
+void daemonize(char *rundir) {
     int pid, sid, i;
     char *str;
     size_t size;
@@ -273,14 +280,17 @@ void daemonize(char *rundir, char *pidfile) {
     }
  
     /* Ensure only one copy */
+    char* pidfile = o_printf("%s/run/opendias.pid", VAR_DIR);
     pidFilehandle = open(pidfile, O_RDWR|O_CREAT, 0600);
  
     if (pidFilehandle == -1 ) {
         /* Couldn't open lock file */
         printf("Could not daemonise [3] pidfile %s. Try running with the -d option or as super user\n",pidfile);
         o_log(ERROR, "Could not open PID lock file. Exiting");
+        free( pidfile );
         exit(EXIT_FAILURE);
     }
+    free( pidfile );
  
     /* Try to lock file */
     if (lockf(pidFilehandle,F_TLOCK,0) == -1) {
@@ -387,12 +397,14 @@ int main (int argc, char **argv) {
     }
   }
 
+  // Set default log verbosity
+  VERBOSITY = DEBUGM;
 
   // Disconnect from the tty
   if( turnToDaemon==1 ) {
     // Turn into a meamon and write the pid file.
     o_log(INFORMATION, "Running in daemon mode.");
-    daemonize("/tmp/", "/var/run/opendias.pid");
+    daemonize("/tmp/");
     startedServices.pid = 1;
   }
   else {
@@ -402,8 +414,8 @@ int main (int argc, char **argv) {
 
   // Open logs, read the config file, start the database, etc...
   if( setup(configFile) == 1 ) {
-    if( turnToDaemon!=1 ) 
-      printf("Could not startup. Check /var/log/opendias/ for the reason.\n");
+    if( turnToDaemon != 1 )
+      printf("Could not startup. Check %s for the reason.\n", LOG_DIR);
     server_shutdown();
     exit(EXIT_FAILURE);
   }

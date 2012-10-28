@@ -19,6 +19,7 @@ usage() {
 # Parse off all the parameters
 #
 
+INSTALLLOCATION="/tmp/opendias_test"
 NOBUILD=""
 RECORD=""
 SKIPMEMORY=""
@@ -72,21 +73,13 @@ if [ ! -f "/usr/bin/lcov" ]; then
   echo "Will skip analysing code coverage (package not available)."
 fi
 
-# So that everything else does not have to run as root (for testing), reset back later
-for W in /var/run/opendias.pid; do # /var/log/opendias/opendias.log; do
-  if [ ! -w "$W" ]; then
-    echo $W is not writable. Please correct before running testing.
-    exit
-  fi
-done
-
-# Check we dont have a running service atm.
-ps -ef | grep -v "grep" | grep "opendias"
+# Check we don't have a running service atm.
+ps -ef | grep -v "grep" | grep "bin/opendias"
 if [ "$?" -eq "0" ]; then
   echo "It looks like the opendias service is already running. Please stop before running testing."
   exit
 fi
-rm -f /var/log/opendias/opendias.log
+rm -f /tmp/opendias_test/var/log/opendias/opendias.log
 
 #
 # Cleanup
@@ -138,10 +131,10 @@ if [ "$NOBUILD" == "" ]; then
   cd ../
   if [ "$SKIPCOVERAGE" == "-c" ]; then
     echo " (without coverage) ..."
-    ./configure --enable-werror -C CFLAGS=' -g -O ' &> test/results/buildLog2.out
+    ./configure --prefix=$INSTALLLOCATION --enable-werror -C CFLAGS=' -g -O ' &> test/results/buildLog2.out
   else
     echo " (with coverage) ..."
-    ./configure --enable-werror -C CFLAGS=' -g -O --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
+    ./configure --prefix=$INSTALLLOCATION --enable-werror -C CFLAGS=' -g -O --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
   fi
   cd test
   # unfortunatly bash cannot support "&>>" - yet!
@@ -164,6 +157,30 @@ if [ "$NOBUILD" == "" ]; then
   # unfortunatly bash cannot support "&>>" - yet!
   cat results/buildLog2.out >> results/buildLog.out
   rm results/buildLog2.out
+
+  # Install the app into the configured test location.
+  echo Installing ...
+  cd ../
+  make install &> test/results/buildLog2.out
+  if [ "$?" -ne "0" ]; then
+    echo "Install stage failed. Check the buildLog.out for details."
+    cd test
+    # unfortunatly bash cannot support "&>>" - yet!
+    cat results/buildLog2.out >> results/buildLog.out
+    rm results/buildLog2.out
+    exit
+  fi
+  cd test
+  # unfortunatly bash cannot support "&>>" - yet!
+  cat results/buildLog2.out >> results/buildLog.out
+  rm results/buildLog2.out
+
+  # Add in the test language pack
+  cp clientSideTesting/test_localisation_files/*.hh $INSTALLLOCATION/share/opendias/webcontent/
+  cp clientSideTesting/test_localisation_files/i18n/*.hh $INSTALLLOCATION/share/opendias/
+  cp clientSideTesting/test_localisation_files/includes/*.hh $INSTALLLOCATION/share/opendias/webcontent/includes/
+  cp clientSideTesting/test_localisation_files/includes/local/*.hh $INSTALLLOCATION/share/opendias/webcontent/includes/local/
+  perl -pi -e 's/<\/select>/<option value="hh">#### ########<\/option><\/select>/g' `grep -L '<option value="hh">#### ########' $INSTALLLOCATION/share/opendias/webcontent/includes/header.txt.* `
 
 else
   echo Skipping the build process
@@ -210,9 +227,9 @@ mkdir -p /tmp/opendiassaneconfig
 cp config/sane/* /tmp/opendiassaneconfig/
 export SANE_CONFIG_DIR=/tmp/opendiassaneconfig/
 
+echo /tmp/opendiastest > $INSTALLLOCATION/etc/opendias/opendias.conf
 
-PWD=`pwd`
-echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP ../src/opendias -c $PWD/config/testapp.conf \> results/resultsFiles/appLog.out > config/startAppCommands
+echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP $INSTALLLOCATION/bin/opendias \> results/resultsFiles/appLog.out > config/startAppCommands
 
 
 
