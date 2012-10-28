@@ -13,7 +13,7 @@ Implement the remainder of the test plan 'current_code/test/regressionTests/test
 
 Fix intermittent test failures (log timings mainly).
 
-Implement 'By Username/Password' access controls
+[wpb] Implement 'By Username/Password' access controls
 
 Print documents
 
