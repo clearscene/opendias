@@ -77,14 +77,6 @@ cpan -f WWW::HtmlUnit
 The test setupRun script will configure and build the application using a prefix of '/tmp/opendias_test'. 
 Therefore no special permission are required to before running tests.
 
-3.4 Deploying files
--------------------
-Even though the test suit build opendias from source, it does not deploy the 'shared'
-files to the system. (At least for the time being) you will need to make and install
-the app first.
-You should also deploy the test language pack, by running:
-  ./deploy_test_lang_pack.sh
-  
 4. How to run the tests (automated).
 -------------------------------------
 cd test
