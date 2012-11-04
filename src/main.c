@@ -44,6 +44,7 @@
 #include "debug.h"
 #include "web_handler.h"
 #include "localisation.h"
+#include "sessionmanagement.h"
 
 #include "main.h"
 
@@ -56,17 +57,23 @@ int setup (char *configFile) {
 
   struct simpleLinkedList *rSet;
   char *location, *conf, *sql, *config_option, *config_value;
+  unsigned short MAX_SESSIONS;
+  unsigned int MAX_SESSION_AGE;
 
 	o_log(DEBUGM,"setup launched");
 
   // Defaults
-  // Log verbosity has already been set in main()
-  DB_VERSION = 6;
-  PORT = 8988; // Default - but overridden by config settings before port is opened
   BASE_DIR = NULL;
+  DB_VERSION = 6; // Log verbosity has already been set in main()
+
   LOG_DIR = o_printf("%s/log/opendias", VAR_DIR);
   startedServices.log = 1;
   o_log(INFORMATION, "Setting default log (%s) verbosity to %d.", LOG_DIR, VERBOSITY);
+
+  // Default - but overridden by config settings before port is opened
+  PORT = 8988; 
+  MAX_SESSIONS = 10;
+  MAX_SESSION_AGE = 3600;
 
   // Get 'DB' location
   if (configFile != NULL) {
@@ -130,6 +137,12 @@ int setup (char *configFile) {
           createDir_ifRequired(LOG_DIR);
         }
       }
+      else if ( 0 == strcmp(config_option, "max_sessions") ) {
+        MAX_SESSIONS = (unsigned short) atoi(config_value);
+      }
+      else if ( 0 == strcmp(config_option, "max_session_age") ) {
+        MAX_SESSION_AGE = (unsigned int) atoi(config_value);
+      }
       free(config_option);
       free(config_value);
     } while ( nextRow( rSet ) );
@@ -141,6 +154,10 @@ int setup (char *configFile) {
   conCat(&location, "/scans");
   createDir_ifRequired(location);
   free(location);
+
+  // Initalise localisaion storage.
+  init_session_management( MAX_SESSIONS, MAX_SESSION_AGE );
+  startedServices.sessions = 1;
 
   return 0;
 
@@ -169,6 +186,11 @@ void server_shutdown() {
     sane_exit();
   }
 #endif // CAN_SCAN //
+
+  if( startedServices.sessions ) {
+    cleanup_session_management();
+    o_log(DEBUGM, "... session management [done]");
+  }
 
   if( startedServices.locale ) {
     o_log(DEBUGM, "... locale [done]");
@@ -379,6 +401,7 @@ int main (int argc, char **argv) {
   startedServices.sane = 0;
   startedServices.command = 0;
   startedServices.httpd = 0;
+  startedServices.sessions = 0;
 
   // Parse out the command line flags
   while ((c = getopt(argc, argv, "dc:ih")) != EOF) {

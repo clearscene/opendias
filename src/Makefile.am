@@ -65,7 +65,9 @@ opendias_SOURCES = \
   saneDispatcher.c    \
   saneDispatcher.h    \
   simpleLinkedList.c    \
-  simpleLinkedList.h
+  simpleLinkedList.h \
+  sessionmanagement.c \
+  sessionmanagement.h
 
 opendias_LDFLAGS = 
 

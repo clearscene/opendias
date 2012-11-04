@@ -84,6 +84,9 @@ void sll_insert ( struct simpleLinkedList *element, char *key, void *data ) {
 }
 
 struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *element, const char *key ) {
+  if( key == NULL ) {
+    return NULL;
+  }
   if( element && ( element != NULL ) ) {
     if( element->key && ( element->key != NULL ) && ( 0 == strcmp(element->key, key) ) ) {
       return element;
@@ -136,3 +139,13 @@ void sll_delete( struct simpleLinkedList *element ) {
   free( element );
 }
 
+int _sll_count( struct simpleLinkedList *element, int current_count ) {
+  if( element->next == NULL ) {
+    return current_count;
+  }
+  return _sll_count( element->next, ++current_count );
+}
+
+int sll_count( struct simpleLinkedList *element ) {
+  return _sll_count( element, 0 );
+}

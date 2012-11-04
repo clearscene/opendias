@@ -42,6 +42,7 @@
 #include "import_doc.h"
 #include "simpleLinkedList.h"
 #include "localisation.h"
+#include "sessionmanagement.h"
 
 #include "web_handler.h"
 
@@ -138,21 +139,30 @@ static char *build_page (char *page, const char *lang) {
 //                                                  ----                      | char *data
 //                                                                            ----
 
-static int send_page (struct MHD_Connection *connection, char *page, int status_code, const char* mimetype, size_t contentSize) {
+static int send_page (struct MHD_Connection *connection, char *page, int status_code, const char* mimetype, size_t contentSize, char *session_id ) {
   int ret;
   struct MHD_Response *response;
+
   response = MHD_create_response_from_data (contentSize, (void *) page, MHD_NO, MHD_YES);
   free(page);
   if (!response)
     return MHD_NO;
-  MHD_add_response_header (response, "Content-Type", mimetype);
+
+  if( session_id ) {
+    char *session_cookie = o_printf( "o_session_id=%s; path=/; max-age=%d", session_id, MAX_AGE - 5);
+    MHD_add_response_header (response, MHD_HTTP_HEADER_SET_COOKIE, session_cookie);
+    o_log( DEBUGM, "setting cookie '%s'", session_cookie);
+    free( session_cookie );
+  }
+
+  MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE, mimetype);
   ret = MHD_queue_response (connection, (unsigned int)status_code, response);
   MHD_destroy_response (response);
   return ret;
 }
 
 static int send_page_bin (struct MHD_Connection *connection, char *page, int status_code, const char* mimetype) {
-  return send_page(connection, page, status_code, mimetype, strlen(page));
+  return send_page(connection, page, status_code, mimetype, strlen(page), NULL);
 }
 
 static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key, const char *filename, const char *content_type, const char *transfer_encoding, const char *data, uint64_t off, size_t size) {
@@ -234,6 +244,7 @@ void request_completed (void *cls, struct MHD_Connection *connection, void **con
     return;
 
   free(con_info->lang);
+  free(con_info->session_id);
   if (con_info->connectiontype == POST) {
     if (NULL != con_info->postprocessor) {
       MHD_destroy_post_processor (con_info->postprocessor);
@@ -283,6 +294,9 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
   struct simpleLinkedList *rSet;
   const union MHD_ConnectionInfo *c_info;
   struct sockaddr_in *p;
+
+  // session management
+  clear_old_sessions();
 
   // Check if there are any restrictions
   sql = o_strdup("SELECT 'location' as type, role FROM location_access UNION SELECT 'user' as type, role FROM user_access");
@@ -438,6 +452,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   int status = MHD_HTTP_OK;
   struct priverlage accessPrivs;
   const char *url;
+  struct simpleLinkedList *session_data = NULL;
+  char *session_id = NULL;
 
   // Remove the begining "/opendias" (so this URL can be used like:)
   // http://server:port/opendias/
@@ -458,16 +474,50 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
   // Discover Params
   if (NULL == *con_cls) {
+
+    // Check client language
     char *lang = userLanguage(connection);
+
+    // Check that we've not got too many clients
     if (nr_of_clients >= MAXCLIENTS)
-      return send_page_bin (connection, build_page(o_printf("<p>%s</p>", getString("LOCAL_server_busy", lang) ), lang), MHD_HTTP_SERVICE_UNAVAILABLE, MIMETYPE_HTML);
+      return send_page_bin (connection, 
+                            build_page(o_printf("<p>%s</p>", getString("LOCAL_server_busy", lang) ), lang), 
+                            MHD_HTTP_SERVICE_UNAVAILABLE, 
+                            MIMETYPE_HTML);
+
+    // Retrieve or create a session data store
+    const char *sid = MHD_lookup_connection_value (connection, MHD_COOKIE_KIND, "o_session_id" );
+    if( sid != NULL ) {
+      session_id = o_strdup(sid);
+      o_log( DEBUGM, "Client provided session cookie: %s", session_id);
+      session_data = get_session( session_id );
+      if( session_data == NULL ) {
+        o_log( INFORMATION, "Provided session is not available");
+      }
+    }
+    if( session_data == NULL ) {
+      free( session_id );
+      session_id = create_session();
+      session_data = get_session( session_id );
+    }
+    if( session_data != NULL ) {
+      o_log( DEBUGM, "Using session: %s", session_id );
+    }
+    else {
+      o_log( ERROR, "Could not build a new session" );
+    }
+
+    // Create connection storage
     con_info = malloc (sizeof (struct connection_info_struct));
     if (NULL == con_info)
       return MHD_NO;
+
 #ifdef THREAD_JOIN
     con_info->thread = NULL;
 #endif /* THREAD_JOIN */
     con_info->lang = lang;
+    con_info->session_data = session_data;
+    con_info->session_id = session_id;
 
     if (0 == strcmp (method, "POST")) {
       con_info->post_data = sll_init();
@@ -501,13 +551,21 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
       if(accessError != NULL) {
         char *accessErrorPage = build_page(accessError, con_info->lang);
         size = strlen(accessErrorPage);
-        return send_page (connection, accessErrorPage, MHD_HTTP_UNAUTHORIZED, MIMETYPE_HTML, size);
+        return send_page (connection, accessErrorPage, MHD_HTTP_UNAUTHORIZED, MIMETYPE_HTML, size, NULL);
       }
     }
   }
 
   if (0 == strcmp (method, "GET")) {
     o_log(INFORMATION, "Serving request: %s", url);
+
+    if ( con_info->session_data == NULL ) {
+      o_log( INFORMATION, "Session %s was not found", con_info->session_id );
+      return send_page_bin (connection, 
+                            build_page(o_printf("<p>%s</p>", getString("LOCAL_server_busy", con_info->lang) ), con_info->lang), 
+                            MHD_HTTP_SERVICE_UNAVAILABLE, 
+                            MIMETYPE_HTML);
+    }
 
     // A 'root' request needs to be mapped to an actual file
     if( (strlen(url) == 1  && 0!=strstr(url,"/")) || strlen(url) == 0 ) {
@@ -636,7 +694,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
       size = 0;
     }
 
-    return send_page (connection, content, status, mimetype, size);
+    return send_page (connection, content, status, mimetype, size, con_info->session_id);
   }
 
   if (0 == strcmp (method, "POST")) {
@@ -982,7 +1040,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     }
 
     o_log(DEBUGM, "Serving the following content: %s", content);
-    return send_page (connection, content, status, mimetype, size);
+    return send_page (connection, content, status, mimetype, size, con_info->session_id);
   }
 
   return send_page_bin (connection, build_page(o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) ), con_info->lang), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);

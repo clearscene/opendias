@@ -40,5 +40,6 @@ void sll_append( struct simpleLinkedList *, void * );
 void sll_insert( struct simpleLinkedList *, char *, void * );
 void sll_destroy( struct simpleLinkedList * );
 void sll_delete( struct simpleLinkedList * );
+int sll_count( struct simpleLinkedList * );
 
 #endif /* SIMPLELINKEDLIST */
