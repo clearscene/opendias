@@ -30,6 +30,7 @@ struct simpleLinkedList *sessions = NULL;
 
 void init_session_management( int max_sessions, int max_session_age) {
   sessions = sll_init();
+  sll_insert( sessions, "placeholder", "placeholder" );
   MAX_SESSIONS = max_sessions;
   MAX_AGE = max_session_age;;
 }
@@ -92,7 +93,7 @@ void clear_sessions_older_than( time_t oldest_allowed ) {
     struct simpleLinkedList *this_session = session;
     session = sll_getNext( session );
 
-    if( this_session->data == NULL )
+    if( 0 == strcmp( this_session->key, "placeholder" ) )
       continue;
 
     struct session_data *sessions_element = (struct session_data *)this_session->data;
@@ -125,7 +126,7 @@ void clear_sessions_older_than( time_t oldest_allowed ) {
 // Delete all sessions
 void cleanup_session_management() {
   clear_sessions_older_than( 0 );
-  //sll_delete( sessions );
+  sll_destroy( sessions );
 }
 
 // Remove expired sessions
