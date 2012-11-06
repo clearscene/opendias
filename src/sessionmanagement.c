@@ -97,7 +97,7 @@ void clear_sessions_older_than( time_t oldest_allowed ) {
       continue;
 
     struct session_data *sessions_element = (struct session_data *)this_session->data;
-    if( sessions_element->last_accessed > oldest_allowed ) {
+    if( sessions_element->last_accessed < oldest_allowed ) {
 
       for( sess_data = sll_findFirstElement( sessions_element->session_container ) ; sess_data != NULL ; sess_data = sll_getNext( sess_data ) ) {
         free( sess_data->key );
@@ -125,12 +125,12 @@ void clear_sessions_older_than( time_t oldest_allowed ) {
 
 // Delete all sessions
 void cleanup_session_management() {
-  clear_sessions_older_than( 0 );
+  clear_sessions_older_than( time(NULL) + 999 ); // 999 to ensure no race conditions.
   sll_destroy( sessions );
 }
 
 // Remove expired sessions
-void clear_old_sessions( char *lang ) {
+void clear_old_sessions() {
   clear_sessions_older_than( time(NULL) - MAX_AGE );
 }
 

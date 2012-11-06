@@ -98,6 +98,7 @@ sub setupClient {
   WWW::HtmlUnit::com::gargoylesoftware::htmlunit::util::WebClientUtils->attachVisualDebugger($client) if $graphicalDebugger;
 
   # Set some sensible defaults
+  $client->getCookieManager()->setCookiesEnabled($true);
   $client->setRedirectEnabled($true);
   $client->setCssEnabled($true);
   $client->setCssErrorHandler(WWW::HtmlUnit::com::gargoylesoftware::htmlunit::SilentCssErrorHandler->new());
