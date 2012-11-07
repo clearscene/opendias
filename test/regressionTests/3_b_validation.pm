@@ -4,6 +4,7 @@ use lib qw( regressionTests/lib );
 use DBI;
 use standardTests;
 use Data::Dumper;
+use HTTP::Cookies;
 use strict;
 
 sub testProfile {
@@ -70,18 +71,22 @@ sub test {
           },
   );
 
+  my $cookie_jar = HTTP::Cookies->new();
+  my %default = (
+    __cookiejar => $cookie_jar,
+  );
 
   # No data
-  o_log( "no post data = " . Dumper( directRequest( { } ) ) );
+  o_log( "no post data = " . Dumper( directRequest( { %default } ) ) );
 
 
   # Unknown 'action'
-  o_log( "Unknown action = " . Dumper( directRequest( { action => 'rumplestilskin' } ) ) );
+  o_log( "Unknown action = " . Dumper( directRequest( { %default, action => 'rumplestilskin' } ) ) );
 
 
   # Try all API actions, with zero supporting fields - expect 'error' response
   foreach my $action (sort {$a cmp $b} (keys %calls)) {
-    o_log( "$action = " . Dumper( directRequest( { action => $action } ) ) );
+    o_log( "$action = " . Dumper( directRequest( { %default, action => $action } ) ) );
   }
 
 
@@ -92,7 +97,7 @@ sub test {
     my %local_details = %{$calls{$action}};
     delete $local_details{subaction};
     replaceWithValues(\%local_details);
-    o_log( "Unknown subaction on action of $action = " . Dumper( directRequest( { action => $action, subaction => 'rumplestilskin', %local_details } ) ) );
+    o_log( "Unknown subaction on action of $action = " . Dumper( directRequest( { %default, action => $action, subaction => 'rumplestilskin', %local_details } ) ) );
   }
 
 
@@ -101,7 +106,7 @@ sub test {
   foreach my $action (sort {$a cmp $b} (keys %calls)) {
     next unless exists $calls{$action}->{subaction};
     foreach my $subaction ( @{$calls{$action}->{subaction}} ) {
-      o_log( "actions of $action / $subaction, no supporting fields = " . Dumper( directRequest( { action => $action, subaction => $subaction } ) ) );
+      o_log( "actions of $action / $subaction, no supporting fields = " . Dumper( directRequest( { %default, action => $action, subaction => $subaction } ) ) );
     }
   }
 
@@ -114,11 +119,11 @@ sub test {
     if( exists $local_details{subaction} ) {
       delete $local_details{subaction};
       foreach my $subaction ( @{$calls{$action}->{subaction}} ) {
-        o_log( "rogue field in actions of $action / $subaction = " . Dumper( directRequest( { action => $action, subaction => $subaction, rogue_field => 'evil', %local_details } ) ) );
+        o_log( "rogue field in actions of $action / $subaction = " . Dumper( directRequest( { %default, action => $action, subaction => $subaction, rogue_field => 'evil', %local_details } ) ) );
       }
     }
     else {
-      o_log( "rogue field in actions of $action = " . Dumper( directRequest( { action => $action, rogue_field => 'evil', %local_details } ) ) );
+      o_log( "rogue field in actions of $action = " . Dumper( directRequest( { %default, action => $action, rogue_field => 'evil', %local_details } ) ) );
     }
   }
 
@@ -133,11 +138,11 @@ sub test {
       if( exists $local_details{subaction} ) {
         delete $local_details{subaction};
         foreach my $subaction ( @{$calls{$action}->{subaction}} ) {
-          o_log( "field $field with duff data, $action / $subaction = " . Dumper( directRequest( { action => $action, subaction => $subaction, %local_details } ) ) );
+          o_log( "field $field with duff data, $action / $subaction = " . Dumper( directRequest( { %default, action => $action, subaction => $subaction, %local_details } ) ) );
         }
       }
       else {
-        o_log( "field $field with duff data, $action = " . Dumper( directRequest( { action => $action, %local_details } ) ) );
+        o_log( "field $field with duff data, $action = " . Dumper( directRequest( { %default, action => $action, %local_details } ) ) );
       }
     }
   }

@@ -1,6 +1,7 @@
 package standardTests;
 
 use LWP;
+use HTTP::Cookies;
 use Data::Dumper;
 use XML::Simple;
 use DBI;
@@ -307,6 +308,7 @@ sub directRequest {
   #
   my $ua = LWP::UserAgent->new;
   $ua->agent($default{__agent});
+  $ua->cookie_jar( $default{__cookiejar} ) if $default{__cookiejar};
 
   my $req = HTTP::Request->new($default{__method} => $default{__proto} . $default{__domain} . $default{__uri});
 
@@ -327,6 +329,7 @@ sub directRequest {
   # Check the outcome of the response
   my $resData;
   if ($res->is_success) {
+    $default{__cookiejar}->extract_cookies( $res ) if $default{__cookiejar};
     if( $res->content =~ /^</ ) {
       eval {
         my $xml = new XML::Simple;

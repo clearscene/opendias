@@ -4,6 +4,7 @@ use lib qw( regressionTests/lib );
 use DBI;
 use standardTests;
 use Data::Dumper;
+use HTTP::Cookies;
 use strict;
 
 sub testProfile {
@@ -15,7 +16,9 @@ sub testProfile {
 
 sub test {
 
+  my $cookie_jar = HTTP::Cookies->new();
   my %data = (
+    __cookiejar => $cookie_jar,
     action => 'tagsAutoComplete',
   );
 
