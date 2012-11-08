@@ -270,8 +270,9 @@ moveTag -> docEditor::updateTagLinkage
           tag: the tag that is being (un)linked
           subaction: flag to indicate if the tag should be added or removed ['addTag','removeTag','addDoc','removeDoc']
 	Outputs;
+		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
-		  </MoveTag>
+		  <MoveTag>
 		    status - indication of the update process - currently a static string 'OK'
 		  </MoveTag>
 		</Response>
@@ -283,12 +284,29 @@ deleteDoc -> docEditor::doDelete
 	Inputs:	action: fixed string 'deleteDoc'
           docid: the documents id
 	Outputs;
+		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
-		  </DeleteDoc>
+		  <DeleteDoc>
 		    status - indication of the update process - currently a static string 'OK'
 		  </DeleteDoc>
 		</Response>
 
+
+checkLogin -> pageRender::checkLogin
+	Called from: NA
+	Purpose: Checks login details and assigns the user role to the session, on success
+	Inputs:	action: fixed string 'checkLogin'
+          username: The username to login with
+          password: The usernames password
+	Outputs;
+		<?xml version='1.0' encoding='utf-8'?>
+		<Response>
+		  <Login>
+        result - Was login successful ['OK','FAIL']
+        message - User message when login was 'FAIL'
+        retry_throttle - The number of seconds that must pass before a subsiquent login attempt will be accepted.
+		  </Login>
+		</Response>
 
 
 tagsAutoComplete -> pageRender::tagsAutoComplete

@@ -25,7 +25,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <microhttpd.h>
-#include <arpa/inet.h>
+//#include <arpa/inet.h>
 #include <uuid/uuid.h>
 #include <pthread.h>
 #include <fcntl.h>
@@ -286,19 +286,22 @@ void request_completed (void *cls, struct MHD_Connection *connection, void **con
 #endif /* THREAD_JOIN */
 }
 
-static char *accessChecks(struct MHD_Connection *connection, const char *url, struct priverlage *privs, char *lang) {
+//static char *
+void accessChecks(struct MHD_Connection *connection, const char *url, struct priverlage *privs, char *lang, struct simpleLinkedList *session_data) {
 
-  int locationLimited = 0, userLimited = 0, locationAccess = 0; //, userAccess = 0;
+  char *role = "";
+  char *sql;
+  struct simpleLinkedList *role_element;
+  struct simpleLinkedList *rSet;
+/*  int locationLimited = 0, userLimited = 0, locationAccess = 0; //, userAccess = 0;
   const char *tmp;
   char *sql, *type, client_address[INET6_ADDRSTRLEN+14];
-  struct simpleLinkedList *rSet;
   const union MHD_ConnectionInfo *c_info;
   struct sockaddr_in *p;
-
-  // session management
-  clear_old_sessions();
+*/
 
   // Check if there are any restrictions
+/*
   sql = o_strdup("SELECT 'location' as type, role FROM location_access UNION SELECT 'user' as type, role FROM user_access");
   rSet = runquery_db(sql);
   if( rSet != NULL ) {
@@ -326,26 +329,29 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
       if( tmp == NULL )
         o_log(ERROR, "Could not convert the address.");
     }
+*/
+
+    role_element = sll_searchKeys(session_data, "role");
+    if( role_element && ( role_element != NULL ) && ( role_element->data != NULL ) ) {
+      role = (char *)role_element->data;
+    }
 
     sql = o_printf("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan \
-            FROM location_access LEFT JOIN access_role ON location_access.role = access_role.role \
-            WHERE '%s' LIKE location", client_address);
+            FROM access_role \
+            WHERE role = '%s'", role);
     rSet = runquery_db(sql);
     if( rSet != NULL ) {
-      do  {
-        locationAccess = 1;
-        privs->update_access += atoi(readData_db(rSet, "update_access"));
-        privs->view_doc += atoi(readData_db(rSet, "view_doc"));
-        privs->edit_doc += atoi(readData_db(rSet, "edit_doc"));
-        privs->delete_doc += atoi(readData_db(rSet, "delete_doc"));
-        privs->add_import += atoi(readData_db(rSet, "add_import"));
-        privs->add_scan += atoi(readData_db(rSet, "add_scan"));
-      } while ( nextRow( rSet ) );
+      privs->update_access += atoi(readData_db(rSet, "update_access"));
+      privs->view_doc += atoi(readData_db(rSet, "view_doc"));
+      privs->edit_doc += atoi(readData_db(rSet, "edit_doc"));
+      privs->delete_doc += atoi(readData_db(rSet, "delete_doc"));
+      privs->add_import += atoi(readData_db(rSet, "add_import"));
+      privs->add_scan += atoi(readData_db(rSet, "add_scan"));
     }
     free_recordset( rSet );
     free(sql);
+/*
   }
-
   // username / password is a fallcack to location access
   if ( userLimited == 1 && locationAccess == 0 ) {
     // TODO - fetch username/password and process
@@ -370,6 +376,7 @@ static char *accessChecks(struct MHD_Connection *connection, const char *url, st
     privs->add_scan=1;
     return NULL; // No limitation
   }
+*/
 }
 
 char *userLanguage( struct MHD_Connection *connection ) {
@@ -486,6 +493,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
                             MIMETYPE_HTML);
 
     // Retrieve or create a session data store
+    clear_old_sessions();
     const char *sid = MHD_lookup_connection_value (connection, MHD_COOKIE_KIND, "o_session_id" );
     if( sid != NULL ) {
       session_id = o_strdup(sid);
@@ -547,18 +555,20 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   if (0 == *upload_data_size) {
 
     if ((0 == strcmp (method, "GET") && (0!=strstr(url,".html") || 0!=strstr(url,"/scans/"))) || 0 == strcmp(method,"POST")) {
-      char *accessError = accessChecks(connection, url, &accessPrivs, con_info->lang);
-      if(accessError != NULL) {
+      // char *accessError = 
+      accessChecks(connection, url, &accessPrivs, con_info->lang, con_info->session_data);
+/*      if(accessError != NULL) {
         char *accessErrorPage = build_page(accessError, con_info->lang);
         size = strlen(accessErrorPage);
         return send_page (connection, accessErrorPage, MHD_HTTP_UNAUTHORIZED, MIMETYPE_HTML, size, NULL);
       }
+*/
     }
   }
 
   if (0 == strcmp (method, "GET")) {
     o_log(INFORMATION, "Serving request: %s", url);
-
+/*
     if ( con_info->session_data == NULL ) {
       o_log( INFORMATION, "Session %s was not found", con_info->session_id );
       return send_page_bin (connection, 
@@ -566,7 +576,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
                             MHD_HTTP_SERVICE_UNAVAILABLE, 
                             MIMETYPE_HTML);
     }
-
+*/
     // A 'root' request needs to be mapped to an actual file
     if( (strlen(url) == 1  && 0!=strstr(url,"/")) || strlen(url) == 0 ) {
       o_log(DEBUGM, "Serving root request ");
@@ -1016,6 +1026,21 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               content = tagsAutoComplete(startsWith, docid); // pageRender.c
               if(content == (void *)NULL)
                 content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
+            }
+            mimetype = MIMETYPE_JSON;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "checkLogin") ) {
+            o_log(INFORMATION, "Processing request for: checkLogin");
+            if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *username = getPostData(con_info->post_data, "username");
+              char *password = getPostData(con_info->post_data, "password");
+              content = checkLogin(username, password, con_info->session_data); // pageRender.c
+              if(content == (void *)NULL) 
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             }
             mimetype = MIMETYPE_JSON;
             size = strlen(content);

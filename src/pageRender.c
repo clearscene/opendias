@@ -41,6 +41,7 @@
 #include "scan.h"
 #include "saneDispatcher.h"
 #endif // CAN_SCAN //
+#include "simpleLinkedList.h"
 
 #include "pageRender.h"
 
@@ -590,5 +591,93 @@ char *tagsAutoComplete(char *startsWith, char *docid) {
   conCat(&result, "]}");
 
   return result;
+}
+
+char *checkLogin( char *username, char *password, struct simpleLinkedList *session_data ) {
+  struct simpleLinkedList *rSet;
+  int retry_throttle = 15;
+
+  // Check next_login_attempt
+  struct simpleLinkedList *last_attempt = sll_searchKeys( session_data, "next_login_attempt" );
+  if( last_attempt != NULL ) {
+    time_t *tt = last_attempt->data;
+    if( *tt > time(NULL) ) {
+      o_log( ERROR, "Login attempt was too soon after previous login fail" );
+      time_t rt = time(NULL)+retry_throttle;
+      last_attempt->data = &rt;
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>Login attempt retry was too soon.</message><retry_throttle>%d</retry_throttle></Login></Response>", retry_throttle);
+    }
+  }
+
+  // Create a password hash
+  // Would have liked to do this directly in sqlite, but hashing functions
+  // are not available, a defining one is a major dependency pain.
+  char *sql = o_printf(
+    "SELECT created \
+    FROM user_access \
+    WHERE username = %s", username );
+  rSet = runquery_db( sql );
+  if( rSet == NULL ) {
+    free( sql );
+    o_log( ERROR, "User provded an incorrect username!" );
+    time_t rt = time(NULL)+retry_throttle;
+    sll_insert( session_data, o_strdup("next_login_attempt"), &rt );
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>Username or password incorrect</message><retry_throttle>%d</retry_throttle></Login></Response>", retry_throttle);
+  }
+  char *password_sha = o_printf( "%s%s%s", readData_db(rSet, "created"), password, username );
+  free_recordset( rSet );
+  free( sql );
+
+  // Update last_access if the password matches
+  sql = o_strdup( 
+    "UPDATE user_access \
+    SET last_access = now()i \
+    WHERE username = ? \
+    AND password = ? ");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, username );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, password );
+  runUpdate_db( sql, vars );
+  free( sql );
+
+  // Get user info if the password matches
+  sql = o_printf(
+    "SELECT realname, role \
+    FROM user_access \
+    WHERE username = %s \
+    AND password = %S", username, password_sha );
+  rSet = runquery_db( sql );
+
+  if( rSet == NULL ) {
+    free( password_sha );
+    free( sql );
+    o_log( ERROR, "User provded an incorrect password!" );
+    time_t rt = time(NULL)+retry_throttle;
+    sll_insert( session_data, o_strdup("next_login_attempt"), &rt );
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>Username or password incorrect</message><retry_throttle>%d</retry_throttle></Login></Response>", retry_throttle);
+  }
+  char *realname = o_strdup(readData_db(rSet, "realname"));
+  char *role = o_strdup(readData_db(rSet, "role"));
+
+  if ( nextRow( rSet ) ) {
+    free( password_sha );
+    free_recordset( rSet );
+    free( sql );
+    free( realname );
+    free( role );
+    o_log( ERROR, "User login check, returned more than one row!" );
+    return NULL;
+  }
+
+  free( password_sha );
+  free_recordset( rSet );
+  free( sql );
+
+  sll_insert( session_data, o_strdup("realname"), realname );
+  sll_insert( session_data, o_strdup("role"), role );
+
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>OK</result></Login></Response>");
 }
 

@@ -21,6 +21,8 @@
 
 #include "config.h"
 
+#include "simpleLinkedList.h"
+
 #include "validation.h" // for con_info struct - move me to web_handler.h
 
 #ifdef CAN_SCAN
@@ -35,5 +37,6 @@ char *getAccessDetails();
 char *controlAccess(char *, char *, char *, char *, int);
 char *titleAutoComplete(char *, char *);
 char *tagsAutoComplete(char *, char *);
+char *checkLogin(char *, char *, struct simpleLinkedList *);
 
 #endif /* PAGERENDER */

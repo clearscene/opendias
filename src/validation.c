@@ -363,6 +363,7 @@ int basicValidation(struct simpleLinkedList *postdata) {
     && 0 != strcmp(action, "getAccessDetails")
     && 0 != strcmp(action, "titleAutoComplete")
     && 0 != strcmp(action, "tagsAutoComplete")
+    && 0 != strcmp(action, "checkLogin")
     && 0 != strcmp(action, "controlAccess") ) {
     o_log(ERROR, "requested 'action' (of '%s') is not available.", action);
     return 1;
@@ -530,6 +531,12 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     sll_insert(vars, "docid", "m" );
     ret += checkKeys(postdata, vars );
     ret += checkDocId(getPostData(postdata, "docid"));
+  }
+
+  if ( 0 == strcmp(action, "checkLogin") ) {
+    sll_insert(vars, "username", "m" );
+    sll_insert(vars, "password", "m" );
+    ret += checkKeys(postdata, vars );
   }
 
   // Needs further validation effort

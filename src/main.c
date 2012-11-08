@@ -64,7 +64,7 @@ int setup (char *configFile) {
 
   // Defaults
   BASE_DIR = NULL;
-  DB_VERSION = 6; // Log verbosity has already been set in main()
+  DB_VERSION = 7; // Log verbosity has already been set in main()
 
   LOG_DIR = o_printf("%s/log/opendias", VAR_DIR);
   startedServices.log = 1;
