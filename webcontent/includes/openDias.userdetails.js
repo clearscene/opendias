@@ -17,6 +17,19 @@ $(document).ready(function() {
     }
     window.location.reload(true);
   });
+
+  // Display or not, the login area
+  // If we have a cookie "show_login='no'"
+  // then show the logout only. Otherwise
+  // show the login area.
+  var show_login = getCookie("show_login");
+  if( show_login != null && show_login == "no" ) {
+    $('#logout').css({ display: 'block' });
+  }
+  else {
+    $('#login').css({ display: 'block' });
+  }
+
 });
 
 function setCookie(name,value,days) {

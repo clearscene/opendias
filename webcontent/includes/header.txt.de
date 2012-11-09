@@ -7,7 +7,7 @@
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
-  <script type="text/javascript" src="/opendias/includes/openDias.language.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -22,6 +22,17 @@
   <div id='header'>
     <div class="container">
       <img id='logo' src='/opendias/images/openDIAS_sml.png' />
+    </div>
+    <div id='loginout'>
+      <div id='login'>
+        <input id='username' size=6 placeholder='benutzername' />
+        <input id='password' size=6 placeholder='kennwort' type='password' />
+        <button>Login</button>
+      </div>
+      <div id='logout'>
+        <div id='realname'></div>
+        <button>Abmeldung</button>
+      </div>
     </div>
   </div>
 
