@@ -139,7 +139,7 @@ static char *build_page (char *page, const char *lang) {
 //                                                  ----                      | char *data
 //                                                                            ----
 
-static int send_page (struct MHD_Connection *connection, char *page, int status_code, const char* mimetype, size_t contentSize, char *session_id ) {
+static int send_page (struct MHD_Connection *connection, char *page, int status_code, const char* mimetype, size_t contentSize, struct connection_info_struct *con_info ) {
   int ret;
   struct MHD_Response *response;
 
@@ -148,11 +148,29 @@ static int send_page (struct MHD_Connection *connection, char *page, int status_
   if (!response)
     return MHD_NO;
 
-  if( session_id ) {
-    char *session_cookie = o_printf( "o_session_id=%s; path=/; max-age=%d", session_id, MAX_AGE - 5);
-    MHD_add_response_header (response, MHD_HTTP_HEADER_SET_COOKIE, session_cookie);
-    o_log( DEBUGM, "setting cookie '%s'", session_cookie);
-    free( session_cookie );
+  if( con_info->session_id ) {
+    char *cookie = o_printf( "o_session_id=%s; path=/; max-age=%d", con_info->session_id, MAX_AGE - 5);
+    MHD_add_response_header (response, MHD_HTTP_HEADER_SET_COOKIE, cookie);
+    o_log( DEBUGM, "setting cookie '%s'", cookie);
+    free( cookie );
+
+    // Do we need to show a login form?
+    char *realname = NULL;
+    struct simpleLinkedList *role_element = sll_searchKeys(con_info->session_data, "realname");
+    if( role_element && ( role_element != NULL ) && ( role_element->data != NULL ) ) {
+      realname = (char *)role_element->data;
+    }
+    if( realname == NULL ) {
+      // This effectivly clears the cookie. 
+      // What the frontend actually looks for is "realname=<anything>"
+      // If it doesn't find that, then the login will be shown.
+      cookie = o_printf( "realname=; path=/; max-age=%d", -5);
+    }
+    else {
+      cookie = o_printf( "realname=%s; path=/; max-age=%d", realname, MAX_AGE - 1);
+    }
+    MHD_add_response_header (response, MHD_HTTP_HEADER_SET_COOKIE, cookie);
+    free( cookie );
   }
 
   MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE, mimetype);
@@ -704,7 +722,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
       size = 0;
     }
 
-    return send_page (connection, content, status, mimetype, size, con_info->session_id);
+    return send_page (connection, content, status, mimetype, size, con_info);
   }
 
   if (0 == strcmp (method, "POST")) {
@@ -1038,7 +1056,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             else {
               char *username = getPostData(con_info->post_data, "username");
               char *password = getPostData(con_info->post_data, "password");
-              content = checkLogin(username, password, con_info->session_data); // pageRender.c
+              content = checkLogin(username, password, con_info->lang, con_info->session_data); // pageRender.c
               if(content == (void *)NULL) 
                 content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             }
@@ -1065,7 +1083,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     }
 
     o_log(DEBUGM, "Serving the following content: %s", content);
-    return send_page (connection, content, status, mimetype, size, con_info->session_id);
+    return send_page (connection, content, status, mimetype, size, con_info);
   }
 
   return send_page_bin (connection, build_page(o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) ), con_info->lang), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);

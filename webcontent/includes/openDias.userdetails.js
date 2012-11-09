@@ -19,15 +19,16 @@ $(document).ready(function() {
   });
 
   // Display or not, the login area
-  // If we have a cookie "show_login='no'"
+  // If we have a cookie "realname=<anything>"
   // then show the logout only. Otherwise
   // show the login area.
-  var show_login = getCookie("show_login");
-  if( show_login != null && show_login == "no" ) {
-    $('#logout').css({ display: 'block' });
+  var realname = getCookie("realname");
+  if( realname == null || realname == "" ) {
+    $('#login').css({ display: 'block' });
   }
   else {
-    $('#login').css({ display: 'block' });
+    $('#realname').val( realname );
+    $('#logout').css({ display: 'block' });
   }
 
 });
