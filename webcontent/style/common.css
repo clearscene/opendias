@@ -464,3 +464,41 @@
   .divider {
     border-top: 1px dotted #888;
   }
+  #loginout {
+    position: absolute;
+    top: 67px;
+    width: 200px;
+    background: #000;
+   -moz-border-radius:8px;
+   -webkit-border-radius:8px;
+    margin-left: 650px;
+    padding: 5px;
+    padding-bottom: 10px;
+  }
+  #loginout input {
+    border-color: #555;
+    background: #333;
+    color: #bbb;
+  }
+  #loginout button {
+    background: #333;
+    color: #bbb;
+    border-color: #555;
+   -moz-border-radius:3px;
+   -webkit-border-radius:3px;
+  }
+  #loginout input::-webkit-input-placeholder {
+    color: #777;
+  }
+  #loginout input:-moz-placeholder {
+    color: #777;
+  }
+  #loginout input:-ms-input-placeholder {
+    color: #777;
+  }
+  #login {
+    display: none;
+  }
+  #logout {
+    display: none;
+  }
