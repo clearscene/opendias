@@ -37,6 +37,6 @@ char *getAccessDetails();
 char *controlAccess(char *, char *, char *, char *, int);
 char *titleAutoComplete(char *, char *);
 char *tagsAutoComplete(char *, char *);
-char *checkLogin(char *, char *, struct simpleLinkedList *);
+char *checkLogin(char *, char *, char *, struct simpleLinkedList *);
 
 #endif /* PAGERENDER */

@@ -593,7 +593,7 @@ char *tagsAutoComplete(char *startsWith, char *docid) {
   return result;
 }
 
-char *checkLogin( char *username, char *password, struct simpleLinkedList *session_data ) {
+char *checkLogin( char *username, char *password, char *lang, struct simpleLinkedList *session_data ) {
   struct simpleLinkedList *rSet;
   int retry_throttle = 15;
 
@@ -605,7 +605,7 @@ char *checkLogin( char *username, char *password, struct simpleLinkedList *sessi
       o_log( ERROR, "Login attempt was too soon after previous login fail" );
       time_t rt = time(NULL)+retry_throttle;
       last_attempt->data = &rt;
-      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>Login attempt retry was too soon.</message><retry_throttle>%d</retry_throttle></Login></Response>", retry_throttle);
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_login_retry_too_soon", lang), retry_throttle);
     }
   }
 
@@ -622,7 +622,7 @@ char *checkLogin( char *username, char *password, struct simpleLinkedList *sessi
     o_log( ERROR, "User provded an incorrect username!" );
     time_t rt = time(NULL)+retry_throttle;
     sll_insert( session_data, o_strdup("next_login_attempt"), &rt );
-    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>Username or password incorrect</message><retry_throttle>%d</retry_throttle></Login></Response>", retry_throttle);
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_bad_login", lang), retry_throttle);
   }
   char *password_sha = o_printf( "%s%s%s", readData_db(rSet, "created"), password, username );
   free_recordset( rSet );
@@ -656,7 +656,7 @@ char *checkLogin( char *username, char *password, struct simpleLinkedList *sessi
     o_log( ERROR, "User provded an incorrect password!" );
     time_t rt = time(NULL)+retry_throttle;
     sll_insert( session_data, o_strdup("next_login_attempt"), &rt );
-    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>Username or password incorrect</message><retry_throttle>%d</retry_throttle></Login></Response>", retry_throttle);
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_bad_login", lang), retry_throttle);
   }
   char *realname = o_strdup(readData_db(rSet, "realname"));
   char *role = o_strdup(readData_db(rSet, "role"));
