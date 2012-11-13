@@ -18,6 +18,9 @@
 
 #include "config.h"
 
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
@@ -29,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <uuid/uuid.h>
+#include <time.h>
 
 #include "main.h"
 #include "db.h"
@@ -595,16 +599,24 @@ char *tagsAutoComplete(char *startsWith, char *docid) {
 
 char *checkLogin( char *username, char *password, char *lang, struct simpleLinkedList *session_data ) {
   struct simpleLinkedList *rSet;
-  int retry_throttle = 15;
+  int retry_throttle = 5;
+
+  time_t current_time;
+  time( &current_time );
 
   // Check next_login_attempt
   struct simpleLinkedList *last_attempt = sll_searchKeys( session_data, "next_login_attempt" );
   if( last_attempt != NULL ) {
-    time_t *tt = last_attempt->data;
-    if( *tt > time(NULL) ) {
-      o_log( ERROR, "Login attempt was too soon after previous login fail" );
-      time_t rt = time(NULL)+retry_throttle;
-      last_attempt->data = &rt;
+    struct tm last_attempt_date_struct;
+    time_t last_attempt_time;
+    char *last_attempt_date_string = (char *)last_attempt->data;
+    strptime( last_attempt_date_string, "%a %b %d %T %Y", &last_attempt_date_struct);
+    last_attempt_time = mktime( &last_attempt_date_struct );
+    if( difftime( current_time, last_attempt_time ) <= retry_throttle ) {
+      o_log( ERROR, "Login attempt was too soon (by %d seconds) after previous login fail", retry_throttle - difftime( current_time, last_attempt_time ) );
+      char *rtp = o_strdup( ctime( &current_time ) );
+      
+      last_attempt->data = rtp;
       return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_login_retry_too_soon", lang), retry_throttle);
     }
   }
@@ -615,54 +627,75 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
   char *sql = o_printf(
     "SELECT created \
     FROM user_access \
-    WHERE username = %s", username );
+    WHERE username = '%s'", username );
   rSet = runquery_db( sql );
   if( rSet == NULL ) {
     free( sql );
     o_log( ERROR, "User provded an incorrect username!" );
-    time_t rt = time(NULL)+retry_throttle;
-    sll_insert( session_data, o_strdup("next_login_attempt"), &rt );
+    char *rtp = o_strdup( ctime( &current_time ) );
+    if( last_attempt != NULL ) {
+      last_attempt->data = rtp;
+    }
+    else {
+      sll_insert( session_data, o_strdup("next_login_attempt"), rtp );
+    }
+    o_log(DEBUGM, "Saving the current time of %d", *rtp );
     return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_bad_login", lang), retry_throttle);
   }
-  char *password_sha = o_printf( "%s%s%s", readData_db(rSet, "created"), password, username );
+
+  char *salted_password = o_printf( "%s%s%s", readData_db(rSet, "created"), password, username );
+  char *password_hash = str2md5( salted_password, strlen(salted_password) );
+  o_log( DEBUGM, "user = %s,    salted_password = %s,   password_hash = %s", username, salted_password, password_hash);
+
   free_recordset( rSet );
   free( sql );
 
   // Update last_access if the password matches
   sql = o_strdup( 
     "UPDATE user_access \
-    SET last_access = now()i \
+    SET last_access = datetime('now') \
     WHERE username = ? \
     AND password = ? ");
   struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_TEXT );
-  sll_append(vars, username );
+  sll_append(vars, o_strdup(username) );
   sll_append(vars, DB_TEXT );
-  sll_append(vars, password );
+  sll_append(vars, o_strdup(password_hash) );
+o_log(DEBUGM, "About to update last_accessed time on user_access: %s", sql);
   runUpdate_db( sql, vars );
+o_log(DEBUGM, "done.");
   free( sql );
 
   // Get user info if the password matches
   sql = o_printf(
     "SELECT realname, role \
     FROM user_access \
-    WHERE username = %s \
-    AND password = %S", username, password_sha );
+    WHERE username = '%s' \
+    AND password = '%s'", username, password_hash );
+o_log(DEBUGM, "About to get realname and role: %s", sql);
   rSet = runquery_db( sql );
+o_log(DEBUGM, "done.");
 
   if( rSet == NULL ) {
-    free( password_sha );
+    free( password_hash );
+    free( salted_password );
     free( sql );
     o_log( ERROR, "User provded an incorrect password!" );
-    time_t rt = time(NULL)+retry_throttle;
-    sll_insert( session_data, o_strdup("next_login_attempt"), &rt );
+    char *rtp = o_strdup( ctime( &current_time ) );
+    if( last_attempt != NULL ) {
+      last_attempt->data = rtp;
+    }
+    else {
+      sll_insert( session_data, o_strdup("next_login_attempt"), rtp );
+    }
     return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_bad_login", lang), retry_throttle);
   }
   char *realname = o_strdup(readData_db(rSet, "realname"));
   char *role = o_strdup(readData_db(rSet, "role"));
 
   if ( nextRow( rSet ) ) {
-    free( password_sha );
+    free( password_hash );
+    free( salted_password );
     free_recordset( rSet );
     free( sql );
     free( realname );
@@ -671,7 +704,8 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
     return NULL;
   }
 
-  free( password_sha );
+  free( password_hash );
+  free( salted_password );
   free_recordset( rSet );
   free( sql );
 
