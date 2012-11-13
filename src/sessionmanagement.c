@@ -19,6 +19,7 @@
 #include "config.h"
 #include <time.h>
 #include <uuid/uuid.h>
+#include <string.h>
 
 #include "utils.h"
 #include "debug.h"
