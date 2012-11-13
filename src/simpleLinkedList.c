@@ -160,6 +160,7 @@ char *sll_dumper( struct simpleLinkedList *container, const char *type ) {
   struct simpleLinkedList *row;
   char *ret = o_strdup("");
   for( row = sll_findFirstElement( container ) ; row != NULL ; row = sll_getNext(row) ) {
+    conCat( &ret, "\n" );
     char *data;
     if( type != NULL && 0 == strcmp( type, "post_data_struct" ) ) {
 
@@ -177,7 +178,7 @@ char *sll_dumper( struct simpleLinkedList *container, const char *type ) {
     else {
       data = row->data;
     }
-    o_concatf( &ret, "      %s : %s\n", row->key, data);
+    o_concatf( &ret, "      %s : %s", row->key, data);
   }
   return ret;
 }
