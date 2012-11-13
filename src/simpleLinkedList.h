@@ -41,5 +41,6 @@ void sll_insert( struct simpleLinkedList *, char *, void * );
 void sll_destroy( struct simpleLinkedList * );
 void sll_delete( struct simpleLinkedList * );
 int sll_count( struct simpleLinkedList * );
+char *sll_dumper( struct simpleLinkedList *, const char * );
 
 #endif /* SIMPLELINKEDLIST */

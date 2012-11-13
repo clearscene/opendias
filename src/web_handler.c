@@ -456,16 +456,6 @@ char *userLanguage( struct MHD_Connection *connection ) {
   return lang;
 }
 
-static void postDumper(struct simpleLinkedList *table) {
-
-  struct simpleLinkedList *row;
-  o_log(DEBUGM, "Collected post data: ");
-  for( row = sll_findFirstElement( table ) ; row != NULL ; row = sll_getNext(row) ) {
-    char *data = getPostData(table, row->key);
-    o_log(DEBUGM, "      %s : %s", row->key, data);
-  }
-}
-
 int answer_to_connection (void *cls, struct MHD_Connection *connection,
               const char *url_orig, const char *method,
               const char *version, const char *upload_data,
@@ -527,7 +517,13 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
       session_data = get_session( session_id );
     }
     if( session_data != NULL ) {
-      o_log( DEBUGM, "Using session: %s", session_id );
+      if( trigger_log_verbosity( DEBUGM ) ) {
+        o_log( DEBUGM, "Using session: %s", session_id );
+        char *dump = sll_dumper( session_data, NULL );
+        o_log(DEBUGM, "Session contains: %s", dump );
+        free( dump );
+      }
+
     }
     else {
       o_log( ERROR, "Could not build a new session" );
@@ -750,7 +746,13 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         else {
 
           // Validation was OK?, then get ready to build a page.
-          postDumper(con_info->post_data);
+
+          if( trigger_log_verbosity( DEBUGM ) ) {
+            char *dump = sll_dumper( con_info->post_data, "post_data_struct" );
+            o_log(DEBUGM, "Collected post data: %s", dump );
+            free( dump );
+          }
+
           action = getPostData(con_info->post_data, "action");
 
           if ( action && 0 == strcmp(action, "getDocDetail") ) {
