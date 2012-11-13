@@ -27,11 +27,11 @@
       <div id='login'>
         <input id='username' size=6 placeholder='username' />
         <input id='password' size=6 placeholder='password' type='password' />
-        <button>Login</button>
+        <button id='loginbutton'>Login</button>
       </div>
       <div id='logout'>
-        <div id='realname'></div>
-        <button>Logout</button>
+        <span id='realname'></span>
+        <button id='logoutbutton'>Logout</button>
       </div>
     </div>
   </div>

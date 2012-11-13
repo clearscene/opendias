@@ -468,7 +468,7 @@
     position: absolute;
     top: 67px;
     width: 200px;
-    background: #000;
+    background: #111;
    -moz-border-radius:8px;
    -webkit-border-radius:8px;
     margin-left: 650px;
@@ -479,6 +479,7 @@
     border-color: #555;
     background: #333;
     color: #bbb;
+    width: 55px;
   }
   #loginout button {
     background: #333;
@@ -501,4 +502,10 @@
   }
   #logout {
     display: none;
+  }
+  #realname {
+    width: 130px;
+    color: #aaa;
+    display: inline-block;
+    text-align: center;
   }

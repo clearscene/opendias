@@ -18,20 +18,66 @@ $(document).ready(function() {
     window.location.reload(true);
   });
 
+  setLoginOutArea();
+
+  $('#loginbutton').click( function(){ 
+    $('#loginbutton').attr("disabled", true);
+    $.ajax({ url: "/opendias/dynamic",
+             dataType: "xml",
+             timeout: 10000,
+             data: {action: "checkLogin",
+                    username: $('#username').val(),
+                    password: $('#password').val(),
+                   },
+             cache: false,
+             type: "POST",
+             error: function( x, t, m ) {
+               if(t=="timeout") {
+                 alert("[s001] " + LOCAL_timeout_talking_to_server);
+               } else {
+                 alert("[s001] " + LOCAL_error_talking_to_server+": "+t+"\n"+m);
+               }
+             },
+             success: function(data){
+               if( $(data).find('error').text() ) {
+                 alert( $(data).find('error').text() );
+               } else {
+                if( $(data).find('result').text()=='OK' ) {
+                  $('#loginbutton').attr("disabled", false);
+                  setLoginOutArea();
+                }
+                else {
+                  $('#loginbutton').css({ display: 'none' });
+                  setTimeout( function() {
+                    $('#loginbutton').attr("disabled", false);
+                    $('#loginbutton').css({ display: 'inline' });
+                  }, parseInt( $(data).find('retry_throttle').text() ) * 1000 );
+                  alert( $(data).find('message').text() );
+               }
+             }
+           }
+        });
+
+  });
+});
+
+function setLoginOutArea() {
   // Display or not, the login area
   // If we have a cookie "realname=<anything>"
   // then show the logout only. Otherwise
   // show the login area.
   var realname = getCookie("realname");
   if( realname == null || realname == "" ) {
+    $('#logout').css({ display: 'none' });
     $('#login').css({ display: 'block' });
   }
   else {
-    $('#realname').val( realname );
+    $('#realname').html( realname );
+    $('#login').css({ display: 'none' });
     $('#logout').css({ display: 'block' });
   }
 
-});
+}
 
 function setCookie(name,value,days) {
     if (days) {
@@ -57,3 +103,4 @@ function getCookie(name) {
 function deleteCookie(name) {
     setCookie(name,"",-1);
 }
+
