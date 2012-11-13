@@ -19,7 +19,12 @@ CREATE TABLE user_access (
 );
 
 CREATE INDEX user_access_username_idx
-ON doc_links(docid ASC);
+ON user_access(username ASC);
+
+-- password = md5( <created> <password> <username> )
+-- Here the password is 'admin'
+INSERT INTO user_access 
+VALUES ('admin','6e6a83f742b28434aea09d7e8534647a','Admin User',datetime('now'),'automatically',1); 
 
 COMMIT;
 
