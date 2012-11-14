@@ -32,6 +32,7 @@ $(document).ready(function() {
              cache: false,
              type: "POST",
              error: function( x, t, m ) {
+               $('#password').val('');
                if(t=="timeout") {
                  alert("[s001] " + LOCAL_timeout_talking_to_server);
                } else {
@@ -39,6 +40,7 @@ $(document).ready(function() {
                }
              },
              success: function(data){
+               $('#password').val('');
                if( $(data).find('error').text() ) {
                  alert( $(data).find('error').text() );
                } else {
@@ -57,9 +59,36 @@ $(document).ready(function() {
              }
            }
         });
-
   });
+
+
+  $('#logoutbutton').click( function(){ 
+    $('#password').val('');
+    $.ajax({ url: "/opendias/dynamic",
+             dataType: "xml",
+             timeout: 10000,
+             data: { action: "logout" },
+             cache: false,
+             type: "POST",
+             error: function( x, t, m ) {
+               if(t=="timeout") {
+                 alert("[s001] " + LOCAL_timeout_talking_to_server);
+               } else {
+                 alert("[s001] " + LOCAL_error_talking_to_server+": "+t+"\n"+m);
+               }
+             },
+             success: function(data){
+               if( $(data).find('error').text() ) {
+                 alert( $(data).find('error').text() );
+               } else {
+                 deleteCookie("realname", null);
+                 setLoginOutArea();
+               }
+             }
+           });
+    });
 });
+
 
 function setLoginOutArea() {
   // Display or not, the login area

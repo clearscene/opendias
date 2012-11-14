@@ -293,7 +293,7 @@ deleteDoc -> docEditor::doDelete
 
 
 checkLogin -> pageRender::checkLogin
-	Called from: NA
+	Called from: openDias.userdetails.js :: loginbutton
 	Purpose: Checks login details and assigns the user role to the session, on success
 	Inputs:	action: fixed string 'checkLogin'
           username: The username to login with
@@ -303,9 +303,22 @@ checkLogin -> pageRender::checkLogin
 		<Response>
 		  <Login>
         result - Was login successful ['OK','FAIL']
-        message - User message when login was 'FAIL'
-        retry_throttle - The number of seconds that must pass before a subsiquent login attempt will be accepted.
+        message - User message when result was 'FAIL'
+        retry_throttle - The number of seconds that must pass before a further login attempt will be accepted.
 		  </Login>
+		</Response>
+
+
+logout -> pageRender::doLogin
+	Called from: openDias.userdetails.js :: logoutbutton
+	Purpose: Removes any user specific information from the session
+	Inputs:	action: fixed string 'logout'
+	Outputs;
+		<?xml version='1.0' encoding='utf-8'?>
+		<Response>
+		  <Logout>
+        result - Was login successful ['OK','FAIL']
+		  </Logout>
 		</Response>
 
 

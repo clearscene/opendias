@@ -626,6 +626,14 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
 
       return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_login_retry_too_soon", lang), retry_throttle);
     }
+
+    else {
+      // lsat attempt is not no longer used (unless it gets set again later), so we can remove it.
+      free( last_attempt->data );
+      free( last_attempt->key );
+      sll_delete( last_attempt );
+    }
+
   }
 
 
@@ -644,12 +652,7 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
 
     char *rtp = o_strdup( ctime( &current_time ) );
     chop( rtp );
-    if( last_attempt != NULL ) {
-      last_attempt->data = rtp;
-    }
-    else {
-      sll_insert( session_data, o_strdup("next_login_attempt"), rtp );
-    }
+    sll_insert( session_data, o_strdup("next_login_attempt"), rtp );
 
     return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_bad_login", lang), retry_throttle);
   }
@@ -657,7 +660,7 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
 
   // Create a password hash
   // Would have liked to do this directly in sqlite, but hashing functions
-  // are not available, a defining one is a major dependency pain.
+  // are not available, and defining one is a major dependency pain.
   char *salted_password = o_printf( "%s%s%s", readData_db(rSet, "created"), password, username );
   free_recordset( rSet );
   char *password_hash = str2md5( salted_password, strlen(salted_password) );
@@ -698,12 +701,7 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
 
     char *rtp = o_strdup( ctime( &current_time ) );
     chop( rtp );
-    if( last_attempt != NULL ) {
-      last_attempt->data = rtp;
-    }
-    else {
-      sll_insert( session_data, o_strdup("next_login_attempt"), rtp );
-    }
+    sll_insert( session_data, o_strdup("next_login_attempt"), rtp );
 
     return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_bad_login", lang), retry_throttle);
   }
@@ -727,5 +725,23 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
   sll_insert( session_data, o_strdup("role"), role );
 
   return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>OK</result></Login></Response>");
+}
+
+char *doLogout( struct simpleLinkedList *session_data ) {
+  
+  struct simpleLinkedList *details;
+  const char *elements[] = { "next_login_attempt", "realname", "role", NULL };
+  int i;
+
+  for (i = 0; elements[i]; i++) {
+    details = sll_searchKeys( session_data, elements[i] );
+    if ( details != NULL ) {
+      free( details->data );
+      free( details->key );
+      sll_delete( details );
+    }
+  }
+
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Logout><result>OK</result></Logout></Response>");
 }
 
