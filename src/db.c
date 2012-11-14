@@ -54,7 +54,7 @@ int get_db_version() {
   o_log(DEBUGM, "Checking for a populated database");
   rSet = runquery_db("pragma table_info('version')");
   if( rSet != NULL ) {
-    o_log(DEBUGM, "We have one. So will check to see what verstion it is.");
+    o_log(DEBUGM, "We have one. So will check to see what version it is.");
     // We have a version table - so interogate!
     free_recordset( rSet );
     rSet = runquery_db("SELECT version FROM version");
@@ -338,7 +338,7 @@ void free_recordset (struct simpleLinkedList *rSet) {
       sll_destroy( sll_findFirstElement( (struct simpleLinkedList *)rSet->data ) );
     }
     o_log(SQLDEBUG, "Free a record set pointer (%s)", rSet);
-    sll_delete(rSet);
+    sll_destroy(rSet);
   }
   o_log(SQLDEBUG, "Leaving free_recordset");
 }

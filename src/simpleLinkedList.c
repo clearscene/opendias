@@ -38,6 +38,9 @@
 
 #include "simpleLinkedList.h"
 
+/*
+ * DELETE ME
+ */
 struct post_data_struct {
   size_t size;
   char *data;
@@ -126,23 +129,43 @@ struct simpleLinkedList *sll_getNext( struct simpleLinkedList *element ) {
 
 void sll_destroy( struct simpleLinkedList *element ) {
   if( element && ( element != NULL ) ) {
+
     o_log(SQLDEBUG, "preparing to delete element: %x, with prev=%x, and next=%x", element, element->prev, element->next);
+
     sll_destroy( sll_getNext( element ) );
+
+    int set_delete_here = 0;
+    if( element && ( element != NULL ) && ( element->prev == NULL ) ) {
+      o_log(DEBUGM, "Looks like were goingh tro be the last one");
+      set_delete_here = 1;
+    }
+
     sll_delete( element );
+
+    if( set_delete_here == 1 ) {
+      free( element );
+    }
   }
 }
 
 void sll_delete( struct simpleLinkedList *element ) {
   struct simpleLinkedList *prev_element = element->prev;
   struct simpleLinkedList *next_element = element->next;
+
   o_log(SQLDEBUG, "Asked to delete element: %x, with prev=%x, and next=%x", element, element->prev, element->next);
-  if( next_element && ( next_element != NULL ) ) {
-    next_element->prev = prev_element;
-  }
+
   if( prev_element && ( prev_element != NULL ) ) {
+    if( next_element && ( next_element != NULL ) ) {
+      next_element->prev = prev_element;
+    }
     prev_element->next = next_element;
+    free( element );
+    element = NULL;
   }
-  free( element );
+  else {
+    element->key = NULL;
+    element->data = NULL;
+  }
 }
 
 int _sll_count( struct simpleLinkedList *element, int current_count ) {
