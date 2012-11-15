@@ -24,15 +24,22 @@
       <img id='logo' src='/opendias/images/openDIAS_sml.png' />
     </div>
     <div id='loginout'>
-      <div id='login'>
+      <ul>
+      <li><span id='login'>
         <input id='username' size=6 placeholder='username' />
         <input id='password' size=6 placeholder='password' type='password' />
         <button id='loginbutton'>Login</button>
-      </div>
-      <div id='logout'>
-        <span id='realname'></span>
+      </span>
+      <span id='logout'>
+        <a id='accessLink' href='/opendias/accessControls.html'><span id='realname'></span></a>
         <button id='logoutbutton'>Logout</button>
-      </div>
+      </span></li>
+      <li><select id='language'>
+              <option value='--'>Browsers Default Language</option>
+              <option value='en'>English</option>
+              <option value='de'>Deutsche</option>
+            </select></li>
+      </ul>
     </div>
   </div>
 
@@ -42,13 +49,7 @@
         <li><a id='homeLink' href='/opendias/'>Home</a></li>
         <li><a id='doclistLink' href='/opendias/docList.html'>Document List</a></li>
         <li><a id='acquireLink' href='/opendias/acquire.html'>Acquire New</a></li>
-        <li><a id='accessLink' href='/opendias/accessControls.html'>Access Controls</a></li>
         <li><a id='ProjectHome' href='http://opendias.essentialcollections.co.uk/' target='_blank'>Project Home</a></li>
-        <li><select id='language'>
-              <option value='--'>Browsers Default Language</option>
-              <option value='en'>English</option>
-              <option value='de'>Deutsche</option>
-            </select></li>
       </ul>
     </div>
   </div>

@@ -95,34 +95,29 @@
    border-bottom: 2px solid #555;
   }
   #menu li {
+   width: 120px;
+  }
+  #loginout li,
+  #menu li {
    margin-top: 1px;
    padding-top: 1px;
    list-style-type: none;
    display: inline-block;
-   width: 120px;
    text-align: center;
    border-right: 1px dotted #aaa;
   }
+  #loginout ul li:last-child,
   #menu ul li:last-child {
    border-right: none;
   }
+  #loginout li span a,
   #menu li a {
    color: #aaa;
    text-decoration: none;
   }
+  #loginout li span a:hover,
   #menu li a:hover {
    color: #ddd;
-  }
-  #menu li select {
-   background-color: #000;
-   border-color: #000;
-   color: #aaa;
-   font-family: arial;
-  }
-  #menu li select option {
-   background-color: #333;
-   border-color: #444;
-   color: #bbb;
   }
 
   #body {
@@ -466,14 +461,12 @@
   }
   #loginout {
     position: absolute;
-    top: 67px;
-    width: 200px;
-    background: #111;
-   -moz-border-radius:8px;
-   -webkit-border-radius:8px;
-    margin-left: 650px;
-    padding: 5px;
-    padding-bottom: 10px;
+    top: -3px;
+    left: 450px;
+    background: #222;
+   -moz-border-radius:4px;
+   -webkit-border-radius:4px;
+    padding: 5px 8px 3px 8px;
   }
   #loginout input {
     border-color: #555;
@@ -504,8 +497,18 @@
     display: none;
   }
   #realname {
-    width: 130px;
     color: #aaa;
     display: inline-block;
     text-align: center;
+  }
+  #loginout li select {
+   background-color: #333;
+   border-color: #333;
+   color: #aaa;
+   font-family: arial;
+  }
+  #loginout li select option {
+   background-color: #444;
+   border-color: #555;
+   color: #bbb;
   }
