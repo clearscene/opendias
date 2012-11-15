@@ -136,7 +136,8 @@ void sll_destroy( struct simpleLinkedList *element ) {
 
     int set_delete_here = 0;
     if( element && ( element != NULL ) && ( element->prev == NULL ) ) {
-      o_log(DEBUGM, "Looks like were goingh tro be the last one");
+      // The last element is never deleted by sll_delete,
+      // But if we're destroying the object WE should
       set_delete_here = 1;
     }
 
