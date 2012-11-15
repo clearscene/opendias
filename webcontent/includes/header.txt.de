@@ -24,15 +24,26 @@
       <img id='logo' src='/opendias/images/openDIAS_sml.png' />
     </div>
     <div id='loginout'>
-      <div id='login'>
-        <input id='username' size=6 placeholder='benutzername' />
-        <input id='password' size=6 placeholder='kennwort' type='password' />
-        <button id='loginbutton'>Login</button>
-      </div>
-      <div id='logout'>
-        <span id='realname'></span>
-        <button id='logoutbutton'>Abmeldung</button>
-      </div>
+      <ul>
+        <li>
+          <span id='login'>
+            <input id='username' size=6 placeholder='benutzername' />
+            <input id='password' size=6 placeholder='kennwort' type='password' />
+            <button id='loginbutton'>Login</button>
+          </span>
+          <span id='logout'>
+            <a id='accessLink' href='/opendias/accessControls.html'><span id='realname'></span></a>
+            <button id='logoutbutton'>Abmeldung</button>
+          </span>
+        </li>
+        <li>
+          <select id='language'>
+            <option value='--'>Voreinstellen sprachlich</option>
+            <option value='en'>English</option>
+            <option value='de'>Deutsche</option>
+          </select>
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -42,13 +53,7 @@
         <li><a id='homeLink' href='/opendias/'>Zuhause</a></li>
         <li><a id='doclistLink' href='/opendias/docList.html'>Dokumentenliste</a></li>
         <li><a id='acquireLink' href='/opendias/acquire.html'>Akquirieren</a></li>
-        <li><a id='accessLink' href='/opendias/accessControls.html'>Zugreifen</a></li>
         <li><a id='ProjectHome' href='http://opendias.essentialcollections.co.uk/' target='_blank'>Projekt zuhause</a></li>
-        <li><select id='language'>
-              <option value='--'>Voreinstellen sprachlich</option>
-              <option value='en'>English</option>
-              <option value='de'>Deutsche</option>
-            </select></li>
       </ul>
     </div>
   </div>

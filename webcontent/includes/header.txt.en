@@ -25,20 +25,24 @@
     </div>
     <div id='loginout'>
       <ul>
-      <li><span id='login'>
-        <input id='username' size=6 placeholder='username' />
-        <input id='password' size=6 placeholder='password' type='password' />
-        <button id='loginbutton'>Login</button>
-      </span>
-      <span id='logout'>
-        <a id='accessLink' href='/opendias/accessControls.html'><span id='realname'></span></a>
-        <button id='logoutbutton'>Logout</button>
-      </span></li>
-      <li><select id='language'>
-              <option value='--'>Browsers Default Language</option>
-              <option value='en'>English</option>
-              <option value='de'>Deutsche</option>
-            </select></li>
+        <li>
+          <span id='login'>
+            <input id='username' size=6 placeholder='username' />
+            <input id='password' size=6 placeholder='password' type='password' />
+            <button id='loginbutton'>Login</button>
+          </span>
+          <span id='logout'>
+            <a id='accessLink' href='/opendias/accessControls.html'><span id='realname'></span></a>
+            <button id='logoutbutton'>Logout</button>
+          </span>
+        </li>
+        <li>
+          <select id='language'>
+            <option value='--'>Browsers Default Language</option>
+            <option value='en'>English</option>
+            <option value='de'>Deutsche</option>
+          </select>
+        </li>
       </ul>
     </div>
   </div>
