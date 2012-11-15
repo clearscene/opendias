@@ -463,7 +463,7 @@
     position: absolute;
     top: -3px;
     left: 450px;
-    background: #222;
+    background: #442222;
    -moz-border-radius:4px;
    -webkit-border-radius:4px;
     padding: 5px 8px 3px 8px;
@@ -473,6 +473,8 @@
     background: #333;
     color: #bbb;
     width: 55px;
+   -moz-border-radius:2px;
+   -webkit-border-radius:2px;
   }
   #loginout button {
     background: #333;
