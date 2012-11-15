@@ -33,10 +33,9 @@ char *doScan(char *, char *, char *, char *, char *, char *, struct connection_i
 char *nextPageReady(char *, struct connection_info_struct *);
 #endif // CAN_SCAN //
 char *docFilter(char *, char *, char *, char *, char *, char *, char *, char *, char *, char *, char *);
-char *getAccessDetails();
-char *controlAccess(char *, char *, char *, char *, int);
 char *titleAutoComplete(char *, char *);
 char *tagsAutoComplete(char *, char *);
 char *checkLogin(char *, char *, char *, struct simpleLinkedList *);
+char *doLogout( struct simpleLinkedList *);
 
 #endif /* PAGERENDER */

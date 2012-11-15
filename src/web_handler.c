@@ -311,90 +311,26 @@ void accessChecks(struct MHD_Connection *connection, const char *url, struct pri
   char *sql;
   struct simpleLinkedList *role_element;
   struct simpleLinkedList *rSet;
-/*  int locationLimited = 0, userLimited = 0, locationAccess = 0; //, userAccess = 0;
-  const char *tmp;
-  char *sql, *type, client_address[INET6_ADDRSTRLEN+14];
-  const union MHD_ConnectionInfo *c_info;
-  struct sockaddr_in *p;
-*/
 
-  // Check if there are any restrictions
-/*
-  sql = o_strdup("SELECT 'location' as type, role FROM location_access UNION SELECT 'user' as type, role FROM user_access");
+  role_element = sll_searchKeys(session_data, "role");
+  if( role_element && ( role_element != NULL ) && ( role_element->data != NULL ) ) {
+    role = (char *)role_element->data;
+  }
+
+  sql = o_printf("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan \
+            FROM access_role \
+            WHERE role = '%s'", role);
   rSet = runquery_db(sql);
   if( rSet != NULL ) {
-    do  {
-      type = o_strdup(readData_db(rSet, "type"));
-      if(0 == strcmp(type, "location")) {
-        locationLimited = 1;
-      }
-      else if (0 == strcmp(type, "user")) {
-        userLimited = 1;
-      }
-      free(type);
-    } while ( nextRow( rSet ) );
+    privs->update_access += atoi(readData_db(rSet, "update_access"));
+    privs->view_doc += atoi(readData_db(rSet, "view_doc"));
+    privs->edit_doc += atoi(readData_db(rSet, "edit_doc"));
+    privs->delete_doc += atoi(readData_db(rSet, "delete_doc"));
+    privs->add_import += atoi(readData_db(rSet, "add_import"));
+    privs->add_scan += atoi(readData_db(rSet, "add_scan"));
   }
   free_recordset( rSet );
   free(sql);
-
-
-  if ( locationLimited == 1 ) {
-    // Get the client address
-    c_info = MHD_get_connection_info(connection, MHD_CONNECTION_INFO_CLIENT_ADDRESS );
-    p = (struct sockaddr_in *) c_info->client_addr;
-    if ( AF_INET == p->sin_family) {
-      tmp = inet_ntop((int)(p->sin_family), &(p->sin_addr), client_address, INET_ADDRSTRLEN);
-      if( tmp == NULL )
-        o_log(ERROR, "Could not convert the address.");
-    }
-*/
-
-    role_element = sll_searchKeys(session_data, "role");
-    if( role_element && ( role_element != NULL ) && ( role_element->data != NULL ) ) {
-      role = (char *)role_element->data;
-    }
-
-    sql = o_printf("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan \
-            FROM access_role \
-            WHERE role = '%s'", role);
-    rSet = runquery_db(sql);
-    if( rSet != NULL ) {
-      privs->update_access += atoi(readData_db(rSet, "update_access"));
-      privs->view_doc += atoi(readData_db(rSet, "view_doc"));
-      privs->edit_doc += atoi(readData_db(rSet, "edit_doc"));
-      privs->delete_doc += atoi(readData_db(rSet, "delete_doc"));
-      privs->add_import += atoi(readData_db(rSet, "add_import"));
-      privs->add_scan += atoi(readData_db(rSet, "add_scan"));
-    }
-    free_recordset( rSet );
-    free(sql);
-/*
-  }
-  // username / password is a fallcack to location access
-  if ( userLimited == 1 && locationAccess == 0 ) {
-    // TODO - fetch username/password and process
-  }
-
-  if ( locationLimited == 1 || userLimited == 1 ) {
-    // requires some access grant
-    if ( locationAccess == 1 ) { //|| userAccess == 1 ) 
-      o_log(DEBUGM, "Access 'granted' to user on %s for request: %s", client_address, url);
-      return NULL; // User has access
-    }
-    o_log(DEBUGM, "Access 'DENIED' to use on %s for request: %s", client_address, url);
-    return o_printf("<h1>%s</h1>", getString("LOCAL_access_denied", lang) ); // Requires access, but none found
-  }
-  else {
-    o_log(DEBUGM, "Access OPEN");
-    privs->update_access=1;
-    privs->view_doc=1;
-    privs->edit_doc=1;
-    privs->delete_doc=1;
-    privs->add_import=1;
-    privs->add_scan=1;
-    return NULL; // No limitation
-  }
-*/
 }
 
 char *userLanguage( struct MHD_Connection *connection ) {
@@ -975,41 +911,6 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               char *filename = getPostData(con_info->post_data, "uploadfile");
               char *ftype = getPostData(con_info->post_data, "ftype");
               content = uploadfile(filename, ftype, con_info->lang); // import_doc.c
-              if(content == (void *)NULL)
-                content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_HTML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "getAccessDetails") ) {
-            o_log(INFORMATION, "Processing request for: getAccessDetails");
-            if ( accessPrivs.update_access == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              content = getAccessDetails(); // pageRender.c
-              if(content == (void *)NULL)
-                content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_XML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "controlAccess") ) {
-            o_log(INFORMATION, "Processing request for: controlAccess");
-            if ( accessPrivs.update_access == 0 )
-              content = build_page(o_printf("<h1>%s</h1>", getString("LOCAL_access_denied", con_info->lang) ), con_info->lang);
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *submethod = getPostData(con_info->post_data, "submethod");
-              char *location = getPostData(con_info->post_data, "address");
-              //char *user = getPostData(con_info->post_data, "user");
-              //char *password = getPostData(con_info->post_data, "password");
-              int role = atoi(getPostData(con_info->post_data, "role"));
-              content = controlAccess(submethod, location, NULL, NULL, role); // pageRender.c
               if(content == (void *)NULL)
                 content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
             }

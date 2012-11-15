@@ -59,7 +59,6 @@ int removeDocFromDoc (char *, char *);
 void removeDocTags (char *);
 void removeDocLinks (char *);
 void removeDoc (char *);
-void addLocation(char *, int);
 char *getTagId(char *);
 int countDocsWithTag(char *);
 void deleteTag(char *);

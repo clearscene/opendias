@@ -42,16 +42,6 @@ Error Response
 
 
 
-controlAccess -> pageRender::controlAccess()
-        Called from:
-        Purpose: 
-        Inputs: action: fixed string 'controlAccess'
-                submethod: The type of access controls being updated
-                location: The location to assign or remove
-                role: The role to assign or remove
-        Outputs:
-
-
 getScanningProgress -> pageRender::getScanningProgress()
 	Called from: openDias.acquire.js :: getScanningProgress()
 	Purpose: Read the state of an asyncronouse scan.
@@ -165,33 +155,6 @@ docFilter -> pageRender::docFilter
 
 
 
-getAccessDetails -> pageRender::getAccessDetails
-	Called from: openDias.getAccessDetails.js :: ananoumouse()
-	Purpose: Get a list of specific grants that have been setup
-	Inputs:	action: fixed string 'getAccessDetails'
-	Outputs;
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <AccessDetails>
-		    <LocationAccess>
-		      <Access>
-		        location - network address that's linked to a role
-		        role - the priverlage assigned by this access
-		      </Access>
-		      ...
-		    </LocationAccess>
-		    <UserAccess>
-		      <Access>
-		        user - username that's linked to a role
-		        role - the priverlage assigned by this access
-		      </Access>
-		      ...
-		    </UserAccess>
-		  </AccessDetails>
-		</Response>
-
-
-
 
 getAudio -> [stump - not currently implemented]
 	Called from: openDias.loadDetails.js :: ananoumouse()
@@ -262,6 +225,7 @@ updateDocDetails -> docEditor::updateDocDetails
 		</Response>
 
 
+
 moveTag -> docEditor::updateTagLinkage
 	Called from: openDias.saveDetails.js :: ananoumouse()
 	Purpose: Updates links between documents n tags, and document n documents
@@ -278,6 +242,7 @@ moveTag -> docEditor::updateTagLinkage
 		</Response>
 
 
+
 deleteDoc -> docEditor::doDelete
 	Called from: openDias.saveDetails.js :: ananoumouse()
 	Purpose: Removes a document from the database and scanned images store.
@@ -290,6 +255,7 @@ deleteDoc -> docEditor::doDelete
 		    status - indication of the update process - currently a static string 'OK'
 		  </DeleteDoc>
 		</Response>
+
 
 
 checkLogin -> pageRender::checkLogin
@@ -309,6 +275,7 @@ checkLogin -> pageRender::checkLogin
 		</Response>
 
 
+
 logout -> pageRender::doLogin
 	Called from: openDias.userdetails.js :: logoutbutton
 	Purpose: Removes any user specific information from the session
@@ -320,6 +287,7 @@ logout -> pageRender::doLogin
         result - Was login successful ['OK','FAIL']
 		  </Logout>
 		</Response>
+
 
 
 tagsAutoComplete -> pageRender::tagsAutoComplete
@@ -335,6 +303,7 @@ tagsAutoComplete -> pageRender::tagsAutoComplete
               ]}
 
 
+
 titleAutoComplete -> pageRender::titleAutoComplete
         Called from: openDias.loadDetails.js :: autocomplete function()
         Purpose: Complete a title from the start of the name. 
@@ -347,6 +316,7 @@ titleAutoComplete -> pageRender::titleAutoComplete
                 {"docid":"%s","title":"%s"},
                 ...
               ]}
+
 
 
 ----------------------------------------------------
@@ -385,12 +355,8 @@ nld   Dutch
 por   Brasilian Portuguese
 vie   Vietnamese
 
-sortfieldsortfield
-0   docid
-1   title
-2   doc type
-3   date
-0   docid
-1   title
-2   doc type
-3   date
+sort field
+0    docid
+1    title
+2    doc type
+3    date

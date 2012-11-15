@@ -265,18 +265,6 @@ static int checkUpdateKey(char *val) {
   return 0;
 }
 
-static int checkControlAccessMethod(char *submethod) {
-  if( submethod == NULL ) return 1;
-  if ( 0 == strcmp(submethod, "addLocation")
-    || 0 == strcmp(submethod, "removeLocation" )
-    || 0 == strcmp(submethod, "addUser" )
-    || 0 == strcmp(submethod, "removeUser" ) ) {
-    return 0;
-  }
-  o_log(ERROR, "Validation failed: accessConrol Method check");
-  return 1;
-}
-
 static int checkRole(char *role) {
   if(checkStringIsInt(role)) return 1;
   if(checkSaneRange(role, 1, 10)) return 1;
@@ -360,12 +348,11 @@ int basicValidation(struct simpleLinkedList *postdata) {
     && 0 != strcmp(action, "deleteDoc") 
     && 0 != strcmp(action, "regenerateThumb")
     && 0 != strcmp(action, "uploadfile")
-    && 0 != strcmp(action, "getAccessDetails")
     && 0 != strcmp(action, "titleAutoComplete")
     && 0 != strcmp(action, "tagsAutoComplete")
     && 0 != strcmp(action, "checkLogin")
     && 0 != strcmp(action, "logout")
-    && 0 != strcmp(action, "controlAccess") ) {
+                                        ) {
     o_log(ERROR, "requested 'action' (of '%s') is not available.", action);
     return 1;
   }
@@ -515,10 +502,6 @@ int validate(struct simpleLinkedList *postdata, char *action) {
   }
 #endif // CAN_PDF //
 
-  if ( 0 == strcmp(action, "getAccessDetails") ) {
-    ret += checkKeys(postdata, vars );
-  }
-
   if ( 0 == strcmp(action, "titleAutoComplete") ) {
     sll_insert(vars, "startsWith", "m" );
     sll_insert(vars, "notLinkedTo", "o" );
@@ -545,18 +528,6 @@ int validate(struct simpleLinkedList *postdata, char *action) {
   }
 
   // Needs further validation effort
-
-  if ( 0 == strcmp(action, "controlAccess") ) {
-    sll_insert(vars, "submethod", "m" );
-    sll_insert(vars, "address", "o" );
-    sll_insert(vars, "user", "o" );
-    sll_insert(vars, "password", "o" );
-    sll_insert(vars, "role", "o" );
-    sll_insert(vars, "addButton", "o" ); // Ultimatly ignored
-    ret += checkKeys(postdata, vars );
-    ret += checkControlAccessMethod(getPostData(postdata, "submethod"));
-    ret += checkRole(getPostData(postdata, "role"));
-  }
 
   if ( 0 == strcmp(action, "uploadfile") ) {
     sll_insert(vars, "uploadfile", "m" );
