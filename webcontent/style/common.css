@@ -354,8 +354,8 @@
     box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
     -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
     -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
-    -moz-border-radius: 7px;
-    -webkit-border-radius: 7px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
   } 
   .checkbox {
     background: #000;
@@ -513,4 +513,8 @@
    background-color: #444;
    border-color: #555;
    color: #bbb;
+  }
+  #mydetails li {
+   list-style-type: none;
+   padding-left: 100px;
   }
