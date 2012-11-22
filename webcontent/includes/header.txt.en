@@ -32,7 +32,7 @@
             <button id='loginbutton'>Login</button>
           </span>
           <span id='logout'>
-            <a id='accessLink' href='/opendias/accessControls.html'><span id='realname'></span></a>
+            <a id='realname' href='/opendias/accessControls.html'></a>
             <button id='logoutbutton'>Logout</button>
           </span>
         </li>
