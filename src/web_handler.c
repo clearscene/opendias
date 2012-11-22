@@ -149,27 +149,35 @@ static int send_page (struct MHD_Connection *connection, char *page, int status_
     return MHD_NO;
 
   if( con_info->session_id ) {
+    char *cookie2;
     char *cookie = o_printf( "o_session_id=%s; path=/; max-age=%d", con_info->session_id, MAX_AGE - 5);
     MHD_add_response_header (response, MHD_HTTP_HEADER_SET_COOKIE, cookie);
     o_log( DEBUGM, "setting cookie '%s'", cookie);
     free( cookie );
 
     // Do we need to show a login form?
-    char *realname = NULL;
+    char *cookiedata = NULL;
     struct simpleLinkedList *role_element = sll_searchKeys(con_info->session_data, "realname");
     if( role_element && ( role_element != NULL ) && ( role_element->data != NULL ) ) {
-      realname = (char *)role_element->data;
+      cookiedata = (char *)role_element->data;
     }
-    if( realname == NULL ) {
+    if( cookiedata == NULL ) {
       // This effectivly clears the cookie. 
       // What the frontend actually looks for is "realname=<anything>"
       // If it doesn't find that, then the login will be shown.
       cookie = o_printf( "realname=; path=/; max-age=%d", -5);
+      cookie2 = o_printf( "role=; path=/; max-age=%d", -5);
     }
     else {
-      cookie = o_printf( "realname=%s; path=/; max-age=%d", realname, MAX_AGE - 1);
+      cookie = o_printf( "realname=%s; path=/; max-age=%d", cookiedata, MAX_AGE - 1);
+      struct simpleLinkedList *role_element = sll_searchKeys(con_info->session_data, "role");
+      if( role_element && ( role_element != NULL ) && ( role_element->data != NULL ) ) {
+        cookiedata = (char *)role_element->data;
+      }
+      cookie2 = o_printf( "role=%s; path=/; max-age=%d", cookiedata, MAX_AGE - 1);
     }
     MHD_add_response_header (response, MHD_HTTP_HEADER_SET_COOKIE, cookie);
+    MHD_add_response_header (response, MHD_HTTP_HEADER_SET_COOKIE, cookie2);
     free( cookie );
   }
 
@@ -973,6 +981,23 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             else {
               content = doLogout( con_info->session_data ); // pageRender.c
+              if(content == (void *)NULL) 
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            }
+            mimetype = MIMETYPE_JSON;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "updateUser") ) {
+            o_log(INFORMATION, "Processing request for: updateUser");
+            if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *username = getPostData(con_info->post_data, "username");
+              char *realname = getPostData(con_info->post_data, "realname");
+              char *password = getPostData(con_info->post_data, "password");
+              char *role = getPostData(con_info->post_data, "role");
+              content = updateUser(username, realname, password, role, accessPrivs.update_access, con_info->session_data, con_info->lang); // pageRender.c
               if(content == (void *)NULL) 
                 content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             }

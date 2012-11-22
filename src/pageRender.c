@@ -656,6 +656,7 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
   free_recordset( rSet );
 
   // Save the details to the session/
+  sll_insert( session_data, o_strdup("username"), o_strdup(username) );
   sll_insert( session_data, o_strdup("realname"), realname );
   sll_insert( session_data, o_strdup("role"), role );
 
@@ -665,7 +666,7 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
 char *doLogout( struct simpleLinkedList *session_data ) {
   
   struct simpleLinkedList *details;
-  const char *elements[] = { "next_login_attempt", "realname", "role", NULL };
+  const char *elements[] = { "next_login_attempt", "username", "realname", "role", NULL };
   int i;
 
   for (i = 0; elements[i]; i++) {
@@ -678,5 +679,123 @@ char *doLogout( struct simpleLinkedList *session_data ) {
   }
 
   return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Logout><result>OK</result></Logout></Response>");
+}
+
+char *updateUser( char *username, char *realname, char *password, char *role, int can_edit_access, struct simpleLinkedList *session_data, char *lang) {
+  struct simpleLinkedList *rSet;
+  char *useUsername = NULL;
+  char *created = NULL;
+  char *sql;
+
+  // Allow user not to specify the actual username
+  if ( 0 == strcmp(username, "[current]") ) {
+    rSet = sll_searchKeys( session_data, "username" );
+    if ( rSet != NULL ) {
+      useUsername = rSet->data;
+    }
+    else {
+      o_log(ERROR, "A client tried to update her user, but was not logged in,");
+      return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateUser><result>FAIL</result></UpdateUser></Response>");
+    }
+  }
+  else {
+    if ( can_edit_access == 1 ) {
+      useUsername = username;
+    }
+    else {
+      o_log(ERROR, "Client specified a user to update, but they do not have permission.");
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", lang) );
+    }
+  }
+
+  // Check the calculated user is actually a user
+  sql = o_printf(
+    "SELECT created \
+    FROM user_access \
+    WHERE username = '%s'", useUsername );
+  rSet = runquery_db( sql );
+  free( sql );
+  if( rSet == NULL ) {
+    if ( can_edit_access == 1 ) {
+      // Create a new user
+      sql = o_strdup( "INSERT INTO user_access \
+                      VALUES (?, '-no password yet-', '-not set yet-', \
+                      datetime('now'), datetime('now'), 0);" );
+      struct simpleLinkedList *vars = sll_init();
+      sll_append(vars, DB_TEXT );
+      sll_append(vars, o_strdup(useUsername) );
+      runUpdate_db( sql, vars );
+      free( sql );
+
+      sql = o_printf(
+        "SELECT created \
+        FROM user_access \
+        WHERE username = '%s'", useUsername );
+      rSet = runquery_db( sql );
+      free( sql );
+    }
+    else {
+      return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateUser><result>FAIL</result></UpdateUser></Response>");
+    }
+  }
+  created = o_strdup( readData_db(rSet, "created") );
+  free_recordset( rSet );
+
+  // Update the users 'role'
+  if ( role != NULL ) {
+    if ( can_edit_access == 1 ) {
+      char *sql = o_strdup(
+        "UPDATE user_access \
+        SET role = ? \
+        WHERE username = ? " );
+      struct simpleLinkedList *vars = sll_init();
+      sll_append(vars, DB_TEXT );
+      sll_append(vars, o_strdup(role) );
+      sll_append(vars, DB_TEXT );
+      sll_append(vars, o_strdup(useUsername) );
+      runUpdate_db( sql, vars );
+      free( sql );
+    }
+    else {
+      o_log(ERROR, "Client specified a user to update, but they do not have permission.");
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", lang) );
+    }
+  }
+
+  // Update the users 'realname'
+  if ( realname != NULL ) {
+    char *sql = o_strdup(
+      "UPDATE user_access \
+      SET realname = ? \
+      WHERE username = ? " );
+    struct simpleLinkedList *vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, o_strdup(realname) );
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, o_strdup(useUsername) );
+    runUpdate_db( sql, vars );
+    free( sql );
+  }
+
+  // Update the users 'password'
+  if ( password != NULL ) {
+    char *salted_password = o_printf( "%s%s%s", created, password, useUsername );
+    char *password_hash = str2md5( salted_password, strlen(salted_password) );
+    free( salted_password );
+    char *sql = o_strdup(
+      "UPDATE user_access \
+      SET password = ? \
+      WHERE username = ? " );
+    struct simpleLinkedList *vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, o_strdup(password_hash) );
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, o_strdup(useUsername) );
+    runUpdate_db( sql, vars );
+    free( sql );
+  }
+  free( created );
+
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateUser><result>OK</result></UpdateUser></Response>");
 }
 

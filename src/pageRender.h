@@ -37,5 +37,6 @@ char *titleAutoComplete(char *, char *);
 char *tagsAutoComplete(char *, char *);
 char *checkLogin(char *, char *, char *, struct simpleLinkedList *);
 char *doLogout( struct simpleLinkedList *);
+char *updateUser( char *, char *, char *, char *, int, struct simpleLinkedList *, char *);
 
 #endif /* PAGERENDER */

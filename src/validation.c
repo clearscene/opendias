@@ -352,6 +352,7 @@ int basicValidation(struct simpleLinkedList *postdata) {
     && 0 != strcmp(action, "tagsAutoComplete")
     && 0 != strcmp(action, "checkLogin")
     && 0 != strcmp(action, "logout")
+    && 0 != strcmp(action, "updateUser")
                                         ) {
     o_log(ERROR, "requested 'action' (of '%s') is not available.", action);
     return 1;
@@ -525,6 +526,20 @@ int validate(struct simpleLinkedList *postdata, char *action) {
 
   if ( 0 == strcmp(action, "logout") ) {
     ret += checkKeys(postdata, vars );
+  }
+
+  if ( 0 == strcmp(action, "updateUser") ) {
+    sll_insert(vars, "username", "m" );
+    sll_insert(vars, "realname", "o" );
+    sll_insert(vars, "password", "o" );
+    sll_insert(vars, "role", "o" );
+    ret += checkKeys(postdata, vars );
+    if ( 0 == strcmp( getPostData(postdata, "username"), "[current]") ) {
+      if ( getPostData(postdata, "role") != NULL ) {
+        // Cannot update your own role
+        ret += 1;
+      }
+    }
   }
 
   // Needs further validation effort
