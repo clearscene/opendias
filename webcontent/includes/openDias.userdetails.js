@@ -10,7 +10,7 @@ $(document).ready(function() {
   $('#language').change( function() {
     var setting = $('#language').val();
     if( setting == '--' ) {
-      deleteCookie("requested_lang", null);
+      deleteCookie("requested_lang");
     }
     else {
       setCookie("requested_lang", setting);
@@ -82,7 +82,7 @@ $(document).ready(function() {
                  alert( $(data).find('error').text() );
                } else {
                  deleteCookie("realname", null);
-                 setLoginOutArea();
+                 document.location.href = "/opendias/";
                }
              }
            });
@@ -133,3 +133,63 @@ function deleteCookie(name) {
     setCookie(name,"",-1);
 }
 
+// This does not form security, it just stop
+// presenting forms an calling API function, that 
+// we know are going to casue a 'permission denied'
+// response.
+function get_priv_from_role( user_role, priv ) {
+
+  if( user_role == undefined ) {
+    return 0;
+  }
+
+  // These details are set in the application using the 'access_role' table.
+  //         | update_access | view_doc | edit_doc | delete_doc | add_import | add_scan 
+  // 1,"admin",   1,              1,          1,        1,            1,          1
+  // 2,"user",    0,              1,          1,        1,            1,          1
+  // 3,"view",    0,              1,          0,        0,            0,          0
+  // 4,"add",     0,              0,          0,        0,            1,          1
+
+  var role = [];
+  role[1] = {};
+  role[2] = {};
+  role[3] = {};
+  role[4] = {};
+
+  role[1].name = 'Admin';
+  role[2].name = 'User';
+  role[3].name = 'View';
+  role[4].name = 'Add';
+
+  role[1].update_access = 1;
+  role[2].update_access = 0;
+  role[3].update_access = 0;
+  role[4].update_access = 0;
+
+  role[1].view_doc = 1;
+  role[2].view_doc = 1;
+  role[3].view_doc = 1;
+  role[4].view_doc = 0;
+
+  role[1].edit_doc = 1;
+  role[2].edit_doc = 1;
+  role[3].edit_doc = 0;
+  role[4].edit_doc = 0;
+
+  role[1].delete_doc = 1;
+  role[2].delete_doc = 1;
+  role[3].delete_doc = 0;
+  role[4].delete_doc = 0;
+
+  role[1].add_import = 1;
+  role[2].add_import = 1;
+  role[3].add_import = 0;
+  role[4].add_import = 1;
+
+  role[1].add_scan = 1;
+  role[2].add_scan = 1;
+  role[3].add_scan = 0;
+  role[4].add_scan = 1;
+
+  return role[user_role][priv];
+}

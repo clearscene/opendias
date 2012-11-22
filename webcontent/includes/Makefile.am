@@ -18,6 +18,7 @@ web_DATA = \
 	openDias.filter.js \
 	openDias.loadDetails.js \
 	openDias.saveDetails.js \
+	openDias.accessControls.js \
   openDias.userdetails.js 
 
 webdir = \

@@ -11,7 +11,8 @@ web_DATA = \
   openDias.docList.js.resource.en \
   openDias.docList.js.resource.de \
   openDias.filter.js.resource.en \
-  openDias.filter.js.resource.de 
+  openDias.filter.js.resource.de \
+  openDias.accessControls.js.resource.en 
 
 webdir = \
 	$(pkgdatadir)/webcontent/includes/local
