@@ -202,6 +202,12 @@ char *sll_dumper( struct simpleLinkedList *container, const char *type ) {
     else {
       data = row->data;
     }
+
+    // Obscure sensitive data
+    if( row->key != NULL && 0 == strcmp( row->key, "password" ) ) {
+      data = "###############";
+    }
+
     o_concatf( &ret, "      %s : %s", row->key, data);
   }
   return ret;
