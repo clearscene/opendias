@@ -25,7 +25,6 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <microhttpd.h>
-//#include <arpa/inet.h>
 #include <uuid/uuid.h>
 #include <pthread.h>
 #include <fcntl.h>
@@ -179,6 +178,7 @@ static int send_page (struct MHD_Connection *connection, char *page, int status_
     MHD_add_response_header (response, MHD_HTTP_HEADER_SET_COOKIE, cookie);
     MHD_add_response_header (response, MHD_HTTP_HEADER_SET_COOKIE, cookie2);
     free( cookie );
+    free( cookie2 );
   }
 
   MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE, mimetype);
@@ -511,30 +511,14 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   accessPrivs.add_scan = 0;
 
   if (0 == *upload_data_size) {
-
-    if ((0 == strcmp (method, "GET") && (0!=strstr(url,".html") || 0!=strstr(url,"/scans/"))) || 0 == strcmp(method,"POST")) {
-      // char *accessError = 
+    if ((0 == strcmp(method, "GET") && (0!=strstr(url,".html") || 0!=strstr(url,"/scans/"))) || 0 == strcmp(method,"POST")) {
       accessChecks(connection, url, &accessPrivs, con_info->lang, con_info->session_data);
-/*      if(accessError != NULL) {
-        char *accessErrorPage = build_page(accessError, con_info->lang);
-        size = strlen(accessErrorPage);
-        return send_page (connection, accessErrorPage, MHD_HTTP_UNAUTHORIZED, MIMETYPE_HTML, size, NULL);
-      }
-*/
     }
   }
 
   if (0 == strcmp (method, "GET")) {
     o_log(INFORMATION, "Serving request: %s", url);
-/*
-    if ( con_info->session_data == NULL ) {
-      o_log( INFORMATION, "Session %s was not found", con_info->session_id );
-      return send_page_bin (connection, 
-                            build_page(o_printf("<p>%s</p>", getString("LOCAL_server_busy", con_info->lang) ), con_info->lang), 
-                            MHD_HTTP_SERVICE_UNAVAILABLE, 
-                            MIMETYPE_HTML);
-    }
-*/
+
     // A 'root' request needs to be mapped to an actual file
     if( (strlen(url) == 1  && 0!=strstr(url,"/")) || strlen(url) == 0 ) {
       o_log(DEBUGM, "Serving root request ");
