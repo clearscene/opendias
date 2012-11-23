@@ -19,7 +19,7 @@ use WWW::HtmlUnit
 
 require Exporter;
 @ISA = qw(Exporter);
-@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client getNextJSAlert castTo_HtmlInput castTo_HtmlButton removeDuplicateLines directRequest inTestSQL dumpQueryResult $testpath $testcasename $SCAN_COMPLETE $SCAN_BLOCKED $SCAN_WAIT_NEXT_PAGE );
+@EXPORT = qw( startService setupClient stopService getPage openlog o_log waitForPageToFinish $client getNextJSAlert castTo_HtmlInput castTo_HtmlButton removeDuplicateLines directRequest inTestSQL dumpQueryResult login logout $testpath $testcasename $SCAN_COMPLETE $SCAN_BLOCKED $SCAN_WAIT_NEXT_PAGE );
 
 use strict;
 
@@ -379,6 +379,30 @@ sub dumpQueryResult {
   $dbh->disconnect();
   o_log( "\n" );
   
+}
+
+sub login {
+  my ( $username, $password, $cookiejar, ) = @_;
+
+  my %data = (
+    __cookiejar => $cookiejar,
+    action => 'checkLogin',
+    username => $username,
+    password => $password,
+  );
+
+  directRequest( \%data );
+}
+
+sub logout {
+  my ( $cookiejar, ) = @_;
+
+  my %data = (
+    __cookiejar => $cookiejar,
+    action => 'logout',
+  );
+
+  directRequest( \%data );
 }
 
 return 1;
