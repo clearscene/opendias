@@ -15,9 +15,13 @@ sub testProfile {
 
 sub test {
 
+  my $cookie_jar = HTTP::Cookies->new();
   my %data = (
+    __cookiejar => $cookie_jar,
     action => 'getScannerList',
   );
+
+  login( "test-user", "password", $cookie_jar );
 
   my %scan = (
     action => 'doScan',

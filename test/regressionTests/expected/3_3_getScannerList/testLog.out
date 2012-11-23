@@ -3,6 +3,7 @@ Copying default database
 STARTING app...
 Now ready
 No need for a web client for this test.
+Sending request = action=checkLogin&password=password&username=test-user
 Scanner List
 Sending request = action=getScannerList
 $VAR1 = {
@@ -45,8 +46,7 @@ $VAR1 = {
         'type' => 'Virtual Device',
         'vendor' => 'Noname'
       }
-    },
-    'cached' => 'true'
+    }
   }
 };
 

@@ -3,6 +3,7 @@ Copying default database
 STARTING app...
 Now ready
 No need for a web client for this test.
+Sending request = action=checkLogin&password=password&username=test-user
 On document : 2
 Suggestions for an entry of: t
 Sending request = action=tagsAutoComplete&docid=2&startsWith=t

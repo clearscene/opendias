@@ -15,7 +15,9 @@ sub testProfile {
 
 sub test {
 
+  my $cookie_jar = HTTP::Cookies->new();
   my %data = (
+    __cookiejar => $cookie_jar,
     action => 'docFilter',
     subaction => 'fullList',
     isActionRequired => 'false',
@@ -24,6 +26,8 @@ sub test {
     sortfield => '3', # date
     sortorder => '1',
   );
+
+  login( "test-user", "password", $cookie_jar );
 
   # Entry DB
   o_log( "No Rows = " . Dumper( directRequest( \%data ) ) );

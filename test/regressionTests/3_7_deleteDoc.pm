@@ -15,10 +15,14 @@ sub testProfile {
 
 sub test {
 
+  my $cookie_jar = HTTP::Cookies->new();
   my %updateData = (
+    __cookiejar => $cookie_jar,
     action => 'deleteDoc',
     docid => 2,
   );
+
+  login( "test-user", "password", $cookie_jar );
 
   dumpQueryResult( "SELECT docid, title FROM docs ORDER BY docid" );
   dumpQueryResult( "SELECT doclinkid, docid, linkeddocid FROM doc_links ORDER BY doclinkid" );

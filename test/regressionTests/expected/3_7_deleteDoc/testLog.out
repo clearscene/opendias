@@ -3,6 +3,7 @@ Copying default database
 STARTING app...
 Now ready
 No need for a web client for this test.
+Sending request = action=checkLogin&password=password&username=test-user
 SELECT docid, title FROM docs ORDER BY docid
 ------------------ row 1 ------------------
 docid : 1

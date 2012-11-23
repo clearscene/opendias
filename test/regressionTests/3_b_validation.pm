@@ -76,6 +76,8 @@ sub test {
     __cookiejar => $cookie_jar,
   );
 
+  login( "test-user", "password", $cookie_jar );
+
   # No data
   o_log( "no post data = " . Dumper( directRequest( { %default } ) ) );
 

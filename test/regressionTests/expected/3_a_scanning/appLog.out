@@ -30,6 +30,7 @@ LOG-OUTPUT
 -date-:-thread-:INF: Sane command socket is open
 -date-:-thread-:INF: ... Starting up the openDias service.
 -date-:-thread-:INF: ready to accept connectons
+-date-:-thread-:INF: Processing request for: checkLogin
 -date-:-thread-:INF: Processing request for: doScan
 -date-:-thread-:INF: SERVER: Sane dispatcher received the command: 'internalDoScanningOperation' with param of '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ],en'
 -date-:-thread-:INF: Processing request for: doScan

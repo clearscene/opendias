@@ -22,6 +22,8 @@ sub test {
     action => 'tagsAutoComplete',
   );
 
+  login( "test-user", "password", $cookie_jar );
+
   my $entry = 'tag one';
   foreach my $docid (2,4) {
     o_log( "On document : $docid" );

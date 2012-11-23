@@ -3,6 +3,7 @@ Copying default database
 STARTING app...
 Now ready
 No need for a web client for this test.
+Sending request = action=checkLogin&password=password&username=test-user
 Doc Details
 Sending request = action=getDocDetail&docid=2
 $VAR1 = {
@@ -31,9 +32,7 @@ $VAR1 = {
 Update docs Title
 Sending request = action=updateDocDetails&docid=2&kkey=title&vvalue=This%20is%20the%20new%20title
 $VAR1 = {
-  'UpdateDocDetails' => {
-    'status' => 'OK'
-  }
+  'error' => 'You do not have permissions to complete the request'
 };
 
 Doc Details
@@ -54,7 +53,7 @@ $VAR1 = {
     'hardcopyKept' => '1',
     'pages' => '1',
     'scanDate' => '2011-01-04T21:13:05.393946Z',
-    'title' => 'This is the new title',
+    'title' => 'Test 3 Title',
     'type' => '3',
     'x' => '2519',
     'y' => '3509'

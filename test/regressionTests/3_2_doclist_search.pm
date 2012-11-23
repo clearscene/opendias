@@ -32,6 +32,7 @@ sub test {
     tags => undef,
   );
 
+  login( "test-user", "password", $cookie_jar );
 
   # All rows
   o_log( "Full list" );

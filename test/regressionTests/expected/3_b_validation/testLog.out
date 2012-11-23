@@ -3,6 +3,7 @@ Copying default database
 STARTING app...
 Now ready
 No need for a web client for this test.
+Sending request = action=checkLogin&password=password&username=test-user
 Sending request = 
 no post data = $VAR1 = {
   'error' => 'Your request could not be processed'

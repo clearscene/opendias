@@ -20,7 +20,9 @@ sub test {
   #
   # Send to and receive from the application
   #
+  my $cookie_jar = HTTP::Cookies->new();
   my %default = (
+    __cookiejar => $cookie_jar,
     '__proto' => 'http://',
     '__domain' => 'localhost:8988',
     '__uri' => '/opendias/dynamic',
@@ -31,6 +33,8 @@ sub test {
   my $ua = LWP::UserAgent->new;
   $ua->timeout( 600 ); # 10 mins
   $ua->agent($default{__agent});
+
+  login( "test-user", "password", $cookie_jar );
 
   my %details = (
                 PDF => './regressionTests/inputs/3_c_import/test.pdf',
