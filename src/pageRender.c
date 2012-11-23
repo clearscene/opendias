@@ -612,9 +612,9 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
     AND password = ? ");
   struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_TEXT );
-  sll_append(vars, o_strdup(username) );
+  sll_append(vars, username );
   sll_append(vars, DB_TEXT );
-  sll_append(vars, o_strdup(password_hash) );
+  sll_append(vars, password_hash );
   runUpdate_db( sql, vars );
   free( sql );
 
@@ -723,7 +723,7 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
                       datetime('now'), datetime('now'), 0);" );
       struct simpleLinkedList *vars = sll_init();
       sll_append(vars, DB_TEXT );
-      sll_append(vars, o_strdup(useUsername) );
+      sll_append(vars, useUsername );
       runUpdate_db( sql, vars );
       free( sql );
 
@@ -750,13 +750,14 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
         WHERE username = ? " );
       struct simpleLinkedList *vars = sll_init();
       sll_append(vars, DB_TEXT );
-      sll_append(vars, o_strdup(role) );
+      sll_append(vars, role );
       sll_append(vars, DB_TEXT );
-      sll_append(vars, o_strdup(useUsername) );
+      sll_append(vars, useUsername );
       runUpdate_db( sql, vars );
       free( sql );
     }
     else {
+      free( created );
       o_log(ERROR, "Client specified a user to update, but they do not have permission.");
       return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", lang) );
     }
@@ -770,9 +771,9 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
       WHERE username = ? " );
     struct simpleLinkedList *vars = sll_init();
     sll_append(vars, DB_TEXT );
-    sll_append(vars, o_strdup(realname) );
+    sll_append(vars, realname );
     sll_append(vars, DB_TEXT );
-    sll_append(vars, o_strdup(useUsername) );
+    sll_append(vars, useUsername );
     runUpdate_db( sql, vars );
     free( sql );
   }
@@ -788,14 +789,15 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
       WHERE username = ? " );
     struct simpleLinkedList *vars = sll_init();
     sll_append(vars, DB_TEXT );
-    sll_append(vars, o_strdup(password_hash) );
+    sll_append(vars, password_hash );
     sll_append(vars, DB_TEXT );
-    sll_append(vars, o_strdup(useUsername) );
+    sll_append(vars, useUsername );
     runUpdate_db( sql, vars );
     free( sql );
+    free( password_hash );
   }
-  free( created );
 
+  free( created );
   return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateUser><result>OK</result></UpdateUser></Response>");
 }
 
