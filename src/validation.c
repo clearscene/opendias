@@ -534,8 +534,9 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     sll_insert(vars, "password", "o" );
     sll_insert(vars, "role", "o" );
     ret += checkKeys(postdata, vars );
-    if ( 0 == strcmp( getPostData(postdata, "username"), "[current]") ) {
-      if ( getPostData(postdata, "role") != NULL ) {
+    if ( getPostData(postdata, "role") != NULL ) {
+      ret += checkRole( getPostData(postdata, "role") );
+      if ( 0 == strcmp( getPostData(postdata, "username"), "[current]") ) {
         // Cannot update your own role
         ret += 1;
       }
