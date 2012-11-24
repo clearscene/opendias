@@ -27,6 +27,14 @@ sub test {
     return 1;
   }
 
+  $elements = $page->getElementById('username');
+  $elements->setText("test-user");
+  $elements = $page->getElementById('password');
+  $elements->setText("password");
+  $elements = $page->getElementById('loginbutton');
+  $elements->click();
+  sleep(1);
+
   # Check document page loads
   $page = $page->getElementById("doclistLink")->click();
   waitForPageToFinish($page);
@@ -41,15 +49,6 @@ sub test {
   waitForPageToFinish($page);
   $elements = $page->getElementsByTagName("h2")->toArray();
   if( @{$elements}[0]->getTextContent() ne "Acquire new Document" ) {
-    o_log("FAIL: Acquire page title was incorrect");
-    return 1;
-  }
-  
-  # Check access loads
-  $page = $page->getElementById("accessLink")->click();
-  waitForPageToFinish($page);
-  $elements = $page->getElementsByTagName("h2")->toArray();
-  if( @{$elements}[0]->getTextContent() ne "Access Controls" ) {
     o_log("FAIL: Acquire page title was incorrect");
     return 1;
   }

@@ -18,6 +18,16 @@ sub testProfile {
 sub test {
 
   my ($page, $elements, ) = @_;
+$|=1;
+  $page = getPage("/");
+  waitForPageToFinish($page);
+  $elements = $page->getElementById('username');
+  $elements->setText("test-user");
+  $elements = $page->getElementById('password');
+  $elements->setText("password");
+  $elements = $page->getElementById('loginbutton');
+  $elements->click();
+  sleep(1);
 
   # Check the homepage loads
   $page = getPage("/acquire.html");
