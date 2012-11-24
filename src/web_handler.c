@@ -714,7 +714,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             }
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString(LOCAL_missing_support, con_info->lang) );
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
 #endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
@@ -741,7 +741,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             }
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString(LOCAL_missing_support, con_info->lang) );
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
 #endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
@@ -763,7 +763,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             }
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString(LOCAL_missing_support, con_info->lang) );
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
 #endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
@@ -785,7 +785,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             }
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString(LOCAL_missing_support, con_info->lang) );
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
 #endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
@@ -887,7 +887,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             }
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString(LOCAL_missing_support, con_info->lang) );
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
 #endif
             mimetype = MIMETYPE_XML;
             size = strlen(content);
