@@ -823,6 +823,8 @@ extern char *internalGetScannerList(char *lang) {
       status = sane_open (SANE_device_list[i]->name, (SANE_Handle)&openDeviceHandle);
       if(status != SANE_STATUS_GOOD) {
         o_log(ERROR, "Could not open: %s %s with error: %s", SANE_device_list[i]->vendor, SANE_device_list[i]->model, status);
+        free( replyTemplate );
+        free( deviceList );
         return NULL;
       }
 
