@@ -31,6 +31,7 @@ AC_CHECK_HEADERS([sys/time.h],[],AC_MSG_ERROR([Missing header sys/time.h]))
 AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
+AC_FUNC_MKTIME
 AC_HEADER_STDBOOL
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
@@ -47,7 +48,7 @@ dnl
 dnl Ensure weve got everything we need to even start!
 dnl
 
-PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid])
+PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid libssl])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)

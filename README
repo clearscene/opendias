@@ -154,6 +154,29 @@ to be able to point a web browser at:
  * Update Changelog, api doc, builds file (eg. Make.am or configure.ac).
  * Write new tests to cover your new functionality
  * Update current tests where appropriate
+    If tests fail (due to memory issues) sometime the stacktrace is missing some 
+    detail because it's been optimised away. eg:
+      ==6053== 33 bytes in 1 blocks are definitely lost in loss record 3 of 9
+      ==6053==    at 0x402BE68: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+      ==6053==    by 0x80545E1: o_strdup (utils.c:207)
+      ==6053==    by 0x531C307: ???
+    If this is the case, you can try and run the test again after configuring then 
+    building without optimisation using:
+      "./configure 'CFLAGS=-O0 -g' --prefix=/tmp/opendias_tmp"
+    run, "make clean && make && make install", and then the test again (with 
+    the -b flag - to stop your specially configured app from being rebuilt in the 
+    standard way.) You should not get better stack traces:
+      ==10695== 33 bytes in 1 blocks are definitely lost in loss record 3 of 9
+      ==10695==    at 0x402BE68: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+      ==10695==    by 0x8056400: o_strdup (utils.c:207)
+      ==10695==    by 0x80517C3: checkLogin (pageRender.c:617)
+      ==10695==    by 0x804FEF8: answer_to_connection (web_handler.c:954)
+      ==10695==    by 0x40F20CF: ??? (in /usr/lib/libmicrohttpd.so.5.2.1)
+      ==10695==    by 0x40F3216: ??? (in /usr/lib/libmicrohttpd.so.5.2.1)
+      ==10695==    by 0x40F5528: ??? (in /usr/lib/libmicrohttpd.so.5.2.1)
+      ==10695==    by 0x40F569E: ??? (in /usr/lib/libmicrohttpd.so.5.2.1)
+      ==10695==    by 0x42B1D4B: start_thread (pthread_create.c:308)
+      ==10695==    by 0x4C58D3D: clone (clone.S:130)
  * Run autoscan, cppcheck.
     autoscan
     cppcheck --verbose --enable=all src/

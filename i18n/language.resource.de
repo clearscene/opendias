@@ -42,6 +42,9 @@ LOCAL_file_type_image|Importiert Image
 LOCAL_file_type_scanned|Gescannt Dok
 LOCAL_default_title|Neues Dokument ohne Titel
 
+LOCAL_bad_login|Benutzername oder Passwort falsch
+LOCAL_login_retry_too_soon|Login-Versuch wiederholen zu früh
+
 #########################################
 
 #

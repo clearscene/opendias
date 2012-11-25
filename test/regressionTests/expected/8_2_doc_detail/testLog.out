@@ -5,6 +5,8 @@ STARTING app...
 Now ready
 Asked to start a web clinet.
 Starting Web Client
+Fetching page: /
+Checking that the page has finished.
 Fetching page: /docDetail.html?docid=1
 Checking that the page has finished.
 All loaded OK

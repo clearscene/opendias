@@ -28,6 +28,13 @@
 
 #include "debug.h"
 
+int trigger_log_verbosity( const int verbosity ) {
+  if( verbosity <= VERBOSITY ) {
+    return 1;
+  }
+  return 0;
+}
+
 void i_o_log(const int verbosity, const char *message, va_list inargs) {
 
   FILE *fp;
@@ -36,7 +43,7 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
 	va_list ap;
 	va_copy(ap,inargs);
 
-  if( verbosity <= VERBOSITY ) {
+  if( trigger_log_verbosity( verbosity ) ) {
 
     char *thumb = o_strdup("%s:%X:%s: ");
     char *ltime = getTimeStr();

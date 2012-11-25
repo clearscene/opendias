@@ -28,6 +28,8 @@ struct connection_info_struct {
   struct simpleLinkedList *post_data;
   pthread_t thread;
   char *lang;
+  struct simpleLinkedList *session_data;
+  char *session_id;
 };
 
 struct post_data_struct {

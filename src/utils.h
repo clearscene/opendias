@@ -46,5 +46,6 @@ void addFileExt(char **, int);
 void replace(char *, char*, char*);
 char *o_printf(const char *, ...);
 void o_concatf(char **, const char *, ...);
+char *str2md5(const char *, int );
 
 #endif /* UTILS */

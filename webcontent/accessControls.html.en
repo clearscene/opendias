@@ -1,129 +1,127 @@
-<h2>Access Controls</h2>
 
-<div class='accessControl'>
+<script type="text/javascript" src="/opendias/includes/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="/opendias/style/jquery-ui.css" type="text/css" media="screen" /> 
+<style>
+  #tabs {font-size: 11px;}
+  .onlyadmin { display: none; }
+</style>
 
-<h3>By Location</h3>
-<p>Allow access from certain locations.</p>
+<h2>User Admin</h2>
 
-<h4>Add new access by location</h4>
-<form action='/opendias/dynamic' method='post'>
-<input name='action' type='hidden' value='controlAccess' />
-<input name='submethod' type='hidden' value='addLocation' />
-<div id='locationSet'>
-  <div class='row'>
-    <div class='label'>Address:</div>
-    <div class='data'><input name='address' />&nbsp;<span>eg 127.0.0.1 or 192.168.%</span></div>
+<div id="tabs">
+
+  <ul id='tabList'>
+    <li><a href="#mydetails">My details</a></li>
+    <li class='onlyadmin'><a href="#newuser">Create Users</a></li>
+    <li class='onlyadmin'><a href="#useradmin">Edit Users</a></li>
+    <li class='onlyadmin'><a href="#sessionman">Session Management</a></li>
+  </ul>
+
+  <div id="mydetails">
+    <h3>Manage the current user</h3>
+    <ul>
+      <li class='row'>
+        <div class='label'>Change 'Real Name' :</div>
+        <div class='data'><input id='newrealname' type='input' /></div>
+      </li>
+      <li class='row'>
+        <div class='label'>Change 'Password' :</div>
+        <div class='data'><input id='newpassword' type='password' /> / <input id='newpassword2' type='password' /></div>
+      </li>
+      <li class='row'>
+        <div class='label'>Current Role :</div>
+        <div class='data'><span id='currentrole'>---</span></div>
+      </li>
+      <li class='row'>
+        <div class='label'>&nbsp;</div>
+        <div class='data'><button id='updateThisUser'>Save</button></div>
+      </li>
+    </ul>
   </div>
-  <div class='row'>
-    <div class='label'>Role:</div>
-    <div class='data'>
-      <select name='role'>
-        <option value='1'>Admin (can do all operations)</option>
-        <option value='2'>User (can do everything, except access controls)</option>
-        <option value='3'>View (can view document only)</option>
-        <option value='4'>Add (can add documents only)</option>
-      </select>
+
+  <div id="newuser" class='onlyadmin'>
+    <h3>Create a new user</h3>
+    <ul>
+      <li class='row'>
+        <div class='label'>Change 'Real Name' :</div>
+        <div class='data'><input id='newrealname' type='input' /></div>
+      </li>
+      <li class='row'>
+        <div class='label'>Change 'Password' :</div>
+        <div class='data'><input id='password' type='password' /> / <input id='password2' type='password' /></div>
+      </li>
+      <li class='row'>
+        <div class='label'>Current Role :</div>
+        <div class='data'><span id='currentrole'>---</span></div>
+      </li>
+      <li class='row'>
+        <div class='label'>&nbsp;</div>
+        <div class='data'><button>Save</button></div>
+      </li>
+    </ul>
+  </div>
+
+  <div id="useradmin" class='onlyadmin'>
+    <h3>Manager Users</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Role</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Admin User (admin)</td>
+          <td>
+            <select name='role'>
+              <option value='1'>Admin (can do all operations)</option>
+              <option value='2'>User (can do everything, except access controls)</option>
+              <option value='3'>View (can view document only)</option>
+              <option value='4'>Add (can add documents only)</option>
+            </select><button>Update</button> | </td>
+          <td><button>Reset Password</button> | <button>Delete</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id='sessionman' class='onlyadmin'>
+    <h3>Manage Current Sessions</h3>
+    <p>Sessions are created when users visit the application. One session is created 
+      per visiting browser. The session holds information about there loggedin status
+      and other things the application needs to keep track of between page views. If
+      a user does not visit the application for longer than the 'session timeout' the
+      session is automatically deleted.</p>
+
+    <div class='row'>
+      <div class='label'>Session Timeout</div>
+      <div class='data'><select>
+                          <option value='1'>1 Min</option>
+                          <option value='5'>5 Mins</option>
+                          <option value='10'>10 Mins</option>
+                          <option value='30'>30 Mins</option>
+                          <option value='60'>60 Mins</option>
+                          <option value='90'>90 Mins</option>
+                        </select></div>
     </div>
-  </div>
-  <div class='row'>
-    <div class='label'>&nbsp;</div>
-    <div class='data'><input type='submit' name='addButton' value='Add' /></div>
-  </div>
-</div>
-</form>
-
-<h4>Current access by location</h4>
-<form action='/opendias/dynamic' method='post'>
-<input name='action' type='hidden' value='controlAccess' />
-<input name='method' type='hidden' value='removeLocation' />
-<div id='locationList'>
-  <div class='row'>
-    <div class='label'>&nbsp;</div>
-    <div class='data'>
-      <table id='locationTable' class='stdTable'>
-        <thead>
-          <tr>
-            <th>Location</th>
-            <th>Role</th>
-            <th>&nbsp;</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Session Id</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ffff</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
-</form>
-<div class='cclear'></div>
 
-
-<br /><br />
-<!--
-<div class='gOut'>
-</div>
-
-<h3>By Username/Password</h3>
-<p>Allow access for certain users<span id='withLocation'><strong>, if access is not provided by location</strong></span>.</p>
-
-<h4>Add access by username and password</h4>
-<form action='/opendias/dynamic' method='post'>
-<input name='action' type='hidden' value='controlAccess' />
-<input name='method' type='hidden' value='addUser' />
-<div id='locationSet'>
-  <div class='row'>
-    <div class='label'>User:</div>
-    <div class='data'><input name='user' /></div>
-  </div>
-  <div class='row'>
-    <div class='label'>Password:</div>
-    <div class='data'><input type='password' name='password' /></div>
-  </div>
-  <div class='row'>
-    <div class='label'>Role:</div>
-    <div class='data'>
-      <select name='role'>
-        <option value='1'>Admin (can do all operations)</option>
-        <option value='2'>User (can do everything, except access controls)</option>
-        <option value='3'>View (can view document only)</option>
-        <option value='4'>Add (can add documents only)</option>
-      </select>
-    </div>
-  </div>
-  <div class='row'>
-    <div class='label'>&nbsp;</div>
-    <div class='data'><input type='submit' name='addButton' value='Add' /></div>
-  </div>
-</div>
-</form>
-
-<h4>Current access by username and password</h4>
-<form action='/opendias/dynamic' method='post'>
-<input name='action' type='hidden' value='controlAccess' />
-<input name='method' type='hidden' value='removeUser' />
-<div id='locationList'>
-  <div class='row'>
-    <div class='label'>&nbsp;</div>
-    <div class='data'>
-      <table id='userTable' class='stdTable'>
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Role</th>
-            <th>&nbsp;</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-</form>
-<div class='cclear'></div>
--->
-
-</div>
 <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
-<script type="text/javascript" src="/opendias/includes/local/openDias.getAccessDetails.js.resource"></script>
-<script type="text/javascript" src="/opendias/includes/openDias.getAccessDetails.js"></script>
+<script type="text/javascript" src="/opendias/includes/local/openDias.accessControls.js.resource"></script>
+<script type="text/javascript" src="/opendias/includes/openDias.accessControls.js"></script>

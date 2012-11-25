@@ -3,6 +3,7 @@ Copying default database
 STARTING app...
 Now ready
 No need for a web client for this test.
+Sending request = action=checkLogin&password=password&username=test-user
 Doc Details, one tag
 Sending request = action=getDocDetail&docid=3
 $VAR1 = {

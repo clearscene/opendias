@@ -95,34 +95,29 @@
    border-bottom: 2px solid #555;
   }
   #menu li {
+   width: 120px;
+  }
+  #loginout li,
+  #menu li {
    margin-top: 1px;
    padding-top: 1px;
    list-style-type: none;
    display: inline-block;
-   width: 120px;
    text-align: center;
    border-right: 1px dotted #aaa;
   }
+  #loginout ul li:last-child,
   #menu ul li:last-child {
    border-right: none;
   }
+  #loginout li span a,
   #menu li a {
    color: #aaa;
    text-decoration: none;
   }
+  #loginout li span a:hover,
   #menu li a:hover {
    color: #ddd;
-  }
-  #menu li select {
-   background-color: #000;
-   border-color: #000;
-   color: #aaa;
-   font-family: arial;
-  }
-  #menu li select option {
-   background-color: #333;
-   border-color: #444;
-   color: #bbb;
   }
 
   #body {
@@ -359,8 +354,8 @@
     box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
     -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
     -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
-    -moz-border-radius: 7px;
-    -webkit-border-radius: 7px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
   } 
   .checkbox {
     background: #000;
@@ -463,4 +458,63 @@
   }
   .divider {
     border-top: 1px dotted #888;
+  }
+  #loginout {
+    position: absolute;
+    top: -3px;
+    left: 450px;
+    background: #442222;
+   -moz-border-radius:4px;
+   -webkit-border-radius:4px;
+    padding: 5px 8px 3px 8px;
+  }
+  #loginout input {
+    border-color: #555;
+    background: #333;
+    color: #bbb;
+    width: 55px;
+   -moz-border-radius:2px;
+   -webkit-border-radius:2px;
+  }
+  #loginout button {
+    background: #333;
+    color: #bbb;
+    border-color: #555;
+   -moz-border-radius:3px;
+   -webkit-border-radius:3px;
+  }
+  #loginout input::-webkit-input-placeholder {
+    color: #777;
+  }
+  #loginout input:-moz-placeholder {
+    color: #777;
+  }
+  #loginout input:-ms-input-placeholder {
+    color: #777;
+  }
+  #login {
+    display: none;
+  }
+  #logout {
+    display: none;
+  }
+  #realname {
+    color: #aaa;
+    display: inline-block;
+    text-align: center;
+  }
+  #loginout li select {
+   background-color: #333;
+   border-color: #333;
+   color: #aaa;
+   font-family: arial;
+  }
+  #loginout li select option {
+   background-color: #444;
+   border-color: #555;
+   color: #bbb;
+  }
+  #mydetails li {
+   list-style-type: none;
+   padding-left: 100px;
   }

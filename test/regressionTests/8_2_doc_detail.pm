@@ -18,6 +18,16 @@ sub test {
 
   my ($page, $elements, ) = @_;
 
+  $page = getPage("/");
+  waitForPageToFinish($page);
+  $elements = $page->getElementById('username');
+  $elements->setText("test-user");
+  $elements = $page->getElementById('password');
+  $elements->setText("password");
+  $elements = $page->getElementById('loginbutton');
+  $elements->click();
+  sleep(1);
+
   # Check the document page loads - with data
   $page = getPage('/docDetail.html?docid=1');
   waitForPageToFinish($page);

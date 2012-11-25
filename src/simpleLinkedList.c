@@ -34,8 +34,17 @@
 #include <string.h>
 
 #include "debug.h"
+#include "utils.h"
 
 #include "simpleLinkedList.h"
+
+/*
+ * DELETE ME
+ */
+struct post_data_struct {
+  size_t size;
+  char *data;
+};
 
 struct simpleLinkedList *generate_new_element( char *key, void *data ) {
   struct simpleLinkedList *element = malloc( sizeof(struct simpleLinkedList) );
@@ -84,6 +93,9 @@ void sll_insert ( struct simpleLinkedList *element, char *key, void *data ) {
 }
 
 struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *element, const char *key ) {
+  if( key == NULL ) {
+    return NULL;
+  }
   if( element && ( element != NULL ) ) {
     if( element->key && ( element->key != NULL ) && ( 0 == strcmp(element->key, key) ) ) {
       return element;
@@ -117,22 +129,86 @@ struct simpleLinkedList *sll_getNext( struct simpleLinkedList *element ) {
 
 void sll_destroy( struct simpleLinkedList *element ) {
   if( element && ( element != NULL ) ) {
+
     o_log(SQLDEBUG, "preparing to delete element: %x, with prev=%x, and next=%x", element, element->prev, element->next);
+
     sll_destroy( sll_getNext( element ) );
+
+    int set_delete_here = 0;
+    if( element->prev == NULL ) {
+      // The last element is never deleted by sll_delete,
+      // But if we're destroying the object WE should
+      set_delete_here = 1;
+    }
+
     sll_delete( element );
+
+    if( set_delete_here == 1 ) {
+      free( element );
+    }
   }
 }
 
 void sll_delete( struct simpleLinkedList *element ) {
   struct simpleLinkedList *prev_element = element->prev;
   struct simpleLinkedList *next_element = element->next;
+
   o_log(SQLDEBUG, "Asked to delete element: %x, with prev=%x, and next=%x", element, element->prev, element->next);
-  if( next_element && ( next_element != NULL ) ) {
-    next_element->prev = prev_element;
-  }
+
   if( prev_element && ( prev_element != NULL ) ) {
+    if( next_element && ( next_element != NULL ) ) {
+      next_element->prev = prev_element;
+    }
     prev_element->next = next_element;
+    free( element );
+    element = NULL;
   }
-  free( element );
+  else {
+    element->key = NULL;
+    element->data = NULL;
+  }
 }
 
+int _sll_count( struct simpleLinkedList *element, int current_count ) {
+  if( element->next == NULL ) {
+    return current_count;
+  }
+  return _sll_count( element->next, ++current_count );
+}
+
+int sll_count( struct simpleLinkedList *element ) {
+  return _sll_count( element, 0 );
+}
+
+char *sll_dumper( struct simpleLinkedList *container, const char *type ) {
+  struct simpleLinkedList *row;
+  char *ret = o_strdup("");
+  for( row = sll_findFirstElement( container ) ; row != NULL ; row = sll_getNext(row) ) {
+    conCat( &ret, "\n" );
+    char *data;
+    if( type != NULL && 0 == strcmp( type, "post_data_struct" ) ) {
+
+      struct simpleLinkedList *dd = sll_searchKeys(container, row->key);
+      struct post_data_struct *data_struct = NULL;
+      if( dd != NULL && dd->data != NULL )
+        data_struct = (struct post_data_struct *)dd->data;
+
+        if(data_struct == NULL || data_struct->data == NULL)
+          data = NULL;
+        else
+          data = data_struct->data;
+
+    }
+    else {
+      data = row->data;
+    }
+
+    // Obscure sensitive data
+    if( row->key != NULL && 0 == strcmp( row->key, "password" ) ) {
+      data = "###############";
+    }
+
+    o_concatf( &ret, "      %s : %s", row->key, data);
+  }
+  return ret;
+}

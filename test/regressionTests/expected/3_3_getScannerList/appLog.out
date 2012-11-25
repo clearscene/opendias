@@ -11,10 +11,10 @@ LOG-OUTPUT
 -date-:-thread-:DBG: Dir structure is in-place, database should exist
 -date-:-thread-:DBG: Checking for a populated database
 -date-:-thread-:DBG: Run Query [RECORDSET]
--date-:-thread-:DBG: We have one. So will check to see what verstion it is.
+-date-:-thread-:DBG: We have one. So will check to see what version it is.
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:DBG: Run Query [RECORDSET]
--date-:-thread-:DBG: Database reports that it is version: 6
+-date-:-thread-:DBG: Database reports that it is version: 7
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:INF: Connected to database
 -date-:-thread-:INF: database opened
@@ -30,16 +30,12 @@ LOG-OUTPUT
 -date-:-thread-:INF: Sane command socket is open
 -date-:-thread-:INF: ... Starting up the openDias service.
 -date-:-thread-:INF: ready to accept connectons
+-date-:-thread-:INF: Processing request for: checkLogin
 -date-:-thread-:INF: Processing request for: getScannerList
 -date-:-thread-:INF: SERVER: Sane dispatcher received the command: 'internalGetScannerList' with param of 'en'
 -date-:-thread-:INF: Processing request for: doScan
--date-:-thread-:INF: SERVER: Sane dispatcher received the command: 'internalDoScanningOperation' with param of '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ],en'
 -date-:-thread-:INF: Processing request for: getScannerList
--date-:-thread-:INF: The SANE sub system is busy, trying to return a cached response.
--date-:-thread-:INF: Scanner Parm : stat=Success form=0,lf=1,bpl=393,pixpl=393,lin=393,dep=8
--date-:-thread-:INF: Scanning done.
--date-:-thread-:INF: Convertion process: Loaded (depth: 8)
--date-:-thread-:INF: Conversion process: Complete
+-date-:-thread-:INF: SERVER: Sane dispatcher received the command: 'internalGetScannerList' with param of 'en'
 -date-:-thread-:INF: Received SIGUSR1 signal.
 -date-:-thread-:INF: openDias service is shutting down....
 -date-:-thread-:INF: openDias service has shutdown.

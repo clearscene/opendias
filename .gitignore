@@ -65,6 +65,9 @@ src/odf_plug.o
 src/pdf_plug.gcda
 src/pdf_plug.gcno
 src/pdf_plug.o
+src/sessionmanagement.gcda
+src/sessionmanagement.gcno
+src/sessionmanagement.o
 src/saneDispatcher.gcda
 src/saneDispatcher.gcno
 src/saneDispatcher.o

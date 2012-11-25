@@ -15,11 +15,15 @@ sub testProfile {
 
 sub test {
 
+  my $cookie_jar = HTTP::Cookies->new();
   my %data = (
+    __cookiejar => $cookie_jar,
     __method => 'GET',
     __encoding => 'text/html',
     __uri => '/opendias/',
   );
+
+  login( "test-user", "password", $cookie_jar );
 
   # No language setting - should default to English
   o_log( "No language indication = " . Dumper( directRequest( \%data ) ) );

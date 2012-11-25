@@ -22,7 +22,7 @@ sub test {
   $sth->execute();
 
   while( my $hashRef = $sth->fetchrow_hashref() ) {
-    if ( $hashRef->{version} eq "6" ) {
+    if ( $hashRef->{version} eq "7" ) {
       o_log("Correct DB version.");
     }
     else {

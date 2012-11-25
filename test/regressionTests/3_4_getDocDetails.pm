@@ -15,11 +15,14 @@ sub testProfile {
 
 sub test {
 
+  my $cookie_jar = HTTP::Cookies->new();
   my %data = (
+    __cookiejar => $cookie_jar,
     action => 'getDocDetail',
     docid => 3,
   );
 
+  login( "test-user", "password", $cookie_jar );
 
   # Call getDocDetails
   o_log( "Doc Details, one tag" );

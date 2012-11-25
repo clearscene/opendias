@@ -3,6 +3,7 @@ Copying default database
 STARTING app...
 Now ready
 No need for a web client for this test.
+Sending request = action=checkLogin&password=password&username=test-user
 Sending request = action=docFilter&isActionRequired=false&page=1&range=3&sortfield=3&sortorder=1&subaction=fullList
 No Rows = $VAR1 = {
   'DocFilter' => {

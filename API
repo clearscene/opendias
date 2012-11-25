@@ -42,16 +42,6 @@ Error Response
 
 
 
-controlAccess -> pageRender::controlAccess()
-        Called from:
-        Purpose: 
-        Inputs: action: fixed string 'controlAccess'
-                submethod: The type of access controls being updated
-                location: The location to assign or remove
-                role: The role to assign or remove
-        Outputs:
-
-
 getScanningProgress -> pageRender::getScanningProgress()
 	Called from: openDias.acquire.js :: getScanningProgress()
 	Purpose: Read the state of an asyncronouse scan.
@@ -165,33 +155,6 @@ docFilter -> pageRender::docFilter
 
 
 
-getAccessDetails -> pageRender::getAccessDetails
-	Called from: openDias.getAccessDetails.js :: ananoumouse()
-	Purpose: Get a list of specific grants that have been setup
-	Inputs:	action: fixed string 'getAccessDetails'
-	Outputs;
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <AccessDetails>
-		    <LocationAccess>
-		      <Access>
-		        location - network address that's linked to a role
-		        role - the priverlage assigned by this access
-		      </Access>
-		      ...
-		    </LocationAccess>
-		    <UserAccess>
-		      <Access>
-		        user - username that's linked to a role
-		        role - the priverlage assigned by this access
-		      </Access>
-		      ...
-		    </UserAccess>
-		  </AccessDetails>
-		</Response>
-
-
-
 
 getAudio -> [stump - not currently implemented]
 	Called from: openDias.loadDetails.js :: ananoumouse()
@@ -262,6 +225,7 @@ updateDocDetails -> docEditor::updateDocDetails
 		</Response>
 
 
+
 moveTag -> docEditor::updateTagLinkage
 	Called from: openDias.saveDetails.js :: ananoumouse()
 	Purpose: Updates links between documents n tags, and document n documents
@@ -270,11 +234,13 @@ moveTag -> docEditor::updateTagLinkage
           tag: the tag that is being (un)linked
           subaction: flag to indicate if the tag should be added or removed ['addTag','removeTag','addDoc','removeDoc']
 	Outputs;
+		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
-		  </MoveTag>
+		  <MoveTag>
 		    status - indication of the update process - currently a static string 'OK'
 		  </MoveTag>
 		</Response>
+
 
 
 deleteDoc -> docEditor::doDelete
@@ -283,10 +249,61 @@ deleteDoc -> docEditor::doDelete
 	Inputs:	action: fixed string 'deleteDoc'
           docid: the documents id
 	Outputs;
+		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
-		  </DeleteDoc>
+		  <DeleteDoc>
 		    status - indication of the update process - currently a static string 'OK'
 		  </DeleteDoc>
+		</Response>
+
+
+
+checkLogin -> pageRender::checkLogin
+	Called from: openDias.userdetails.js :: loginbutton
+	Purpose: Checks login details and assigns the user role to the session, on success
+	Inputs:	action: fixed string 'checkLogin'
+          username: The username to login with
+          password: The usernames password
+	Outputs;
+		<?xml version='1.0' encoding='utf-8'?>
+		<Response>
+		  <Login>
+        result - Was login successful ['OK','FAIL']
+        message - User message when result was 'FAIL'
+        retry_throttle - The number of seconds that must pass before a further login attempt will be accepted.
+		  </Login>
+		</Response>
+
+
+
+logout -> pageRender::doLogin
+	Called from: openDias.userdetails.js :: logoutbutton
+	Purpose: Removes any user specific information from the session
+	Inputs:	action: fixed string 'logout'
+	Outputs;
+		<?xml version='1.0' encoding='utf-8'?>
+		<Response>
+		  <Logout>
+        result - Was login successful ['OK','FAIL']
+		  </Logout>
+		</Response>
+
+
+
+updateUser -> pageRender::updateUser
+	Called from: openDias.accessControls.js :: ananoumouse()
+	Purpose: Update a user with new details
+	Inputs:	action: fixed string 'updateUser'
+          username: the username to update or the fixed string '[current]'
+          realname: (optional) The new realname of the updated user
+          password: (optional) The new password of the updated user
+          role: (optional) The new role of the updated user (not available for '[current]')
+	Outputs;
+		<?xml version='1.0' encoding='utf-8'?>
+		<Response>
+		  <UpdateUser>
+        result - Was login successful ['OK','FAIL']
+		  </UpdateUser>
 		</Response>
 
 
@@ -304,6 +321,7 @@ tagsAutoComplete -> pageRender::tagsAutoComplete
               ]}
 
 
+
 titleAutoComplete -> pageRender::titleAutoComplete
         Called from: openDias.loadDetails.js :: autocomplete function()
         Purpose: Complete a title from the start of the name. 
@@ -316,6 +334,7 @@ titleAutoComplete -> pageRender::titleAutoComplete
                 {"docid":"%s","title":"%s"},
                 ...
               ]}
+
 
 
 ----------------------------------------------------
@@ -354,12 +373,8 @@ nld   Dutch
 por   Brasilian Portuguese
 vie   Vietnamese
 
-sortfieldsortfield
-0   docid
-1   title
-2   doc type
-3   date
-0   docid
-1   title
-2   doc type
-3   date
+sort field
+0    docid
+1    title
+2    doc type
+3    date

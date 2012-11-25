@@ -289,19 +289,6 @@ void removeDoc (char *docid) {
   free(sql);
 }
 
-void addLocation(char *location, int role) {
-
-  char *sql = o_strdup("INSERT INTO location_access (location, role) VALUES (?, ?);");
-  struct simpleLinkedList *vars = sll_init();
-  sll_append(vars, DB_TEXT );
-  sll_append(vars, location );
-  sll_append(vars, DB_INT );
-  sll_append(vars, &role );
-
-  runUpdate_db(sql, vars);
-  free(sql);
-}
-
 char *getTagId(char *tagname) {
 
   struct simpleLinkedList *vars, *rSet;

@@ -11,10 +11,10 @@ LOG-OUTPUT
 -date-:-thread-:DBG: Dir structure is in-place, database should exist
 -date-:-thread-:DBG: Checking for a populated database
 -date-:-thread-:DBG: Run Query [RECORDSET]
--date-:-thread-:DBG: We have one. So will check to see what verstion it is.
+-date-:-thread-:DBG: We have one. So will check to see what version it is.
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:DBG: Run Query [RECORDSET]
--date-:-thread-:DBG: Database reports that it is version: 6
+-date-:-thread-:DBG: Database reports that it is version: 7
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:INF: Connected to database
 -date-:-thread-:INF: database opened
@@ -30,9 +30,14 @@ LOG-OUTPUT
 -date-:-thread-:INF: Sane command socket is open
 -date-:-thread-:INF: ... Starting up the openDias service.
 -date-:-thread-:INF: ready to accept connectons
+-date-:-thread-:INF: Serving request: /
+-date-:-thread-:INF: Serving request: /includes/jquery.js
+-date-:-thread-:INF: Serving request: /includes/openDias.userdetails.js
+-date-:-thread-:INF: Serving request: /style/common.css
+-date-:-thread-:INF: Processing request for: checkLogin
 -date-:-thread-:INF: Serving request: /acquire.html
 -date-:-thread-:INF: Serving request: /includes/jquery.js
--date-:-thread-:INF: Serving request: /includes/openDias.language.js
+-date-:-thread-:INF: Serving request: /includes/openDias.userdetails.js
 -date-:-thread-:INF: Serving request: /includes/jquery-ui.min.js
 -date-:-thread-:INF: Serving request: /includes/jquery.canvas-loader.js
 -date-:-thread-:INF: Serving request: /includes/sprintf-0.7-beta1.js
@@ -61,7 +66,7 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Serving request: /docDetail.html
 -date-:-thread-:INF: Serving request: /includes/jquery.js
--date-:-thread-:INF: Serving request: /includes/openDias.language.js
+-date-:-thread-:INF: Serving request: /includes/openDias.userdetails.js
 -date-:-thread-:INF: Serving request: /includes/jquery-ui.min.js
 -date-:-thread-:INF: Serving request: /includes/jquery.mousewheel.js
 -date-:-thread-:INF: Serving request: /includes/jquery.gzoom.js

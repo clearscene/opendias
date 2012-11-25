@@ -18,6 +18,9 @@
 
 #include "config.h"
 
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
@@ -29,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <uuid/uuid.h>
+#include <time.h>
 
 #include "main.h"
 #include "db.h"
@@ -41,6 +45,7 @@
 #include "scan.h"
 #include "saneDispatcher.h"
 #endif // CAN_SCAN //
+#include "simpleLinkedList.h"
 
 #include "pageRender.h"
 
@@ -441,71 +446,6 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   return docList;
 }
 
-char *getAccessDetails() {
-
-  char *userAccess, *access;
-
-  // Access by location
-  char *sql = o_strdup("SELECT location, r.rolename FROM location_access a left join access_role r on a.role = r.role");
-  char *locationAccess = o_strdup("");
-  struct simpleLinkedList *rSet = runquery_db(sql);
-  if( rSet != NULL ) {
-    do {
-      o_concatf(&locationAccess, "<Access><location>%s</location><role>%s</role></Access>", 
-                                readData_db(rSet, "location"), readData_db(rSet, "rolename"));
-    } while ( nextRow( rSet ) );
-    free_recordset( rSet );
-  }
-  free(sql);
-
-  // Access by user
-  sql = o_strdup("SELECT * FROM user_access a left join access_role r on a.role = r.role");
-  userAccess = o_strdup("");
-  rSet = runquery_db(sql);
-  if( rSet != NULL ) {
-    do {
-      o_concatf(&userAccess, "<Access><user>%s</user><role>%s</role></Access>", 
-                            readData_db(rSet, "username"), readData_db(rSet, "rolename"));
-    } while ( nextRow( rSet ) );
-    free_recordset( rSet );
-  }
-  free(sql);
-
-  access = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><AccessDetails><LocationAccess>%s</LocationAccess><UserAccess>%s</UserAccess></AccessDetails></Response>", locationAccess, userAccess);
-  free(locationAccess);
-  free(userAccess);
-
-  return access;
-}
-
-char *controlAccess(char *submethod, char *location, char *user, char *password, int role) {
-
-  if(!strcmp(submethod, "addLocation")) {
-    o_log(INFORMATION, "Adding access %i to location %s", role, location);
-    addLocation(location, role);
-
-  } else if(!strcmp(submethod, "removeLocation")) {
-
-
-
-  } else if(!strcmp(submethod, "addUser")) {
-
-
-
-  } else if(!strcmp(submethod, "removeUser")) {
-
-
-
-  } else {
-
-    // Should not have gotten here (validation)
-    o_log(ERROR, "Unknown accessControl Method");
-    return NULL;
-  }
-
-  return o_strdup("<html><HEAD><title>refresh</title><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/opendias/accessControls.html\"></HEAD><body></body></html>");
-}
-
 char *titleAutoComplete(char *startsWith, char *notLinkedTo) {
 
   char *docid, *title, *data;
@@ -590,5 +530,274 @@ char *tagsAutoComplete(char *startsWith, char *docid) {
   conCat(&result, "]}");
 
   return result;
+}
+
+char *checkLogin( char *username, char *password, char *lang, struct simpleLinkedList *session_data ) {
+  struct simpleLinkedList *rSet;
+  int retry_throttle = 5;
+
+  time_t current_time;
+  time( &current_time );
+
+  //
+  // Check that a login attemp was made earlier than retry_throttle seconds ago.
+  //
+  struct simpleLinkedList *last_attempt = sll_searchKeys( session_data, "next_login_attempt" );
+  if( last_attempt != NULL ) {
+    struct tm last_attempt_date_struct;
+    time_t last_attempt_time;
+
+    char *last_attempt_date_string = (char *)last_attempt->data;
+    strptime( last_attempt_date_string, "%a %b %d %T %Y", &last_attempt_date_struct);
+    last_attempt_time = mktime( &last_attempt_date_struct );
+
+    if( difftime( current_time, last_attempt_time ) <= retry_throttle ) {
+      o_log( ERROR, "Login attempt was too soon (by %d seconds) after previous login fail", 
+                                      retry_throttle - difftime( current_time, last_attempt_time ) );
+
+      char *rtp = o_strdup( ctime( &current_time ) );
+      chop( rtp );
+      last_attempt->data = rtp;
+
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_login_retry_too_soon", lang), retry_throttle);
+    }
+
+    else {
+      // lsat attempt is not no longer used (unless it gets set again later), so we can remove it.
+      free( last_attempt->data );
+      free( last_attempt->key );
+      sll_delete( last_attempt );
+    }
+
+  }
+
+
+  //
+  // Check we have a user of the name provided
+  //
+  char *sql = o_printf(
+    "SELECT created \
+    FROM user_access \
+    WHERE username = '%s'", username );
+  rSet = runquery_db( sql );
+  free( sql );
+
+  if( rSet == NULL ) {
+    o_log( ERROR, "User provded an incorrect username!" );
+
+    char *rtp = o_strdup( ctime( &current_time ) );
+    chop( rtp );
+    sll_insert( session_data, o_strdup("next_login_attempt"), rtp );
+
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_bad_login", lang), retry_throttle);
+  }
+
+
+  // Create a password hash
+  // Would have liked to do this directly in sqlite, but hashing functions
+  // are not available, and defining one is a major dependency pain.
+  char *salted_password = o_printf( "%s%s%s", readData_db(rSet, "created"), password, username );
+  free_recordset( rSet );
+  char *password_hash = str2md5( salted_password, strlen(salted_password) );
+  free( salted_password );
+
+
+  //
+  // Update last_access if the password matches
+  //
+  sql = o_strdup( 
+    "UPDATE user_access \
+    SET last_access = datetime('now') \
+    WHERE username = ? \
+    AND password = ? ");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, username );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, password_hash );
+  runUpdate_db( sql, vars );
+  free( sql );
+
+
+  //
+  // Get user info if the password matches
+  //
+  sql = o_printf(
+    "SELECT realname, role \
+    FROM user_access \
+    WHERE username = '%s' \
+    AND password = '%s'", username, password_hash );
+  rSet = runquery_db( sql );
+  free( sql );
+  free( password_hash );
+
+  if( rSet == NULL ) {
+    o_log( ERROR, "User provded an incorrect password!" );
+
+    char *rtp = o_strdup( ctime( &current_time ) );
+    chop( rtp );
+    sll_insert( session_data, o_strdup("next_login_attempt"), rtp );
+
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_bad_login", lang), retry_throttle);
+  }
+
+  char *realname = o_strdup(readData_db(rSet, "realname"));
+  char *role = o_strdup(readData_db(rSet, "role"));
+
+  // Before we assign these values to a user session, ensure we've not 
+  // gone nutz and fetched more than one record
+  if ( nextRow( rSet ) ) {
+    free_recordset( rSet );
+    free( realname );
+    free( role );
+    o_log( ERROR, "User login check, returned more than one row!" );
+    return NULL;
+  }
+  free_recordset( rSet );
+
+  // Save the details to the session/
+  sll_insert( session_data, o_strdup("username"), o_strdup(username) );
+  sll_insert( session_data, o_strdup("realname"), realname );
+  sll_insert( session_data, o_strdup("role"), role );
+
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>OK</result></Login></Response>");
+}
+
+char *doLogout( struct simpleLinkedList *session_data ) {
+  
+  struct simpleLinkedList *details;
+  const char *elements[] = { "next_login_attempt", "username", "realname", "role", NULL };
+  int i;
+
+  for (i = 0; elements[i]; i++) {
+    details = sll_searchKeys( session_data, elements[i] );
+    if ( details != NULL ) {
+      free( details->data );
+      free( details->key );
+      sll_delete( details );
+    }
+  }
+
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Logout><result>OK</result></Logout></Response>");
+}
+
+char *updateUser( char *username, char *realname, char *password, char *role, int can_edit_access, struct simpleLinkedList *session_data, char *lang) {
+  struct simpleLinkedList *rSet;
+  char *useUsername = NULL;
+  char *created = NULL;
+  char *sql;
+
+  // Allow user not to specify the actual username
+  if ( 0 == strcmp(username, "[current]") ) {
+    rSet = sll_searchKeys( session_data, "username" );
+    if ( rSet != NULL ) {
+      useUsername = rSet->data;
+    }
+    else {
+      o_log(ERROR, "A client tried to update her user, but was not logged in,");
+      return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateUser><result>FAIL</result></UpdateUser></Response>");
+    }
+  }
+  else {
+    if ( can_edit_access == 1 ) {
+      useUsername = username;
+    }
+    else {
+      o_log(ERROR, "Client specified a user to update, but they do not have permission.");
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", lang) );
+    }
+  }
+
+  // Check the calculated user is actually a user
+  sql = o_printf(
+    "SELECT created \
+    FROM user_access \
+    WHERE username = '%s'", useUsername );
+  rSet = runquery_db( sql );
+  free( sql );
+  if( rSet == NULL ) {
+    if ( can_edit_access == 1 ) {
+      // Create a new user
+      sql = o_strdup( "INSERT INTO user_access \
+                      VALUES (?, '-no password yet-', '-not set yet-', \
+                      datetime('now'), datetime('now'), 0);" );
+      struct simpleLinkedList *vars = sll_init();
+      sll_append(vars, DB_TEXT );
+      sll_append(vars, useUsername );
+      runUpdate_db( sql, vars );
+      free( sql );
+
+      sql = o_printf(
+        "SELECT created \
+        FROM user_access \
+        WHERE username = '%s'", useUsername );
+      rSet = runquery_db( sql );
+      free( sql );
+    }
+    else {
+      return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateUser><result>FAIL</result></UpdateUser></Response>");
+    }
+  }
+  created = o_strdup( readData_db(rSet, "created") );
+  free_recordset( rSet );
+
+  // Update the users 'role'
+  if ( role != NULL ) {
+    if ( can_edit_access == 1 ) {
+      char *sql = o_strdup(
+        "UPDATE user_access \
+        SET role = ? \
+        WHERE username = ? " );
+      struct simpleLinkedList *vars = sll_init();
+      sll_append(vars, DB_TEXT );
+      sll_append(vars, role );
+      sll_append(vars, DB_TEXT );
+      sll_append(vars, useUsername );
+      runUpdate_db( sql, vars );
+      free( sql );
+    }
+    else {
+      free( created );
+      o_log(ERROR, "Client specified a user to update, but they do not have permission.");
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", lang) );
+    }
+  }
+
+  // Update the users 'realname'
+  if ( realname != NULL ) {
+    char *sql = o_strdup(
+      "UPDATE user_access \
+      SET realname = ? \
+      WHERE username = ? " );
+    struct simpleLinkedList *vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, realname );
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, useUsername );
+    runUpdate_db( sql, vars );
+    free( sql );
+  }
+
+  // Update the users 'password'
+  if ( password != NULL ) {
+    char *salted_password = o_printf( "%s%s%s", created, password, useUsername );
+    char *password_hash = str2md5( salted_password, strlen(salted_password) );
+    free( salted_password );
+    char *sql = o_strdup(
+      "UPDATE user_access \
+      SET password = ? \
+      WHERE username = ? " );
+    struct simpleLinkedList *vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, password_hash );
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, useUsername );
+    runUpdate_db( sql, vars );
+    free( sql );
+    free( password_hash );
+  }
+
+  free( created );
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateUser><result>OK</result></UpdateUser></Response>");
 }
 

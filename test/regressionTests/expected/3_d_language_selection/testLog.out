@@ -3,6 +3,7 @@ Copying default database
 STARTING app...
 Now ready
 No need for a web client for this test.
+Sending request = action=checkLogin&password=password&username=test-user
 Sending request = 
 No language indication = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -13,7 +14,7 @@ No language indication = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
-  <script type="text/javascript" src="/opendias/includes/openDias.language.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -29,6 +30,28 @@ No language indication = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
     </div>
+    <div id=\'loginout\'>
+      <ul>
+        <li>
+          <span id=\'login\'>
+            <input id=\'username\' size=6 placeholder=\'username\' />
+            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+            <button id=\'loginbutton\'>Login</button>
+          </span>
+          <span id=\'logout\'>
+            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+            <button id=\'logoutbutton\'>Logout</button>
+          </span>
+        </li>
+        <li>
+          <select id=\'language\'>
+            <option value=\'--\'>Browsers Default Language</option>
+            <option value=\'en\'>English</option>
+            <option value=\'de\'>Deutsche</option>
+          <option value="hh">#### ########</option></select>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div id=\'menu\'>
@@ -37,13 +60,7 @@ No language indication = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
         <li><a id=\'homeLink\' href=\'/opendias/\'>Home</a></li>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
-        <li><a id=\'accessLink\' href=\'/opendias/accessControls.html\'>Access Controls</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li><select id=\'language\'>
-              <option value=\'--\'>Browsers Default Language</option>
-              <option value=\'en\'>English</option>
-              <option value=\'de\'>Deutsche</option>
-            <option value="hh">#### ########</option></select></li>
       </ul>
     </div>
   </div>
@@ -167,7 +184,7 @@ header says en = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
-  <script type="text/javascript" src="/opendias/includes/openDias.language.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -183,6 +200,28 @@ header says en = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
     </div>
+    <div id=\'loginout\'>
+      <ul>
+        <li>
+          <span id=\'login\'>
+            <input id=\'username\' size=6 placeholder=\'username\' />
+            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+            <button id=\'loginbutton\'>Login</button>
+          </span>
+          <span id=\'logout\'>
+            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+            <button id=\'logoutbutton\'>Logout</button>
+          </span>
+        </li>
+        <li>
+          <select id=\'language\'>
+            <option value=\'--\'>Browsers Default Language</option>
+            <option value=\'en\'>English</option>
+            <option value=\'de\'>Deutsche</option>
+          <option value="hh">#### ########</option></select>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div id=\'menu\'>
@@ -191,13 +230,7 @@ header says en = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
         <li><a id=\'homeLink\' href=\'/opendias/\'>Home</a></li>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
-        <li><a id=\'accessLink\' href=\'/opendias/accessControls.html\'>Access Controls</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li><select id=\'language\'>
-              <option value=\'--\'>Browsers Default Language</option>
-              <option value=\'en\'>English</option>
-              <option value=\'de\'>Deutsche</option>
-            <option value="hh">#### ########</option></select></li>
       </ul>
     </div>
   </div>
@@ -321,7 +354,7 @@ header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
-  <script type="text/javascript" src="/opendias/includes/openDias.language.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -337,6 +370,28 @@ header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
     </div>
+    <div id=\'loginout\'>
+      <ul>
+        <li>
+          <span id=\'login\'>
+            <input id=\'username\' size=6 placeholder=\'benutzername\' />
+            <input id=\'password\' size=6 placeholder=\'kennwort\' type=\'password\' />
+            <button id=\'loginbutton\'>Login</button>
+          </span>
+          <span id=\'logout\'>
+            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+            <button id=\'logoutbutton\'>Abmeldung</button>
+          </span>
+        </li>
+        <li>
+          <select id=\'language\'>
+            <option value=\'--\'>Voreinstellen sprachlich</option>
+            <option value=\'en\'>English</option>
+            <option value=\'de\'>Deutsche</option>
+          <option value="hh">#### ########</option></select>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div id=\'menu\'>
@@ -345,13 +400,7 @@ header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
         <li><a id=\'homeLink\' href=\'/opendias/\'>Zuhause</a></li>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Dokumentenliste</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Akquirieren</a></li>
-        <li><a id=\'accessLink\' href=\'/opendias/accessControls.html\'>Zugreifen</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a></li>
-        <li><select id=\'language\'>
-              <option value=\'--\'>Voreinstellen sprachlich</option>
-              <option value=\'en\'>English</option>
-              <option value=\'de\'>Deutsche</option>
-            <option value="hh">#### ########</option></select></li>
       </ul>
     </div>
   </div>
@@ -475,7 +524,7 @@ bad cookie, header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
-  <script type="text/javascript" src="/opendias/includes/openDias.language.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -491,6 +540,28 @@ bad cookie, header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
     </div>
+    <div id=\'loginout\'>
+      <ul>
+        <li>
+          <span id=\'login\'>
+            <input id=\'username\' size=6 placeholder=\'benutzername\' />
+            <input id=\'password\' size=6 placeholder=\'kennwort\' type=\'password\' />
+            <button id=\'loginbutton\'>Login</button>
+          </span>
+          <span id=\'logout\'>
+            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+            <button id=\'logoutbutton\'>Abmeldung</button>
+          </span>
+        </li>
+        <li>
+          <select id=\'language\'>
+            <option value=\'--\'>Voreinstellen sprachlich</option>
+            <option value=\'en\'>English</option>
+            <option value=\'de\'>Deutsche</option>
+          <option value="hh">#### ########</option></select>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div id=\'menu\'>
@@ -499,13 +570,7 @@ bad cookie, header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
         <li><a id=\'homeLink\' href=\'/opendias/\'>Zuhause</a></li>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Dokumentenliste</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Akquirieren</a></li>
-        <li><a id=\'accessLink\' href=\'/opendias/accessControls.html\'>Zugreifen</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a></li>
-        <li><select id=\'language\'>
-              <option value=\'--\'>Voreinstellen sprachlich</option>
-              <option value=\'en\'>English</option>
-              <option value=\'de\'>Deutsche</option>
-            <option value="hh">#### ########</option></select></li>
       </ul>
     </div>
   </div>

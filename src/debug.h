@@ -45,6 +45,7 @@ enum {
   SQLDEBUG
 };
 
+int trigger_log_verbosity( const int );
 void o_log(const int, const char *, ...);
 
 #ifdef __cplusplus

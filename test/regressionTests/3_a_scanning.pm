@@ -19,7 +19,9 @@ sub test {
                           "", "", { RaiseError => 1, AutoCommit => 1, sqlite_use_immediate_transaction => 1 } );
   my $sth = $dbh->prepare("SELECT status FROM scan_progress WHERE client_id = ? ");
 
+  my $cookie_jar = HTTP::Cookies->new();
   my %scan = (
+    __cookiejar => $cookie_jar,
     action => 'doScan',
     deviceid => 'test:0',
     format => 'Grey Scale',
@@ -29,10 +31,12 @@ sub test {
     pagelength => '100',
   );
   my %followup = (
+    __cookiejar => $cookie_jar,
     action => 'nextPageReady',
     scanprogressid => 0,
   );
 
+  login( "test-user", "password", $cookie_jar );
 
   # Send start scan request
   my $result = directRequest( \%scan );
