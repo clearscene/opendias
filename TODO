@@ -11,9 +11,7 @@ Migrate 8_* tests to use QUnit instead of HTMLUnit. ie remove 2.3 from tests/REA
 
 Implement the remainder of the test plan 'current_code/test/regressionTests/testplan', check coverage.
 
-Fix intermittent test failures (log timings mainly).
-
-[wpb] Implement 'By Username/Password' access controls
+Fix intermittent test failures (log timings mainly) & rationalise valgrind suppressions.
 
 Print documents
 
@@ -24,6 +22,10 @@ Implement 'OCR now' on document detail page.
 Get included into major repositories
 
 Frontend remembers user options
+
+User and session managment
+
+German test for session handeling / login 'n' out / user management
 
 
 Version 1.0
