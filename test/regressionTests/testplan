@@ -7,15 +7,18 @@
 
 * 3_1_doclist
 * 3_2_doclist_search
-o 3_3_getScannerList (see issue #XXXXX)
+@ 3_3_getScannerList (see issue #XXXXX)
 * 3_4_getDocDetails
-* 3_5_updateDocDetails
+* 3_5_updateDocDetails ?????????????
 * 3_6_moveTag
-o 3_7_deleteDoc (see issue #XXXXX)
+@ 3_7_deleteDoc (see issue #XXXXX)
 * 3_8_autoComplete
   3_9_access
 * 3_a_scanning
-  3_b_validation
+* 3_b_validation
+* 3_c_import
+* 3_d_language_selection
+
 
 * 8_1_basic_pages
 * 8_2_doc_detail
