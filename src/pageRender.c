@@ -163,11 +163,13 @@ char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
   int status=0;
   struct simpleLinkedList *rSet;
 
-  sql = o_printf("SELECT status \
+  sql = o_strdup("SELECT status \
                   FROM scan_progress \
-                  WHERE client_id = '%s'", scanid);
-
-  rSet = runquery_db(sql);
+                  WHERE client_id = ?");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, scanid );
+  rSet = runquery_db(sql, vars);
   if( rSet != NULL ) {
     do {
       status = atoi(readData_db(rSet, "status"));
@@ -214,11 +216,13 @@ char *getScanningProgress(char *scanid) {
   struct simpleLinkedList *rSet;
   char *sql, *status=0, *value=0, *ret;
 
-  sql = o_printf("SELECT status, value \
+  sql = o_strdup("SELECT status, value \
                   FROM scan_progress \
-                  WHERE client_id = '%s'", scanid);
-
-  rSet = runquery_db(sql);
+                  WHERE client_id = ?");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, scanid );
+  rSet = runquery_db(sql, vars);
   if( rSet != NULL ) {
     do {
       status = o_strdup(readData_db(rSet, "status"));
@@ -240,12 +244,14 @@ char *getScanningProgress(char *scanid) {
 
 char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder, char *lang ) {
 
+  struct simpleLinkedList *vars = sll_init();
   struct simpleLinkedList *rSet;
   const char *type;
   char *docList, *actionrequired, *title, *docid, *humanReadableDate, 
     *rows, *token, *olds, *sql, *textWhere=NULL, *dateWhere=NULL, 
     *tagWhere=NULL, *actionWhere=NULL, *page_ret;
   int count = 0;
+  char *sqlTextSearch = o_printf( "%%%s%%", textSearch );
 
   if( 0 == strcmp(subaction, "fullList") ) {
     sql = o_strdup("SELECT DISTINCT docs.* FROM docs ");
@@ -257,7 +263,11 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   // Filter by title or OCR
   //
   if( textSearch!=NULL && strlen(textSearch) ) {
-    textWhere = o_printf("(title LIKE '%%%s%%' OR ocrText LIKE '%%%s%%') ", textSearch, textSearch);
+    textWhere = o_strdup("(title LIKE ? OR ocrText LIKE ?) ");
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, sqlTextSearch );
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, sqlTextSearch );
   }
 
   // Filter by ActionRequired
@@ -269,7 +279,11 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   // Filter by Doc Date
   //
   if( startDate && strlen(startDate) && endDate && strlen(endDate) ) {
-    dateWhere = o_printf("date(docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2)) BETWEEN date('%s') AND date('%s') ", startDate, endDate);
+    dateWhere = o_strdup("date(docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2)) BETWEEN date(?) AND date(?) ");
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, startDate );
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, endDate );
   }
 
   // Filter By Tags
@@ -292,11 +306,12 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
       olds = tags;
     }
     tagWhere[strlen(tagWhere)-1] = ')';
-
     o_concatf(&sql, " JOIN (SELECT docid, COUNT(docid) c FROM doc_tags \
                     JOIN tags ON tags.tagid = doc_tags.tagid \
-                    WHERE %s GROUP BY docid HAVING c = %i ) t \
-                    ON docs.docid = t.docid ", tagWhere, count);
+                    WHERE %s GROUP BY docid HAVING c = ? ) t \
+                    ON docs.docid = t.docid ", tagWhere);
+    sll_append(vars, DB_INT );
+    sll_append(vars, &count );
     free(tagWhere);
   }
 
@@ -390,10 +405,11 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   // Get Results
   //
   rows = o_strdup("");
-  count = 0;
   o_log(DEBUGM, "sql=%s", sql);
 
-  rSet = runquery_db(sql);
+  rSet = runquery_db(sql, vars);
+  count = 0;
+  free( sqlTextSearch );
   if( rSet != NULL ) {
     do {
 
@@ -448,6 +464,7 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
 
 char *titleAutoComplete(char *startsWith, char *notLinkedTo) {
 
+  struct simpleLinkedList *vars = sll_init();
   char *docid, *title, *data;
   char *result = o_strdup("{\"results\":[");
   char *line = o_strdup("{\"docid\":\"%s\",\"title\":\"%s\"}");
@@ -456,20 +473,28 @@ char *titleAutoComplete(char *startsWith, char *notLinkedTo) {
 
   if(notLinkedTo != NULL) {
     o_concatf(&sql, "LEFT JOIN (SELECT * FROM doc_links \
-                        WHERE linkeddocid = %s) dl \
-                     ON docs.docid = dl.docid ", notLinkedTo);
+                        WHERE linkeddocid = ?) dl \
+                     ON docs.docid = dl.docid ");
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, notLinkedTo );
   }
 
-  o_concatf(&sql, "WHERE title LIKE '%s%%' ", startsWith);
+  char *sqlStartsWith = o_printf( "%s%%", startsWith );
+  o_concatf(&sql, "WHERE title LIKE ? ");
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, sqlStartsWith );
 
   if(notLinkedTo != NULL) {
     o_concatf(&sql, "AND dl.docid IS NULL \
-                     AND docs.docid != %s ", notLinkedTo);
+                     AND docs.docid != ? ");
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, notLinkedTo );
   }
 
   conCat(&sql, "ORDER BY title ");
 
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  struct simpleLinkedList *rSet = runquery_db(sql, vars);
+  free( sqlStartsWith );
   if( rSet != NULL ) {
     int notFirst = 0;
     do {
@@ -499,18 +524,25 @@ char *tagsAutoComplete(char *startsWith, char *docid) {
   char *title, *data;
   char *result = o_strdup("{\"results\":[");
   char *line = o_strdup("{\"tag\":\"%s\"}");
-  char *sql = o_printf(
+  char *sql = o_strdup(
     "SELECT tagname \
     FROM tags LEFT JOIN \
       (SELECT docid, tagid \
       FROM doc_tags \
-      WHERE docid=%s) dt \
+      WHERE docid = ?) dt \
     ON tags.tagid = dt.tagid \
     WHERE dt.docid IS NULL \
-    AND tagname like '%s%%' \
-    ORDER BY tagname", docid, startsWith);
+    AND tagname like ? \
+    ORDER BY tagname");
 
-  rSet = runquery_db(sql);
+  char *sqlTagName = o_printf( "%s%%", startsWith );
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, docid );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, sqlTagName);
+  rSet = runquery_db(sql, vars);
+  free( sqlTagName );
   if( rSet != NULL ) {
     int notFirst = 0;
     do {
@@ -575,11 +607,14 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
   //
   // Check we have a user of the name provided
   //
-  char *sql = o_printf(
+  char *sql = o_strdup(
     "SELECT created \
     FROM user_access \
-    WHERE username = '%s'", username );
-  rSet = runquery_db( sql );
+    WHERE username = ?");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, username );
+  rSet = runquery_db( sql, vars );
   free( sql );
 
   if( rSet == NULL ) {
@@ -610,7 +645,7 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
     SET last_access = datetime('now') \
     WHERE username = ? \
     AND password = ? ");
-  struct simpleLinkedList *vars = sll_init();
+  vars = sll_init();
   sll_append(vars, DB_TEXT );
   sll_append(vars, username );
   sll_append(vars, DB_TEXT );
@@ -622,12 +657,17 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
   //
   // Get user info if the password matches
   //
-  sql = o_printf(
+  sql = o_strdup(
     "SELECT realname, role \
     FROM user_access \
-    WHERE username = '%s' \
-    AND password = '%s'", username, password_hash );
-  rSet = runquery_db( sql );
+    WHERE username = ? \
+    AND password = ?");
+  vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, username );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, password_hash );
+  rSet = runquery_db( sql, vars );
   free( sql );
   free( password_hash );
 
@@ -709,11 +749,14 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
   }
 
   // Check the calculated user is actually a user
-  sql = o_printf(
+  sql = o_strdup(
     "SELECT created \
     FROM user_access \
-    WHERE username = '%s'", useUsername );
-  rSet = runquery_db( sql );
+    WHERE username = ?" );
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, useUsername );
+  rSet = runquery_db( sql, vars );
   free( sql );
   if( rSet == NULL ) {
     if ( can_edit_access == 1 ) {
@@ -721,17 +764,20 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
       sql = o_strdup( "INSERT INTO user_access \
                       VALUES (?, '-no password yet-', '-not set yet-', \
                       datetime('now'), datetime('now'), 0);" );
-      struct simpleLinkedList *vars = sll_init();
+      vars = sll_init();
       sll_append(vars, DB_TEXT );
       sll_append(vars, useUsername );
       runUpdate_db( sql, vars );
       free( sql );
 
-      sql = o_printf(
+      sql = o_strdup(
         "SELECT created \
         FROM user_access \
-        WHERE username = '%s'", useUsername );
-      rSet = runquery_db( sql );
+        WHERE username = ?" );
+      vars = sll_init();
+      sll_append(vars, DB_TEXT );
+      sll_append(vars, useUsername );
+      rSet = runquery_db( sql, vars );
       free( sql );
     }
     else {
@@ -748,7 +794,7 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
         "UPDATE user_access \
         SET role = ? \
         WHERE username = ? " );
-      struct simpleLinkedList *vars = sll_init();
+      vars = sll_init();
       sll_append(vars, DB_TEXT );
       sll_append(vars, role );
       sll_append(vars, DB_TEXT );
@@ -769,7 +815,7 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
       "UPDATE user_access \
       SET realname = ? \
       WHERE username = ? " );
-    struct simpleLinkedList *vars = sll_init();
+    vars = sll_init();
     sll_append(vars, DB_TEXT );
     sll_append(vars, realname );
     sll_append(vars, DB_TEXT );
@@ -787,7 +833,7 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
       "UPDATE user_access \
       SET password = ? \
       WHERE username = ? " );
-    struct simpleLinkedList *vars = sll_init();
+    vars = sll_init();
     sll_append(vars, DB_TEXT );
     sll_append(vars, password_hash );
     sll_append(vars, DB_TEXT );
