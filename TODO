@@ -7,8 +7,6 @@
 Version 0.9
 -----------
 
-[wpb] Convert sql-select queries to use bind variables
-
 Migrate 8_* tests to use QUnit instead of HTMLUnit. ie remove 2.3 from tests/README
 
 Implement the remainder of the test plan 'test/regressionTests/testplan', check coverage.
@@ -25,7 +23,7 @@ Get included into major repositories
 
 Frontend remembers user options
 
-User and session managment
+Managment of users and sessions
 
 German test for session handeling / login 'n' out / user management
 

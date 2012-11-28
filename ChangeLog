@@ -3,6 +3,7 @@
         Web application is now session aware.
         Priverlage assignment by username and password.
         Depricated location based priverlage assignments.
+        Implement bind vars for result returning SQL statements
 
  0.8.1  A localisation framework has been put in place (with en and de languages added)
         Remove defunct speak functionality
