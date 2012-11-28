@@ -325,10 +325,14 @@ void accessChecks(struct MHD_Connection *connection, const char *url, struct pri
     role = (char *)role_element->data;
   }
 
-  sql = o_printf("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan \
+  sql = o_strdup("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan \
             FROM access_role \
-            WHERE role = '%s'", role);
-  rSet = runquery_db(sql);
+            WHERE role = ?");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, role );
+
+  rSet = runquery_db(sql, vars);
   if( rSet != NULL ) {
     privs->update_access += atoi(readData_db(rSet, "update_access"));
     privs->view_doc += atoi(readData_db(rSet, "view_doc"));

@@ -52,12 +52,12 @@ int get_db_version() {
   struct simpleLinkedList *rSet;
 
   o_log(DEBUGM, "Checking for a populated database");
-  rSet = runquery_db("pragma table_info('version')");
+  rSet = runquery_db("pragma table_info('version')", NULL);
   if( rSet != NULL ) {
     o_log(DEBUGM, "We have one. So will check to see what version it is.");
     // We have a version table - so interogate!
     free_recordset( rSet );
-    rSet = runquery_db("SELECT version FROM version");
+    rSet = runquery_db("SELECT version FROM version", NULL);
     if( rSet != NULL ) {
       version = atoi(readData_db(rSet, "version"));
       o_log(DEBUGM, "Database reports that it is version: %i", version);
@@ -188,40 +188,42 @@ int last_insert() {
   return (int)sqlite3_last_insert_rowid(DBH);
 }
 
+void bind_vars( sqlite3_stmt *stmt, struct simpleLinkedList *vars ) {
+  int col = 0;
+  struct simpleLinkedList *tmpList = vars;
+  if ( tmpList == NULL || tmpList->data == NULL ) {
+    return;
+  }
+  do {
+    col++;
+    char *type = tmpList->data;
+    tmpList = sll_getNext(tmpList);
+    if ( 0 == strcmp (type, DB_NULL ) ) {
+      sqlite3_bind_null(stmt, col);
+    }
+    else if ( 0 == strcmp (type, DB_TEXT ) ) {
+      sqlite3_bind_text(stmt, col, (char *)tmpList->data, (int)strlen(tmpList->data), SQLITE_TRANSIENT );
+    }
+    else if ( 0 == strcmp (type, DB_INT ) ) {
+      int *m = tmpList->data;
+      sqlite3_bind_int(stmt, col, *m );
+    }
+    tmpList = sll_getNext(tmpList);
+  } while (tmpList != NULL);
+}
+
 int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
 
   sqlite3_stmt *stmt;
-  struct simpleLinkedList *tmpList = NULL;
   int rc;
-  char *type;
 
   o_log(SQLDEBUG, "%s", sql);
 
   if(vars != NULL) {
-    int col = 0;
-    sqlite3_prepare(DBH, sql, (int)strlen(sql), &stmt, NULL);
-    tmpList = vars;
-    do {
-      col++;
-      type = tmpList->data;
-      tmpList = sll_getNext(tmpList);
-      if ( 0 == strcmp (type, DB_NULL ) ) {
-        sqlite3_bind_null(stmt, col);
-      }
-      else if ( 0 == strcmp (type, DB_TEXT ) ) {
-        sqlite3_bind_text(stmt, col, (char *)tmpList->data, (int)strlen(tmpList->data), SQLITE_TRANSIENT );
-//      free(tmpList->data);
-      }
-      else if ( 0 == strcmp (type, DB_INT ) ) {
-        int *m = tmpList->data;
-        sqlite3_bind_int(stmt, col, *m );
-      }
-//    else if ( 0 == strcmp (type, DB_DOUBLE ) ) {
-//        sqlite3_bind_double(stmt, col, tmpList->data );
-//    }
-      tmpList = sll_getNext(tmpList);
-    } while (tmpList != NULL);
 
+    sqlite3_prepare(DBH, sql, (int)strlen(sql), &stmt, NULL);
+    bind_vars( stmt, vars );
+ 
     rc = sqlite3_step(stmt);
     if( rc != SQLITE_DONE ) {
       o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);
@@ -246,7 +248,7 @@ The error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(D
     return 0;
 }
 
-struct simpleLinkedList *runquery_db (char *sql) {
+struct simpleLinkedList *runquery_db (char *sql, struct simpleLinkedList *vars) {
 
   int rc;
   char *zErrMsg;
@@ -255,15 +257,47 @@ struct simpleLinkedList *runquery_db (char *sql) {
   o_log(DEBUGM, "Run Query (%x)", rSet);
   o_log(SQLDEBUG, "SQL = %s", sql);
 
+  if(vars != NULL) {
 
-  // Execute the query
-  rc = sqlite3_exec(DBH, sql, callback, rSet, &zErrMsg);
+    sqlite3_stmt *stmt;
 
-  // Dump out on error
-  if( rc != SQLITE_OK ) {
-    o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s and/or %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), zErrMsg, sql);
-    if (zErrMsg)
-      sqlite3_free(zErrMsg);
+    sqlite3_prepare(DBH, sql, (int)strlen(sql), &stmt, NULL);
+    bind_vars( stmt, vars );
+    sll_destroy(vars);
+ 
+    while( SQLITE_ROW == ( rc = sqlite3_step( stmt ) ) ) {
+      int i;
+      int columns = sqlite3_column_count( stmt );
+      const unsigned char **argv = (const unsigned char **)malloc( columns * sizeof( unsigned char * ) );
+      const char **azColName = (const char **)malloc( columns * sizeof( char * ) );
+      for(i=0; i<columns; i++) {
+        argv[i] = sqlite3_column_text( stmt, i );
+        azColName[i] = sqlite3_column_name( stmt, i );
+      }
+
+      callback(rSet, columns, (char **)argv, (char **)azColName);
+
+      free( argv );
+      free( azColName );
+    }
+
+    if( rc != SQLITE_DONE ) {
+      o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);
+      return NULL;
+    }
+    rc = sqlite3_finalize(stmt);
+  }
+
+  else {
+    // Execute the query - with no bind vars
+    rc = sqlite3_exec(DBH, sql, callback, rSet, &zErrMsg);
+
+    // Dump out on error
+    if( rc != SQLITE_OK ) {
+      o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s and/or %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), zErrMsg, sql);
+      if (zErrMsg)
+        sqlite3_free(zErrMsg);
+    }
   }
 
   if(rSet->data != NULL ) {

@@ -31,7 +31,7 @@ void close_db (void);
 void free_recordset (struct simpleLinkedList *);
 int last_insert(void);
 int runUpdate_db (char *, struct simpleLinkedList *);
-struct simpleLinkedList *runquery_db (char *);
+struct simpleLinkedList *runquery_db (char *, struct simpleLinkedList *);
 char *readData_db (struct simpleLinkedList *, char *);
 int nextRow (struct simpleLinkedList *);
 

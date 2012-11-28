@@ -60,12 +60,17 @@ char *getScanParam(char *scanid, int param_option) {
 
 	o_log(DEBUGM,"Entering getScanParam");
 
-  sql = o_printf("SELECT param_value \
+  sql = o_strdup("SELECT param_value \
                   FROM scan_params \
-                  WHERE client_id = '%s' \
-                  AND param_option = %i", scanid, param_option);
+                  WHERE client_id = ? \
+                  AND param_option = ?");
 
-  rSet = runquery_db(sql);
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, scanid );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &param_option );
+  rSet = runquery_db(sql, vars);
   if( rSet ) {
     vvalue = o_strdup(readData_db(rSet, "param_value"));
   }
@@ -293,9 +298,12 @@ char *getTagId(char *tagname) {
 
   struct simpleLinkedList *vars, *rSet;
   char *sql2, *ret = NULL;
-  char *sql = o_printf("SELECT tagid FROM tags WHERE tagname = '%s'", tagname);
+  char *sql = o_strdup("SELECT tagid FROM tags WHERE tagname = ?");
 
-  rSet = runquery_db(sql);
+  vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, tagname );
+  rSet = runquery_db(sql, vars);
   if( rSet != NULL ) {
     ret = o_strdup(readData_db(rSet, "tagid"));
   }
@@ -321,10 +329,13 @@ char *getTagId(char *tagname) {
 
 int countDocsWithTag( char *tagid ) {
 
-  char *sql = o_printf("SELECT COUNT(tagid) ct FROM doc_tags WHERE tagid = '%s'", tagid);
+  char *sql = o_strdup("SELECT COUNT(tagid) ct FROM doc_tags WHERE tagid = ?");
   int ret = 0;
 
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, tagid );
+  struct simpleLinkedList *rSet = runquery_db(sql, vars);
   if( rSet ) {
     ret = atoi(readData_db(rSet, "ct"));
   }

@@ -40,8 +40,12 @@ char *doDelete (char *documentId) {
   int pages, i;
   char *docTemplate, *docPath;
 
-  char *sql = o_printf("SELECT pages FROM docs WHERE docid = %s", documentId);
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  char *sql = o_strdup("SELECT pages FROM docs WHERE docid = ?");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, documentId );
+  struct simpleLinkedList *rSet = runquery_db(sql, vars);
+
   if( rSet != NULL ) {
     char *pages_s = o_strdup(readData_db(rSet, "pages"));
     pages = atoi(pages_s);
@@ -88,8 +92,12 @@ char *getDocDetail (char *documentId, char *lang ) {
  
   // Validate document id
   //
-  sql = o_printf("SELECT docid FROM docs WHERE docid = %s", documentId);
-  rSet = runquery_db(sql);
+  sql = o_strdup("SELECT docid FROM docs WHERE docid = ?");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, documentId );
+
+  rSet = runquery_db(sql, vars);
   if( rSet == NULL ) {
     o_log(ERROR, "Could not select record %s.", documentId);
     free_recordset( rSet );
@@ -105,16 +113,20 @@ char *getDocDetail (char *documentId, char *lang ) {
   //
   tags = o_strdup("");
   tagsTemplate = o_strdup("<tag>%s</tag>");
-  sql = o_printf(
+  sql = o_strdup(
     "SELECT tagname \
     FROM tags JOIN \
     (SELECT * \
     FROM doc_tags \
-    WHERE docid=%s) dt \
+    WHERE docid = ? ) dt \
     ON tags.tagid = dt.tagid \
-    ORDER BY tagname", documentId);
+    ORDER BY tagname");
 
-  rSet = runquery_db(sql);
+  vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, documentId );
+  rSet = runquery_db(sql, vars);
+
   if( rSet ) {
     do  {
       o_concatf(&tags, tagsTemplate, readData_db(rSet, "tagname") );
@@ -132,14 +144,17 @@ char *getDocDetail (char *documentId, char *lang ) {
   //
   docs = o_strdup("");
   docsTemplate = o_strdup("<doc><targetDocid>%s</targetDocid><targetTitle>%s</targetTitle></doc>");
-  sql = o_printf(
+  sql = o_strdup(
     "SELECT l.linkeddocid, d.title \
     FROM doc_links l JOIN docs d \
     ON l.linkeddocid = d.docid \
-    WHERE l.docid = %s \
-    ORDER BY d.title", documentId);
+    WHERE l.docid = ? \
+    ORDER BY d.title");
+  vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, documentId );
 
-  rSet = runquery_db(sql);
+  rSet = runquery_db(sql, vars);
   if( rSet ) {
     do  {
       o_concatf(&docs, docsTemplate, readData_db(rSet, "linkeddocid"), readData_db(rSet, "title") );
@@ -154,8 +169,12 @@ char *getDocDetail (char *documentId, char *lang ) {
 
   // Get docinformation
   //
-  sql = o_printf("SELECT * FROM docs WHERE docid = %s", documentId);
-  rSet = runquery_db(sql);
+  sql = o_strdup("SELECT * FROM docs WHERE docid = ?");
+  vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, documentId );
+  rSet = runquery_db(sql, vars);
+
   if( rSet == NULL ) {
     o_log(ERROR, "Could not select record %s.", documentId);
     free_recordset( rSet );

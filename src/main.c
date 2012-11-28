@@ -110,7 +110,7 @@ int setup (char *configFile) {
 
   o_log(INFORMATION, "database opened");
   sql = o_strdup("SELECT config_option, config_value FROM config");
-  rSet = runquery_db(sql);
+  rSet = runquery_db(sql, NULL);
   if( rSet != NULL ) {
     do {
       config_option = o_strdup(readData_db(rSet, "config_option"));
