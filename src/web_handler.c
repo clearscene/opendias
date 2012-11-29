@@ -646,7 +646,6 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   if (0 == strcmp (method, "POST")) {
     // Serve up content that needs a top and tailed
     if( 0!=strstr(url,"/dynamic") ) {
-      //struct connection_info_struct *con_info = *con_cls;
       con_info = *con_cls;
       if (0 != *upload_data_size) {
         MHD_post_process (con_info->postprocessor, upload_data, *upload_data_size);

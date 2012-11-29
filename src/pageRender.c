@@ -39,7 +39,6 @@
 #include "dbaccess.h"
 #include "utils.h"
 #include "debug.h"
-#include "validation.h" // for con_info struct - move me to web_handler.h
 #include "localisation.h"
 #ifdef CAN_SCAN
 #include "scan.h"

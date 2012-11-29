@@ -23,7 +23,7 @@
 
 #include "simpleLinkedList.h"
 
-#include "validation.h" // for con_info struct - move me to web_handler.h
+#include "main.h" // for con_info struct
 
 #ifdef CAN_SCAN
 char *getScannerList(void *);  // Command port frontend to the internalGetScannerList function
