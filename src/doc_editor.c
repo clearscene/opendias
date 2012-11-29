@@ -37,13 +37,15 @@
 
 char *doDelete (char *documentId) {
 
-  int pages, i;
+  int doc_id, pages, i;
   char *docTemplate, *docPath;
+
+  doc_id = atoi( documentId );
 
   char *sql = o_strdup("SELECT pages FROM docs WHERE docid = ?");
   struct simpleLinkedList *vars = sll_init();
-  sll_append(vars, DB_TEXT );
-  sll_append(vars, documentId );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &doc_id );
   struct simpleLinkedList *rSet = runquery_db(sql, vars);
 
   if( rSet != NULL ) {
@@ -83,9 +85,12 @@ char *doDelete (char *documentId) {
 
 char *getDocDetail (char *documentId, char *lang ) {
 
+  int doc_id;
   struct simpleLinkedList *rSet;
   char *sql, *tags, *tagsTemplate, *title, *humanReadableDate,
       *docs, *docsTemplate, *returnXMLtemplate, *returnXML;
+
+  doc_id = atoi( documentId );
 
   // Remove any trailing '#' marks
   replace(documentId, "#", "");
@@ -94,8 +99,8 @@ char *getDocDetail (char *documentId, char *lang ) {
   //
   sql = o_strdup("SELECT docid FROM docs WHERE docid = ?");
   struct simpleLinkedList *vars = sll_init();
-  sll_append(vars, DB_TEXT );
-  sll_append(vars, documentId );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &doc_id );
 
   rSet = runquery_db(sql, vars);
   if( rSet == NULL ) {
@@ -123,8 +128,8 @@ char *getDocDetail (char *documentId, char *lang ) {
     ORDER BY tagname");
 
   vars = sll_init();
-  sll_append(vars, DB_TEXT );
-  sll_append(vars, documentId );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &doc_id );
   rSet = runquery_db(sql, vars);
 
   if( rSet ) {
@@ -151,8 +156,8 @@ char *getDocDetail (char *documentId, char *lang ) {
     WHERE l.docid = ? \
     ORDER BY d.title");
   vars = sll_init();
-  sll_append(vars, DB_TEXT );
-  sll_append(vars, documentId );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &doc_id );
 
   rSet = runquery_db(sql, vars);
   if( rSet ) {
@@ -171,8 +176,8 @@ char *getDocDetail (char *documentId, char *lang ) {
   //
   sql = o_strdup("SELECT * FROM docs WHERE docid = ?");
   vars = sll_init();
-  sll_append(vars, DB_TEXT );
-  sll_append(vars, documentId );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &doc_id );
   rSet = runquery_db(sql, vars);
 
   if( rSet == NULL ) {
