@@ -38,14 +38,6 @@
 
 #include "simpleLinkedList.h"
 
-/*
- * DELETE ME
- */
-struct post_data_struct {
-  size_t size;
-  char *data;
-};
-
 struct simpleLinkedList *generate_new_element( char *key, void *data ) {
   struct simpleLinkedList *element = malloc( sizeof(struct simpleLinkedList) );
   element->key = key;
@@ -180,28 +172,13 @@ int sll_count( struct simpleLinkedList *element ) {
   return _sll_count( element, 0 );
 }
 
-char *sll_dumper( struct simpleLinkedList *container, const char *type ) {
+char *sll_dumper( struct simpleLinkedList *container ) {
   struct simpleLinkedList *row;
   char *ret = o_strdup("");
   for( row = sll_findFirstElement( container ) ; row != NULL ; row = sll_getNext(row) ) {
     conCat( &ret, "\n" );
     char *data;
-    if( type != NULL && 0 == strcmp( type, "post_data_struct" ) ) {
-
-      struct simpleLinkedList *dd = sll_searchKeys(container, row->key);
-      struct post_data_struct *data_struct = NULL;
-      if( dd != NULL && dd->data != NULL )
-        data_struct = (struct post_data_struct *)dd->data;
-
-        if(data_struct == NULL || data_struct->data == NULL)
-          data = NULL;
-        else
-          data = data_struct->data;
-
-    }
-    else {
-      data = row->data;
-    }
+    data = row->data;
 
     // Obscure sensitive data
     if( row->key != NULL && 0 == strcmp( row->key, "password" ) ) {

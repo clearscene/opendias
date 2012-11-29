@@ -29,14 +29,10 @@
 
 char *getPostData(struct simpleLinkedList *post_hash, char *key) {
   struct simpleLinkedList *data = sll_searchKeys(post_hash, key);
-  struct post_data_struct *data_struct = NULL;
-  if( data != NULL && data->data != NULL )
-    data_struct = (struct post_data_struct *)data->data;
-
-  if(data_struct == NULL || data_struct->data == NULL)
+  if( data == NULL || data->data == NULL )
     return NULL;
   else
-    return data_struct->data;
+    return data->data;
 }
 
 

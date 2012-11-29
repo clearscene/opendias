@@ -32,11 +32,6 @@ struct connection_info_struct {
   char *session_id;
 };
 
-struct post_data_struct {
-  size_t size;
-  char *data;
-};
-
 char *getPostData(struct simpleLinkedList *, char *);
 int basicValidation(struct simpleLinkedList *);
 int validate(struct simpleLinkedList *, char *);
