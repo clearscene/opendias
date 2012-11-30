@@ -111,7 +111,7 @@ if [ "$NOBUILD" == "" ]; then
 
   echo Performing code analysis ...
   cd ../
-  cppcheck --verbose --enable=all --error-exitcode=1 src/ &> test/results/buildLog2.out
+  cppcheck --verbose --enable=all --platform=unix32 --platform=unix64 --error-exitcode=1 src/ &> test/results/buildLog2.out
   if [ "$?" -ne "0" ]; then
     echo "Code analysis found a problem. Check the buildLog.out for details."
     cd test
