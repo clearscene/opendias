@@ -19,8 +19,6 @@
 #ifndef MAIN
 #define MAIN
 
-#include <pthread.h>
-
 #define QUEUE_LENGTH 3
 
 int DB_VERSION;
@@ -44,16 +42,6 @@ struct services {
   int command;
   int httpd;
   int sessions;
-};
-
-struct connection_info_struct {
-  int connectiontype;
-  struct MHD_PostProcessor *postprocessor;
-  struct simpleLinkedList *post_data;
-  pthread_t thread;
-  char *lang;
-  struct simpleLinkedList *session_data;
-  char *session_id;
 };
 
 void server_shutdown(void);

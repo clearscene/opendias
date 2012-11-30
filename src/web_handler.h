@@ -21,6 +21,21 @@
 
 #include <microhttpd.h>
 
+#ifdef THREAD_JOIN
+#include <pthread.h>
+#endif /* THREAD_JOIN */
+struct connection_info_struct {
+  int connectiontype;
+  struct MHD_PostProcessor *postprocessor;
+  struct simpleLinkedList *post_data;
+#ifdef THREAD_JOIN
+  pthread_t thread;
+#endif /* THREAD_JOIN */
+  char *lang;
+  struct simpleLinkedList *session_data;
+  char *session_id;
+};
+
 #define POSTBUFFERSIZE 512
 #define MAXCLIENTS 5
 #define GET 0

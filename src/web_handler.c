@@ -26,7 +26,9 @@
 #include <stdarg.h>
 #include <microhttpd.h>
 #include <uuid/uuid.h>
+#ifdef THREAD_JOIN
 #include <pthread.h>
+#endif /* THREAD_JOIN */
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -727,7 +729,11 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               char *pages = getPostData(con_info->post_data, "pages");
               char *ocr = getPostData(con_info->post_data, "ocr");
               char *pagelength = getPostData(con_info->post_data, "pagelength");
-              content = doScan(deviceid, format, resolution, pages, ocr, pagelength, (void *) con_info); // pageRender.c
+#ifdef THREAD_JOIN
+              content = doScan(deviceid, format, resolution, pages, ocr, pagelength, con_info->lang, &(con_info->thread) ); // pageRender.c
+#else
+              content = doScan(deviceid, format, resolution, pages, ocr, pagelength, con_info->lang); // pageRender.c
+#endif /* THREAD_JOIN */
               if(content == (void *)NULL) {
                 content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
               }
@@ -771,7 +777,11 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             else {
               char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
-              content = nextPageReady(scanprogressid, (void *) con_info); //pageRender.c
+#ifdef THREAD_JOIN
+              content = nextPageReady(scanprogressid, con_info->lang, &(con_info->thread) ); //pageRender.c
+#else
+              content = nextPageReady(scanprogressid, con_info->lang); //pageRender.c
+#endif /* THREAD_JOIN */
               if(content == (void *)NULL) {
                 content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
               }
