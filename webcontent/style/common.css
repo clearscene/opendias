@@ -41,6 +41,9 @@
     left: 10px;
     top: 20px;
   }
+  .hidden {
+    display: none;
+  }
   .row {
     width: 680px;
     min-height: 30px;
@@ -231,10 +234,6 @@
     float: left;
     width: 430px;
     margin-left: 15px;
-  }
-
-  #playAudio {
-    display: none;
   }
 
   .float5050 {
