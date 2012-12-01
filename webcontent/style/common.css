@@ -115,6 +115,9 @@
    color: #aaa;
    text-decoration: none;
   }
+  .version {
+    color: #888;
+  }
   #loginout li span a:hover,
   #menu li a:hover {
    color: #ddd;

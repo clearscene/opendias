@@ -14,4 +14,4 @@ install-exec-hook:
 	test ! -e ${sysconfdir}/opendias/opendias.conf && echo ${libdir}/opendias >> ${sysconfdir}/opendias/opendias.conf || echo config file already exists
 	perl -pi -e 's|__libdir__|$(libdir)|g' $(pkgdatadir)/openDIAS.sqlite3.dmp.*.sql
 	perl -pi -e 's|__localstatedir__|$(localstatedir)|g' $(pkgdatadir)/openDIAS.sqlite3.dmp.*.sql
-
+	perl -pi -e 's|__package_string__|$(PACKAGE_STRING)|g' $(pkgdatadir)/webcontent/includes/header.txt.*
