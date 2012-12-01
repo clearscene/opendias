@@ -5,19 +5,19 @@
 
   <div style='float: left; width:570px;'>
 
-  <h3>Functional</h3>
-	<li>Access Controls: deletion of rules impossible</li>
-	<li>Acquire New: offered scanning resolutions does not match hardware capabilities</li>
-	<li>Acquire New: upload existing documents fails if document type is not correct</li>
-	<li>Document Detail: uploaded jpg's not shown (filename issue _n missing or wrong)</li>
-  
+    <h3>Functional</h3>
+	  <ul>
+      <li>Acquire New: offered scanning resolutions does not match hardware capabilities</li>
+  	  <li>Document Detail: uploaded jpg's not shown (filename issue _n missing or wrong)</li>
+    </ul>
 
-  <h3>technical</h3>
-	<li>Acquire New: error prone ftype radio button detection on missing radio button selection</li>
-	<li>Acquire New: false errors reported related to size estimations</li>
-	<li>Acquire New: scanning may result in unoperational scanner. (usb-reset)</li>
-	<li>memory leaks: scanning operation, upload jpeg(odf untested), after startup when browsing the site, <li>
-	<li>checkOnlyKeys: many false errors reported, or called on non mandatory keys</li>
+    <h3>Technical</h3>
+    <ul>
+	    <li>Acquire New: false errors reported related to size estimations</li>
+  	  <li>Acquire New: scanning may result in unoperational scanner. (usb-reset)</li>
+	    <li>Memory leaks: scanning operation, upload jpeg(odf untested), after startup when browsing the site, </li>
+    </ul>
+
   </div>
 
  </div>
