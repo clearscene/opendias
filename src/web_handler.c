@@ -904,8 +904,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             else {
               char *filename = getPostData(con_info->post_data, "uploadfile");
-              char *ftype = getPostData(con_info->post_data, "ftype");
-              content = uploadfile(filename, ftype, con_info->lang); // import_doc.c
+              content = uploadfile(filename, con_info->lang); // import_doc.c
               if(content == (void *)NULL)
                 content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
             }

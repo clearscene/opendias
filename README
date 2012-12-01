@@ -61,10 +61,12 @@ Use the application, by visiting:
     leptonica
 
   2.2.3 For ODF import
+    magic
     xml2
     zzip
 
   2.2.4 For PDF import
+    magic
     poppler-cpp
 
 2.3 Short cut
@@ -74,13 +76,13 @@ On, Debian or Ubuntu, you can do this by running:
 
   sudo apt-get install build-essential libsqlite3-dev libsane-dev \
     libmicrohttpd-dev uuid-dev libleptonica-dev libpoppler-cpp-dev \
-    libtesseract-dev libxml2-dev libzzip-dev 
+    libtesseract-dev libxml2-dev libzzip-dev libmagic-dev
 
 On, RedHat or Fedora, you can do this by running:
 
   su - 
   yum install gcc-c++ make sqlite-devel libmicrohttpd-devel \
-    libuuid-devel sane-backends-devel leptonica-devel \
+    libuuid-devel sane-backends-devel leptonica-devel file-devel \
     tesseract-devel libxml2-devel zziplib-devel poppler-cpp-devel
 
 -----------------------------------

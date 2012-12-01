@@ -132,11 +132,20 @@ AC_CHECK_LIB(xml2, xmlParseExternalEntity,
   AC_MSG_WARN(You are missing the xml libs) )
 
 
+magic="no"
+AC_CHECK_LIB(magic, magic_open, 
+  [AC_CHECK_HEADER(magic.h,
+    magic="yes",
+    AC_MSG_WARN(You are missing the development headers for the magic libs))], 
+  AC_MSG_WARN(You are missing the magic libs) )
+
+
 
 
 dnl
 dnl Determin what service we can provide based on available libs
 dnl
+
 
 if test "x$scanning" = "xyes" && test "x$imageprocessing" = "xyes" ; then
 	AC_DEFINE([CAN_SCAN],[],[Have everything that is needed for scanning documents])
@@ -154,20 +163,29 @@ else
 fi
 
 
-if test "x$xml" = "xyes" && test "x$zzip" = "xyes" ; then
-	AC_DEFINE([CAN_READODF],[],[Have everything that is needed to read ODF documents])
-	OPENDIAS_LIBS="$OPENDIAS_LIBS -lxml2 -lzzip"
+if test "x$magic" = "xyes" ; then
+
+  AC_DEFINE([CAN_MAGIC],[],[Can decide on uploaded file type.])
+	OPENDIAS_LIBS="$OPENDIAS_LIBS -lmagic"
+
+  if test "x$xml" = "xyes" && test "x$zzip" = "xyes" ; then
+  	AC_DEFINE([CAN_READODF],[],[Have everything that is needed to read ODF documents])
+	  OPENDIAS_LIBS="$OPENDIAS_LIBS -lxml2 -lzzip"
+  else
+	  AC_MSG_WARN(You wll not be able to import any ODF documents.)
+  fi
+
+  if test "x$pdf" = "xyes"; then
+    AC_DEFINE([CAN_PDF],[],[Have everything that is needed to import PDF documents])
+    OPENDIAS_LIBS="$OPENDIAS_LIBS -lpoppler-cpp"
+  else
+    AC_MSG_WARN(You wll not be able to import any PDF documents.)
+  fi
+
 else
-	AC_MSG_WARN(You wll not be able to import any ODF documents.)
+	AC_MSG_WARN(You wll not be able to import in any document.)
 fi
 
-
-if test "x$pdf" = "xyes"; then
-  AC_DEFINE([CAN_PDF],[],[Have everything that is needed to import PDF documents])
-  OPENDIAS_LIBS="$OPENDIAS_LIBS -lpoppler-cpp"
-else
-  AC_MSG_WARN(You wll not be able to import any PDF documents.)
-fi
 
 
 

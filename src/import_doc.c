@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <magic.h>
 
 #include "main.h"
 #include "dbaccess.h"
@@ -59,19 +60,27 @@ char *extractThumbnail(char *docid) {
 }
 #endif // CAN_PDF //
 
-char *uploadfile(char *filename, char *ftype, char *lang) {
+char *uploadfile(char *filename, char *lang) {
 
   int itype = PLACE_HOLDER;
   char *to_name, *datafile, *ocrText = NULL, *thumbext = NULL, *tmp;
   char *docid;
+  char *ftype;
 
   // Save Record
   o_log(DEBUGM, "Saving doc import record");
 
+#ifdef CAN_MAGIC
   datafile = o_printf("/tmp/%s.dat", filename);
+  magic_t cookie = magic_open(MAGIC_MIME_TYPE);
+  magic_load( cookie, NULL );
+  const char *t = magic_file( cookie, datafile );
+  ftype = o_strdup( t );
+  o_log( ERROR, "Uploaded file looks to be of type: %s", ftype );
+  magic_close( cookie );
 
   // --------------------------------------
-  if( 0 == strcmp("PDF", ftype) ) {
+  if( 0 == strcmp("application/pdf", ftype) ) {
     itype = PDF_FILETYPE;
 #ifdef CAN_PDF
     char *outfile;
@@ -83,7 +92,7 @@ char *uploadfile(char *filename, char *ftype, char *lang) {
   }
 
   // --------------------------------------
-  else if( 0 == strcmp("ODF", ftype) ) {
+  else if( 0 == strcmp("application/vnd.oasis.opendocument.text", ftype) ) {
     itype = ODF_FILETYPE;
 #ifdef CAN_READODF
     char *outfile;
@@ -96,7 +105,7 @@ char *uploadfile(char *filename, char *ftype, char *lang) {
   }
 
   // --------------------------------------
-  else if( 0 == strcmp("jpg", ftype) ) {
+  else if( 0 == strcmp("image/jpeg", ftype) ) {
     itype = JPG_FILETYPE;
 #ifdef CAN_OCR
     PIX *pix;
@@ -111,10 +120,15 @@ char *uploadfile(char *filename, char *ftype, char *lang) {
 
   // --------------------------------------
   else {
+    free( ftype );
+#endif // CAN_MAGIC //
     o_log(ERROR, "unknown file type.");
-    free(datafile);
+    free( datafile );
     return NULL;
+#ifdef CAN_MAGIC
   }
+#endif // CAN_PDF //
+  free( ftype );
 
   if(ocrText == NULL) {
     ocrText = o_strdup( getString("LOCAL_ocr_default_text", lang ) );

@@ -155,17 +155,6 @@ static int checkFullCount(char *val) {
   return 1;
 }
 
-static int validUploadType(char *val) {
-  if( val == NULL ) return 1;
-  if ( 0 == strcmp(val, "PDF" )
-    || 0 == strcmp(val, "ODF" ) 
-    || 0 == strcmp(val, "jpg" ) ) {
-    return 0;
-  }
-  o_log(ERROR, "Validation failed: uploadType check");
-  return 1;
-}
-
 //
 static int checkDate(char *val) {
   struct dateParts *dp = dateStringToDateParts(val);
@@ -543,9 +532,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
 
   if ( 0 == strcmp(action, "uploadfile") ) {
     sll_insert(vars, "uploadfile", "m" );
-    sll_insert(vars, "ftype", "m" );
     ret += checkKeys(postdata, vars );
-    ret += validUploadType(getPostData(postdata, "ftype"));
     ret += checkUUID(getPostData(postdata, "uploadfile"));
   }
 
