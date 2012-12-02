@@ -105,7 +105,24 @@ function setLoginOutArea() {
     $('#login').css({ display: 'none' });
     $('#logout').css({ display: 'block' });
   }
+  updateMenuLinks();
+}
 
+function updateMenuLinks() {
+  // Remove links the user can't use
+  var role = getCookie("role");
+  if( get_priv_from_role( role, 'view_doc' ) ) {
+    $('#doclistLink').parent().css({ display: 'inline-block' });
+  }
+  else {
+    $('#doclistLink').parent().css({ display: 'none' });
+  }
+  if( get_priv_from_role( role, 'add_import' ) || get_priv_from_role( role, 'add_scan' )) {
+    $('#acquireLink').parent().css({ display: 'inline-block' });
+  }
+  else {
+    $('#acquireLink').parent().css({ display: 'none' });
+  }
 }
 
 function setCookie(name,value,days) {
