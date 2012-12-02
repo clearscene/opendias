@@ -62,6 +62,7 @@ char *extractThumbnail(char *docid) {
 
 char *uploadfile(char *filename, char *lang) {
 
+  int width = 0, height = 0;
   int itype = PLACE_HOLDER;
   char *to_name, *datafile, *ocrText = NULL, *thumbext = NULL, *tmp;
   char *docid;
@@ -108,11 +109,17 @@ char *uploadfile(char *filename, char *lang) {
   else if( 0 == strcmp("image/jpeg", ftype) ) {
     itype = JPG_FILETYPE;
 #ifdef CAN_OCR
-    PIX *pix;
-    if ( ( pix = pixRead( datafile ) ) == NULL) {
+    PIX *pix_l;
+    if ( ( pix_l = pixRead( datafile ) ) == NULL) {
       o_log(ERROR, "Could not load the image data into a PIX");
     }
-    o_log(INFORMATION, "Convertion process: Loaded (depth: %d)", pixGetDepth(pix));
+    int res = 0;
+    width = pixGetWidth( pix_l );
+    height = pixGetHeight( pix_l );
+    o_log(INFORMATION, "Convertion process: Loaded (depth: %d)", pixGetDepth(pix_l));
+    PIX *pix = pixScaleRGBToGrayFast( pix_l, 1, COLOR_GREEN );
+    o_log(INFORMATION, "Convertion process: Reduced depth to %d", pixGetDepth(pix));
+    pixDestroy( &pix_l );
     ocrText = getTextFromImage(pix, 0, "eng");
     pixDestroy( &pix );
 #endif // CAN_OCR //
@@ -136,10 +143,13 @@ char *uploadfile(char *filename, char *lang) {
   free(datafile);
 
   // Save the record to the DB
-  docid = addNewFileDoc(itype, ocrText); // ocrText get freed in this method
+  docid = addNewFileDoc(itype, width, height, ocrText); // ocrText get freed in this method
 
   // Move the datafile to the file store location
-  to_name = o_printf("%s/scans/%s", BASE_DIR, docid); // imported docs, are stored with no "_x" postfix.
+  to_name = o_printf("%s/scans/%s", BASE_DIR, docid); // none image imported docs, are stored with no "_x" postfix.
+  if( itype == JPG_FILETYPE ) {
+    conCat(&to_name, "_1");
+  }
   addFileExt(&to_name, itype);
   tmp = o_printf("/tmp/%s.dat", filename);
   fcopy(tmp, to_name);

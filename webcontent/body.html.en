@@ -46,7 +46,6 @@
     <h4>Functional</h4>
     <ul>
       <li>Acquire New: offered scanning resolutions does not match hardware capabilities</li>
-      <li>Document Detail: uploaded jpg's not shown (filename issue _n missing or wrong)</li>
     </ul>
 
     <h4>Technical</h4>
