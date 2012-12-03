@@ -20,22 +20,6 @@
 #define VALIDATION
 
 #include "simpleLinkedList.h"
-#include <pthread.h>
-
-struct connection_info_struct {
-  int connectiontype;
-  struct MHD_PostProcessor *postprocessor;
-  struct simpleLinkedList *post_data;
-  pthread_t thread;
-  char *lang;
-  struct simpleLinkedList *session_data;
-  char *session_id;
-};
-
-struct post_data_struct {
-  size_t size;
-  char *data;
-};
 
 char *getPostData(struct simpleLinkedList *, char *);
 int basicValidation(struct simpleLinkedList *);

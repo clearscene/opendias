@@ -26,7 +26,9 @@
 #include <stdarg.h>
 #include <microhttpd.h>
 #include <uuid/uuid.h>
+#ifdef THREAD_JOIN
 #include <pthread.h>
+#endif /* THREAD_JOIN */
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -132,11 +134,10 @@ static char *build_page (char *page, const char *lang) {
 // | struct simpleLinkedList *post_data  -------->  struct simpleLinkedList *post_data
 // ----                                             ---- (details about what the user POSTed)
 //                                                  | char *key
-//                                                  | void *data  --------->  struct post_data_struct 
-//                                                  | sll *next               ---- (individual post data elements)
-//                                                  | sll *prev               | int size
-//                                                  ----                      | char *data
-//                                                                            ----
+//                                                  | void *data
+//                                                  | sll *next
+//                                                  | sll *prev
+//                                                  ----
 
 static int send_page (struct MHD_Connection *connection, char *page, int status_code, const char* mimetype, size_t contentSize, struct connection_info_struct *con_info ) {
   int ret;
@@ -147,7 +148,7 @@ static int send_page (struct MHD_Connection *connection, char *page, int status_
   if (!response)
     return MHD_NO;
 
-  if( con_info->session_id ) {
+  if( con_info && con_info->session_id ) {
     char *cookie2;
     char *cookie = o_printf( "o_session_id=%s; path=/; max-age=%d", con_info->session_id, MAX_AGE - 5);
     MHD_add_response_header (response, MHD_HTTP_HEADER_SET_COOKIE, cookie);
@@ -195,51 +196,45 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
 
   struct connection_info_struct *con_info = coninfo_cls;
   struct simpleLinkedList *post_element = sll_searchKeys(con_info->post_data, key);
-  struct post_data_struct *data_struct = NULL;
-  if( post_element && ( post_element != NULL ) && ( post_element->data != NULL ) ) {
-    data_struct = (struct post_data_struct *)post_element->data;
-  }
 
   if(size > 0) {
     char *trimedData = calloc(size+1, sizeof(char));
     strncat(trimedData, data, size);
 
-    if(NULL == data_struct) {
-      data_struct = (struct post_data_struct *) malloc (sizeof (struct post_data_struct));
-      data_struct->size = size;
+    if( NULL == post_element ) {
       if(0 == strcmp(key, "uploadfile")) {
           uuid_t uu;
           char *fileid = malloc(36+1);
           uuid_generate(uu);
           uuid_unparse(uu, fileid);
-          data_struct->data = o_strdup(fileid);
-          o_log(DEBUGM, "Generated upload handlename %s", data_struct->data);
+          sll_insert(con_info->post_data, o_strdup(key), o_strdup(fileid) );
+          o_log(DEBUGM, "Generated upload handlename %s", fileid );
           free(fileid);
       }
       else {
-        data_struct->data = o_strdup(trimedData);
+        sll_insert(con_info->post_data, o_strdup(key), o_strdup(trimedData) );
       }
-      sll_insert(con_info->post_data, o_strdup(key), data_struct);
+      post_element = sll_searchKeys(con_info->post_data, key);
     }
 
     else if(0 != strcmp(key, "uploadfile")) {
-      conCat(&(data_struct->data), trimedData);
-      data_struct->size += size;
+      char *t=(char *)post_element->data;
+      conCat(&t, trimedData);
     }
 
     if(0 == strcmp(key, "uploadfile")) {
       int fd;
-      char *filename = o_printf("/tmp/%s.dat", data_struct->data);
+      char *filename = o_printf("/tmp/%s.dat", post_element->data);
       struct stat fstat;
 
       mode_t fmode;
       fmode = S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP;
       int flags;
-      if (stat(filename,&fstat) == -1 ) {
-        flags=O_CREAT|O_WRONLY;
+      if ( stat( filename, &fstat ) == -1 ) {
+        flags = O_CREAT|O_WRONLY;
       } 
       else {
-        flags=O_RDWR;
+        flags = O_RDWR;
       }
 
       if ((fd = open(filename, flags, fmode)) == -1 )
@@ -263,7 +258,6 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
 void request_completed (void *cls, struct MHD_Connection *connection, void **con_cls, enum MHD_RequestTerminationCode toe) {
 
   struct simpleLinkedList *row;
-  struct post_data_struct *data_struct;
   struct connection_info_struct *con_info = *con_cls;
   char *uploadedFileName, *filename;
   if (NULL == con_info)
@@ -286,11 +280,9 @@ void request_completed (void *cls, struct MHD_Connection *connection, void **con
     for( row = sll_findFirstElement( con_info->post_data ) ; row != NULL ; row = sll_getNext(row) ) {
       free(row->key);
       row->key = NULL;
-      data_struct = (struct post_data_struct *)row->data;
       // Incase do data is sent in the post
-      if( data_struct != NULL ) {
-        free(data_struct->data);
-        free(data_struct);
+      if( row->data != NULL ) {
+        free(row->data);
       }
       row->data = NULL;
     }
@@ -467,7 +459,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     if( session_data != NULL ) {
       if( trigger_log_verbosity( DEBUGM ) ) {
         o_log( DEBUGM, "Using session: %s", session_id );
-        char *dump = sll_dumper( session_data, NULL );
+        char *dump = sll_dumper( session_data );
         o_log(DEBUGM, "Session contains: %s", dump );
         free( dump );
       }
@@ -656,7 +648,6 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   if (0 == strcmp (method, "POST")) {
     // Serve up content that needs a top and tailed
     if( 0!=strstr(url,"/dynamic") ) {
-      //struct connection_info_struct *con_info = *con_cls;
       con_info = *con_cls;
       if (0 != *upload_data_size) {
         MHD_post_process (con_info->postprocessor, upload_data, *upload_data_size);
@@ -680,7 +671,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
           // Validation was OK?, then get ready to build a page.
 
           if( trigger_log_verbosity( DEBUGM ) ) {
-            char *dump = sll_dumper( con_info->post_data, "post_data_struct" );
+            char *dump = sll_dumper( con_info->post_data );
             o_log(DEBUGM, "Collected post data: %s", dump );
             free( dump );
           }
@@ -738,7 +729,11 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               char *pages = getPostData(con_info->post_data, "pages");
               char *ocr = getPostData(con_info->post_data, "ocr");
               char *pagelength = getPostData(con_info->post_data, "pagelength");
-              content = doScan(deviceid, format, resolution, pages, ocr, pagelength, (void *) con_info); // pageRender.c
+#ifdef THREAD_JOIN
+              content = doScan(deviceid, format, resolution, pages, ocr, pagelength, con_info->lang, &(con_info->thread) ); // pageRender.c
+#else
+              content = doScan(deviceid, format, resolution, pages, ocr, pagelength, con_info->lang); // pageRender.c
+#endif /* THREAD_JOIN */
               if(content == (void *)NULL) {
                 content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
               }
@@ -782,7 +777,11 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             else {
               char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
-              content = nextPageReady(scanprogressid, (void *) con_info); //pageRender.c
+#ifdef THREAD_JOIN
+              content = nextPageReady(scanprogressid, con_info->lang, &(con_info->thread) ); //pageRender.c
+#else
+              content = nextPageReady(scanprogressid, con_info->lang); //pageRender.c
+#endif /* THREAD_JOIN */
               if(content == (void *)NULL) {
                 content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
               }
@@ -905,8 +904,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             else {
               char *filename = getPostData(con_info->post_data, "uploadfile");
-              char *ftype = getPostData(con_info->post_data, "ftype");
-              content = uploadfile(filename, ftype, con_info->lang); // import_doc.c
+              content = uploadfile(filename, con_info->lang); // import_doc.c
               if(content == (void *)NULL)
                 content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
             }

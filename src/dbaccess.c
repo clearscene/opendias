@@ -154,8 +154,8 @@ char *addNewScannedDoc (int getLines, int ppl, int resolution, int pageCount) {
   return addNewDoc(SCAN_FILETYPE, getLines, ppl, resolution, pageCount, o_strdup("") );
 }
 
-char *addNewFileDoc (int ftype, char *ocrText) {
-  return addNewDoc(ftype, 0, 0, 0, 1, ocrText);
+char *addNewFileDoc (int ftype, int x, int y, char *ocrText) {
+  return addNewDoc(ftype, y, x, 0, 1, ocrText);
 }
 
 void updateNewScannedPage (int docid, char *ocrText, int page) {

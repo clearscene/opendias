@@ -49,18 +49,6 @@
         <div class='data'><input name='uploadfile' type='file' /></div>
       </div>
       <div class='row'>
-        <div class='label'>PDF Document</div>
-        <div class='data'><input type='radio' name='ftype' value='PDF' /></div>
-      </div>
-      <div class='row'>
-        <div class='label'>ODF Document</div>
-        <div class='data'><input type='radio' name='ftype' value='ODF' /></div>
-      </div>
-      <div class='row'>
-        <div class='label'>JPEG Image</div>
-        <div class='data'><input type='radio' name='ftype' value='jpg' /></div>
-      </div>
-      <div class='row'>
         <div class='label'>&nbsp;</div>
         <div class='data'><input id='uploadButton' type='submit' value='Upload' /></div>
       </div>

@@ -41,6 +41,9 @@
     left: 10px;
     top: 20px;
   }
+  .hidden {
+    display: none;
+  }
   .row {
     width: 680px;
     min-height: 30px;
@@ -114,6 +117,9 @@
   #menu li a {
    color: #aaa;
    text-decoration: none;
+  }
+  .version {
+    color: #888;
   }
   #loginout li span a:hover,
   #menu li a:hover {
@@ -228,10 +234,6 @@
     float: left;
     width: 430px;
     margin-left: 15px;
-  }
-
-  #playAudio {
-    display: none;
   }
 
   .float5050 {
@@ -467,6 +469,7 @@
    -moz-border-radius:4px;
    -webkit-border-radius:4px;
     padding: 5px 8px 3px 8px;
+    border: 1px solid #555;
   }
   #loginout input {
     border-color: #555;

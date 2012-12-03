@@ -29,14 +29,10 @@
 
 char *getPostData(struct simpleLinkedList *post_hash, char *key) {
   struct simpleLinkedList *data = sll_searchKeys(post_hash, key);
-  struct post_data_struct *data_struct = NULL;
-  if( data != NULL && data->data != NULL )
-    data_struct = (struct post_data_struct *)data->data;
-
-  if(data_struct == NULL || data_struct->data == NULL)
+  if( data == NULL || data->data == NULL )
     return NULL;
   else
-    return data_struct->data;
+    return data->data;
 }
 
 
@@ -156,17 +152,6 @@ static int checkFullCount(char *val) {
     return 0;
   }
   o_log(ERROR, "Validation failed: fullList/count check");
-  return 1;
-}
-
-static int validUploadType(char *val) {
-  if( val == NULL ) return 1;
-  if ( 0 == strcmp(val, "PDF" )
-    || 0 == strcmp(val, "ODF" ) 
-    || 0 == strcmp(val, "jpg" ) ) {
-    return 0;
-  }
-  o_log(ERROR, "Validation failed: uploadType check");
   return 1;
 }
 
@@ -547,9 +532,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
 
   if ( 0 == strcmp(action, "uploadfile") ) {
     sll_insert(vars, "uploadfile", "m" );
-    sll_insert(vars, "ftype", "m" );
     ret += checkKeys(postdata, vars );
-    ret += validUploadType(getPostData(postdata, "ftype"));
     ret += checkUUID(getPostData(postdata, "uploadfile"));
   }
 

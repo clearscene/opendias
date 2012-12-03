@@ -196,9 +196,15 @@ $(document).ready(function() {
 
   $("#tabs").tabs();
 
-  $('#loading').canvasLoader({'radius':20, 'dotRadius':2});
+  var role = getCookie("role");
+  if( ! get_priv_from_role( role, 'add_import' ) ) {
+    $("#tabs").tabs( "disable", 1 );
+  }
 
-  $.ajax({ url: "/opendias/dynamic",
+  if( get_priv_from_role( role, 'add_scan' ) ) {
+
+    $('#loading').canvasLoader({'radius':20, 'dotRadius':2});
+    $.ajax({ url: "/opendias/dynamic",
          dataType: "xml",
          timeout: 10000,
          data: {action: "getScannerList"},
@@ -360,7 +366,11 @@ $(document).ready(function() {
              alert("[a008] " + LOCAL_error_talking_to_server + ": "+t+"\n"+m);
            }
          },
-  });
+    });
+  }
+  else {
+    $('#scanning').hide();
+  }
 
 });
 

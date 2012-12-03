@@ -20,6 +20,6 @@
 #define IMPORTDOC
 
 char *extractThumbnail(char *);
-char *uploadfile(char *, char *, char *);
+char *uploadfile(char *, char *);
 
 #endif /* IMPORTDOC */

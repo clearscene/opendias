@@ -3,12 +3,13 @@ SUBDIRS = style includes images
 
 web_DATA = \
   accessControls.html.en \
+  accessControls.html.de \
   docList.html.en \
   docList.html.de \
   docDetail.html.en \
+  docDetail.html.de \
   body.html.en \
   body.html.de \
-  buglist.html.en \
   acquire.html.en \
   acquire.html.de
 

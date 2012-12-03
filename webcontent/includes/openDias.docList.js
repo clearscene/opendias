@@ -65,10 +65,13 @@ $(document).ready(function() {
       }
     });
 
-  reloadResults();
-  $(window).scroll( function() {
-    loadListData( check_result_block );
-  });
+  var role = getCookie("role");
+  if( get_priv_from_role( role, 'view_doc' ) ) {
+    reloadResults();
+    $(window).scroll( function() {
+      loadListData( check_result_block );
+    });
+  }
   
 });
 

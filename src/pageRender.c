@@ -39,7 +39,6 @@
 #include "dbaccess.h"
 #include "utils.h"
 #include "debug.h"
-#include "validation.h" // for con_info struct - move me to web_handler.h
 #include "localisation.h"
 #ifdef CAN_SCAN
 #include "scan.h"
@@ -96,7 +95,11 @@ extern void *doScanningOperation(void *saneOpData) {
 
 // Start the scanning process
 //
-char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *ocr, char *pagelength, struct connection_info_struct *con_info) {
+#ifdef THREAD_JOIN
+char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *ocr, char *pagelength, char *lang, pthread_t *thr) {
+#else
+char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *ocr, char *pagelength, char *lang ) {
+#endif /* THREAD_JOIN */
 
   char *ret = NULL;
 
@@ -135,7 +138,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
 
   struct doScanOpData *tr = malloc( sizeof(struct doScanOpData) );
   tr->uuid = o_strdup(scanUuid);
-  tr->lang = o_strdup(con_info->lang);
+  tr->lang = o_strdup(lang);
   o_log(DEBUGM,"doScan launching doScanningOperation");
   rc = pthread_create(&thread, &attr, doScanningOperation, (void *)tr );
   if(rc != 0) {
@@ -143,7 +146,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
     return NULL;
   }
 #ifdef THREAD_JOIN
-  con_info->thread = thread;
+  thr = &thread;
 #endif /* THREAD_JOIN */
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
@@ -155,7 +158,11 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
   return ret;
 }
 
-char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
+#ifdef THREAD_JOIN
+char *nextPageReady(char *scanid, char *lang, pthread_t *thr) {
+#else
+char *nextPageReady(char *scanid, char *lang) {
+#endif /* THREAD_JOIN */
 
   pthread_t thread;
   pthread_attr_t attr;
@@ -190,14 +197,14 @@ char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
 #endif /* THREAD_JOIN */
     struct doScanOpData *tr = malloc( sizeof(struct doScanOpData) );
     tr->uuid = o_strdup(scanid);
-    tr->lang = o_strdup(con_info->lang);
+    tr->lang = o_strdup(lang);
     rc = pthread_create(&thread, &attr, doScanningOperation, (void *)tr);
     if(rc != 0) {
       o_log(ERROR, "Failed to create a new thread - for scanning operation.");
       return NULL;
     }
 #ifdef THREAD_JOIN
-    con_info->thread = thread;
+    thr = &thread;
 #endif
     updateScanProgress(scanid, SCAN_WAITING_ON_SCANNER, 0);
   } else {

@@ -49,7 +49,7 @@ void updateScanProgress(char *, int, int);
 void updateNewScannedPage (int, char *, int); // Frees both chars
 char *addNewScannedDoc (int, int, int, int);
 #endif // CAN_SCAN //
-char *addNewFileDoc (int, char *);
+char *addNewFileDoc (int, int, int, char *);
 int updateDocValue_int (char *, char *, int);
 int updateDocValue (char *, char *, char *);
 int addTagToDoc (char *, char *);

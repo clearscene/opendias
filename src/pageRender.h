@@ -23,14 +23,19 @@
 
 #include "simpleLinkedList.h"
 
-#include "validation.h" // for con_info struct - move me to web_handler.h
+#include "main.h" // for con_info struct
 
 #ifdef CAN_SCAN
 char *getScannerList(void *);  // Command port frontend to the internalGetScannerList function
 void *doScanningOperation(void *); //command port frontend to the internalDoScanningOperation function
 char *getScanningProgress(char *);
-char *doScan(char *, char *, char *, char *, char *, char *, struct connection_info_struct *);
-char *nextPageReady(char *, struct connection_info_struct *);
+#ifdef THREAD_JOIN
+char *doScan(char *, char *, char *, char *, char *, char *, char *, pthread *);
+char *nextPageReady(char *, char *, pthread *);
+#else
+char *doScan(char *, char *, char *, char *, char *, char *, char *);
+char *nextPageReady(char *, char *);
+#endif /* THREAD_JOIN */
 #endif // CAN_SCAN //
 char *docFilter(char *, char *, char *, char *, char *, char *, char *, char *, char *, char *, char *);
 char *titleAutoComplete(char *, char *);
