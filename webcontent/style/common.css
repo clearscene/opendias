@@ -469,6 +469,7 @@
    -moz-border-radius:4px;
    -webkit-border-radius:4px;
     padding: 5px 8px 3px 8px;
+    border: 1px solid #555;
   }
   #loginout input {
     border-color: #555;

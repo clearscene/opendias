@@ -7,8 +7,6 @@ Asked to start a web clinet.
 Starting Web Client
 Fetching page: /
 Checking that the page has finished.
-Checking that the page has finished.
-Checking that the page has finished.
-Checking that the page has finished.
+FAIL: Home page title was incorrect
 Stopping service
 Waiting for valgrind to finish.

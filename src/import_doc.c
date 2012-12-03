@@ -113,7 +113,6 @@ char *uploadfile(char *filename, char *lang) {
     if ( ( pix_l = pixRead( datafile ) ) == NULL) {
       o_log(ERROR, "Could not load the image data into a PIX");
     }
-    int res = 0;
     width = pixGetWidth( pix_l );
     height = pixGetHeight( pix_l );
     o_log(INFORMATION, "Convertion process: Loaded (depth: %d)", pixGetDepth(pix_l));
