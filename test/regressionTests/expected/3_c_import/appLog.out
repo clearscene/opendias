@@ -32,6 +32,16 @@ LOG-OUTPUT
 -date-:-thread-:INF: ready to accept connectons
 -date-:-thread-:INF: Processing request for: checkLogin
 -date-:-thread-:INF: Processing request for: uploadfile
+-date-:-thread-:ERR: Uploaded file looks to be of type: image/jpeg
+-date-:-thread-:INF: Convertion process: Loaded (depth: 32)
+-date-:-thread-:INF: Convertion process: Reduced depth to 8
+-date-:-thread-:INF: Processing request for: uploadfile
+-date-:-thread-:ERR: Uploaded file looks to be of type: application/vnd.oasis.opendocument.text
+-date-:-thread-:INF: Processing request for: uploadfile
+-date-:-thread-:ERR: Uploaded file looks to be of type: application/pdf
+-date-:-thread-:INF: Processing request for: uploadfile
+-date-:-thread-:ERR: Uploaded file looks to be of type: text/plain
+-date-:-thread-:ERR: unknown file type.
 -date-:-thread-:INF: Received SIGUSR1 signal.
 -date-:-thread-:INF: openDias service is shutting down....
 -date-:-thread-:INF: openDias service has shutdown.
