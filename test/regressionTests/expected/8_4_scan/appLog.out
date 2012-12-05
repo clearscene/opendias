@@ -62,8 +62,6 @@ LOG-OUTPUT
 -date-:-thread-:INF: Conversion process: Complete
 -date-:-thread-:INF: Attempting OCR in lang of eng
 -date-:-thread-:INF: Processing request for: getScanning Progress
- ----- line duplicated more than three times ----- 
--date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Serving request: /docDetail.html
 -date-:-thread-:INF: Serving request: /includes/jquery.js
 -date-:-thread-:INF: Serving request: /includes/openDias.userdetails.js
