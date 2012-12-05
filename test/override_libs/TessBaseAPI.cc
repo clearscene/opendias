@@ -9,6 +9,10 @@
  */
 namespace tesseract {
 
+  TessBaseAPI::TessBaseAPI() { }
+
+  TessBaseAPI::~TessBaseAPI() { }
+
   const char *TessBaseAPI::Version( ) { return "Overridden Tesseract Lib 0.1"; }
 
   int TessBaseAPI::Init( const char* datapath, const char* language, OcrEngineMode mode,
@@ -30,5 +34,7 @@ namespace tesseract {
   void TessBaseAPI::Clear( ) { };
 
   void TessBaseAPI::End( ) { };
+
+  void TessBaseAPI::Threshold(Pix** pix) { };
 
 }

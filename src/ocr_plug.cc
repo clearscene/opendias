@@ -67,35 +67,37 @@ extern "C" void runocr(struct scanCallInfo *info) {
 
     // Language is the code of the language for which the data will be loaded.
     // (Codes follow ISO 639-2.) If it is NULL, english (eng) will be loaded.
-    tesseract::TessBaseAPI *tessObject = new tesseract::TessBaseAPI();
+    //tesseract::TessBaseAPI *tessObject = new tesseract::TessBaseAPI();
+    tesseract::TessBaseAPI tessObject; // = new tesseract::TessBaseAPI();
 #ifdef EXTENDED_OCR
-    o_log(DEBUGM, "Tesseract-ocr version: %s", tessObject->Version() );
+    o_log(DEBUGM, "Tesseract-ocr version: %s", tessObject.Version() );
 #endif // EXTENDED_OCR //
-    o_log(DEBUGM, "Leptonica version: %s", getLeptonicaVersion() );
+    char *lept_ver = getLeptonicaVersion();
+    o_log(DEBUGM, "Leptonica version: %s", lept_ver);
+    lept_free( lept_ver );
 
-    if ( tessObject->Init( "/usr/share/tesseract-ocr/tessdata", info->language ) ) {
+    if ( tessObject.Init( "/usr/share/tesseract-ocr/tessdata", info->language ) ) {
       o_log(ERROR, "Could not initialize tesseract.");
-      tessObject->End();
+      tessObject.End();
       return;
     }
 #ifdef EXTENDED_OCR
-    o_log(DEBUGM, "Initalised language was: %s", tessObject->GetInitLanguagesAsString() );
+    o_log(DEBUGM, "Initalised language was: %s", tessObject.GetInitLanguagesAsString() );
 #endif // EXTENDED_OCR //
 
-    tessObject->SetImage( info->image_pix );
+    tessObject.SetImage( info->image_pix );
 #ifdef EXTENDED_OCR
     if( info->ppi > 0 ) {
-      tessObject->SetSourceResolution( info->ppi );
+      tessObject.SetSourceResolution( info->ppi );
     }
 #endif // EXTENDED_OCR //
 
-    ret = tessObject->GetUTF8Text();
+    ret = tessObject.GetUTF8Text();
     info->ret = strdup(ret);
-
-    tessObject->Clear();
-    tessObject->End();
-
     delete [] ret;
+
+    tessObject.Clear();
+    tessObject.End();
 
 }
 
