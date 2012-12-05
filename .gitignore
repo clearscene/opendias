@@ -94,6 +94,10 @@ stamp-h1
 test/config/startAppCommand
 test/config/startAppCommands
 test/_Inline/
+test/override_libs/TessBaseAPI.o
+test/override_libs/libtesseract.so
+test/override_libs/libtesseract.so.3
+test/override_libs/libtesseract.so.3.0.2
 test/results/
 webcontent/images/datepicker/Makefile
 webcontent/images/datepicker/Makefile.in
