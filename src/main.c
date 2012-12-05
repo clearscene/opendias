@@ -272,11 +272,19 @@ void daemonize(char *rundir) {
         return;
     }
 
+    close(STDOUT_FILENO);
+    close(STDERR_FILENO);
+    close(STDIN_FILENO);
+
+    // close handles to any open files. We're not expecting to have any atm.
+    for (i = getdtablesize()-1; i > 0; --i) {
+      close(i);
+    }
+
     pid = fork();
     if (pid < 0) {
         /* Could not fork */
         o_log(ERROR, "Could not fork.");
-        printf("Could not daemonise [1]. Try running with the -d option or as super user\n");
         exit(EXIT_FAILURE);
     }
  
@@ -297,7 +305,6 @@ void daemonize(char *rundir) {
     sid = setsid();
     if (sid < 0) {
         o_log(ERROR, "Could not get new process group.");
-        printf("Could not daemonise [2]. Try running with the -d option or as super user\n");
         exit(EXIT_FAILURE);
     }
  
@@ -307,7 +314,6 @@ void daemonize(char *rundir) {
  
     if (pidFilehandle == -1 ) {
         /* Couldn't open lock file */
-        printf("Could not daemonise [3] pidfile %s. Try running with the -d option or as super user\n",pidfile);
         o_log(ERROR, "Could not open PID lock file. Exiting");
         free( pidfile );
         exit(EXIT_FAILURE);
@@ -317,7 +323,6 @@ void daemonize(char *rundir) {
     /* Try to lock file */
     if (lockf(pidFilehandle,F_TLOCK,0) == -1) {
         /* Couldn't get lock on lock file */
-        printf("Could not daemonise [4]. Try running with the -d option or as super user\n");
         o_log(ERROR, "Could not lock PID lock file. Exiting");
         exit(EXIT_FAILURE);
     }
