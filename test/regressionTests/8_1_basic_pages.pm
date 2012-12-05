@@ -57,7 +57,7 @@ sub test {
   $page = $page->getElementById("homeLink")->click();
   waitForPageToFinish($page);
   $elements = $page->getElementsByTagName("h2")->toArray();
-  if( @{$elements}[0]->getTextContent() ne "Home" ) {
+  if( @{$elements}[0]->getTextContent() ne "Application Home" ) {
     o_log("FAIL: Home page title was incorrect");
     return 1;
   }
