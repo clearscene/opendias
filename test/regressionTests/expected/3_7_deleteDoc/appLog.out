@@ -32,6 +32,8 @@ LOG-OUTPUT
 -date-:-thread-:INF: ready to accept connectons
 -date-:-thread-:INF: Processing request for: checkLogin
 -date-:-thread-:INF: Processing request for: delete document
+-date-:-thread-:ERR: Could not select record 9999.
+-date-:-thread-:INF: Processing request for: delete document
 -date-:-thread-:INF: 1
 -date-:-thread-:INF: /tmp/opendiastest/scans/2_1.jpg
 -date-:-thread-:INF: Received SIGUSR1 signal.
