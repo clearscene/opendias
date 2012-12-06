@@ -358,16 +358,16 @@ char *i_printf(const char *fmt, va_list inargs) {
 	va_copy(ap,inargs);
 
 	//open dev zero as stream
-	if ( (DEVZERO=fopen("/dev/null","w+")) == NULL ) {
+	if ( (DEVZERO = fopen("/dev/null","w+")) == NULL ) {
 		printf("cannot open /dev/null.");
 		exit(110);	
 	}
-	xs=(size_t)vfprintf(DEVZERO,fmt,inargs);
+	xs = (size_t)vfprintf( DEVZERO, fmt, inargs );
 	//printf("\n%d bytes written\n",(int)xs);
 	fclose(DEVZERO);
 
-	xs=xs+sizeof(*str);
-	if ( (str=(char*)malloc(xs)) == NULL ) {
+	xs = xs + sizeof(*str);
+	if ( (str = (char*)malloc(xs) ) == NULL ) {
     printf("memory allocation error\n");
     exit(1);
   }

@@ -1,4 +1,4 @@
-Updated start command to specify a mmissing config file.
+Updated start command to specify a missing config file.
 STARTING app...
 Could not start the service.
 No need for a web client for this test.

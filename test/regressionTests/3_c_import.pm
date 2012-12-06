@@ -12,8 +12,17 @@ sub testProfile {
   return {
     valgrind => 1,
     client => 0,
+    updateStartCommand => 'updateStartCommand',
   }; 
 } 
+
+sub updateStartCommand {
+  my $startCommand = shift;
+  chomp( my $pwd = `pwd` );
+  my $prefix = "LD_LIBRARY_PATH=$pwd/override_libs ";
+  $$startCommand =~ s/^/$prefix/g;
+  o_log("Updated start command to use overidden libs");
+}
 
 sub test {
 
@@ -32,13 +41,17 @@ sub test {
 
   my $ua = LWP::UserAgent->new;
   $ua->timeout( 600 ); # 10 mins
-  $ua->agent($default{__agent});
+  $ua->agent( $default{__agent} );
+  $ua->cookie_jar( $cookie_jar );
 
   login( "test-user", "password", $cookie_jar );
 
   my %details = (
+                JPG => './regressionTests/inputs/3_c_import/test.jpg',
+#                MSS => '/missing',
                 PDF => './regressionTests/inputs/3_c_import/test.pdf',
                 ODF => './regressionTests/inputs/3_c_import/test.odt',
+                UNK => './harness.pl',
                 );
 
   foreach my $type (sort {$a cmp $b} (keys %details)) {
@@ -50,7 +63,6 @@ sub test {
                   Content => [
                       action => 'uploadfile',
                       uploadfile => ["$details{$type}"],
-                      ftype => $type,
                       ],
                   );
 
@@ -59,12 +71,26 @@ sub test {
     my $result;
     if ($res->is_success) {
       $result = $res->content;
-      o_log( "response was = " . Dumper( $result ) );
+      o_log( "Response was = " . Dumper( $result ) );
     }
     else {
       o_log( "Did not get a successful response.\n".Dumper($res)."\n".Dumper($ua) );
-      return 1;
+      if( $type ne "UNK" && $type ne "MSS" ) {
+        return 1;
+      }
     }
+  }
+
+  dumpQueryResult( "SELECT * FROM docs" );
+
+  opendir(DIR, "/tmp/opendiastest/scans/" );
+  while( (my $filename = readdir(DIR))) { 
+    next if $filename =~ /^\./;
+    my $loaded = open(FILE, "/tmp/opendiastest/scans/$filename");
+    binmode(FILE);
+    my $md5 = Digest::MD5->new->addfile(*FILE)->hexdigest;
+    close(FILE);
+    o_log("File $filename has MD5 of $md5");
   }
 
   return 0;

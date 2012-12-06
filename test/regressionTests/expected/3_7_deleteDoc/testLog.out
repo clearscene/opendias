@@ -144,6 +144,152 @@ tagid : 33
 tagname : tag three
 
 
+Fail to Remove a doc linkage
+Sending request = action=deleteDoc&docid=9999
+$VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+SELECT docid, title FROM docs ORDER BY docid
+------------------ row 1 ------------------
+docid : 1
+title : Test Titletext
+------------------ row 2 ------------------
+docid : 2
+title : Test 3 Title
+------------------ row 3 ------------------
+docid : 3
+title : Test 2 Title text
+------------------ row 4 ------------------
+docid : 4
+title : Test 1 TitleText 2
+
+
+SELECT doclinkid, docid, linkeddocid FROM doc_links ORDER BY doclinkid
+------------------ row 1 ------------------
+docid : 2
+doclinkid : 1
+linkeddocid : 4
+------------------ row 2 ------------------
+docid : 4
+doclinkid : 2
+linkeddocid : 2
+------------------ row 3 ------------------
+docid : 1
+doclinkid : 3
+linkeddocid : 4
+------------------ row 4 ------------------
+docid : 4
+doclinkid : 4
+linkeddocid : 1
+
+
+SELECT doctagid, docid, tagid FROM doc_tags ORDER BY doctagid
+------------------ row 1 ------------------
+docid : 2
+doctagid : 1
+tagid : 31
+------------------ row 2 ------------------
+docid : 2
+doctagid : 2
+tagid : 32
+------------------ row 3 ------------------
+docid : 3
+doctagid : 3
+tagid : 32
+------------------ row 4 ------------------
+docid : 4
+doctagid : 4
+tagid : 33
+
+
+SELECT tagid, tagname FROM tags ORDER BY tagid
+------------------ row 1 ------------------
+tagid : 1
+tagname : Bank
+------------------ row 2 ------------------
+tagid : 2
+tagname : Utility
+------------------ row 3 ------------------
+tagid : 3
+tagname : Tax
+------------------ row 4 ------------------
+tagid : 4
+tagname : Household
+------------------ row 5 ------------------
+tagid : 5
+tagname : Account
+------------------ row 6 ------------------
+tagid : 6
+tagname : Credit Card
+------------------ row 7 ------------------
+tagid : 7
+tagname : Gas
+------------------ row 8 ------------------
+tagid : 8
+tagname : Electricity
+------------------ row 9 ------------------
+tagid : 9
+tagname : Water
+------------------ row 10 ------------------
+tagid : 10
+tagname : Government
+------------------ row 11 ------------------
+tagid : 11
+tagname : Local
+------------------ row 12 ------------------
+tagid : 12
+tagname : Personal
+------------------ row 13 ------------------
+tagid : 13
+tagname : Morgage
+------------------ row 14 ------------------
+tagid : 14
+tagname : Insurance
+------------------ row 15 ------------------
+tagid : 15
+tagname : Car
+------------------ row 16 ------------------
+tagid : 16
+tagname : Land-Line
+------------------ row 17 ------------------
+tagid : 17
+tagname : Mobile
+------------------ row 18 ------------------
+tagid : 18
+tagname : Internet
+------------------ row 19 ------------------
+tagid : 19
+tagname : TV
+------------------ row 20 ------------------
+tagid : 20
+tagname : Letter
+------------------ row 21 ------------------
+tagid : 21
+tagname : Statement
+------------------ row 22 ------------------
+tagid : 22
+tagname : Bill
+------------------ row 23 ------------------
+tagid : 23
+tagname : Recieved
+------------------ row 24 ------------------
+tagid : 24
+tagname : Sent
+------------------ row 25 ------------------
+tagid : 25
+tagname : Wages
+------------------ row 26 ------------------
+tagid : 31
+tagname : tag one
+------------------ row 27 ------------------
+tagid : 32
+tagname : tag two
+------------------ row 28 ------------------
+tagid : 33
+tagname : tag three
+
+
 Remove a doc linkage
 Sending request = action=deleteDoc&docid=2
 $VAR1 = {

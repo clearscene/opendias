@@ -5,10 +5,7 @@
 ==XXXXX==  Parent PID: XXXXX.
 ==XXXXX==  
 ==XXXXX==  
-==XXXXX==  FILE DESCRIPTORS: 1 open at exit.
-==XXXXX==  Open file descriptor 0: [FILE PATH]
-==XXXXX==     <inherited from parent>
-==XXXXX==  
+==XXXXX==  FILE DESCRIPTORS: 0 open at exit.
 ==XXXXX==  
 ==XXXXX==  HEAP SUMMARY:
 ==XXXXX==      in use at exit: XXX bytes in XXX blocks

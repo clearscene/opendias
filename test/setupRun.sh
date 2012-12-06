@@ -182,6 +182,11 @@ if [ "$NOBUILD" == "" ]; then
   cp clientSideTesting/test_localisation_files/includes/local/*.hh $INSTALLLOCATION/share/opendias/webcontent/includes/local/
   perl -pi -e 's/<\/select>/<option value="hh">#### ########<\/option><\/select>/g' `grep -L '<option value="hh">#### ########' $INSTALLLOCATION/share/opendias/webcontent/includes/header.txt.* `
 
+  echo Creating testing \(override\) libs...
+  cd override_libs
+  ./build.sh
+  cd ../
+
 else
   echo Skipping the build process
 fi

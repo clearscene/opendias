@@ -32,7 +32,9 @@ $VAR1 = {
 Update docs Title
 Sending request = action=updateDocDetails&docid=2&kkey=title&vvalue=This%20is%20the%20new%20title
 $VAR1 = {
-  'error' => 'You do not have permissions to complete the request'
+  'UpdateDocDetails' => {
+    'status' => 'OK'
+  }
 };
 
 Doc Details
@@ -53,7 +55,7 @@ $VAR1 = {
     'hardcopyKept' => '1',
     'pages' => '1',
     'scanDate' => '2011-01-04T21:13:05.393946Z',
-    'title' => 'Test 3 Title',
+    'title' => 'This is the new title',
     'type' => '3',
     'x' => '2519',
     'y' => '3509'

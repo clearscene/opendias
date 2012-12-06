@@ -158,7 +158,7 @@ for my $requested (@runTests) {
       }
       else {
         printProgressLine($TEST, "Starting service");
-        $startCommand =~ s{^.*\s([a-z_\/]*/bin/opendias)}{$1}xms;
+        $startCommand =~ s{valgrind.*\s([a-z_\/]*/bin/opendias)}{$1}xms;
         o_log("No need for valgrind on this test.");
       }
       $RES = 1 unless startService( $startCommand, $testProfile->{startTimeout} );

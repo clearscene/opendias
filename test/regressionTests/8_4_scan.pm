@@ -12,8 +12,17 @@ sub testProfile {
   return {
     valgrind => 0,
     client => 1,
-  }; 
-} 
+    updateStartCommand => 'updateStartCommand',
+  };
+}
+
+sub updateStartCommand {
+  my $startCommand = shift;
+  chomp( my $pwd = `pwd` );
+  my $prefix = "LD_LIBRARY_PATH=$pwd/override_libs ";
+  $$startCommand =~ s/^/$prefix/g;
+  o_log("Updated start command to use overidden libs");
+}
 
 sub test {
 
@@ -78,6 +87,7 @@ $|=1;
     o_log("Did not find the expected scanner button");
     return 1;
   }
+  o_log("Starting the scan.");
   $page = $scanButton->click();
 
   # Wait for the scan to happen

@@ -1,0 +1,7 @@
+Some libraries we use are very memory intensive, which makes
+testing functionality that uses then (using valgrind), very
+slow (such as tesseract OCR). 
+In reality were not interested in the function of these libs,
+just how our program works, so we can safely stub these out 
+with dumb implementations. That's what is contained in this
+directory. do NOT use in production systems.
