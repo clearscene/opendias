@@ -44,7 +44,6 @@ int setup (char *configFile) {
 
   // Defaults
   VERBOSITY = DEBUGM;
-  DB_VERSION = 4;
   LOG_DIR = o_printf("%s/log/opendias", VAR_DIR);
 
   // Get 'DB' location
