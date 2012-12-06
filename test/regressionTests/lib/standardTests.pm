@@ -47,26 +47,28 @@ sub openlog {
 
 sub startService {
 
-  my ($startCommand, $overrideTimeout, ) = @_;
+  my ($startCommand, $overrideTimeout, $wait, ) = @_;
 
   my $serviceStart_timeout = $overrideTimeout || 10; # default of 10 seconds
 
   `$startCommand`;
   o_log("STARTING app...");
 
-  my $sock;
-  while( ! ( $sock = IO::Socket::INET->new( PeerAddr => 'localhost',
-                                            PeerPort => '8988',
-                                            Timeout => 1,
-                                            Proto => 'tcp') ) ) {
-    $serviceStart_timeout--;
-    sleep(1);
-    unless($serviceStart_timeout) {
-      o_log("Could not start the service.");
-      return 1;
+  if( ! defined $wait || $wait ne 'no port' ) {
+    my $sock;
+    while( ! ( $sock = IO::Socket::INET->new( PeerAddr => 'localhost',
+                                              PeerPort => '8988',
+                                              Timeout => 1,
+                                              Proto => 'tcp') ) ) {
+      $serviceStart_timeout--;
+      sleep(1);
+      unless($serviceStart_timeout) {
+        o_log("Could not start the service.");
+        return 1;
+      }
     }
+    $sock->close();
   }
-  $sock->close();
 
   sleep(1); # Ensure everything is ready - not just the web socket.
   o_log("Now ready");

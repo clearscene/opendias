@@ -147,8 +147,9 @@ for my $requested (@runTests) {
 
       my $testProfile = eval("regressionTests::".$TESTCASENAME."::testProfile();");
 
+      my $wait = 0;
       if( $testProfile->{updateStartCommand} ) {
-        eval "regressionTests::${TESTCASENAME}::".$testProfile->{updateStartCommand}."(\\\$startCommand)";
+        eval "\$wait = regressionTests::${TESTCASENAME}::".$testProfile->{updateStartCommand}."(\\\$startCommand)";
       }
 
 
@@ -161,7 +162,7 @@ for my $requested (@runTests) {
         $startCommand =~ s{valgrind.*\s([a-z_\/]*/bin/opendias)}{$1}xms;
         o_log("No need for valgrind on this test.");
       }
-      $RES = 1 unless startService( $startCommand, $testProfile->{startTimeout} );
+      $RES = 1 unless startService( $startCommand, $testProfile->{startTimeout}, $wait );
 
 
       # Start a web client
