@@ -37,7 +37,9 @@ $VAR1 = {
 Add a tag linkage
 Sending request = action=moveTag&docid=2&subaction=addTag&tag=new%20%CE%AB%20tag
 $VAR1 = {
-  'error' => 'You do not have permissions to complete the request'
+  'MoveTag' => {
+    'status' => 'OK'
+  }
 };
 
 Doc Details - after update
@@ -52,6 +54,7 @@ $VAR1 = {
     },
     'Tags' => {
       'tag' => [
+        "new \x{3ab} tag",
         'tag one',
         'tag two'
       ]
@@ -73,7 +76,9 @@ $VAR1 = {
 Add a doc linkage
 Sending request = action=moveTag&docid=2&subaction=addDoc&tag=3
 $VAR1 = {
-  'error' => 'You do not have permissions to complete the request'
+  'MoveTag' => {
+    'status' => 'OK'
+  }
 };
 
 Doc Details - after update
@@ -81,13 +86,20 @@ Sending request = action=getDocDetail&docid=2
 $VAR1 = {
   'DocDetail' => {
     'DocLinks' => {
-      'doc' => {
-        'targetDocid' => '4',
-        'targetTitle' => 'Test 1 TitleText 2'
-      }
+      'doc' => [
+        {
+          'targetDocid' => '4',
+          'targetTitle' => 'Test 1 TitleText 2'
+        },
+        {
+          'targetDocid' => '3',
+          'targetTitle' => 'Test 2 Title text'
+        }
+      ]
     },
     'Tags' => {
       'tag' => [
+        "new \x{3ab} tag",
         'tag one',
         'tag two'
       ]
@@ -123,6 +135,10 @@ tagid : 32
 docid : 4
 doctagid : 4
 tagid : 33
+------------------ row 5 ------------------
+docid : 2
+doctagid : 5
+tagid : 34
 
 
 SELECT tagid, tagname FROM tags ORDER BY tagid
@@ -210,12 +226,17 @@ tagname : tag two
 ------------------ row 28 ------------------
 tagid : 33
 tagname : tag three
+------------------ row 29 ------------------
+tagid : 34
+tagname : new Ϋ tag
 
 
 Remove a tag linkage
 Sending request = action=moveTag&docid=2&subaction=removeTag&tag=tag%20two
 $VAR1 = {
-  'error' => 'You do not have permissions to complete the request'
+  'MoveTag' => {
+    'status' => 'OK'
+  }
 };
 
 Doc Details - after update
@@ -223,15 +244,21 @@ Sending request = action=getDocDetail&docid=2
 $VAR1 = {
   'DocDetail' => {
     'DocLinks' => {
-      'doc' => {
-        'targetDocid' => '4',
-        'targetTitle' => 'Test 1 TitleText 2'
-      }
+      'doc' => [
+        {
+          'targetDocid' => '4',
+          'targetTitle' => 'Test 1 TitleText 2'
+        },
+        {
+          'targetDocid' => '3',
+          'targetTitle' => 'Test 2 Title text'
+        }
+      ]
     },
     'Tags' => {
       'tag' => [
-        'tag one',
-        'tag two'
+        "new \x{3ab} tag",
+        'tag one'
       ]
     },
     'actionrequired' => '1',
@@ -254,17 +281,17 @@ docid : 2
 doctagid : 1
 tagid : 31
 ------------------ row 2 ------------------
-docid : 2
-doctagid : 2
-tagid : 32
------------------- row 3 ------------------
 docid : 3
 doctagid : 3
 tagid : 32
------------------- row 4 ------------------
+------------------ row 3 ------------------
 docid : 4
 doctagid : 4
 tagid : 33
+------------------ row 4 ------------------
+docid : 2
+doctagid : 5
+tagid : 34
 
 
 SELECT tagid, tagname FROM tags ORDER BY tagid
@@ -352,12 +379,17 @@ tagname : tag two
 ------------------ row 28 ------------------
 tagid : 33
 tagname : tag three
+------------------ row 29 ------------------
+tagid : 34
+tagname : new Ϋ tag
 
 
 Remove a tag linkage
 Sending request = action=moveTag&docid=2&subaction=removeTag&tag=tag%20one
 $VAR1 = {
-  'error' => 'You do not have permissions to complete the request'
+  'MoveTag' => {
+    'status' => 'OK'
+  }
 };
 
 Doc Details - after update
@@ -365,16 +397,19 @@ Sending request = action=getDocDetail&docid=2
 $VAR1 = {
   'DocDetail' => {
     'DocLinks' => {
-      'doc' => {
-        'targetDocid' => '4',
-        'targetTitle' => 'Test 1 TitleText 2'
-      }
+      'doc' => [
+        {
+          'targetDocid' => '4',
+          'targetTitle' => 'Test 1 TitleText 2'
+        },
+        {
+          'targetDocid' => '3',
+          'targetTitle' => 'Test 2 Title text'
+        }
+      ]
     },
     'Tags' => {
-      'tag' => [
-        'tag one',
-        'tag two'
-      ]
+      'tag' => "new \x{3ab} tag"
     },
     'actionrequired' => '1',
     'docDate' => '2012/12/31',
@@ -392,21 +427,17 @@ $VAR1 = {
 
 SELECT doctagid, docid, tagid FROM doc_tags ORDER BY doctagid
 ------------------ row 1 ------------------
-docid : 2
-doctagid : 1
-tagid : 31
------------------- row 2 ------------------
-docid : 2
-doctagid : 2
-tagid : 32
------------------- row 3 ------------------
 docid : 3
 doctagid : 3
 tagid : 32
------------------- row 4 ------------------
+------------------ row 2 ------------------
 docid : 4
 doctagid : 4
 tagid : 33
+------------------ row 3 ------------------
+docid : 2
+doctagid : 5
+tagid : 34
 
 
 SELECT tagid, tagname FROM tags ORDER BY tagid
@@ -486,20 +517,22 @@ tagname : Sent
 tagid : 25
 tagname : Wages
 ------------------ row 26 ------------------
-tagid : 31
-tagname : tag one
------------------- row 27 ------------------
 tagid : 32
 tagname : tag two
------------------- row 28 ------------------
+------------------ row 27 ------------------
 tagid : 33
 tagname : tag three
+------------------ row 28 ------------------
+tagid : 34
+tagname : new Ϋ tag
 
 
 Remove a doc linkage
 Sending request = action=moveTag&docid=2&subaction=removeDoc&tag=4
 $VAR1 = {
-  'error' => 'You do not have permissions to complete the request'
+  'MoveTag' => {
+    'status' => 'OK'
+  }
 };
 
 Doc Details - after update
@@ -508,15 +541,12 @@ $VAR1 = {
   'DocDetail' => {
     'DocLinks' => {
       'doc' => {
-        'targetDocid' => '4',
-        'targetTitle' => 'Test 1 TitleText 2'
+        'targetDocid' => '3',
+        'targetTitle' => 'Test 2 Title text'
       }
     },
     'Tags' => {
-      'tag' => [
-        'tag one',
-        'tag two'
-      ]
+      'tag' => "new \x{3ab} tag"
     },
     'actionrequired' => '1',
     'docDate' => '2012/12/31',

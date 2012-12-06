@@ -25,6 +25,7 @@ sub test {
   login( "test-user", "password", $cookie_jar );
 
   my %updateData = (
+    __cookiejar => $cookie_jar,
     action => 'moveTag',
     docid => 2,
     tag => undef,
