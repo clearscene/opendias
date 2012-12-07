@@ -1,0 +1,192 @@
+Copying pre defined environment
+Copying default database
+STARTING app...
+Now ready
+No need for a web client for this test.
+Sending request = action=checkLogin&password=password&username=test-user
+Sending request = action=deleteDoc&docid=1234
+actions of deleteDoc = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=doScan&deviceid=some%20text&format=&ocr=eng&pagelength=&pages=8&resolution=
+actions of doScan = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=docFilter&endDate=2012-12-31&isActionRequired=true&page=8&range=8&sortfield=1234&sortorder=1234&startDate=2012-12-31&subaction=count&tags=some%20text&textSearch=some%20text
+actions of docFilter / count = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=docFilter&endDate=2012-12-31&isActionRequired=true&page=8&range=8&sortfield=1234&sortorder=1234&startDate=2012-12-31&subaction=fullList&tags=some%20text&textSearch=some%20text
+actions of docFilter / fullList = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=getDocDetail&docid=1234
+actions of getDocDetail = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=getScannerList
+actions of getScannerList = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=getScanningProgress&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+actions of getScanningProgress = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=moveTag&docid=1234&subaction=addDoc&tag=some%20text
+actions of moveTag / addDoc = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=moveTag&docid=1234&subaction=addTag&tag=some%20text
+actions of moveTag / addTag = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=moveTag&docid=1234&subaction=removeDoc&tag=some%20text
+actions of moveTag / removeDoc = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=moveTag&docid=1234&subaction=removeTag&tag=some%20text
+actions of moveTag / removeTag = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=nextPageReady&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+actions of nextPageReady = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=tagsAutoComplete&docid=1234&startsWith=
+actions of tagsAutoComplete = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=titleAutoComplete&notLinkedTo=1234&startsWith=
+actions of titleAutoComplete = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=updateDocDetails&docid=1234&kkey=1234&vvalue=some%20text
+actions of updateDocDetails = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=deleteDoc&docid=1234
+actions of deleteDoc = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=doScan&deviceid=some%20text&format=&ocr=eng&pagelength=&pages=8&resolution=
+actions of doScan = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=docFilter&endDate=2012-12-31&isActionRequired=true&page=8&range=8&sortfield=1234&sortorder=1234&startDate=2012-12-31&subaction=count&tags=some%20text&textSearch=some%20text
+actions of docFilter / count = $VAR1 = {
+  'DocFilter' => {
+    'Results' => {},
+    'count' => '0'
+  }
+};
+
+Sending request = action=docFilter&endDate=2012-12-31&isActionRequired=true&page=8&range=8&sortfield=1234&sortorder=1234&startDate=2012-12-31&subaction=fullList&tags=some%20text&textSearch=some%20text
+actions of docFilter / fullList = $VAR1 = {
+  'DocFilter' => {
+    'Results' => {},
+    'count' => '0',
+    'page' => '8'
+  }
+};
+
+Sending request = action=getDocDetail&docid=1234
+actions of getDocDetail = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=getScannerList
+actions of getScannerList = $VAR1 = {
+  'ScannerList' => {
+    'Devices' => {
+      'Device' => {
+        'Formats' => {
+          'format' => 'Grey Scale'
+        },
+        'default' => '300',
+        'host' => 'opendias server',
+        'max' => '800',
+        'min' => '50',
+        'model' => 'Frontend-tester',
+        'name' => 'test:0',
+        'type' => 'Virtual Device',
+        'vendor' => 'Noname'
+      }
+    }
+  }
+};
+
+Sending request = action=getScanningProgress&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+actions of getScanningProgress = $VAR1 = {
+  'ScanningProgress' => {
+    'status' => '(null)',
+    'value' => '(null)'
+  }
+};
+
+Sending request = action=moveTag&docid=1234&subaction=addDoc&tag=some%20text
+actions of moveTag / addDoc = $VAR1 = {
+  'MoveTag' => {
+    'status' => 'OK'
+  }
+};
+
+Sending request = action=moveTag&docid=1234&subaction=addTag&tag=some%20text
+actions of moveTag / addTag = $VAR1 = {
+  'MoveTag' => {
+    'status' => 'OK'
+  }
+};
+
+Sending request = action=moveTag&docid=1234&subaction=removeDoc&tag=some%20text
+actions of moveTag / removeDoc = $VAR1 = {
+  'MoveTag' => {
+    'status' => 'OK'
+  }
+};
+
+Sending request = action=moveTag&docid=1234&subaction=removeTag&tag=some%20text
+actions of moveTag / removeTag = $VAR1 = {
+  'MoveTag' => {
+    'status' => 'OK'
+  }
+};
+
+Sending request = action=nextPageReady&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+actions of nextPageReady = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=tagsAutoComplete&docid=1234&startsWith=
+actions of tagsAutoComplete = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=titleAutoComplete&notLinkedTo=1234&startsWith=
+actions of titleAutoComplete = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=updateDocDetails&docid=1234&kkey=1234&vvalue=some%20text
+actions of updateDocDetails = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Stopping service
+Waiting for valgrind to finish.
