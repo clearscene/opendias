@@ -240,7 +240,7 @@ static int checkResolution(char *val) {
 static int checkUpdateKey(char *val) {
   if( val == NULL ) return 1;
   if ( 0 != strcmp(val, "title") 
-    && 0 != strcmp(val, "isActionRequired") 
+    && 0 != strcmp(val, "actionrequired") 
     && 0 != strcmp(val, "hardcopyKept") 
     && 0 != strcmp(val, "ocrtext") 
     && 0 != strcmp(val, "docDate") ) {
