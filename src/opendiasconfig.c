@@ -40,7 +40,7 @@ int setup (char *configFile) {
   struct simpleLinkedList *rSet;
   char *location, *conf, *sql, *config_option, *config_value;
 
-	printf("entering setup\n");
+  printf("entering setup\n");
 
   // Defaults
   VERBOSITY = DEBUGM;
@@ -108,14 +108,14 @@ int setup (char *configFile) {
 }
 
 void usage(void) {
-    fprintf(stderr,"openDIAS. v%s\n", PACKAGE_VERSION);
-    fprintf(stderr,"usage: opendiasconfig [options] <setting> <value>\n");
-    fprintf(stderr,"\n");
-    fprintf(stderr,"Where:\n");
-    fprintf(stderr,"   -c <file> = specify config \"file\"\n");
-    fprintf(stderr,"          -h = show this page\n");
-    fprintf(stderr,"-s <setting> = config option to update\n");
-    fprintf(stderr,"  -v <value> = value to update the config option to\n");
+    fprintf(stdout,"openDIAS. v%s\n", PACKAGE_VERSION);
+    fprintf(stdout,"usage: opendiasconfig [options] <setting> <value>\n");
+    fprintf(stdout,"\n");
+    fprintf(stdout,"Where:\n");
+    fprintf(stdout,"   -c <file> = specify config \"file\"\n");
+    fprintf(stdout,"          -h = show this page\n");
+    fprintf(stdout,"-s <setting> = config option to update\n");
+    fprintf(stdout,"  -v <value> = value to update the config option to\n");
 }
 
 void close_all() {
