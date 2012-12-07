@@ -36,8 +36,85 @@ sub test {
   o_log( "Doc Details" );
   o_log( Dumper( directRequest( \%getData ) ) );
 
-  # ?Update doc details
-  o_log( "Update docs Title" );
+  #############
+
+  # Update doc details
+  o_log( "Update docs 'Title'" );
+  o_log( Dumper( directRequest( \%updateData ) ) );
+
+  # Call getDocDetails
+  o_log( "Doc Details" );
+  o_log( Dumper( directRequest( \%getData ) ) );
+
+  #############
+
+  # Update doc details
+  o_log( "Update docs 'OCR Text'" );
+  $updateData{kkey} = 'ocrtext';
+  $updateData{vvalue} = 'updated text';
+  o_log( Dumper( directRequest( \%updateData ) ) );
+
+  # Call getDocDetails
+  o_log( "Doc Details" );
+  o_log( Dumper( directRequest( \%getData ) ) );
+
+  #############
+
+  #############
+
+  # Update doc details
+  o_log( "Update docs 'date'" );
+  $updateData{kkey} = 'docDate';
+  $updateData{vvalue} = '1912-01-01';
+  o_log( Dumper( directRequest( \%updateData ) ) );
+
+  # Call getDocDetails
+  o_log( "Doc Details" );
+  o_log( Dumper( directRequest( \%getData ) ) );
+
+  #############
+
+  # Update doc details
+  o_log( "Update docs 'actionrequired' off" );
+  $updateData{kkey} = 'actionrequired';
+  $updateData{vvalue} = 'false';
+  o_log( Dumper( directRequest( \%updateData ) ) );
+
+  # Call getDocDetails
+  o_log( "Doc Details" );
+  o_log( Dumper( directRequest( \%getData ) ) );
+
+  #############
+
+  # Update doc details
+  o_log( "Update docs 'actionrequired' oon" );
+  $updateData{kkey} = 'actionrequired';
+  $updateData{vvalue} = 'true';
+  o_log( Dumper( directRequest( \%updateData ) ) );
+
+  # Call getDocDetails
+  o_log( "Doc Details" );
+  o_log( Dumper( directRequest( \%getData ) ) );
+
+  #############
+
+  # Update doc details
+  o_log( "Update docs 'hardcopyKept' off" );
+  $updateData{kkey} = 'hardcopyKept';
+  $updateData{vvalue} = 'false';
+  o_log( Dumper( directRequest( \%updateData ) ) );
+
+  # Call getDocDetails
+  o_log( "Doc Details" );
+  o_log( Dumper( directRequest( \%getData ) ) );
+
+  #############
+
+
+  # Update doc details
+  o_log( "Update docs 'hardcopyKept' on" );
+  $updateData{kkey} = 'hardcopyKept';
+  $updateData{vvalue} = 'true';
   o_log( Dumper( directRequest( \%updateData ) ) );
 
   # Call getDocDetails
@@ -48,4 +125,4 @@ sub test {
 }
 
 return 1;
-
+1
