@@ -1,0 +1,11 @@
+STDOUT
+openDIAS. v0.9a
+usage: opendiasconfig [options] <setting> <value>
+
+Where:
+   -c <file> = specify config "file"
+          -h = show this page
+-s <setting> = config option to update
+  -v <value> = value to update the config option to
+--------------------------------------------------
+LOG-OUTPUT
