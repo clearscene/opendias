@@ -598,7 +598,6 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
     char *last_attempt_date_string = (char *)last_attempt->data;
     strptime( last_attempt_date_string, "%F %z %T", &last_attempt_date_struct);
     last_attempt_time = mktime( &last_attempt_date_struct );
-o_log( ERROR, "Login attempt was at: %s  - %ld", last_attempt_date_string, last_attempt_time );
 
     if( difftime( current_time, last_attempt_time ) <= retry_throttle ) {
       o_log( ERROR, "Login attempt was too soon (by %d seconds) after previous login fail", 
