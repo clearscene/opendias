@@ -117,7 +117,7 @@ sub test {
     );
   }
 
-  log( "logout = " . Dumper( logout( $cookie_jar ) ) );
+  o_log( "logout = " . Dumper( logout( $cookie_jar ) ) );
 
   return 0;
 }

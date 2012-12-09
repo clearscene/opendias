@@ -236,7 +236,11 @@ actions of updateDocDetails = $VAR1 = {
 };
 
 Sending request = action=logout
-Error while running test: Can't take log of 0 at regressionTests/3_9_access.pm line 120.
+logout = $VAR1 = {
+  'Logout' => {
+    'result' => 'OK'
+  }
+};
 
 Stopping service
 Waiting for valgrind to finish.
