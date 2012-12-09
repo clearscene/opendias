@@ -69,6 +69,12 @@ sub test {
           kkey => 'int',
           vvalue => 'text',
           },
+    checkLogin => {
+          username => 'text',
+          password => 'text',
+          },
+    logout => { 
+          },
   );
 
   my $cookie_jar = HTTP::Cookies->new();
