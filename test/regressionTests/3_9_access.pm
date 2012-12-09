@@ -16,6 +16,25 @@ sub testProfile {
 
 sub test {
 
+  my $cookie_jar = HTTP::Cookies->new();
+
+  # Try login with a bad user
+  o_log( Dumper( login( "bad-user", "password", $cookie_jar ) ) ); # expect a rejection
+
+  # Try a login with a good user, but a bad password
+  sleep(6); # login attempts are throttled for 5 seconds.
+  o_log( Dumper( login( "test-user", "bad-password", $cookie_jar ) ) ); # expect a rejection
+
+  # Try a good login, but within the lockout period
+  sleep(1);
+  o_log( Dumper( login( "test-user", "password", $cookie_jar ) ) ); # expect a rejection
+ 
+  # Try a good login, but within the lockout period
+  sleep(6);
+  o_log( Dumper( login( "test-user", "password", $cookie_jar ) ) ); # Should be good
+ 
+  ###################################
+
   my %calls = (
     deleteDoc => { 
           docid => 'int', 
@@ -71,12 +90,13 @@ sub test {
           },
   );
 
-  my $cookie_jar = HTTP::Cookies->new();
-  login( "test-user", "password", $cookie_jar );
- 
   my %default = ();
 
+  # First time in the loop, we're providing no login cookie,
+  # Second time in the loop, send the loggedin session cookie.
   foreach (0, 1) {
+    o_log( "GET request for /opendias/scans/unknown.jpg\n" . Dumper( directRequest( { %default, '__method'=>'GET', '__uri'=>'/opendias/scans/unknown.jpg'}, 1 ) ) . "\n\n" );
+
     # Try all API actions, send a valid sub subaction, 
     # and all subfields
     foreach my $action (sort {$a cmp $b} (keys %calls)) {
@@ -96,6 +116,8 @@ sub test {
       __cookiejar => $cookie_jar,
     );
   }
+
+  log( "logout = " . Dumper( logout( $cookie_jar ) ) );
 
   return 0;
 }
