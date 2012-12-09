@@ -330,7 +330,7 @@ sub directRequest {
 
   # Check the outcome of the response
   my $resData;
-  if ($res->is_success) {
+  if ($res->is_success || defined $supressLogOfRequest ) {
     $default{__cookiejar}->extract_cookies( $res ) if $default{__cookiejar};
     if( $res->content =~ /^</ ) {
       eval {
@@ -393,7 +393,7 @@ sub login {
     password => $password,
   );
 
-  directRequest( \%data );
+  return directRequest( \%data );
 }
 
 sub logout {
@@ -404,7 +404,7 @@ sub logout {
     action => 'logout',
   );
 
-  directRequest( \%data );
+  return directRequest( \%data );
 }
 
 return 1;
