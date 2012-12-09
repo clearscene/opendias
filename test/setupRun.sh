@@ -85,7 +85,7 @@ rm -f /tmp/opendias_test/var/log/opendias/opendias.log
 # Cleanup
 #
 if [ "$NOBUILD" == "" ]; then
-  rm -f results
+  rm -rf results
   rm -rf ../src/*.gcda ../src/*.gcno
   mkdir -p results/coverage/
 else
