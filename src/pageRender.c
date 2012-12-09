@@ -575,34 +575,42 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
   struct simpleLinkedList *rSet;
   int retry_throttle = 5;
 
+  char str[27];
+  struct tm *ptr;
   time_t current_time;
+
+  // Get the current time in a parsable format.
   time( &current_time );
+  ptr = localtime( &current_time );
+  strftime(str, 26, "%F %z %T", ptr);
+  str[26] = '\0';
+  char *rtp = o_strdup( str );
 
   //
-  // Check that a login attemp was made earlier than retry_throttle seconds ago.
+  // Check that a login attemp was not made earlier than retry_throttle seconds ago.
   //
   struct simpleLinkedList *last_attempt = sll_searchKeys( session_data, "next_login_attempt" );
   if( last_attempt != NULL ) {
     struct tm last_attempt_date_struct;
     time_t last_attempt_time;
 
+    last_attempt_date_struct.tm_isdst = -1;
     char *last_attempt_date_string = (char *)last_attempt->data;
-    strptime( last_attempt_date_string, "%a %b %d %T %Y", &last_attempt_date_struct);
+    strptime( last_attempt_date_string, "%F %z %T", &last_attempt_date_struct);
     last_attempt_time = mktime( &last_attempt_date_struct );
+o_log( ERROR, "Login attempt was at: %s  - %ld", last_attempt_date_string, last_attempt_time );
 
     if( difftime( current_time, last_attempt_time ) <= retry_throttle ) {
       o_log( ERROR, "Login attempt was too soon (by %d seconds) after previous login fail", 
                                       retry_throttle - difftime( current_time, last_attempt_time ) );
-
-      char *rtp = o_strdup( ctime( &current_time ) );
-      chop( rtp );
+      free( last_attempt_date_string );
       last_attempt->data = rtp;
 
       return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_login_retry_too_soon", lang), retry_throttle);
     }
 
     else {
-      // lsat attempt is not no longer used (unless it gets set again later), so we can remove it.
+      // last attempt is not no longer used (unless it gets set again later), so we can remove it.
       free( last_attempt->data );
       free( last_attempt->key );
       sll_delete( last_attempt );
@@ -626,9 +634,6 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
 
   if( rSet == NULL ) {
     o_log( ERROR, "User provded an incorrect username!" );
-
-    char *rtp = o_strdup( ctime( &current_time ) );
-    chop( rtp );
     sll_insert( session_data, o_strdup("next_login_attempt"), rtp );
 
     return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_bad_login", lang), retry_throttle);
@@ -680,9 +685,6 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
 
   if( rSet == NULL ) {
     o_log( ERROR, "User provded an incorrect password!" );
-
-    char *rtp = o_strdup( ctime( &current_time ) );
-    chop( rtp );
     sll_insert( session_data, o_strdup("next_login_attempt"), rtp );
 
     return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_bad_login", lang), retry_throttle);
@@ -697,6 +699,7 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
     free_recordset( rSet );
     free( realname );
     free( role );
+    free(rtp);
     o_log( ERROR, "User login check, returned more than one row!" );
     return NULL;
   }
@@ -707,6 +710,7 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
   sll_insert( session_data, o_strdup("realname"), realname );
   sll_insert( session_data, o_strdup("role"), role );
 
+  free(rtp);
   return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>OK</result></Login></Response>");
 }
 
