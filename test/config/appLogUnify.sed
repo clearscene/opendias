@@ -7,4 +7,5 @@ s/Run Query .[0-9A-Fa-f]*./Run Query [RECORDSET]/g
 s/Free recordset .[0-9A-Fa-f]*./Free recordset [RECORDSET]/g
 s/file: .*\/test\/config/file: [PATH]\/test\/config/g
 s/\w\{8\}-\w\{4\}-\w\{4\}-\w\{4\}-\w\{12\}/[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]/g
+s/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [+-][0-9][0-9][0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]/YYYY-MM-DD +-UTC HH:MM:SS/g
 
