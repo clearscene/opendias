@@ -62,7 +62,6 @@ LOG-OUTPUT
       password : ###############
       username : test-user
 -date-:-thread-:INF: Processing request for: checkLogin
--date-:-thread-:ERR: Login attempt was at: YYYY-MM-DD +-UTC HH:MM:SS  - 1355097449
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:DBG: Run Query [RECORDSET]
@@ -82,7 +81,6 @@ LOG-OUTPUT
       password : ###############
       username : test-user
 -date-:-thread-:INF: Processing request for: checkLogin
--date-:-thread-:ERR: Login attempt was at: YYYY-MM-DD +-UTC HH:MM:SS  - 1355097456
 -date-:-thread-:ERR: Login attempt was too soon (by 0 seconds) after previous login fail
 -date-:-thread-:DBG: Serving the following content: <?xml version='1.0' encoding='utf-8'?>
 <Response><Login><result>FAIL</result><message>Login attempt retry was too soon</message><retry_throttle>5</retry_throttle></Login></Response>
@@ -99,7 +97,6 @@ LOG-OUTPUT
       password : ###############
       username : test-user
 -date-:-thread-:INF: Processing request for: checkLogin
--date-:-thread-:ERR: Login attempt was at: YYYY-MM-DD +-UTC HH:MM:SS  - 1355097459
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:DBG: Run Query [RECORDSET]
