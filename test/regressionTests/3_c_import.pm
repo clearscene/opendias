@@ -6,6 +6,7 @@ use standardTests;
 use Data::Dumper;
 use LWP::UserAgent;
 use HTTP::Request::Common;
+use Digest::MD5;
 use strict;
 
 sub testProfile {
@@ -84,7 +85,8 @@ sub test {
   dumpQueryResult( "SELECT * FROM docs" );
 
   opendir(DIR, "/tmp/opendiastest/scans/" );
-  while( (my $filename = readdir(DIR))) { 
+  my @files = readdir(DIR);
+  foreach my $filename (sort @files) { 
     next if $filename =~ /^\./;
     my $loaded = open(FILE, "/tmp/opendiastest/scans/$filename");
     binmode(FILE);
