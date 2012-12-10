@@ -12,8 +12,6 @@ Tests are generally categorised into four areas.
     * Test Coverage - ensure the testsi code coverage are exhaustive.
     * Memory Management - ensure all code handles its memory correctly.
     * Does the backend return what it's supposed to.
- * (8_*) GUI Excersise
-    * Does the webpages function as expected.
  * QUnit tests
     * Detailed client side funcationality (see ./clientSideTesting/)
 
@@ -28,7 +26,6 @@ These are the main components:
  * regressionTest/*.pm - Each actual test. 
                          1_* - App handeling
                          3_* - Are API backend tests
-                         8_* - Are frontend tests
 
 2.1. Test Coverage.
 -------------------
@@ -42,10 +39,6 @@ To ensure that memory is being managed correctly, each test case should
 be run ontop of valgrind. Valgrind will then produce a report of all 
 memory and program logical errors.
 
-2.3. GUI Excersise.
--------------------
-The HtmlUnit (java) project is used to write scripts that interface to 
-the application (via the perl test script).
 
 2.4. Best Practice.
 -------------------
@@ -61,18 +54,7 @@ The main harness has the following dependencies:
   sudo apt-get install valgrind lcov cppcheck libdbd-sqlite3-perl libxml-simple-perl libwww-perl apt-rdepends 
   sudo yum install valgrind lcov cppcheck perl-DBD-SQLite perl-XML-Simple perl-libwww-perl
 
-3.2 Getting the GUI testing environment working
------------------------------------------------
-In order to run the frontend tests (8_* range), you will need the Java wrapper installed.
-The Java wrapper provides JUnit, a library that simulates browser behaviour.
-You will need to install Java and the Perl JUnit wrapper
-
-# run me with root privs
-apt-get install default-jdk
-JAVA_HOME=/usr/lib/jvm/default-java cpan -f Inline::Java
-cpan -f WWW::HtmlUnit
-
-3.3 Setting up the machine
+3.2 Setting up the machine
 --------------------------
 The test setupRun script will configure and build the application using a prefix of '/tmp/opendias_test'. 
 Therefore no special permission are required to before running tests.
