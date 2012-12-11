@@ -1,4 +1,4 @@
-package r::1_4_various_kills_are_ignored;
+package t::1_4_various_kills_are_ignored;
 
 use lib qw( lib );
 use DBI;

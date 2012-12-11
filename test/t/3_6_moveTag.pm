@@ -1,4 +1,4 @@
-package r::3_6_moveTag;
+package t::3_6_moveTag;
 
 use lib qw( lib );
 use DBI;

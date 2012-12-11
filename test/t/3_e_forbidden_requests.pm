@@ -1,4 +1,4 @@
-package r::3_e_forbidden_requests;
+package t::3_e_forbidden_requests;
 
 use lib qw( lib );
 use DBI;

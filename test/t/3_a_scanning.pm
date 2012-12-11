@@ -1,4 +1,4 @@
-package r::3_a_scanning;
+package t::3_a_scanning;
 
 use lib qw( lib );
 use DBI;

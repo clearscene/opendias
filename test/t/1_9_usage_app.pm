@@ -1,4 +1,4 @@
-package r::1_9_usage_app;
+package t::1_9_usage_app;
 
 use lib qw( lib );
 use DBI;

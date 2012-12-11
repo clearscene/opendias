@@ -1,4 +1,4 @@
-package r::3_d_language_selection;
+package t::3_d_language_selection;
 
 use lib qw( lib );
 use DBI;

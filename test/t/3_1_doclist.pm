@@ -1,4 +1,4 @@
-package r::3_1_doclist;
+package t::3_1_doclist;
 
 use lib qw( lib );
 use DBI;

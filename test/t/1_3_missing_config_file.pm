@@ -1,4 +1,4 @@
-package r::1_3_missing_config_file;
+package t::1_3_missing_config_file;
 
 use lib qw( lib );
 use DBI;

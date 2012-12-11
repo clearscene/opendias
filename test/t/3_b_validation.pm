@@ -1,4 +1,4 @@
-package r::3_b_validation;
+package t::3_b_validation;
 
 use lib qw( lib );
 use DBI;

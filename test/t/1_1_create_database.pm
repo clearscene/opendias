@@ -1,4 +1,4 @@
-package r::1_1_create_database;
+package t::1_1_create_database;
 
 use lib qw( lib );
 use DBI;

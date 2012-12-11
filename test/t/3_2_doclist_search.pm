@@ -1,4 +1,4 @@
-package r::3_2_doclist_search;
+package t::3_2_doclist_search;
 
 use lib qw( lib );
 use DBI;

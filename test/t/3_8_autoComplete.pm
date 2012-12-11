@@ -1,4 +1,4 @@
-package r::3_8_autoComplete;
+package t::3_8_autoComplete;
 
 use lib qw( lib );
 use DBI;

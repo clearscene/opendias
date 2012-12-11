@@ -15,7 +15,7 @@ my $testCount=0;
 my $passCount=0;
 my $failCount=0;
 my $outputDir="results/resultsFiles";
-my $TESTPATH="r";
+my $TESTPATH="t";
 my $startCmd=`cat config/startAppCommands`;
 
 ##############################

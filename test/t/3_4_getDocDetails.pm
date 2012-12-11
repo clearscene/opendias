@@ -1,4 +1,4 @@
-package r::3_4_getDocDetails;
+package t::3_4_getDocDetails;
 
 use lib qw( lib );
 use DBI;

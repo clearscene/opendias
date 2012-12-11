@@ -1,4 +1,4 @@
-package r::3_9_access;
+package t::3_9_access;
 
 use lib qw( lib );
 use DBI;

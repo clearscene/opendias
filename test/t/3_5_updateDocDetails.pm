@@ -1,4 +1,4 @@
-package r::3_5_updateDocDetails;
+package t::3_5_updateDocDetails;
 
 use lib qw( lib );
 use DBI;

@@ -1,4 +1,4 @@
-package r::1_7_config_updates;
+package t::1_7_config_updates;
 
 use lib qw( lib );
 use DBI;

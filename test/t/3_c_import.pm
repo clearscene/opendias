@@ -1,4 +1,4 @@
-package r::3_c_import;
+package t::3_c_import;
 
 use lib qw( lib );
 use DBI;
@@ -48,10 +48,10 @@ sub test {
   login( "test-user", "password", $cookie_jar );
 
   my %details = (
-                JPG => './r/inputs/3_c_import/test.jpg',
+                JPG => './i/3_c_import/test.jpg',
 #                MSS => '/missing',
-                PDF => './r/inputs/3_c_import/test.pdf',
-                ODF => './r/inputs/3_c_import/test.odt',
+                PDF => './i/3_c_import/test.pdf',
+                ODF => './i/3_c_import/test.odt',
                 UNK => './harness.pl',
                 );
 

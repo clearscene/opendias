@@ -1,4 +1,4 @@
-package r::3_7_deleteDoc;
+package t::3_7_deleteDoc;
 
 use lib qw( lib );
 use DBI;

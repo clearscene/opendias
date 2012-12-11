@@ -196,7 +196,7 @@ sub directRequest {
 
 sub inTestSQL {
   my ($filename, ) = @_;
-  my $fullPath = "$testpath/inputs/$testcasename/intest/".$filename.".sql";
+  my $fullPath = "i/$testcasename/intest/".$filename.".sql";
   if ( -f $fullPath ) {
     system("/usr/bin/sqlite3 /tmp/opendiastest/openDIAS.sqlite3 \".read $fullPath\""); 
   }

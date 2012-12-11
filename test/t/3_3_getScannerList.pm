@@ -1,4 +1,4 @@
-package r::3_3_getScannerList;
+package t::3_3_getScannerList;
 
 use lib qw( lib );
 use DBI;
