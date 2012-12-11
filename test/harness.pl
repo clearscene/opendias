@@ -95,8 +95,8 @@ for my $requested (@runTests) {
 
     openlog( "$outputDir/$TESTCASENAME/testLog.out" );
 
-    unless( -e "$TESTPATH/expected/$TESTCASENAME" ) {
-      system("mkdir -p $TESTPATH/expected/$TESTCASENAME");
+    unless( -e "r/$TESTCASENAME" ) {
+      system("mkdir -p r/$TESTCASENAME");
     }
 
     # Build new environment
@@ -200,17 +200,17 @@ for my $requested (@runTests) {
 
           # Make this the expected, if required
           if( length $GENERATE ) {
-            system("cp $outputDir/$TESTCASENAME/valgrind4Compare.out $TESTPATH/expected/$TESTCASENAME/valgrind.out");
+            system("cp $outputDir/$TESTCASENAME/valgrind4Compare.out r/$TESTCASENAME/valgrind.out");
           }
 
           $MEM_RES="<td class='none'><a href='./$TESTCASENAME/valgrind.out'>actual</a></td>";
-          system("diff -ydN $TESTPATH/expected/$TESTCASENAME/valgrind.out $outputDir/$TESTCASENAME/valgrind4Compare.out > $outputDir/$TESTCASENAME/valgrindDiff.out");
+          system("diff -ydN r/$TESTCASENAME/valgrind.out $outputDir/$TESTCASENAME/valgrind4Compare.out > $outputDir/$TESTCASENAME/valgrindDiff.out");
           if($? >> 8 == 0) {
             system("rm $outputDir/$TESTCASENAME/valgrindDiff.out");
             $MEM_RES .= "<td class='ok'>OK</td>";
           }
           else {
-            $MEM_RES .= "<td><a href='./$TESTCASENAME/valgrindDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../$TESTPATH/expected/$TESTCASENAME/valgrind.out'>expected</a></td>";
+            $MEM_RES .= "<td><a href='./$TESTCASENAME/valgrindDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../r/$TESTCASENAME/valgrind.out'>expected</a></td>";
             $RES=1
           }
         }
@@ -226,16 +226,16 @@ for my $requested (@runTests) {
       # test log - output from the testing harness
       system("sed -f config/testLogUnify.sed < $outputDir/$TESTCASENAME/testLog.out > $outputDir/$TESTCASENAME/testLog4Compare.out");
       if( length $GENERATE ) {
-        system("cp $outputDir/$TESTCASENAME/testLog4Compare.out $TESTPATH/expected/$TESTCASENAME/testLog.out");
+        system("cp $outputDir/$TESTCASENAME/testLog4Compare.out r/$TESTCASENAME/testLog.out");
       }
       $TEST_RES="<td class='none'><a href='./$TESTCASENAME/testLog.out'>actual</a></td>";
-      system("diff -ydN $TESTPATH/expected/$TESTCASENAME/testLog.out $outputDir/$TESTCASENAME/testLog4Compare.out > $outputDir/$TESTCASENAME/testLogDiff.out");
+      system("diff -ydN r/$TESTCASENAME/testLog.out $outputDir/$TESTCASENAME/testLog4Compare.out > $outputDir/$TESTCASENAME/testLogDiff.out");
       if( $? >> 8 == 0 ) {
         system("rm $outputDir/$TESTCASENAME/testLogDiff.out");
         $TEST_RES .= "<td class='ok'>OK</td>";
       }
       else {
-        $TEST_RES .= "<td><a href='./$TESTCASENAME/testLogDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../$TESTPATH/expected/$TESTCASENAME/testLog.out'>expected</a></td>";
+        $TEST_RES .= "<td><a href='./$TESTCASENAME/testLogDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../r/$TESTCASENAME/testLog.out'>expected</a></td>";
         $RES=1;
       }
 
@@ -250,16 +250,16 @@ for my $requested (@runTests) {
       system("sed -f config/appLogUnify.sed < $outputDir/$TESTCASENAME/appLog.out > $outputDir/$TESTCASENAME/appLog4Compare.out");
       removeDuplicateLines("$outputDir/$TESTCASENAME/appLog4Compare.out");
       if( length $GENERATE ) {
-        system("cp $outputDir/$TESTCASENAME/appLog4Compare.out $TESTPATH/expected/$TESTCASENAME/appLog.out");
+        system("cp $outputDir/$TESTCASENAME/appLog4Compare.out r/$TESTCASENAME/appLog.out");
       }
       $APP_RES="<td class='none'><a href='./$TESTCASENAME/appLog.out'>actual</a></td>";
-      system("diff -ydN $TESTPATH/expected/$TESTCASENAME/appLog.out $outputDir/$TESTCASENAME/appLog4Compare.out > $outputDir/$TESTCASENAME/appLogDiff.out");
+      system("diff -ydN r/$TESTCASENAME/appLog.out $outputDir/$TESTCASENAME/appLog4Compare.out > $outputDir/$TESTCASENAME/appLogDiff.out");
       if( $? >> 8 == 0 ) {
         system("rm $outputDir/$TESTCASENAME/appLogDiff.out");
         $APP_RES .= "<td class='ok'>OK</td>";
       }
       else {
-        $APP_RES .= "<td><a href='./$TESTCASENAME/appLogDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../$TESTPATH/expected/$TESTCASENAME/appLog.out'>expected</a></td>";
+        $APP_RES .= "<td><a href='./$TESTCASENAME/appLogDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../r/$TESTCASENAME/appLog.out'>expected</a></td>";
         $RES=1;
       }
 
