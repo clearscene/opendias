@@ -100,20 +100,20 @@ for my $requested (@runTests) {
     }
 
     # Build new environment
-    if( -d "$TESTPATH/inputs/$TESTCASENAME" ) {
-      if( -d "$TESTPATH/inputs/$TESTCASENAME/homeDir" ) {
+    if( -d "i/$TESTCASENAME" ) {
+      if( -d "i/$TESTCASENAME/homeDir" ) {
         o_log("Copying pre defined environment");
-        system("cp -r $TESTPATH/inputs/$TESTCASENAME/homeDir/* /tmp/opendiastest/");
+        system("cp -r i/$TESTCASENAME/homeDir/* /tmp/opendiastest/");
       }
       if( -e "/tmp/opendiastest/DEFAULTDB" ) {
         o_log("Copying default database");
         system("cp -r config/defaultdatabase.sqlite3 /tmp/opendiastest/openDIAS.sqlite3");
         system("rm -f /tmp/opendiastest/DEFAULTDB");
       }
-      opendir(DIR, "$TESTPATH/inputs/$TESTCASENAME/" ) or die "Cannot read SQL directory $TESTPATH/inputs/$TESTCASENAME/, because: $!\n";
+      opendir(DIR, "i/$TESTCASENAME/" ) or die "Cannot read SQL directory i/$TESTCASENAME/, because: $!\n";
       while( ($filename = readdir(DIR))) {
         next if ( $filename eq "." || $filename eq ".." );
-        my $fullPath = "$TESTPATH/inputs/$TESTCASENAME/".$filename;
+        my $fullPath = "i/$TESTCASENAME/".$filename;
         if ( -f $fullPath && $fullPath =~ /\.sql$/ ) {
           system("/usr/bin/sqlite3 /tmp/opendiastest/openDIAS.sqlite3 \".read $fullPath\""); 
         }
