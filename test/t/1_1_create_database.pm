@@ -1,6 +1,6 @@
 package r::1_1_create_database;
 
-use lib qw( r/lib );
+use lib qw( lib );
 use DBI;
 use standardTests;
 use strict;

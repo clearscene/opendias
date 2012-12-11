@@ -1,6 +1,6 @@
 package r::3_e_forbidden_requests;
 
-use lib qw( r/lib );
+use lib qw( lib );
 use DBI;
 use standardTests;
 use Data::Dumper;

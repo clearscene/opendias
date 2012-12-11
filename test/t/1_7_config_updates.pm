@@ -1,6 +1,6 @@
 package r::1_7_config_updates;
 
-use lib qw( r/lib );
+use lib qw( lib );
 use DBI;
 use standardTests;
 use strict;

@@ -1,6 +1,6 @@
 package r::1_2_failed_to_create_database;
 
-use lib qw( r/lib );
+use lib qw( lib );
 use DBI;
 use standardTests;
 use strict;

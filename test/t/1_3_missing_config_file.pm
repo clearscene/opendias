@@ -1,6 +1,6 @@
 package r::1_3_missing_config_file;
 
-use lib qw( r/lib );
+use lib qw( lib );
 use DBI;
 use standardTests;
 use strict;

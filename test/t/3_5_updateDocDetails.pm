@@ -1,6 +1,6 @@
 package r::3_5_updateDocDetails;
 
-use lib qw( r/lib );
+use lib qw( lib );
 use DBI;
 use standardTests;
 use Data::Dumper;

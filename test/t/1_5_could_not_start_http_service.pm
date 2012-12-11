@@ -1,6 +1,6 @@
 package r::1_5_could_not_start_http_service;
 
-use lib qw( r/lib );
+use lib qw( lib );
 use DBI;
 use standardTests;
 use strict;

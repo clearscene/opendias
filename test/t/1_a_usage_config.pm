@@ -1,6 +1,6 @@
 package r::1_a_usage_config;
 
-use lib qw( r/lib );
+use lib qw( lib );
 use DBI;
 use standardTests;
 use strict;

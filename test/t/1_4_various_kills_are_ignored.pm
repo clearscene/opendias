@@ -1,6 +1,6 @@
 package r::1_4_various_kills_are_ignored;
 
-use lib qw( r/lib );
+use lib qw( lib );
 use DBI;
 use standardTests;
 use strict;
