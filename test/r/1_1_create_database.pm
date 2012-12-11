@@ -1,6 +1,6 @@
-package regressionTests::1_1_create_database;
+package r::1_1_create_database;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use strict;

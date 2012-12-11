@@ -1,6 +1,6 @@
-package regressionTests::3_6_moveTag;
+package r::3_6_moveTag;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use Data::Dumper;

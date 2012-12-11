@@ -1,6 +1,6 @@
-package regressionTests::3_a_scanning;
+package r::3_a_scanning;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use Data::Dumper;

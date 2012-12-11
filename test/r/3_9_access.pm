@@ -1,6 +1,6 @@
-package regressionTests::3_9_access;
+package r::3_9_access;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use Data::Dumper;

@@ -1,6 +1,6 @@
-package regressionTests::3_c_import;
+package r::3_c_import;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use Data::Dumper;
@@ -48,10 +48,10 @@ sub test {
   login( "test-user", "password", $cookie_jar );
 
   my %details = (
-                JPG => './regressionTests/inputs/3_c_import/test.jpg',
+                JPG => './r/inputs/3_c_import/test.jpg',
 #                MSS => '/missing',
-                PDF => './regressionTests/inputs/3_c_import/test.pdf',
-                ODF => './regressionTests/inputs/3_c_import/test.odt',
+                PDF => './r/inputs/3_c_import/test.pdf',
+                ODF => './r/inputs/3_c_import/test.odt',
                 UNK => './harness.pl',
                 );
 

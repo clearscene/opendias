@@ -1,6 +1,6 @@
-package regressionTests::1_4_various_kills_are_ignored;
+package r::1_4_various_kills_are_ignored;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use strict;

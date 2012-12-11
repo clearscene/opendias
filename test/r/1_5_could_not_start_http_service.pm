@@ -1,6 +1,6 @@
-package regressionTests::1_5_could_not_start_http_service;
+package r::1_5_could_not_start_http_service;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use strict;

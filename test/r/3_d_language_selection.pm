@@ -1,6 +1,6 @@
-package regressionTests::3_d_language_selection;
+package r::3_d_language_selection;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use Data::Dumper;

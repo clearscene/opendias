@@ -1,6 +1,6 @@
-package regressionTests::3_4_getDocDetails;
+package r::3_4_getDocDetails;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use Data::Dumper;

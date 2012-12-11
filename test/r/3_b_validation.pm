@@ -1,6 +1,6 @@
-package regressionTests::3_b_validation;
+package r::3_b_validation;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use Data::Dumper;

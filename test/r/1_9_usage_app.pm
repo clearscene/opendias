@@ -1,6 +1,6 @@
-package regressionTests::1_3_missing_config_file;
+package r::1_9_usage_app;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use strict;
@@ -10,13 +10,14 @@ sub testProfile {
     valgrind => 1,
     client => 0,
     updateStartCommand => 'updateStartCommand',
-  }; 
-} 
+  };
+}
 
 sub updateStartCommand {
   my $startCommand = shift;
-  $$startCommand =~ s/bin\/opendias/bin\/opendias -c \/tmp\/opendias_test\/etc\/opendias\/testappMISSING.conf/g;
-  o_log("Updated start command to specify a missing config file.");
+  $$startCommand =~ s/bin\/opendias/bin\/opendias -h/g;
+  o_log("Updated start command to run the config updater.");
+  return 'no port';
 }
 
 sub test {

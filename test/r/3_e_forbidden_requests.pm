@@ -1,6 +1,6 @@
-package regressionTests::3_e_forbidden_requests;
+package r::3_e_forbidden_requests;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use Data::Dumper;

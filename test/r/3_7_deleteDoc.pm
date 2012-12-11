@@ -1,6 +1,6 @@
-package regressionTests::3_7_deleteDoc;
+package r::3_7_deleteDoc;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use Data::Dumper;

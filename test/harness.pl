@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-use lib qw( regressionTests regressionTests/lib );
+use lib qw( r lib );
 use Getopt::Std;
 use Time::HiRes qw( gettimeofday tv_interval );
 use standardTests;
@@ -15,7 +15,7 @@ my $testCount=0;
 my $passCount=0;
 my $failCount=0;
 my $outputDir="results/resultsFiles";
-my $TESTPATH="regressionTests";
+my $TESTPATH="r";
 my $startCmd=`cat config/startAppCommands`;
 
 ##############################
@@ -145,11 +145,11 @@ for my $requested (@runTests) {
 
       my $startCommand = $startCmd;
 
-      my $testProfile = eval("regressionTests::".$TESTCASENAME."::testProfile();");
+      my $testProfile = eval("${TESTPATH}::${TESTCASENAME}::testProfile();");
 
       my $wait = 0;
       if( $testProfile->{updateStartCommand} ) {
-        eval "\$wait = regressionTests::${TESTCASENAME}::".$testProfile->{updateStartCommand}."(\\\$startCommand)";
+        eval "\$wait = ${TESTPATH}::${TESTCASENAME}::".$testProfile->{updateStartCommand}."(\\\$startCommand)";
       }
 
 
@@ -182,7 +182,7 @@ for my $requested (@runTests) {
       unless( $RES ) {
         printProgressLine($TEST, "Running");
         my $t0 = [gettimeofday];
-        eval "\$RES = regressionTests::".$TESTCASENAME."::test()";
+        eval "\$RES = ${TESTPATH}::${TESTCASENAME}::test()";
         $testTime = sprintf("%.2f", tv_interval( $t0, [gettimeofday]) );
         o_log("Error while running test: $@") if ($@);
         printProgressLine($TEST, "Stopping");

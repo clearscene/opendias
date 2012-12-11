@@ -1,6 +1,6 @@
-package regressionTests::3_8_autoComplete;
+package r::3_8_autoComplete;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use Data::Dumper;

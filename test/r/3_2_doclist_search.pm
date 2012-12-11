@@ -1,6 +1,6 @@
-package regressionTests::3_2_doclist_search;
+package r::3_2_doclist_search;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use Data::Dumper;

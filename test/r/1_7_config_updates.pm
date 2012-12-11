@@ -1,6 +1,6 @@
-package regressionTests::1_a_usage_config;
+package r::1_7_config_updates;
 
-use lib qw( regressionTests/lib );
+use lib qw( r/lib );
 use DBI;
 use standardTests;
 use strict;
@@ -15,7 +15,7 @@ sub testProfile {
 
 sub updateStartCommand {
   my $startCommand = shift;
-  $$startCommand =~ s/bin\/opendias/bin\/opendiasconfig -h/g;
+  $$startCommand =~ s/bin\/opendias/bin\/opendiasconfig -s log_verbosity -v 4/g;
   o_log("Updated start command to run the config updater.");
   return 'no port';
 }
