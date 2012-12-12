@@ -33,7 +33,7 @@ $VAR1 = {
     'DocLinks' => {
       'doc' => {
         'targetDocid' => '4',
-        'targetTitle' => 'Test 1 TitleText 2'
+        'targetTitle' => 'New (untitled) document.'
       }
     },
     'Tags' => {
@@ -82,7 +82,7 @@ $VAR1 = {
     'hardcopyKept' => '1',
     'pages' => '1',
     'scanDate' => '2011-01-03T21:13:04.393946Z',
-    'title' => 'Test 1 TitleText 2',
+    'title' => 'New (untitled) document.',
     'type' => '4',
     'x' => '2519',
     'y' => '3509'
