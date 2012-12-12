@@ -10,8 +10,17 @@ sub testProfile {
   return {
     valgrind => 1,
     client => 0,
-  }; 
-} 
+    updateStartCommand => 'updateStartCommand',
+  };
+}
+
+sub updateStartCommand {
+  my $startCommand = shift;
+  chomp( my $pwd = `pwd` );
+  my $prefix = "LD_LIBRARY_PATH=$pwd/override_libs ";
+  $$startCommand =~ s/^/$prefix/g;
+  o_log("Updated start command to use overidden libs");
+}
 
 sub test {
 
@@ -46,23 +55,6 @@ sub test {
   sleep(3);
   o_log( "Scanner List" );
   o_log( Dumper( directRequest( \%data ) ) );
-
-  # Wait for the page to finish scanning
-  my $dbh = DBI->connect( "dbi:SQLite:dbname=/tmp/opendiastest/openDIAS.sqlite3",
-                          "", "", { RaiseError => 1, AutoCommit => 1, sqlite_use_immediate_transaction => 1 } );
-  my $sth = $dbh->prepare("SELECT status FROM scan_progress WHERE client_id = ? ");
-
-  my $attempt = 0;
-  while( 1 ) {
-    sleep(1);
-    $attempt++;
-    $sth->execute($scan_uuid);
-    my $hashRef = $sth->fetchrow_hashref();
-    $sth->finish;
-    last if( $hashRef->{status} eq $SCAN_COMPLETE );
-    last if( $attempt > 120 );
-  }
-  $dbh->disconnect();
 
   return 0;
 }
