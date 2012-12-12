@@ -10,3 +10,11 @@ ln -s libtesseract.so.3.0.2 libtesseract.so.3
 ln -s libtesseract.so.3 libtesseract.so
 
 
+# Sane
+rm -f libsane.so* ScannerList.o
+gcc -fPIC -g -c -Wall ScannerList.c
+g++ -shared -Wl,-soname,libsane.so.1 -o libsane.so.1.0.22 ScannerList.o -lc
+ln -s libsane.so.1.0.22 libsane.so.1
+ln -s libsane.so.1 libsane.so
+
+

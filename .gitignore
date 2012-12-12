@@ -98,6 +98,11 @@ test/override_libs/TessBaseAPI.o
 test/override_libs/libtesseract.so
 test/override_libs/libtesseract.so.3
 test/override_libs/libtesseract.so.3.0.2
+test/override_libs/ScannerList.o
+test/override_libs/libsane.so
+test/override_libs/libsane.so.1
+test/override_libs/libsane.so.1.0.22
+
 test/results/
 webcontent/images/datepicker/Makefile
 webcontent/images/datepicker/Makefile.in
