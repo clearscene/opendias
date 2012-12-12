@@ -87,6 +87,7 @@ sub wait_for(&@) {
 }
 
 sub o_log {
+#  my $dts = gmtime;
   print TESTLOG join(",", @_)."\n";
 }
 
