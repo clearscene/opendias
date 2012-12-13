@@ -56,7 +56,7 @@ char *extractThumbnail(char *docid) {
   free(source_file);
   free(target_file);
 
-  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><NextPageReady><result>OK</result></NextPageReady></Response>");
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><RegenerateThumb><result>OK</result></RegenerateThumb></Response>");
 }
 #endif // CAN_PDF //
 
