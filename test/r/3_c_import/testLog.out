@@ -17,6 +17,14 @@ Response was = $VAR1 = '<html><HEAD><META HTTP-EQUIV="refresh" CONTENT="0;URL=/o
 Uploading file of type UNK...
 Response was = $VAR1 = '<p>An internal server error has occured.</p>';
 
+Generating a PDF doc thumbnail
+Sending request = action=regenerateThumb&docid=7
+$VAR1 = {
+  'RegenerateThumb' => {
+    'result' => 'OK'
+  }
+};
+
 SELECT * FROM docs
 ------------------ row 1 ------------------
 actionrequired : 0
@@ -192,5 +200,6 @@ File 6.odt has MD5 of 4bfae85ddae5adacf88b52e8d42dcfaa
 File 6_thumb.png has MD5 of 68294bbeabd83d8220799b5f1a8c6784
 File 7.pdf has MD5 of 0e79ba199e8484ba9e3fc77472a19fb0
 File 7_thumb.jpg has MD5 of ecc54a2ffe5b32436bcfb410a1fefe6e
+File x7_thumb.jpg has MD5 of ecc54a2ffe5b32436bcfb410a1fefe6e
 Stopping service
 Waiting for valgrind to finish.

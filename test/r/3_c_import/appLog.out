@@ -44,6 +44,9 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: uploadfile
 -date-:-thread-:ERR: Uploaded file looks to be of type: text/plain
 -date-:-thread-:ERR: unknown file type.
+-date-:-thread-:INF: Processing request for: regenerateThumb
+-date-:-thread-:ERR: PDF page successfuly parsed
+-date-:-thread-:ERR: Text Extracted from the PDF
 -date-:-thread-:INF: Received SIGUSR1 signal.
 -date-:-thread-:INF: openDias service is shutting down....
 -date-:-thread-:INF: openDias service has shutdown.

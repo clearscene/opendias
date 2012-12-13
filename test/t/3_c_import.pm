@@ -50,8 +50,8 @@ sub test {
   my %details = (
                 JPG => './i/3_c_import/test.jpg',
 #                MSS => '/missing',
-                PDF => './i/3_c_import/test.pdf',
                 ODF => './i/3_c_import/test.odt',
+                PDF => './i/3_c_import/test.pdf',
                 UNK => './harness.pl',
                 );
 
@@ -81,6 +81,18 @@ sub test {
       }
     }
   }
+
+  # Move the thumbnail for 7 (the PDF doc)
+  # So we can try and generate it using the API call.
+  system("mv /tmp/opendiastest/scans/7_thumb.jpg /tmp/opendiastest/scans/x7_thumb.jpg");
+  my %regen = (
+    __cookiejar => $cookie_jar,
+    action => 'regenerateThumb',
+    docid => '7',
+  );
+  o_log( "Generating a PDF doc thumbnail" );
+  o_log( Dumper( directRequest( \%regen ) ) );
+
 
   dumpQueryResult( "SELECT * FROM docs" );
 
