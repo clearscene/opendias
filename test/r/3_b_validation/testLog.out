@@ -97,6 +97,11 @@ updateDocDetails = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
 };
 
+Sending request = action=updateUser
+updateUser = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
 Sending request = action=docFilter&endDate=2012-12-31&isActionRequired=true&page=8&range=8&sortfield=1234&sortorder=1234&startDate=2012-12-31&subaction=rumplestilskin&tags=some%20text&textSearch=some%20text
 Unknown subaction on action of docFilter = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
@@ -220,6 +225,11 @@ rogue field in actions of titleAutoComplete = $VAR1 = {
 Sending request = action=updateDocDetails&docid=1234&kkey=1234&rogue_field=evil&vvalue=some%20text
 rogue field in actions of updateDocDetails = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=updateUser&password=some%20text&realname=some%20text&rogue_field=evil&username=some%20text
+rogue field in actions of updateUser = $VAR1 = {
+  'error' => 'Your request could not be processed'
 };
 
 Sending request = action=checkLogin&password=&username=some%20text
@@ -445,6 +455,21 @@ field kkey with duff data, updateDocDetails = $VAR1 = {
 Sending request = action=updateDocDetails&docid=1234&kkey=1234&vvalue=
 field vvalue with duff data, updateDocDetails = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=updateUser&password=&realname=some%20text&username=some%20text
+field password with duff data, updateUser = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=updateUser&password=some%20text&realname=&username=some%20text
+field realname with duff data, updateUser = $VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+Sending request = action=updateUser&password=some%20text&realname=some%20text&username=
+field username with duff data, updateUser = $VAR1 = {
+  'error' => 'Your request could not be processed'
 };
 
 Stopping service

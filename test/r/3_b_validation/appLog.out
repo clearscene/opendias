@@ -59,6 +59,8 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: tagsAutoComplete
 -date-:-thread-:INF: Processing request for: titleAutoComplete
 -date-:-thread-:INF: Processing request for: update doc details
+-date-:-thread-:INF: Processing request for: updateUser
+-date-:-thread-:ERR: Missing manditory post data with key of username
 -date-:-thread-:INF: Processing request for: Doc List Filter
 -date-:-thread-:INF: Processing request for: Move Tag
 -date-:-thread-:INF: Processing request for: Doc List Filter
@@ -78,6 +80,8 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: tagsAutoComplete
 -date-:-thread-:INF: Processing request for: titleAutoComplete
 -date-:-thread-:INF: Processing request for: update doc details
+-date-:-thread-:INF: Processing request for: updateUser
+-date-:-thread-:ERR: Unexpected post data with key of rogue_field
 -date-:-thread-:INF: Processing request for: checkLogin
 -date-:-thread-:ERR: Missing manditory post data with key of password
 -date-:-thread-:INF: Processing request for: checkLogin
@@ -98,6 +102,12 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: tagsAutoComplete
 -date-:-thread-:INF: Processing request for: titleAutoComplete
 -date-:-thread-:INF: Processing request for: update doc details
+-date-:-thread-:INF: Processing request for: updateUser
+-date-:-thread-:ERR: Client specified a user to update, but they do not have permission.
+-date-:-thread-:INF: Processing request for: updateUser
+-date-:-thread-:ERR: Client specified a user to update, but they do not have permission.
+-date-:-thread-:INF: Processing request for: updateUser
+-date-:-thread-:ERR: Missing manditory post data with key of username
 -date-:-thread-:INF: Received SIGUSR1 signal.
 -date-:-thread-:INF: openDias service is shutting down....
 -date-:-thread-:INF: openDias service has shutdown.

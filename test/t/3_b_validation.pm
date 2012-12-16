@@ -75,6 +75,11 @@ sub test {
           },
     logout => { 
           },
+    updateUser => {
+          username => 'text',
+          password => 'text',
+          realname => 'text',
+          },
   );
 
   my $cookie_jar = HTTP::Cookies->new();
