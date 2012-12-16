@@ -7,7 +7,7 @@ Diff of generated-to-reference database:
 < INSERT INTO "user_access" VALUES('admin','6e6a83f742b28434aea09d7e8534647a','Admin User','[YYYY-MM-DD HH:MM:SS]','automatically',1);
 ---
 > INSERT INTO "user_access" VALUES('admin','6e6a83f742b28434aea09d7e8534647a','Admin User','[YYYY-MM-DD HH:MM:SS]','automatically',1);
-> INSERT INTO "user_access" VALUES('test-user','63294d4f9a52894e2ef9298d1b8ac455','Test - User','2012-11-22 17:26:00','automatically',2);
+> INSERT INTO "user_access" VALUES('test-user','63294d4f9a52894e2ef9298d1b8ac455','Test - User','[YYYY-MM-DD HH:MM:SS]','automatically',2);
 
 Stopping service
 Waiting for valgrind to finish.
