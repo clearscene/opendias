@@ -2848,5 +2848,205 @@ $VAR1 = {
 
 
 
+Sending request = 
+$VAR1 = bless( {
+  'COOKIES' => {
+    'localhost.local' => {
+      '/' => {
+        'o_session_id' => [
+          0,
+          '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]',
+          undef,
+          1,
+          undef,
+          '[DTS]',
+          1
+        ]
+      }
+    }
+  }
+}, 'HTTP::Cookies' );
+
+Sending request = 
+$VAR1 = bless( {
+  'COOKIES' => {
+    'localhost.local' => {
+      '/' => {
+        'o_session_id' => [
+          0,
+          '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]',
+          undef,
+          1,
+          undef,
+          '[DTS]',
+          1
+        ]
+      }
+    }
+  }
+}, 'HTTP::Cookies' );
+
+Sending request = 
+$VAR1 = bless( {
+  'COOKIES' => {
+    'localhost.local' => {
+      '/' => {
+        'o_session_id' => [
+          0,
+          '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]',
+          undef,
+          1,
+          undef,
+          '[DTS]',
+          1
+        ]
+      }
+    }
+  }
+}, 'HTTP::Cookies' );
+
+Sending request = 
+$VAR1 = bless( {
+  'COOKIES' => {
+    'localhost.local' => {
+      '/' => {
+        'o_session_id' => [
+          0,
+          '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]',
+          undef,
+          1,
+          undef,
+          '[DTS]',
+          1
+        ]
+      }
+    }
+  }
+}, 'HTTP::Cookies' );
+
+Sending request = 
+$VAR1 = bless( {
+  'COOKIES' => {
+    'localhost.local' => {
+      '/' => {
+        'o_session_id' => [
+          0,
+          '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]',
+          undef,
+          1,
+          undef,
+          '[DTS]',
+          1
+        ]
+      }
+    }
+  }
+}, 'HTTP::Cookies' );
+
+Sending request = 
+$VAR1 = bless( {
+  'COOKIES' => {
+    'localhost.local' => {
+      '/' => {
+        'o_session_id' => [
+          0,
+          '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]',
+          undef,
+          1,
+          undef,
+          '[DTS]',
+          1
+        ]
+      }
+    }
+  }
+}, 'HTTP::Cookies' );
+
+Sending request = 
+$VAR1 = bless( {
+  'COOKIES' => {
+    'localhost.local' => {
+      '/' => {
+        'o_session_id' => [
+          0,
+          '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]',
+          undef,
+          1,
+          undef,
+          '[DTS]',
+          1
+        ]
+      }
+    }
+  }
+}, 'HTTP::Cookies' );
+
+Sending request = 
+$VAR1 = bless( {
+  'COOKIES' => {
+    'localhost.local' => {
+      '/' => {
+        'o_session_id' => [
+          0,
+          '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]',
+          undef,
+          1,
+          undef,
+          '[DTS]',
+          1
+        ]
+      }
+    }
+  }
+}, 'HTTP::Cookies' );
+
+Sending request = 
+$VAR1 = bless( {
+  'COOKIES' => {
+    'localhost.local' => {
+      '/' => {
+        'o_session_id' => [
+          0,
+          '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]',
+          undef,
+          1,
+          undef,
+          '[DTS]',
+          1
+        ]
+      }
+    }
+  }
+}, 'HTTP::Cookies' );
+
+Sending request = 
+$VAR1 = bless( {
+  'COOKIES' => {
+    'localhost.local' => {
+      '/' => {
+        'o_session_id' => [
+          0,
+          '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]',
+          undef,
+          1,
+          undef,
+          '[DTS]',
+          1
+        ]
+      }
+    }
+  }
+}, 'HTTP::Cookies' );
+
+Sending request = 
+$VAR1 = bless( {
+  'COOKIES' => {}
+}, 'HTTP::Cookies' );
+
+Sending request = 
+$VAR1 = bless( {
+  'COOKIES' => {}
+}, 'HTTP::Cookies' );
+
 Stopping service
 Waiting for valgrind to finish.

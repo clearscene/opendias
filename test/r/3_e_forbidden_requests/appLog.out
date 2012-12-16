@@ -82,6 +82,13 @@ LOG-OUTPUT
  ----- line duplicated more than three times ----- 
 -date-:-thread-:WRN: disallowed content: post request for unknown method
 -date-:-thread-:ERR: no requested 'action' given.
+-date-:-thread-:INF: Serving request: /
+ ----- line duplicated more than three times ----- 
+-date-:-thread-:INF: Serving request: /
+-date-:-thread-:ERR: Could not build a new session
+-date-:-thread-:INF: Serving request: /
+-date-:-thread-:ERR: Could not build a new session
+-date-:-thread-:INF: Serving request: /
 -date-:-thread-:INF: Received SIGUSR1 signal.
 -date-:-thread-:INF: openDias service is shutting down....
 -date-:-thread-:INF: openDias service has shutdown.

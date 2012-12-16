@@ -72,6 +72,19 @@ sub test {
 
   }
 
+  # ensure 10 new sessions are created, then no more are dished out.
+  foreach ( 1 .. 12 ) {
+    my $cookie_jar = HTTP::Cookies->new();
+    my %data = (
+      __cookiejar => $cookie_jar,
+      __uri => '/opendias/',
+      __method => 'GET',
+    );
+    directRequest( \%data );
+    $cookie_jar->{'COOKIES'}->{'localhost.local'}->{'/'}->{'o_session_id'}[5] = '[DTS]' if exists $cookie_jar->{'COOKIES'}->{'localhost.local'};
+    o_log( Dumper( $cookie_jar ) );
+  }
+
   return 0;
 }
 
