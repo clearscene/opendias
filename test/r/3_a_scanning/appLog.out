@@ -38,6 +38,7 @@ LOG-OUTPUT
 -date-:-thread-:INF: Scanning done.
 -date-:-thread-:INF: Convertion process: Loaded (depth: 8)
 -date-:-thread-:INF: Conversion process: Complete
+-date-:-thread-:INF: Processing request for: getScanning Progress
 -date-:-thread-:INF: Processing request for: restart scan after page change
 -date-:-thread-:INF: SERVER: Sane dispatcher received the command: 'internalDoScanningOperation' with param of '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ],en'
 -date-:-thread-:INF: Scanner Parm : stat=Success form=0,lf=1,bpl=787,pixpl=787,lin=787,dep=8

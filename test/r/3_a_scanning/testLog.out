@@ -19,6 +19,14 @@ blocked Scan, request = $VAR1 = {
 };
 
 blocked Scan, result = Correctly Marked as blocked
+Sending request = action=getScanningProgress&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+Progress of scann = $VAR1 = {
+  'ScanningProgress' => {
+    'status' => '7',
+    'value' => '2'
+  }
+};
+
 Sending request = action=nextPageReady&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 Result of page turn request = $VAR1 = {
   'NextPageReady' => {

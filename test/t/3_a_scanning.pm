@@ -73,6 +73,12 @@ sub test {
       last;
     }
   }
+  my %getstatus = (
+    __cookiejar => $cookie_jar,
+    action => 'getScanningProgress',
+    scanprogressid => $scan_uuid,
+  );
+  o_log( "Progress of scann = " . Dumper( directRequest( \%getstatus) ) );
 
 
 
