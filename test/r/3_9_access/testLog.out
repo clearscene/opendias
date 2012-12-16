@@ -120,6 +120,11 @@ actions of updateDocDetails = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
 };
 
+Sending request = action=updateUser&password=some%20text&realname=some%20text&username=
+actions of updateUser = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
 Sending request = 
 GET request for /opendias/scans/unknown.jpg
 $VAR1 = '';
@@ -232,6 +237,11 @@ actions of titleAutoComplete = $VAR1 = {
 
 Sending request = action=updateDocDetails&docid=1234&kkey=1234&vvalue=some%20text
 actions of updateDocDetails = $VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Sending request = action=updateUser&password=some%20text&realname=some%20text&username=
+actions of updateUser = $VAR1 = {
   'error' => 'Your request could not be processed'
 };
 

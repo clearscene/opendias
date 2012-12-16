@@ -16,6 +16,7 @@ sub testProfile {
 
 sub test {
 
+  my $no_user_cookie_jar = HTTP::Cookies->new();
   my $cookie_jar = HTTP::Cookies->new();
 
   # Try login with a bad user
@@ -88,9 +89,16 @@ sub test {
           kkey => 'int',
           vvalue => 'text',
           },
+    updateUser => {
+          username => '[current]',
+          password => 'text',
+          realname => 'text',
+          },
   );
 
-  my %default = ();
+  my %default = (
+      __cookiejar => $no_user_cookie_jar,
+    );
 
   # First time in the loop, we're providing no login cookie,
   # Second time in the loop, send the loggedin session cookie.

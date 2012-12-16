@@ -115,8 +115,7 @@ LOG-OUTPUT
 -date-:-thread-:INF: Serving request: /scans/unknown.jpg
 -date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 2 active sessions
--date-:-thread-:DBG: Generated new session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Session contains: 
       (null) : (null)
@@ -130,8 +129,7 @@ LOG-OUTPUT
 <Response><error>You do not have permissions to complete the request</error></Response>
 -date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 3 active sessions
--date-:-thread-:DBG: Generated new session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Session contains: 
       (null) : (null)
@@ -147,8 +145,7 @@ LOG-OUTPUT
 <Response><error>You do not have permissions to complete the request</error></Response>
 -date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 4 active sessions
--date-:-thread-:DBG: Generated new session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Session contains: 
       (null) : (null)
@@ -171,8 +168,7 @@ LOG-OUTPUT
 <Response><error>You do not have permissions to complete the request</error></Response>
 -date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 5 active sessions
--date-:-thread-:DBG: Generated new session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Session contains: 
       (null) : (null)
@@ -195,8 +191,7 @@ LOG-OUTPUT
 <Response><error>You do not have permissions to complete the request</error></Response>
 -date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 6 active sessions
--date-:-thread-:DBG: Generated new session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Session contains: 
       (null) : (null)
@@ -210,8 +205,7 @@ LOG-OUTPUT
 <Response><error>You do not have permissions to complete the request</error></Response>
 -date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 7 active sessions
--date-:-thread-:DBG: Generated new session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Session contains: 
       (null) : (null)
@@ -224,8 +218,7 @@ LOG-OUTPUT
 <Response><error>You do not have permissions to complete the request</error></Response>
 -date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 8 active sessions
--date-:-thread-:DBG: Generated new session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Session contains: 
       (null) : (null)
@@ -239,8 +232,7 @@ LOG-OUTPUT
 <Response><error>You do not have permissions to complete the request</error></Response>
 -date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 9 active sessions
--date-:-thread-:DBG: Generated new session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Session contains: 
       (null) : (null)
@@ -256,8 +248,7 @@ LOG-OUTPUT
 <Response><error>You do not have permissions to complete the request</error></Response>
 -date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 10 active sessions
--date-:-thread-:DBG: Generated new session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Session contains: 
       (null) : (null)
@@ -273,8 +264,10 @@ LOG-OUTPUT
 <Response><error>You do not have permissions to complete the request</error></Response>
 -date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 11 active sessions
--date-:-thread-:ERR: Could not build a new session
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Session contains: 
+      (null) : (null)
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:DBG: Collected post data: 
@@ -285,9 +278,12 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: Move Tag
 -date-:-thread-:DBG: Serving the following content: <?xml version='1.0' encoding='utf-8'?>
 <Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 11 active sessions
--date-:-thread-:ERR: Could not build a new session
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Session contains: 
+      (null) : (null)
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:DBG: Collected post data: 
@@ -298,9 +294,12 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: Move Tag
 -date-:-thread-:DBG: Serving the following content: <?xml version='1.0' encoding='utf-8'?>
 <Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 11 active sessions
--date-:-thread-:ERR: Could not build a new session
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Session contains: 
+      (null) : (null)
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:DBG: Collected post data: 
@@ -309,9 +308,12 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: restart scan after page change
 -date-:-thread-:DBG: Serving the following content: <?xml version='1.0' encoding='utf-8'?>
 <Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 11 active sessions
--date-:-thread-:ERR: Could not build a new session
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Session contains: 
+      (null) : (null)
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:DBG: Collected post data: 
@@ -320,9 +322,12 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: tagsAutoComplete
 -date-:-thread-:DBG: Serving the following content: <?xml version='1.0' encoding='utf-8'?>
 <Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 11 active sessions
--date-:-thread-:ERR: Could not build a new session
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Session contains: 
+      (null) : (null)
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:DBG: Collected post data: 
@@ -331,9 +336,12 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: titleAutoComplete
 -date-:-thread-:DBG: Serving the following content: <?xml version='1.0' encoding='utf-8'?>
 <Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
--date-:-thread-:DBG: There are currently 11 active sessions
--date-:-thread-:ERR: Could not build a new session
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Session contains: 
+      (null) : (null)
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:DBG: Collected post data: 
@@ -344,6 +352,24 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: update doc details
 -date-:-thread-:DBG: Serving the following content: <?xml version='1.0' encoding='utf-8'?>
 <Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG: Language setting (from header) is: en
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG: Run Query [RECORDSET]
+-date-:-thread-:DBG: Free recordset [RECORDSET]
+-date-:-thread-:DBG: Collected post data: 
+      action : updateUser
+      password : ###############
+      realname : some text
+-date-:-thread-:INF: Processing request for: updateUser
+-date-:-thread-:ERR: Missing manditory post data with key of username
+-date-:-thread-:DBG: Looks like we failed validation (at least 1 times)
+-date-:-thread-:DBG: Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>Your request could not be processed</error></Response>
+-date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG: Language setting (from header) is: en
 -date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
@@ -685,6 +711,25 @@ LOG-OUTPUT
 -date-:-thread-:DBG: Run Query [RECORDSET]
 -date-:-thread-:DBG: Free recordset [RECORDSET]
 -date-:-thread-:DBG: Collected post data: 
+      action : updateUser
+      password : ###############
+      realname : some text
+-date-:-thread-:INF: Processing request for: updateUser
+-date-:-thread-:ERR: Missing manditory post data with key of username
+-date-:-thread-:DBG: Looks like we failed validation (at least 1 times)
+-date-:-thread-:DBG: Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>Your request could not be processed</error></Response>
+-date-:-thread-:DBG: setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG: Language setting (from header) is: en
+-date-:-thread-:DBG: Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG: Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG: Run Query [RECORDSET]
+-date-:-thread-:DBG: Free recordset [RECORDSET]
+-date-:-thread-:DBG: Collected post data: 
       action : logout
 -date-:-thread-:INF: Processing request for: logout
 -date-:-thread-:DBG: Serving the following content: <?xml version='1.0' encoding='utf-8'?>
@@ -696,9 +741,7 @@ LOG-OUTPUT
 -date-:-thread-:DBG: ... sane command socket [done]
 -date-:-thread-:DBG: ... sane backend [done]
 -date-:-thread-:DBG: Deleting session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
- ----- line duplicated more than three times ----- 
--date-:-thread-:DBG: Deleting session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
--date-:-thread-:DBG: Expired 11 sessions
+-date-:-thread-:DBG: Expired 2 sessions
 -date-:-thread-:DBG: ... session management [done]
 -date-:-thread-:DBG: ... locale [done]
 -date-:-thread-:DBG: ... database [done]
