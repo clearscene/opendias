@@ -1,0 +1,197 @@
+Copying pre defined environment
+Copying default database
+STARTING app...
+Now ready
+No need for a web client for this test.
+Sending request = action=checkLogin&password=admin&username=admin
+Sending request = action=checkLogin&password=password&username=test-user
+SELECT * FROM user_access ORDER BY username
+------------------ row 1 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : 6e6a83f742b28434aea09d7e8534647a
+realname : Admin User
+role : 1
+username : admin
+------------------ row 2 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : 63294d4f9a52894e2ef9298d1b8ac455
+realname : Test - User
+role : 2
+username : test-user
+
+
+As a normal user, Attempt to update someone elses user
+Sending request = action=updateUser&password=text%20admin&realname=text%20admin&username=admin
+$VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+SELECT * FROM user_access ORDER BY username
+------------------ row 1 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : 6e6a83f742b28434aea09d7e8534647a
+realname : Admin User
+role : 1
+username : admin
+------------------ row 2 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : 63294d4f9a52894e2ef9298d1b8ac455
+realname : Test - User
+role : 2
+username : test-user
+
+
+As an admin user, Attempt to update someone elses user
+Sending request = action=updateUser&realname=text%20new&username=test-user
+$VAR1 = {
+  'UpdateUser' => {
+    'result' => 'OK'
+  }
+};
+
+SELECT * FROM user_access ORDER BY username
+------------------ row 1 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : 6e6a83f742b28434aea09d7e8534647a
+realname : Admin User
+role : 1
+username : admin
+------------------ row 2 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : 63294d4f9a52894e2ef9298d1b8ac455
+realname : text new
+role : 2
+username : test-user
+
+
+As an admin user, Attempt to update someone elses role
+Sending request = action=updateUser&role=5&username=test-user
+$VAR1 = {
+  'UpdateUser' => {
+    'result' => 'OK'
+  }
+};
+
+SELECT * FROM user_access ORDER BY username
+------------------ row 1 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : 6e6a83f742b28434aea09d7e8534647a
+realname : Admin User
+role : 1
+username : admin
+------------------ row 2 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : 63294d4f9a52894e2ef9298d1b8ac455
+realname : text new
+role : 5
+username : test-user
+
+
+As a normal user, Attempt to update your own user
+Sending request = action=updateUser&password=text&username=%5Bcurrent%5D
+$VAR1 = {
+  'UpdateUser' => {
+    'result' => 'OK'
+  }
+};
+
+SELECT * FROM user_access ORDER BY username
+------------------ row 1 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : 6e6a83f742b28434aea09d7e8534647a
+realname : Admin User
+role : 1
+username : admin
+------------------ row 2 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : c3f73b640418ad7d201004b4e249bf3b
+realname : text new
+role : 5
+username : test-user
+
+
+As an admin user, Attempt to update your own user
+Sending request = action=updateUser&password=text&realname=text&username=%5Bcurrent%5D
+$VAR1 = {
+  'UpdateUser' => {
+    'result' => 'OK'
+  }
+};
+
+SELECT * FROM user_access ORDER BY username
+------------------ row 1 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : 2bdb7e1de8ff3dd6ffe68373dd6e592e
+realname : text
+role : 1
+username : admin
+------------------ row 2 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : c3f73b640418ad7d201004b4e249bf3b
+realname : text new
+role : 5
+username : test-user
+
+
+As a normal user, Attempt to update your own role
+Sending request = action=updateUser&role=3&username=test-user
+$VAR1 = {
+  'error' => 'You do not have permissions to complete the request'
+};
+
+SELECT * FROM user_access ORDER BY username
+------------------ row 1 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : 2bdb7e1de8ff3dd6ffe68373dd6e592e
+realname : text
+role : 1
+username : admin
+------------------ row 2 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : c3f73b640418ad7d201004b4e249bf3b
+realname : text new
+role : 5
+username : test-user
+
+
+As an admin user, Attempt to update your own role
+Sending request = action=updateUser&role=3&username=admin
+$VAR1 = {
+  'UpdateUser' => {
+    'result' => 'OK'
+  }
+};
+
+SELECT * FROM user_access ORDER BY username
+------------------ row 1 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : 2bdb7e1de8ff3dd6ffe68373dd6e592e
+realname : text
+role : 3
+username : admin
+------------------ row 2 ------------------
+created : automatically
+last_access : [YYYY-MM-DD HH:MM:SS]
+password : c3f73b640418ad7d201004b4e249bf3b
+realname : text new
+role : 5
+username : test-user
+
+
+Stopping service
+Waiting for valgrind to finish.
