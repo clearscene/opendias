@@ -9,7 +9,7 @@ Sending request = action=docFilter&endDate=&isActionRequired=false&page=1&range=
 $VAR1 = {
   'DocFilter' => {
     'Results' => {},
-    'count' => '4'
+    'count' => '5'
   }
 };
 
@@ -18,6 +18,13 @@ $VAR1 = {
   'DocFilter' => {
     'Results' => {
       'Row' => [
+        {
+          'actionrequired' => '0',
+          'date' => '2039/01/01',
+          'docid' => '5',
+          'title' => 'New (untitled) document.',
+          'type' => 'Imported ODF Doc'
+        },
         {
           'actionrequired' => '1',
           'date' => '2012/12/31',
@@ -38,13 +45,6 @@ $VAR1 = {
           'docid' => '1',
           'title' => 'Test Titletext',
           'type' => 'Scanned Doc'
-        },
-        {
-          'actionrequired' => '0',
-          'date' => '2010/12/30',
-          'docid' => '4',
-          'title' => 'Test 1 TitleText 2',
-          'type' => 'Imported Image'
         }
       ]
     },
@@ -137,6 +137,32 @@ $VAR1 = {
       ]
     },
     'count' => '2',
+    'page' => '1'
+  }
+};
+
+NULL title
+Sending request = action=docFilter&endDate=&isActionRequired=false&page=1&range=4&sortfield=3&sortorder=1&startDate=&subaction=count&tags=&textSearch=fantastical
+$VAR1 = {
+  'DocFilter' => {
+    'Results' => {},
+    'count' => '1'
+  }
+};
+
+Sending request = action=docFilter&endDate=&isActionRequired=false&page=1&range=4&sortfield=3&sortorder=1&startDate=&subaction=fullList&tags=&textSearch=fantastical
+$VAR1 = {
+  'DocFilter' => {
+    'Results' => {
+      'Row' => {
+        'actionrequired' => '0',
+        'date' => '2039/01/01',
+        'docid' => '5',
+        'title' => 'New (untitled) document.',
+        'type' => 'Imported ODF Doc'
+      }
+    },
+    'count' => '1',
     'page' => '1'
   }
 };

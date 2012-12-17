@@ -72,6 +72,15 @@ sub test {
   $data{textSearch} = undef;
 
 
+  # NULL title
+  o_log( "NULL title" );
+  $data{textSearch} = 'fantastical';
+  $data{subaction} = 'count';
+  o_log( Dumper( directRequest( \%data ) ) );
+  $data{subaction} = 'fullList';
+  o_log( Dumper( directRequest( \%data ) ) );
+
+
   # Text search - ocr hits
   o_log( "Text search - matches on OCR text" );
   $data{textSearch} = 'is ocr text';
