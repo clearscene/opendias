@@ -130,6 +130,9 @@ char *send_command(char *command) {
         return o_strdup(deviceListCache);
       }
       o_log(INFORMATION, "We dont have a cache of the result, we're going to have to wait.");
+      free(command);
+      free(answer);
+      return o_strdup("BUSY");
     }
   }
   else if( 0 == strncmp(command,"internalDoScanningOperation", 27) ) {

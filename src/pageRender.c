@@ -60,6 +60,10 @@ char *getScannerList(void *lang) {
   char *answer = send_command( o_printf("internalGetScannerList:%s", (char *)lang) ); // scan.c
   o_log(DEBUGM, "RESPONSE WAS: %s", answer);
 
+  if( 0 == strcmp(answer, "BUSY") ) {
+    free( answer );
+    return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>BUSY</error></Response>");
+  }
   return answer;
 }
 
