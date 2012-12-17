@@ -20,6 +20,11 @@ sub test {
   my $sth = $dbh->prepare("SELECT status FROM scan_progress WHERE client_id = ? ");
 
   my $cookie_jar = HTTP::Cookies->new();
+
+  my %list = (
+    __cookiejar => $cookie_jar,
+    action => 'getScannerList',
+  );
   my %scan = (
     __cookiejar => $cookie_jar,
     action => 'doScan',
@@ -44,10 +49,14 @@ sub test {
   my $scan_uuid = $result->{DoScan}->{scanuuid};
   return 1 unless defined $scan_uuid && $scan_uuid ne '';
   $followup{scanprogressid} = $scan_uuid;
+  sleep(1);
+
+
+  # SANE is blocked and no cache to give
+  o_log( "Total fail on getScannerList = " . Dumper( directRequest( \%list ) ) );
 
 
   # Attempt a second scan - ensure it is rejected
-  sleep(1);
   $result = directRequest( \%scan );
   o_log( "blocked Scan, request = " . Dumper( $result ) );
   sleep(1);
@@ -73,18 +82,27 @@ sub test {
       last;
     }
   }
+
+
   my %getstatus = (
     __cookiejar => $cookie_jar,
     action => 'getScanningProgress',
     scanprogressid => $scan_uuid,
   );
-  o_log( "Progress of scann = " . Dumper( directRequest( \%getstatus) ) );
+  o_log( "Progress of scan = " . Dumper( directRequest( \%getstatus) ) );
 
+
+  # SANE is no longer blocked
+  o_log( "a good response on getScannerList = " . Dumper( directRequest( \%list ) ) );
 
 
   # Tell the system, the second page is ready for scanning
   o_log( "Result of page turn request = " . Dumper( directRequest( \%followup ) ) );
+  sleep(1);
 
+
+  # SANE is blocked, nut we have cache to give
+  o_log( "cached response on getScannerList = " . Dumper( directRequest( \%list ) ) );
 
 
   # Wait for the second page to finish scanning
