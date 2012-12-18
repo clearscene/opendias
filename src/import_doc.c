@@ -24,6 +24,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <magic.h>
+#include <leptonica/allheaders.h>
 
 #include "main.h"
 #include "dbaccess.h"
