@@ -20,7 +20,7 @@ sub testProfile {
 sub updateStartCommand {
   my $startCommand = shift;
   chomp( my $pwd = `pwd` );
-  my $prefix = "LD_LIBRARY_PATH=$pwd/override_libs ";
+  my $prefix = "LD_LIBRARY_PATH=$pwd/override_libs/libtesseract:$pwd/override_libs/liblept ";
   $$startCommand =~ s/^/$prefix/g;
   o_log("Updated start command to use overidden libs");
 }

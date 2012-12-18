@@ -105,10 +105,10 @@ doneocr :
 entrydate : [YYYY-MM-DD HH:MM:SS]
 filetype : 4
 hardcopyKept : 1
-lines : 500
+lines : 1900
 ocrtext : Example OCR output.
 pages : 1
-ppl : 387
+ppl : 1500
 resolution : 0
 title : 
 ------------------ row 6 ------------------

@@ -33,7 +33,7 @@ LOG-OUTPUT
 -date-:-thread-:INF: Processing request for: checkLogin
 -date-:-thread-:INF: Processing request for: uploadfile
 -date-:-thread-:ERR: Uploaded file looks to be of type: image/jpeg
--date-:-thread-:INF: Convertion process: Loaded (depth: 32)
+-date-:-thread-:INF: Convertion process: Loaded (depth: 8)
 -date-:-thread-:INF: Convertion process: Reduced depth to 8
 -date-:-thread-:INF: Processing request for: uploadfile
 -date-:-thread-:ERR: Uploaded file looks to be of type: application/vnd.oasis.opendocument.text
