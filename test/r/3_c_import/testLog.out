@@ -140,55 +140,7 @@ entrydate : [YYYY-MM-DD HH:MM:SS]
 filetype : 3
 hardcopyKept : 1
 lines : 0
-ocrtext :                            An Overview of the Tesseract OCR Engine
-                                                     Ray Smith
-                                                    Google Inc.
-                                            theraysmith@gmail.com
-                       Abstract
-                                                             2. Architecture
-    The Tesseract OCR engine, as was the HP Research
-Prototype in the UNLV Fourth Annual Test of OCR                  Since HP had independently-developed page layout
-Accuracy[1], is described in a comprehensive                 analysis technology that was used in products, (and
-overview. Emphasis is placed on aspects that are novel       therefore not released for open-source) Tesseract never
-or at least unusual in an OCR engine, including in           needed its own page layout analysis. Tesseract
-particular the line finding, features/classification         therefore assumes that its input is a binary image with
-methods, and the adaptive classifier.                        optional polygonal text regions defined.
-                                                                 Processing follows a traditional step-by-step
-                                                             pipeline, but some of the stages were unusual in their
-1. Introduction – Motivation and History                     day, and possibly remain so even now. The first step is
-                                                             a connected component analysis in which outlines of
-    Tesseract is an open-source OCR engine that was          the components are stored. This was a computationally
-developed at HP between 1984 and 1994. Like a super-         expensive design decision at the time, but had a
-nova, it appeared from nowhere for the 1995 UNLV             significant advantage: by inspection of the nesting of
-Annual Test of OCR Accuracy [1], shone brightly with         outlines, and the number of child and grandchild
-its results, and then vanished back under the same           outlines, it is simple to detect inverse text and
-cloak of secrecy under which it had been developed.          recognize it as easily as black-on-white text. Tesseract
-Now for the first time, details of the architecture and      was probably the first OCR engine able to handle
-algorithms can be revealed.                                  white-on-black text so trivially. At this stage, outlines
-    Tesseract began as a PhD research project [2] in HP      are gathered together, purely by nesting, into Blobs.
-Labs, Bristol, and gained momentum as a possible                 Blobs are organized into text lines, and the lines and
-software and/or hardware add-on for HP’s line of             regions are analyzed for fixed pitch or proportional
-flatbed scanners. Motivation was provided by the fact        text. Text lines are broken into words differently
-that the commercial OCR engines of the day were in           according to the kind of character spacing. Fixed pitch
-their infancy, and failed miserably on anything but the      text is chopped immediately by character cells.
-best quality print.                                          Proportional text is broken into words using definite
-    After a joint project between HP Labs Bristol, and       spaces and fuzzy spaces.
-HP’s scanner division in Colorado, Tesseract had a               Recognition then proceeds as a two-pass process. In
-significant lead in accuracy over the commercial             the first pass, an attempt is made to recognize each
-engines, but did not become a product. The next stage        word in turn. Each word that is satisfactory is passed to
-of its development was back in HP Labs Bristol as an         an adaptive classifier as training data. The adaptive
-investigation of OCR for compression. Work                   classifier then gets a chance to more accurately
-concentrated more on improving rejection efficiency          recognize text lower down the page.
-than on base-level accuracy. At the end of this project,         Since the adaptive classifier may have learned
-at the end of 1994, development ceased entirely. The         something useful too late to make a contribution near
-engine was sent to UNLV for the 1995 Annual Test of          the top of the page, a second pass is run over the page,
-OCR Accuracy[1], where it proved its worth against           in which words that were not recognized well enough
-the commercial engines of the time. In late 2005, HP         are recognized again.
-released Tesseract for open source. It is now available          A final phase resolves fuzzy spaces, and checks
-at http://code.google.com/p/tesseract-ocr.                   alternative hypotheses for the x-height to locate small-
-                                                             cap text.
-0-7695-2822-8/07 $25.00 © 2007 IEEE                      629
-
+ocrtext : placeholder text
 pages : 1
 ppl : 0
 resolution : 0
@@ -199,7 +151,7 @@ File 5_1.jpg has MD5 of a46d421806a9c01169d5c472ea5462a5
 File 6.odt has MD5 of 4bfae85ddae5adacf88b52e8d42dcfaa
 File 6_thumb.png has MD5 of 68294bbeabd83d8220799b5f1a8c6784
 File 7.pdf has MD5 of 0e79ba199e8484ba9e3fc77472a19fb0
-File 7_thumb.jpg has MD5 of ecc54a2ffe5b32436bcfb410a1fefe6e
-File x7_thumb.jpg has MD5 of ecc54a2ffe5b32436bcfb410a1fefe6e
+File 7_thumb.jpg has MD5 of 9735115f4e2f7be156c2a549386de787
+File x7_thumb.jpg has MD5 of 9735115f4e2f7be156c2a549386de787
 Stopping service
 Waiting for valgrind to finish.
