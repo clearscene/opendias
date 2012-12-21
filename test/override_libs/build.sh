@@ -35,3 +35,22 @@ ln -s liblept.so.3 liblept.so
 cd ../
 
 
+# Poppler
+#
+# Poppler is a wee bit more complex than other libs. Other libs we can just implement the methods
+# we know we need, poppler has a deep structure of interdependency, so that would mean we'de 
+# have to stub out dozens on methods, just to override the one we're interested in.
+# Therefore, we just compile the bits were interested in and then link in the full static lib
+# into our skellinton shared lib, we're setting ignore duplicate defs which will override the
+# method provided by the static lib (with ours), but make all the others available unchanged.
+#
+cd libpoppler
+echo Building libpoppler
+rm -f libpoppler-cpp.so* libpoppler.o
+g++ -fPIC -g -c -Wall libpoppler.cc
+g++ -shared -Wl,-soname,libpoppler-cpp.so.0 -o libpoppler-cpp.so.0.2.0 -Wl,-zmuldefs libpoppler.o -Wl,-whole-archive /usr/lib/i386-linux-gnu/libpoppler-cpp.a -Wl,-no-whole-archive -lc -lpoppler
+ln -s libpoppler-cpp.so.0.2.0 libpoppler-cpp.so.0
+ln -s libpoppler-cpp.so.0 libpoppler-cpp.so
+cd ../
+
+
