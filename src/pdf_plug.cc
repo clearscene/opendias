@@ -48,8 +48,8 @@ extern "C" char *parse_pdf( const char *pdf_filename, const char *out_filename )
   const std::string file_name(pdf_filename);
   std::auto_ptr<poppler::document> doc( poppler::document::load_from_file(file_name) );
 
-  if (!doc.get()) {
-    o_log(ERROR, "loading error");
+  if ( ! doc.get() ) {
+    o_log(ERROR, "PDF could not be loaded");
   }
 
   if (doc->is_locked()) {
@@ -78,7 +78,7 @@ extern "C" char *parse_pdf( const char *pdf_filename, const char *out_filename )
     o_log(ERROR, "rendering failed");
   }
   else {
-    o_log(DEBUGM, "Thumbnail extracted from the PDF");
+    o_log(ERROR, "Image generated from the PDF");
   }
  
   if ( ! img.save(out_filename, "jpg") ) {
