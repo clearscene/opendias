@@ -19,16 +19,15 @@
 * 3_9_access
 * 3_a_scanning
 * 3_b_validation
-* 3_c_import (need to add 'regenerateThumb')
+* 3_c_import 
 * 3_d_language_selection
 * 3_e_forbidden_requests
-  3_f_update_user_permissions
+  3_f_update_user_n_user_permissions
 
-* 8_1_basic_pages
-* 8_2_doc_detail
-* 8_3_doc_detail_missing
-* 8_4_scan
-
+  8_1_basic_pages
+  8_2_doc_detail
+  8_3_doc_detail_missing
+  8_4_scan
   8_11-MainWindow-display
   8_12-MainWindow-dbDisplay
   8_13-MainWindow-fieldSorting
