@@ -40,7 +40,7 @@ int setup (char *configFile) {
   struct simpleLinkedList *rSet;
   char *location, *conf, *sql, *config_option, *config_value;
 
-	printf("entering setup\n");
+  printf("entering setup\n");
 
   // Defaults
   VERBOSITY = DEBUGM;
@@ -72,6 +72,7 @@ int setup (char *configFile) {
     free(location);
     return 1;
   }
+  free(location);
 
   o_log(INFORMATION, "|Current config is: ");
   sql = o_strdup("SELECT config_option, config_value FROM config");
@@ -82,15 +83,15 @@ int setup (char *configFile) {
       config_option = o_strdup(readData_db(rSet, "config_option"));
       config_value = o_strdup(readData_db(rSet, "config_value"));
 
-	if ( config_option == NULL || config_value == NULL ) {
-		printf("either option or value is NULL\n");
-	} else {
-		//o_log(INFORMATION, "    %s = %s", config_option, config_value);
-		//remark: the pipe in the message causes o_log i_o_log to crash
-		//	caused by debug.c i_o_log by double use of vprintf
-		o_log(INFORMATION, "|    %s = %s", config_option, config_value);
-	}
-
+      if ( config_option == NULL || config_value == NULL ) {
+        printf("either option or value is NULL\n");
+      } 
+      else {
+        //o_log(INFORMATION, "    %s = %s", config_option, config_value);
+        //remark: the pipe in the message causes o_log i_o_log to crash
+        //	caused by debug.c i_o_log by double use of vprintf
+        o_log(INFORMATION, "|    %s = %s", config_option, config_value);
+      }
 
       if( 0 == strcmp(config_option, "log_verbosity") ) {
         VERBOSITY = atoi(config_value);
@@ -104,18 +105,17 @@ int setup (char *configFile) {
   free(sql);
 
   return 0;
-
 }
 
 void usage(void) {
-    fprintf(stderr,"openDIAS. v%s\n", PACKAGE_VERSION);
-    fprintf(stderr,"usage: opendiasconfig [options] <setting> <value>\n");
-    fprintf(stderr,"\n");
-    fprintf(stderr,"Where:\n");
-    fprintf(stderr,"   -c <file> = specify config \"file\"\n");
-    fprintf(stderr,"          -h = show this page\n");
-    fprintf(stderr,"-s <setting> = config option to update\n");
-    fprintf(stderr,"  -v <value> = value to update the config option to\n");
+    fprintf(stdout,"openDIAS. v%s\n", PACKAGE_VERSION);
+    fprintf(stdout,"usage: opendiasconfig [options] <setting> <value>\n");
+    fprintf(stdout,"\n");
+    fprintf(stdout,"Where:\n");
+    fprintf(stdout,"   -c <file> = specify config \"file\"\n");
+    fprintf(stdout,"          -h = show this page\n");
+    fprintf(stdout,"-s <setting> = config option to update\n");
+    fprintf(stdout,"  -v <value> = value to update the config option to\n");
 }
 
 void close_all() {
@@ -123,6 +123,7 @@ void close_all() {
   o_log(DEBUGM, "|Finished");
   close_db ();
   free(BASE_DIR);
+  free(LOG_DIR);
 }
 
 void update_config_option( char *option, char *value ) {
@@ -143,6 +144,7 @@ void update_config_option( char *option, char *value ) {
   else {
     o_log(INFORMATION, "|    Successful.");
   }
+  free(sql);
 	o_log(DEBUGM,"leaving update_config_option\n");
 }
 

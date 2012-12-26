@@ -48,6 +48,7 @@ Use the application, by visiting:
   sqlite3
   microhttpd
   uuid
+  ssl
 
 2.2 Optional
 ------------ 
@@ -76,12 +77,12 @@ On, Debian or Ubuntu, you can do this by running:
 
   sudo apt-get install build-essential libsqlite3-dev libsane-dev \
     libmicrohttpd-dev uuid-dev libleptonica-dev libpoppler-cpp-dev \
-    libtesseract-dev libxml2-dev libzzip-dev libmagic-dev
+    libtesseract-dev libxml2-dev libzzip-dev libmagic-dev libssl-dev
 
 On, RedHat or Fedora, you can do this by running:
 
   su - 
-  yum install gcc-c++ make sqlite-devel libmicrohttpd-devel \
+  yum install gcc-c++ make sqlite-devel libmicrohttpd-devel libssl-devel \
     libuuid-devel sane-backends-devel leptonica-devel file-devel \
     tesseract-devel libxml2-devel zziplib-devel poppler-cpp-devel
 

@@ -162,7 +162,13 @@ char *getDocDetail (char *documentId, char *lang ) {
   rSet = runquery_db(sql, vars);
   if( rSet ) {
     do  {
-      o_concatf(&docs, docsTemplate, readData_db(rSet, "linkeddocid"), readData_db(rSet, "title") );
+      title = o_strdup(readData_db(rSet, "title"));
+      if( 0 == strcmp(title, "NULL") ) {
+        free(title);
+        title = o_strdup( getString( "LOCAL_default_title", lang ) );
+      }
+      o_concatf(&docs, docsTemplate, readData_db(rSet, "linkeddocid"), title );
+      free( title );
     } while ( nextRow( rSet ) );
   }
   free_recordset( rSet );
@@ -173,19 +179,13 @@ char *getDocDetail (char *documentId, char *lang ) {
 
 
   // Get docinformation
-  //
+  // (we will get a result, since we've checked this above)
   sql = o_strdup("SELECT * FROM docs WHERE docid = ?");
   vars = sll_init();
   sll_append(vars, DB_INT );
   sll_append(vars, &doc_id );
   rSet = runquery_db(sql, vars);
 
-  if( rSet == NULL ) {
-    o_log(ERROR, "Could not select record %s.", documentId);
-    free_recordset( rSet );
-    free(sql);
-    return NULL;
-  }
 
   // Build Human Readable
   //
@@ -227,7 +227,7 @@ char *getDocDetail (char *documentId, char *lang ) {
           humanReadableDate, readData_db(rSet, "pages"), readData_db(rSet, "ocrtext"), 
           readData_db(rSet, "ppl"), readData_db(rSet, "lines"), tags, docs,
           readData_db(rSet, "hardcopyKept"),
-			    readData_db(rSet, "actionrequired") );
+          readData_db(rSet, "actionrequired") );
 
   free_recordset(rSet);
   free(sql);
@@ -277,13 +277,13 @@ char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
     }
   } 
 
-	else if ( 0 == strcmp(kkey, "hardcopyKept") ) {
-		if ( vvalue && 0 == strcmp(vvalue,"true") ) {
-			rc = updateDocValue_int(docid,kkey ,1);
-		} else {
-			rc = updateDocValue_int(docid,kkey, 0);
-		}
-	}
+  else if ( 0 == strcmp(kkey, "hardcopyKept") ) {
+    if ( vvalue && 0 == strcmp(vvalue,"true") ) {
+      rc = updateDocValue_int(docid,kkey ,1);
+    } else {
+      rc = updateDocValue_int(docid,kkey, 0);
+    }
+  }
 
   else 
     rc = updateDocValue(docid, kkey, vvalue);

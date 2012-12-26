@@ -1,0 +1,94 @@
+STDOUT
+--------------------------------------------------
+LOG-OUTPUT
+-date-:-thread-:INF: Running in daemon mode.
+-date-:-thread-:INF: Child process created [CONFIG_FILE]
+-date-:-thread-:DBG: setup launched
+-date-:-thread-:INF: Setting default log (/tmp/opendias_test/var/log/opendias) verbosity to 4.
+-date-:-thread-:INF: Using config file: [CONFIG_FILE]
+-date-:-thread-:INF: Which says the database is at: /tmp/opendiastest
+-date-:-thread-:DBG: database file is /tmp/opendiastest/openDIAS.sqlite3
+-date-:-thread-:DBG: Dir structure is in-place, database should exist
+-date-:-thread-:DBG: Checking for a populated database
+-date-:-thread-:DBG: Run Query [RECORDSET]
+-date-:-thread-:DBG: We have one. So will check to see what version it is.
+-date-:-thread-:DBG: Free recordset [RECORDSET]
+-date-:-thread-:DBG: Run Query [RECORDSET]
+-date-:-thread-:DBG: Database reports that it is version: 7
+-date-:-thread-:DBG: Free recordset [RECORDSET]
+-date-:-thread-:INF: Connected to database
+-date-:-thread-:INF: database opened
+-date-:-thread-:DBG: Run Query [RECORDSET]
+-date-:-thread-:INF: Config setting: log_verbosity = 3
+-date-:-thread-:INF: Moving log verbosity from 4 to 3
+-date-:-thread-:INF: Config setting: scan_directory = /tmp/opendiastest
+-date-:-thread-:INF: Config setting: show_all_available = 1
+-date-:-thread-:INF: Config setting: port = 8988
+-date-:-thread-:INF: Config setting: log_directory = /tmp/opendias_test/var/log/opendias
+-date-:-thread-:INF: Created directory.
+-date-:-thread-:INF: Sane backend started
+-date-:-thread-:INF: Sane command socket is open
+-date-:-thread-:INF: ... Starting up the openDias service.
+-date-:-thread-:INF: ready to accept connectons
+-date-:-thread-:INF: Processing request for: checkLogin
+-date-:-thread-:ERR: request '/' does not start '/opendias'
+-date-:-thread-:ERR: request '/../unknown.html' does not start '/opendias'
+-date-:-thread-:ERR: request '/unknown.html' does not start '/opendias'
+-date-:-thread-:ERR: request '/images/unknown.png' does not start '/opendias'
+-date-:-thread-:ERR: request '/images/unknown.jpg' does not start '/opendias'
+-date-:-thread-:ERR: request '/scans/unknown.jpg' does not start '/opendias'
+-date-:-thread-:ERR: request '/includes/unknown.js' does not start '/opendias'
+-date-:-thread-:ERR: request '/style/unknown.css' does not start '/opendias'
+-date-:-thread-:ERR: request '/unknown' does not start '/opendias'
+-date-:-thread-:ERR: request '/unknown/' does not start '/opendias'
+-date-:-thread-:ERR: request '/dynamic' does not start '/opendias'
+-date-:-thread-:ERR: request '/dynamic/' does not start '/opendias'
+-date-:-thread-:INF: Serving request: 
+-date-:-thread-:INF: Serving request: /
+-date-:-thread-:INF: Serving request: /unknown.html
+-date-:-thread-:ERR: File '/tmp/opendias_test/share/opendias/webcontent/unknown.html.en' is not readable
+-date-:-thread-:ERR: Could not open file: /tmp/opendias_test/share/opendias/webcontent/unknown.html
+-date-:-thread-:INF: Serving request: /images/unknown.png
+-date-:-thread-:ERR: Could not open file: /tmp/opendias_test/share/opendias/webcontent/images/unknown.png
+-date-:-thread-:INF: Serving request: /images/unknown.jpg
+-date-:-thread-:ERR: Could not open file: /tmp/opendias_test/share/opendias/webcontent/images/unknown.jpg
+-date-:-thread-:INF: Serving request: /scans/unknown.jpg
+-date-:-thread-:ERR: Could not open file: /tmp/opendiastest/scans/unknown.jpg
+-date-:-thread-:INF: Serving request: /includes/unknown.js
+-date-:-thread-:ERR: Could not open file: /tmp/opendias_test/share/opendias/webcontent/includes/unknown.js
+-date-:-thread-:INF: Serving request: /style/unknown.css
+-date-:-thread-:ERR: Could not open file: /tmp/opendias_test/share/opendias/webcontent/style/unknown.css
+-date-:-thread-:INF: Serving request: /unknown
+-date-:-thread-:WRN: disallowed content: static file of unknown type
+-date-:-thread-:INF: Serving request: /unknown/
+-date-:-thread-:WRN: disallowed content: static file of unknown type
+-date-:-thread-:INF: Serving request: /dynamic
+-date-:-thread-:WRN: disallowed content: static file of unknown type
+-date-:-thread-:INF: Serving request: /dynamic/
+-date-:-thread-:WRN: disallowed content: static file of unknown type
+-date-:-thread-:ERR: request '/' does not start '/opendias'
+-date-:-thread-:ERR: request '/../unknown.html' does not start '/opendias'
+-date-:-thread-:ERR: request '/unknown.html' does not start '/opendias'
+-date-:-thread-:ERR: request '/images/unknown.png' does not start '/opendias'
+-date-:-thread-:ERR: request '/images/unknown.jpg' does not start '/opendias'
+-date-:-thread-:ERR: request '/scans/unknown.jpg' does not start '/opendias'
+-date-:-thread-:ERR: request '/includes/unknown.js' does not start '/opendias'
+-date-:-thread-:ERR: request '/style/unknown.css' does not start '/opendias'
+-date-:-thread-:ERR: request '/unknown' does not start '/opendias'
+-date-:-thread-:ERR: request '/unknown/' does not start '/opendias'
+-date-:-thread-:ERR: request '/dynamic' does not start '/opendias'
+-date-:-thread-:ERR: request '/dynamic/' does not start '/opendias'
+-date-:-thread-:WRN: disallowed content: post request for unknown method
+ ----- line duplicated more than three times ----- 
+-date-:-thread-:WRN: disallowed content: post request for unknown method
+-date-:-thread-:ERR: no requested 'action' given.
+-date-:-thread-:INF: Serving request: /
+ ----- line duplicated more than three times ----- 
+-date-:-thread-:INF: Serving request: /
+-date-:-thread-:ERR: Could not build a new session
+-date-:-thread-:INF: Serving request: /
+-date-:-thread-:ERR: Could not build a new session
+-date-:-thread-:INF: Serving request: /
+-date-:-thread-:INF: Received SIGUSR1 signal.
+-date-:-thread-:INF: openDias service is shutting down....
+-date-:-thread-:INF: openDias service has shutdown.

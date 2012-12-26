@@ -1,0 +1,87 @@
+Copying pre defined environment
+Copying default database
+Updated start command to use overidden libs
+STARTING app...
+Now ready
+No need for a web client for this test.
+Sending request = action=checkLogin&password=password&username=test-user
+Sending request = action=doScan&deviceid=test%3A0&format=Grey%20Scale&ocr=-&pagelength=100&pages=2&resolution=100
+startScan = $VAR1 = {
+  'DoScan' => {
+    'scanuuid' => '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]'
+  }
+};
+
+Sending request = action=getScannerList
+Total fail on getScannerList = $VAR1 = {
+  'error' => 'BUSY'
+};
+
+Sending request = action=doScan&deviceid=test%3A0&format=Grey%20Scale&ocr=-&pagelength=100&pages=2&resolution=100
+blocked Scan, request = $VAR1 = {
+  'DoScan' => {
+    'scanuuid' => '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]'
+  }
+};
+
+blocked Scan, result = Correctly Marked as blocked
+Sending request = action=getScanningProgress&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+Progress of scan = $VAR1 = {
+  'ScanningProgress' => {
+    'status' => '7',
+    'value' => '2'
+  }
+};
+
+Sending request = action=getScannerList
+a good response on getScannerList = $VAR1 = {
+  'ScannerList' => {
+    'Devices' => {
+      'Device' => {
+        'Formats' => {
+          'format' => 'Grey Scale'
+        },
+        'default' => '300',
+        'host' => 'opendias server',
+        'max' => '800',
+        'min' => '50',
+        'model' => 'Frontend-tester',
+        'name' => 'test:0',
+        'type' => 'Virtual Device',
+        'vendor' => 'Noname'
+      }
+    }
+  }
+};
+
+Sending request = action=nextPageReady&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+Result of page turn request = $VAR1 = {
+  'NextPageReady' => {
+    'result' => 'OK'
+  }
+};
+
+Sending request = action=getScannerList
+cached response on getScannerList = $VAR1 = {
+  'ScannerList' => {
+    'Devices' => {
+      'Device' => {
+        'Formats' => {
+          'format' => 'Grey Scale'
+        },
+        'default' => '300',
+        'host' => 'opendias server',
+        'max' => '800',
+        'min' => '50',
+        'model' => 'Frontend-tester',
+        'name' => 'test:0',
+        'type' => 'Virtual Device',
+        'vendor' => 'Noname'
+      }
+    },
+    'cached' => 'true'
+  }
+};
+
+Stopping service
+Waiting for valgrind to finish.

@@ -385,13 +385,20 @@ int createSocket(void) {
 #endif // CAN_SCAN //
 
 void usage(void) {
-    fprintf(stderr,"openDIAS. v%s\n", PACKAGE_VERSION);
-    fprintf(stderr,"usage: opendias <options>\n");
-    fprintf(stderr,"\n");
-    fprintf(stderr,"Where:\n");
-    fprintf(stderr,"          -d = don't turn into a daemon once started\n");
-    fprintf(stderr,"          -c = specify config \"file\"\n");
-    fprintf(stderr,"          -h = show this page\n");
+    fprintf(stdout,"openDIAS. v%s\n", PACKAGE_VERSION);
+    fprintf(stdout,"usage: opendias <options>\n");
+    fprintf(stdout,"\n");
+    fprintf(stdout,"Where:\n");
+    fprintf(stdout,"          -d = don't turn into a daemon once started\n");
+    fprintf(stdout,"          -c = specify config \"file\"\n");
+    fprintf(stdout,"          -h = show this page\n");
+
+    // Close files opened by libs (leptonica).
+    // Gotta go this, or regression testing will throw a wobbeler
+    int i;
+    for (i = getdtablesize()-1; i > 0; --i) {
+      close(i);
+    }
 }
 
 int main (int argc, char **argv) {

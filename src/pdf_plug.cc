@@ -48,25 +48,22 @@ extern "C" char *parse_pdf( const char *pdf_filename, const char *out_filename )
   const std::string file_name(pdf_filename);
   std::auto_ptr<poppler::document> doc( poppler::document::load_from_file(file_name) );
 
-  if (!doc.get()) {
-    o_log(ERROR, "loading error");
+  if ( ! doc.get() ) {
+    o_log(ERROR, "PDF could not be loaded");
   }
 
   if (doc->is_locked()) {
     o_log(ERROR, "encrypted document");
   }
 
-  // try to get page 1, but if the doc has only one page, then get that.
-  // reemmber, we're 0 indexed.
   int doc_page = 0; 
-  //if ( doc_page >= doc->pages() ) {
-  //  doc_page = 0;
-  //}
-
   std::auto_ptr<poppler::page> p( doc->create_page(doc_page) );
 
   if ( ! p.get() ) {
     o_log(ERROR, "Could not get the PDF page.");
+  }
+  else {
+    o_log(ERROR, "PDF page successfuly parsed");
   }
 
   //
@@ -80,9 +77,15 @@ extern "C" char *parse_pdf( const char *pdf_filename, const char *out_filename )
   if ( ! img.is_valid() ) {
     o_log(ERROR, "rendering failed");
   }
+  else {
+    o_log(ERROR, "Image generated from the PDF");
+  }
  
   if ( ! img.save(out_filename, "jpg") ) {
     o_log(ERROR, "saving to file failed");
+  }
+  else {
+    o_log(DEBUGM, "Thumbnail saved");
   }
 
   //
@@ -91,6 +94,7 @@ extern "C" char *parse_pdf( const char *pdf_filename, const char *out_filename )
   poppler::byte_array ocr_text_ba = p->text( p->page_rect(), poppler::page::physical_layout ).to_utf8(); 
   ocr_text_ba.push_back( 0 ); // Add a NULL terminator for the C char *
   std::string ocr_text( ocr_text_ba.begin(), ocr_text_ba.end() );
+  o_log(ERROR, "Text Extracted from the PDF");
 
   return strdup( ocr_text.c_str() );
 }

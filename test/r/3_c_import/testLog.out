@@ -1,0 +1,157 @@
+Copying pre defined environment
+Copying default database
+Updated start command to use overidden libs
+STARTING app...
+Now ready
+No need for a web client for this test.
+Sending request = action=checkLogin&password=password&username=test-user
+Uploading file of type JPG...
+Response was = $VAR1 = '<html><HEAD><META HTTP-EQUIV="refresh" CONTENT="0;URL=/opendias/docDetail.html?docid=5"></HEAD><body></body></html>';
+
+Uploading file of type ODF...
+Response was = $VAR1 = '<html><HEAD><META HTTP-EQUIV="refresh" CONTENT="0;URL=/opendias/docDetail.html?docid=6"></HEAD><body></body></html>';
+
+Uploading file of type PDF...
+Response was = $VAR1 = '<html><HEAD><META HTTP-EQUIV="refresh" CONTENT="0;URL=/opendias/docDetail.html?docid=7"></HEAD><body></body></html>';
+
+Uploading file of type UNK...
+Response was = $VAR1 = '<p>An internal server error has occured.</p>';
+
+Generating a PDF doc thumbnail
+Sending request = action=regenerateThumb&docid=7
+$VAR1 = {
+  'RegenerateThumb' => {
+    'result' => 'OK'
+  }
+};
+
+SELECT * FROM docs
+------------------ row 1 ------------------
+actionrequired : 0
+depth : 8
+docdated : 31
+docdatem : 12
+docdatey : 2010
+docid : 1
+doneocr : 1
+entrydate : 2011-01-02T21:13:04.393946Z
+filetype : 2
+hardcopyKept : 0
+lines : 3509
+ocrtext : This is the OCR text.
+pages : 1
+ppl : 2519
+resolution : 300
+title : Test Titletext
+------------------ row 2 ------------------
+actionrequired : 1
+depth : 8
+docdated : 31
+docdatem : 12
+docdatey : 2012
+docid : 2
+doneocr : 1
+entrydate : 2011-01-04T21:13:05.393946Z
+filetype : 3
+hardcopyKept : 0
+lines : 3509
+ocrtext : This is final OCR text 3.
+pages : 1
+ppl : 2519
+resolution : 300
+title : Test 3 Title
+------------------ row 3 ------------------
+actionrequired : 1
+depth : 8
+docdated : 1
+docdatem : 1
+docdatey : 2011
+docid : 3
+doneocr : 1
+entrydate : 2011-01-04T21:13:04.393946Z
+filetype : 2
+hardcopyKept : 0
+lines : 3509
+ocrtext : This is OCR text 2.
+pages : 1
+ppl : 2519
+resolution : 300
+title : Test 2 Title text
+------------------ row 4 ------------------
+actionrequired : 0
+depth : 8
+docdated : 30
+docdatem : 12
+docdatey : 2010
+docid : 4
+doneocr : 1
+entrydate : 2011-01-03T21:13:04.393946Z
+filetype : 4
+hardcopyKept : 0
+lines : 3509
+ocrtext : This is OCR text 4.
+pages : 1
+ppl : 2519
+resolution : 300
+title : Test 1 TitleText 2
+------------------ row 5 ------------------
+actionrequired : 
+depth : 8
+docdated : 
+docdatem : 
+docdatey : 
+docid : 5
+doneocr : 
+entrydate : [YYYY-MM-DD HH:MM:SS]
+filetype : 4
+hardcopyKept : 1
+lines : 1900
+ocrtext : Example OCR output.
+pages : 1
+ppl : 1500
+resolution : 0
+title : 
+------------------ row 6 ------------------
+actionrequired : 
+depth : 8
+docdated : 
+docdatem : 
+docdatey : 
+docid : 6
+doneocr : 
+entrydate : [YYYY-MM-DD HH:MM:SS]
+filetype : 1
+hardcopyKept : 1
+lines : 0
+ocrtext : "ODF Alliance" formed to support OpenDocument format  3/3/2006 8:25:36 PM, by  Jeremy Reimer A consortium of companies and organizations have banded together to form the  "ODF Alliance,"  a group dedicated to promoting the office software file format first implemented by OpenOffice.org. The alliance consists of more than 35 members from various countries around the world. It includes companies such as Red Hat, IBM, Novell, Sun Microsystems, and Corel, and governmental organizations such as the American Library Association and the Information and Communications Technology council for the city of Vienna. The  OpenDocument  file format was formed by the industry consortium OASIS, a group headed by Sun Microsystems, and was based on OpenOffice.org's native file format. OpenOffice.org is itself an open-sourced version of Star Office, the proprietary office suite that Sun purchased when it acquired the German company Star Division in 1999. The idea behind OpenDocument was to use a text-based XML format (compressed in a zip file to conserve disk space) in order to make it easy for other products to interoperate with it. The specification was finalized in 2005 and OpenOffice.org was the first software suite to support it. Other projects, such as KOffice, AbiWord, and IBM Workplace are adding support for the ODF format, either natively or through plug-in format translators. In today's highly networked world, it turns out that operability is a very useful thing to have, which is why Microsoft decided that they would also jump on the XML bandwagon, introducing a new XML-based file format (.docx) for Office 2003. Not only that, but the company is planning to make the next version of the Office XML format the default for Office 2007 (formerly known as Office 12). This means that when users of Office 2007 go to save a file, they will automatically save in .docx, not .doc. While most people don't consider file formats to be terribly exciting, the question of which format to adopt led to an increasingly dramatic series of announcements from the government of Massachusetts. In January 2005, the government  approved  Office XML 2003 as an appropriate file format, then in September of that year  reversed  their decision, stating that Office XML was unacceptable and that only OpenDocument and PDF files would be allowed. They went  back again  in November, stating that they were "very pleased" with Microsoft's submission of Office XML to the ECMA standards body, and that they were "optimistic that Office Open XML will meet our new standards for acceptable open formats." The champion of ODF in Massachusetts, CIO Peter Quinn, then suddenly announced his  resignation  in January. This announcement was followed with an assurance from Quinn's former boss that their position on ODF "remained unchanged" and that they were still committed to supporting that format. Confused yet? The so-called "controversy" over the ODF switch has generated an unbelievable amount of press, and various groups are now busy pushing governments worldwide to switch over to the ODF format. This new "alliance" joins the groups SpreadOpenDocument.org, the OpenDocument Fellowship, and the "Friends of OpenDocument" in their quest to promote the format. My own inbox is now slowly filling up with pro-ODF announcements and press releases. The push seems overtly political, as evidenced by the rhetoric used  by the ODF Alliance:  [...] 
+pages : 1
+ppl : 0
+resolution : 0
+title : 
+------------------ row 7 ------------------
+actionrequired : 
+depth : 8
+docdated : 
+docdatem : 
+docdatey : 
+docid : 7
+doneocr : 
+entrydate : [YYYY-MM-DD HH:MM:SS]
+filetype : 3
+hardcopyKept : 1
+lines : 0
+ocrtext : placeholder text
+pages : 1
+ppl : 0
+resolution : 0
+title : 
+
+
+File 5_1.jpg has MD5 of a46d421806a9c01169d5c472ea5462a5
+File 6.odt has MD5 of 4bfae85ddae5adacf88b52e8d42dcfaa
+File 6_thumb.png has MD5 of 68294bbeabd83d8220799b5f1a8c6784
+File 7.pdf has MD5 of 0e79ba199e8484ba9e3fc77472a19fb0
+File 7_thumb.jpg has MD5 of 9735115f4e2f7be156c2a549386de787
+File x7_thumb.jpg has MD5 of 9735115f4e2f7be156c2a549386de787
+Stopping service
+Waiting for valgrind to finish.

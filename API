@@ -181,7 +181,7 @@ getDocDetail -> docEditor::getDocDetail
 		<Response>
 		  <DocDetail>
 		    docid - the docid of the selected doc
-		    title - the user defined title of the selected doc
+		    title - the user defined title of the selected doc (a default text is provided if NULL)
 		    extractedText - the OCR text of the selected doc
 		    docDate - the user defined date of the selected doc
 		    scanDate - the date that the document was added to the application.
@@ -200,7 +200,7 @@ getDocDetail -> docEditor::getDocDetail
 		    <DocLinks>
 		      <doc>
 		        targetDocid - the docid of the linked doc
-            targetTitle - the user defined title of the linked doc
+            targetTitle - the user defined title of the linked doc (a default text is provided if NULL)
 		      </doc>
 		      ...
 		    </DocLinks>
@@ -254,6 +254,21 @@ deleteDoc -> docEditor::doDelete
 		  <DeleteDoc>
 		    status - indication of the update process - currently a static string 'OK'
 		  </DeleteDoc>
+		</Response>
+
+
+
+regenerateThumb -> import_doc::extractThumbnail
+  Called from: openDias.acquire.js :: ananoumouse()
+  Purpose: Creates a thumbnail of PDF documents (some PDFs imported with earlier version of openDIAS did not have a thumbnail created for them at import time)
+	Inputs:	action: fixed string 'regenerateThumb'
+          docid: the documents id
+  Outputs: 
+		<?xml version='1.0' encoding='utf-8'?>
+		<Response>
+		  <RegenerateThumb>
+		    status - indication of the update process - currently a static string 'OK'
+		  </RegenerateThumb>
 		</Response>
 
 
@@ -334,6 +349,17 @@ titleAutoComplete -> pageRender::titleAutoComplete
                 {"docid":"%s","title":"%s"},
                 ...
               ]}
+
+
+
+uploadfile -> import_doc::uploadfile
+  Called from: openDias.acquire.js :: ananoumouse()
+  Purpose: Uploads a file, determins its type and includes PDF, ODF and JPEG docs into the document store.
+  Encoding: The form submitting this request should not be an AJAX request, but instead a form submision with encoding of enctype="multipart/form-data"
+	Inputs:	action: fixed string 'uploadfile'
+          uploadfile: (of type 'file') the filename/data of the file being imported
+  Outputs: 
+    An HTML page which redirect the user to the imported doc detail page.
 
 
 

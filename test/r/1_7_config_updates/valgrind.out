@@ -1,0 +1,29 @@
+==XXXXX==  Memcheck, a memory error detector
+==XXXXX==  Copyright [details]
+==XXXXX==  Using Valgrind [version and build info]
+==XXXXX==  Command: /tmp/opendias_test/bin/opendiasconfig -s log_verbosity -v 4
+==XXXXX==  Parent PID: XXXXX.
+==XXXXX==  
+==XXXXX==  
+==XXXXX==  FILE DESCRIPTORS: 4 open at exit.
+==XXXXX==  Open file descriptor 3: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  Open file descriptor 2: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  Open file descriptor 1: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  Open file descriptor 0: [FILE PATH]
+==XXXXX==     <inherited from parent>
+==XXXXX==  
+==XXXXX==  
+==XXXXX==  HEAP SUMMARY:
+==XXXXX==      in use at exit: XXX bytes in XXX blocks
+==XXXXX==    total heap usage: XXXX allocs, XXXX frees, XXX bytes allocated
+==XXXXX==  
+==XXXXX==  All heap blocks were freed -- no leaks are possible
+==XXXXX==  
+==XXXXX==  For counts of detected and suppressed errors, rerun with: -v
+==XXXXX==  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: XXX from XXX)

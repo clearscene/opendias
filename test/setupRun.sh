@@ -84,10 +84,17 @@ rm -f /tmp/opendias_test/var/log/opendias/opendias.log
 #
 # Cleanup
 #
-rm -rf ../src/*.gcda ../src/*.gcno results
-mkdir -p results/coverage/
-mkdir -p results/resultsFiles/
+if [ "$NOBUILD" == "" ]; then
+  rm -rf results
+  rm -rf ../src/*.gcda ../src/*.gcno
+  mkdir -p results/coverage/
+else
+  # If we're not building the source, save the coverage information
+  rm -f results/buildLog.out
+  rm -rf results/resultsFiles
+fi
 
+mkdir -p results/resultsFiles/
 
 if [ "$NOBUILD" == "" ]; then
   #
@@ -196,8 +203,10 @@ fi
 # Generate baseline (coverage) information
 #
 if [ "$SKIPCOVERAGE" == "" ]; then
-  echo Getting baseline coverage information ...
-  lcov -c -i -d ../src -o results/coverage/app_base.info >> results/buildLog.out
+  if [ "$NOBUILD" == "" ]; then
+    echo Getting baseline coverage information ...
+    lcov -c -i -d ../src -o results/coverage/app_base.info >> results/buildLog.out
+  fi
 fi
 
 
@@ -242,7 +251,6 @@ echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP $INSTALLLOCATION/bin/opendias \>
 #######################################
 # Run automated tests
 echo Starting test harness ...
-#echo perl ./harness.pl -z $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@
 perl ./harness.pl -z $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@ 2> /dev/null
 #######################################
 #######################################
@@ -252,8 +260,8 @@ perl ./harness.pl -z $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@ 2> /dev/null
 # Collect process and build coverage report
 #
 if [ "$SKIPCOVERAGE" == "" ]; then
-  echo Creating run coverage information ...
-  echo Creating run coverage information ... >> results/buildLog.out
+  echo Creating total coverage report ...
+  echo Creating total coverage report... >> results/buildLog.out
   lcov -c -d ../src -o results/coverage/app_test.info >> results/buildLog.out
   lcov -a results/coverage/app_base.info -a results/coverage/app_test.info -o results/coverage/app_total.info >> results/buildLog.out
   genhtml -o results/coverage results/coverage/app_total.info >> results/buildLog.out
