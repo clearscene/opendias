@@ -9,11 +9,9 @@ Version 0.9
 
 Migrate 8_* tests to use QUnit instead of HTMLUnit. ie remove 2.3 from tests/README
 
-[wpb] Implement the remainder of the test plan 'test/regressionTests/testplan', check coverage.
-
 Fix intermittent test failures (log timings mainly) & rationalise valgrind suppressions.
 
-Print documents
+[wpb] Print documents
 
 Got a SANE busy signal - then give option to keep polling until it's available.
 
@@ -26,6 +24,8 @@ Frontend remembers user options
 Managment of users and sessions
 
 German test for session handeling / login 'n' out / user management
+
+Implement the remainder of the test plan 'test/regressionTests/testplan', check coverage.
 
 
 Version 1.0
