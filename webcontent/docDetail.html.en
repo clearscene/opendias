@@ -7,8 +7,8 @@
 <script type="text/javascript" src="/opendias/includes/sprintf-0.7-beta1.js"></script>
 <link rel="stylesheet" href="/opendias/style/jquery-ui.css" type="text/css" media="screen" /> 
 <link rel="stylesheet" href="/opendias/style/jquery.gzoom.css" type="text/css" media="screen" /> 
-<link rel="stylesheet" href="/opendias/style/jquery.easyslider.css" type="text/css" />
-<link rel="stylesheet" href="/opendias/style/jquery.tagsinput.css" type="text/css" />
+<link rel="stylesheet" href="/opendias/style/jquery.easyslider.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="/opendias/style/jquery.tagsinput.css" type="text/css" media="screen" />
 <style>
 .ui-datepicker { font-size: 11px; }
 .ui-autocomplete { font-size: 11px; max-height: 150px; overflow-y: auto; }

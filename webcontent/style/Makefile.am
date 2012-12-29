@@ -1,6 +1,7 @@
 
 web_DATA = \
 	common.css \
+	print.css \
 	datepicker.css \
 	jquery.easyslider.css \
 	jquery.tagsinput.css \

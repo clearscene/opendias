@@ -96,6 +96,12 @@ $(document).ready(function() {
                                    lighbox: false
                                    });
              }
+             $("head").append("<link rel='stylesheet' href='/opendias/style/print.css' type='text/css' media='print' />"); 
+             $("#delete").parent().append("<button id='print'>" + LOCAL_print + "</button>");
+             $("#print").bind('click', { }, 
+                                  function(e){ 
+                                      window.print(); 
+                                  });
 
            }
 

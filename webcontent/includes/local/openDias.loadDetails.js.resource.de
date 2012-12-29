@@ -7,3 +7,4 @@ LOCAL_generate_thumbnail = 'regenerieren Thumbnail';
 LOCAL_error_generating_thumbnail = 'Kann Thumbnail generieren';
 LOCAL_removing_tag = 'Entfernen tag';
 LOCAL_add_tag_default_text = 'Add a tag';
+LOCAL_print = 'Drucken';
