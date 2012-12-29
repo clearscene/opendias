@@ -46,7 +46,8 @@ enum {
 };
 
 int trigger_log_verbosity( const int );
-void o_log(const int, const char *, ...);
+void oo_log(const char *, const int, const int, const char *, ...);
+#define o_log( a, b, ... ) oo_log( __FILE__, __LINE__, a, b, ##__VA_ARGS__ )
 
 #ifdef __cplusplus
 }
