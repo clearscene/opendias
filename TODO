@@ -11,8 +11,6 @@ Migrate 8_* tests to use QUnit instead of HTMLUnit. ie remove 2.3 from tests/REA
 
 Fix intermittent test failures (log timings mainly) & rationalise valgrind suppressions.
 
-[wpb] Print documents
-
 Got a SANE busy signal - then give option to keep polling until it's available.
 
 Implement 'OCR now' on document detail page.
