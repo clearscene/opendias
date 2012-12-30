@@ -107,6 +107,7 @@ void i_o_log(const char *file, const int line, const int verbosity, const char *
 
     free(logFile);
     free(ltime);
+    free(thumb);
     free(vb);
   }
 
