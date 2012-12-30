@@ -1,5 +1,6 @@
 s/[0-9]*:[A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9]:/-date-:-thread-:/g
 s/[0-9]*:[A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9]:/-date-:-thread-:/g
+s/:[a-zA-Z0-9_]*.c:[0-9]* /:-file-:-line- /g
 s/Child process created [0-9]*/Child process created [CONFIG_FILE]/g
 s/Using config file: .*/Using config file: [CONFIG_FILE]/g
 s/t open database: .*/t open database: [ERROR]/g
