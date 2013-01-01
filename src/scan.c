@@ -340,6 +340,29 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
           }
         }
 
+        else if (strcmp (sod->name, "batch-scan") == 0) {
+          v_b = SANE_FALSE;
+          status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
+          if(status != SANE_STATUS_GOOD) {
+            handleSaneErrors("Cannot set no to batch-scan", status, paramSetRet);
+            updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
+            return 0;
+          }
+        }
+
+        else if (strcmp (sod->name, "compression") == 0) {
+          if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
+            v_c = o_strdup("None");
+            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
+            free(v_c);
+            if(status != SANE_STATUS_GOOD) {
+              handleSaneErrors("Cannot set Compression", status, paramSetRet);
+              updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
+              return 0;
+            }
+          }
+        }
+
         // For the test 'virtual scanner'
         else if (testScanner == 1) {
           status = SANE_STATUS_GOOD;
