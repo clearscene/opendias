@@ -187,7 +187,9 @@ else
 fi
 
 
-
+cd webcontent
+perl build-local-versions.pl
+cd ../
 
 
 dnl

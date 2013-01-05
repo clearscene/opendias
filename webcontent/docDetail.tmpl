@@ -14,9 +14,9 @@
 .ui-autocomplete { font-size: 11px; max-height: 150px; overflow-y: auto; }
 </style>
 
-<h2>Document Details</h2>
+<h2>---LOCAL_docdetail_title---</h2>
 
-<div id='saveAlert'>Gespeichert OK</div>
+<div id='saveAlert'>---LOCAL_docdetail_savedok---</div>
 
 <div id='leftPane'>
   <div class='picBorder'>
@@ -34,60 +34,60 @@
     <div class='data'>
       <div id='docid' class='innerLeftDisplay'>&nbsp;</div>
       <div class='innerRightDisplay'>
-        <button id='delete'>löschen</button>
+        <button id='delete'>---LOCAL_docdetail_delete---</button>
       </div>
     </div>
   </div>
 
   <div class='row'>
-    <div class='label'>Scan-Datum:</div>
+    <div class='label'>---LOCAL_docdetail_scandate---</div>
     <div id='scanDate' class='data'></div>
   </div>
 
   <div class='row'>
-    <div class='label'>Doc Type:</div>
+    <div class='label'>---LOCAL_docdetail_doctype---</div>
     <div id='type' class='data'></div>
   </div>
 
   <div class='row'>
-    <div class='label'>Erforderliche Aktion:</div>
+    <div class='label'>---LOCAL_docdetail_actionrequired---</div>
     <div class='data'><input id='actionrequired' type='checkbox' /></div>
   </div>
 
   <div class='row'>
-    <div class='label'>Hardcopy gehalten:</div>
+    <div class='label'>---LOCAL_docdetail_hardcopykept---</div>
     <div class='data'><input id='hardcopyKept' type='checkbox' /></div>
   </div>
 
   <div class='row'>
-    <div class='label'>Titel:</div>
+    <div class='label'>---LOCAL_docdetail_doctitle---</div>
     <div class='data'><input id='title' size=40 /></div>
   </div>
 
   <div class='row'>
-    <div class='label'>Dokument Datum:</div>
+    <div class='label'>---LOCAL_docdetail_docdate---</div>
     <div class='data'><input id='docDate' /></div>
   </div>
 
   <div class='row '>
-    <div class='label'>Extrahierten Text:</div>
+    <div class='label'>---LOCAL_docdetail_extractedtext---</div>
     <div class='data'>
       <textarea id='ocrtext' rows=2 cols=40></textarea>
     </div>
   </div>
 
   <div class='row'>
-    <div class='label'>Tags zugeordnet:</div>
+    <div class='label'>---LOCAL_docdetail_assignedtags---</div>
     <div class='data'>
       <input id='tags' type='text' class='tags'>
     </div>
   </div>
 
   <div class='row'>
-    <div class='label'>Linked Docs:</div>
+    <div class='label'>---LOCAL_docdetail_linkeddocs---</div>
     <div class='data divider'>
       <div id="doclinks_tagsinput" class="tagsinput" style="width: 300px; ">
-        <div id="doclinks_addTag"><input id="doclinks_tag" value="" data-default="link to doc" style="color: rgb(102, 102, 102); " class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true"></div>
+        <div id="doclinks_addTag"><input id="doclinks_tag" value="" data-default="---LOCAL_docdetail_defaultdoclink---" style="color: rgb(102, 102, 102); " class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true"></div>
         <div class="tags_clear"></div>
       </div>
     </div>

@@ -6,57 +6,57 @@
   .onlyadmin { display: none; }
 </style>
 
-<h2>User Admin</h2>
+<h2>---LOCAL_admin_title---</h2>
 
 <div id="tabs">
 
   <ul id='tabList'>
-    <li><a href="#mydetails">My details</a></li>
-    <li class='onlyadmin'><a href="#newuser">Create Users</a></li>
-    <li class='onlyadmin'><a href="#useradmin">Edit Users</a></li>
-    <li class='onlyadmin'><a href="#sessionman">Session Management</a></li>
+    <li><a href="#mydetails">---LOCAL_admin_tab_mydetails---</a></li>
+    <li class='onlyadmin'><a href="#newuser">---LOCAL_admin_tab_create_user---</a></li>
+    <li class='onlyadmin'><a href="#useradmin">---LOCAL_admin_tab_edit_user---</a></li>
+    <li class='onlyadmin'><a href="#sessionman">---LOCAL_admin_tab_manage_session---</a></li>
   </ul>
 
   <div id="mydetails">
-    <h3>Manage the current user</h3>
+    <h3>---LOCAL_admin_mydetails_title---</h3>
     <ul>
       <li class='row'>
-        <div class='label'>Change 'Real Name' :</div>
+        <div class='label'>---LOCAL_admin_mydetails_changename---</div>
         <div class='data'><input id='newrealname' type='input' /></div>
       </li>
       <li class='row'>
-        <div class='label'>Change 'Password' :</div>
+        <div class='label'>---LOCAL_admin_mydetails_changepassword---</div>
         <div class='data'><input id='newpassword' type='password' /> / <input id='newpassword2' type='password' /></div>
       </li>
       <li class='row'>
-        <div class='label'>Current Role :</div>
+        <div class='label'>---LOCAL_admin_mydetails_currentrole---</div>
         <div class='data'><span id='currentrole'>---</span></div>
       </li>
       <li class='row'>
         <div class='label'>&nbsp;</div>
-        <div class='data'><button id='updateThisUser'>Save</button></div>
+        <div class='data'><button id='updateThisUser'>---LOCAL_admin_save_button---</button></div>
       </li>
     </ul>
   </div>
 
   <div id="newuser" class='onlyadmin'>
-    <h3>Create a new user</h3>
+    <h3>---LOCAL_admin_createuser_title---</h3>
     <ul>
       <li class='row'>
-        <div class='label'>Change 'Real Name' :</div>
+        <div class='label'>---LOCAL_admin_createuser_name---</div>
         <div class='data'><input id='newrealname' type='input' /></div>
       </li>
       <li class='row'>
-        <div class='label'>Change 'Password' :</div>
+        <div class='label'>---LOCAL_admin_createuser_password---</div>
         <div class='data'><input id='password' type='password' /> / <input id='password2' type='password' /></div>
       </li>
       <li class='row'>
-        <div class='label'>Current Role :</div>
+        <div class='label'>---LOCAL_admin_createuser_role---</div>
         <div class='data'><span id='currentrole'>---</span></div>
       </li>
       <li class='row'>
         <div class='label'>&nbsp;</div>
-        <div class='data'><button>Save</button></div>
+        <div class='data'><button>---LOCAL_admin_save_button---</button></div>
       </li>
     </ul>
   </div>

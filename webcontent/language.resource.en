@@ -1,0 +1,111 @@
+LOCAL_lang|en
+LOCAL_username|username
+LOCAL_password|password
+LOCAL_logout|Logout
+LOCAL_default_browser_lang|Browsers Default Language
+LOCAL_link_home|Home
+LOCAL_link_doclist|Document List
+LOCAL_link_acquire|Acquire New
+LOCAL_link_projecthome|Project Home
+LOCAL_copyright|Copyright
+LOCAL_app_home|Application Home
+LOCAL_welcome|Welcome
+LOCAL_home_intro|openDIAS (Document Imaging Archive System) provides document imaging with OCR. You can scan documents (with SANE) or import ODF documents, and then assign tags. It can store all your letters, bills, statements, etc. in a convenient, safe, and easily retrievable way.
+LOCAL_home_intro2|The openDIAS project is a new OpenSource offering to bring professional document scanning and storage utility to the home user.
+LOCAL_home_title_architecture|Architecture
+LOCAL_home_title_knownbugs|Known Bugs
+LOCAL_home_title_helpproject|Help the project
+LOCAL_home_arch_intro|The openDias architecture has been designed to allow many users to access the system.
+LOCAL_home_arch_point1|The application connects to 'SANE' which gives you access to various scanning devices, both locally or via the network (see SANE config setting for instructions how).
+LOCAL_home_arch_point2|Scanned images and the main database are stored on the server.
+LOCAL_home_arch_point3|Clients can connect from any location that can see the server, using a standard web browser.
+LOCAL_home_arch_point4|Access controls can be set up by 'clients location' or 'traditional username and password'.
+LOCAL_home_subtitle_functional|Functional
+LOCAL_home_functional_point1|Acquire New: offered scanning resolutions does not match hardware capabilities
+LOCAL_home_subtitle_technical|Technical
+LOCAL_home_technical_point1|Acquire New: false errors reported related to size estimations
+LOCAL_home_technical_point2|Acquire New: scanning may result in unoperational scanner. (usb-reset)
+LOCAL_home_technical_point3|Memory leaks: scanning operation, upload jpeg(odf untested), after startup when browsing the site,
+LOCAL_home_title_helpproject2|Get involved and Support.
+LOCAL_home_helpproject_intro|openDias is an opensource project, which means there are several ways you can help. We appreciate anything you can do.
+LOCAL_home_help_subtitle_feedback|Test/Feedback
+LOCAL_home_help_feedback_p1|We are always happy to hear from anyone who has used opendias. Tell us <a href='https://groups.google.com/forum/#!forum/opendias' target='_blank'>what you think</a>, good or bad.
+LOCAL_home_help_feedback_p2|Have any <a href='http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40' target='_blank'>ideas/ suggestions?</a> or want to vote on the current list of ideas.
+LOCAL_home_help_subtitle_publicise|Publicise
+LOCAL_home_help_publicise_p1|We want as many people to use opendias as possible, and that means getting as many people to hear about it as possible. So, go, spread the word.
+LOCAL_home_help_publicise_p2|We try to keep the <a href='http://opendias.blogspot.com/'>opendias blog</a> up-2-date as much as possible.
+LOCAL_home_help_subtitle_hackers|Hackers Needed
+LOCAL_home_help_hackers_p1|If you have available time, get in contact, there are several projects lined up.
+LOCAL_home_help_hackers_p2|Otherwise, feel free to submit a patch (as <a href='https://github.com/clearscene/opendias'>GitHub</a>) to improve/fix the current system.
+LOCAL_home_help_subtitle_donate|Donate
+LOCAL_home_help_donate_p1|Any donation are gratefully received, and are used to buy hardware to test against.
+LOCAL_home_help_donate_p2|Thank you to everyone who has done so already.
+LOCAL_doclist_filterby|Filter By:
+LOCAL_doclist_title_or_ocr|Title or OCR Text:
+LOCAL_doclist_has_action|Has 'Action Required':
+LOCAL_doclist_doc_date|Document Date:
+LOCAL_doclist_doc_tag|Document Tags:
+LOCAL_doclist_filterbutton|Filter
+LOCAL_doclist_filtertab|Filter and Search
+LOCAL_doclist_nodocs|There are currently no docs stored. Add some using the <a href='acquire.html'>Acquire New</a> link.
+LOCAL_doclist_title|Document List
+LOCAL_doclist_table_docid|Doc Id
+LOCAL_doclist_table_title|Title
+LOCAL_doclist_table_type|Type
+LOCAL_doclist_table_date|Date
+LOCAL_doclist_loading|Loading
+LOCAL_docdetail_title|Document Detail
+LOCAL_docdetail_savedok|Saved OK
+LOCAL_docdetail_delete|Delete
+LOCAL_docdetail_scandate|Scan Date:
+LOCAL_docdetail_doctype|Doc Type:
+LOCAL_docdetail_actionrequired|Action Required:
+LOCAL_docdetail_hardcopykept|Hardcopy kept:
+LOCAL_docdetail_doctitle|Title:
+LOCAL_docdetail_docdate|Document Date:
+LOCAL_docdetail_extractedtext|Extracted Text:
+LOCAL_docdetail_assignedtags|Assigned Tags:
+LOCAL_docdetail_linkeddocs|Linked Docs:
+LOCAL_docdetail_defaultdoclink|link to doc
+LOCAL_acquire_title|Acquire new Document
+LOCAL_acquire_notcurrent_title|Details are not current
+LOCAL_acquire_notcurrent_p1|At the time these details were requested, the SANE subsystem was busy serving a scanning request. Unfortunately, SANE can only handle one request at a time. Therefor, the details shown here are not current and are from the last successful request.
+LOCAL_acquire_notcurrent_p2|You can try to use one of the listed scanners, but please note  devices could have since become available, or been withdrawn.
+LOCAL_acquire_notcurrent_p3|Alternatively, you could refresh this page, until this message is not longer displayed.
+LOCAL_acquire_tab_info|Information
+LOCAL_acquire_tab_office|Document Import
+LOCAL_acquire_info_title|Acquiring a new document
+LOCAL_acquire_info_p1|Use this screen to add a new document to your archive.
+LOCAL_acquire_info_p2|In the first tab, you can add files to your store. Including: PDF or ODF documents and images, perhaps that you have scanned in independently from opendias.
+LOCAL_acquire_info_p3|Any additional tabs represent various scanning input devices.
+LOCAL_acquire_info_activity|Scanning for devices...
+LOCAL_acquire_office_title|Document Import
+LOCAL_acquire_office_p1|Select a PDF, ODF document or JPEG image for upload into your archive.
+LOCAL_acquire_office_upload_file|Filename to upload:
+LOCAL_acquire_office_upload_botton|Upload
+LOCAL_acquire_scanner_pages_alt|The number of pages that make up the document you are going to scan
+LOCAL_acquire_scanner_pages|Pages:
+LOCAL_acquire_scanner_no_of_page|pages
+LOCAL_acquire_scanner_resolution_alt|The resolution the scanner should use when scanning your document. The higher, the better quality. But also, the higher, the larger file and slower operations will be.
+LOCAL_acquire_scanner_resolution|Resolution:
+LOCAL_acquire_scanner_ocr_alt|Check this to get opendias to read the scanned image and return the text of the document. You will then be able to search on this text later.
+LOCAL_acquire_scanner_ocr|OCR:
+LOCAL_acquire_scanner_best_ocr_alt|Indication of the best resolution for OCRing. Stay within the green area for best results.
+LOCAL_acquire_scanner_best_oct|The ideal scanning resolution zone for OCRing.
+LOCAL_acquire_scanner_page_length_alt|How much of the page do you want to scan. If your scanning a document smaller than the max length than your scanner supports. don&quot;t waste time and space.
+LOCAL_acquire_scanner_page_length|Page Length:
+LOCAL_acquire_scanner_scan_now_button|Scan
+LOCAL_admin_title|User Admin
+LOCAL_admin_tab_mydetails|My details
+LOCAL_admin_tab_create_user|Create Users
+LOCAL_admin_tab_edit_user|Edit Users
+LOCAL_admin_tab_manage_session|Session Management
+LOCAL_admin_mydetails_title|Manage the current user
+LOCAL_admin_mydetails_changename|Change 'Real Name':
+LOCAL_admin_mydetails_changepassword|Change 'Password':
+LOCAL_admin_mydetails_currentrole|Current Role:
+LOCAL_admin_save_button|Save
+LOCAL_admin_createuser_title|Create a new user
+LOCAL_admin_createuser_name|Real Name:
+LOCAL_admin_createuser_password|Password:
+LOCAL_admin_createuser_role|Role:

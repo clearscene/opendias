@@ -125,7 +125,14 @@ webcontent/includes/Makefile
 webcontent/includes/Makefile.in
 webcontent/Makefile
 webcontent/Makefile.in
+webcontent/accessControls.html.*
+webcontent/acquire.html.*
+webcontent/body.html.*
+webcontent/docDetail.html.*
+webcontent/docList.html.*
 webcontent/includes/local/Makefile
 webcontent/includes/local/Makefile.in
+webcontent/includes/footer.txt.*
+webcontent/includes/header.txt.*
 webcontent/style/Makefile
 webcontent/style/Makefile.in

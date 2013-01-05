@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="---LOCAL_lang---">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -26,18 +26,18 @@
       <ul>
         <li>
           <span id='login'>
-            <input id='username' size=6 placeholder='username' />
-            <input id='password' size=6 placeholder='password' type='password' />
+            <input id='username' size=6 placeholder='---LOCAL_username---' />
+            <input id='password' size=6 placeholder='---LOCAL_password---' type='password' />
             <button id='loginbutton'>Login</button>
           </span>
           <span id='logout'>
             <a id='realname' href='/opendias/accessControls.html'></a>
-            <button id='logoutbutton'>Logout</button>
+            <button id='logoutbutton'>---LOCAL_logout---</button>
           </span>
         </li>
         <li>
           <select id='language'>
-            <option value='--'>Browsers Default Language</option>
+            <option value='--'>---LOCAL_default_browser_lang---</option>
             <option value='en'>English</option>
             <option value='de'>Deutsche</option>
           </select>
@@ -49,10 +49,10 @@
   <div id='menu'>
     <div class="container">
       <ul>
-        <li><a id='homeLink' href='/opendias/'>Home</a></li>
-        <li><a id='doclistLink' href='/opendias/docList.html'>Document List</a></li>
-        <li><a id='acquireLink' href='/opendias/acquire.html'>Acquire New</a></li>
-        <li><a id='ProjectHome' href='http://opendias.essentialcollections.co.uk/' target='_blank'>Project Home</a></li>
+        <li><a id='homeLink' href='/opendias/'>---LOCAL_link_home---</a></li>
+        <li><a id='doclistLink' href='/opendias/docList.html'>---LOCAL_link_doclist---</a></li>
+        <li><a id='acquireLink' href='/opendias/acquire.html'>---LOCAL_link_acquire---</a></li>
+        <li><a id='ProjectHome' href='http://opendias.essentialcollections.co.uk/' target='_blank'>---LOCAL_link_projecthome---</a></li>
         <li class='version'>__package_string__</li>
       </ul>
     </div>
