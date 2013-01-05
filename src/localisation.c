@@ -59,7 +59,7 @@ void locale_cleanup() {
   }
 }
 
-const char *getString( char *phrase, char *lang) {
+const char *getString( const char *phrase, const char *lang) {
   struct simpleLinkedList *tmp;
   struct simpleLinkedList *keysList;
 
@@ -87,7 +87,7 @@ const char *getString( char *phrase, char *lang) {
   return (char *)tmp->data; // the translation we found
 }
 
-struct simpleLinkedList *loadLangList( char *lang ) {
+struct simpleLinkedList *loadLangList( const char *lang ) {
   struct simpleLinkedList *trList = NULL;
   char *resourceFile = o_printf("%s/opendias/language.resource.%s", SHARE_DIR, lang);
 
