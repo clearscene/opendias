@@ -1,0 +1,135 @@
+
+<script type="text/javascript" src="/opendias/includes/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/opendias/includes/jquery.canvas-loader.js"></script>
+<script type="text/javascript" src="/opendias/includes/sprintf-0.7-beta1.js"></script>
+<link rel="stylesheet" href="/opendias/style/jquery-ui.css" type="text/css" media="screen" /> 
+<style>
+  .ui-progressbar-value { background-image: url(/opendias/images/jquery-ui/pbar-ani.png); }
+  #tabs {font-size: 11px;}
+</style>
+
+<h2>---LOCAL_acquire_title---</h2>
+
+<div id='cached' class='warning ui-corner-all'>
+  <h3>---LOCAL_acquire_notcurrent_title---</h3>
+  <p>---LOCAL_acquire_notcurrent_p1---</p>
+  <p>---LOCAL_acquire_notcurrent_p2---</p>
+  <p>---LOCAL_acquire_notcurrent_p3---</p>
+</div>
+
+<div id="tabs">
+
+  <ul id='tabList'>
+    <li><a href="#info">---LOCAL_acquire_tab_info---</a></li>
+    <li><a href="#office">---LOCAL_acquire_tab_office---</a></li>
+  </ul>
+
+  <div id="info">
+    <h3>---LOCAL_acquire_info_title---</h3>
+    <p>---LOCAL_acquire_info_p1---</p>
+    <p>---LOCAL_acquire_info_p2---</p>
+    <p>---LOCAL_acquire_info_p3---</p>
+    <p id='scanning'><span id='loading'></span>&nbsp;---LOCAL_acquire_info_activity---</p>
+  </div>
+
+  <div id="office">
+    <h3>---LOCAL_acquire_office_title---</h3>
+    <p>---LOCAL_acquire_office_p1---</p>
+    <form action='/opendias/dynamic' method='post' enctype="multipart/form-data">
+      <input name='action' type='hidden' value='uploadfile' />
+      <div class='row'>
+        <div class='label'>---LOCAL_acquire_office_upload_file---</div>
+        <div class='data'><input name='uploadfile' type='file' /></div>
+      </div>
+      <div class='row'>
+        <div class='label'>&nbsp;</div>
+        <div class='data'><input id='uploadButton' type='submit' value='---LOCAL_acquire_office_upload_botton---' /></div>
+      </div>
+    </form>
+  </div>
+
+  <div id='scannerTemplate'>
+    <div class='row'>
+      <div class='label'>&nbsp;</div>
+      <div class='data'>
+        <h3 id='title_DEVICE'>___ placeholder for scanner title ___</h3>
+        <p></p>
+        <input id='deviceid_DEVICE' type='hidden' />
+      </div>
+    </div>
+<!--
+    <div class='row'>
+      <div class='label'>Format:</div>
+      <div class='data'><select id='format_DEVICE'></select></div>
+    </div>
+-->
+    <input id='format_DEVICE' type='hidden' value='Grey Scale' />
+    <div class='row'>
+      <div class='label' title='---LOCAL_acquire_scanner_pages_alt---'>---LOCAL_acquire_scanner_pages---</div>
+      <div class='data'>
+        <input id='pages_DEVICE' type='hidden' value='1' />
+        <div id='pagesDisplay_DEVICE' class='innerLeftDisplay'>1 ---LOCAL_acquire_scanner_no_of_page---</div>
+        <div class='innerRightDisplay'><div id='pagesSlider_DEVICE'></div></div>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='label' title='---LOCAL_acquire_scanner_resolution_alt---'>---LOCAL_acquire_scanner_resolution---</div>
+      <div class='data'>
+        <input id='resolution_DEVICE' type='hidden' />
+        <div id='resolutionDisplay_DEVICE' class='innerLeftDisplay'>x dpi</div>
+        <div class='innerRightDisplay'>
+          <div id='resolutionSlider_DEVICE'></div>
+        </div>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='label' title='---LOCAL_acquire_scanner_ocr_alt---'>---LOCAL_acquire_scanner_ocr---</div>
+      <div class='data'>
+        <div class='innerLeftDisplay'>
+        <div class='data'><select id='ocr_DEVICE'>
+                          <option value="-">No OCR</option>
+                          <option value="nld">Dutch</option>
+                          <option value="eng" selected='selected'>English</option>
+                          <option value="fra">French</option>
+                          <option value="deu">German</option>
+                          <option value="ita">Italian</option>
+                          <option value="por">Portuguese</option>
+                          <option value="spa">Spanish</option>
+                          <option value="vie">Vietnamese</option>
+                        </select></div>
+        </div>
+        <div class='innerRightDisplay'>
+          <div class='resolutionQuality' title='---LOCAL_acquire_scanner_best_ocr_alt---'>
+            <div id='resolutionGood_DEVICE' class='resolutionQualityGood' title='---LOCAL_acquire_scanner_best_oct---'></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='label' title='---LOCAL_acquire_scanner_page_length_alt---'>---LOCAL_acquire_scanner_page_length---</div>
+      <div class='data'>
+        <input id='length_DEVICE' type='hidden' value='100' />
+        <div id='lengthDisplay_DEVICE' class='innerLeftDisplay'>100 %</div>
+        <div class='innerRightDisplay'>
+          <div id='lengthSlider_DEVICE'></div>
+        </div>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='label'>&nbsp;</div>
+      <div class='data'>
+        <div class='innerLeftDisplay'>
+          <button id='scanButton_DEVICE'>---LOCAL_acquire_scanner_scan_now_button---</button>
+        </div>
+        <div class='innerRightDisplay'>
+          <div id="status_DEVICE"></div>
+          <div id="progressbar_DEVICE"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
+<script type="text/javascript" src="/opendias/includes/local/openDias.acquire.js.resource"></script>
+<script type="text/javascript" src="/opendias/includes/openDias.acquire.js"></script>
