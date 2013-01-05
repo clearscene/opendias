@@ -14,7 +14,7 @@ LOCAL_home_intro| openDIAS (Document Imaging Archive System) bietet Document Ima
 LOCAL_home_intro2|Die openDIAS Projekt ist eine neue Open Source-Angebot für professionelle Scannen von Dokumenten zu bringen und Lagerung Nutzen für die Benutzer zu Hause.
 LOCAL_home_title_architecture|Architektur
 LOCAL_home_title_knownbugs|Bekannte Bugs
-CAL_home_title_helpproject|Machen Sie mit und Support
+LOCAL_home_title_helpproject|Machen Sie mit und Support
 LOCAL_home_arch_intro|openDias architektur wurde so konzipiert, dass viele Anwender auf das System zuzugreifen.
 LOCAL_home_arch_point1|Die Anwendung verbindet sich 'SANE' was Ihnen an verschiedene Scan-Geräte zugreifen, sowohl lokal oder über das Netzwerk (siehe SANE Konfigurations-Einstellung für die Anleitung, wie).
 LOCAL_home_arch_point2|Gescannte Bilder und die Haupt-Datenbank auf dem Server gespeichert.
@@ -90,8 +90,22 @@ LOCAL_acquire_scanner_resolution_alt| Die Auflösung des Scanners sollten Sie be
 LOCAL_acquire_scanner_resolution|Auflösung:
 LOCAL_acquire_scanner_ocr_alt|Aktivieren Sie diese Option opendias bekommen, um das gescannte Bild zu lesen und senden Sie den Text des Dokuments. Sie werden dann in der Lage, auf diesen Text später suchen.
 LOCAL_acquire_scanner_ocr|OCR:
-Anzeige der beste Auflösung für ins Register OCR. Bleiben Sie im grünen Bereich für beste Ergebnisse.
+LOCAL_acquire_scanner_best_ocr_alt|Anzeige der beste Auflösung für ins Register OCR. Bleiben Sie im grünen Bereich für beste Ergebnisse.
 LOCAL_acquire_scanner_best_oct|Die ideale Scanauflösung ins Register OCR-Zone für.
 LOCAL_acquire_scanner_page_length_alt|Wie viel von der Seite sehen Sie scannen möchten. Wenn Ihr ein Dokument scannen, kleiner als die maximale Länge als Ihr Scanner unterstützt. verschwende keine Zeit und Raum.
 LOCAL_acquire_scanner_page_length|Seitenlänge:
 LOCAL_acquire_scanner_scan_now_button|Erwerben
+LOCAL_admin_title|User Admin
+LOCAL_admin_tab_mydetails|Meine Details
+LOCAL_admin_tab_create_user|Benutzer erstellen
+LOCAL_admin_tab_edit_user|Benutzer bearbeiten
+LOCAL_admin_tab_manage_session|Session Management
+LOCAL_admin_mydetails_title|Verwalten des aktuellen Benutzers
+LOCAL_admin_mydetails_changename|Ändern Richtiger Name:
+LOCAL_admin_mydetails_changepassword|Kennwort ändern:
+LOCAL_admin_mydetails_currentrole|aktuelle Rolle:
+LOCAL_admin_save_button|Sparen
+LOCAL_admin_createuser_title|Erstellen eines neuen Benutzerkontos
+LOCAL_admin_createuser_name|Echter Name:
+LOCAL_admin_createuser_password|Kennwort:
+LOCAL_admin_createuser_role|Rolle:

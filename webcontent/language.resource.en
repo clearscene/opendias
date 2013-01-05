@@ -101,9 +101,9 @@ LOCAL_admin_tab_create_user|Create Users
 LOCAL_admin_tab_edit_user|Edit Users
 LOCAL_admin_tab_manage_session|Session Management
 LOCAL_admin_mydetails_title|Manage the current user
-LOCAL_admin_mydetails_changename|Change 'Real Name' :
-LOCAL_admin_mydetails_changepassword|Change 'Password' :
-LOCAL_admin_mydetails_currentrole|Current Role :
+LOCAL_admin_mydetails_changename|Change 'Real Name':
+LOCAL_admin_mydetails_changepassword|Change 'Password':
+LOCAL_admin_mydetails_currentrole|Current Role:
 LOCAL_admin_save_button|Save
 LOCAL_admin_createuser_title|Create a new user
 LOCAL_admin_createuser_name|Real Name:
