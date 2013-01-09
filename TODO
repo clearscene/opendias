@@ -3,25 +3,45 @@
 ####################################################################################
 
 
+Version 0.9 [active]
+--------------------
 
-Version 0.9
------------
+Testing
 
-Migrate 8_* tests to use QUnit instead of HTMLUnit. ie remove 2.3 from tests/README
+  Migrate 8_* tests to use QUnit instead of HTMLUnit. ie remove 2.3 from tests/README
 
-Fix intermittent test failures (log timings mainly) & rationalise valgrind suppressions.
+  Fix intermittent test failures (log timings mainly) & rationalise valgrind suppressions.
 
-Got a SANE busy signal - then give option to keep polling until it's available.
+  Implement the remainder of the test plan 'test/regressionTests/testplan', check coverage.
 
-Implement 'OCR now' on document detail page.
+App Improvments
 
-Get included into major repositories
+  Got a SANE busy signal - then give option to keep polling until it's available.
 
-Frontend remembers user options
+Functionality
 
-Managment of users and sessions
+  [assigned wpb] Managment of users and sessions
 
-Implement the remainder of the test plan 'test/regressionTests/testplan', check coverage.
+Project
+
+  Get included into major repositories
+
+
+
+Version 0.10
+------------
+
+Functionality
+
+  Implement 'OCR now' on document detail page.
+
+  Frontend remembers user options [not sure what options a user need opendias to remember]
+
+  New doc detail data (doc meta data) by category or assigned tag.
+
+App Improvments
+
+  Add a plugin framework
 
 
 Version 1.0
