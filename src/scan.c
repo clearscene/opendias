@@ -19,6 +19,7 @@
 #include "config.h"
 
 #ifdef CAN_SCAN
+#include <unistd.h>     // for sleep
 #include <stdlib.h>
 #include <stdio.h>      // printf, file operations
 #include <string.h>     // compares
@@ -786,13 +787,27 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   /* ========================================================== */
   if ( ! setOptions( (char *)uuid, openDeviceHandle, &request_resolution, &buff_requested_len ) )
     return 0;
-
   o_log(DEBUGM, "sane_start: setOptions returned request_resolution %d\n",request_resolution);
-  status = sane_start (openDeviceHandle);
-  if(status != SANE_STATUS_GOOD) {  
-    handleSaneErrors("Cannot start scanning", status, 0);
-    updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-    return 0;
+
+  int timeout = 5;
+  while( 0 < timeout ) {
+    status = sane_start (openDeviceHandle);
+    if(status == SANE_STATUS_GOOD) {  
+      break;
+    }
+    else {
+      if(status == SANE_STATUS_DEVICE_BUSY ) {  
+        // BUSY signal could be the scanner just having a 
+        // bit of lag - specially network connected devices
+        sleep(500);
+        timeout--;
+      }
+      else {
+        handleSaneErrors("Cannot start scanning", status, 0);
+        updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
+        return 0;
+      }
+    }
   }
 
   // Get scanning params (from the scanner)
@@ -935,7 +950,7 @@ extern char *internalGetScannerList(char *lang) {
   int scanOK = SANE_FALSE;
   char *replyTemplate, *deviceList; 
 
-  status = sane_get_devices (&SANE_device_list, SANE_FALSE);
+  status = sane_get_devices (&SANE_device_list, SANE_TRUE);
   if(status == SANE_STATUS_GOOD) {
     if (SANE_device_list && SANE_device_list[0]) {
       scanOK = SANE_TRUE;
