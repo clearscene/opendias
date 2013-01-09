@@ -27,7 +27,7 @@ const char * get_status_string (SANE_Status);
 const char * get_action_string (SANE_Action);
 void log_option (SANE_Int, const SANE_Option_Descriptor *);
 SANE_Status control_option (SANE_Handle, const SANE_Option_Descriptor *, SANE_Int, SANE_Action, void *, int *);
-int setDefaultScannerOption(SANE_Handle *, const SANE_Option_Descriptor *, int);
+int setDefaultScannerOption(SANE_Handle *, const SANE_Option_Descriptor *, int, int *);
 #endif /* CAN_SCAN */
 
 #endif /* SCANNER */
