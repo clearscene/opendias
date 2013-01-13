@@ -19,7 +19,7 @@
 #include "config.h"
 
 #ifdef CAN_SCAN
-#include <unistd.h>     // for sleep
+#include <unistd.h>     // for usleep
 #include <stdlib.h>
 #include <stdio.h>      // printf, file operations
 #include <string.h>     // compares
@@ -799,8 +799,9 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
       if(status == SANE_STATUS_DEVICE_BUSY ) {  
         // BUSY signal could be the scanner just having a 
         // bit of lag - specially network connected devices
-        sleep(500);
         timeout--;
+        o_log(WARNING, "Device reports not ready to 'start', waiting 500ms. Will try another %d times", timeout);
+        usleep(500);
       }
       else {
         handleSaneErrors("Cannot start scanning", status, 0);
