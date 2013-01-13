@@ -32,9 +32,9 @@
 #include "scanner.h"
 
 
-void handleSaneErrors(char *defaultMessage, SANE_Status st, int retCode) {
+void handleSaneErrors(char *defaultMessage, const char *name, SANE_Status st, int retCode) {
 
-  o_log(ERROR, "%s: sane error = %d (%s), return code = %d", defaultMessage, st, sane_strstatus(st), retCode);
+  o_log(ERROR, "%s \"%s\": sane error = %d (%s), return code = %d", defaultMessage, name, st, sane_strstatus(st), retCode);
 
 }
 
@@ -248,75 +248,116 @@ void log_option (SANE_Int index, const SANE_Option_Descriptor *option) {
 
 SANE_Status control_option (SANE_Handle handle, const SANE_Option_Descriptor *option, SANE_Int index, SANE_Action action, void *value, int *ret) {
     SANE_Status status;
-    char *old_value;
+    char *proposed_value;
+    char *scanners_value;
 
+    // See what the device has set for this option. Compare it to what we want to set
     switch (option->type) {
-    case SANE_TYPE_BOOL:
-        old_value = o_printf (*((SANE_Bool *) value) ? "SANE_TRUE" : "SANE_FALSE");
+      case SANE_TYPE_BOOL:
+        proposed_value = o_printf (*((SANE_Bool *) value) ? "SANE_TRUE" : "SANE_FALSE");
+        SANE_Bool v_b;
+        status = sane_control_option (handle, index, SANE_ACTION_GET_VALUE, &v_b, NULL);
+        scanners_value = o_printf ((SANE_Bool) v_b ? "SANE_TRUE" : "SANE_FALSE");
         break;
-    case SANE_TYPE_INT:
-        old_value = o_printf ("%d", *((SANE_Int *) value));
+
+      case SANE_TYPE_INT:
+        proposed_value = o_printf ("%d", *((SANE_Int *) value));
+        int v_i;
+        status = sane_control_option (handle, index, SANE_ACTION_GET_VALUE, &v_i, NULL);
+        scanners_value = o_printf ("%d", v_i);
         break;
-    case SANE_TYPE_FIXED:
-        old_value = o_printf ("%f", SANE_UNFIX (*((SANE_Fixed *) value)));
+
+      case SANE_TYPE_FIXED:
+        proposed_value = o_printf ("%f", SANE_UNFIX (*((SANE_Fixed *) value)));
+        SANE_Fixed v_f = SANE_FIX( 9999999999 );
+        status = sane_control_option (handle, index, SANE_ACTION_GET_VALUE, &v_f, NULL);
+        scanners_value = o_printf ("%f", SANE_UNFIX( v_f ) );
         break;
-    case SANE_TYPE_STRING:
-        old_value = o_printf ("\"%s\"", (char *) value);
+
+      case SANE_TYPE_STRING:
+        proposed_value = o_printf ("\"%s\"", (char *) value);
+        char *v_c = malloc( sizeof( char ) * option->size );
+        status = sane_control_option (handle, index, SANE_ACTION_GET_VALUE, (void *)v_c, NULL);
+        scanners_value = o_printf ("\"%s\"", (char *) v_c);
+        free(v_c);
         break;
-    default:
-        old_value = o_strdup ("?");
+
+      default:
+        proposed_value = o_strdup ("--unknwon-request-type--");
+        scanners_value = o_strdup ("--unknown-scanner-type--");
         break;
     }
 
+    if ( 0 == strcmp(proposed_value, scanners_value) ) {
+      // The SANE spec says we were only supposed to get SANE_INFO_RELOAD_OPTIONS when we 
+      // UPDATED something? Never mind...
+      // Were not setting the device, since some options will request we reload all options.
+      // if that happenes and we set the value again the next time around - we end up in an
+      // infinate loop
+      o_log( DEBUGM, "The scanner reports having \"%s\" already set to %s. Not attempting to update.", option->name, scanners_value );
+      free (proposed_value);
+      free (scanners_value);
+      return SANE_STATUS_GOOD;
+    }
+
+    // So, we need to actualy set the value
+    o_log( INFORMATION, "Setting scanner param %s to %s", option->name, proposed_value);
     status = sane_control_option (handle, index, action, value, ret);
 
     switch (option->type) {
-    case SANE_TYPE_BOOL:
-        o_log(DEBUGM, "sane_control_option (%d, %s, %s) -> (%s, %s)",
+      case SANE_TYPE_BOOL:
+        o_log(DEBUGM, "sane_control_option (%d, %s, %s) -> (%s, was:%s, now:%s)",
                  index, get_action_string (action),
                  *((SANE_Bool *) value) ? "SANE_TRUE" : "SANE_FALSE",
                  get_status_string (status),
-                 old_value);
+                 scanners_value, proposed_value);
         break;
-    case SANE_TYPE_INT:
-        o_log(DEBUGM, "sane_control_option (%d, %s, %d) -> (%s, %s)",
+
+      case SANE_TYPE_INT:
+        o_log(DEBUGM, "sane_control_option (%d, %s, %d) -> (%s, was:%s, now:%s)",
                  index, get_action_string (action),
                  *((SANE_Int *) value),
                  get_status_string (status),
-                 old_value);
+                 scanners_value, proposed_value);
         break;
-    case SANE_TYPE_FIXED:
-        o_log(DEBUGM, "sane_control_option (%d, %s, %f) -> (%s, %s)",
+
+      case SANE_TYPE_FIXED:
+        o_log(DEBUGM, "sane_control_option (%d, %s, %f) -> (%s, was:%s, now:%s)",
                  index, get_action_string (action),
                  SANE_UNFIX (*((SANE_Fixed *) value)),
                  get_status_string (status),
-                 old_value);
+                 scanners_value, proposed_value);
         break;
-    case SANE_TYPE_STRING:
-        o_log(DEBUGM, "sane_control_option (%d, %s, \"%s\") -> (%s, %s)",
+
+      case SANE_TYPE_STRING:
+        o_log(DEBUGM, "sane_control_option (%d, %s, %s) -> (%s, was:%s, now:%s)",
                  index, get_action_string (action),
                  (char *) value,
                  get_status_string (status),
-                 old_value);
+                 scanners_value, proposed_value);
         break;
-    default:
+
+      default:
         break;
     }
 
-    free (old_value);
+    free (proposed_value);
+    free (scanners_value);
 
-    if (status != SANE_STATUS_GOOD)
-        o_log(WARNING, "Error setting option %s: %s", option->name, sane_strstatus(status));
+    if ( *ret & SANE_INFO_RELOAD_OPTIONS ) 
+      o_log( DEBUGM, "This setting update has requested that we reload all previous settings." );
+
+    if ( status != SANE_STATUS_GOOD )
+      o_log( WARNING, "Error setting option %s: %s", option->name, sane_strstatus(status));
 
     return status;
 }
 
-int setDefaultScannerOption(SANE_Handle *devHandle, const SANE_Option_Descriptor *sod, int option ) {
+int setDefaultScannerOption(SANE_Handle *devHandle, const SANE_Option_Descriptor *sod, int option, int *ret ) {
   if ( sod->cap & SANE_CAP_AUTOMATIC ) {
-    int paramSetRet;
-    int status = control_option (devHandle, sod, option, SANE_ACTION_SET_AUTO, NULL, &paramSetRet);
+    int status = control_option (devHandle, sod, option, SANE_ACTION_SET_AUTO, NULL, ret);
     if(status == SANE_STATUS_GOOD) {
-      handleSaneErrors("Cannot set automatically", status, paramSetRet);
+      handleSaneErrors("Cannot set automatically", sod->name, status, *ret);
       //updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
       return 1;
     }

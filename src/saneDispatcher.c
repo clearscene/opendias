@@ -80,10 +80,10 @@ extern void dispatch_sane_work( int ns ) {
   }
   else if ( command && 0 == strcmp(command, "internalDoScanningOperation") ) {
     inLongRunningOperation = 1;
-    char *p1 = strtok(o_strdup(param), ","); // uuid
-    char *p2 = strtok( NULL, ","); // lang
-    response = internalDoScanningOperation( p1, p2 );
-    free(p1);
+    char *uuid = strtok(o_strdup(param), ","); // uuid
+    char *lang = strtok( NULL, ","); // lang
+    response = internalDoScanningOperation( uuid, lang );
+    free( uuid );
     inLongRunningOperation = 0;
   }
   else {
