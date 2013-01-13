@@ -294,13 +294,14 @@ SANE_Status control_option (SANE_Handle handle, const SANE_Option_Descriptor *op
       // Were not setting the device, since some options will request we reload all options.
       // if that happenes and we set the value again the next time around - we end up in an
       // infinate loop
-      o_log( WARNING, "The scanner reports having \"%s\" already set to %s. Not attempting to update.", option->name, scanners_value );
+      o_log( DEBUGM, "The scanner reports having \"%s\" already set to %s. Not attempting to update.", option->name, scanners_value );
       free (proposed_value);
       free (scanners_value);
       return SANE_STATUS_GOOD;
     }
 
     // So, we need to actualy set the value
+    o_log( INFORMATION, "Setting scanner param %s to %s", option->name, proposed_value);
     status = sane_control_option (handle, index, action, value, ret);
 
     switch (option->type) {
@@ -344,7 +345,7 @@ SANE_Status control_option (SANE_Handle handle, const SANE_Option_Descriptor *op
     free (scanners_value);
 
     if ( *ret & SANE_INFO_RELOAD_OPTIONS ) 
-      o_log( INFORMATION, "This setting update has requested that we reload all previous settings." );
+      o_log( DEBUGM, "This setting update has requested that we reload all previous settings." );
 
     if ( status != SANE_STATUS_GOOD )
       o_log( WARNING, "Error setting option %s: %s", option->name, sane_strstatus(status));
