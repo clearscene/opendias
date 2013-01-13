@@ -32,9 +32,9 @@
 #include "scanner.h"
 
 
-void handleSaneErrors(char *defaultMessage, SANE_Status st, int retCode) {
+void handleSaneErrors(char *defaultMessage, const char *name, SANE_Status st, int retCode) {
 
-  o_log(ERROR, "%s: sane error = %d (%s), return code = %d", defaultMessage, st, sane_strstatus(st), retCode);
+  o_log(ERROR, "%s \"%s\": sane error = %d (%s), return code = %d", defaultMessage, name, st, sane_strstatus(st), retCode);
 
 }
 
@@ -357,7 +357,7 @@ int setDefaultScannerOption(SANE_Handle *devHandle, const SANE_Option_Descriptor
   if ( sod->cap & SANE_CAP_AUTOMATIC ) {
     int status = control_option (devHandle, sod, option, SANE_ACTION_SET_AUTO, NULL, ret);
     if(status == SANE_STATUS_GOOD) {
-      handleSaneErrors("Cannot set automatically", status, *ret);
+      handleSaneErrors("Cannot set automatically", sod->name, status, *ret);
       //updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
       return 1;
     }
