@@ -8,6 +8,7 @@
         Stubbed out many external libs for testing (performance)
         Detail page now has a print now button (for scans and jpeg imports)
         Localisation is now much easier
+        Improve scanning performance
 
  0.8.1  A localisation framework has been put in place (with en and de languages added)
         Remove defunct speak functionality
