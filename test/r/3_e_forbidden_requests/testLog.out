@@ -6,14 +6,13 @@ No need for a web client for this test.
 Sending request = action=checkLogin&password=password&username=test-user
 Sending request = 
 GET request for 
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -89,14 +88,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -172,14 +170,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /../unknown.html
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -255,14 +252,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /unknown.html
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -338,14 +334,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /images/unknown.png
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -421,14 +416,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /images/unknown.jpg
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -504,14 +498,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /scans/unknown.jpg
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -587,14 +580,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /includes/unknown.js
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -670,14 +662,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /style/unknown.css
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -753,14 +744,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /unknown
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -836,14 +826,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /unknown/
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -919,14 +908,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /dynamic
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -1002,14 +990,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /dynamic/
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -1085,14 +1072,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /opendias
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -1159,13 +1145,9 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
   <p style=\'float: left\'><img src=\'/opendias/images/openDIAS_sml.png\' width=140px /></p>
   <p style=\'float: right; padding: 3px; border: 1px solid black\'><img src=\'/opendias/images/cabinet.jpg\' style=\'border: 1px solid black\' /></p>
 
-  <p class=\'intro\'>openDIAS (Document Imaging Archive System) provides document imaging with 
-    OCR. You can scan documents (with SANE) or import ODF documents, and then assign tags. It 
-    can store all your letters, bills, statements, etc. in a convenient, safe, and easily 
-    retrievable way.</p>
+  <p class=\'intro\'>openDIAS (Document Imaging Archive System) provides document imaging with OCR. You can scan documents (with SANE) or import ODF documents, and then assign tags. It can store all your letters, bills, statements, etc. in a convenient, safe, and easily retrievable way.</p>
 
-  <p>The openDIAS project is a new OpenSource offering to bring professional document scanning 
-    and storage utility to the home user.</p>
+  <p>The openDIAS project is a new OpenSource offering to bring professional document scanning and storage utility to the home user.</p>
 
   <ul>
     <li><a href=\'#\' onclick=\'$("#arch").toggle("clip");\'>Architecture</a></li>
@@ -1184,8 +1166,7 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     </span>
     <p>The openDias architecture has been designed to allow many users to access the system.</p>
     <ul>
-      <li>The application connects to \'SANE\' which gives you access to various scanning devices, both 
-        locally or via the network (see SANE config setting for instructions how).</li>
+      <li>The application connects to \'SANE\' which gives you access to various scanning devices, both locally or via the network (see SANE config setting for instructions how).</li>
       <li>Scanned images and the main database are stored on the server.</li>
       <li>Clients can connect from any location that can see the server, using a standard web browser.</li>
       <li>Access controls can be set up by \'clients location\' or \'traditional username and password\'.</li>
@@ -1203,21 +1184,20 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     <ul>
       <li>Acquire New: false errors reported related to size estimations</li>
       <li>Acquire New: scanning may result in unoperational scanner. (usb-reset)</li>
-      <li>Memory leaks: scanning operation, upload jpeg(odf untested), after startup when browsing the site, </li>
+      <li>Memory leaks: scanning operation, upload jpeg(odf untested), after startup when browsing the site,</li>
     </ul>
   </div>
 
   <div id=\'help\' class=\'hidden\'>
     <h3>Get involved and Support.</h3>
-    <p>openDias is an opensource project, which means there are several ways you can help. We appreciate
-      anything you can do.</p>
+    <p>openDias is an opensource project, which means there are several ways you can help. We appreciate anything you can do.</p>
 
     <div class=\'row\'>
 
       <div style=\'float: left; width: 23%\'>
         <strong>Test/Feedback</strong>
         <p>We are always happy to hear from anyone who has used opendias. Tell us <a href=\'https://groups.google.com/forum/#!forum/opendias\' target=\'_blank\'>what you think</a>, good or bad.</p>
-        <p>Have any <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>ideas/ suggestions?</a> or want to vote on the current list of ideas.</li>
+        <p>Have any <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>ideas/ suggestions?</a> or want to vote on the current list of ideas.</p>
       </div>
 
       <div style=\'float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
@@ -1277,14 +1257,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /opendias/
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -1351,13 +1330,9 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
   <p style=\'float: left\'><img src=\'/opendias/images/openDIAS_sml.png\' width=140px /></p>
   <p style=\'float: right; padding: 3px; border: 1px solid black\'><img src=\'/opendias/images/cabinet.jpg\' style=\'border: 1px solid black\' /></p>
 
-  <p class=\'intro\'>openDIAS (Document Imaging Archive System) provides document imaging with 
-    OCR. You can scan documents (with SANE) or import ODF documents, and then assign tags. It 
-    can store all your letters, bills, statements, etc. in a convenient, safe, and easily 
-    retrievable way.</p>
+  <p class=\'intro\'>openDIAS (Document Imaging Archive System) provides document imaging with OCR. You can scan documents (with SANE) or import ODF documents, and then assign tags. It can store all your letters, bills, statements, etc. in a convenient, safe, and easily retrievable way.</p>
 
-  <p>The openDIAS project is a new OpenSource offering to bring professional document scanning 
-    and storage utility to the home user.</p>
+  <p>The openDIAS project is a new OpenSource offering to bring professional document scanning and storage utility to the home user.</p>
 
   <ul>
     <li><a href=\'#\' onclick=\'$("#arch").toggle("clip");\'>Architecture</a></li>
@@ -1376,8 +1351,7 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     </span>
     <p>The openDias architecture has been designed to allow many users to access the system.</p>
     <ul>
-      <li>The application connects to \'SANE\' which gives you access to various scanning devices, both 
-        locally or via the network (see SANE config setting for instructions how).</li>
+      <li>The application connects to \'SANE\' which gives you access to various scanning devices, both locally or via the network (see SANE config setting for instructions how).</li>
       <li>Scanned images and the main database are stored on the server.</li>
       <li>Clients can connect from any location that can see the server, using a standard web browser.</li>
       <li>Access controls can be set up by \'clients location\' or \'traditional username and password\'.</li>
@@ -1395,21 +1369,20 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     <ul>
       <li>Acquire New: false errors reported related to size estimations</li>
       <li>Acquire New: scanning may result in unoperational scanner. (usb-reset)</li>
-      <li>Memory leaks: scanning operation, upload jpeg(odf untested), after startup when browsing the site, </li>
+      <li>Memory leaks: scanning operation, upload jpeg(odf untested), after startup when browsing the site,</li>
     </ul>
   </div>
 
   <div id=\'help\' class=\'hidden\'>
     <h3>Get involved and Support.</h3>
-    <p>openDias is an opensource project, which means there are several ways you can help. We appreciate
-      anything you can do.</p>
+    <p>openDias is an opensource project, which means there are several ways you can help. We appreciate anything you can do.</p>
 
     <div class=\'row\'>
 
       <div style=\'float: left; width: 23%\'>
         <strong>Test/Feedback</strong>
         <p>We are always happy to hear from anyone who has used opendias. Tell us <a href=\'https://groups.google.com/forum/#!forum/opendias\' target=\'_blank\'>what you think</a>, good or bad.</p>
-        <p>Have any <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>ideas/ suggestions?</a> or want to vote on the current list of ideas.</li>
+        <p>Have any <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>ideas/ suggestions?</a> or want to vote on the current list of ideas.</p>
       </div>
 
       <div style=\'float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
@@ -1469,14 +1442,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 GET request for /opendias/../unknown.html
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -1612,14 +1584,13 @@ $VAR1 = '';
 
 Sending request = 
 POST request for 
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -1695,14 +1666,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 POST request for /
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -1778,14 +1748,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 POST request for /../unknown.html
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -1861,14 +1830,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 POST request for /unknown.html
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -1944,14 +1912,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 POST request for /images/unknown.png
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -2027,14 +1994,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 POST request for /images/unknown.jpg
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -2110,14 +2076,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 POST request for /scans/unknown.jpg
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -2193,14 +2158,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 POST request for /includes/unknown.js
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -2276,14 +2240,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 POST request for /style/unknown.css
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -2359,14 +2322,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 POST request for /unknown
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -2442,14 +2404,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 POST request for /unknown/
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -2525,14 +2486,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 POST request for /dynamic
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -2608,14 +2568,13 @@ $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
 Sending request = 
 POST request for /dynamic/
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -2703,14 +2662,13 @@ $VAR1 = '';
 
 Sending request = 
 POST request for /opendias/../unknown.html
-$VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+$VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 

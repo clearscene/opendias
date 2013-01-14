@@ -22,7 +22,7 @@ LOCAL_home_arch_point3|Kunden können von jedem Standort aus, die den Server seh
 LOCAL_home_arch_point4|Zugriffskontrolle kann durch den Kunden von Standort "oder" Benutzernamen und Passwort angemeldet 'gesetzt werden.
 LOCAL_home_subtitle_functional|Funktionalität
 LOCAL_home_functional_point1|Erwerben Neu: angebotene Scanauflösung entspricht nicht Hardwarefunktionen
-LOCAL_home_subtitle_technical|Technical
+LOCAL_home_subtitle_technical|Technisch
 LOCAL_home_technical_point1|Erwerben New: false Fehler gemeldet Bezug auf Größe Einschätzungen
 LOCAL_home_technical_point2|Erwerben Neu: Scannen kann unoperational Scanners führen. (usb-reset)
 LOCAL_home_technical_point3|Speicherverluste: Scanvorgang, upload jpeg (ODF ungetestet), nach dem Start, wenn das Surfen im Ort

@@ -379,13 +379,14 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, size_t totbyt
   SANE_Byte *raw_image_current_pos;
   int progress = 0;
   int feedback = 5;
+  int bufferSize = 32768;
   size_t readSoFar = 0;
   size_t headerLength = strlen(header);
   size_t stillToRead = totbytes;
   struct timeval start, end;
 
   // Initialise the blank image;
-  raw_image = calloc( totbytes + headerLength, sizeof(unsigned char) );
+  raw_image = calloc( totbytes + headerLength + 1, sizeof(unsigned char) );
   if( raw_image == NULL ) {
     o_log(ERROR, "Out of memory, when assiging the new image storage.");
     return NULL;
@@ -413,7 +414,7 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, size_t totbyt
     //
     // Read buffer from sane (the scanner)
     //status = sane_read (openDeviceHandle, raw_image_current_pos, stillToRead, &received_length_from_sane);
-    status = sane_read (openDeviceHandle, raw_image_current_pos, 32768, &received_length_from_sane);
+    status = sane_read (openDeviceHandle, raw_image_current_pos, bufferSize, &received_length_from_sane);
     o_log(DEBUGM, "At %d%, requested %d bytes, got %d, with status %d)", progress, stillToRead, received_length_from_sane, status);
 
 
@@ -424,13 +425,16 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, size_t totbyt
       readSoFar += received_length_from_sane;
       stillToRead -= received_length_from_sane;
       raw_image_current_pos += received_length_from_sane;
+      if ( bufferSize > stillToRead ) {
+        bufferSize = stillToRead;
+      }
 
       // Update the progress info
       progress = (int)((readSoFar*100) / totbytes);
       if(progress > 100)
         progress = 100;
 
-      if ( stillToRead <= 0 ) {
+      if ( stillToRead == 0 ) {
         o_log(ERROR, "No more bytes to read" );
         break;
       }

@@ -5,14 +5,13 @@ Now ready
 No need for a web client for this test.
 Sending request = action=checkLogin&password=password&username=test-user
 Sending request = 
-No language indication = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+No language indication = $VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -79,13 +78,9 @@ No language indication = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
   <p style=\'float: left\'><img src=\'/opendias/images/openDIAS_sml.png\' width=140px /></p>
   <p style=\'float: right; padding: 3px; border: 1px solid black\'><img src=\'/opendias/images/cabinet.jpg\' style=\'border: 1px solid black\' /></p>
 
-  <p class=\'intro\'>openDIAS (Document Imaging Archive System) provides document imaging with 
-    OCR. You can scan documents (with SANE) or import ODF documents, and then assign tags. It 
-    can store all your letters, bills, statements, etc. in a convenient, safe, and easily 
-    retrievable way.</p>
+  <p class=\'intro\'>openDIAS (Document Imaging Archive System) provides document imaging with OCR. You can scan documents (with SANE) or import ODF documents, and then assign tags. It can store all your letters, bills, statements, etc. in a convenient, safe, and easily retrievable way.</p>
 
-  <p>The openDIAS project is a new OpenSource offering to bring professional document scanning 
-    and storage utility to the home user.</p>
+  <p>The openDIAS project is a new OpenSource offering to bring professional document scanning and storage utility to the home user.</p>
 
   <ul>
     <li><a href=\'#\' onclick=\'$("#arch").toggle("clip");\'>Architecture</a></li>
@@ -104,8 +99,7 @@ No language indication = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     </span>
     <p>The openDias architecture has been designed to allow many users to access the system.</p>
     <ul>
-      <li>The application connects to \'SANE\' which gives you access to various scanning devices, both 
-        locally or via the network (see SANE config setting for instructions how).</li>
+      <li>The application connects to \'SANE\' which gives you access to various scanning devices, both locally or via the network (see SANE config setting for instructions how).</li>
       <li>Scanned images and the main database are stored on the server.</li>
       <li>Clients can connect from any location that can see the server, using a standard web browser.</li>
       <li>Access controls can be set up by \'clients location\' or \'traditional username and password\'.</li>
@@ -123,21 +117,20 @@ No language indication = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     <ul>
       <li>Acquire New: false errors reported related to size estimations</li>
       <li>Acquire New: scanning may result in unoperational scanner. (usb-reset)</li>
-      <li>Memory leaks: scanning operation, upload jpeg(odf untested), after startup when browsing the site, </li>
+      <li>Memory leaks: scanning operation, upload jpeg(odf untested), after startup when browsing the site,</li>
     </ul>
   </div>
 
   <div id=\'help\' class=\'hidden\'>
     <h3>Get involved and Support.</h3>
-    <p>openDias is an opensource project, which means there are several ways you can help. We appreciate
-      anything you can do.</p>
+    <p>openDias is an opensource project, which means there are several ways you can help. We appreciate anything you can do.</p>
 
     <div class=\'row\'>
 
       <div style=\'float: left; width: 23%\'>
         <strong>Test/Feedback</strong>
         <p>We are always happy to hear from anyone who has used opendias. Tell us <a href=\'https://groups.google.com/forum/#!forum/opendias\' target=\'_blank\'>what you think</a>, good or bad.</p>
-        <p>Have any <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>ideas/ suggestions?</a> or want to vote on the current list of ideas.</li>
+        <p>Have any <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>ideas/ suggestions?</a> or want to vote on the current list of ideas.</p>
       </div>
 
       <div style=\'float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
@@ -194,14 +187,13 @@ No language indication = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 ';
 
 Sending request = 
-header says en = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+header says en = $VAR1 = '<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -268,13 +260,9 @@ header says en = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
   <p style=\'float: left\'><img src=\'/opendias/images/openDIAS_sml.png\' width=140px /></p>
   <p style=\'float: right; padding: 3px; border: 1px solid black\'><img src=\'/opendias/images/cabinet.jpg\' style=\'border: 1px solid black\' /></p>
 
-  <p class=\'intro\'>openDIAS (Document Imaging Archive System) provides document imaging with 
-    OCR. You can scan documents (with SANE) or import ODF documents, and then assign tags. It 
-    can store all your letters, bills, statements, etc. in a convenient, safe, and easily 
-    retrievable way.</p>
+  <p class=\'intro\'>openDIAS (Document Imaging Archive System) provides document imaging with OCR. You can scan documents (with SANE) or import ODF documents, and then assign tags. It can store all your letters, bills, statements, etc. in a convenient, safe, and easily retrievable way.</p>
 
-  <p>The openDIAS project is a new OpenSource offering to bring professional document scanning 
-    and storage utility to the home user.</p>
+  <p>The openDIAS project is a new OpenSource offering to bring professional document scanning and storage utility to the home user.</p>
 
   <ul>
     <li><a href=\'#\' onclick=\'$("#arch").toggle("clip");\'>Architecture</a></li>
@@ -293,8 +281,7 @@ header says en = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     </span>
     <p>The openDias architecture has been designed to allow many users to access the system.</p>
     <ul>
-      <li>The application connects to \'SANE\' which gives you access to various scanning devices, both 
-        locally or via the network (see SANE config setting for instructions how).</li>
+      <li>The application connects to \'SANE\' which gives you access to various scanning devices, both locally or via the network (see SANE config setting for instructions how).</li>
       <li>Scanned images and the main database are stored on the server.</li>
       <li>Clients can connect from any location that can see the server, using a standard web browser.</li>
       <li>Access controls can be set up by \'clients location\' or \'traditional username and password\'.</li>
@@ -312,21 +299,20 @@ header says en = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     <ul>
       <li>Acquire New: false errors reported related to size estimations</li>
       <li>Acquire New: scanning may result in unoperational scanner. (usb-reset)</li>
-      <li>Memory leaks: scanning operation, upload jpeg(odf untested), after startup when browsing the site, </li>
+      <li>Memory leaks: scanning operation, upload jpeg(odf untested), after startup when browsing the site,</li>
     </ul>
   </div>
 
   <div id=\'help\' class=\'hidden\'>
     <h3>Get involved and Support.</h3>
-    <p>openDias is an opensource project, which means there are several ways you can help. We appreciate
-      anything you can do.</p>
+    <p>openDias is an opensource project, which means there are several ways you can help. We appreciate anything you can do.</p>
 
     <div class=\'row\'>
 
       <div style=\'float: left; width: 23%\'>
         <strong>Test/Feedback</strong>
         <p>We are always happy to hear from anyone who has used opendias. Tell us <a href=\'https://groups.google.com/forum/#!forum/opendias\' target=\'_blank\'>what you think</a>, good or bad.</p>
-        <p>Have any <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>ideas/ suggestions?</a> or want to vote on the current list of ideas.</li>
+        <p>Have any <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>ideas/ suggestions?</a> or want to vote on the current list of ideas.</p>
       </div>
 
       <div style=\'float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
@@ -383,14 +369,13 @@ header says en = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 ';
 
 Sending request = 
-header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+header says de = $VAR1 = '<!DOCTYPE html>
+<html lang="de">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -457,13 +442,9 @@ header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
   <p style=\'float: left\'><img src=\'/opendias/images/openDIAS_sml.png\' width=140px /></p>
   <p style=\'float: right; padding: 3px; border: 1px solid black\'><img src=\'/opendias/images/cabinet.jpg\' style=\'border: 1px solid black\' /></p>
 
-  <p class=\'intro\'>openDIAS (Document Imaging Archive System) bietet Document Imaging mit 
-    OCR. Sie können Dokumente scannen (mit SANE) oder importieren ODF-Dokumente, und weisen Sie dann tags. es
-    können Sie alle Ihre Briefe, Rechnungen, Kontoauszüge, etc. in einem bequemen, sicheren und einfach speichern
-    abrufbaren Weise.</p>
+  <p class=\'intro\'> openDIAS (Document Imaging Archive System) bietet Document Imaging mit OCR. Sie können Dokumente scannen (mit SANE) oder importieren ODF-Dokumente, und weisen Sie dann tags. es können Sie alle Ihre Briefe, Rechnungen, Kontoauszüge, etc. in einem bequemen, sicheren und einfach speichern abrufbaren Weise.</p>
 
-  <p>Die openDIAS Projekt ist eine neue Open Source-Angebot für professionelle Scannen von Dokumenten zu bringen
-    und Lagerung Nutzen für die Benutzer zu Hause.</p>
+  <p>Die openDIAS Projekt ist eine neue Open Source-Angebot für professionelle Scannen von Dokumenten zu bringen und Lagerung Nutzen für die Benutzer zu Hause.</p>
 
   <ul>
     <li><a href=\'#\' onclick=\'$("#arch").toggle("clip");\'>Architektur</a></li>
@@ -482,8 +463,7 @@ header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     </span>
     <p>openDias architektur wurde so konzipiert, dass viele Anwender auf das System zuzugreifen.</p>
     <ul>
-      <li>Die Anwendung verbindet sich \'SANE\' was Ihnen an verschiedene Scan-Geräte zugreifen, sowohl
-        lokal oder über das Netzwerk (siehe SANE Konfigurations-Einstellung für die Anleitung, wie).</li> 
+      <li>Die Anwendung verbindet sich \'SANE\' was Ihnen an verschiedene Scan-Geräte zugreifen, sowohl lokal oder über das Netzwerk (siehe SANE Konfigurations-Einstellung für die Anleitung, wie).</li>
       <li>Gescannte Bilder und die Haupt-Datenbank auf dem Server gespeichert.</li>
       <li>Kunden können von jedem Standort aus, die den Server sehen eine Verbindung herstellen können, über einen Standard-Webbrowser.</li>
       <li>Zugriffskontrolle kann durch den Kunden von Standort "oder" Benutzernamen und Passwort angemeldet \'gesetzt werden.</li>
@@ -507,33 +487,32 @@ header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
   <div id=\'help\' class=\'hidden\'>
     <h3>Machen Sie mit und Support.</h3>
-    <p>openDias ist ein OpenSource Projekt, das es gibt mehrere Möglichkeiten zu helfen bedeutet. Wir freuen uns über
-      alles, was Sie tun können.</p>
+    <p>openDias ist ein OpenSource Projekt, das es gibt mehrere Möglichkeiten zu helfen bedeutet. Wir freuen uns über alles, was Sie tun können.</p>
 
-      <div class=\'row\'>
+    <div class=\'row\'>
 
-        <div style=\'float: left; width: 23%\'>
-          <strong>Test/Feedback</strong>
-          <p>Wir freuen uns immer, von jedem, der opendias verwendet hat zu hören. Sagen Sie uns <a href=\'https://groups.google.com/forum/#!forum/opendias\' target=\'_blank\'>was Sie</a>, gut oder schlecht.</p>
-          <p>Übernehmen keinerlei <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>Ideen / Anregungen?</a> oder wollen Abstimmung über die aktuelle Liste der Ideen.</li>
-        </div>
+      <div style=\'float: left; width: 23%\'>
+        <strong>Test/Feedback</strong>
+        <p>Wir freuen uns immer, von jedem, der opendias verwendet hat zu hören. Sagen Sie uns <a href=\'https://groups.google.com/forum/#!forum/opendias\' target=\'_blank\'>was Sie</a>, gut oder schlecht.</p>
+        <p>Übernehmen keinerlei <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>Ideen / Anregungen?</a> oder wollen Abstimmung über die aktuelle Liste der Ideen.</p>
+      </div>
 
-        <div style=\'float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
-          <strong>Veröffentlichen Sie</strong>
-          <p>Wir möchten möglichst viele Menschen zu opendias wie möglich zu nutzen, und das bedeutet, dass man möglichst viele Menschen davon zu hören wie möglich. Also, los, das Wort zu verbreiten.</p>
-          <p>Wir versuchen, die <a href=\'http://opendias.blogspot.com/\'>opendias blog</a> bis-2-Termin so weit wie möglich.</p>
-        </div>
+      <div style=\'float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Veröffentlichen Sie</strong>
+        <p>Wir möchten möglichst viele Menschen zu opendias wie möglich zu nutzen, und das bedeutet, dass man möglichst viele Menschen davon zu hören wie möglich. Also, los, das Wort zu verbreiten.</p>
+        <p>Wir versuchen, die <a href=\'http://opendias.blogspot.com/\'>opendias blog</a> bis-2-Termin so weit wie möglich.</p>
+      </div>
 
-        <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
-          <strong>Hackers Benötigte</strong>
-          <p>Wenn Sie verfügbare Zeit haben, in Kontakt zu treten, gibt es mehrere Projekte aufgereiht.</p>
-          <p>Oonst fühlen Sie sich frei, um einen Patch (wie <a href=\'https://github.com/clearscene/opendias\'>GitHub</a>) zu verbessern / fix die aktuelle Systemzeit.</p>
-        </div>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Hackers Benötigte</strong>
+        <p>Wenn Sie verfügbare Zeit haben, in Kontakt zu treten, gibt es mehrere Projekte aufgereiht.</p>
+        <p>Oonst fühlen Sie sich frei, um einen Patch (wie <a href=\'https://github.com/clearscene/opendias\'>GitHub</a>) zu verbessern / fix die aktuelle Systemzeit.</p>
+      </div>
 
-        <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
-          <strong>Spenden</strong>
-          <p>Jede Spende wird dankbar angenommen, und werden verwendet, um Hardware zu kaufen, um gegen. testen.</p>
-          <form action="https://www.paypal.com/cgi-bin/webscr" method="post"  style=\'float: left\'>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Spenden</strong>
+        <p>Jede Spende wird dankbar angenommen, und werden verwendet, um Hardware zu kaufen, um gegen. testen.</p>
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post"  style=\'float: left\'>
           <input type="hidden" name="cmd" value="_donations" />
           <input type="hidden" name="business" value="booth@clearscene.net" />
           <input type="hidden" name="item_name" value="openDIAS Project" />
@@ -572,14 +551,13 @@ header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 ';
 
 Sending request = 
-bad cookie, header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
+<html lang="de">
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 
@@ -646,13 +624,9 @@ bad cookie, header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
   <p style=\'float: left\'><img src=\'/opendias/images/openDIAS_sml.png\' width=140px /></p>
   <p style=\'float: right; padding: 3px; border: 1px solid black\'><img src=\'/opendias/images/cabinet.jpg\' style=\'border: 1px solid black\' /></p>
 
-  <p class=\'intro\'>openDIAS (Document Imaging Archive System) bietet Document Imaging mit 
-    OCR. Sie können Dokumente scannen (mit SANE) oder importieren ODF-Dokumente, und weisen Sie dann tags. es
-    können Sie alle Ihre Briefe, Rechnungen, Kontoauszüge, etc. in einem bequemen, sicheren und einfach speichern
-    abrufbaren Weise.</p>
+  <p class=\'intro\'> openDIAS (Document Imaging Archive System) bietet Document Imaging mit OCR. Sie können Dokumente scannen (mit SANE) oder importieren ODF-Dokumente, und weisen Sie dann tags. es können Sie alle Ihre Briefe, Rechnungen, Kontoauszüge, etc. in einem bequemen, sicheren und einfach speichern abrufbaren Weise.</p>
 
-  <p>Die openDIAS Projekt ist eine neue Open Source-Angebot für professionelle Scannen von Dokumenten zu bringen
-    und Lagerung Nutzen für die Benutzer zu Hause.</p>
+  <p>Die openDIAS Projekt ist eine neue Open Source-Angebot für professionelle Scannen von Dokumenten zu bringen und Lagerung Nutzen für die Benutzer zu Hause.</p>
 
   <ul>
     <li><a href=\'#\' onclick=\'$("#arch").toggle("clip");\'>Architektur</a></li>
@@ -671,8 +645,7 @@ bad cookie, header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
     </span>
     <p>openDias architektur wurde so konzipiert, dass viele Anwender auf das System zuzugreifen.</p>
     <ul>
-      <li>Die Anwendung verbindet sich \'SANE\' was Ihnen an verschiedene Scan-Geräte zugreifen, sowohl
-        lokal oder über das Netzwerk (siehe SANE Konfigurations-Einstellung für die Anleitung, wie).</li> 
+      <li>Die Anwendung verbindet sich \'SANE\' was Ihnen an verschiedene Scan-Geräte zugreifen, sowohl lokal oder über das Netzwerk (siehe SANE Konfigurations-Einstellung für die Anleitung, wie).</li>
       <li>Gescannte Bilder und die Haupt-Datenbank auf dem Server gespeichert.</li>
       <li>Kunden können von jedem Standort aus, die den Server sehen eine Verbindung herstellen können, über einen Standard-Webbrowser.</li>
       <li>Zugriffskontrolle kann durch den Kunden von Standort "oder" Benutzernamen und Passwort angemeldet \'gesetzt werden.</li>
@@ -696,33 +669,32 @@ bad cookie, header says de = $VAR1 = '<?xml version="1.0" encoding="utf-8"?>
 
   <div id=\'help\' class=\'hidden\'>
     <h3>Machen Sie mit und Support.</h3>
-    <p>openDias ist ein OpenSource Projekt, das es gibt mehrere Möglichkeiten zu helfen bedeutet. Wir freuen uns über
-      alles, was Sie tun können.</p>
+    <p>openDias ist ein OpenSource Projekt, das es gibt mehrere Möglichkeiten zu helfen bedeutet. Wir freuen uns über alles, was Sie tun können.</p>
 
-      <div class=\'row\'>
+    <div class=\'row\'>
 
-        <div style=\'float: left; width: 23%\'>
-          <strong>Test/Feedback</strong>
-          <p>Wir freuen uns immer, von jedem, der opendias verwendet hat zu hören. Sagen Sie uns <a href=\'https://groups.google.com/forum/#!forum/opendias\' target=\'_blank\'>was Sie</a>, gut oder schlecht.</p>
-          <p>Übernehmen keinerlei <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>Ideen / Anregungen?</a> oder wollen Abstimmung über die aktuelle Liste der Ideen.</li>
-        </div>
+      <div style=\'float: left; width: 23%\'>
+        <strong>Test/Feedback</strong>
+        <p>Wir freuen uns immer, von jedem, der opendias verwendet hat zu hören. Sagen Sie uns <a href=\'https://groups.google.com/forum/#!forum/opendias\' target=\'_blank\'>was Sie</a>, gut oder schlecht.</p>
+        <p>Übernehmen keinerlei <a href=\'http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40\' target=\'_blank\'>Ideen / Anregungen?</a> oder wollen Abstimmung über die aktuelle Liste der Ideen.</p>
+      </div>
 
-        <div style=\'float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
-          <strong>Veröffentlichen Sie</strong>
-          <p>Wir möchten möglichst viele Menschen zu opendias wie möglich zu nutzen, und das bedeutet, dass man möglichst viele Menschen davon zu hören wie möglich. Also, los, das Wort zu verbreiten.</p>
-          <p>Wir versuchen, die <a href=\'http://opendias.blogspot.com/\'>opendias blog</a> bis-2-Termin so weit wie möglich.</p>
-        </div>
+      <div style=\'float: left; width: 23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Veröffentlichen Sie</strong>
+        <p>Wir möchten möglichst viele Menschen zu opendias wie möglich zu nutzen, und das bedeutet, dass man möglichst viele Menschen davon zu hören wie möglich. Also, los, das Wort zu verbreiten.</p>
+        <p>Wir versuchen, die <a href=\'http://opendias.blogspot.com/\'>opendias blog</a> bis-2-Termin so weit wie möglich.</p>
+      </div>
 
-        <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
-          <strong>Hackers Benötigte</strong>
-          <p>Wenn Sie verfügbare Zeit haben, in Kontakt zu treten, gibt es mehrere Projekte aufgereiht.</p>
-          <p>Oonst fühlen Sie sich frei, um einen Patch (wie <a href=\'https://github.com/clearscene/opendias\'>GitHub</a>) zu verbessern / fix die aktuelle Systemzeit.</p>
-        </div>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Hackers Benötigte</strong>
+        <p>Wenn Sie verfügbare Zeit haben, in Kontakt zu treten, gibt es mehrere Projekte aufgereiht.</p>
+        <p>Oonst fühlen Sie sich frei, um einen Patch (wie <a href=\'https://github.com/clearscene/opendias\'>GitHub</a>) zu verbessern / fix die aktuelle Systemzeit.</p>
+      </div>
 
-        <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
-          <strong>Spenden</strong>
-          <p>Jede Spende wird dankbar angenommen, und werden verwendet, um Hardware zu kaufen, um gegen. testen.</p>
-          <form action="https://www.paypal.com/cgi-bin/webscr" method="post"  style=\'float: left\'>
+      <div style=\'float: left; width:23%; border-left: 1px dashed black; margin-left: 10px; padding-left: 4px;\'>
+        <strong>Spenden</strong>
+        <p>Jede Spende wird dankbar angenommen, und werden verwendet, um Hardware zu kaufen, um gegen. testen.</p>
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post"  style=\'float: left\'>
           <input type="hidden" name="cmd" value="_donations" />
           <input type="hidden" name="business" value="booth@clearscene.net" />
           <input type="hidden" name="item_name" value="openDIAS Project" />
