@@ -16,11 +16,13 @@ Testing
 
 App Improvments
 
-  Got a SANE busy signal - then give option to keep polling until it's available.
+  [all done]
 
 Functionality
 
   [assigned wpb] Managment of users and sessions
+
+  Add support for scanning in colour
 
 Project
 

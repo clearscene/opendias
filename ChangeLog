@@ -4,7 +4,7 @@
         Priverlage assignment by username and password.
         Depricated location based priverlage assignments.
         Implement bind vars for result returning SQL statements
-        Cleanedup homepage
+        Cleaned up homepage
         Stubbed out many external libs for testing (performance)
         Detail page now has a print now button (for scans and jpeg imports)
         Localisation is now much easier
