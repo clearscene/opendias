@@ -1,6 +1,6 @@
 var baron = 0;
 var canon = 0;
-var PROGRESS_REFRESH_TIME = 400;
+var PROGRESS_REFRESH_TIME = 400; // ms
 var doneAtLeastOnePage = 0;
 
 function showStatus(dev, canv, prog) {
