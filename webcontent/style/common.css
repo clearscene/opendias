@@ -517,7 +517,7 @@
    border-color: #555;
    color: #bbb;
   }
-  #mydetails li {
+  .useradmin li {
    list-style-type: none;
-   padding-left: 100px;
+   padding-left: 40px;
   }

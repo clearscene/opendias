@@ -173,10 +173,10 @@ function get_priv_from_role( user_role, priv ) {
   role[3] = {};
   role[4] = {};
 
-  role[1].name = 'Admin';
-  role[2].name = 'User';
-  role[3].name = 'View';
-  role[4].name = 'Add';
+  role[1].name = LOCAL_role_admin;
+  role[2].name = LOCAL_role_user;
+  role[3].name = LOCAL_role_view;
+  role[4].name = LOCAL_role_add;
 
   role[1].update_access = 1;
   role[2].update_access = 0;
