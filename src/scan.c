@@ -800,8 +800,15 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
         // BUSY signal could be the scanner just having a 
         // bit of lag - specially network connected devices
         timeout--;
-        o_log(WARNING, "Device reports not ready to 'start', waiting 500ms. Will try another %d times", timeout);
-        usleep(500);
+        if ( timeout == 0 ) {
+          handleSaneErrors("Cannot start scanning even after trying several time", status, 0);
+          updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
+          return 0;
+        }
+        else {
+          o_log(WARNING, "Device reports not ready to 'start', waiting 500ms. Will try another %d times", timeout);
+          usleep(500);
+        }
       }
       else {
         handleSaneErrors("Cannot start scanning", status, 0);
