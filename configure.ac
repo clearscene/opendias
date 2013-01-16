@@ -61,6 +61,10 @@ dnl Special config options
 dnl 
 
 AC_ENABLE([werror],[OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS -Werror"])
+AC_ENABLE([opentoall],[
+  AC_DEFINE([OPEN_TO_ALL],[],[No login for user. The application is open to all.])
+  LOCALISATION_FLAGS="$LOCALISATION_FLAGS OPEN_TO_ALL"
+])
 AC_ENABLE([thread_join],[
 	AC_DEFINE([THREAD_JOIN],[],[The main process will wait for child threads to finish.])
 ])
@@ -188,7 +192,7 @@ fi
 
 
 cd webcontent
-perl build-local-versions.pl
+perl build-local-versions.pl $LOCALISATION_FLAGS
 cd ../
 
 
