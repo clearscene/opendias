@@ -61,9 +61,12 @@ dnl Special config options
 dnl 
 
 AC_ENABLE([werror],[OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS -Werror"])
-AC_ENABLE([opentoall],[
-  AC_DEFINE([OPEN_TO_ALL],[],[No login for user. The application is open to all.])
+AC_ENABLE([open_to_all],[
+  AC_DEFINE([OPEN_TO_ALL],[],[No login for users. The application is open to all.])
   LOCALISATION_FLAGS="$LOCALISATION_FLAGS OPEN_TO_ALL"
+])
+AC_ENABLE([create_test_language],[
+  LOCALISATION_FLAGS="$LOCALISATION_FLAGS CREATE_TEST_LANGUAGE"
 ])
 AC_ENABLE([thread_join],[
 	AC_DEFINE([THREAD_JOIN],[],[The main process will wait for child threads to finish.])

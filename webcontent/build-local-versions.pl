@@ -34,6 +34,11 @@ closedir( DIR );
 
 
 #####################################
+# Generate a testing language pack.
+generate_test_language();
+
+
+#####################################
 # Localise each file
 foreach my $lang ( keys %langs ) {
   my %lang_pack = ();
@@ -63,6 +68,7 @@ foreach my $lang ( keys %langs ) {
     close( TARGET );
     close( SOURCE );
   }
+
 }
 
 
@@ -108,6 +114,61 @@ sub translate {
     $line =~ s/---$key---/$lang_pack{$key}/g;
   }
   return $line;
+}
+
+
+####################################
+# Generate test localisation packs
+sub generate_test_language {
+
+  if ( exists $option{'CREATE_TEST_LANGUAGE'} ) {
+
+    my @resource_files = qw( language.resource.en ../i18n/language.resource.en );
+    opendir( DIR, './includes/local/' );
+    while( my $FILE = readdir( DIR ) ) {
+      if ( $FILE =~ /\.resource\.en/ ) {
+        push @resource_files, './includes/local/'.$FILE;
+      }
+    }
+    closedir( DIR );
+
+    # Load the language pack
+    foreach my $file (@resource_files) {
+
+      print "Creating a test language pack for $file\n";
+
+      my $file_out = $file;
+      $file_out =~ s/en$/hh/;
+
+      open( SOURCE, $file );
+      open( TARGET, ">$file_out" );
+      while ( my $line = <SOURCE> ) {
+        chomp( $line );
+        next if $line =~ /^$/ || $line =~ /^#/ || $line =~ /^\/\//;
+        if ( $file =~ /includes\/local/ ) {
+          # A javascript localise resource file
+          my ( $key, $data ) = $line =~ /^(.*) = '(.*)';/;
+          $data =~ s/[^\s]/#/g;
+          print TARGET "$key = '$data';\n";
+        }
+        else {
+          # An application resource file
+          my ( $key, $data ) = split( /\|/, $line );
+          $data =~ s/[^\s]/#/g;
+          print TARGET "$key|$data\n";
+        }
+      }
+      close( TARGET );
+      close( SOURCE );
+      $langs{'hh'} = 1;
+    }
+
+  }
+  else {
+    unlink('language.resource.hh');
+    delete $langs{'hh'};
+  }
+
 }
 
 __END__

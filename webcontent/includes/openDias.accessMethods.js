@@ -109,7 +109,7 @@ function updateMenuLinks() {
 
 
 // This does not form security, it just stop
-// presenting forms an calling API function, that 
+// presenting forms and calling API function, that 
 // we know are going to casue a 'permission denied'
 // response.
 function get_priv_from_role( user_role, priv ) {
