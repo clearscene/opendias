@@ -956,6 +956,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             size = strlen(content);
           }
   
+#ifndef OPEN_TO_ALL
           else if ( action && 0 == strcmp(action, "checkLogin") ) {
             o_log(INFORMATION, "Processing request for: checkLogin");
             if ( validate( con_info->post_data, action ) ) 
@@ -1000,7 +1001,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             mimetype = MIMETYPE_JSON;
             size = strlen(content);
           }
-  
+#endif // OPEN_TO_ALL //
+
           else {
             // should have been picked up by validation! and so never got here
             o_log(WARNING, "disallowed content: post request for unknown action.");
