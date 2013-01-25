@@ -118,10 +118,15 @@ char *uploadfile(char *filename, char *lang) {
     height = pixGetHeight( pix_l );
     o_log(INFORMATION, "Convertion process: Loaded (depth: %d)", pixGetDepth(pix_l));
     PIX *pix = pixScaleRGBToGrayFast( pix_l, 1, COLOR_GREEN );
-    o_log(INFORMATION, "Convertion process: Reduced depth to %d", pixGetDepth(pix));
-    pixDestroy( &pix_l );
-    ocrText = getTextFromImage(pix, 0, "eng");
-    pixDestroy( &pix );
+    if (pix == NULL ) {
+      o_log(ERROR,"Conversion process failed pixScaleRGBToGrayFast! skip ocr");
+    }
+    else {
+      o_log(INFORMATION, "Convertion process: Reduced depth to %d", pixGetDepth(pix));
+      pixDestroy( &pix_l );
+      ocrText = getTextFromImage(pix, 0, "eng");
+      pixDestroy( &pix );
+    }
 #endif // CAN_OCR //
   }
 
