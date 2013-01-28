@@ -7,6 +7,7 @@ my @templates = qw( includes/header.txt includes/footer.txt );
 my %langs = ( 'en' => 1 );
 my $hide = 0;
 my %option;
+my $year = 1900+((gmtime())[5]);
 
 #########################################
 # Collection options from the command line (ie what ./configure sends us)
@@ -112,6 +113,7 @@ sub translate {
 
   foreach my $key ( keys %lang_pack ) {
     $line =~ s/---$key---/$lang_pack{$key}/g;
+    $line =~ s/---CURRENT_YEAR---/$year/g;
   }
   return $line;
 }

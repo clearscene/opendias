@@ -5,7 +5,7 @@
   <div id='footerpadding'></div>
 
   <div id='footer'>
-      <p>---LOCAL_copyright--- Clearscene Ltd 2010</p>
+    <p>---LOCAL_copyright--- Clearscene Ltd 2010 - ---CURRENT_YEAR---</p>
   </div>
 
 </div>
