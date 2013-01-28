@@ -1001,6 +1001,25 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             mimetype = MIMETYPE_JSON;
             size = strlen(content);
           }
+ 
+          else if ( action && 0 == strcmp(action, "createUser") ) {
+            o_log(INFORMATION, "Processing request for: createUser");
+            if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *username = getPostData(con_info->post_data, "username");
+              char *realname = getPostData(con_info->post_data, "realname");
+              char *password = getPostData(con_info->post_data, "password");
+              char *role = getPostData(con_info->post_data, "role");
+		//reuse update user function 
+              //content = updateUser(username, realname, password, role, accessPrivs.update_access, con_info->session_data, con_info->lang); // pageRender.c
+              content = createUser(username, realname, password, role, accessPrivs.update_access, con_info->session_data, con_info->lang); // pageRender.c
+              if(content == (void *)NULL) 
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            }
+            mimetype = MIMETYPE_JSON;
+            size = strlen(content);
+          } 
 #endif // OPEN_TO_ALL //
 
           else {
