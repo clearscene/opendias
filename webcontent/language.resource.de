@@ -85,6 +85,9 @@ LOCAL_acquire_office_upload_file|Dateiname zum Hochladen:
 LOCAL_acquire_office_upload_botton|laden
 LOCAL_acquire_scanner_pages_alt|Die Anzahl der Seiten, aus denen das Dokument, das Sie zum Scannen fest
 LOCAL_acquire_scanner_pages|Seiten:
+LOCAL_acquire_scanscale|---LOCALISE_ME-format--:
+LOCAL_acquire_scanscale_grey|---LOCALISE_ME-Gray Scale--
+LOCAL_acquire_scanscale_colour|--LOCALISE_ME-Colour--
 LOCAL_acquire_scanner_no_of_page|seiten
 LOCAL_acquire_scanner_resolution_alt| Die Auflösung des Scanners sollten Sie beim Scannen Ihres Dokuments. Je höher, desto besser die Qualität. Aber auch, werden die höher ist, desto größer und langsamer Datei-Operationen sein.
 LOCAL_acquire_scanner_resolution|Auflösung:

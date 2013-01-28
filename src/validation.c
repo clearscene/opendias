@@ -210,7 +210,10 @@ static int checkDeviceId(char *val) {
 static int checkFormat(char *val) {
   if( val == NULL ) return 1;
   lower(val); // convert the whole string to lower case
-  if ( 0 == strcmp(val, "grey scale") ) return 0;
+  if ( 0 == strcmp(val, "gray")
+    || 0 == strcmp(val, "colour") ) {
+    return 0;
+  }
   o_log(ERROR, "Validation failed: scan format check");
   return 1;
 }
