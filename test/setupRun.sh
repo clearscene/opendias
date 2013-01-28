@@ -138,10 +138,10 @@ if [ "$NOBUILD" == "" ]; then
   cd ../
   if [ "$SKIPCOVERAGE" == "-c" ]; then
     echo " (without coverage) ..."
-    ./configure --prefix=$INSTALLLOCATION --enable-werror -C CFLAGS=' -g -O ' &> test/results/buildLog2.out
+    ./configure --prefix=$INSTALLLOCATION --enable-create_test_language --enable-werror -C CFLAGS=' -g -O ' &> test/results/buildLog2.out
   else
     echo " (with coverage) ..."
-    ./configure --prefix=$INSTALLLOCATION --enable-werror -C CFLAGS=' -g -O --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
+    ./configure --prefix=$INSTALLLOCATION --enable-create_test_language --enable-werror -C CFLAGS=' -g -O --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
   fi
   cd test
   # unfortunatly bash cannot support "&>>" - yet!

@@ -20,7 +20,8 @@ AC_CHECK_FUNCS([memset],[],AC_MSG_ERROR([Missing function memset]))
 AC_CHECK_FUNCS([mkdir],[],AC_MSG_ERROR([Missing function mkdir]))
 AC_CHECK_FUNCS([socket],[],AC_MSG_ERROR([Missing function socket]))
 AC_CHECK_FUNCS([strerror],[],AC_MSG_ERROR([Missing function strerror]))
-AC_CHECK_FUNCS([dup2],[],AC_MSG_ERROR([Missing header dup2]))
+AC_CHECK_FUNCS([dup2],[],AC_MSG_ERROR([Missing function dup2]))
+AC_CHECK_FUNCS([gettimeofday],[],AC_MSG_ERROR([Missing function gettimeofday]))
 AC_CHECK_HEADERS([arpa/inet.h],[],AC_MSG_ERROR([Missing header arpa/inet.h]))
 AC_CHECK_HEADERS([fcntl.h],[],AC_MSG_ERROR([Missing header fcntl.h]))
 AC_CHECK_HEADERS([netdb.h],[],AC_MSG_ERROR([Missing header netdb.h]))
@@ -38,7 +39,7 @@ AC_TYPE_SIZE_T
 AC_TYPE_SSIZE_T
 AC_TYPE_UINT64_T
 AC_TYPE_MODE_T
-
+AC_PROG_LN_S
 
 
 
@@ -61,6 +62,13 @@ dnl Special config options
 dnl 
 
 AC_ENABLE([werror],[OPENDIAS_CFLAGS="$OPENDIAS_CFLAGS -Werror"])
+AC_ENABLE([open_to_all],[
+  AC_DEFINE([OPEN_TO_ALL],[],[No login for users. The application is open to all.])
+  LOCALISATION_FLAGS="$LOCALISATION_FLAGS OPEN_TO_ALL"
+])
+AC_ENABLE([create_test_language],[
+  LOCALISATION_FLAGS="$LOCALISATION_FLAGS CREATE_TEST_LANGUAGE"
+])
 AC_ENABLE([thread_join],[
 	AC_DEFINE([THREAD_JOIN],[],[The main process will wait for child threads to finish.])
 ])
@@ -188,7 +196,7 @@ fi
 
 
 cd webcontent
-perl build-local-versions.pl
+perl build-local-versions.pl $LOCALISATION_FLAGS
 cd ../
 
 

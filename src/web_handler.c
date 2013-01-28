@@ -304,7 +304,16 @@ void request_completed (void *cls, struct MHD_Connection *connection, void **con
 #endif /* THREAD_JOIN */
 }
 
-//static char *
+#ifdef OPEN_TO_ALL
+void accessChecks(struct MHD_Connection *connection, const char *url, struct priverlage *privs, char *lang, struct simpleLinkedList *session_data) {
+    privs->update_access += 1;
+    privs->view_doc += 1;
+    privs->edit_doc += 1;
+    privs->delete_doc += 1;
+    privs->add_import += 1;
+    privs->add_scan += 1;
+}
+#else
 void accessChecks(struct MHD_Connection *connection, const char *url, struct priverlage *privs, char *lang, struct simpleLinkedList *session_data) {
 
   char *role = "";
@@ -336,6 +345,7 @@ void accessChecks(struct MHD_Connection *connection, const char *url, struct pri
   free_recordset( rSet );
   free(sql);
 }
+#endif /* OPEN_TO_ALL */
 
 char *userLanguage( struct MHD_Connection *connection ) {
 
@@ -946,6 +956,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             size = strlen(content);
           }
   
+#ifndef OPEN_TO_ALL
           else if ( action && 0 == strcmp(action, "checkLogin") ) {
             o_log(INFORMATION, "Processing request for: checkLogin");
             if ( validate( con_info->post_data, action ) ) 
@@ -990,7 +1001,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             mimetype = MIMETYPE_JSON;
             size = strlen(content);
           }
-  
+#endif // OPEN_TO_ALL //
+
           else {
             // should have been picked up by validation! and so never got here
             o_log(WARNING, "disallowed content: post request for unknown action.");

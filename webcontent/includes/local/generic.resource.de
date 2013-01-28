@@ -6,3 +6,7 @@ LOCAL_scanned_doc = 'Gescannt Dokument';
 LOCAL_pdf_doc = 'PDF Dokument';
 LOCAL_jpeg_img = 'JPEG Bilder';
 LOCAL_unknown = 'unbekannt';
+LOCAL_role_admin = 'TRANSLATE ME Admin (can do all operations)';
+LOCAL_role_user = 'TRANSLATE ME User (can do everything, except access controls)';
+LOCAL_role_view = 'TRANSLATE ME View (can view document only)';
+LOCAL_role_add = 'TRANSLATE ME Add (can add documents only)';

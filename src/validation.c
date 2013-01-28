@@ -250,11 +250,13 @@ static int checkUpdateKey(char *val) {
   return 0;
 }
 
+#ifndef OPEN_TO_ALL
 static int checkRole(char *role) {
   if(checkStringIsInt(role)) return 1;
   if(checkSaneRange(role, 1, 10)) return 1;
   return 0;
 }
+#endif // OPEN_TO_ALL //
 
 // need more here (ie comma delimited)
 static int checkTagList(char *val) {
@@ -503,6 +505,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkDocId(getPostData(postdata, "docid"));
   }
 
+#ifndef OPEN_TO_ALL
   if ( 0 == strcmp(action, "checkLogin") ) {
     sll_insert(vars, "username", "m" );
     sll_insert(vars, "password", "m" );
@@ -529,6 +532,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
       }
     }
   }
+#endif // OPEN_TO_ALL //
 
   // Needs further validation effort
 

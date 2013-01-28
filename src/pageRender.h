@@ -40,8 +40,10 @@ char *nextPageReady(char *, char *);
 char *docFilter(char *, char *, char *, char *, char *, char *, char *, char *, char *, char *, char *);
 char *titleAutoComplete(char *, char *);
 char *tagsAutoComplete(char *, char *);
+#ifndef OPEN_TO_ALL
 char *checkLogin(char *, char *, char *, struct simpleLinkedList *);
 char *doLogout( struct simpleLinkedList *);
 char *updateUser( char *, char *, char *, char *, int, struct simpleLinkedList *, char *);
+#endif // OPEN_TO_ALL //
 
 #endif /* PAGERENDER */

@@ -575,6 +575,7 @@ char *tagsAutoComplete(char *startsWith, char *docid) {
   return result;
 }
 
+#ifndef OPEN_TO_ALL
 char *checkLogin( char *username, char *password, char *lang, struct simpleLinkedList *session_data ) {
   struct simpleLinkedList *rSet;
   int retry_throttle = 5;
@@ -860,4 +861,5 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
   free( created );
   return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateUser><result>OK</result></UpdateUser></Response>");
 }
+#endif // OPEN_TO_ALL //
 

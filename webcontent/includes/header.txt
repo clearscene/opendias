@@ -7,6 +7,12 @@
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+#ifndef OPEN_TO_ALL
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
+#endifndef OPEN_TO_ALL
+#ifdef OPEN_TO_ALL
+  <script type="text/javascript"> function get_priv_from_role() { return 1; } </script>
+#endifdef OPEN_TO_ALL
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -23,6 +29,7 @@
       <img id='logo' src='/opendias/images/openDIAS_sml.png' />
     </div>
     <div id='loginout'>
+#ifndef OPEN_TO_ALL
       <ul>
         <li>
           <span id='login'>
@@ -35,11 +42,15 @@
             <button id='logoutbutton'>---LOCAL_logout---</button>
           </span>
         </li>
+#endifndef OPEN_TO_ALL
         <li>
           <select id='language'>
             <option value='--'>---LOCAL_default_browser_lang---</option>
             <option value='en'>English</option>
             <option value='de'>Deutsche</option>
+#ifdef CREATE_TEST_LANGUAGE
+            <option value='hh'>#### ########</option>
+#endifdef CREATE_TEST_LANGUAGE
           </select>
         </li>
       </ul>
