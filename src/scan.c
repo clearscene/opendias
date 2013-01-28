@@ -54,7 +54,8 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
   SANE_Bool v_b;
   char *v_c;
   //const char *modes[] = { SANE_VALUE_SCAN_MODE_COLOR, SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
-  const char *modes[] = { SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
+  const char *modes_colour[] = { SANE_VALUE_SCAN_MODE_COLOR, "Color", SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
+  const char *modes_gray[] = { SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
   const char *speeds[] = { "Auto", "Normal", "Fast", NULL };
   const char *sources[] = { "Auto", SANE_I18N ("Auto"), "Flatbed", SANE_I18N ("Flatbed"), 
                             "FlatBed", "Normal", SANE_I18N ("Normal"), NULL };
@@ -129,25 +130,31 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
 
         // Set scanning mode
         else if ( strcmp(sod->name, SANE_NAME_SCAN_MODE ) == 0 ) {
-          if ( !setDefaultScannerOption(openDeviceHandle, sod, option, &paramSetRet) ) {
-            int i, j; 
-            int foundMatch = 0;
-            for (i = 0; modes[i] != NULL; i++) {
-              for (j = 0; sod->constraint.string_list[j]; j++) {
-                if (strcmp (modes[i], sod->constraint.string_list[j]) == 0)
-                  break;
-              }
-              if (sod->constraint.string_list[j] != NULL) {
-                v_c = o_strdup(modes[i]);
-                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
-                free(v_c);
-                foundMatch = 1;
+          char *requested_mode = getScanParam(uuid, SCAN_PARAM_FORMAT );
+          const char **modes;
+          if( 0 == strcmp( "colour", requested_mode ) ) {
+            modes = modes_colour;
+          }
+          else {
+            modes = modes_gray;
+          }
+          int i, j; 
+          int foundMatch = 0;
+          for (i = 0; modes[i] != NULL; i++) {
+            for (j = 0; sod->constraint.string_list[j]; j++) {
+              if (strcmp (modes[i], sod->constraint.string_list[j]) == 0)
                 break;
-              }
             }
-            if( foundMatch == 0 ) {
-              o_log(DEBUGM, "Non of the available options are appropriate.");
+            if (sod->constraint.string_list[j] != NULL) {
+              v_c = o_strdup(modes[i]);
+              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
+              free(v_c);
+              foundMatch = 1;
+              break;
             }
+          }
+          if( foundMatch == 0 ) {
+            o_log(DEBUGM, "Non of the available options are appropriate.");
           }
         }
 
