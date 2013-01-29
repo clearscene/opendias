@@ -53,6 +53,9 @@ foreach my $lang ( keys %langs ) {
   }
   close( LANGPACK );
 
+  # Add 'special cases' to the language pack
+  $lang_pack{'CURRENT_YEAR'} = $year;
+
   # Localise each file
   foreach my $file ( @templates ) {
     print "Generating an '$lang' version of '$file'\n";
@@ -113,7 +116,6 @@ sub translate {
 
   foreach my $key ( keys %lang_pack ) {
     $line =~ s/---$key---/$lang_pack{$key}/g;
-    $line =~ s/---CURRENT_YEAR---/$year/g;
   }
   return $line;
 }
