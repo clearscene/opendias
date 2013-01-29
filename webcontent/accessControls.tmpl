@@ -43,8 +43,7 @@
 
     <h3>---LOCAL_admin_createuser_title---</h3>
 
-    <p>To create a new user, enter the details below. The userId is the only 
-      details that cannot be change later.</p>
+    <p>---LOCAL_admin_createuser_intro---</p>
 
     <ul>
       <li class='row'>
@@ -61,7 +60,7 @@
       </li>
       <li class='row'>
         <div class='label'>---LOCAL_admin_createuser_role---</div>
-        <div class='data'><select>
+        <div class='data'><select id='newuser_role'>
             <option value='1'><script>document.write(LOCAL_role_admin);</script></option>
             <option value='2'><script>document.write(LOCAL_role_user);</script></option>
             <option value='3'><script>document.write(LOCAL_role_view);</script></option>
@@ -70,7 +69,7 @@
       </li>
       <li class='row'>
         <div class='label'>&nbsp;</div>
-        <div class='data'><button>---LOCAL_admin_save_button---</button></div>
+        <div class='data'><button id='createNewUser'>---LOCAL_admin_save_button---</button></div>
       </li>
     </ul>
   </div>

@@ -45,12 +45,9 @@ $(document).ready(function() {
 
   $('#createNewUser').click( function(){
     if( $('#password1').val() != $('#password2').val() ) {
-      alert( $('#password1').val() + "!=" + $('#password2').val() + " " + LOCAL_new_password_do_not_match );
+      alert( LOCAL_new_password_do_not_match );
       return 0;
     }
-	alert (	"loginname = " + $('#loginname').val() + 
-		"realname1 = " + $('#realname1').val() +
-		"role = " + $('#newuser_role').val() );
     $.ajax({ url: "/opendias/dynamic",
              dataType: "xml",
              timeout: 10000,

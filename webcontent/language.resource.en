@@ -109,6 +109,7 @@ LOCAL_admin_mydetails_changepassword|Change 'Password':
 LOCAL_admin_mydetails_currentrole|Current Role:
 LOCAL_admin_save_button|Save
 LOCAL_admin_createuser_title|Create a new user
+LOCAL_admin_createuser_intro|To create a new user, enter the details below. The userId is the only details that cannot be change later.
 LOCAL_admin_createuser_id|User Id:
 LOCAL_admin_createuser_name|Real Name:
 LOCAL_admin_createuser_password|Password:
