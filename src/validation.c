@@ -540,9 +540,9 @@ int validate(struct simpleLinkedList *postdata, char *action) {
 
   if ( 0 == strcmp(action, "createUser") ) {
     sll_insert(vars, "username", "m" );
-    sll_insert(vars, "realname", "o" );
-    sll_insert(vars, "password", "o" );
-    sll_insert(vars, "role", "o" );
+    sll_insert(vars, "realname", "m" );
+    sll_insert(vars, "password", "m" );
+    sll_insert(vars, "role", "m" );
     ret += checkKeys(postdata, vars );
     if ( getPostData(postdata, "username") != NULL ) {
       if ( getPostData(postdata, "role") != NULL ) {

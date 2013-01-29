@@ -81,7 +81,7 @@ static size_t getFromFile_fullPath(const char *url, const char *lang, char **dat
   if ( localised == NULL ) {
     localised = o_printf("%s", url);
   }
-	o_log(SQLDEBUG,"enterting getFromFile_fullpath: %s", localised);
+  o_log(SQLDEBUG,"enterting getFromFile_fullpath: %s", localised);
 
   size = load_file_to_memory(localised, data);
   free(localised);
@@ -89,7 +89,7 @@ static size_t getFromFile_fullPath(const char *url, const char *lang, char **dat
 }
 
 static size_t getFromFile(const char *url, const char *lang, char **data) {
-	o_log(SQLDEBUG,"enterting getFromFile: ");
+  o_log(SQLDEBUG,"enterting getFromFile: ");
 
   // Build Document Root
   char *htmlFrag = o_printf("%s/opendias/webcontent%s", SHARE_DIR, url);
@@ -561,7 +561,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
-      	mimetype = MIMETYPE_HTML;
+        mimetype = MIMETYPE_HTML;
         size = 0;
       }
       else
@@ -574,7 +574,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
-      	mimetype = MIMETYPE_HTML;
+        mimetype = MIMETYPE_HTML;
         size = 0;
       }
       else
@@ -610,7 +610,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
           free(content);
           content = o_strdup("");
           status = MHD_HTTP_NOT_FOUND;
-      	  mimetype = MIMETYPE_HTML;
+          mimetype = MIMETYPE_HTML;
           size = 0;
         }
       }
@@ -623,7 +623,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
-      	mimetype = MIMETYPE_HTML;
+        mimetype = MIMETYPE_HTML;
         size = 0;
       }
       else
@@ -637,7 +637,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
-      	mimetype = MIMETYPE_HTML;
+        mimetype = MIMETYPE_HTML;
         size = 0;
       }
       else
@@ -1004,16 +1004,17 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
  
           else if ( action && 0 == strcmp(action, "createUser") ) {
             o_log(INFORMATION, "Processing request for: createUser");
-            if ( validate( con_info->post_data, action ) ) 
+            if ( accessPrivs.update_access == 0 )
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
+            else if ( validate( con_info->post_data, action ) ) 
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             else {
               char *username = getPostData(con_info->post_data, "username");
               char *realname = getPostData(con_info->post_data, "realname");
               char *password = getPostData(con_info->post_data, "password");
               char *role = getPostData(con_info->post_data, "role");
-		//reuse update user function 
-              //content = updateUser(username, realname, password, role, accessPrivs.update_access, con_info->session_data, con_info->lang); // pageRender.c
-              content = createUser(username, realname, password, role, accessPrivs.update_access, con_info->session_data, con_info->lang); // pageRender.c
+              // re-use the updateUser function for creating a user.
+              content = updateUser(username, realname, password, role, accessPrivs.update_access, con_info->session_data, con_info->lang); // pageRender.c
               if(content == (void *)NULL) 
                 content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             }

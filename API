@@ -323,6 +323,24 @@ updateUser -> pageRender::updateUser
 
 
 
+updateUser -> pageRender::updateUser
+	Called from: openDias.accessControls.js :: ananoumouse()
+	Purpose: Update a user with new details
+	Inputs:	action: fixed string 'updateUser'
+          username: the username to update or the fixed string '[current]'
+          realname: (optional) The new realname of the updated user
+          password: (optional) The new password of the updated user
+          role: (optional) The new role of the updated user (not available for '[current]')
+	Outputs;
+		<?xml version='1.0' encoding='utf-8'?>
+		<Response>
+		  <UpdateUser>
+        result - Was login successful ['OK','FAIL']
+		  </UpdateUser>
+		</Response>
+
+
+
 tagsAutoComplete -> pageRender::tagsAutoComplete
         Called from: openDias.loadDetails.js :: autocomplete function()
         Purpose: Complete a tagname from the start of the name. 
