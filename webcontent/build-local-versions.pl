@@ -60,6 +60,14 @@ foreach my $lang ( keys %langs ) {
   foreach my $file ( @templates ) {
     print "Generating an '$lang' version of '$file'\n";
     $hide = 0;
+    $lang_pack{'UPDATE_WARNING'} =<<EOS;
+<!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      $file - for the structure
+      language.resource.$lang - for the readable text
+     ############################################## -->
+EOS
     open( SOURCE, $file );
     my $targ = $file;
     $targ =~ s/tmpl/html/g;
