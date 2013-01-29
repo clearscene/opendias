@@ -109,6 +109,7 @@ LOCAL_admin_mydetails_changepassword|Kennwort ändern:
 LOCAL_admin_mydetails_currentrole|aktuelle Rolle:
 LOCAL_admin_save_button|Sparen
 LOCAL_admin_createuser_title|Erstellen eines neuen Benutzerkontos
+LOCAL_admin_createuser_id|Benutzer Id:
 LOCAL_admin_createuser_name|Echter Name:
 LOCAL_admin_createuser_password|Kennwort:
 LOCAL_admin_createuser_role|Rolle:
