@@ -742,7 +742,7 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
   char *created = NULL;
   char *sql;
 
-  // Allow user not to specify the actual username
+  // User cannot specify the actual username
   if ( 0 == strcmp(username, "[current]") ) {
     rSet = sll_searchKeys( session_data, "username" );
     if ( rSet != NULL ) {
@@ -750,7 +750,7 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
     }
     else {
       o_log(ERROR, "A client tried to update her user, but was not logged in,");
-      return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateUser><result>FAIL</result></UpdateUser></Response>");
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", lang) );
     }
   }
   else {
@@ -796,7 +796,18 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
       free( sql );
     }
     else {
-      return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateUser><result>FAIL</result></UpdateUser></Response>");
+      o_log(ERROR, "A client tried to update a unknown user. We should never have been able to get here!");
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", lang) );
+    }
+  }
+
+  else {
+    // we already have a user of the name
+    if ( 0 != strcmp(username, "[current]") ) {
+      // ... and we're trying to create a user
+      free_recordset( rSet );
+      o_log(ERROR, "A client tried to create user that already exists.");
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_user_already_exists", lang) );
     }
   }
   created = o_strdup( readData_db(rSet, "created") );

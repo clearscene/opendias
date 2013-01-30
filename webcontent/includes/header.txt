@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="---LOCAL_lang---">
+ ---UPDATE_WARNING---
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
 #ifndef OPEN_TO_ALL
   <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>

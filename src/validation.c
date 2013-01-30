@@ -343,6 +343,7 @@ int basicValidation(struct simpleLinkedList *postdata) {
     && 0 != strcmp(action, "checkLogin")
     && 0 != strcmp(action, "logout")
     && 0 != strcmp(action, "updateUser")
+    && 0 != strcmp(action, "createUser")
                                         ) {
     o_log(ERROR, "requested 'action' (of '%s') is not available.", action);
     return 1;
@@ -536,6 +537,19 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     }
   }
 #endif // OPEN_TO_ALL //
+
+  if ( 0 == strcmp(action, "createUser") ) {
+    sll_insert(vars, "username", "m" );
+    sll_insert(vars, "realname", "m" );
+    sll_insert(vars, "password", "m" );
+    sll_insert(vars, "role", "m" );
+    ret += checkKeys(postdata, vars );
+    if ( getPostData(postdata, "username") != NULL ) {
+      if ( getPostData(postdata, "role") != NULL ) {
+        ret += checkRole( getPostData(postdata, "role") );
+      }
+    }
+  }
 
   // Needs further validation effort
 

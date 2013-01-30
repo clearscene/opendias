@@ -43,4 +43,38 @@ $(document).ready(function() {
            });
     });
 
+  $('#createNewUser').click( function(){
+    if( $('#createpassword').val() != $('#createpassword2').val() ) {
+      alert( LOCAL_new_password_do_not_match );
+      return 0;
+    }
+    $.ajax({ url: "/opendias/dynamic",
+             dataType: "xml",
+             timeout: 10000,
+             data: { action: "createUser",
+                     username: $("#createuserid").val(),
+                     realname: $("#createrealname").val(),
+                     password: $("#createpassword").val(),
+                     role: $("#createuserrole").val(),
+                     },
+             cache: false,
+             type: "POST",
+             error: function( x, t, m ) {
+               if(t=="timeout") {
+                 alert("[s001] " + LOCAL_timeout_talking_to_server);
+               } else {
+                 alert("[s001] " + LOCAL_error_talking_to_server+": "+t+"\n"+m);
+               }
+             },
+             success: function(data){
+               if( $(data).find('error').text() ) {
+                 alert( $(data).find('error').text() );
+               }
+               else {
+                 alert( LOCAL_user_created );
+               }
+             }
+           });
+    });
+
 });

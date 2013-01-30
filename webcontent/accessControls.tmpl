@@ -1,6 +1,6 @@
+---UPDATE_WARNING---
 
 <script type="text/javascript" src="/opendias/includes/jquery-ui.min.js"></script>
-<script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
 <link rel="stylesheet" href="/opendias/style/jquery-ui.css" type="text/css" media="screen" /> 
 <style>
   #tabs {font-size: 11px;}
@@ -43,26 +43,24 @@
   <div id="newuser" class='useradmin onlyadmin'>
 
     <h3>---LOCAL_admin_createuser_title---</h3>
-
-    <p>To create a new user, enter the details below. The userId is the only 
-      details that cannot be change later.</p>
+    <p>---LOCAL_admin_createuser_intro---</p>
 
     <ul>
       <li class='row'>
         <div class='label'>---LOCAL_admin_createuser_id---</div>
-        <div class='data'><input id='newuserid' type='input' /></div>
+        <div class='data'><input id='createuserid' type='input' /></div>
       </li>
       <li class='row'>
         <div class='label'>---LOCAL_admin_createuser_name---</div>
-        <div class='data'><input id='newrealname' type='input' /></div>
+        <div class='data'><input id='createrealname' type='input' /></div>
       </li>
       <li class='row'>
         <div class='label'>---LOCAL_admin_createuser_password---</div>
-        <div class='data'><input id='password' type='password' /> / <input id='password2' type='password' /></div>
+        <div class='data'><input id='createpassword' type='password' /> / <input id='createpassword2' type='password' /></div>
       </li>
       <li class='row'>
         <div class='label'>---LOCAL_admin_createuser_role---</div>
-        <div class='data'><select>
+        <div class='data'><select id='createuserrole'>
             <option value='1'><script>document.write(LOCAL_role_admin);</script></option>
             <option value='2'><script>document.write(LOCAL_role_user);</script></option>
             <option value='3'><script>document.write(LOCAL_role_view);</script></option>
@@ -71,7 +69,7 @@
       </li>
       <li class='row'>
         <div class='label'>&nbsp;</div>
-        <div class='data'><button>---LOCAL_admin_save_button---</button></div>
+        <div class='data'><button id='createNewUser'>---LOCAL_admin_save_button---</button></div>
       </li>
     </ul>
   </div>
