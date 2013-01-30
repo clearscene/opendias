@@ -44,7 +44,7 @@ $(document).ready(function() {
     });
 
   $('#createNewUser').click( function(){
-    if( $('#password1').val() != $('#password2').val() ) {
+    if( $('#createpassword').val() != $('#createpassword2').val() ) {
       alert( LOCAL_new_password_do_not_match );
       return 0;
     }
@@ -52,10 +52,10 @@ $(document).ready(function() {
              dataType: "xml",
              timeout: 10000,
              data: { action: "createUser",
-                     username: $("#newuserid").val(),
-                     realname: $("#newrealname").val(),
-                     password: $("#password").val(),
-                     role: $("#newuser_role").val(),
+                     username: $("#createuserid").val(),
+                     realname: $("#createrealname").val(),
+                     password: $("#createpassword").val(),
+                     role: $("#createuserrole").val(),
                      },
              cache: false,
              type: "POST",
@@ -69,6 +69,9 @@ $(document).ready(function() {
              success: function(data){
                if( $(data).find('error').text() ) {
                  alert( $(data).find('error').text() );
+               }
+               else {
+                 alert( LOCAL_user_created );
                }
              }
            });
