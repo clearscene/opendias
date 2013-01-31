@@ -50,6 +50,7 @@
             <option value='--'>---LOCAL_default_browser_lang---</option>
             <option value='en'>English</option>
             <option value='de'>Deutsche</option>
+            <option value='nl'>Nederlands</option>
 #ifdef CREATE_TEST_LANGUAGE
             <option value='hh'>#### ########</option>
 #endifdef CREATE_TEST_LANGUAGE

@@ -1,0 +1,12 @@
+LOCAL_timeout_talking_to_server = 'LOCALISE_ME - Timeout while talking to the server';
+LOCAL_error_talking_to_server = 'LOCALISE_ME - Error while talking to the server';
+LOCAL_date_format = 'LOCALISE_ME - yy/mm/dd';
+LOCAL_odf_doc = 'LOCALISE_ME - ODF Document';
+LOCAL_scanned_doc = 'LOCALISE_ME - Scanned Document';
+LOCAL_pdf_doc = 'LOCALISE_ME - PDF Document';
+LOCAL_jpeg_img = 'LOCALISE_ME - JPEG Images';
+LOCAL_unknown = 'LOCALISE_ME - unknown';
+LOCAL_role_admin = 'LOCALISE_ME - Admin (can do all operations)';
+LOCAL_role_user = 'LOCALISE_ME - User (can do everything, except access controls)';
+LOCAL_role_view = 'LOCALISE_ME - View (can view document only)';
+LOCAL_role_add = 'LOCALISE_ME - Add (can add documents only)';

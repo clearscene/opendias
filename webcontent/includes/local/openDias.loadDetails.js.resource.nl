@@ -1,0 +1,10 @@
+LOCAL_unable_to_get_doc_details = 'LOCALISE_ME - Unable to get document';
+LOCAL_open_odf_doc = 'LOCALISE_ME - Open ODF Document';
+LOCAL_open_page_fullsize = 'LOCALISE_ME - Open page %s fillsize';
+LOCAL_open_pdf_doc = 'LOCALISE_ME - Open PDF Document';
+LOCAL_pdf_thumb_not_available_attempt_to_generate_now = 'LOCALISE_ME - <p>PDF Thumbnail is not available</p><p>Attempt to generate now.</p>';
+LOCAL_generate_thumbnail = 'LOCALISE_ME - Regenerate Thumbnail';
+LOCAL_error_generating_thumbnail = 'LOCALISE_ME - Unable to generate thumbnail';
+LOCAL_removing_tag = 'LOCALISE_ME - Removing tag';
+LOCAL_add_tag_default_text = 'LOCALISE_ME - Add a tag';
+LOCAL_print = 'LOCALISE_ME - Print';
