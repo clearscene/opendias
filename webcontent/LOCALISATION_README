@@ -6,7 +6,8 @@ This document applies to you, if:
 First, thank you, it really is much appreciated.
 
 Second, you should first read Section 5 (and specifically 
-  Section 5.1) of the main README file.
+  Section 5.1 on how each localisation file is used, and what
+  not to localise) of the main README file.
 
 Over and above that, there are a few scripts and pointers to 
   help you.
@@ -15,11 +16,12 @@ Over and above that, there are a few scripts and pointers to
     * Add the correct localised text as per the language of 
       the file.
     * or, Add the English version prefixed with 'LOCALISE_ME'
-      This will let us know were effort needs to be spent on 
+      This will let us know where effort needs to be spent on 
       getting that phase transalated.
 
- * The script 'generate_new_language_pack.sh' will create a 
-    new local version of each language resource file
+ * The script 'generate_new_language_pack.pl' will create a 
+    new local version of each language resource file. Add
+    these to git, but not any generated file, eg *.html.<lang>
 
  * The script 'build-local-versions.pl' (that is called by
     ./configure) creates the .html files used by the 
@@ -28,4 +30,4 @@ Over and above that, there are a few scripts and pointers to
     * Prints a warning when a phase contains 'LOCALISE_ME'
     * Stops processing, if a phrase is missing from any of
       the language resource files.
-    
+
