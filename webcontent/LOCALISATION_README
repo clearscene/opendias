@@ -1,0 +1,33 @@
+This document applies to you, if:
+
+  * You are thinking of localising opendias into a new language
+    or adding new phases to current language packs.
+
+First, thank you, it really is much appreciated.
+
+Second, you should first read Section 5 (and specifically 
+  Section 5.1 on how each localisation file is used, and what
+  not to localise) of the main README file.
+
+Over and above that, there are a few scripts and pointers to 
+  help you.
+
+ * If adding a new 'phase' to a language resouce file, either:
+    * Add the correct localised text as per the language of 
+      the file.
+    * or, Add the English version prefixed with 'LOCALISE_ME'
+      This will let us know where effort needs to be spent on 
+      getting that phase transalated.
+
+ * The script 'generate_new_language_pack.pl' will create a 
+    new local version of each language resource file. Add
+    these to git, but not any generated file, eg *.html.<lang>
+
+ * The script 'build-local-versions.pl' (that is called by
+    ./configure) creates the .html files used by the 
+    application, from .tmpl and language resource files.
+    However, it also:
+    * Prints a warning when a phase contains 'LOCALISE_ME'
+    * Stops processing, if a phrase is missing from any of
+      the language resource files.
+

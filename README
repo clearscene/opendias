@@ -10,10 +10,13 @@ openDias - Document Imaging Archive System
     3.1 As a user
     3.2 As a developer
   4. Running
-  5. Developing
-    5.1 Before submitting a 'pull request'
-    5.2 Accepting a pull request
-    5.3 Distribution
+  5. Helping the project
+    5.1 Localisation
+    5.2 Developing
+      5.2.1 Tips and standards
+      5.2.2 Before submitting a 'pull request'
+      5.2.3 Accepting a pull request
+      5.2.4 Distribution
 
 -----------------------------------
 
@@ -119,6 +122,7 @@ You need to pre configure the source:
 -----------------------------------
 
 4. Running
+---------
 
 Start and get to the apllication with:
 
@@ -147,59 +151,84 @@ to be able to point a web browser at:
 
 -----------------------------------
 
-5. Developing
+5. Helping the project
 
-5.1 Before submitting a 'pull request'
---------------------------------------
- * Ensure you are working against the most current codebase
+5.1 Localisation
+----------------
+
+The application is localised using three kinds of file:
+
+ * Backend service language files, named: i18n/language.resource.<lang>
+    There is one of these per language. It is used by the application to localise
+    messages returned by the backend API. As such there are very few entries here,
+    since most user feedback is provided by the frontend HTML and JS.
+
+ * Javascript language files, eg: webcontent/includes/local/*.js.resource.<lang>
+    In general there is a 1:1 mapping between these files are their counterpart
+    Javascript file. Localisation here are provided so the active part of the 
+    user frontend can respond in a localised way. The majority of localisation
+    elements are found here.
+    Note: The frontend will request just the filename (without the ".<lang>", the 
+    application will return the correct language version to the user.
+
+ * HTML language files, named: webcontent/language.resource.<lang>
+    For each HTML page (and there are only five), there is a ".tmpl" file. 
+    HTML is localised by the "./configure" script, by building language specific
+    ".html.<lang>" files using these ".tmpl" and "language.resource.<lang>" files.
+    The ".tmpl" files contain placeholders "---LOCAL_x_y_z---" which are replaced
+    from entried in the "language.resource" file. 
+    (This way localised versions of pages do not have to be rebuilt by the 
+    application each time they are requested.)
+    Note: The frontend will request just the filename (without the ".<lang>", the 
+    application will return the correct language version to the user.
+
+5.2. Developing
+---------------
+
+5.2.1 Tips and standards
+------------------------
+ * Ensure you are working against the most current codebase. Merge up from the 
+    development branch regularly.
+ * Please indent with two spaces and not a tab.
  * Create a git branch off the current development branch (eg development_0_9)
- * Hack away
+    and name it something like "my_new_functionality_0_9".
+ * To get better valgrind backtrace resolution, (for memory failed tests) you 
+    may want to include "'CFLAGS=-O0 -g'" as an option to ./configure. 
+    Rebuilding the app after a clean, and re-running tests with the '-b' flag 
+    (to stop your specific configured app from being rebuilt).
+
+
+5.2.2 Before submitting a 'pull request'
+----------------------------------------
  * Update Changelog, api doc, builds file (eg. Make.am or configure.ac).
- * Write new tests to cover your new functionality
- * Update current tests where appropriate
-    If tests fail (due to memory issues) sometime the stacktrace is missing some 
-    detail because it's been optimised away. eg:
-      ==6053== 33 bytes in 1 blocks are definitely lost in loss record 3 of 9
-      ==6053==    at 0x402BE68: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-      ==6053==    by 0x80545E1: o_strdup (utils.c:207)
-      ==6053==    by 0x531C307: ???
-    If this is the case, you can try and run the test again after configuring then 
-    building without optimisation using:
-      "./configure 'CFLAGS=-O0 -g' --prefix=/tmp/opendias_tmp"
-    run, "make clean && make && make install", and then the test again (with 
-    the -b flag - to stop your specially configured app from being rebuilt in the 
-    standard way.) You should not get better stack traces:
-      ==10695== 33 bytes in 1 blocks are definitely lost in loss record 3 of 9
-      ==10695==    at 0x402BE68: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-      ==10695==    by 0x8056400: o_strdup (utils.c:207)
-      ==10695==    by 0x80517C3: checkLogin (pageRender.c:617)
-      ==10695==    by 0x804FEF8: answer_to_connection (web_handler.c:954)
-      ==10695==    by 0x40F20CF: ??? (in /usr/lib/libmicrohttpd.so.5.2.1)
-      ==10695==    by 0x40F3216: ??? (in /usr/lib/libmicrohttpd.so.5.2.1)
-      ==10695==    by 0x40F5528: ??? (in /usr/lib/libmicrohttpd.so.5.2.1)
-      ==10695==    by 0x40F569E: ??? (in /usr/lib/libmicrohttpd.so.5.2.1)
-      ==10695==    by 0x42B1D4B: start_thread (pthread_create.c:308)
-      ==10695==    by 0x4C58D3D: clone (clone.S:130)
+ * Write new tests and/or update existing tests, to cover your changes
  * Run autoscan, cppcheck.
     autoscan
     cppcheck --verbose --enable=all src/
  * Ensure all tests pass
     cd test && ./setupRun.sh
- * Submit a 'pull request' into current development branch
+ * Submit a 'pull request' onn github, for the current development branch
 
 
-5.2 Accepting a pull request
-----------------------------
+5.2.3 Accepting a pull request
+------------------------------
  * Inspect the diffs between the current development branch and the end of the authors branch.
+ * Ensure the authors branch is merged up to a resonable level.
+ * Ensure that tests have been added/updated to support new functionality.
  * Submit update feedback to the author, if required.
- * Checkout the authors branch and ensure the tests pass.
- * git merge the authors branch into the development branch.
- * bump the configure.ac version number.
- * consolidate Changelog
+ * Create or move to an 'accepting branch' (off from the current development branch)
+ * Merge in the pull request
+    git remote add <sending_user> git://github.com/<sending_user>/opendias_fork.git
+    git fetch <sending_user>
+    git merge <sending_user> <branch_name>
+ * Ensure the tests all pass.
+ * Merge the 'accepting branch' into the development branch
+ * Bump the configure.ac version number.
+ * Consolidate Changelog
 
 
-5.3 Distribution
-----------------
+5.2.4 Distribution
+------------------
  * git merge the development branch into master
  * Checkout master and ensure the tests pass.
  * Ensure the general checks are satisfied

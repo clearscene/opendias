@@ -44,6 +44,9 @@ generate_test_language();
 foreach my $lang ( keys %langs ) {
   my %lang_pack = ();
 
+  my $resp = validate_language_pack( $lang );
+  die $resp if $resp ne '';
+
   # Load the language pack
   open( LANGPACK, "language.resource.$lang" );
   while ( my $line = <LANGPACK> ) {
@@ -64,7 +67,7 @@ foreach my $lang ( keys %langs ) {
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      $file - for the structure
+      $file - for the structure, and
       language.resource.$lang - for the readable text
      ############################################## -->
 EOS
@@ -183,4 +186,62 @@ sub generate_test_language {
 
 }
 
+sub validate_language_pack {
+  my ( $lang, ) = @_;
+  my $ret = '';
+
+  # English files are the baseline to which everything else is compared
+  return $ret if $lang eq 'en';
+
+  my @resource_files = qw( language.resource.en ../i18n/language.resource.en );
+  opendir( DIR, './includes/local/' );
+  while( my $FILE = readdir( DIR ) ) {
+    if ( $FILE =~ /\.resource\.en/ ) {
+      push @resource_files, './includes/local/'.$FILE;
+    }
+  }
+  closedir( DIR );
+
+  # Load the language pack
+  foreach my $file (@resource_files) {
+
+    my $working_file = $file;
+    my %compare;
+
+    foreach my $compare_langs ( 'en', $lang ) {
+    
+      $working_file =~ s/en$/$compare_langs/;
+
+      open( SOURCE, $working_file );
+      while ( my $line = <SOURCE> ) {
+        chomp( $line );
+        next if $line =~ /^$/ || $line =~ /^#/ || $line =~ /^\/\//;
+        my ( $key, $data );
+        if ( $file =~ /includes\/local/ ) {
+          # A javascript localise resource file
+          ( $key, $data ) = $line =~ /^(.*) = '(.*)';/;
+          $compare{$compare_langs}{$key} = 1;
+        }
+        else {
+          # An application resource file
+          ( $key, $data ) = split( /\|/, $line );
+          $compare{$compare_langs}{$key} = 1;
+        }
+        if ( $data =~ /LOCALISE_ME/ ) {
+          print "Please localise the phrase '$key' into '$lang'\n";
+        }
+      }
+      close( SOURCE );
+    }
+
+    foreach my $key ( keys %{$compare{'en'}} ) {
+      if ( ! exists $compare{$lang}{$key} ) {
+        $ret .= "The resouce file $file is missing the phrase '$key'.\n";
+      }
+    }
+
+  }
+
+  return $ret;
+}
 __END__
