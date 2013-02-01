@@ -5,6 +5,35 @@ $(document).ready(function() {
   $("#currentrole").html( get_priv_from_role( role, 'name' ) + " (" + role + ")" );
   if ( get_priv_from_role( role, 'update_access' ) ) {
     $('.onlyadmin').css({ display: 'block' });
+
+    // Get a list of current users
+    $.ajax({ url: "/opendias/dynamic",
+             dataType: "xml",
+             timeout: 10000,
+             data: { action: "getUserList",
+                     },
+             cache: false,
+             type: "POST",
+             error: function( x, t, m ) {
+               if(t=="timeout") {
+                 alert("[s001] " + LOCAL_timeout_talking_to_server);
+               } else {
+                 alert("[s001] " + LOCAL_error_talking_to_server+": "+t+"\n"+m);
+               }
+             },
+             success: function(data){
+               if( $(data).find('error').text() ) {
+                 alert( $(data).find('error').text() );
+               } else {
+                 $(data).find('GetUserList').find('Users').find('User').each( function() {
+                   alert( $(this).find('username').text() 
+                        + $(this).find('realname').text() 
+                        + $(this).find('last_access').text() 
+                        + $(this).find('role').text() );
+                 });
+               }
+             }
+           });
   }
 
   $("#tabs").tabs();
