@@ -67,11 +67,10 @@ char *extractThumbnail(char *docid) {
 
 char *uploadfile(char *filename, char *lang) {
 
-  int width = 0, height = 0;
-  int itype = PLACE_HOLDER;
-  char *to_name, *ocrText, *thumbext = NULL, *tmp;
-  char *docid;
 #ifdef CAN_MAGIC
+  int width = 0, height = 0, itype = PLACE_HOLDER;
+  char *to_name, *ocrText = NULL, *thumbext = NULL, *tmp;
+  char *docid;
   char *ftype;
   char *datafile;
 #endif // CAN_MAGIC //
@@ -140,16 +139,15 @@ char *uploadfile(char *filename, char *lang) {
   // --------------------------------------
   else {
     free( ftype );
+    free( datafile );
 #endif // CAN_MAGIC //
     o_log(ERROR, "unknown file type.");
-    free( datafile );
     return NULL;
 #ifdef CAN_MAGIC
   }
   free( ftype );
-#endif // CAN_MAGIC //
 
-  if( NULL == ocrText ) {
+  if( ocrText == NULL ) {
     ocrText = o_strdup( getString("LOCAL_ocr_default_text", lang ) );
   }
   free(datafile);
@@ -185,5 +183,6 @@ char *uploadfile(char *filename, char *lang) {
   free(docid);
 
   return tmp;
+#endif // CAN_MAGIC //
 }
 
