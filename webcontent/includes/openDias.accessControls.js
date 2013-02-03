@@ -26,10 +26,27 @@ $(document).ready(function() {
                  alert( $(data).find('error').text() );
                } else {
                  $(data).find('GetUserList').find('Users').find('User').each( function() {
-                   alert( $(this).find('username').text() 
-                        + $(this).find('realname').text() 
-                        + $(this).find('last_access').text() 
-                        + $(this).find('role').text() );
+                    var real = $("<td></td>").text( $(this).find('realname').text() + " (" + $(this).find('username').text() + ")");
+                    var r = $(this).find('role').text();
+                    var s = "selected='selected'";
+                    var role = $("<td></td>").html( "<select name='role'>"
+                        + "<option value='1'" + ( ( r == "1" ) ? s : "" ) + ">" + LOCAL_role_admin + "</option>"
+                        + "<option value='2'" + ( ( r == "2" ) ? s : "" ) + ">" + LOCAL_role_user + "</option>"
+                        + "<option value='3'" + ( ( r == "3" ) ? s : "" ) + ">" + LOCAL_role_view + "</option>"
+                        + "<option value='4'" + ( ( r == "4" ) ? s : "" ) + ">" + LOCAL_role_add + "</option>"
+                        + "</select>" );
+
+                    var last = $("<td></td>").text( $(this).find('last_access').text() );
+
+                    //var id = document.createAttribute('id');
+                    //new_result.setAttribute('id','result_block_'+currentPage);
+                    var update = $("<button>Update</button>");
+                    var reset = $("<button>Reset Password</button>");
+                    var delet = $("<button>Delete</button>");
+                    var actions = $("<tr></tr>").append(update).append(reset).append(delet);
+
+                    var row = $("<tr></tr>").append(real).append(role).append(last).append(actions);
+                    $('#useradmin table tbody').append( row );
                  });
                }
              }
