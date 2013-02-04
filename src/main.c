@@ -34,7 +34,7 @@
 #include <microhttpd.h>
 #ifdef CAN_SCAN
 #include <sys/un.h>
-#include <sane/sane.h>
+//#include <sane/sane.h>
 
 #include "saneDispatcher.h"
 #endif // CAN_SCAN //
@@ -181,10 +181,10 @@ void server_shutdown() {
     o_log(DEBUGM, "... sane command socket [done]");
   }
 
-  if( startedServices.sane ) {
-    o_log(DEBUGM, "... sane backend [done]");
-    sane_exit();
-  }
+//  if( startedServices.sane ) {
+//    o_log(DEBUGM, "... sane backend [done]");
+//    sane_exit();
+//  }
 #endif // CAN_SCAN //
 
   if( startedServices.sessions ) {
@@ -410,7 +410,7 @@ int main (int argc, char **argv) {
   startedServices.log = 0;
   startedServices.db = 0;
   startedServices.locale = 0;
-  startedServices.sane = 0;
+//  startedServices.sane = 0;
   startedServices.command = 0;
   startedServices.httpd = 0;
   startedServices.sessions = 0;
@@ -461,14 +461,14 @@ int main (int argc, char **argv) {
 
 #ifdef CAN_SCAN
   // Start sane
-  if( SANE_STATUS_GOOD != sane_init(NULL, NULL) ) {
+/*  if( SANE_STATUS_GOOD != sane_init(NULL, NULL) ) {
     o_log(INFORMATION, "Could not start sane");
     server_shutdown();
     exit(EXIT_FAILURE);
   }
   startedServices.sane = 1;
   o_log(INFORMATION, "Sane backend started");
-  
+*/  
 
   // Create the sane command socket
   if ( createSocket() || COMMSSOCKET < 0 ) {
