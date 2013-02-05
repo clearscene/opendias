@@ -42,18 +42,101 @@ $(document).ready(function() {
 
                     var update = $("<button>Update</button>");
                     update.click( function() {
-                        alert( "Set users " + userid + " role to " + $('#role_'+userid).val() );
-                      });
+                        if( confirm( "Set user '" + userid + "'s role to '" + $('#role_'+userid+' option:selected').text() + "'?" ) ) {
+                        $.ajax({ url: "/opendias/dynamic",
+                                 dataType: "xml",
+                                 timeout: 10000,
+                                 data: { action: "updateUser",
+                                         username: userid,
+                                         role: $('#role_'+userid).val(),
+                                        },
+                                  cache: false,
+                                  type: "POST",
+                                  error: function( x, t, m ) {
+                                     if(t=="timeout") {
+                                       alert("[s001] " + LOCAL_timeout_talking_to_server);
+                                     } else {
+                                       alert("[s001] " + LOCAL_error_talking_to_server+": "+t+"\n"+m);
+                                     }
+                                  },
+                                   success: function(data){
+                                     if( $(data).find('error').text() ) {
+                                       alert( $(data).find('error').text() );
+                                     } else {
+                                       alert( LOCAL_details_updated );
+                                     }
+                                   }
+                               });
+                              }
+                            });
 
                     var reset = $("<button>Reset Password</button>");
                     reset.click( function() {
-                        alert( "Reset users password" );
+                        if( confirm( "Reset user '" + userid + "'s password to 'changeme'?" ) ) {
+                        $.ajax({ url: "/opendias/dynamic",
+                                 dataType: "xml",
+                                 timeout: 10000,
+                                 data: { action: "updateUser",
+                                         username: userid,
+                                         password: 'changeme',
+                                        },
+                                  cache: false,
+                                  type: "POST",
+                                  error: function( x, t, m ) {
+                                     if(t=="timeout") {
+                                       alert("[s001] " + LOCAL_timeout_talking_to_server);
+                                     } else {
+                                       alert("[s001] " + LOCAL_error_talking_to_server+": "+t+"\n"+m);
+                                     }
+                                  },
+                                   success: function(data){
+                                     if( $(data).find('error').text() ) {
+                                       alert( $(data).find('error').text() );
+                                     } else {
+                                       alert( LOCAL_details_updated );
+                                     }
+                                   }
+                               });
+                          }
                       });
 
                     var delet = $("<button>Delete</button>");
                     delet.click( function() {
-                        alert( "Delete user " + userid );
+                        if( confirm( "Delete user '" + userid +"'?" ) ) {
+                        $.ajax({ url: "/opendias/dynamic",
+                                 dataType: "xml",
+                                 timeout: 10000,
+                                 data: { action: "updateUser",
+                                         username: userid,
+                                         password: $("#newpassword").val(),
+                                        },
+                                  cache: false,
+                                  type: "POST",
+                                  error: function( x, t, m ) {
+                                     if(t=="timeout") {
+                                       alert("[s001] " + LOCAL_timeout_talking_to_server);
+                                     } else {
+                                       alert("[s001] " + LOCAL_error_talking_to_server+": "+t+"\n"+m);
+                                     }
+                                  },
+                                   success: function(data){
+                                     if( $(data).find('error').text() ) {
+                                       alert( $(data).find('error').text() );
+                                     } else {
+                                       setCookie("realname", $('#newrealname').val() );
+                                       setLoginOutArea();
+                                       alert( LOCAL_details_updated );
+                                     }
+                                   }
+                               });
+                          }
                       });
+
+                    if( userid == "admin" ) {
+                      update.attr("disabled", true);
+                      delet.attr("disabled", true);
+                      role.html( "&nbsp;&nbsp;" + LOCAL_role_admin );
+                    }
 
                     var actions = $("<td class='actions'></td>").append(update).append(reset).append(delet);
                     var row = $("<tr></tr>").append(real).append(last).append(role).append(actions);

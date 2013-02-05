@@ -801,7 +801,7 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
     }
   }
 
-  else {
+/*  else {
     // we already have a user of the name
     if ( 0 != strcmp(username, "[current]") ) {
       // ... and we're trying to create a user
@@ -810,6 +810,7 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
       return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_user_already_exists", lang) );
     }
   }
+*/
   created = o_strdup( readData_db(rSet, "created") );
   free_recordset( rSet );
 
