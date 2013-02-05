@@ -38,7 +38,7 @@ sub test {
     __cookiejar => $cookie_jar,
     action => 'doScan',
     deviceid => 'test:0',
-    format => 'Grey Scale',
+    format => 'gray',
     pages => 2,
     resolution => '100',
     ocr => '-',
@@ -107,10 +107,10 @@ sub test {
 
   # Tell the system, the second page is ready for scanning
   o_log( "Result of page turn request = " . Dumper( directRequest( \%followup ) ) );
-  sleep(1);
+  sleep(2);
 
 
-  # SANE is blocked, nut we have cache to give
+  # SANE is blocked, now we have cache to give
   o_log( "cached response on getScannerList = " . Dumper( directRequest( \%list ) ) );
 
 

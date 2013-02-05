@@ -130,14 +130,15 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
 
         // Set scanning mode
         else if ( strcmp(sod->name, SANE_NAME_SCAN_MODE ) == 0 ) {
-          char *requested_mode = getScanParam(uuid, SCAN_PARAM_FORMAT );
           const char **modes;
+          char *requested_mode = getScanParam(uuid, SCAN_PARAM_FORMAT );
           if( 0 == strcmp( "colour", requested_mode ) ) {
             modes = modes_colour;
           }
           else {
             modes = modes_gray;
           }
+          free( requested_mode );
           int i, j; 
           int foundMatch = 0;
           for (i = 0; modes[i] != NULL; i++) {
