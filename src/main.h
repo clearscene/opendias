@@ -21,7 +21,6 @@
 
 #define QUEUE_LENGTH 3
 
-int DB_VERSION;
 char *BASE_DIR;
 unsigned short PORT;
 
