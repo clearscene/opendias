@@ -44,6 +44,7 @@ char *tagsAutoComplete(char *, char *);
 char *checkLogin(char *, char *, char *, struct simpleLinkedList *);
 char *doLogout( struct simpleLinkedList *);
 char *updateUser( char *, char *, char *, char *, int, struct simpleLinkedList *, char *);
+char *getUserList();
 #endif // OPEN_TO_ALL //
 
 #endif /* PAGERENDER */

@@ -308,6 +308,11 @@
     border-bottom: 3px solid black;
     margin-left: 30px;
   }
+  .accessControl table tr td {
+    padding: 5px;
+    margin: 0px;
+    border: 0px;
+  }
   .accessControl table thead {
     background-color: #9999ee;
   }
@@ -315,8 +320,8 @@
     background-color: #bbbbff;
     border: 1px solid #9999ee;
   }
-  .accessControl table tbody td {
-    padding: 3px;
+  .accessControl table tbody tr td.actions {
+    background-color: #ffbbbb;
   }
   .accessControl div {
     margin-left: 30px;

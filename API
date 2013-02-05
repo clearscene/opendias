@@ -341,6 +341,27 @@ updateUser -> pageRender::updateUser
 
 
 
+getUserList -> pageREnder::getUserList
+  Called from openDias.accessControls.js :: anonmousle()
+  Purpose: Provides a list of configured users on the system.
+  Inputs: action: fixed string 'getUserList'
+  Outputs:
+		<?xml version='1.0' encoding='utf-8'?>
+		<Response>
+		  <GetUserList>
+        <Users>
+          <User>
+            username - the users user-id
+            realname - the users chosen 'display name''
+            last_access - the date the user last logged on
+            role - the users assigned role
+          </User>
+        </Users>
+		  </GetUserList>
+		</Response>
+
+
+
 tagsAutoComplete -> pageRender::tagsAutoComplete
         Called from: openDias.loadDetails.js :: autocomplete function()
         Purpose: Complete a tagname from the start of the name. 

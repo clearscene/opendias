@@ -118,15 +118,21 @@ if [ "$NOBUILD" == "" ]; then
 
   echo Performing code analysis ...
   cd ../
-  cppcheck --verbose --enable=all --platform=unix32 --platform=unix64 --error-exitcode=1 src/ &> test/results/buildLog2.out
+  mv config.h config.h.orig
+  mv config.h.for_cppcheck config.h
+  cppcheck --verbose --enable=all --max-configs=999 --platform=unix32 --platform=unix64 --error-exitcode=1 src/ &> test/results/buildLog2.out
   if [ "$?" -ne "0" ]; then
     echo "Code analysis found a problem. Check the buildLog.out for details."
+    mv config.h config.h.for_cppcheck
+    mv config.h.orig config.h
     cd test
     # unfortunatly bash cannot support "&>>" - yet!
     cat results/buildLog2.out >> results/buildLog.out
     rm results/buildLog2.out
     exit
   fi
+  mv config.h config.h.for_cppcheck
+  mv config.h.orig config.h
   cd test
   # unfortunatly bash cannot support "&>>" - yet!
   cat results/buildLog2.out >> results/buildLog.out
