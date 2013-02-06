@@ -62,15 +62,14 @@ int setup (char *configFile) {
 
 	o_log(DEBUGM,"setup launched");
 
-  // Defaults
+  // Defaults - Log verbosity has already been set in main()
   BASE_DIR = NULL;
-  DB_VERSION = 7; // Log verbosity has already been set in main()
 
   LOG_DIR = o_printf("%s/log/opendias", VAR_DIR);
   startedServices.log = 1;
   o_log(INFORMATION, "Setting default log (%s) verbosity to %d.", LOG_DIR, VERBOSITY);
 
-  // Default - but overridden by config settings before port is opened
+  // Default - but overridden by config settings
   PORT = 8988; 
   MAX_SESSIONS = 10;
   MAX_SESSION_AGE = 3600;

@@ -5,7 +5,7 @@ STARTING app...
 Now ready
 No need for a web client for this test.
 Sending request = action=checkLogin&password=password&username=test-user
-Sending request = action=doScan&deviceid=test%3A0&format=Grey%20Scale&ocr=-&pagelength=100&pages=2&resolution=100
+Sending request = action=doScan&deviceid=test%3A0&format=gray&ocr=-&pagelength=100&pages=2&resolution=100
 startScan = $VAR1 = {
   'DoScan' => {
     'scanuuid' => '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]'
@@ -17,7 +17,7 @@ Total fail on getScannerList = $VAR1 = {
   'error' => 'BUSY'
 };
 
-Sending request = action=doScan&deviceid=test%3A0&format=Grey%20Scale&ocr=-&pagelength=100&pages=2&resolution=100
+Sending request = action=doScan&deviceid=test%3A0&format=gray&ocr=-&pagelength=100&pages=2&resolution=100
 blocked Scan, request = $VAR1 = {
   'DoScan' => {
     'scanuuid' => '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]'
