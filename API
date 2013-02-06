@@ -341,6 +341,21 @@ updateUser -> pageRender::updateUser
 
 
 
+deleteUser -> pageRender::deleteUser
+	Called from: openDias.accessControls.js :: ananoumouse()
+	Purpose: Remove the user from the system
+	Inputs:	action: fixed string 'deleteUser'
+          username: the username to update or the fixed string '[current]'
+	Outputs;
+		<?xml version='1.0' encoding='utf-8'?>
+		<Response>
+		  <DeleteUser>
+        result - Was login successful ['OK','FAIL']
+		  </DeleteUser>
+		</Response>
+
+
+
 getUserList -> pageREnder::getUserList
   Called from openDias.accessControls.js :: anonmousle()
   Purpose: Provides a list of configured users on the system.
@@ -352,7 +367,7 @@ getUserList -> pageREnder::getUserList
         <Users>
           <User>
             username - the users user-id
-            realname - the users chosen 'display name''
+            realname - the users chosen 'display name'
             last_access - the date the user last logged on
             role - the users assigned role
           </User>
