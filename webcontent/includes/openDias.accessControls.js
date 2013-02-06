@@ -115,9 +115,8 @@ $(document).ready(function () {
                   dataType: "xml",
                   timeout: 10000,
                   data: {
-                    action: "updateUser",
+                    action: "deleteUser",
                     username: userid,
-                    password: $("#newpassword").val(),
                   },
                   cache: false,
                   type: "POST",
@@ -132,8 +131,6 @@ $(document).ready(function () {
                     if ($(data).find('error').text()) {
                       alert($(data).find('error').text());
                     } else {
-                      setCookie("realname", $('#newrealname').val());
-                      setLoginOutArea();
                       alert(LOCAL_details_updated);
                     }
                   }
