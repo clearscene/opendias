@@ -1,15 +1,20 @@
-###################################################################################
-## EDITED THIS DOC? NOW GO UPDATE essesntialcollections.co.uk/openDIAS/api.shtml ##
-###################################################################################
-Request method
-	Any of the API calls can be make invoken by making an 
-	HTTP POST request to the "/opendias/dynamic" entry point,
-	over the port that the application is running on.
-	Usually this would be done via an AJAX call on a webpage,
-	but could just as easily be make from any application.
-	eg, this is a call to invoke a new scanning operation 
-	from bash.
-
+<?xml version='1.0' encoding='utf-8'?>
+<API>
+  <version>20130206001</version>
+  <GeneralHelp>
+    <Section type='request'>
+      <title>Request method</title>
+      <body>
+        Any of the API calls can be make invoken by making an 
+        HTTP POST request to the "/opendias/dynamic" entry point,
+        over the port that the application is running on.
+        Usually this would be done via an AJAX call on a webpage,
+        but could just as easily be make from any application.
+        eg, this is a call to invoke a new scanning operation 
+        from bash.
+      </body>
+      <example>
+        <![CDATA[
 telnet localhost 8988 <<__endjob
 POST /opendias/dynamic HTTP/1.1
 Host: localhost:8988
@@ -29,25 +34,119 @@ Cache-Control: no-cache
 
 action=doScan&deviceid=test%3A0&format=Grey+Scale&pages=1&&resolution=300&ocr=-&pagelength=100
 __endjob
+        ]]>
+      </example>
+    </Section>
+
+    <Section type='response'>
+      <title>Responses</title>
+      <body>
+        --- some text here ---
+      </body>
+    </Section>
+
+    <Section type='error'>
+      <title>Error Response</title>
+      <body>
+        Any of the API calls could return an error message. Fontends 
+        should check for this error and take appropriate action.
+      </body>
+      <example>
+        <![CDATA[
+        <?xml version='1.0' encoding='utf-8'?>
+        <Response>
+          <error /> - a message describing the problem
+        </Response>
+        ]]>
+      </example>
+    </Section>
+
+    <Section type='fields'>
+      <title>Field Mappings</title>
+      <body>
+        <![CDATA[
+        <h4>Scan Status</h4>
+        <table>
+          <tr><th>status id</th><th>code constant</th><th>supporting data will contain</th></tr>
+          <tr><td>0</td><td>SCAN_IDLE</td><td>&nbsp;</td></tr>
+          <tr><td>1</td><td>SCAN_INTERNAL_ERROR</td><td>&nbsp;</td></tr>
+          <tr><td>2</td><td>SCAN_DB_WORKING</td><td>&nbsp;</td></tr>
+          <tr><td>3</td><td>SCAN_DB_ERROR</td><td>DB error code</td></tr>
+          <tr><td>4</td><td>SCAN_WAITING_ON_SCANNER</td><td>&nbsp;</td></tr>
+          <tr><td>5</td><td>SCAN_ERRO_FROM_SCANNER</td><td>SANE error code</td></tr>
+          <tr><td>6</td><td>SCAN_SCANNING</td><td>Current progress</td></tr>
+          <tr><td>7</td><td>SCAN_WAITING_ON_NEW_PAGE</td><td>Waiting for page [x]</td></tr>
+          <tr><td>8</td><td>SCAN_TIMEOUT_WAITING_ON_NEW_PAGE</td><td>&nbsp;</td></tr>
+          <tr><td>9</td><td>SCAN_CONVERTING_FORMAT</td><td>&nbsp;</td></tr>
+          <tr><td>10</td><td>SCAN_ERROR_CONVERTING_FORMAT</td><td>FreeImage error code</td></tr>
+          <tr><td>11</td><td>SCAN_PERFORMING_OCR</td><td>&nbsp;</td></tr>
+          <tr><td>12</td><td>SCAN_ERROR_PERFORMING_OCR</td><td>xxxxxx error code</td></tr>
+          <tr><td>13</td><td>SCAN_SANE_BUSY</td><td>used to be FIXING_SKEW</td></tr>
+          <tr><td>14</td><td>SCAN_RESERVED_1</td><td>&nbsp;</td></tr>
+          <tr><td>15</td><td>SCAN_RESERVED_2</td><td>&nbsp;</td></tr>
+          <tr><td>16</td><td>SCAN_FINISHED</td><td>id of the saved doc</td></tr>
+        <table>
+
+        <h4>Document Types</h4>
+        <table>
+          <tr><th>type id</th><th>Document Type</th></tr>
+          <tr><td>1</td><td>ODF Document</td></tr>
+          <tr><td>2</td><td>Scanned Document</td></tr>
+          <tr><td>3</td><td>PDF Document</td></tr>
+          <tr><td>4</td><td>Imported Image</td></tr>
+        </table>
+
+        <h4>OCR language</h4>
+        <table>
+          <tr><th>ocr</th><th>Language</th></tr>
+          <tr><td>eng</td><td>International English</td></tr>
+          <tr><td>deu</td><td>German</td></tr>
+          <tr><td>fra</td><td>French</td></tr>
+          <tr><td>spa</td><td>Spanish</td></tr>
+          <tr><td>ita</td><td>Italian</td></tr>
+          <tr><td>nld</td><td>Dutch</td></tr>
+          <tr><td>por</td><td>Brasilian Portuguese</td></tr>
+          <tr><td>vie</td><td>Vietnamese</td></tr>
+        </table>
+
+        <h4>Sorting Fields</h4>
+        <table>
+          <tr><th>field id</th><th>Field</th></tr>
+          <tr><td>0</td><td>docid</td></tr>
+          <tr><td>1</td><td>title</td></tr>
+          <tr><td>2</td><td>doc type</td></tr>
+          <tr><td>3</td><td>date</td></tr>
+        </table>
+        ]]>
+      </body>
+    </Section>
+
+  </GeneralHelp>
 
 
-Error Response
-	Any of the API calls could return an error message. Fontends 
-	should check for this error and take appropriate action.
-	Outputs:
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  error - a message describing the problem
-		</Response>
+
+  <ApiSpec>
 
 
-
-getScanningProgress -> pageRender::getScanningProgress()
-	Called from: openDias.acquire.js :: getScanningProgress()
-	Purpose: Read the state of an asyncronouse scan.
-	Inputs:	action: fixed string 'getScanningProgress'
-		scanprogressid: The uuid of the scanning process (as returned by 'doScan')
-	Outputs:
+    <ApiCall>
+      <call_name>getScanningProgress</call_name>
+      <calls_method>pageRender::getScanningProgress()</calls_method>
+      <KnownCallers>
+        <caller>openDias.acquire.js :: getScanningProgress()</caller>
+      </KnownCallers>
+      <purpose>Read the state of an asyncronouse scan.</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>Fixed string 'getScanningProgress'</value>
+        </Input>
+        <Input>
+          <name>scanprogressid</name>
+          <value>The uuid of the scanning process (as returned by 'doScan')</value>
+        </Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <ScanningProgress>
@@ -55,29 +154,56 @@ getScanningProgress -> pageRender::getScanningProgress()
 		    value - representation of how far along the action being done, is.
 		  </ScanningProgress>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
-
-
-nextPageReady -> pageRender::nextPageReady()
-	Called from: openDias.acquire.js :: ananoumouse()
-	Purpose: Signal to the application that the user has correctly placed the next page for scanning.
-	Inputs:	action: fixed string 'nextPageReady'
-		scanprogressid: The uuid of the scanning process (as returned by 'doScan')
-	Outputs;
+    <ApiCall>
+      <call_name>nextPageReady</call_name>
+      <calls_method>pageRender::nextPageReady()</calls_method>
+      <KnownCallers>
+        <caller>openDias.acquire.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Signal to the application that the user has correctly placed the next page for scanning.</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'nextPageReady'</value>
+        </Input>
+        <Input>
+          <name>scanprogressid</name>
+          <value>The uuid of the scanning process (as returned by 'doScan')</value>
+        </Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <NextPageReady>
 		    result - indication if the next page command was accepted, currently a fixed string 'ok'
 		  </NextPageReady>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-getScannerList -> pageRender::getScannerList()
-	Called from: openDias.acquire.js :: ananoumouse()
-	Purpose: Get a list of scanners (and their usage parameters) that the application can use.
-	Inputs:	action: fixed string 'getScannerList'
-	Outputs;
+    <ApiCall>
+      <call_name>getScannerList</call_name>
+      <calls_method>pageRender::getScannerList()</calls_method>
+      <KnownCallers>
+        <caller>openDias.acquire.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Get a list of scanners (and their usage parameters) that the application can use.</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'getScannerList'</value>
+        </Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <ScannerList cached='true'>    -- optional param, present if data is returned from the cache
@@ -100,44 +226,69 @@ getScannerList -> pageRender::getScannerList()
 		    </Devices>
 		  </ScannerList>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-doScan -> pageRender::doScan()
-	Called from: openDias.acquire.js :: ananoumouse()
-	Purpose: Starts a scanning process.
-	Inputs:	action: fixed string "doScan",
-          deviceid: The sane device id, as provided by getScannerList : Response.ScannerList.Devices.Device.name
-          format: The format to use for scannsing, one of getScanningList : Response.ScanningList.Devices.Device.Formats.format
-          pages: The number of pages that make up the document,
-          resolution: The resolution to set the scanner to, between Response.ScannerList.Devices.Device.min and Response.ScannerList.Devices.Device.max,
-          ocr: Flag to indicate if an OCR process should be performed and in what language,
-          pagelength: The length of the page to scan, Percent, in relation to the maximum available by the scanner.
-	Outputs;
+    <ApiCall>
+      <call_name>doScan</call_name>
+      <calls_method>pageRender::doScan()</calls_method>
+      <KnownCallers>
+        <caller>openDias.acquire.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Starts a scanning process.</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name><value>fixed string "doScan",</value>
+        </Input>
+          <Input><name>deviceid</name><value>The sane device id, as provided by getScannerList - Response.ScannerList.Devices.Device.name</value></Input>
+          <Input><name>format</name><value>The format to use for scannsing, one of getScanningList - Response.ScanningList.Devices.Device.Formats.format</value></Input>
+          <Input><name>pages</name><value>The number of pages that make up the document,</value></Input>
+          <Input><name>resolution</name><value>The resolution to set the scanner to, between Response.ScannerList.Devices.Device.min and Response.ScannerList.Devices.Device.max,</value></Input>
+          <Input><name>ocr</name><value>Flag to indicate if an OCR process should be performed and in what language,</value></Input>
+          <Input><name>pagelength</name><value>The length of the page to scan, Percent, in relation to the maximum available by the scanner.</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		</Response>
 		  </DoScan>
 		    scanuuid - The application uniq id for the scanning process.
 		  </DoScan>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-docFilter -> pageRender::docFilter
-	Called from: openDias.filter.js :: ananoumouse()
-	Purpose: Get a list of documents that fit a specific set of cryteria
-	Inputs:	action: fixed string 'docFilter'
-          subaction: Get all details or just the count of matching docs ['count','fullList']
-          textSearch: Text that a document must match (title or ocr text)
-          isActionRequired: If 'true' return only records that are marked as 'action required'.
-          startDate: The first date that a document could fit into
-          endDate: The last date that a document could fit into
-          tags: Comma delimetered list of tagnames.
-          page: The number of 'range' offsets to apply before the first returned row.
-          range: The number of records to return in a single request.
-          sortfield*: Order the results by column
-          sortorder: present results in acending/decending order ['0','1']
-	Outputs;
+    <ApiCall>
+      <call_name>docFilter</call_name>
+      <calls_method>pageRender::docFilter</calls_method>
+      <KnownCallers>
+        <caller>openDias.filter.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Get a list of documents that fit a specific set of cryteria</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'docFilter'</value>
+        </Input>
+          <Input><name>subaction</name><value>Get all details or just the count of matching docs ['count','fullList']</value></Input>
+          <Input><name>textSearch</name><value>Text that a document must match (title or ocr text)</value></Input>
+          <Input><name>isActionRequired</name><value>If 'true' return only records that are marked as 'action required'.</value></Input>
+          <Input><name>startDate</name><value>The first date that a document could fit into</value></Input>
+          <Input><name>endDate</name><value>The last date that a document could fit into</value></Input>
+          <Input><name>tags</name><value>Comma delimetered list of tagnames.</value></Input>
+          <Input><name>page</name><value>The number of 'range' offsets to apply before the first returned row.</value></Input>
+          <Input><name>range</name><value>The number of records to return in a single request.</value></Input>
+          <Input><name>sortfield*</name><value>Order the results by column</value></Input>
+          <Input><name>sortorder</name><value>present results in acending/decending order ['0','1']</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <DocFilter>
@@ -152,31 +303,57 @@ docFilter -> pageRender::docFilter
 		    </Results>
 		  </DocFilter>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
 
-getAudio -> [stump - not currently implemented]
-	Called from: openDias.loadDetails.js :: ananoumouse()
-	Purpose: Get the web accessable filename that contains the read OCR 
-	Inputs:	action: fixed string 'getAudio'
-          docid: the documents id
-	Outputs;
+    <ApiCall>
+      <call_name>getAudio</call_name>
+      <calls_method>[stump - not currently implemented]</calls_method>
+      <KnownCallers>
+        <caller>openDias.loadDetails.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Get the web accessable filename that contains the read OCR </purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'getAudio'</value>
+        </Input>
+          <Input><name>docid</name><value>the documents id</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <Audio>
 		    filename - the filename that contains the audio of the selected doc 
 		  </Audio>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-getDocDetail -> docEditor::getDocDetail
-	Called from: openDias.loadDetails.js :: ananoumouse()
-	Purpose: Get all the current information about a document 
-	Inputs:	action: fixed string 'getDocDetail'
-          docid: the documents id
-	Outputs;
+    <ApiCall>
+      <call_name>getDocDetail</call_name>
+      <calls_method>docEditor::getDocDetail</calls_method>
+      <KnownCallers>
+        <caller>openDias.loadDetails.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Get all the current information about a document </purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'getDocDetail'</value>
+        </Input>
+          <Input><name>docid</name><value>the documents id</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <DocDetail>
@@ -206,80 +383,145 @@ getDocDetail -> docEditor::getDocDetail
 		    </DocLinks>
 		  </DocDetail>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-updateDocDetails -> docEditor::updateDocDetails
-	Called from: openDias.saveDetails.js :: ananoumouse()
-	Purpose: Update a documents field with a specific value. 
-	Inputs:	action: fixed string 'updateDocDetails'
-          docid: the documents id
-          kkey: the name of the field that is being updated ['ocrtext','title','docDate','actionrequired','hardcopyKept']
-          vvalue: the new value to set the field to
-	Outputs;
+    <ApiCall>
+      <call_name>updateDocDetails</call_name>
+      <calls_method>docEditor::updateDocDetails</calls_method>
+      <KnownCallers>
+        <caller>openDias.saveDetails.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Update a documents field with a specific value. </purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'updateDocDetails'</value>
+        </Input>
+          <Input><name>docid</name><value>the documents id</value></Input>
+          <Input><name>kkey</name><value>the name of the field that is being updated ['ocrtext','title','docDate','actionrequired','hardcopyKept']</value></Input>
+          <Input><name>vvalue</name><value>the new value to set the field to</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <UpdateDocDetails>
 		    status - indication of the update process - currently a static string 'OK'
 		  </UpdateDocDetails>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-moveTag -> docEditor::updateTagLinkage
-	Called from: openDias.saveDetails.js :: ananoumouse()
-	Purpose: Updates links between documents n tags, and document n documents
-	Inputs:	action: fixed string 'moveTag'
-          docid: the documents id
-          tag: the tag that is being (un)linked
-          subaction: flag to indicate if the tag should be added or removed ['addTag','removeTag','addDoc','removeDoc']
-	Outputs;
+    <ApiCall>
+      <call_name>moveTag</call_name>
+      <calls_method>docEditor::updateTagLinkage</calls_method>
+      <KnownCallers>
+        <caller>openDias.saveDetails.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Updates links between documents n tags, and document n documents</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'moveTag'</value>
+        </Input>
+          <Input><name>docid</name><value>the documents id</value></Input>
+          <Input><name>tag</name><value>the tag that is being (un)linked</value></Input>
+          <Input><name>subaction</name><value>flag to indicate if the tag should be added or removed ['addTag','removeTag','addDoc','removeDoc']</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <MoveTag>
 		    status - indication of the update process - currently a static string 'OK'
 		  </MoveTag>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-deleteDoc -> docEditor::doDelete
-	Called from: openDias.saveDetails.js :: ananoumouse()
-	Purpose: Removes a document from the database and scanned images store.
-	Inputs:	action: fixed string 'deleteDoc'
-          docid: the documents id
-	Outputs;
+    <ApiCall>
+      <call_name>deleteDoc</call_name>
+      <calls_method>docEditor::doDelete</calls_method>
+      <KnownCallers>
+        <caller>openDias.saveDetails.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Removes a document from the database and scanned images store.</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'deleteDoc'</value>
+        </Input>
+          <Input><name>docid</name><value>the documents id</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <DeleteDoc>
 		    status - indication of the update process - currently a static string 'OK'
 		  </DeleteDoc>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-regenerateThumb -> import_doc::extractThumbnail
-  Called from: openDias.acquire.js :: ananoumouse()
-  Purpose: Creates a thumbnail of PDF documents (some PDFs imported with earlier version of openDIAS did not have a thumbnail created for them at import time)
-	Inputs:	action: fixed string 'regenerateThumb'
-          docid: the documents id
-  Outputs: 
+    <ApiCall>
+      <call_name>regenerateThumb</call_name>
+      <calls_method>import_doc::extractThumbnail</calls_method>
+      <KnownCallers>
+        <caller>openDias.acquire.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Creates a thumbnail of PDF documents (some PDFs imported with earlier version of openDIAS did not have a thumbnail created for them at import time)</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'regenerateThumb'</value>
+        </Input>
+          <Input><name>docid</name><value>the documents id</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <RegenerateThumb>
 		    status - indication of the update process - currently a static string 'OK'
 		  </RegenerateThumb>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-checkLogin -> pageRender::checkLogin
-	Called from: openDias.userdetails.js :: loginbutton
-	Purpose: Checks login details and assigns the user role to the session, on success
-	Inputs:	action: fixed string 'checkLogin'
-          username: The username to login with
-          password: The usernames password
-	Outputs;
+    <ApiCall>
+      <call_name>checkLogin</call_name>
+      <calls_method>pageRender::checkLogin</calls_method>
+      <KnownCallers>
+        <caller>openDias.userdetails.js :: loginbutton</caller>
+      </KnownCallers>
+      <purpose>Checks login details and assigns the user role to the session, on success</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'checkLogin'</value>
+        </Input>
+          <Input><name>username</name><value>The username to login with</value></Input>
+          <Input><name>password</name><value>The usernames password</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <Login>
@@ -288,79 +530,144 @@ checkLogin -> pageRender::checkLogin
         retry_throttle - The number of seconds that must pass before a further login attempt will be accepted.
 		  </Login>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-logout -> pageRender::doLogin
-	Called from: openDias.userdetails.js :: logoutbutton
-	Purpose: Removes any user specific information from the session
-	Inputs:	action: fixed string 'logout'
-	Outputs;
+    <ApiCall>
+      <call_name>logout</call_name>
+      <calls_method>pageRender::doLogin</calls_method>
+      <KnownCallers>
+        <caller>openDias.userdetails.js :: logoutbutton</caller>
+      </KnownCallers>
+      <purpose>Removes any user specific information from the session</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'logout'</value>
+        </Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <Logout>
         result - Was login successful ['OK','FAIL']
 		  </Logout>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-updateUser -> pageRender::updateUser
-	Called from: openDias.accessControls.js :: ananoumouse()
-	Purpose: Update a user with new details
-	Inputs:	action: fixed string 'updateUser'
-          username: the username to update or the fixed string '[current]'
-          realname: (optional) The new realname of the updated user
-          password: (optional) The new password of the updated user
-          role: (optional) The new role of the updated user (not available for '[current]')
-	Outputs;
+    <ApiCall>
+      <call_name>updateUser</call_name>
+      <calls_method>pageRender::updateUser</calls_method>
+      <KnownCallers>
+        <caller>openDias.accessControls.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Update a user with new details</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'updateUser'</value>
+        </Input>
+          <Input><name>username</name><value>the username to update or the fixed string '[current]'</value></Input>
+          <Input><name>realname</name><value>(optional) The new realname of the updated user</value></Input>
+          <Input><name>password</name><value>(optional) The new password of the updated user</value></Input>
+          <Input><name>role</name><value>(optional) The new role of the updated user (not available for '[current]')</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <UpdateUser>
         result - Was login successful ['OK','FAIL']
 		  </UpdateUser>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-updateUser -> pageRender::updateUser
-	Called from: openDias.accessControls.js :: ananoumouse()
-	Purpose: Update a user with new details
-	Inputs:	action: fixed string 'updateUser'
-          username: the username to update or the fixed string '[current]'
-          realname: (optional) The new realname of the updated user
-          password: (optional) The new password of the updated user
-          role: (optional) The new role of the updated user (not available for '[current]')
-	Outputs;
+    <ApiCall>
+      <call_name>updateUser</call_name>
+      <calls_method>pageRender::updateUser</calls_method>
+      <KnownCallers>
+        <caller>openDias.accessControls.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Update a user with new details</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'updateUser'</value>
+        </Input>
+          <Input><name>username</name><value>the username to update or the fixed string '[current]'</value></Input>
+          <Input><name>realname</name><value>(optional) The new realname of the updated user</value></Input>
+          <Input><name>password</name><value>(optional) The new password of the updated user</value></Input>
+          <Input><name>role</name><value>(optional) The new role of the updated user (not available for '[current]')</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <UpdateUser>
         result - Was login successful ['OK','FAIL']
 		  </UpdateUser>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-deleteUser -> pageRender::deleteUser
-	Called from: openDias.accessControls.js :: ananoumouse()
-	Purpose: Remove the user from the system
-	Inputs:	action: fixed string 'deleteUser'
-          username: the username to update or the fixed string '[current]'
-	Outputs;
+    <ApiCall>
+      <call_name>deleteUser</call_name>
+      <calls_method>pageRender::deleteUser</calls_method>
+      <KnownCallers>
+        <caller>openDias.accessControls.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Remove the user from the system</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'deleteUser'</value>
+        </Input>
+          <Input><name>username</name><value>the username to update or the fixed string '[current]'</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <DeleteUser>
         result - Was login successful ['OK','FAIL']
 		  </DeleteUser>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-getUserList -> pageREnder::getUserList
-  Called from openDias.accessControls.js :: anonmousle()
-  Purpose: Provides a list of configured users on the system.
-  Inputs: action: fixed string 'getUserList'
-  Outputs:
+    <ApiCall>
+      <call_name>getUserList</call_name>
+      <calls_method>pageREnder::getUserList</calls_method>
+      <KnownCallers>
+        <caller>openDias.accessControls.js :: anonmousle()</caller>
+      </KnownCallers>
+      <purpose>Provides a list of configured users on the system.</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'getUserList'</value>
+        </Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
 		  <GetUserList>
@@ -374,87 +681,85 @@ getUserList -> pageREnder::getUserList
         </Users>
 		  </GetUserList>
 		</Response>
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-tagsAutoComplete -> pageRender::tagsAutoComplete
-        Called from: openDias.loadDetails.js :: autocomplete function()
-        Purpose: Complete a tagname from the start of the name. 
-        Inputs: action: fixed string 'tagsAutoComplete'
-                startsWith: the beginning of the tags to return.
-                docid: the documents id
-        Outputs; JSON as required by JQuery autocomplete methods.
+    <ApiCall>
+      <call_name>tagsAutoComplete</call_name>
+      <calls_method>pageRender::tagsAutoComplete</calls_method>
+      <KnownCallers>
+        <caller>openDias.loadDetails.js :: autocomplete function()</caller>
+      </KnownCallers>
+      <purpose>Complete a tagname from the start of the name. </purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'tagsAutoComplete'</value>
+        </Input>
+          <Input><name>startsWith</name><value>the beginning of the tags to return.</value></Input>
+          <Input><name>docid</name><value>the documents id</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
               {"results":[
                 {"tag":"%s"},
                 ...
               ]}
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-titleAutoComplete -> pageRender::titleAutoComplete
-        Called from: openDias.loadDetails.js :: autocomplete function()
-        Purpose: Complete a title from the start of the name. 
-        Inputs: action: fixed string 'titleAutoComplete'
-                startsWith: the beginning of the titles to return.
-                notLinkedTo: (optional) Do not return: document with this docid, 
-                              or documents linked to this docid
-        Outputs; JSON as required by JQuery autocomplete methods.
+    <ApiCall>
+      <call_name>titleAutoComplete</call_name>
+      <calls_method>pageRender::titleAutoComplete</calls_method>
+      <KnownCallers>
+        <caller>openDias.loadDetails.js :: autocomplete function()</caller>
+      </KnownCallers>
+      <purpose>Complete a title from the start of the name. </purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'titleAutoComplete'</value>
+        </Input>
+          <Input><name>startsWith</name><value>the beginning of the titles to return.</value></Input>
+          <Input><name>notLinkedTo</name><value>(optional) Do not return document with this docid, or documents linked to this docid</value></Input>
+      </Inputs>
+      <example type='result'>
+        <![CDATA[
               {"results":[
                 {"docid":"%s","title":"%s"},
                 ...
               ]}
+        ]]>
+      </example>
+    </ApiCall>
 
 
 
-uploadfile -> import_doc::uploadfile
-  Called from: openDias.acquire.js :: ananoumouse()
-  Purpose: Uploads a file, determins its type and includes PDF, ODF and JPEG docs into the document store.
-  Encoding: The form submitting this request should not be an AJAX request, but instead a form submision with encoding of enctype="multipart/form-data"
-	Inputs:	action: fixed string 'uploadfile'
-          uploadfile: (of type 'file') the filename/data of the file being imported
-  Outputs: 
+    <ApiCall>
+      <call_name>uploadfile</call_name>
+      <calls_method>import_doc::uploadfile</calls_method>
+      <KnownCallers>
+        <caller>openDias.acquire.js :: ananoumouse()</caller>
+      </KnownCallers>
+      <purpose>Uploads a file, determins its type and includes PDF, ODF and JPEG docs into the document store.</purpose>
+      <encoding>The form submitting this request should not be an AJAX request, but instead a form submision with encoding of enctype="multipart/form-data"</encoding>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'uploadfile'</value>
+        </Input>
+          <Input><name>uploadfile</name><value>(of type 'file') the filename/data of the file being imported</value></Input>
+      </Inputs>
     An HTML page which redirect the user to the imported doc detail page.
+    </ApiCall>
 
+  </ApiSpec>
 
+</API>
 
-----------------------------------------------------
-status
-0   SCAN_IDLE,
-1   SCAN_INTERNAL_ERROR,
-2   SCAN_DB_WORKING,
-3   SCAN_DB_ERROR,                        // DB error code
-4   SCAN_WAITING_ON_SCANNER,
-5   SCAN_ERRO_FROM_SCANNER,               // SANE error code
-6   SCAN_SCANNING,                        // Current progress
-7   SCAN_WAITING_ON_NEW_PAGE,             // Waiting for page [x]
-8   SCAN_TIMEOUT_WAITING_ON_NEW_PAGE,
-9   SCAN_CONVERTING_FORMAT,
-10  SCAN_ERROR_CONVERTING_FORMAT,         // FreeImage error code
-11  SCAN_PERFORMING_OCR,
-12  SCAN_ERROR_PERFORMING_OCR,            // xxxxxx error code
-13  SCAN_SANE_BUSY,                       // used to be FIXING_SKEW
-14  SCAN_RESERVED_1,
-15  SCAN_RESERVED_2,
-16  SCAN_FINISHED                         // id of the saved doc
-
-type
-1	ODF Document
-2	Scanned Document
-3	PDF Document
-4	Imported Image
-
-ocr Language
-eng   International English
-deu   German
-fra   French
-spa   Spanish
-ita   Italian
-nld   Dutch
-por   Brasilian Portuguese
-vie   Vietnamese
-
-sort field
-0    docid
-1    title
-2    doc type
-3    date
