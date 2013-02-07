@@ -1,18 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
 <API>
+
   <version>20130206001</version>
+
   <GeneralHelp>
+
     <Section type='request'>
       <title>Request method</title>
-      <body>
-        Any of the API calls can be make invoken by making an 
-        HTTP POST request to the "/opendias/dynamic" entry point,
-        over the port that the application is running on.
-        Usually this would be done via an AJAX call on a webpage,
-        but could just as easily be make from any application.
-        eg, this is a call to invoke a new scanning operation 
-        from bash.
-      </body>
+      <body>Any of the API calls can be make invoken by making an HTTP POST request to the "/opendias/dynamic" entry point, over the port that the application is running on. Usually this would be done via an AJAX call on a webpage, but could just as easily be make from any application. eg, this is a call to invoke a new scanning operation from bash.</body>
       <example>
         <![CDATA[
 telnet localhost 8988 <<__endjob
@@ -40,17 +35,12 @@ __endjob
 
     <Section type='response'>
       <title>Responses</title>
-      <body>
-        --- some text here ---
-      </body>
+      <body>--- some text here ---</body>
     </Section>
 
     <Section type='error'>
       <title>Error Response</title>
-      <body>
-        Any of the API calls could return an error message. Fontends 
-        should check for this error and take appropriate action.
-      </body>
+      <body>Any of the API calls could return an error message. Fontends should check for this error and take appropriate action.</body>
       <example>
         <![CDATA[
         <?xml version='1.0' encoding='utf-8'?>
@@ -123,10 +113,7 @@ __endjob
 
   </GeneralHelp>
 
-
-
   <ApiSpec>
-
 
     <ApiCall>
       <call_name>getScanningProgress</call_name>
@@ -147,13 +134,13 @@ __endjob
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <ScanningProgress>
-		    status* - the current action being done by the system
-		    value - representation of how far along the action being done, is.
-		  </ScanningProgress>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <ScanningProgress>
+                    status* - the current action being done by the system
+                    value - representation of how far along the action being done, is.
+                  </ScanningProgress>
+                </Response>
         ]]>
       </example>
     </ApiCall>
@@ -177,17 +164,15 @@ __endjob
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <NextPageReady>
-		    result - indication if the next page command was accepted, currently a fixed string 'ok'
-		  </NextPageReady>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <NextPageReady>
+                    result - indication if the next page command was accepted, currently a fixed string 'ok'
+                  </NextPageReady>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>getScannerList</call_name>
@@ -204,33 +189,31 @@ __endjob
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <ScannerList cached='true'>    -- optional param, present if data is returned from the cache
-		    <Devices>
-		      <Device>
-		        <Formats>
-              format - the format that a scan can be performed in. currently only fixed string 'grey scale'
-		          ...
-            </Formats>
-            type - sane text that describes the scanning device (eg 'flat bed')
-            vendor - sane text that names the scanning device
-            model - sane text that names the scanning device
-            host - text representation of the location of the scanner
-            name - the machine id for the scanning device
-            default - the default resolution
-            min - the minimum resolution allowed by the scanning decice
-            max - the maximum resolution allowed by the scanning device
-		      </Device>
-		      ...
-		    </Devices>
-		  </ScannerList>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <ScannerList cached='true'>    -- optional param, present if data is returned from the cache
+                    <Devices>
+                      <Device>
+                        <Formats>
+                          format - the format that a scan can be performed in. currently only fixed string 'grey scale'
+                          ...
+                        </Formats>
+                        type - sane text that describes the scanning device (eg 'flat bed')
+                        vendor - sane text that names the scanning device
+                        model - sane text that names the scanning device
+                        host - text representation of the location of the scanner
+                        name - the machine id for the scanning device
+                        default - the default resolution
+                        min - the minimum resolution allowed by the scanning decice
+                        max - the maximum resolution allowed by the scanning device
+                      </Device>
+                      ...
+                    </Devices>
+                  </ScannerList>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>doScan</call_name>
@@ -241,28 +224,45 @@ __endjob
       <purpose>Starts a scanning process.</purpose>
       <Inputs>
         <Input>
-          <name>action</name><value>fixed string "doScan",</value>
+          <name>action</name>
+          <value>fixed string "doScan",</value>
         </Input>
-          <Input><name>deviceid</name><value>The sane device id, as provided by getScannerList - Response.ScannerList.Devices.Device.name</value></Input>
-          <Input><name>format</name><value>The format to use for scannsing, one of getScanningList - Response.ScanningList.Devices.Device.Formats.format</value></Input>
-          <Input><name>pages</name><value>The number of pages that make up the document,</value></Input>
-          <Input><name>resolution</name><value>The resolution to set the scanner to, between Response.ScannerList.Devices.Device.min and Response.ScannerList.Devices.Device.max,</value></Input>
-          <Input><name>ocr</name><value>Flag to indicate if an OCR process should be performed and in what language,</value></Input>
-          <Input><name>pagelength</name><value>The length of the page to scan, Percent, in relation to the maximum available by the scanner.</value></Input>
+        <Input>
+          <name>deviceid</name>
+          <value>The sane device id, as provided by getScannerList - Response.ScannerList.Devices.Device.name</value>
+        </Input>
+        <Input>
+          <name>format</name>
+          <value>The format to use for scannsing, one of getScanningList - Response.ScanningList.Devices.Device.Formats.format</value>
+        </Input>
+        <Input>
+          <name>pages</name>
+          <value>The number of pages that make up the document,</value>
+        </Input>
+        <Input>
+          <name>resolution</name>
+          <value>The resolution to set the scanner to, between Response.ScannerList.Devices.Device.min and Response.ScannerList.Devices.Device.max,</value>
+        </Input>
+        <Input>
+          <name>ocr</name>
+          <value>Flag to indicate if an OCR process should be performed and in what language,</value>
+        </Input>
+        <Input>
+          <name>pagelength</name>
+          <value>The length of the page to scan, Percent, in relation to the maximum available by the scanner.</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		</Response>
-		  </DoScan>
-		    scanuuid - The application uniq id for the scanning process.
-		  </DoScan>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                </Response>
+                  </DoScan>
+                    scanuuid - The application uniq id for the scanning process.
+                  </DoScan>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>docFilter</call_name>
@@ -276,39 +276,66 @@ __endjob
           <name>action</name>
           <value>fixed string 'docFilter'</value>
         </Input>
-          <Input><name>subaction</name><value>Get all details or just the count of matching docs ['count','fullList']</value></Input>
-          <Input><name>textSearch</name><value>Text that a document must match (title or ocr text)</value></Input>
-          <Input><name>isActionRequired</name><value>If 'true' return only records that are marked as 'action required'.</value></Input>
-          <Input><name>startDate</name><value>The first date that a document could fit into</value></Input>
-          <Input><name>endDate</name><value>The last date that a document could fit into</value></Input>
-          <Input><name>tags</name><value>Comma delimetered list of tagnames.</value></Input>
-          <Input><name>page</name><value>The number of 'range' offsets to apply before the first returned row.</value></Input>
-          <Input><name>range</name><value>The number of records to return in a single request.</value></Input>
-          <Input><name>sortfield*</name><value>Order the results by column</value></Input>
-          <Input><name>sortorder</name><value>present results in acending/decending order ['0','1']</value></Input>
+        <Input>
+          <name>subaction</name>
+          <value>Get all details or just the count of matching docs ['count','fullList']</value>
+        </Input>
+        <Input>
+          <name>textSearch</name>
+          <value>Text that a document must match (title or ocr text)</value>
+        </Input>
+        <Input>
+          <name>isActionRequired</name>
+          <value>If 'true' return only records that are marked as 'action required'.</value>
+        </Input>
+        <Input>
+          <name>startDate</name>
+          <value>The first date that a document could fit into</value>
+        </Input>
+        <Input>
+          <name>endDate</name>
+          <value>The last date that a document could fit into</value>
+        </Input>
+        <Input>
+          <name>tags</name>
+          <value>Comma delimetered list of tagnames.</value>
+        </Input>
+        <Input>
+          <name>page</name>
+          <value>The number of 'range' offsets to apply before the first returned row.</value>
+        </Input>
+        <Input>
+          <name>range</name>
+          <value>The number of records to return in a single request.</value>
+        </Input>
+        <Input>
+          <name>sortfield*</name>
+          <value>Order the results by column</value>
+        </Input>
+        <Input>
+          <name>sortorder</name>
+          <value>present results in acending/decending order ['0','1']</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <DocFilter>
-        count - The count of matching documents
-        page - The requested page
-		    <Results>
-		      docid - the document id of a found document
-          actionrequired - indicator flag
-		      title - the user defined title of the found document
-		      type* - the style of document
-		      date - the user defined date of the found document
-		    </Results>
-		  </DocFilter>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <DocFilter>
+                    count - The count of matching documents
+                    page - The requested page
+                    <Results>
+                      docid - the document id of a found document
+                      actionrequired - indicator flag
+                      title - the user defined title of the found document
+                      type* - the style of document
+                      date - the user defined date of the found document
+                    </Results>
+                  </DocFilter>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
-
 
     <ApiCall>
       <call_name>getAudio</call_name>
@@ -316,27 +343,28 @@ __endjob
       <KnownCallers>
         <caller>openDias.loadDetails.js :: ananoumouse()</caller>
       </KnownCallers>
-      <purpose>Get the web accessable filename that contains the read OCR </purpose>
+      <purpose>Get the web accessable filename that contains the read OCR</purpose>
       <Inputs>
         <Input>
           <name>action</name>
           <value>fixed string 'getAudio'</value>
         </Input>
-          <Input><name>docid</name><value>the documents id</value></Input>
+        <Input>
+          <name>docid</name>
+          <value>the documents id</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <Audio>
-		    filename - the filename that contains the audio of the selected doc 
-		  </Audio>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <Audio>
+                    filename - the filename that contains the audio of the selected doc 
+                  </Audio>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>getDocDetail</call_name>
@@ -344,50 +372,51 @@ __endjob
       <KnownCallers>
         <caller>openDias.loadDetails.js :: ananoumouse()</caller>
       </KnownCallers>
-      <purpose>Get all the current information about a document </purpose>
+      <purpose>Get all the current information about a document</purpose>
       <Inputs>
         <Input>
           <name>action</name>
           <value>fixed string 'getDocDetail'</value>
         </Input>
-          <Input><name>docid</name><value>the documents id</value></Input>
+        <Input>
+          <name>docid</name>
+          <value>the documents id</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <DocDetail>
-		    docid - the docid of the selected doc
-		    title - the user defined title of the selected doc (a default text is provided if NULL)
-		    extractedText - the OCR text of the selected doc
-		    docDate - the user defined date of the selected doc
-		    scanDate - the date that the document was added to the application.
-		    type* - the style of document
-		    pages - the number of pages used by the document
-        actionrequired - indication if the document has been flagged as requiring an action
-        hardcopyKept - indication if the original document has been retained
-		    x - the number of horizontal pizel required by the document
-		    y - the number of lines required by the document
-		    <Taqs>
-		      <tag>
-		        tagname - the name of the assigned tag
-		      </tag>
-		      ...
-		    </Tags>
-		    <DocLinks>
-		      <doc>
-		        targetDocid - the docid of the linked doc
-            targetTitle - the user defined title of the linked doc (a default text is provided if NULL)
-		      </doc>
-		      ...
-		    </DocLinks>
-		  </DocDetail>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <DocDetail>
+                    docid - the docid of the selected doc
+                    title - the user defined title of the selected doc (a default text is provided if NULL)
+                    extractedText - the OCR text of the selected doc
+                    docDate - the user defined date of the selected doc
+                    scanDate - the date that the document was added to the application.
+                    type* - the style of document
+                    pages - the number of pages used by the document
+                    actionrequired - indication if the document has been flagged as requiring an action
+                    hardcopyKept - indication if the original document has been retained
+                    x - the number of horizontal pizel required by the document
+                    y - the number of lines required by the document
+                    <Taqs>
+                      <tag>
+                        tagname - the name of the assigned tag
+                      </tag>
+                      ...
+                    </Tags>
+                    <DocLinks>
+                      <doc>
+                        targetDocid - the docid of the linked doc
+                        targetTitle - the user defined title of the linked doc (a default text is provided if NULL)
+                      </doc>
+                      ...
+                    </DocLinks>
+                  </DocDetail>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>updateDocDetails</call_name>
@@ -395,29 +424,36 @@ __endjob
       <KnownCallers>
         <caller>openDias.saveDetails.js :: ananoumouse()</caller>
       </KnownCallers>
-      <purpose>Update a documents field with a specific value. </purpose>
+      <purpose>Update a documents field with a specific value.</purpose>
       <Inputs>
         <Input>
           <name>action</name>
           <value>fixed string 'updateDocDetails'</value>
         </Input>
-          <Input><name>docid</name><value>the documents id</value></Input>
-          <Input><name>kkey</name><value>the name of the field that is being updated ['ocrtext','title','docDate','actionrequired','hardcopyKept']</value></Input>
-          <Input><name>vvalue</name><value>the new value to set the field to</value></Input>
+        <Input>
+          <name>docid</name>
+          <value>the documents id</value>
+        </Input>
+        <Input>
+          <name>kkey</name>
+          <value>the name of the field that is being updated ['ocrtext','title','docDate','actionrequired','hardcopyKept']</value>
+        </Input>
+        <Input>
+          <name>vvalue</name>
+          <value>the new value to set the field to</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <UpdateDocDetails>
-		    status - indication of the update process - currently a static string 'OK'
-		  </UpdateDocDetails>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <UpdateDocDetails>
+                    status - indication of the update process - currently a static string 'OK'
+                  </UpdateDocDetails>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>moveTag</call_name>
@@ -431,23 +467,30 @@ __endjob
           <name>action</name>
           <value>fixed string 'moveTag'</value>
         </Input>
-          <Input><name>docid</name><value>the documents id</value></Input>
-          <Input><name>tag</name><value>the tag that is being (un)linked</value></Input>
-          <Input><name>subaction</name><value>flag to indicate if the tag should be added or removed ['addTag','removeTag','addDoc','removeDoc']</value></Input>
+        <Input>
+          <name>docid</name>
+          <value>the documents id</value>
+        </Input>
+        <Input>
+          <name>tag</name>
+          <value>the tag that is being (un)linked</value>
+        </Input>
+        <Input>
+          <name>subaction</name>
+          <value>flag to indicate if the tag should be added or removed ['addTag','removeTag','addDoc','removeDoc']</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <MoveTag>
-		    status - indication of the update process - currently a static string 'OK'
-		  </MoveTag>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <MoveTag>
+                    status - indication of the update process - currently a static string 'OK'
+                  </MoveTag>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>deleteDoc</call_name>
@@ -461,21 +504,22 @@ __endjob
           <name>action</name>
           <value>fixed string 'deleteDoc'</value>
         </Input>
-          <Input><name>docid</name><value>the documents id</value></Input>
+        <Input>
+          <name>docid</name>
+          <value>the documents id</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <DeleteDoc>
-		    status - indication of the update process - currently a static string 'OK'
-		  </DeleteDoc>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <DeleteDoc>
+                    status - indication of the update process - currently a static string 'OK'
+                  </DeleteDoc>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>regenerateThumb</call_name>
@@ -489,21 +533,22 @@ __endjob
           <name>action</name>
           <value>fixed string 'regenerateThumb'</value>
         </Input>
-          <Input><name>docid</name><value>the documents id</value></Input>
+        <Input>
+          <name>docid</name>
+          <value>the documents id</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <RegenerateThumb>
-		    status - indication of the update process - currently a static string 'OK'
-		  </RegenerateThumb>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <RegenerateThumb>
+                    status - indication of the update process - currently a static string 'OK'
+                  </RegenerateThumb>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>checkLogin</call_name>
@@ -517,24 +562,28 @@ __endjob
           <name>action</name>
           <value>fixed string 'checkLogin'</value>
         </Input>
-          <Input><name>username</name><value>The username to login with</value></Input>
-          <Input><name>password</name><value>The usernames password</value></Input>
+        <Input>
+          <name>username</name>
+          <value>The username to login with</value>
+        </Input>
+        <Input>
+          <name>password</name>
+          <value>The usernames password</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <Login>
-        result - Was login successful ['OK','FAIL']
-        message - User message when result was 'FAIL'
-        retry_throttle - The number of seconds that must pass before a further login attempt will be accepted.
-		  </Login>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <Login>
+                    result - Was login successful ['OK','FAIL']
+                    message - User message when result was 'FAIL'
+                    retry_throttle - The number of seconds that must pass before a further login attempt will be accepted.
+                  </Login>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>logout</call_name>
@@ -551,17 +600,15 @@ __endjob
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <Logout>
-        result - Was login successful ['OK','FAIL']
-		  </Logout>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <Logout>
+                    result - Was login successful ['OK','FAIL']
+                  </Logout>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>updateUser</call_name>
@@ -575,24 +622,34 @@ __endjob
           <name>action</name>
           <value>fixed string 'updateUser'</value>
         </Input>
-          <Input><name>username</name><value>the username to update or the fixed string '[current]'</value></Input>
-          <Input><name>realname</name><value>(optional) The new realname of the updated user</value></Input>
-          <Input><name>password</name><value>(optional) The new password of the updated user</value></Input>
-          <Input><name>role</name><value>(optional) The new role of the updated user (not available for '[current]')</value></Input>
+        <Input>
+          <name>username</name>
+          <value>the username to update or the fixed string '[current]'</value>
+        </Input>
+        <Input>
+          <name>realname</name>
+          <value>(optional) The new realname of the updated user</value>
+        </Input>
+        <Input>
+          <name>password</name>
+          <value>(optional) The new password of the updated user</value>
+        </Input>
+        <Input>
+          <name>role</name>
+          <value>(optional) The new role of the updated user (not available for '[current]')</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <UpdateUser>
-        result - Was login successful ['OK','FAIL']
-		  </UpdateUser>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <UpdateUser>
+                    result - Was login successful ['OK','FAIL']
+                  </UpdateUser>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>createUser</call_name>
@@ -606,24 +663,34 @@ __endjob
           <name>action</name>
           <value>fixed string 'createUser'</value>
         </Input>
-          <Input><name>username</name><value>the username to create</value></Input>
-          <Input><name>realname</name><value>The new realname of the user</value></Input>
-          <Input><name>password</name><value>The new password of the user</value></Input>
-          <Input><name>role</name><value>The new role of the user</value></Input>
+        <Input>
+          <name>username</name>
+          <value>the username to create</value>
+        </Input>
+        <Input>
+          <name>realname</name>
+          <value>The new realname of the user</value>
+        </Input>
+        <Input>
+          <name>password</name>
+          <value>The new password of the user</value>
+        </Input>
+        <Input>
+          <name>role</name>
+          <value>The new role of the user</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <CreateUser>
-        result - Was login successful ['OK','FAIL']
-		  </CreateUser>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <CreateUser>
+                    result - Was login successful ['OK','FAIL']
+                  </CreateUser>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>deleteUser</call_name>
@@ -637,21 +704,22 @@ __endjob
           <name>action</name>
           <value>fixed string 'deleteUser'</value>
         </Input>
-          <Input><name>username</name><value>the username to delete</value></Input>
+        <Input>
+          <name>username</name>
+          <value>the username to delete</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <DeleteUser>
-        result - Was login successful ['OK','FAIL']
-		  </DeleteUser>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <DeleteUser>
+                    result - Was login successful ['OK','FAIL']
+                  </DeleteUser>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>getUserList</call_name>
@@ -668,24 +736,22 @@ __endjob
       </Inputs>
       <example type='result'>
         <![CDATA[
-		<?xml version='1.0' encoding='utf-8'?>
-		<Response>
-		  <GetUserList>
-        <Users>
-          <User>
-            username - the users user-id
-            realname - the users chosen 'display name'
-            last_access - the date the user last logged on
-            role - the users assigned role
-          </User>
-        </Users>
-		  </GetUserList>
-		</Response>
+                <?xml version='1.0' encoding='utf-8'?>
+                <Response>
+                  <GetUserList>
+                    <Users>
+                      <User>
+                        username - the users user-id
+                        realname - the users chosen 'display name'
+                        last_access - the date the user last logged on
+                        role - the users assigned role
+                      </User>
+                    </Users>
+                  </GetUserList>
+                </Response>
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>tagsAutoComplete</call_name>
@@ -693,14 +759,20 @@ __endjob
       <KnownCallers>
         <caller>openDias.loadDetails.js :: autocomplete function()</caller>
       </KnownCallers>
-      <purpose>Complete a tagname from the start of the name. </purpose>
+      <purpose>Complete a tagname from the start of the name.</purpose>
       <Inputs>
         <Input>
           <name>action</name>
           <value>fixed string 'tagsAutoComplete'</value>
         </Input>
-          <Input><name>startsWith</name><value>the beginning of the tags to return.</value></Input>
-          <Input><name>docid</name><value>the documents id</value></Input>
+        <Input>
+          <name>startsWith</name>
+          <value>the beginning of the tags to return.</value>
+        </Input>
+        <Input>
+          <name>docid</name>
+          <value>the documents id</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
@@ -712,22 +784,26 @@ __endjob
       </example>
     </ApiCall>
 
-
-
     <ApiCall>
       <call_name>titleAutoComplete</call_name>
       <calls_method>pageRender::titleAutoComplete</calls_method>
       <KnownCallers>
         <caller>openDias.loadDetails.js :: autocomplete function()</caller>
       </KnownCallers>
-      <purpose>Complete a title from the start of the name. </purpose>
+      <purpose>Complete a title from the start of the name.</purpose>
       <Inputs>
         <Input>
           <name>action</name>
           <value>fixed string 'titleAutoComplete'</value>
         </Input>
-          <Input><name>startsWith</name><value>the beginning of the titles to return.</value></Input>
-          <Input><name>notLinkedTo</name><value>(optional) Do not return document with this docid, or documents linked to this docid</value></Input>
+        <Input>
+          <name>startsWith</name>
+          <value>the beginning of the titles to return.</value>
+        </Input>
+        <Input>
+          <name>notLinkedTo</name>
+          <value>(optional) Do not return document with this docid, or documents linked to this docid</value>
+        </Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
@@ -738,8 +814,6 @@ __endjob
         ]]>
       </example>
     </ApiCall>
-
-
 
     <ApiCall>
       <call_name>uploadfile</call_name>
@@ -754,12 +828,14 @@ __endjob
           <name>action</name>
           <value>fixed string 'uploadfile'</value>
         </Input>
-          <Input><name>uploadfile</name><value>(of type 'file') the filename/data of the file being imported</value></Input>
+        <Input>
+          <name>uploadfile</name>
+          <value>(of type 'file') the filename/data of the file being imported</value>
+        </Input>
       </Inputs>
-    An HTML page which redirect the user to the imported doc detail page.
+      An HTML page which redirect the user to the imported doc detail page.
     </ApiCall>
 
   </ApiSpec>
 
 </API>
-
