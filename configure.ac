@@ -196,9 +196,7 @@ else
 fi
 
 
-cd webcontent
-perl build-local-versions.pl $LOCALISATION_FLAGS
-cd ../
+perl scripts/build-local-versions.pl $LOCALISATION_FLAGS
 
 
 dnl
