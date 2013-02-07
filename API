@@ -595,29 +595,29 @@ __endjob
 
 
     <ApiCall>
-      <call_name>updateUser</call_name>
-      <calls_method>pageRender::updateUser</calls_method>
+      <call_name>createUser</call_name>
+      <calls_method>pageRender::createUser</calls_method>
       <KnownCallers>
         <caller>openDias.accessControls.js :: ananoumouse()</caller>
       </KnownCallers>
-      <purpose>Update a user with new details</purpose>
+      <purpose>Create a new user</purpose>
       <Inputs>
         <Input>
           <name>action</name>
-          <value>fixed string 'updateUser'</value>
+          <value>fixed string 'createUser'</value>
         </Input>
-          <Input><name>username</name><value>the username to update or the fixed string '[current]'</value></Input>
-          <Input><name>realname</name><value>(optional) The new realname of the updated user</value></Input>
-          <Input><name>password</name><value>(optional) The new password of the updated user</value></Input>
-          <Input><name>role</name><value>(optional) The new role of the updated user (not available for '[current]')</value></Input>
+          <Input><name>username</name><value>the username to create</value></Input>
+          <Input><name>realname</name><value>The new realname of the user</value></Input>
+          <Input><name>password</name><value>The new password of the user</value></Input>
+          <Input><name>role</name><value>The new role of the user</value></Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
 		<?xml version='1.0' encoding='utf-8'?>
 		<Response>
-		  <UpdateUser>
+		  <CreateUser>
         result - Was login successful ['OK','FAIL']
-		  </UpdateUser>
+		  </CreateUser>
 		</Response>
         ]]>
       </example>
@@ -637,7 +637,7 @@ __endjob
           <name>action</name>
           <value>fixed string 'deleteUser'</value>
         </Input>
-          <Input><name>username</name><value>the username to update or the fixed string '[current]'</value></Input>
+          <Input><name>username</name><value>the username to delete</value></Input>
       </Inputs>
       <example type='result'>
         <![CDATA[
