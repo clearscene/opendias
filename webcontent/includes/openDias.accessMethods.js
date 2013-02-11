@@ -14,7 +14,7 @@ $(document).ready(function () {
     $.ajax({
       url: "/opendias/dynamic",
       dataType: "xml",
-      timeout: 10000,
+      timeout: AJAX_TIMEOUT,
       data: {
         action: "logout"
       },
@@ -45,7 +45,7 @@ function attemptLogin() {
   $.ajax({
     url: "/opendias/dynamic",
     dataType: "xml",
-    timeout: 10000,
+    timeout: AJAX_TIMEOUT,
     data: {
       action: "checkLogin",
       username: $('#username').val(),

@@ -40,7 +40,7 @@ function getRecordCount() {
   $.ajax({
     url: "/opendias/dynamic",
     dataType: "xml",
-    timeout: 10000,
+    timeout: AJAX_TIMEOUT,
     data: {
       action: "docFilter",
       subaction: "count",

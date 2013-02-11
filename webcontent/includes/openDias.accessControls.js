@@ -12,7 +12,7 @@ $(document).ready(function () {
     $.ajax({
       url: "/opendias/dynamic",
       dataType: "xml",
-      timeout: 10000,
+      timeout: AJAX_TIMEOUT,
       data: {
         action: "getUserList",
       },
@@ -49,7 +49,7 @@ $(document).ready(function () {
                 $.ajax({
                   url: "/opendias/dynamic",
                   dataType: "xml",
-                  timeout: 10000,
+                  timeout: AJAX_TIMEOUT,
                   data: {
                     action: "updateUser",
                     username: userid,
@@ -81,7 +81,7 @@ $(document).ready(function () {
                 $.ajax({
                   url: "/opendias/dynamic",
                   dataType: "xml",
-                  timeout: 10000,
+                  timeout: AJAX_TIMEOUT,
                   data: {
                     action: "updateUser",
                     username: userid,
@@ -113,7 +113,7 @@ $(document).ready(function () {
                 $.ajax({
                   url: "/opendias/dynamic",
                   dataType: "xml",
-                  timeout: 10000,
+                  timeout: AJAX_TIMEOUT,
                   data: {
                     action: "deleteUser",
                     username: userid,
@@ -164,7 +164,7 @@ $(document).ready(function () {
     $.ajax({
       url: "/opendias/dynamic",
       dataType: "xml",
-      timeout: 10000,
+      timeout: AJAX_TIMEOUT,
       data: {
         action: "updateUser",
         username: "[current]",
@@ -200,7 +200,7 @@ $(document).ready(function () {
     $.ajax({
       url: "/opendias/dynamic",
       dataType: "xml",
-      timeout: 10000,
+      timeout: AJAX_TIMEOUT,
       data: {
         action: "createUser",
         username: $("#createuserid").val(),

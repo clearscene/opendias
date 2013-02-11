@@ -1,3 +1,4 @@
+AJAX_TIMEOUT = 10000;
 $(document).ready(function () {
 
   // Set the language dropdown to the current value
