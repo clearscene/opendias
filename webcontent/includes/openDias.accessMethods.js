@@ -2,52 +2,12 @@ $(document).ready(function () {
 
   setLoginOutArea();
 
-  $('#loginbutton').click(function () {
-    $('#loginbutton').attr("disabled", true);
-    $.ajax({
-      url: "/opendias/dynamic",
-      dataType: "xml",
-      timeout: 10000,
-      data: {
-        action: "checkLogin",
-        username: $('#username').val(),
-        password: $('#password').val(),
-      },
-      cache: false,
-      type: "POST",
-      error: function (x, t, m) {
-        $('#password').val('');
-        if (t == "timeout") {
-          alert("[s001] " + LOCAL_timeout_talking_to_server);
-        } else {
-          alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
-        }
-      },
-      success: function (data) {
-        $('#password').val('');
-        if ($(data).find('error').text()) {
-          alert($(data).find('error').text());
-        } else {
-          if ($(data).find('result').text() == 'OK') {
-            $('#loginbutton').attr("disabled", false);
-            setLoginOutArea();
-          } else {
-            $('#loginbutton').css({
-              display: 'none'
-            });
-            setTimeout(function () {
-              $('#loginbutton').attr("disabled", false);
-              $('#loginbutton').css({
-                display: 'inline'
-              });
-            }, parseInt($(data).find('retry_throttle').text()) * 1000);
-            alert($(data).find('message').text());
-          }
-        }
-      }
-    });
+  $('#loginbutton').click( function() { attemptLogin(); });
+  $('#password').bind('keypress','',function(event) {
+    if (event.which==13) {
+      attemptLogin();
+    }
   });
-
 
   $('#logoutbutton').click(function () {
     $('#password').val('');
@@ -80,7 +40,53 @@ $(document).ready(function () {
 });
 
 
-function setLoginOutArea() {
+function attemptLogin() {
+  $('#loginbutton').attr("disabled", true);
+  $.ajax({
+    url: "/opendias/dynamic",
+    dataType: "xml",
+    timeout: 10000,
+    data: {
+      action: "checkLogin",
+      username: $('#username').val(),
+      password: $('#password').val(),
+    },
+    cache: false,
+    type: "POST",
+    error: function (x, t, m) {
+      $('#password').val('');
+      if (t == "timeout") {
+        alert("[s001] " + LOCAL_timeout_talking_to_server);
+      } else {
+        alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+      }
+    },
+    success: function (data) {
+      $('#password').val('');
+      if ($(data).find('error').text()) {
+        alert($(data).find('error').text());
+      } else {
+        if ($(data).find('result').text() == 'OK') {
+          $('#loginbutton').attr("disabled", false);
+          setLoginOutArea( 1 );
+        } else {
+          $('#loginbutton').css({
+            display: 'none'
+          });
+          setTimeout(function () {
+            $('#loginbutton').attr("disabled", false);
+            $('#loginbutton').css({
+              display: 'inline'
+            });
+          }, parseInt($(data).find('retry_throttle').text()) * 1000);
+          alert($(data).find('message').text());
+        }
+      }
+    }
+  });
+}
+
+function setLoginOutArea( justloggedin ) {
   // Display or not, the login area
   // If we have a cookie "realname=<anything>"
   // then show the logout only. Otherwise
@@ -102,10 +108,18 @@ function setLoginOutArea() {
       display: 'block'
     });
   }
-  updateMenuLinks();
+  updateMenuLinks( justloggedin );
 }
 
-function updateMenuLinks() {
+function updateMenuLinks( justloggedin ) {
+
+  if ( justloggedin && window.location.pathname != '/opendias/') {
+    // We're not on the homepage, so chances are there is some dynamic content
+    // needing adding to this page. So just refresh.
+    document.location.reload(true);
+    return;
+  }
+
   // Remove links the user can't use
   var role = getCookie("role");
   if (get_priv_from_role(role, 'view_doc')) {
