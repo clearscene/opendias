@@ -33,7 +33,7 @@ function getScanningProgress(progressId, device) {
   $.ajax({
     url: "/opendias/dynamic",
     dataType: "xml",
-    timeout: 30000,
+    timeout: 5 * AJAX_TIMEOUT,
     data: {
       action: "getScanningProgress",
       scanprogressid: progressId,
@@ -171,7 +171,7 @@ function getScanningProgress(progressId, device) {
         doneAtLeastOnePage = 1;
         $.ajax({
           url: "/opendias/dynamic",
-          timeout: 10000,
+          timeout: AJAX_TIMEOUT,
           dataType: "xml",
           data: {
             action: "nextPageReady",
@@ -223,7 +223,7 @@ $(document).ready(function () {
     $.ajax({
       url: "/opendias/dynamic",
       dataType: "xml",
-      timeout: 10000,
+      timeout: AJAX_TIMEOUT,
       data: {
         action: "getScannerList"
       },
@@ -345,7 +345,7 @@ $(document).ready(function () {
             $.ajax({
               url: "/opendias/dynamic",
               dataType: "xml",
-              timeout: 10000,
+              timeout: AJAX_TIMEOUT,
               data: {
                 action: "doScan",
                 deviceid: $("#deviceid_" + device).val(),

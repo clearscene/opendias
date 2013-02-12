@@ -17,7 +17,7 @@ $(document).ready(function () {
   $.ajax({
     url: "/opendias/dynamic",
     dataType: "xml",
-    timeout: 10000,
+    timeout: AJAX_TIMEOUT,
     data: {
       action: "getDocDetail",
       docid: getUrlVars()['docid']
@@ -139,7 +139,7 @@ $(document).ready(function () {
             $.ajax({
               url: "/opendias/dynamic",
               dataType: "xml",
-              timeout: 10000,
+              timeout: AJAX_TIMEOUT,
               data: {
                 action: "regenerateThumb",
                 docid: d.data.docId
@@ -202,7 +202,7 @@ $(document).ready(function () {
           $.ajax({
             url: "/opendias/dynamic",
             dataType: "json",
-            timeout: 10000,
+            timeout: AJAX_TIMEOUT,
             type: "POST",
             data: {
               action: "tagsAutoComplete",
@@ -262,7 +262,7 @@ $(document).ready(function () {
           $.ajax({
             url: "/opendias/dynamic",
             dataType: "json",
-            timeout: 10000,
+            timeout: AJAX_TIMEOUT,
             type: "POST",
             data: {
               action: "titleAutoComplete",
@@ -312,7 +312,7 @@ $(document).ready(function () {
       $.ajax({
         url: "/opendias/dynamic",
         dataType: "json",
-        timeout: 10000,
+        timeout: AJAX_TIMEOUT,
         type: "POST",
         data: {
           action: "titleAutoComplete",

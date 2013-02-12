@@ -433,6 +433,9 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, size_t totbyt
       readSoFar += received_length_from_sane;
       stillToRead -= received_length_from_sane;
       raw_image_current_pos += received_length_from_sane;
+      if ( received_length_from_sane == bufferSize ) {
+        bufferSize += 32768;
+      }
       if ( bufferSize > stillToRead ) {
         bufferSize = stillToRead;
       }

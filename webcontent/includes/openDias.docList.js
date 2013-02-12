@@ -32,7 +32,7 @@ $(document).ready(function () {
     source: function (request, response) {
       $.ajax({
         url: "/opendias/dynamic",
-        timeout: 10000,
+        timeout: AJAX_TIMEOUT,
         dataType: "json",
         type: "POST",
         data: {
@@ -167,7 +167,7 @@ function loadListData(currentPage) {
 
   $.ajax({
     url: "dynamic",
-    timeout: 10000,
+    timeout: AJAX_TIMEOUT,
     dataType: "xml",
     data: {
       action: "docFilter",

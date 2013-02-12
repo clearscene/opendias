@@ -6,7 +6,7 @@ function sendUpdate(kkey, vvalue) {
   $.ajax({
     url: "/opendias/dynamic",
     dataType: "xml",
-    timeout: 10000,
+    timeout: AJAX_TIMEOUT,
     data: {
       action: "updateDocDetails",
       docid: $('#docid').text(),
@@ -40,7 +40,7 @@ function moveTag(tag, docid, action) {
   $.ajax({
     url: "/opendias/dynamic",
     dataType: "xml",
-    timeout: 10000,
+    timeout: AJAX_TIMEOUT,
     data: {
       action: "moveTag",
       subaction: action,
@@ -128,7 +128,7 @@ $(document).ready(function () {
       $.ajax({
         url: "/opendias/dynamic",
         dataType: "xml",
-        timeout: 10000,
+        timeout: AJAX_TIMEOUT,
         data: {
           action: "deleteDoc",
           docid: $('#docid').text(),
