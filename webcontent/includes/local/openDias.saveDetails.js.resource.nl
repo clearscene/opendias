@@ -1,0 +1,9 @@
+LOCAL_error_while_updating = 'Er is een fout opgetreden tijdens het bijwerken van de informatie';
+LOCAL_error_while_deleting_doc = 'Er is een fout opgetreden tijdens het verwijderen van het document.';
+LOCAL_sure_to_delete_doc = 'Dit document verwijderen. Weet u het zeker?';
+LOCAL_default_title = 'Nieuw (naamloos) document.';
+LOCAL_default_title_warning = 'Documentnaam is nog niet aangepast';
+LOCAL_default_date = '-  - Geen datum -';
+LOCAL_default_date_warning = 'Documentdatum is nog niet aangepast';
+LOCAL_no_tags_assigned = 'Document is niet gecategoriseerd';
+LOCAL_doc_incomplete_warning = 'Documentgegevens zijn incompleet';

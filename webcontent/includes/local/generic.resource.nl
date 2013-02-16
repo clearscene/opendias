@@ -1,0 +1,12 @@
+LOCAL_timeout_talking_to_server = 'Timeout tijdens de communicatie met de server';
+LOCAL_error_talking_to_server = 'Fout tijdens de communicatie met de server';
+LOCAL_date_format = 'jj/mm/dd';
+LOCAL_odf_doc = 'ODF Document';
+LOCAL_scanned_doc = 'Gescand Document';
+LOCAL_pdf_doc = 'PDF Document';
+LOCAL_jpeg_img = 'JPEG Afbeeldingen';
+LOCAL_unknown = 'onbekend';
+LOCAL_role_admin = 'Admin (mag alles)';
+LOCAL_role_user = 'User (mag alles, behalve rechten toekennen)';
+LOCAL_role_view = 'View (mag alleen documenten bekijken)';
+LOCAL_role_add = 'Add (mag alleen documenten toevoegen)';
