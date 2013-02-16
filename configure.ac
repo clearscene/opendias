@@ -1,6 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(opendias, [0.9a], [wbooth@clearscene.net])
+AC_INIT(opendias, [0.9b], [wbooth@clearscene.net])
+AC_DEFINE([DB_VERSION],[7],[Setting DB version])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AM_CONFIG_HEADER([config.h])

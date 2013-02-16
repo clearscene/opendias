@@ -236,7 +236,7 @@ The application is localised using three kinds of file:
     autoscan
     cppcheck --verbose --enable=all src/
  * Get the api doc and Changelog diffs, and update the website.
- * bump the configure.ac version number
+ * Bump the configure.ac version number
  * Generate distribution tarball
     make distcheck
 

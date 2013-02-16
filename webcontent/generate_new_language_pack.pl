@@ -35,12 +35,11 @@ closedir( DIR );
 # Load the language pack
 foreach my $file (@resource_files) {
 
-  print "Creating a test language pack for $file\n";
-
   my $file_out = $file;
   $file_out =~ s/en$/$lang/;
 
   die "Target file ($file_out) already exists." if -f $file_out;
+  print "Creating $file_out\n";
 
   open( SOURCE, $file );
   open( TARGET, ">$file_out" );

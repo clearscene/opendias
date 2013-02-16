@@ -19,7 +19,6 @@
 #ifndef OPENDIASCONFIG
 #define OPENDIASCONFIG
 
-int DB_VERSION;
 char *BASE_DIR;
 
 #endif /* OPENDIASCONFIG */

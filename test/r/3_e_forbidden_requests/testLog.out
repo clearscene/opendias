@@ -8,13 +8,22 @@ Sending request =
 GET request for 
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -48,6 +57,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -69,14 +79,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -90,13 +107,22 @@ Sending request =
 GET request for /
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -130,6 +156,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -151,14 +178,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -172,13 +206,22 @@ Sending request =
 GET request for /../unknown.html
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -212,6 +255,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -233,14 +277,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -254,13 +305,22 @@ Sending request =
 GET request for /unknown.html
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -294,6 +354,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -315,14 +376,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -336,13 +404,22 @@ Sending request =
 GET request for /images/unknown.png
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -376,6 +453,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -397,14 +475,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -418,13 +503,22 @@ Sending request =
 GET request for /images/unknown.jpg
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -458,6 +552,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -479,14 +574,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -500,13 +602,22 @@ Sending request =
 GET request for /scans/unknown.jpg
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -540,6 +651,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -561,14 +673,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -582,13 +701,22 @@ Sending request =
 GET request for /includes/unknown.js
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -622,6 +750,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -643,14 +772,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -664,13 +800,22 @@ Sending request =
 GET request for /style/unknown.css
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -704,6 +849,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -725,14 +871,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -746,13 +899,22 @@ Sending request =
 GET request for /unknown
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -786,6 +948,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -807,14 +970,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -828,13 +998,22 @@ Sending request =
 GET request for /unknown/
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -868,6 +1047,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -889,14 +1069,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -910,13 +1097,22 @@ Sending request =
 GET request for /dynamic
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -950,6 +1146,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -971,14 +1168,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -992,13 +1196,22 @@ Sending request =
 GET request for /dynamic/
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -1032,6 +1245,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -1053,14 +1267,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -1074,13 +1295,22 @@ Sending request =
 GET request for /opendias
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -1114,6 +1344,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -1134,6 +1365,13 @@ $VAR1 = '<!DOCTYPE html>
 
   <div id=\'body\'>
     <div class="container">
+
+<!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      body.tmpl - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
 
 
 <h2>Application Home</h2>
@@ -1238,6 +1476,13 @@ $VAR1 = '<!DOCTYPE html>
   <p></p>
 
  </div>
+<!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
 
     </div>
   </div>
@@ -1245,7 +1490,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -1259,13 +1504,22 @@ Sending request =
 GET request for /opendias/
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -1299,6 +1553,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -1319,6 +1574,13 @@ $VAR1 = '<!DOCTYPE html>
 
   <div id=\'body\'>
     <div class="container">
+
+<!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      body.tmpl - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
 
 
 <h2>Application Home</h2>
@@ -1423,6 +1685,13 @@ $VAR1 = '<!DOCTYPE html>
   <p></p>
 
  </div>
+<!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
 
     </div>
   </div>
@@ -1430,7 +1699,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -1444,13 +1713,22 @@ Sending request =
 GET request for /opendias/../unknown.html
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -1484,6 +1762,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -1505,14 +1784,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>An internal server error has occured.</p>
+<p>An internal server error has occured.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -1586,13 +1872,22 @@ Sending request =
 POST request for 
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -1626,6 +1921,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -1647,14 +1943,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -1668,13 +1971,22 @@ Sending request =
 POST request for /
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -1708,6 +2020,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -1729,14 +2042,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -1750,13 +2070,22 @@ Sending request =
 POST request for /../unknown.html
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -1790,6 +2119,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -1811,14 +2141,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -1832,13 +2169,22 @@ Sending request =
 POST request for /unknown.html
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -1872,6 +2218,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -1893,14 +2240,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -1914,13 +2268,22 @@ Sending request =
 POST request for /images/unknown.png
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -1954,6 +2317,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -1975,14 +2339,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -1996,13 +2367,22 @@ Sending request =
 POST request for /images/unknown.jpg
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -2036,6 +2416,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -2057,14 +2438,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -2078,13 +2466,22 @@ Sending request =
 POST request for /scans/unknown.jpg
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -2118,6 +2515,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -2139,14 +2537,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -2160,13 +2565,22 @@ Sending request =
 POST request for /includes/unknown.js
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -2200,6 +2614,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -2221,14 +2636,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -2242,13 +2664,22 @@ Sending request =
 POST request for /style/unknown.css
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -2282,6 +2713,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -2303,14 +2735,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -2324,13 +2763,22 @@ Sending request =
 POST request for /unknown
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -2364,6 +2812,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -2385,14 +2834,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -2406,13 +2862,22 @@ Sending request =
 POST request for /unknown/
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -2446,6 +2911,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -2467,14 +2933,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -2488,13 +2961,22 @@ Sending request =
 POST request for /dynamic
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -2528,6 +3010,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -2549,14 +3032,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -2570,13 +3060,22 @@ Sending request =
 POST request for /dynamic/
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -2610,6 +3109,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -2631,14 +3131,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p>
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -2664,13 +3171,22 @@ Sending request =
 POST request for /opendias/../unknown.html
 $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -2704,6 +3220,7 @@ $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -2725,14 +3242,21 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>An internal server error has occured.</p>
+<p>An internal server error has occured.</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
     </div>
   </div>
 
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>

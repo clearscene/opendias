@@ -23,8 +23,12 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#ifdef CAN_MAGIC
 #include <magic.h>
+#endif // CAN_MAGIC //
+#ifdef CAN_OCR
 #include <leptonica/allheaders.h>
+#endif // CAN_OCR //
 
 #include "main.h"
 #include "dbaccess.h"
@@ -63,11 +67,13 @@ char *extractThumbnail(char *docid) {
 
 char *uploadfile(char *filename, char *lang) {
 
-  int width = 0, height = 0;
-  int itype = PLACE_HOLDER;
-  char *to_name, *datafile, *ocrText = NULL, *thumbext = NULL, *tmp;
+#ifdef CAN_MAGIC
+  int width = 0, height = 0, itype = PLACE_HOLDER;
+  char *to_name, *ocrText = NULL, *thumbext = NULL, *tmp;
   char *docid;
   char *ftype;
+  char *datafile;
+#endif // CAN_MAGIC //
 
   // Save Record
   o_log(DEBUGM, "Saving doc import record");
@@ -133,16 +139,15 @@ char *uploadfile(char *filename, char *lang) {
   // --------------------------------------
   else {
     free( ftype );
+    free( datafile );
 #endif // CAN_MAGIC //
     o_log(ERROR, "unknown file type.");
-    free( datafile );
     return NULL;
 #ifdef CAN_MAGIC
   }
-#endif // CAN_PDF //
   free( ftype );
 
-  if(ocrText == NULL) {
+  if( ocrText == NULL ) {
     ocrText = o_strdup( getString("LOCAL_ocr_default_text", lang ) );
   }
   free(datafile);
@@ -178,5 +183,6 @@ char *uploadfile(char *filename, char *lang) {
   free(docid);
 
   return tmp;
+#endif // CAN_MAGIC //
 }
 

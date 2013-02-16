@@ -801,15 +801,6 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
     }
   }
 
-  else {
-    // we already have a user of the name
-    if ( 0 != strcmp(username, "[current]") ) {
-      // ... and we're trying to create a user
-      free_recordset( rSet );
-      o_log(ERROR, "A client tried to create user that already exists.");
-      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_user_already_exists", lang) );
-    }
-  }
   created = o_strdup( readData_db(rSet, "created") );
   free_recordset( rSet );
 
@@ -871,6 +862,60 @@ char *updateUser( char *username, char *realname, char *password, char *role, in
 
   free( created );
   return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateUser><result>OK</result></UpdateUser></Response>");
+}
+
+char *getUserList() {
+
+  struct simpleLinkedList *rSet;
+  char *sql = o_strdup(
+    "SELECT username, realname, last_access, role \
+    FROM user_access " );
+  rSet = runquery_db( sql, NULL );
+  free( sql );
+
+  if( rSet == NULL ) {
+    o_log( ERROR, "Could not get a list of users." );
+    return NULL;
+  }
+
+  char *userTemplate = o_strdup( "<User><username>%s</username><realname>%s</realname><last_access>%s</last_access><role>%s</role></User>" );
+  char *userList = o_strdup("");
+  do {
+    o_concatf(&userList, userTemplate,
+                            readData_db(rSet, "username"),
+                            readData_db(rSet, "realname"),
+                            readData_db(rSet, "last_access"),
+                            readData_db(rSet, "role") );
+  } while ( nextRow( rSet ) );
+  free_recordset( rSet );
+
+  char *result = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><GetUserList><Users>%s</Users></GetUserList></Response>", userList);
+  free( userList );
+  free( userTemplate );
+o_log( ERROR, "%s", result );
+
+  return result;
+}
+
+char *deleteUser( char *username, char *lang ) {
+  char *sql;
+
+  if ( 0 == strcmp(username, "admin") ) {
+    o_log(ERROR, "A client tried to delete the 'admin' user. Prevented!,");
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", lang) );
+  }
+
+  // Check the calculated user is actually a user
+  sql = o_strdup(
+    "DELETE FROM user_access \
+    WHERE username = ?" );
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, username );
+  runUpdate_db( sql, vars );
+  free( sql );
+
+  return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><DeleteUser><result>OK</result></DeleteUser></Response>");
 }
 #endif // OPEN_TO_ALL //
 

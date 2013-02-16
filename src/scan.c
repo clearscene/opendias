@@ -130,14 +130,15 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
 
         // Set scanning mode
         else if ( strcmp(sod->name, SANE_NAME_SCAN_MODE ) == 0 ) {
-          char *requested_mode = getScanParam(uuid, SCAN_PARAM_FORMAT );
           const char **modes;
+          char *requested_mode = getScanParam(uuid, SCAN_PARAM_FORMAT );
           if( 0 == strcmp( "colour", requested_mode ) ) {
             modes = modes_colour;
           }
           else {
             modes = modes_gray;
           }
+          free( requested_mode );
           int i, j; 
           int foundMatch = 0;
           for (i = 0; modes[i] != NULL; i++) {
@@ -432,6 +433,9 @@ SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, size_t totbyt
       readSoFar += received_length_from_sane;
       stillToRead -= received_length_from_sane;
       raw_image_current_pos += received_length_from_sane;
+      if ( received_length_from_sane == bufferSize ) {
+        bufferSize += 32768;
+      }
       if ( bufferSize > stillToRead ) {
         bufferSize = stillToRead;
       }

@@ -7,13 +7,22 @@ Sending request = action=checkLogin&password=password&username=test-user
 Sending request = 
 No language indication = $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -47,6 +56,7 @@ No language indication = $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -67,6 +77,13 @@ No language indication = $VAR1 = '<!DOCTYPE html>
 
   <div id=\'body\'>
     <div class="container">
+
+<!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      body.tmpl - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
 
 
 <h2>Application Home</h2>
@@ -171,6 +188,13 @@ No language indication = $VAR1 = '<!DOCTYPE html>
   <p></p>
 
  </div>
+<!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
 
     </div>
   </div>
@@ -178,7 +202,7 @@ No language indication = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -189,13 +213,22 @@ No language indication = $VAR1 = '<!DOCTYPE html>
 Sending request = 
 header says en = $VAR1 = '<!DOCTYPE html>
 <html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -229,6 +262,7 @@ header says en = $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Browsers Default Language</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -249,6 +283,13 @@ header says en = $VAR1 = '<!DOCTYPE html>
 
   <div id=\'body\'>
     <div class="container">
+
+<!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      body.tmpl - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
 
 
 <h2>Application Home</h2>
@@ -353,6 +394,13 @@ header says en = $VAR1 = '<!DOCTYPE html>
   <p></p>
 
  </div>
+<!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
 
     </div>
   </div>
@@ -360,7 +408,7 @@ header says en = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Copyright Clearscene Ltd 2010</p>
+    <p>Copyright Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -371,13 +419,22 @@ header says en = $VAR1 = '<!DOCTYPE html>
 Sending request = 
 header says de = $VAR1 = '<!DOCTYPE html>
 <html lang="de">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.de - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -411,6 +468,7 @@ header says de = $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Voreinstellen sprachlich</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -431,6 +489,13 @@ header says de = $VAR1 = '<!DOCTYPE html>
 
   <div id=\'body\'>
     <div class="container">
+
+<!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      body.tmpl - for the structure, and
+      language.resource.de - for the readable text
+     ############################################## -->
 
 
 <h2>Startseite</h2>
@@ -535,6 +600,13 @@ header says de = $VAR1 = '<!DOCTYPE html>
   <p></p>
 
  </div>
+<!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.de - for the readable text
+     ############################################## -->
+
 
     </div>
   </div>
@@ -542,7 +614,7 @@ header says de = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Urheberrecht Clearscene Ltd 2010</p>
+    <p>Urheberrecht Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
@@ -553,13 +625,22 @@ header says de = $VAR1 = '<!DOCTYPE html>
 Sending request = 
 bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
 <html lang="de">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/header.txt - for the structure, and
+      language.resource.de - for the readable text
+     ############################################## -->
+
  <head>
   <title>openDias</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
   <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
   <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
 
   <!--[if lt IE 7]>
   <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -593,6 +674,7 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
             <option value=\'--\'>Voreinstellen sprachlich</option>
             <option value=\'en\'>English</option>
             <option value=\'de\'>Deutsche</option>
+            <option value=\'hh\'>#### ########</option>
           <option value="hh">#### ########</option></select>
         </li>
       </ul>
@@ -613,6 +695,13 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
 
   <div id=\'body\'>
     <div class="container">
+
+<!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      body.tmpl - for the structure, and
+      language.resource.de - for the readable text
+     ############################################## -->
 
 
 <h2>Startseite</h2>
@@ -717,6 +806,13 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
   <p></p>
 
  </div>
+<!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      includes/footer.txt - for the structure, and
+      language.resource.de - for the readable text
+     ############################################## -->
+
 
     </div>
   </div>
@@ -724,7 +820,7 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-      <p>Urheberrecht Clearscene Ltd 2010</p>
+    <p>Urheberrecht Clearscene Ltd 2008 - 2013</p>
   </div>
 
 </div>
