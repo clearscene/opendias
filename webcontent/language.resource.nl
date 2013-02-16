@@ -1,116 +1,116 @@
-LOCAL_lang|LOCALISE_ME - en
-LOCAL_username|LOCALISE_ME - username
-LOCAL_password|LOCALISE_ME - password
-LOCAL_logout|LOCALISE_ME - Logout
-LOCAL_default_browser_lang|LOCALISE_ME - Browsers Default Language
-LOCAL_link_home|LOCALISE_ME - Home
-LOCAL_link_doclist|LOCALISE_ME - Document List
-LOCAL_link_acquire|LOCALISE_ME - Acquire New
-LOCAL_link_projecthome|LOCALISE_ME - Project Home
-LOCAL_copyright|LOCALISE_ME - Copyright
-LOCAL_app_home|LOCALISE_ME - Application Home
-LOCAL_welcome|LOCALISE_ME - Welcome
-LOCAL_home_intro|LOCALISE_ME - openDIAS (Document Imaging Archive System) provides document imaging with OCR. You can scan documents (with SANE) or import ODF documents, and then assign tags. It can store all your letters, bills, statements, etc. in a convenient, safe, and easily retrievable way.
-LOCAL_home_intro2|LOCALISE_ME - The openDIAS project is a new OpenSource offering to bring professional document scanning and storage utility to the home user.
-LOCAL_home_title_architecture|LOCALISE_ME - Architecture
-LOCAL_home_title_knownbugs|LOCALISE_ME - Known Bugs
-LOCAL_home_title_helpproject|LOCALISE_ME - Help the project
-LOCAL_home_arch_intro|LOCALISE_ME - The openDias architecture has been designed to allow many users to access the system.
-LOCAL_home_arch_point1|LOCALISE_ME - The application connects to 'SANE' which gives you access to various scanning devices, both locally or via the network (see SANE config setting for instructions how).
-LOCAL_home_arch_point2|LOCALISE_ME - Scanned images and the main database are stored on the server.
-LOCAL_home_arch_point3|LOCALISE_ME - Clients can connect from any location that can see the server, using a standard web browser.
-LOCAL_home_arch_point4|LOCALISE_ME - Access controls can be set up by 'clients location' or 'traditional username and password'.
-LOCAL_home_subtitle_functional|LOCALISE_ME - Functional
-LOCAL_home_functional_point1|LOCALISE_ME - Acquire New: offered scanning resolutions does not match hardware capabilities
-LOCAL_home_subtitle_technical|LOCALISE_ME - Technical
-LOCAL_home_technical_point1|LOCALISE_ME - Acquire New: false errors reported related to size estimations
-LOCAL_home_technical_point2|LOCALISE_ME - Acquire New: scanning may result in unoperational scanner. (usb-reset)
-LOCAL_home_technical_point3|LOCALISE_ME - Memory leaks: scanning operation, upload jpeg(odf untested), after startup when browsing the site,
-LOCAL_home_title_helpproject2|LOCALISE_ME - Get involved and Support.
-LOCAL_home_helpproject_intro|LOCALISE_ME - openDias is an opensource project, which means there are several ways you can help. We appreciate anything you can do.
-LOCAL_home_help_subtitle_feedback|LOCALISE_ME - Test/Feedback
-LOCAL_home_help_feedback_p1|LOCALISE_ME - We are always happy to hear from anyone who has used opendias. Tell us <a href='https://groups.google.com/forum/#!forum/opendias' target='_blank'>what you think</a>, good or bad.
-LOCAL_home_help_feedback_p2|LOCALISE_ME - Have any <a href='http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40' target='_blank'>ideas/ suggestions?</a> or want to vote on the current list of ideas.
-LOCAL_home_help_subtitle_publicise|LOCALISE_ME - Publicise
-LOCAL_home_help_publicise_p1|LOCALISE_ME - We want as many people to use opendias as possible, and that means getting as many people to hear about it as possible. So, go, spread the word.
-LOCAL_home_help_publicise_p2|LOCALISE_ME - We try to keep the <a href='http://opendias.blogspot.com/'>opendias blog</a> up-2-date as much as possible.
-LOCAL_home_help_subtitle_hackers|LOCALISE_ME - Hackers Needed
-LOCAL_home_help_hackers_p1|LOCALISE_ME - If you have available time, get in contact, there are several projects lined up.
-LOCAL_home_help_hackers_p2|LOCALISE_ME - Otherwise, feel free to submit a patch (as <a href='https://github.com/clearscene/opendias'>GitHub</a>) to improve/fix the current system.
-LOCAL_home_help_subtitle_donate|LOCALISE_ME - Donate
-LOCAL_home_help_donate_p1|LOCALISE_ME - Any donation are gratefully received, and are used to buy hardware to test against.
-LOCAL_home_help_donate_p2|LOCALISE_ME - Thank you to everyone who has done so already.
-LOCAL_doclist_filterby|LOCALISE_ME - Filter By:
-LOCAL_doclist_title_or_ocr|LOCALISE_ME - Title or OCR Text:
-LOCAL_doclist_has_action|LOCALISE_ME - Has 'Action Required':
-LOCAL_doclist_doc_date|LOCALISE_ME - Document Date:
-LOCAL_doclist_doc_tag|LOCALISE_ME - Document Tags:
-LOCAL_doclist_filterbutton|LOCALISE_ME - Filter
-LOCAL_doclist_filtertab|LOCALISE_ME - Filter and Search
-LOCAL_doclist_nodocs|LOCALISE_ME - There are currently no docs stored. Add some using the <a href='acquire.html'>Acquire New</a> link.
-LOCAL_doclist_title|LOCALISE_ME - Document List
-LOCAL_doclist_table_docid|LOCALISE_ME - Doc Id
-LOCAL_doclist_table_title|LOCALISE_ME - Title
-LOCAL_doclist_table_type|LOCALISE_ME - Type
-LOCAL_doclist_table_date|LOCALISE_ME - Date
-LOCAL_doclist_loading|LOCALISE_ME - Loading
-LOCAL_docdetail_title|LOCALISE_ME - Document Detail
-LOCAL_docdetail_savedok|LOCALISE_ME - Saved OK
-LOCAL_docdetail_delete|LOCALISE_ME - Delete
-LOCAL_docdetail_scandate|LOCALISE_ME - Scan Date:
-LOCAL_docdetail_doctype|LOCALISE_ME - Doc Type:
-LOCAL_docdetail_actionrequired|LOCALISE_ME - Action Required:
-LOCAL_docdetail_hardcopykept|LOCALISE_ME - Hardcopy kept:
-LOCAL_docdetail_doctitle|LOCALISE_ME - Title:
-LOCAL_docdetail_docdate|LOCALISE_ME - Document Date:
-LOCAL_docdetail_extractedtext|LOCALISE_ME - Extracted Text:
-LOCAL_docdetail_assignedtags|LOCALISE_ME - Assigned Tags:
-LOCAL_docdetail_linkeddocs|LOCALISE_ME - Linked Docs:
-LOCAL_docdetail_defaultdoclink|LOCALISE_ME - link to doc
-LOCAL_acquire_title|LOCALISE_ME - Acquire new Document
-LOCAL_acquire_notcurrent_title|LOCALISE_ME - Details are not current
-LOCAL_acquire_notcurrent_p1|LOCALISE_ME - At the time these details were requested, the SANE subsystem was busy serving a scanning request. Unfortunately, SANE can only handle one request at a time. Therefor, the details shown here are not current and are from the last successful request.
-LOCAL_acquire_notcurrent_p2|LOCALISE_ME - You can try to use one of the listed scanners, but please note  devices could have since become available, or been withdrawn.
-LOCAL_acquire_notcurrent_p3|LOCALISE_ME - Alternatively, you could refresh this page, until this message is not longer displayed.
-LOCAL_acquire_tab_info|LOCALISE_ME - Information
-LOCAL_acquire_tab_office|LOCALISE_ME - Document Import
-LOCAL_acquire_info_title|LOCALISE_ME - Acquiring a new document
-LOCAL_acquire_info_p1|LOCALISE_ME - Use this screen to add a new document to your archive.
-LOCAL_acquire_info_p2|LOCALISE_ME - In the first tab, you can add files to your store. Including: PDF or ODF documents and images, perhaps that you have scanned in independently from opendias.
-LOCAL_acquire_info_p3|LOCALISE_ME - Any additional tabs represent various scanning input devices.
-LOCAL_acquire_info_activity|LOCALISE_ME - Scanning for devices...
-LOCAL_acquire_office_title|LOCALISE_ME - Document Import
-LOCAL_acquire_office_p1|LOCALISE_ME - Select a PDF, ODF document or JPEG image for upload into your archive.
-LOCAL_acquire_office_upload_file|LOCALISE_ME - Filename to upload:
-LOCAL_acquire_office_upload_botton|LOCALISE_ME - Upload
-LOCAL_acquire_scanner_pages_alt|LOCALISE_ME - The number of pages that make up the document you are going to scan
-LOCAL_acquire_scanner_pages|LOCALISE_ME - Pages:
-LOCAL_acquire_scanscale|LOCALISE_ME - Format:
-LOCAL_acquire_scanscale_grey|LOCALISE_ME - Gray Scale
-LOCAL_acquire_scanscale_colour|LOCALISE_ME - Colour
-LOCAL_acquire_scanner_no_of_page|LOCALISE_ME - pages
-LOCAL_acquire_scanner_resolution_alt|LOCALISE_ME - The resolution the scanner should use when scanning your document. The higher, the better quality. But also, the higher, the larger file and slower operations will be.
-LOCAL_acquire_scanner_resolution|LOCALISE_ME - Resolution:
-LOCAL_acquire_scanner_ocr_alt|LOCALISE_ME - Check this to get opendias to read the scanned image and return the text of the document. You will then be able to search on this text later.
-LOCAL_acquire_scanner_ocr|LOCALISE_ME - OCR:
-LOCAL_acquire_scanner_best_ocr_alt|LOCALISE_ME - Indication of the best resolution for OCRing. Stay within the green area for best results.
-LOCAL_acquire_scanner_best_oct|LOCALISE_ME - The ideal scanning resolution zone for OCRing.
-LOCAL_acquire_scanner_page_length_alt|LOCALISE_ME - How much of the page do you want to scan. If your scanning a document smaller than the max length than your scanner supports. don&quot;t waste time and space.
-LOCAL_acquire_scanner_page_length|LOCALISE_ME - Page Length:
-LOCAL_acquire_scanner_scan_now_button|LOCALISE_ME - Scan
-LOCAL_admin_title|LOCALISE_ME - User Admin
-LOCAL_admin_tab_mydetails|LOCALISE_ME - My details
-LOCAL_admin_tab_create_user|LOCALISE_ME - Create Users
-LOCAL_admin_tab_edit_user|LOCALISE_ME - Edit Users
-LOCAL_admin_tab_manage_session|LOCALISE_ME - Session Management
-LOCAL_admin_mydetails_title|LOCALISE_ME - Manage the current user
-LOCAL_admin_mydetails_changename|LOCALISE_ME - Change 'Real Name':
-LOCAL_admin_mydetails_changepassword|LOCALISE_ME - Change 'Password':
-LOCAL_admin_mydetails_currentrole|LOCALISE_ME - Current Role:
-LOCAL_admin_save_button|LOCALISE_ME - Save
-LOCAL_admin_createuser_title|LOCALISE_ME - Create a new user
-LOCAL_admin_createuser_intro|LOCALISE_ME - To create a new user, enter the details below. The userId is the only details that cannot be change later.
-LOCAL_admin_createuser_id|LOCALISE_ME - User Id:
-LOCAL_admin_createuser_name|LOCALISE_ME - Real Name:
-LOCAL_admin_createuser_password|LOCALISE_ME - Password:
-LOCAL_admin_createuser_role|LOCALISE_ME - Role:
+LOCAL_lang|nl
+LOCAL_username|gebruikersnaam
+LOCAL_password|wachtwoord
+LOCAL_logout|Uitloggen
+LOCAL_default_browser_lang|Browser Standaard Taal
+LOCAL_link_home|Home
+LOCAL_link_doclist|Documentlijst
+LOCAL_link_acquire|Nieuw Document
+LOCAL_link_projecthome|Project Home
+LOCAL_copyright|Copyright
+LOCAL_app_home|Applicatie Home
+LOCAL_welcome|Welkom
+LOCAL_home_intro|Met openDIAS (Document Imaging Archive System) kunt u documenten -imagen- met OCR. U kunt documenten scannen (met SANE) of ODF-documenten importeren en daarna categoriseren. Al uw brieven, rekeningen, overzichten, etc. kunnen op een makkelijke, veilige en eenvoudig vindbare manier opgeslagen worden.
+LOCAL_home_intro2|Het openDIAS project is een nieuw OpenSource project dat op en professionele wijze documenten scannen en opslaan mogelijk maakt voor de thuis-gebruiker.
+LOCAL_home_title_architecture|Architectuur
+LOCAL_home_title_knownbugs|Bekende Fouten
+LOCAL_home_title_helpproject|Help het project
+LOCAL_home_arch_intro|De openDias architectuur is ontworpen om meerdere gebruikers het systeem gelijktijdig te laten gebruiken.
+LOCAL_home_arch_point1|De applicatie gebruikt 'SANE' voor de toegang tot scan-apparatuur, zowel lokaal aangesloten als via het netwerk (zie de SANE configuratie-instellingen voor instructies over het hoe).
+LOCAL_home_arch_point2|Gescande afbeeldingen en de database staan centraal opgeslagen op de server.
+LOCAL_home_arch_point3|Gebruikers kunnen vanaf elke ingestelde locatie de server benaderen via de webbrowser.
+LOCAL_home_arch_point4|Toegangscontrole wordt ingesteld op basis van locatie van het werkstation of via de traditionele gebruikersnaam met wachtwoord 
+LOCAL_home_subtitle_functional|Functioneel
+LOCAL_home_functional_point1|Nieuw Document: aangeboden scanresoluties komen niet overeen met de mogelijkheden van de scanner
+LOCAL_home_subtitle_technical|Technisch
+LOCAL_home_technical_point1|Nieuw Document: onterechte fouten in verband met inschattingen documentgrootte
+LOCAL_home_technical_point2|Nieuw Document: scan kan resulteren in een vastgeslagen scanner (usb-reset).
+LOCAL_home_technical_point3|Geheugen lekken: tijdens scannen, jpeg(odf niet getest) uploaden, na opstarten tijdens het browsen van de site,
+LOCAL_home_title_helpproject2|Meedoen en Ondersteuning.
+LOCAL_home_helpproject_intro|openDIAS is een opensource project en dat betekend dat er verschillende manieren zijn waarop je kunt helpen. We waarderen alles wat je kunt doen.
+LOCAL_home_help_subtitle_feedback|Test/Feedback
+LOCAL_home_help_feedback_p1|We vinden het altijd leuk om van openDIAS gebruikers te horen. Vertel ons via <a href='https://groups.google.com/forum/#!forum/opendias' target='_blank'>wat je ervaringen zijn</a>, goed of slecht.
+LOCAL_home_help_feedback_p2|Heeft u <a href='http://www.google.com/moderator/#15/e=b85d9&t=b85d9.40' target='_blank'>ideeën / suggesties?</a> of wilt u stemmen op de huidige lijst van suggesties.
+LOCAL_home_help_subtitle_publicise|Publiciteit
+LOCAL_home_help_publicise_p1|We willen zoveel mogelijk mensen gebruik laten maken van openDIAS en dat betekent dat zoveel mogelijk mensen erover moeten horen. Dus 'verspreid het woord',  als mogelijk 
+LOCAL_home_help_publicise_p2|We proberen het <a href='http://opendias.blogspot.com/'>openDIAS blog</a> zoveel mogelijk  up-2-date te houden.
+LOCAL_home_help_subtitle_hackers|Hackers Gevraagd
+LOCAL_home_help_hackers_p1|Als je tijd beschikbaar hebt benader me dan. Er staan diverse projecten te wachten.
+LOCAL_home_help_hackers_p2|Voel je ook vrij om een patch in te dienen (via <a href='https://github.com/clearscene/opendias'>GitHub</a>) om de huidige versie te verbeteren of uit te breiden.
+LOCAL_home_help_subtitle_donate|Doneer
+LOCAL_home_help_donate_p1|Elke donatie wordt dankbaar ontvangen en wordt gebruikt om test-hardware te kopen.
+LOCAL_home_help_donate_p2|Dank aan iedereen die al een donatie gedaan heeft.
+LOCAL_doclist_filterby|Filter Op:
+LOCAL_doclist_title_or_ocr|Titel or OCR-Tekst:
+LOCAL_doclist_has_action|Heeft 'Actie Benodigd':
+LOCAL_doclist_doc_date|Documentdatum:
+LOCAL_doclist_doc_tag|Document Categorieën:
+LOCAL_doclist_filterbutton|Filter
+LOCAL_doclist_filtertab|Filter en Zoek
+LOCAL_doclist_nodocs|Er zijn momenteel geen documenten opgeslagen. Voeg ze toe via de <a href='acquire.html'>Nieuw Document</a> link.
+LOCAL_doclist_title|Document Lijst
+LOCAL_doclist_table_docid|Doc Id
+LOCAL_doclist_table_title|Titel
+LOCAL_doclist_table_type|Type
+LOCAL_doclist_table_date|Datum
+LOCAL_doclist_loading|Laden
+LOCAL_docdetail_title|Document Gegevens
+LOCAL_docdetail_savedok|Opgeslagen
+LOCAL_docdetail_delete|Verwijderen
+LOCAL_docdetail_scandate|Scandatum:
+LOCAL_docdetail_doctype|Doc Type:
+LOCAL_docdetail_actionrequired|Actie Benodigd:
+LOCAL_docdetail_hardcopykept|Origineel bewaard:
+LOCAL_docdetail_doctitle|Titel:
+LOCAL_docdetail_docdate|Documentdatum:
+LOCAL_docdetail_extractedtext|OCR-Tekst:
+LOCAL_docdetail_assignedtags|Toegewezen Categorieën:
+LOCAL_docdetail_linkeddocs|Gekoppelde Documenten:
+LOCAL_docdetail_defaultdoclink|Koppel aan document
+LOCAL_acquire_title|Nieuw Document Inlezen
+LOCAL_acquire_notcurrent_title|Gegevens zijn niet actueel
+LOCAL_acquire_notcurrent_p1|Toen deze gegevens werden opgevraagd was het SANE-substeem bezig met de uitvoering van een scanopdracht. Jammer genoeg kan SANE slechts een opdracht tegelijkertijd afhandelen. Daarom zijn de gepresenteerde gegevens niet actueel en zijn van de laatst uitgevoerde opdracht.
+LOCAL_acquire_notcurrent_p2|U kunt een van de aangeboden scanners proberen maar houdt er rekening mee dat er ondertussen scanners bijgekomen kunnen zijn, of verwijderd kunnen zijn.
+LOCAL_acquire_notcurrent_p3|U kunt natuurlijk ook deze pagina verversen totdat dit bericht niet meer wordt getoond.
+LOCAL_acquire_tab_info|Informatie
+LOCAL_acquire_tab_office|Document Importeren
+LOCAL_acquire_info_title|Nieuw document inlezen
+LOCAL_acquire_info_p1|Gebruik dit scherm om een nieuw documenten aan uw archief toe te voegen.
+LOCAL_acquire_info_p2|Via het eerste tabblad kunt u bestanden toevoegen aan uw archief zoals PDF-, ODF-bestanden en afbeeldingen die u wellicht buiten openDIAS om heeft ingescand.
+LOCAL_acquire_info_p3|Elk volgend tabblad verwijst naar een herkende scanner.
+LOCAL_acquire_info_activity|Zoeken naar scanners...
+LOCAL_acquire_office_title|Document Importeren
+LOCAL_acquire_office_p1|Selecteer een PDF-, ODF-bestand of een JPEG-afbeelding om in uw archief op te nemen.
+LOCAL_acquire_office_upload_file|Bestandsnaam voor upload:
+LOCAL_acquire_office_upload_botton|Upload
+LOCAL_acquire_scanner_pages_alt|Het aantal bladzijden waaruit het gescande document gaat bestaan
+LOCAL_acquire_scanner_pages|Bladzijden:
+LOCAL_acquire_scanscale|Formaat:
+LOCAL_acquire_scanscale_grey|Grijswaarden
+LOCAL_acquire_scanscale_colour|Kleur
+LOCAL_acquire_scanner_no_of_page|bladzijden
+LOCAL_acquire_scanner_resolution_alt|De resolutie die de scanner moet gebruiken tijdens het inlezen van uw document. Hoe hoger, hoe beter de kwaliteit is maar ook hoe groter het resultaat en hoe langer het scannen duurt 
+LOCAL_acquire_scanner_resolution|Resolutie:
+LOCAL_acquire_scanner_ocr_alt|Vink dit aan om openDIAS het gescande documenten te laten OCR'en en de herkende tekst op te laten slaan. Later kunt u dan zoeken op deze tekst.
+LOCAL_acquire_scanner_ocr|OCR:
+LOCAL_acquire_scanner_best_ocr_alt|Indicatie voor de beste resolutie voor OCR. Blijf in het groene gebied voor de beste resultaten.
+LOCAL_acquire_scanner_best_oct|Het beste resolutiegebied voor OCR.
+LOCAL_acquire_scanner_page_length_alt|Hoeveel van de bladzijde wilt u scannen als u een document scant dat korter is dan de maximale lengte die de scanner ondersteund. Verknoei geen ruimte en tijd.
+LOCAL_acquire_scanner_page_length|Pagina Lengte:
+LOCAL_acquire_scanner_scan_now_button|Scan
+LOCAL_admin_title|Gebruiker Admin
+LOCAL_admin_tab_mydetails|Mijn gegevens
+LOCAL_admin_tab_create_user|Maak Gebruikers
+LOCAL_admin_tab_edit_user|Wijzig Gebruikers
+LOCAL_admin_tab_manage_session|Sessie Beheer
+LOCAL_admin_mydetails_title|Beheer de huidige gebruiker
+LOCAL_admin_mydetails_changename|Wijzig 'Echte Naam':
+LOCAL_admin_mydetails_changepassword|Wijzig 'Wachtwoord':
+LOCAL_admin_mydetails_currentrole|Huidige Rol:
+LOCAL_admin_save_button|Opslaan
+LOCAL_admin_createuser_title|Maak een nieuwe gebruiker
+LOCAL_admin_createuser_intro|Om een gebruiker te maken voert u de gegevens hieronder in. Het Gebruiker ID is het enige veld dat later niet gewijzigd kan worden.
+LOCAL_admin_createuser_id|Gebruiker Id:
+LOCAL_admin_createuser_name|Echte Naam:
+LOCAL_admin_createuser_password|Wachtwoord:
+LOCAL_admin_createuser_role|Rol:
