@@ -3,7 +3,7 @@
 #include <sane/sane.h>
 #include <sane/saneopts.h>
 
-SANE_Device *dev[1];
+SANE_Device *dev[2];
 SANE_Option_Descriptor *sod;
 static SANE_Range resolution_range = {
   SANE_FIX (1.0),
@@ -37,7 +37,14 @@ SANE_Status sane_init(SANE_Int *version, SANE_Auth_Callback authorize ) {
   dev[0]->vendor = "Noname";
   dev[0]->model = "frontend-tester";
   dev[0]->type = "virtual device";
-  dev[1] = NULL;
+
+  dev[1] = malloc( sizeof( SANE_Device ) );
+  dev[1]->name = "test:1";
+  dev[1]->vendor = "timeout test";
+  dev[1]->model = "timeout frontend tester";
+  dev[1]->type = "virtual device";
+
+  dev[2] = NULL;
 
   return SANE_STATUS_GOOD;
 }
@@ -47,7 +54,12 @@ SANE_Status sane_get_devices (const SANE_Device ***device_list, SANE_Bool local_
   return SANE_STATUS_GOOD;
 }
 SANE_Status sane_open (SANE_String_Const devicename, SANE_Handle *handle) {
-  return SANE_STATUS_GOOD;
+  if ( 0 == strcmp(devicename, "test:1") ) {
+    return SANE_STATUS_IO_ERROR;
+  }
+  else {
+    return SANE_STATUS_GOOD;
+  }
 }
 const SANE_Option_Descriptor *sane_get_option_descriptor (SANE_Handle handle, SANE_Int option) {
   if( sod ) {
@@ -120,6 +132,9 @@ const SANE_Option_Descriptor *sane_get_option_descriptor (SANE_Handle handle, SA
   }
   return sod;
 }
+SANE_String_Const sane_strstatus(SANE_Status st) {
+  return "Some ERROR message";
+}
 void sane_cancel(SANE_Handle handle) {
 }
 void sane_close(SANE_Handle handle) {
@@ -128,5 +143,6 @@ void sane_close(SANE_Handle handle) {
 }
 void sane_exit( void ) {
   free( dev[0] );
+  free( dev[1] );
   dev[0] = NULL;
 }

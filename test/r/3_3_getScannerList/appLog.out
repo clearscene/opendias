@@ -33,9 +33,11 @@ LOG-OUTPUT
 -date-:-thread-:INF Processing request for: checkLogin
 -date-:-thread-:INF Processing request for: getScannerList
 -date-:-thread-:INF SERVER: Sane dispatcher received the command: 'internalGetScannerList' with param of 'en'
+-date-:-thread-:ERR Could not open: 'test:1' with error: Some ERROR message
 -date-:-thread-:INF Processing request for: doScan
 -date-:-thread-:INF Processing request for: getScannerList
 -date-:-thread-:INF SERVER: Sane dispatcher received the command: 'internalGetScannerList' with param of 'en'
+-date-:-thread-:ERR Could not open: 'test:1' with error: Some ERROR message
 -date-:-thread-:INF Received SIGUSR1 signal.
 -date-:-thread-:INF openDias service is shutting down....
 -date-:-thread-:INF openDias service has shutdown.

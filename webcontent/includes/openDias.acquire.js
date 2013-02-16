@@ -223,7 +223,7 @@ $(document).ready(function () {
     $.ajax({
       url: "/opendias/dynamic",
       dataType: "xml",
-      timeout: AJAX_TIMEOUT,
+      timeout: 5*AJAX_TIMEOUT,
       data: {
         action: "getScannerList"
       },
