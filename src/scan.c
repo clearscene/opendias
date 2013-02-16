@@ -533,7 +533,7 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
 
   // Open the device
   devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
-  o_log(DEBUGM,"sane_open of \"%s\"",devName);
+  o_log(DEBUGM, "sane_open of \"%s\"",devName);
   status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {
     handleSaneErrors("Cannot open device ", devName, status, 0);
@@ -756,13 +756,11 @@ extern char *internalGetScannerList(char *lang) {
       char *scannerHost;
       SANE_Handle *openDeviceHandle;
 
-      o_log(DEBUGM, "sane_open");
+      o_log(DEBUGM, "sane_open of \"%s\"",SANE_device_list[i]->name);
       status = sane_open (SANE_device_list[i]->name, (SANE_Handle)&openDeviceHandle);
       if(status != SANE_STATUS_GOOD) {
-        o_log(ERROR, "Could not open: %s %s with error: %s", SANE_device_list[i]->vendor, SANE_device_list[i]->model, status);
-        free( replyTemplate );
-        free( deviceList );
-        return NULL;
+        o_log(ERROR, "Could not open: '%s' with error: %s", SANE_device_list[i]->name, sane_strstatus(status));
+        continue;
       }
 
       vendor = o_strdup(SANE_device_list[i]->vendor);
@@ -903,14 +901,21 @@ extern char *internalGetScannerList(char *lang) {
     }
 
     free(replyTemplate);
-    // The escaped string placeholder will be interprited in the sane dispatcher client
-    answer = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s><Devices>%s</Devices></ScannerList></Response>", deviceList);
-    free(deviceList);
+    if(deviceList) {
+      // The escaped string placeholder will be interprited in the sane dispatcher client
+      answer = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s><Devices>%s</Devices></ScannerList></Response>", deviceList);
+      free(deviceList);
+    }
+    else {
+      // The escaped string placeholder will be interprited in the sane dispatcher client
+      answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s></ScannerList></Response>");
+    }
   }
 
   else {
     // No devices or sane failed.
-    answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
+    // The escaped string placeholder will be interprited in the sane dispatcher client
+    answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s></ScannerList></Response>");
   }
 
   return answer;

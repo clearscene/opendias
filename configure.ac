@@ -53,6 +53,7 @@ dnl
 PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid libssl])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
+AC_SUBST(VAR_DIR)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
 
 
@@ -73,6 +74,10 @@ AC_ENABLE([create_test_language],[
 AC_ENABLE([thread_join],[
 	AC_DEFINE([THREAD_JOIN],[],[The main process will wait for child threads to finish.])
 ])
+AC_ARG_ENABLE([force_var_at_root],[],
+  [VAR_DIR="/var"],
+  [VAR_DIR="${localstatedir}"]
+)
 OPENDIAS_LIBS="$OPENDIAS_LIBS -lpthread "
 
 
@@ -160,7 +165,7 @@ if test "x$scanning" = "xyes" && test "x$imageprocessing" = "xyes" ; then
 	AC_DEFINE([CAN_SCAN],[],[Have everything that is needed for scanning documents])
 	OPENDIAS_LIBS="$OPENDIAS_LIBS -lsane -llept"
 else
-	AC_MSG_WARN(You wll not be able to scan in any document.)
+	AC_MSG_WARN(You will not be able to scan in any document.)
 fi
 
 
@@ -168,7 +173,7 @@ if test "x$ocr" = "xyes" && test "x$imageprocessing" = "xyes" ; then
  AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
  OPENDIAS_LIBS="$OPENDIAS_LIBS -llept"
 else
- AC_MSG_WARN(You wll not be able to OCR any document.)
+ AC_MSG_WARN(You will not be able to OCR any document.)
 fi
 
 
@@ -181,18 +186,18 @@ if test "x$magic" = "xyes" ; then
   	AC_DEFINE([CAN_READODF],[],[Have everything that is needed to read ODF documents])
 	  OPENDIAS_LIBS="$OPENDIAS_LIBS -lxml2 -lzzip"
   else
-	  AC_MSG_WARN(You wll not be able to import any ODF documents.)
+	  AC_MSG_WARN(You will not be able to import any ODF documents.)
   fi
 
   if test "x$pdf" = "xyes"; then
     AC_DEFINE([CAN_PDF],[],[Have everything that is needed to import PDF documents])
     OPENDIAS_LIBS="$OPENDIAS_LIBS -lpoppler-cpp"
   else
-    AC_MSG_WARN(You wll not be able to import any PDF documents.)
+    AC_MSG_WARN(You will not be able to import any PDF documents.)
   fi
 
 else
-	AC_MSG_WARN(You wll not be able to import in any document.)
+	AC_MSG_WARN(You will not be able to import in any document.)
 fi
 
 

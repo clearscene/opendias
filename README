@@ -9,6 +9,7 @@ openDias - Document Imaging Archive System
   3. Building
     3.1 As a user
     3.2 As a developer
+      3.2.1 Configure options
   4. Running
   5. Helping the project
     5.1 Localisation
@@ -118,6 +119,28 @@ You need to pre configure the source:
   ./setupRun.sh 
   [run client side tests test/clientSideTesting/README]
   [refer '5. Developing' for details on publishing]
+
+3.2.1 Configure options
+To get a full list of options add "--help" to the configure script.
+Here is an overview of the openDIAS specific options.
+
+  --prefix={path-to-directory}
+    The location files will be deployed to (and the app will look for them)
+
+  --enable-force_var_at_root
+    override "prefix" to put "/var" at the systems root
+
+  --enable-werror
+    upgrade all warnings to errors (useful in development)
+
+  --enable-open_to_all
+    Removes all user access checking code (makes the application fully open)
+
+  --enable-create_test_language
+    Adds a test language (all words show as '####'), useful to ensure you've not hard coded some text
+
+  --enable-thread_join
+    Don't let the main calling thread finish until the child thread is done (useful for debugging)
 
 -----------------------------------
 

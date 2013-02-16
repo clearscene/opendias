@@ -2,7 +2,7 @@
 
 AM_CPPFLAGS = \
   -DETC_DIR=\""$(sysconfdir)"\" \
-  -DVAR_DIR=\""$(localstatedir)"\" \
+  -DVAR_DIR=\""$(VAR_DIR)"\" \
   -DSHARE_DIR=\""$(datadir)"\" \
   $(OPENDIAS_CFLAGS)
 
