@@ -188,13 +188,6 @@ if [ "$NOBUILD" == "" ]; then
   cat results/buildLog2.out >> results/buildLog.out
   rm results/buildLog2.out
 
-  # Add in the test language pack
-  cp clientSideTesting/test_localisation_files/*.hh $INSTALLLOCATION/share/opendias/webcontent/
-  cp clientSideTesting/test_localisation_files/i18n/*.hh $INSTALLLOCATION/share/opendias/
-  cp clientSideTesting/test_localisation_files/includes/*.hh $INSTALLLOCATION/share/opendias/webcontent/includes/
-  cp clientSideTesting/test_localisation_files/includes/local/*.hh $INSTALLLOCATION/share/opendias/webcontent/includes/local/
-  perl -pi -e 's/<\/select>/<option value="hh">#### ########<\/option><\/select>/g' `grep -L '<option value="hh">#### ########' $INSTALLLOCATION/share/opendias/webcontent/includes/header.txt.* `
-
   echo Creating testing \(override\) libs...
   cd override_libs
   ./build.sh

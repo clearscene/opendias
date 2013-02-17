@@ -29,34 +29,34 @@
   <div id='header'>
     <div class="container">
       <img id='logo' src='/opendias/images/openDIAS_sml.png' />
-    <div id='loginout'>
+      <div id='loginout'>
 #ifndef OPEN_TO_ALL
-      <ul>
-        <li>
-          <span id='login'>
-            <input id='username' size=6 placeholder='---LOCAL_username---' />
-            <input id='password' size=6 placeholder='---LOCAL_password---' type='password' />
-            <button id='loginbutton'>Login</button>
-          </span>
-          <span id='logout'>
-            <a id='realname' href='/opendias/accessControls.html'></a>
-            <button id='logoutbutton'>---LOCAL_logout---</button>
-          </span>
-        </li>
+        <ul>
+          <li>
+            <span id='login'>
+              <input id='username' size=6 placeholder='---LOCAL_username---' />
+              <input id='password' size=6 placeholder='---LOCAL_password---' type='password' />
+              <button id='loginbutton'>Login</button>
+            </span>
+            <span id='logout'>
+              <a id='realname' href='/opendias/accessControls.html'></a>
+              <button id='logoutbutton'>---LOCAL_logout---</button>
+            </span>
+          </li>
 #endifndef OPEN_TO_ALL
-        <li>
-          <select id='language'>
-            <option value='--'>---LOCAL_default_browser_lang---</option>
-            <option value='en'>English</option>
-            <option value='de'>Deutsche</option>
-            <option value='nl'>Nederlands</option>
+          <li>
+            <select id='language'>
+              <option value='--'>---LOCAL_default_browser_lang---</option>
+              <option value='en'>English</option>
+              <option value='de'>Deutsche</option>
+              <option value='nl'>Nederlands</option>
 #ifdef CREATE_TEST_LANGUAGE
-            <option value='hh'>#### ########</option>
+              <option value='hh'>#### ########</option>
 #endifdef CREATE_TEST_LANGUAGE
-          </select>
-        </li>
-      </ul>
-    </div>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 

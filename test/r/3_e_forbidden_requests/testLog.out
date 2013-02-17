@@ -38,29 +38,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -71,7 +72,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -137,29 +138,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -170,7 +172,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -236,29 +238,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -269,7 +272,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -335,29 +338,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -368,7 +372,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -434,29 +438,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -467,7 +472,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -533,29 +538,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -566,7 +572,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -632,29 +638,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -665,7 +672,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -731,29 +738,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -764,7 +772,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -830,29 +838,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -863,7 +872,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -929,29 +938,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -962,7 +972,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1028,29 +1038,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1061,7 +1072,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1127,29 +1138,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1160,7 +1172,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1226,29 +1238,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1259,7 +1272,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1325,29 +1338,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1358,7 +1372,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1534,29 +1548,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1567,7 +1582,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1743,29 +1758,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1776,7 +1792,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1902,29 +1918,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1935,7 +1952,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2001,29 +2018,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2034,7 +2052,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2100,29 +2118,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2133,7 +2152,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2199,29 +2218,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2232,7 +2252,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2298,29 +2318,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2331,7 +2352,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2397,29 +2418,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2430,7 +2452,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2496,29 +2518,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2529,7 +2552,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2595,29 +2618,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2628,7 +2652,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2694,29 +2718,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2727,7 +2752,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2793,29 +2818,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2826,7 +2852,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2892,29 +2918,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2925,7 +2952,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2991,29 +3018,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -3024,7 +3052,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -3090,29 +3118,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -3123,7 +3152,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -3201,29 +3230,30 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -3234,7 +3264,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>

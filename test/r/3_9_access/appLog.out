@@ -28,7 +28,6 @@ LOG-OUTPUT
 -date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
 -date-:-thread-:INF:-file-:-line- Created directory.
 -date-:-thread-:DBG:-file-:-line- loading translation file: /tmp/opendias_test/share/opendias/language.resource.en
--date-:-thread-:INF:-file-:-line- Sane backend started
 -date-:-thread-:INF:-file-:-line- Sane command socket is open
 -date-:-thread-:INF:-file-:-line- ... Starting up the openDias service.
 -date-:-thread-:INF:-file-:-line- ready to accept connectons
@@ -513,7 +512,7 @@ LOG-OUTPUT
 -date-:-thread-:DBG:-file-:-line- SERVER: The sane command port has received an incomming connection.
 -date-:-thread-:INF:-file-:-line- SERVER: Sane dispatcher received the command: 'internalGetScannerList' with param of 'en'
 -date-:-thread-:DBG:-file-:-line- device(s) found
--date-:-thread-:DBG:-file-:-line- sane_open
+-date-:-thread-:DBG:-file-:-line- sane_open of "test:0"
 -date-:-thread-:DBG:-file-:-line- Resolution setting detected as 'range'
 -date-:-thread-:DBG:-file-:-line- Determined max resultion to be 800
 -date-:-thread-:DBG:-file-:-line- sane_cancel
@@ -739,7 +738,6 @@ LOG-OUTPUT
 -date-:-thread-:INF:-file-:-line- openDias service is shutting down....
 -date-:-thread-:DBG:-file-:-line- ... httpd service [done]
 -date-:-thread-:DBG:-file-:-line- ... sane command socket [done]
--date-:-thread-:DBG:-file-:-line- ... sane backend [done]
 -date-:-thread-:DBG:-file-:-line- Deleting session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG:-file-:-line- Expired 2 sessions
 -date-:-thread-:DBG:-file-:-line- ... session management [done]

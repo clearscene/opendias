@@ -145,4 +145,5 @@ void sane_exit( void ) {
   free( dev[0] );
   free( dev[1] );
   dev[0] = NULL;
+  dev[1] = NULL;
 }
