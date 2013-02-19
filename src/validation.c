@@ -582,6 +582,7 @@ int validateLanguage( const char *requestedLang ) {
   // "hh" is the test lang (hash-hash).
   if ( ( 0 == strcmp(requestedLang, "en") ) 
     || ( 0 == strcmp(requestedLang, "de") ) 
+    || ( 0 == strcmp(requestedLang, "nl") ) 
     || ( 0 == strcmp(requestedLang, "hh") ) ) {
     return 1;
   }
