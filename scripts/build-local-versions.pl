@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-my @templates = qw( includes/header.txt includes/footer.txt );
+my @templates = qw( webcontent/includes/header.txt webcontent/includes/footer.txt );
 my %langs = ( 'en' => 1 );
 my $hide = 0;
 my %option;
@@ -21,7 +21,7 @@ foreach my $opt ( @ARGV ) {
 #########################################
 # Find all the files that need localising 
 # and the languages that can do it
-opendir( DIR, "./" );
+opendir( DIR, "webcontent/" );
 while( my $FILE = readdir( DIR ) ) {
 
   if ( my ($lang) = ( $FILE =~ /language\.resource\.(..)/ ) ) {
@@ -29,7 +29,7 @@ while( my $FILE = readdir( DIR ) ) {
   }
 
   elsif ( my ($template) = ( $FILE =~ /^(.*\.tmpl)$/ ) ) {
-    push @templates, $template;
+    push @templates, 'webcontent/'.$template;
   }
 
 }
@@ -50,7 +50,7 @@ foreach my $lang ( keys %langs ) {
   die $resp if $resp ne '';
 
   # Load the language pack
-  open( LANGPACK, "language.resource.$lang" );
+  open( LANGPACK, "webcontent/language.resource.$lang" );
   while ( my $line = <LANGPACK> ) {
     chomp( $line );
     my ( $key, $data ) = split( /\|/, $line );
@@ -141,11 +141,11 @@ sub generate_test_language {
 
   if ( exists $option{'CREATE_TEST_LANGUAGE'} ) {
 
-    my @resource_files = qw( language.resource.en ../i18n/language.resource.en );
-    opendir( DIR, './includes/local/' );
+    my @resource_files = qw( webcontent/language.resource.en i18n/language.resource.en );
+    opendir( DIR, 'webcontent/includes/local/' );
     while( my $FILE = readdir( DIR ) ) {
       if ( $FILE =~ /\.resource\.en/ ) {
-        push @resource_files, './includes/local/'.$FILE;
+        push @resource_files, 'webcontent/includes/local/'.$FILE;
       }
     }
     closedir( DIR );
@@ -183,7 +183,7 @@ sub generate_test_language {
 
   }
   else {
-    unlink('language.resource.hh');
+    unlink('webcontent/language.resource.hh');
     delete $langs{'hh'};
   }
 
@@ -196,11 +196,11 @@ sub validate_language_pack {
   # English files are the baseline to which everything else is compared
   return $ret if $lang eq 'en';
 
-  my @resource_files = qw( language.resource.en ../i18n/language.resource.en );
-  opendir( DIR, './includes/local/' );
+  my @resource_files = qw( webcontent/language.resource.en i18n/language.resource.en );
+  opendir( DIR, 'webcontent/includes/local/' );
   while( my $FILE = readdir( DIR ) ) {
     if ( $FILE =~ /\.resource\.en/ ) {
-      push @resource_files, './includes/local/'.$FILE;
+      push @resource_files, 'webcontent/includes/local/'.$FILE;
     }
   }
   closedir( DIR );

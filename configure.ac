@@ -202,9 +202,7 @@ else
 fi
 
 
-cd webcontent
-perl build-local-versions.pl "$PACKAGE_STRING" $LOCALISATION_FLAGS
-cd ../
+perl scripts/build-local-versions.pl "$PACKAGE_STRING" $LOCALISATION_FLAGS
 
 
 dnl

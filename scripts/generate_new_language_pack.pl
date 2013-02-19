@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-my @templates = qw( includes/header.txt includes/footer.txt );
+my @templates = qw( webcontent/includes/header.txt webcontent/includes/footer.txt );
 my %option;
 my $count = 0;
 my $lang = '';
@@ -23,11 +23,11 @@ foreach my $opt ( @ARGV ) {
 die "You should provide one language prefix only, as a parameter." if $count != 1;
 
 
-my @resource_files = qw( language.resource.en ../i18n/language.resource.en );
-opendir( DIR, './includes/local/' );
+my @resource_files = qw( webcontent/language.resource.en i18n/language.resource.en );
+opendir( DIR, 'webcontent/includes/local/' );
 while( my $FILE = readdir( DIR ) ) {
   if ( $FILE =~ /\.resource\.en/ ) {
-    push @resource_files, './includes/local/'.$FILE;
+    push @resource_files, 'webcontent/includes/local/'.$FILE;
   }
 }
 closedir( DIR );
