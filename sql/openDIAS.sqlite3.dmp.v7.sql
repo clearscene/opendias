@@ -7,6 +7,10 @@ BEGIN TRANSACTION;
 
 UPDATE version SET version = 7;
 
+DELETE FROM config WHERE config_option = "scan_directory";
+DELETE FROM config WHERE config_option = "show_all_available";
+DELETE FROM config WHERE config_option = "log_directory";
+
 DROP TABLE user_access;
 
 CREATE TABLE user_access (
@@ -25,6 +29,7 @@ ON user_access(username ASC);
 -- Here the password is 'admin'
 INSERT INTO user_access 
 VALUES ('admin','6e6a83f742b28434aea09d7e8534647a','Admin User',datetime('now'),'automatically',1); 
+
 
 COMMIT;
 

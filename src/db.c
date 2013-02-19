@@ -18,6 +18,7 @@
 
 #include "config.h"
 
+#include <stdio.h>
 #include <sqlite3.h>
 #include <stdlib.h>
 #include <string.h>
@@ -81,6 +82,23 @@ int connect_db (int createIfRequired) {
   // Test to see if a DB file exsists
   db = o_printf("%s/openDIAS.sqlite3", BASE_DIR);
   o_log(DEBUGM,"database file is %s",db);
+
+  ////////////////////
+  //
+  // Delete this section (and the stdio include)
+  if( 0 != access(db, F_OK) ) {
+    // Older versions saved the database in the wrong place.
+    // Check for this and correct if found.
+    char *wrong_name = o_printf("%sopenDIAS.sqlite3", BASE_DIR);
+    if( 0 == access(wrong_name, F_OK) ) {
+      o_log(INFORMATION,"Due to a bug in v0.8, we're moving the database file from %s to %s", wrong_name, db);
+      rename( wrong_name, db );
+    }
+    free( wrong_name );
+  }
+  //
+  ///////////////////
+
   if( 0 == access(db, F_OK) ) {
     o_log(DEBUGM, "Dir structure is in-place, database should exist");
     if(open_db (db)) {
@@ -114,8 +132,7 @@ int connect_db (int createIfRequired) {
 
   // Bring the DB up-2-date
   for(i=version+1 ; i <= DB_VERSION ; i++) {
-    char *upgradeSQL = o_strdup(SHARE_DIR);
-    o_concatf(&upgradeSQL, "/opendias/openDIAS.sqlite3.dmp.v%d.sql", i);
+    char *upgradeSQL = o_printf( "%s/opendias/openDIAS.sqlite3.dmp.v%d.sql", SHARE_DIR, i);
 
     o_log(INFORMATION, "Bringing BD upto version: %d", i);
     o_log(DEBUGM, "Reading SQL code from file: %s", upgradeSQL);
