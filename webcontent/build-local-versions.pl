@@ -8,9 +8,11 @@ my %langs = ( 'en' => 1 );
 my $hide = 0;
 my %option;
 my $year = 1900+((gmtime())[5]);
+my $package_string = 'opendias';
 
 #########################################
 # Collection options from the command line (ie what ./configure sends us)
+$package_string = shift @ARGV;
 foreach my $opt ( @ARGV ) {
   $option{$opt} = 1;
 }
@@ -58,6 +60,7 @@ foreach my $lang ( keys %langs ) {
 
   # Add 'special cases' to the language pack
   $lang_pack{'CURRENT_YEAR'} = $year;
+  $lang_pack{'PACKAGE_STRING'} = $package_string;
 
   # Localise each file
   foreach my $file ( @templates ) {

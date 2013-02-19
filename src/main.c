@@ -115,33 +115,24 @@ int setup (char *configFile) {
       config_option = o_strdup(readData_db(rSet, "config_option"));
       config_value = o_strdup(readData_db(rSet, "config_value"));
       o_log(INFORMATION, "Config setting: %s = %s", config_option, config_value);
+
       if( 0 == strcmp(config_option, "log_verbosity") ) {
         o_log(INFORMATION, "Moving log verbosity from %d to %s", VERBOSITY, config_value);
         VERBOSITY = atoi(config_value);
       }
-      else if ( 0 == strcmp(config_option, "scan_driectory") ) {
-        free(location);
-        free(BASE_DIR);
-        BASE_DIR = o_strdup(config_value);
-        location = o_strdup(BASE_DIR);
-      }
+
       else if ( 0 == strcmp(config_option, "port") ) {
         PORT = (unsigned short) atoi(config_value);
       }
-      else if ( 0 == strcmp(config_option, "log_directory") ) {
-        if ( 0 != strcmp( LOG_DIR, config_value ) ) {
-          o_log(INFORMATION, "Moving log entries from %s to %s", LOG_DIR, config_value);
-          free(LOG_DIR);
-          LOG_DIR = o_strdup(config_value);
-          createDir_ifRequired(LOG_DIR);
-        }
-      }
+
       else if ( 0 == strcmp(config_option, "max_sessions") ) {
         MAX_SESSIONS = (unsigned short) atoi(config_value);
       }
+
       else if ( 0 == strcmp(config_option, "max_session_age") ) {
         MAX_SESSION_AGE = (unsigned int) atoi(config_value);
       }
+
       free(config_option);
       free(config_value);
     } while ( nextRow( rSet ) );
@@ -433,6 +424,7 @@ int main (int argc, char **argv) {
 
   // Set default log verbosity
   VERBOSITY = DEBUGM;
+  o_log(INFORMATION, "openDIAS version '%s' has been invoked.", PACKAGE_STRING);
 
   // Disconnect from the tty
   if( turnToDaemon==1 ) {
