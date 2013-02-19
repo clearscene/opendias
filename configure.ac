@@ -203,7 +203,7 @@ fi
 
 
 cd webcontent
-perl build-local-versions.pl $LOCALISATION_FLAGS
+perl build-local-versions.pl "$PACKAGE_STRING" $LOCALISATION_FLAGS
 cd ../
 
 

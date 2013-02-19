@@ -424,6 +424,7 @@ int main (int argc, char **argv) {
 
   // Set default log verbosity
   VERBOSITY = DEBUGM;
+  o_log(INFORMATION, "openDIAS version '%s' has been invoked.", PACKAGE_STRING);
 
   // Disconnect from the tty
   if( turnToDaemon==1 ) {
