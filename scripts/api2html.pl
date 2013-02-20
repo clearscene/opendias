@@ -39,17 +39,29 @@ print "<p>Version: " . $xml->{version}[0] . "</p>\n";
 #
 # Contents
 #
-print "<ul>\n";
+print <<EOS;
+  <ul>
+    <li><a href='#request_method'>Request Method</a></li>
+    <li><a href='#authentication'>Authentication</a></li>
+    <li><a href='#error_response'>Error Response</a></li>
+    <li><a href='#field_mappings'>Field Mappings</a></li>
+    <li>API Calls
+      <ul>
+EOS
+
 foreach my $spec ( @{$xml->{ApiSpec}[0]->{ApiCall}} ) {
-  print "<li>" . $spec->{call_name}[0] . "</li>\n";
+  print "<li><a href='#" . $spec->{call_name}[0] . "'>" . $spec->{call_name}[0] . "</a></li>\n";
 }
-print "</ul>\n";
+print "</ul></ul>\n";
 
 #
 # General Help sections
 #
 foreach my $spec ( @{$xml->{GeneralHelp}[0]->{Section}} ) {
-  print "<h3>" . $spec->{title}[0] . "</h3>\n";
+  my $id = $spec->{title}[0];
+  $id =~ s/ /_/;
+  $id = lc($id); 
+  print "<h3 id='" . $id . "'>" . $spec->{title}[0] . "</h3>\n";
   print "<p>" . $spec->{body}[0] . "</p>\n";
   if( exists $spec->{example} ) {
     $spec->{example}[0] =~ s/</\&lt;/g;
@@ -62,7 +74,7 @@ foreach my $spec ( @{$xml->{GeneralHelp}[0]->{Section}} ) {
 # API sections
 #
 foreach my $spec ( @{$xml->{ApiSpec}[0]->{ApiCall}} ) {
-  print "<h3>" . $spec->{call_name}[0] . "</h3>\n";
+  print "<h3 id='" . $spec->{call_name}[0] . "'>" . $spec->{call_name}[0] . "</h3>\n";
   print "<div class='spec'>\n";
   print "<p><strong>" . $spec->{purpose}[0] . "</strong></p>\n";
 
@@ -100,5 +112,6 @@ foreach my $spec ( @{$xml->{ApiSpec}[0]->{ApiCall}} ) {
 # Standard footer
 #
 print <<EOS;
+<hr />
 <!--#include virtual="/include/footer.html" -->
 EOS
