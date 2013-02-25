@@ -85,6 +85,7 @@ LOCAL_acquire_office_upload_file|Bestandsnaam voor upload:
 LOCAL_acquire_office_upload_botton|Upload
 LOCAL_acquire_scanner_pages_alt|Het aantal bladzijden waaruit het gescande document gaat bestaan
 LOCAL_acquire_scanner_pages|Bladzijden:
+LOCAL_acquire_scanscale_alt|LOCALISE_ME The colour depth of the scanned image
 LOCAL_acquire_scanscale|Formaat:
 LOCAL_acquire_scanscale_grey|Grijswaarden
 LOCAL_acquire_scanscale_colour|Kleur

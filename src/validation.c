@@ -346,6 +346,7 @@ int basicValidation(struct simpleLinkedList *postdata) {
     && 0 != strcmp(action, "createUser")
     && 0 != strcmp(action, "getUserList")
     && 0 != strcmp(action, "deleteUser")
+    && 0 != strcmp(action, "checkForSimilar")
                                         ) {
     o_log(ERROR, "requested 'action' (of '%s') is not available.", action);
     return 1;
@@ -435,6 +436,12 @@ int validate(struct simpleLinkedList *postdata, char *action) {
         ret += checkVal(vvalue);
       }
     }
+  }
+
+  if ( 0 == strcmp(action, "checkForSimilar") ) {
+    sll_insert(vars, "docid", "m" );
+    ret += checkKeys(postdata, vars );
+    ret += checkDocId(getPostData(postdata, "docid"));
   }
 
   if ( 0 == strcmp(action, "moveTag") ) {

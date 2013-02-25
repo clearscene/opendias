@@ -67,6 +67,9 @@ src/pageRender.o
 src/pdf_plug.gcda
 src/pdf_plug.gcno
 src/pdf_plug.o
+src/phash_plug.gcda
+src/phash_plug.gcno
+src/phash_plug.o
 src/saneDispatcher.gcda
 src/saneDispatcher.gcno
 src/saneDispatcher.o

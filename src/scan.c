@@ -656,24 +656,6 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   sane_close(openDeviceHandle);
 
 
-  /*
-   *
-   * Change this whole section for the method call in imageProcessing
-   *
-   */
-/*
-  FILE *ptr_fp;
-  if((ptr_fp = fopen("/tmp/OUTPUT.ppm", "wb")) == NULL) {
-    printf("Unable to open file!\n");
-    exit(1);
-  }
-  if( fwrite( raw_image, (pars.bytes_per_line*pars.lines)+strlen(header), 1, ptr_fp) != 1) {
-    printf("Write error!\n");
-    exit(1);
-  }
-  fclose(ptr_fp);
-*/
-
   // Convert Raw into JPEG
   //
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 0);
@@ -689,7 +671,6 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   outFilename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, current_page);
   //pixWriteJpeg(outFilename, pix, 95, 0);
   pixWrite(outFilename, pix, IFF_JFIF_JPEG);
-  free(outFilename);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   o_log(INFORMATION, "Conversion process: Complete");
 
@@ -704,6 +685,13 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   pixDestroy( &pix );
 
 
+  // Calulate the pHash, so we can compare images later
+  if( current_page == 1 ) {
+    updateScanProgress(uuid, SCAN_CALULATING_PHASH, 0);
+    unsigned long long hash = getImagePhash( outFilename );
+    savePhash( docid, hash );
+  }
+  free(outFilename);
 
 
   // cleaup && What should we do next

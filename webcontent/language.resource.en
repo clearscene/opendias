@@ -85,13 +85,14 @@ LOCAL_acquire_office_upload_file|Filename to upload:
 LOCAL_acquire_office_upload_botton|Upload
 LOCAL_acquire_scanner_pages_alt|The number of pages that make up the document you are going to scan
 LOCAL_acquire_scanner_pages|Pages:
+LOCAL_acquire_scanscale_alt|The colour depth of the scanned image
 LOCAL_acquire_scanscale|Format:
 LOCAL_acquire_scanscale_grey|Gray Scale
 LOCAL_acquire_scanscale_colour|Colour
 LOCAL_acquire_scanner_no_of_page|pages
 LOCAL_acquire_scanner_resolution_alt|The resolution the scanner should use when scanning your document. The higher, the better quality. But also, the higher, the larger file and slower operations will be.
 LOCAL_acquire_scanner_resolution|Resolution:
-LOCAL_acquire_scanner_ocr_alt|Check this to get opendias to read the scanned image and return the text of the document. You will then be able to search on this text later.
+LOCAL_acquire_scanner_ocr_alt|Select the lanuage the is used to resolve the text from this document.
 LOCAL_acquire_scanner_ocr|OCR:
 LOCAL_acquire_scanner_best_ocr_alt|Indication of the best resolution for OCRing. Stay within the green area for best results.
 LOCAL_acquire_scanner_best_oct|The ideal scanning resolution zone for OCRing.

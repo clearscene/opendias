@@ -78,6 +78,7 @@ $(document).ready(function () {
         function (e) {
           window.open("/opendias/scans/" + e.data.docId + ".odt");
         });
+
       } else if ($(data).find('DocDetail').find('type').text() == "2" || $(data).find('DocDetail').find('type').text() == "4") {
         // Set images and default width
         for (x = 1; x <= parseInt($(data).find('DocDetail').find('pages').text()); x++) {
@@ -304,6 +305,37 @@ $(document).ready(function () {
         }
       });
 
+      // Check for similkar images and give the option to 
+      // apply the same tags and title
+      if ( 1 ) {
+        $.ajax({
+          url: "/opendias/dynamic",
+          dataType: "xml",
+          timeout: 3 * AJAX_TIMEOUT,
+          type: "POST",
+          data: {
+            action: "checkForSimilar",
+            docid: officialDocId
+          },
+          error: function (x, t, m) {
+            if (t == "timeout") {
+              alert("[d009] " + LOCAL_timeout_talking_to_server);
+            } else {
+              alert("[d010] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+            }
+          },
+          success: function (data) {
+            if ($(data).find('error').text()) {
+              alert(LOCAL_error_generating_thumbnail + ": " + $(data).find('error').text());
+              return 1;
+            }
+          },
+          complete: function (xhr, status) {
+            alert( xhr.responseText );
+          }
+        });
+       
+      }
     }
   });
 

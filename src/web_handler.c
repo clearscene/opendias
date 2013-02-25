@@ -1054,6 +1054,23 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
           } 
 #endif // OPEN_TO_ALL //
 
+          else if ( action && 0 == strcmp(action, "checkForSimilar") ) {
+            o_log(INFORMATION, "Processing request for: check For Similar");
+            if ( accessPrivs.edit_doc == 0 )
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *docid = getPostData(con_info->post_data, "docid");
+              content = checkForSimilar(docid); //doc_editor.c
+              if(content == (void *)NULL) {
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+              }
+            }
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
           else {
             // should have been picked up by validation! and so never got here
             o_log(WARNING, "disallowed content: post request for unknown action.");

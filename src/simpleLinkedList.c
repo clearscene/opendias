@@ -189,3 +189,36 @@ char *sll_dumper( struct simpleLinkedList *container ) {
   }
   return ret;
 }
+
+// Bubble sort the 'data', (low -> high) assuming data contains an int ref
+// Lots of opertunity to make this method more flexable 
+// - (sort order; sort by key/data; data contains chars; etc...)
+void sll_sort( struct simpleLinkedList *element ) {
+  struct simpleLinkedList *row;
+  int swapped = 1;
+  if( element && ( element != NULL ) ) {
+    while( swapped != 0 ) {
+      o_log(SQLDEBUG, "looping over data-set.");
+      swapped = 0;
+      for( row = sll_findFirstElement( element ) ; row != NULL ; row = sll_getNext(row) ) {
+        if( row->next != NULL ) {
+          char *this_data = row->data;
+          char *next_data = row->next->data;
+          if( atoi(this_data) > atoi(next_data) ) {
+            // Swap the data
+            char *this_key = row->key;
+            char *next_key = row->next->key;
+            o_log(SQLDEBUG, "swapping %s->%s for %s->%s", this_key, this_data, next_key, next_data);
+            row->next->key = this_key;
+            row->key = next_key;
+            row->next->data = this_data;
+            row->data = next_data;
+            swapped = 1;
+            break;
+          }
+        }
+      }
+    }
+  }
+}
+

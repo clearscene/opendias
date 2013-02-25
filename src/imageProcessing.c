@@ -18,17 +18,20 @@
 
 #include "config.h"
 
-#ifdef CAN_OCR
 #include <stdlib.h>
 #include <stdio.h>
+
+#ifdef CAN_OCR
 #include <leptonica/allheaders.h>
+#endif // CAN_OCR //
 
 #include "debug.h"
 #include "ocr_plug.h"
+#include "phash_plug.h"
 
 #include "imageProcessing.h"
 
-
+#ifdef CAN_OCR
 char *getTextFromImage(PIX *pix, int ppi, char *lang) {
 
   char *txt = NULL;
@@ -46,3 +49,9 @@ char *getTextFromImage(PIX *pix, int ppi, char *lang) {
   return txt;
 }
 #endif // CAN_OCR //
+
+unsigned long long getImagePhash( const char *filename ) {
+
+  return calculateImagePhash( filename );
+
+}

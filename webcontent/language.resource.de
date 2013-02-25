@@ -85,6 +85,7 @@ LOCAL_acquire_office_upload_file|Dateiname zum Hochladen:
 LOCAL_acquire_office_upload_botton|laden
 LOCAL_acquire_scanner_pages_alt|Die Anzahl der Seiten, aus denen das Dokument, das Sie zum Scannen fest
 LOCAL_acquire_scanner_pages|Seiten:
+LOCAL_acquire_scanscale_alt|LOCALISE_ME The colour depth of the scanned image
 LOCAL_acquire_scanscale|---LOCALISE_ME-format--:
 LOCAL_acquire_scanscale_grey|---LOCALISE_ME-Gray Scale--
 LOCAL_acquire_scanscale_colour|--LOCALISE_ME-Colour--

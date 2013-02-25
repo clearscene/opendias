@@ -24,6 +24,7 @@
 #define DB_NULL "null"
 #define DB_TEXT "text"
 #define DB_INT "int"
+#define DB_ULONG64 "ulong64"
 #define DB_DOUBLE "double"
 
 int connect_db (int);

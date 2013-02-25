@@ -50,7 +50,7 @@ dnl
 dnl Ensure weve got everything we need to even start!
 dnl
 
-PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid libssl])
+PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid libssl pHash])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
 AC_SUBST(VAR_DIR)

@@ -149,8 +149,11 @@ function getScanningProgress(progressId, device) {
           action == 'postnewpage';
         }
 
-      } else if (status == 14) { // SCAN_RESERVED_1,
-      } else if (status == 15) { // SCAN_RESERVED_2,
+      } else if (status == 14) { // Calculating pHash,
+        showStatus(device, 1, undefined);
+        $('#status_' + device).text(LOCAL_calculating_image_comparison_vector);
+
+      } else if (status == 15) { // SCAN_RESERVED_1,
       } else if (status == 16) { // SCAN_FINISHED
         showStatus(device, undefined, undefined);
         $('#status_' + device).text(LOCAL_scan_complete);
