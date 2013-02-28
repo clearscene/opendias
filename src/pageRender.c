@@ -920,6 +920,8 @@ char *deleteUser( char *username, char *lang ) {
 }
 #endif // OPEN_TO_ALL //
 
+
+#ifdef CAN_PHASH
 char *checkForSimilar(const char *docid) {
 
   char *sql = o_strdup( "SELECT image_phash FROM docs WHERE docid = ?" );
@@ -1035,4 +1037,6 @@ char *checkForSimilar(const char *docid) {
   }
   return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><CheckForSimilar><Docs>%s</Docs></CheckForSimilar></Response>", data);
 }
+#endif /* CAN_PHASH */
+
 

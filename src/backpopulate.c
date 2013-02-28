@@ -18,6 +18,7 @@
 
 #include "config.h"
 
+#ifdef CAN_PHASH
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -133,7 +134,7 @@ void *backpopulate_phash_inner( void *u) {
 
   // What tasks do we need to do
   struct simpleLinkedList *rSet;
-  char *sql = o_strdup("SELECT filetype, docid FROM docs WHERE docid > 319");// WHERE image_phash = 0");
+  char *sql = o_strdup("SELECT filetype, docid FROM docs WHERE docid > 347");// WHERE image_phash = 0");
   rSet = runquery_db(sql, NULL);
   if( rSet != NULL ) {
     do {
@@ -180,13 +181,17 @@ void *backpopulate_phash_inner( void *u) {
   runUpdate_db(sql, NULL);
   free(sql);
 
+  return NULL;
 }
+#endif // CAN_PHASH //
 
 void backpopulate_phash() {
+#ifdef CAN_PHASH
   pthread_t backpopulate_thread;
   pthread_attr_t attr;
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
   pthread_create( &backpopulate_thread, &attr, backpopulate_phash_inner, (void *)NULL);
+#endif // CAN_PHASH //
 }
 

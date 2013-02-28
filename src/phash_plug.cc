@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-
+#ifdef CAN_PHASH
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,3 +43,5 @@ extern "C" int getDistance( unsigned long long hash0, unsigned long long hash1 )
 
   return ph_hamming_distance(hash0, hash1);
 }
+#endif // CAN_PHASH //
+

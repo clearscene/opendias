@@ -1056,6 +1056,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
           else if ( action && 0 == strcmp(action, "checkForSimilar") ) {
             o_log(INFORMATION, "Processing request for: check For Similar");
+#ifdef CAN_PHASH
             if ( accessPrivs.edit_doc == 0 )
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
             else if ( validate( con_info->post_data, action ) ) 
@@ -1067,10 +1068,14 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
                 content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
               }
             }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
+#endif // CAN_PHASH //
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
-  
+
           else {
             // should have been picked up by validation! and so never got here
             o_log(WARNING, "disallowed content: post request for unknown action.");

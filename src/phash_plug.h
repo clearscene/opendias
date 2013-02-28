@@ -19,6 +19,7 @@
 #ifndef PHASHING_PLUG
 #define PHASHING_PLUG
 
+#ifdef CAN_PHASH
 #include "config.h"
 
 #ifdef __cplusplus
@@ -31,5 +32,7 @@ extern int getDistance( unsigned long long, unsigned long long );
 #ifdef __cplusplus
 }
 #endif
+
+#endif // CAN_PHASH //
 
 #endif /* PHASHING_PLUG */

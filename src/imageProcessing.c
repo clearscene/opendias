@@ -50,8 +50,11 @@ char *getTextFromImage(PIX *pix, int ppi, char *lang) {
 }
 #endif // CAN_OCR //
 
+#ifdef CAN_PHASH
 unsigned long long getImagePhash( const char *filename ) {
 
   return calculateImagePhash( filename );
 
 }
+#endif /* CAN_PHASH */
+

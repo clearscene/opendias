@@ -47,6 +47,8 @@ char *updateUser( char *, char *, char *, char *, int, struct simpleLinkedList *
 char *deleteUser( char *, char *);
 char *getUserList();
 #endif // OPEN_TO_ALL //
+#ifdef CAN_PHASH
 char *checkForSimilar(const char *);
+#endif /* CAN_PHASH */
 
 #endif /* PAGERENDER */

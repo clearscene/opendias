@@ -50,7 +50,7 @@ dnl
 dnl Ensure weve got everything we need to even start!
 dnl
 
-PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid libssl pHash])
+PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid libssl])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
 AC_SUBST(VAR_DIR)
@@ -155,6 +155,16 @@ AC_CHECK_LIB(magic, magic_open,
   AC_MSG_WARN(You are missing the magic libs) )
 
 
+phash="no"
+AC_LANG_PUSH([C++])
+AC_CHECK_LIB(pHash, ph_hamming_distance, 
+	[AC_CHECK_HEADER(pHash.h,
+    phash="yes",
+    AC_MSG_WARN(You are missing the development headers for the pHash libs))], 
+	AC_MSG_WARN(You are missing the pHash libs) )
+AC_LANG_POP([C++])
+
+
 
 
 dnl
@@ -173,6 +183,7 @@ fi
 if test "x$ocr" = "xyes" && test "x$imageprocessing" = "xyes" ; then
  AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
  OPENDIAS_LIBS="$OPENDIAS_LIBS -llept"
+ LOCALISATION_FLAGS="$LOCALISATION_FLAGS CAN_OCR"
 else
  AC_MSG_WARN(You will not be able to OCR any document.)
 fi
@@ -199,6 +210,15 @@ if test "x$magic" = "xyes" ; then
 
 else
 	AC_MSG_WARN(You will not be able to import in any document.)
+fi
+
+
+if test "x$phash" = "xyes" ; then
+ AC_DEFINE([CAN_PHASH],[],[Have everything that is needed to PHASH documents])
+ OPENDIAS_LIBS="$OPENDIAS_LIBS -lpHash"
+ LOCALISATION_FLAGS="$LOCALISATION_FLAGS CAN_PHASH"
+else
+ AC_MSG_WARN(You will not be able to compare document.)
 fi
 
 

@@ -195,8 +195,8 @@ char *sll_dumper( struct simpleLinkedList *container ) {
 // - (sort order; sort by key/data; data contains chars; etc...)
 void sll_sort( struct simpleLinkedList *element ) {
   struct simpleLinkedList *row;
-  int swapped = 1;
   if( element && ( element != NULL ) ) {
+    int swapped = 1;
     while( swapped != 0 ) {
       o_log(SQLDEBUG, "looping over data-set.");
       swapped = 0;

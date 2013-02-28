@@ -77,6 +77,7 @@
         <div class='innerRightDisplay'><div id='pagesSlider_DEVICE'></div></div>
       </div>
     </div>
+
     <div class='row'>
       <div class='label' title='---LOCAL_acquire_scanner_resolution_alt---'>---LOCAL_acquire_scanner_resolution---</div>
       <div class='data'>
@@ -87,6 +88,8 @@
         </div>
       </div>
     </div>
+#ifdef CAN_OCR
+
     <div class='row'>
       <div class='label' title='---LOCAL_acquire_scanner_ocr_alt---'>---LOCAL_acquire_scanner_ocr---</div>
       <div class='data'>
@@ -103,6 +106,10 @@
                           <option value="vie">Vietnamese</option>
                         </select></div>
         </div>
+#endifdef CAN_OCR
+#ifndef CAN_OCR
+        <select id='ocr_DEVICE' style='display: none'><option value="-">No OCR</option></select>
+#endifndef CAN_OCR
         <div class='innerRightDisplay'>
           <div class='resolutionQuality' title='---LOCAL_acquire_scanner_best_ocr_alt---'>
             <div id='resolutionGood_DEVICE' class='resolutionQualityGood' title='---LOCAL_acquire_scanner_best_oct---'></div>
@@ -110,6 +117,7 @@
         </div>
       </div>
     </div>
+
     <div class='row'>
       <div class='label' title='---LOCAL_acquire_scanner_page_length_alt---'>---LOCAL_acquire_scanner_page_length---</div>
       <div class='data'>
@@ -121,12 +129,17 @@
       </div>
     </div>
 
+#ifdef CAN_PHASH
     <div class='row'>
       <div class='label' title='---LOCAL_acquire_look_for_similar_alt---'>---LOCAL_acquire_look_for_similar---</div>
       <div class='data'>
         <input id='look_for_similar_DEVICE' type='checkbox' checked='checked' />
       </div>
     </div>
+#endifdef CAN_PHASH
+#ifndef CAN_PHASH
+    <input id='look_for_similar_DEVICE' type='checkbox' style='display: none' />
+#endifndef CAN_PHASH
 
     <div class='row'>
       <div class='label'>&nbsp;</div>

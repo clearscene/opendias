@@ -684,6 +684,7 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   //free(header);
 
 
+#ifdef CAN_PHASH
   // Calulate the pHash, so we can compare images later
   if( current_page == 1 ) {
     updateScanProgress(uuid, SCAN_CALULATING_PHASH, 0);
@@ -692,7 +693,9 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
     pixDestroy( &pix_bw );
     unsigned long long hash = getImagePhash( outFilename );
     savePhash( docid, hash );
+    unlink("/tmp/image_for_pHash.bmp");
   }
+#endif /* CAN_PHASH */
   pixDestroy( &pix );
 
 
