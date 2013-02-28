@@ -67,6 +67,9 @@ LOCAL_docdetail_extractedtext|Extracted Text:
 LOCAL_docdetail_assignedtags|Assigned Tags:
 LOCAL_docdetail_linkeddocs|Linked Docs:
 LOCAL_docdetail_defaultdoclink|link to doc
+LOCAL_docdetail_similar_docs_title|Similar Docs
+LOCAL_docdetail_similar_docs_tagline|There are similar document to the one you've just created. Do you want to apply the same title/tags?
+LOCAL_docdetail_no_thanks|No Thanks
 LOCAL_acquire_title|Acquire new Document
 LOCAL_acquire_notcurrent_title|Details are not current
 LOCAL_acquire_notcurrent_p1|At the time these details were requested, the SANE subsystem was busy serving a scanning request. Unfortunately, SANE can only handle one request at a time. Therefor, the details shown here are not current and are from the last successful request.
@@ -99,6 +102,8 @@ LOCAL_acquire_scanner_best_oct|The ideal scanning resolution zone for OCRing.
 LOCAL_acquire_scanner_page_length_alt|How much of the page do you want to scan. If your scanning a document smaller than the max length than your scanner supports. don&quot;t waste time and space.
 LOCAL_acquire_scanner_page_length|Page Length:
 LOCAL_acquire_scanner_scan_now_button|Scan
+LOCAL_acquire_look_for_similar|Look for similar documents:
+LOCAL_acquire_look_for_similar_alt|After scanning attempt to find other documents that look the same. Then apply the title and tags to matching document to your new document - saving time.
 LOCAL_admin_title|User Admin
 LOCAL_admin_tab_mydetails|My details
 LOCAL_admin_tab_create_user|Create Users

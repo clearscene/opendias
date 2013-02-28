@@ -46,9 +46,7 @@
 #include "localisation.h"
 #include "sessionmanagement.h"
 
-// These - just for backpopulation of pHASH
-#include "imageProcessing.h"
-#include "dbaccess.h"
+#include "backpopulate.h"
 
 #include "main.h"
 
@@ -56,25 +54,6 @@ struct services startedServices;
 struct MHD_Daemon *httpdaemon;
 int COMMSSOCKET;
 int pidFilehandle;
-
-void backpopulate_phash() {
-
-  struct simpleLinkedList *rSet;
-  char *sql = o_strdup("SELECT docid FROM docs WHERE image_phash = 0");
-  rSet = runquery_db(sql, NULL);
-  if( rSet != NULL ) {
-    do {
-      int docid = atoi( readData_db(rSet, "docid") );
-      char *docfilename = o_printf("%s/scans/%d_1.jpg", BASE_DIR, docid);
-      o_log(INFORMATION, "Calculating pHash for %s", docfilename );
-      unsigned long long hash = getImagePhash( docfilename );
-      savePhash( docid, hash );
-      free(docfilename);
-    } while ( nextRow( rSet ) );
-  }
-  free_recordset( rSet );
-  free(sql);
-}
 
 int setup (char *configFile) {
 
@@ -156,8 +135,10 @@ int setup (char *configFile) {
         MAX_SESSION_AGE = (unsigned int) atoi(config_value);
       }
 
-      else if ( 0 == strcmp(config_option, "backpopulated_phash") ) {
-        backpopulate_phash();
+      else if ( 0 == strcmp(config_option, "backpopulate_phash") ) {
+        if ( 0 == strcmp(config_value, "yes") ) {
+          backpopulate_phash();
+        }
       }
 
       free(config_option);

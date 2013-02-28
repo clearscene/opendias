@@ -8,14 +8,14 @@ my %langs = ( 'en' => 1 );
 my $hide = 0;
 my %option;
 my $year = 1900+((gmtime())[5]);
-my $package_string = 'opendias';
 
 #########################################
 # Collection options from the command line (ie what ./configure sends us)
-$package_string = shift @ARGV;
+my $package_string = shift @ARGV;
 foreach my $opt ( @ARGV ) {
   $option{$opt} = 1;
 }
+$package_string |= 'opendias';
 
 
 #########################################
@@ -239,7 +239,7 @@ sub validate_language_pack {
 
     foreach my $key ( keys %{$compare{'en'}} ) {
       if ( ! exists $compare{$lang}{$key} ) {
-        $ret .= "The resouce file $file is missing the phrase '$key'.\n";
+        $ret .= "The resouce file $working_file is missing the phrase '$key'.\n";
       }
     }
 

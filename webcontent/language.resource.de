@@ -67,6 +67,9 @@ LOCAL_docdetail_extractedtext|Extrahierten Text:
 LOCAL_docdetail_assignedtags|Tags zugeordnet:
 LOCAL_docdetail_linkeddocs|Linked Docs:
 LOCAL_docdetail_defaultdoclink|link to doc
+LOCAL_docdetail_similar_docs_title|LOCALISE_ME Similar Docs
+LOCAL_docdetail_similar_docs_tagline|LOCALISE_ME There are similar document to the one you've just created. Do you want to apply the same title/tags?
+LOCAL_docdetail_no_thanks|LOCALISE_ME No Thanks
 LOCAL_acquire_title|Gewinnen Sie neue Dokument
 LOCAL_acquire_notcurrent_title|Alle sind nicht aktuell
 LOCAL_acquire_notcurrent_p1|Zu der Zeit diese Angaben angefordert wurden, war die SANE-Subsystem beschäftigt Servieren ein Scan-Anfrage. Leider kann SANE immer nur eine Anfrage zu einem Zeitpunkt.  Dafür sind die Details hier gezeigten nicht aktuell sind und von der letzten erfolgreiche Anfrage.
@@ -99,6 +102,8 @@ LOCAL_acquire_scanner_best_oct|Die ideale Scanauflösung ins Register OCR-Zone f
 LOCAL_acquire_scanner_page_length_alt|Wie viel von der Seite sehen Sie scannen möchten. Wenn Ihr ein Dokument scannen, kleiner als die maximale Länge als Ihr Scanner unterstützt. verschwende keine Zeit und Raum.
 LOCAL_acquire_scanner_page_length|Seitenlänge:
 LOCAL_acquire_scanner_scan_now_button|Erwerben
+LOCAL_acquire_look_for_similar|LOCALISE_ME Look for similar documents:
+LOCAL_acquire_look_for_similar_alt|LOCALISE_ME After scanning attempt to find other documents that look the same. Then apply the title and tags to matching document to your new document - saving time.
 LOCAL_admin_title|User Admin
 LOCAL_admin_tab_mydetails|Meine Details
 LOCAL_admin_tab_create_user|Benutzer erstellen

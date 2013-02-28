@@ -961,7 +961,8 @@ char *checkForSimilar(const char *docid) {
       char *this_docid = o_strdup(readData_db(rSet, "docid"));
       hash = strtoull(readData_db(rSet, "image_phash"), NULL, 10);
       int d = getDistance( ref_hash, hash );
-      if( d <= 20 ) { // A distance of 20 is the largest difference to be considered 'the same'
+      // A distance of 15 is the largest difference to be considered 'the same'
+      if( d <= 15 ) { 
         o_log( DEBUGM, "similar doc %s found, with a distance of %d", this_docid, d);
         sll_insert( matching, this_docid, o_printf("%d", d) );
         match_count++;
@@ -971,7 +972,8 @@ char *checkForSimilar(const char *docid) {
   }
 
   if( match_count == 0 ) {
-    return NULL;
+    o_log( INFORMATION, "No matching documents found.");
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><CheckForSimilar><Docs></Docs></CheckForSimilar></Response>");
   }
 
   // ======================================

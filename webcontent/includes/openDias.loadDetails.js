@@ -326,13 +326,44 @@ $(document).ready(function () {
           },
           success: function (data) {
             if ($(data).find('error').text()) {
-              alert(LOCAL_error_generating_thumbnail + ": " + $(data).find('error').text());
+              alert(LOCAL_error_checking_for_similar + ": " + $(data).find('error').text());
               return 1;
             }
+            else if($(data).find('CheckForSimilar')) {
+              var ret = $(data).find('CheckForSimilar');
+              if(ret.find('Docs').find('Doc').text()) {
+                option = 1;
+                ret.find('Docs').find('Doc').each( function() {
+                  $('#option'+option).html( 
+                    "<h4>" + $(this).find('title').text() + "</h4>"
+                    + "<span id='option"+option+"_tags'></span>"
+                    + "<span><p>" + LOCAL_confidence_in_doc_match + "<strong>" 
+                    + confidence( parseInt($(this).find('distance').text()))
+                    + "</strong></p><button>" + LOCAL_apply_title_tags + "</button>"
+                    + "</span><span class='cclear'></span>");
+                  var tags = '';
+                  $(this).find('Tags').find('tag').each( function() {
+                    tags += "<li>" + $(this).text() + "</li>";
+                  });
+                  $('#option'+option+'_tags').html( "<ul>" + tags + "</ul>" );
+                  option++;
+                });
+                if(option < 4) {
+                  for(x=option; x<4; x++) {
+                    $('#option'+x).css({ display: 'none' });
+                  }
+                }
+                $('#similarDocSelector').css({ display: 'block' });
+                $('#noThanks').click( function() { 
+                  $('#similarDocSelector').css({ display: 'none' });
+                });
+              }
+              else {
+                // No matching docs
+                // do we really want to create a alert box or other pop-up? - prob not
+              }
+            }
           },
-          complete: function (xhr, status) {
-            alert( xhr.responseText );
-          }
         });
        
       }
@@ -382,6 +413,16 @@ $(document).ready(function () {
   });
 
 });
+
+function confidence(distance) {
+  if( distance < 5 ) {
+    return LOCAL_very_high;
+  }
+  else if( distance < 10 ) {
+    return LOCAL_high;
+  }
+  return LOCAL_good;
+}
 
 function getTypeDescription(iType) {
 

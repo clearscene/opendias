@@ -669,10 +669,10 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   free(header);
 
   outFilename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, current_page);
-  //pixWriteJpeg(outFilename, pix, 95, 0);
   pixWrite(outFilename, pix, IFF_JFIF_JPEG);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   o_log(INFORMATION, "Conversion process: Complete");
+  free(outFilename);
 
 
 
@@ -682,16 +682,18 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   ocrImage( uuid, docid, current_page, request_resolution, pix, lang );
   //free(raw_image);
   //free(header);
-  pixDestroy( &pix );
 
 
   // Calulate the pHash, so we can compare images later
   if( current_page == 1 ) {
     updateScanProgress(uuid, SCAN_CALULATING_PHASH, 0);
+    PIX *pix_bw = pixThresholdToBinary( pix, 100 ); 
+    pixWrite("/tmp/image_for_pHash.bmp", pix_bw, IFF_BMP);
+    pixDestroy( &pix_bw );
     unsigned long long hash = getImagePhash( outFilename );
     savePhash( docid, hash );
   }
-  free(outFilename);
+  pixDestroy( &pix );
 
 
   // cleaup && What should we do next

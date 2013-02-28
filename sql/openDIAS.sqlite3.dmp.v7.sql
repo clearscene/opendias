@@ -34,7 +34,7 @@ VALUES ('admin','6e6a83f742b28434aea09d7e8534647a','Admin User',datetime('now'),
 ALTER TABLE docs
 ADD COLUMN image_phash TEXT DEFAULT '0';
 
-INSERT INTO config (config_option, config_value) VALUES ("backpopulated_phash", "no");
+INSERT INTO config (config_option, config_value) VALUES ("backpopulate_phash", "yes");
 
 COMMIT;
 
