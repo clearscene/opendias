@@ -109,7 +109,7 @@ void *stub( void *u ) {
   return NULL;
 }
 
-void backpopulate_phash() {
+void *backpopulate_phash_inner( void *u) {
 
   pthread_t thread[MAX_THREADS];
   pthread_attr_t attr;
@@ -133,7 +133,7 @@ void backpopulate_phash() {
 
   // What tasks do we need to do
   struct simpleLinkedList *rSet;
-  char *sql = o_strdup("SELECT filetype, docid FROM docs WHERE docid > 280");// WHERE image_phash = 0");
+  char *sql = o_strdup("SELECT filetype, docid FROM docs WHERE docid > 319");// WHERE image_phash = 0");
   rSet = runquery_db(sql, NULL);
   if( rSet != NULL ) {
     do {
@@ -175,3 +175,10 @@ void backpopulate_phash() {
   free(sql);
 }
 
+void backpopulate_phash() {
+  pthread_t backpopulate_thread;
+  pthread_attr_t attr;
+  pthread_attr_init(&attr);
+  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+  pthread_create( &backpopulate_thread, &attr, backpopulate_phash_inner, (void *)NULL);
+}
