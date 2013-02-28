@@ -23,6 +23,9 @@ opendias.anjuta
 opendias-*.tar.gz
 sql/Makefile
 sql/Makefile.in
+src/backpopulate.gcda
+src/backpopulate.gcno
+src/backpopulate.o
 src/dbaccess.gcda
 src/dbaccess.gcno
 src/dbaccess.o

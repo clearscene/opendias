@@ -18,12 +18,11 @@
 
 #include "config.h"
 
-#define _GNU_SOURCE
-#include <sys/sysinfo.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
 #include <string.h>
+#include <sys/sysinfo.h>
 #include <leptonica/allheaders.h>
 
 #include "debug.h"
@@ -36,78 +35,110 @@
 
 #include "backpopulate.h"
 
+// max number of worker threads on a system with infinate available processors. (indexed from 0)
+#define MAX_THREADS 3
 
 struct process_phash {
   char *filename;
   int docid;
+  int thread_id;
 };
+
+int thread_active[MAX_THREADS];
 
 void *process_doc( void *in ) {
 
   struct process_phash *data = (struct process_phash *)in;
-  o_log(INFORMATION, "Calculating pHASH for docid = %d", data->docid );
+  int thread_id = data->thread_id;
+  thread_active[thread_id] = 1; // belt & braces
+  o_log(INFORMATION, "[%d] Calculating pHash for docid = %d", thread_id, data->docid );
 
   // Convert the image to 1bit depth
   o_log(DEBUGM, "Converting %s to a depth of 1bit", data->filename );
+
+  PIX *pix_orig;
+  if ( ( pix_orig = pixRead( data->filename ) ) == NULL) {
+    o_log(ERROR, "Could not load the image data into a PIX");
+  }
+
+  // Convert colour images down to grey
+  o_log(DEBUGM, "Convertion process: Loaded (depth: %d)", pixGetDepth(pix_orig));
   PIX *pix8;
-  if ( ( pix8 = pixRead( data->filename ) ) == NULL) {
-        o_log(ERROR, "Could not load the image data into a PIX");
+  if( pixGetDepth(pix_orig) > 8 ) {
+    pix8 = pixScaleRGBToGrayFast( pix_orig, 1, COLOR_GREEN );
+    if( pix8 == NULL ) {
+      o_log( ERROR, "Covertion to 8bit, did not go well.");
+    }
+    pixDestroy( &pix_orig );
   }
-  o_log(DEBUGM, "Convertion process: Loaded (depth: %d)", pixGetDepth(pix8));
-  if( pixGetDepth(pix8) > 8 ) {
-    PIX *pix = pixScaleRGBToGrayFast( pix8, 1, COLOR_GREEN );
-    pixDestroy( &pix8 );
-    pix8 = pix;
+  else {
+    // already gray
+    pix8 = pix_orig;
   }
+
+  // Convert image down to binary (no gray)
   PIX *pix1 = pixThresholdToBinary( pix8, 100 );
   if( pix1 == NULL ) {
-    o_log( ERROR, "Covertion did not go well.");
+    o_log( ERROR, "Covertion to 1bit, did not go well.");
   }
+  pixDestroy( &pix8 );
+
+  // Save the file for pHash processnig
   char *tmpFilename = o_printf( "/tmp/image_for_pHash_%d.bmp", data->docid );
   pixWrite( tmpFilename, pix1, IFF_BMP);
   pixDestroy( &pix1 );
-  pixDestroy( &pix8 );
 
   // Generate the pHash for this image.
   o_log(DEBUGM, "Calculating pHash for %s", data->filename );
   unsigned long long hash = getImagePhash( tmpFilename );
   unlink(tmpFilename);
   free(tmpFilename);
+
+  // Save the result back to the DB
   savePhash( data->docid, hash );
+
+  // Cleanup and go home
   free(data->filename);
   free(data);
-
+  thread_active[thread_id] = 0;
   return NULL;
 }
 
-void *stub() {
+void *stub( void *u ) {
   usleep(10);
   return NULL;
 }
 
 void backpopulate_phash() {
 
-  int MAX_PROCESSORS = get_nprocs() - 1;
-  if( MAX_PROCESSORS > 3 ) {
-    MAX_PROCESSORS = 3;
-  }
-  pthread_t thread[3];
+  pthread_t thread[MAX_THREADS];
   pthread_attr_t attr;
+  int thread_pointer = 0;
+  int avail_processors = 1;
+
+  // We may have 16 processing cors, but only use what we need
+  avail_processors = get_nprocs() - 1;
+  if( avail_processors > MAX_THREADS ) {
+    avail_processors = MAX_THREADS;
+  }
+
+  // initialise threading
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-  int thread_pointer = 0;
-  pthread_create(&thread[0], &attr, stub, (void *)NULL);
-  pthread_create(&thread[1], &attr, stub, (void *)NULL);
-  pthread_create(&thread[2], &attr, stub, (void *)NULL);
-  pthread_create(&thread[3], &attr, stub, (void *)NULL);
+  for( thread_pointer = 0; thread_pointer < MAX_THREADS; thread_pointer++ ) {
+    pthread_create( &thread[ thread_pointer], &attr, stub, (void *)NULL );
+  }
+  thread_pointer = 0;
 
+  // What tasks do we need to do
   struct simpleLinkedList *rSet;
-  char *sql = o_strdup("SELECT filetype, docid FROM docs WHERE dociid > 173");// WHERE image_phash = 0");
+  char *sql = o_strdup("SELECT filetype, docid FROM docs WHERE docid > 280");// WHERE image_phash = 0");
   rSet = runquery_db(sql, NULL);
   if( rSet != NULL ) {
     do {
-      // Calculate the file to hash
+
+      // Queue up the next task
       int docid = atoi( readData_db(rSet, "docid") );
       char *docfilename;
       if( ( 0 == strcmp("2", readData_db(rSet, "filetype") ) ) 
@@ -118,18 +149,25 @@ void backpopulate_phash() {
         docfilename = o_printf("%s/scans/%d_thumb.jpg", BASE_DIR, docid);
       }
 
-      while( pthread_tryjoin_np( thread[thread_pointer], NULL ) != 0 ) {
+      // Wait for an available worker
+      while( thread_active[thread_pointer] == 1 ) {
         thread_pointer++;
-        if( thread_pointer > MAX_PROCESSORS ) {
+        if( thread_pointer > avail_processors ) {
           thread_pointer = 0;
         }
         usleep(200);
       }
 
+      // Wait for it to join back first
+      pthread_join( thread[ thread_pointer ], NULL);
+
+      // Give instructions to the next worker
       struct process_phash *data = malloc( sizeof( struct process_phash ) );
       data->filename = docfilename;
       data->docid = docid;
-      pthread_create(&thread[ thread_pointer], &attr, process_doc, (void *)data );
+      data->thread_id = thread_pointer;
+      thread_active[thread_pointer] = 1;
+      pthread_create( &thread[ thread_pointer], &attr, process_doc, (void *)data );
 
     } while ( nextRow( rSet ) );
   }
