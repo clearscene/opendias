@@ -173,6 +173,13 @@ void *backpopulate_phash_inner( void *u) {
   }
   free_recordset( rSet );
   free(sql);
+
+  // Set the config flag, so we don't try this again.
+  o_log(INFORMATION, "Marking that the backpopulation of pHash is: complete" );
+  sql = o_strdup("UPDATE config SET config_value = 'complete' WHERE config_option = 'backpopulate_phash'");
+  runUpdate_db(sql, NULL);
+  free(sql);
+
 }
 
 void backpopulate_phash() {
@@ -182,3 +189,4 @@ void backpopulate_phash() {
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
   pthread_create( &backpopulate_thread, &attr, backpopulate_phash_inner, (void *)NULL);
 }
+
