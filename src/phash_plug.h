@@ -1,5 +1,5 @@
 /*
- * ocr_plug.h
+ * phash_plug.h
  * Copyright (C) Clearscene Ltd 2008 <wbooth@essentialcollections.co.uk>
  * 
  * ocr_plug.h is free software: you can redistribute it and/or modify it
@@ -19,8 +19,9 @@
 #ifndef PHASHING_PLUG
 #define PHASHING_PLUG
 
-#ifdef CAN_PHASH
 #include "config.h"
+
+#ifdef CAN_PHASH
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,6 +34,6 @@ extern int getDistance( unsigned long long, unsigned long long );
 }
 #endif
 
-#endif // CAN_PHASH //
+#endif /* CAN_PHASH */
 
 #endif /* PHASHING_PLUG */

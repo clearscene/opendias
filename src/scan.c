@@ -670,9 +670,9 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
 
   outFilename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, current_page);
   pixWrite(outFilename, pix, IFF_JFIF_JPEG);
+  free(outFilename);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
   o_log(INFORMATION, "Conversion process: Complete");
-  free(outFilename);
 
 
 

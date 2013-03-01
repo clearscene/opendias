@@ -96,7 +96,7 @@ void *backpopulate_phash_inner( void *u) {
 
   // What tasks do we need to do
   struct simpleLinkedList *rSet;
-  char *sql = o_strdup("SELECT filetype, docid FROM docs WHERE docid > 347");// WHERE image_phash = 0");
+  char *sql = o_strdup("SELECT filetype, docid FROM docs WHERE docid > 416");// WHERE image_phash = 0");
   rSet = runquery_db(sql, NULL);
   if( rSet != NULL ) {
     do {

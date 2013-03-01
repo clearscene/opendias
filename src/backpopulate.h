@@ -1,5 +1,5 @@
 /*
- * imageProcessing.h
+ * backpopulate.h
  * Copyright (C) Clearscene Ltd 2008 <wbooth@essentialcollections.co.uk>
  * 
  * backpopulate.h is free software: you can redistribute it and/or modify it

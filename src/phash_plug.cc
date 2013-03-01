@@ -1,5 +1,5 @@
 /*
- * ocr_plug.c
+ * phash_plug.c
  * Copyright (C) Clearscene Ltd 2008 <wbooth@essentialcollections.co.uk>
  * 
  * ocr_plug.c is free software: you can redistribute it and/or modify it

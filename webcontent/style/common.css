@@ -3,12 +3,11 @@
    padding: 0px;
    margin: 0px;
   }
-  h1 {
-   font-size: 1.15em;
-  }
   .cclear {
    clear: both;
-   display: block;
+  }
+  h1 {
+   font-size: 1.15em;
   }
   h2 {
    font-size: 1.4em;
