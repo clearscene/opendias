@@ -26,6 +26,10 @@
 
 char *getTextFromImage(PIX *, int, char *);
 #endif // CAN_OCR //
-unsigned long long getImagePhash( const char * );
+
+#ifdef CAN_PHASH
+unsigned long long getImagePhash_fn( const char * );
+unsigned long long getImagePhash_px( PIX * );
+#endif /* CAN_PHASH */
 
 #endif /* IMAGEPROCESSING */

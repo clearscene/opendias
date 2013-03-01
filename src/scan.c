@@ -688,12 +688,8 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   // Calulate the pHash, so we can compare images later
   if( current_page == 1 ) {
     updateScanProgress(uuid, SCAN_CALULATING_PHASH, 0);
-    PIX *pix_bw = pixThresholdToBinary( pix, 100 ); 
-    pixWrite("/tmp/image_for_pHash.bmp", pix_bw, IFF_BMP);
-    pixDestroy( &pix_bw );
-    unsigned long long hash = getImagePhash( outFilename );
+    unsigned long long hash = getImagePhash_px( pix );
     savePhash( docid, hash );
-    unlink("/tmp/image_for_pHash.bmp");
   }
 #endif /* CAN_PHASH */
   pixDestroy( &pix );

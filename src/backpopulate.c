@@ -24,7 +24,6 @@
 #include <pthread.h>
 #include <string.h>
 #include <sys/sysinfo.h>
-#include <leptonica/allheaders.h>
 
 #include "debug.h"
 #include "utils.h"
@@ -54,46 +53,9 @@ void *process_doc( void *in ) {
   thread_active[thread_id] = 1; // belt & braces
   o_log(INFORMATION, "[%d] Calculating pHash for docid = %d", thread_id, data->docid );
 
-  // Convert the image to 1bit depth
-  o_log(DEBUGM, "Converting %s to a depth of 1bit", data->filename );
-
-  PIX *pix_orig;
-  if ( ( pix_orig = pixRead( data->filename ) ) == NULL) {
-    o_log(ERROR, "Could not load the image data into a PIX");
-  }
-
-  // Convert colour images down to grey
-  o_log(DEBUGM, "Convertion process: Loaded (depth: %d)", pixGetDepth(pix_orig));
-  PIX *pix8;
-  if( pixGetDepth(pix_orig) > 8 ) {
-    pix8 = pixScaleRGBToGrayFast( pix_orig, 1, COLOR_GREEN );
-    if( pix8 == NULL ) {
-      o_log( ERROR, "Covertion to 8bit, did not go well.");
-    }
-    pixDestroy( &pix_orig );
-  }
-  else {
-    // already gray
-    pix8 = pix_orig;
-  }
-
-  // Convert image down to binary (no gray)
-  PIX *pix1 = pixThresholdToBinary( pix8, 100 );
-  if( pix1 == NULL ) {
-    o_log( ERROR, "Covertion to 1bit, did not go well.");
-  }
-  pixDestroy( &pix8 );
-
-  // Save the file for pHash processnig
-  char *tmpFilename = o_printf( "/tmp/image_for_pHash_%d.bmp", data->docid );
-  pixWrite( tmpFilename, pix1, IFF_BMP);
-  pixDestroy( &pix1 );
-
   // Generate the pHash for this image.
   o_log(DEBUGM, "Calculating pHash for %s", data->filename );
-  unsigned long long hash = getImagePhash( tmpFilename );
-  unlink(tmpFilename);
-  free(tmpFilename);
+  unsigned long long hash = getImagePhash_fn( data->filename );
 
   // Save the result back to the DB
   savePhash( data->docid, hash );
