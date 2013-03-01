@@ -19,3 +19,4 @@ LOCAL_failed_to_get_list_of_scanners = 'Kan de lijst met beschikbare scanners ni
 LOCAL_unable_to_start_scanning = 'Kan de scan-opdracht niet starten';
 LOCAL_on_host = 'op host';
 LOCAL_x_pages = '%s bladzijden';
+LOCAL_calculating_image_comparison_vector = 'LOCALISE_ME Calculating image comparison vector';
