@@ -145,7 +145,7 @@ void *backpopulate_phash_inner( void *u) {
 
   return NULL;
 }
-#endif // CAN_PHASH //
+#endif /* CAN_PHASH */
 
 void backpopulate_phash() {
 #ifdef CAN_PHASH
@@ -154,6 +154,6 @@ void backpopulate_phash() {
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
   pthread_create( &backpopulate_thread, &attr, backpopulate_phash_inner, (void *)NULL);
-#endif // CAN_PHASH //
+#endif /* CAN_PHASH */
 }
 

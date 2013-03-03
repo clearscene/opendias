@@ -500,7 +500,7 @@ void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix
     }
   }
   else
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
     ocrText = o_strdup("");
   free(ocrLang);
 
@@ -911,4 +911,4 @@ extern char *internalGetScannerList(char *lang) {
 
 }
 
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */

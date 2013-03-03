@@ -21,7 +21,7 @@
 
 #ifndef NULL
 #define NULL 0L
-#endif
+#endif /* NULL */
 
 struct simpleLinkedList {
   char *key;

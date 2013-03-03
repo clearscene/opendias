@@ -25,10 +25,10 @@
 #include <string.h>
 #ifdef CAN_MAGIC
 #include <magic.h>
-#endif // CAN_MAGIC //
+#endif /* CAN_MAGIC */
 #ifdef CAN_OCR
 #include <leptonica/allheaders.h>
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
 
 #include "main.h"
 #include "dbaccess.h"
@@ -37,13 +37,13 @@
 #include "localisation.h"
 #ifdef CAN_READODF
 #include "odf_plug.h"
-#endif // CAN_READODF //
+#endif /* CAN_READODF */
 #ifdef CAN_PDF
 #include "pdf_plug.h"
-#endif // CAN_PDF //
+#endif /* CAN_PDF */
 #ifdef CAN_OCR
 #include "imageProcessing.h"
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
 
 #include "import_doc.h"
 
@@ -63,7 +63,7 @@ char *extractThumbnail(char *docid) {
 
   return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><RegenerateThumb><result>OK</result></RegenerateThumb></Response>");
 }
-#endif // CAN_PDF //
+#endif /* CAN_PDF */
 
 char *uploadfile(char *filename, char *lang) {
 
@@ -73,7 +73,7 @@ char *uploadfile(char *filename, char *lang) {
   char *docid;
   char *ftype;
   char *datafile;
-#endif // CAN_MAGIC //
+#endif /* CAN_MAGIC */
 
   // Save Record
   o_log(DEBUGM, "Saving doc import record");
@@ -96,7 +96,7 @@ char *uploadfile(char *filename, char *lang) {
     ocrText = parse_pdf( datafile, outfile ); // pdf_plug.cc [create thumbnail and return body text] 
     free(outfile);
     thumbext = o_strdup("jpg");
-#endif // CAN_PDF //
+#endif /* CAN_PDF */
   }
 
   // --------------------------------------
@@ -109,7 +109,7 @@ char *uploadfile(char *filename, char *lang) {
     ocrText = get_odf_Text( datafile ); // odf_plug.c 
     free(outfile);
     thumbext = o_strdup("png");
-#endif // CAN_READODF //
+#endif /* CAN_READODF */
   }
 
   // --------------------------------------
@@ -133,14 +133,14 @@ char *uploadfile(char *filename, char *lang) {
       ocrText = getTextFromImage(pix, 0, "eng");
       pixDestroy( &pix );
     }
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
   }
 
   // --------------------------------------
   else {
     free( ftype );
     free( datafile );
-#endif // CAN_MAGIC //
+#endif /* CAN_MAGIC */
     o_log(ERROR, "unknown file type.");
     return NULL;
 #ifdef CAN_MAGIC
@@ -187,6 +187,6 @@ char *uploadfile(char *filename, char *lang) {
   free(docid);
 
   return tmp;
-#endif // CAN_MAGIC //
+#endif /* CAN_MAGIC */
 }
 

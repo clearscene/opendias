@@ -25,14 +25,14 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif /* __cplusplus */
 
 extern char *parse_pdf( const char *, const char *);
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
-#endif // CAN_PDF //
+#endif /* CAN_PDF */
 
-#endif // PDF_PLUG //
+#endif /* PDF_PLUG */

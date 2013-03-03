@@ -37,7 +37,7 @@
 //#include <sane/sane.h>
 
 #include "saneDispatcher.h"
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 #include "db.h" 
 #include "utils.h"
@@ -182,7 +182,7 @@ void server_shutdown() {
 //    o_log(DEBUGM, "... sane backend [done]");
 //    sane_exit();
 //  }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
   if( startedServices.sessions ) {
     cleanup_session_management();
@@ -379,7 +379,7 @@ int createSocket(void) {
 
   return 0;
 }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 void usage(void) {
     fprintf(stdout,"openDIAS. v%s\n", PACKAGE_VERSION);
@@ -476,7 +476,7 @@ int main (int argc, char **argv) {
   }
   startedServices.command = 1;
   o_log(INFORMATION, "Sane command socket is open");
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 
   // Start the webservice
@@ -541,7 +541,7 @@ int main (int argc, char **argv) {
     printf("Hit [enter] to close the service.\n");
     getchar();
   }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
   server_shutdown();
   exit(EXIT_SUCCESS);
 

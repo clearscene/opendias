@@ -20,7 +20,7 @@
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
-#endif
+#endif /* _GNU_SOURCE */
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
@@ -43,7 +43,7 @@
 #ifdef CAN_SCAN
 #include "scan.h"
 #include "saneDispatcher.h"
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 #include "simpleLinkedList.h"
 #include "phash_plug.h"
 
@@ -95,7 +95,7 @@ extern void *doScanningOperation(void *saneOpData) {
   pthread_exit(0);
 #else
   return 0;
-#endif
+#endif /* THREAD_JOIN */
 }
 
 // Start the scanning process
@@ -210,7 +210,7 @@ char *nextPageReady(char *scanid, char *lang) {
     }
 #ifdef THREAD_JOIN
     thr = &thread;
-#endif
+#endif /* THREAD_JOIN */
     updateScanProgress(scanid, SCAN_WAITING_ON_SCANNER, 0);
   } else {
     o_log(WARNING, "scan id indicates a status not waiting for a new page signal.");
@@ -252,7 +252,7 @@ char *getScanningProgress(char *scanid) {
 
   return ret;
 }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder, char *lang ) {
 
@@ -918,7 +918,7 @@ char *deleteUser( char *username, char *lang ) {
 
   return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><DeleteUser><result>OK</result></DeleteUser></Response>");
 }
-#endif // OPEN_TO_ALL //
+#endif /* OPEN_TO_ALL */
 
 
 #ifdef CAN_PHASH
@@ -1038,5 +1038,4 @@ char *checkForSimilar(const char *docid) {
   return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><CheckForSimilar><Docs>%s</Docs></CheckForSimilar></Response>", data);
 }
 #endif /* CAN_PHASH */
-
 

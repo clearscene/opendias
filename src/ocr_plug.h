@@ -26,7 +26,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif /* __cplusplus */
 
 struct scanCallInfo {
   PIX *image_pix;
@@ -48,8 +48,8 @@ extern void runocr(struct scanCallInfo*);
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
 
 #endif /* OCR_PLUG */

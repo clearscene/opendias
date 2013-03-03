@@ -25,14 +25,14 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif /* __cplusplus */
 
 extern unsigned long long calculateImagePhash(const char *);
 extern int getDistance( unsigned long long, unsigned long long );
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
 #endif /* CAN_PHASH */
 

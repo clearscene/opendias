@@ -36,7 +36,7 @@ char *nextPageReady(char *, char *, pthread *);
 char *doScan(char *, char *, char *, char *, char *, char *, char *);
 char *nextPageReady(char *, char *);
 #endif /* THREAD_JOIN */
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 char *docFilter(char *, char *, char *, char *, char *, char *, char *, char *, char *, char *, char *);
 char *titleAutoComplete(char *, char *);
 char *tagsAutoComplete(char *, char *);
@@ -46,7 +46,7 @@ char *doLogout( struct simpleLinkedList *);
 char *updateUser( char *, char *, char *, char *, int, struct simpleLinkedList *, char *);
 char *deleteUser( char *, char *);
 char *getUserList();
-#endif // OPEN_TO_ALL //
+#endif /* OPEN_TO_ALL */
 #ifdef CAN_PHASH
 char *checkForSimilar(const char *);
 #endif /* CAN_PHASH */

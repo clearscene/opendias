@@ -199,7 +199,7 @@ static int checkOCRLanguage(char *val) {
   o_log(ERROR, "Validation failed: Unknown ocr language");
   return 1;
 }
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
 
 static int checkDeviceId(char *val) {
   if( val == NULL ) return 1;
@@ -238,7 +238,7 @@ static int checkResolution(char *val) {
   if(checkSaneRange(val, 10, 3000)) return 1;
   return 0;
 }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 static int checkUpdateKey(char *val) {
   if( val == NULL ) return 1;
@@ -259,7 +259,7 @@ static int checkRole(char *role) {
   if(checkSaneRange(role, 1, 10)) return 1;
   return 0;
 }
-#endif // OPEN_TO_ALL //
+#endif /* OPEN_TO_ALL */
 
 // need more here (ie comma delimited)
 static int checkTagList(char *val) {
@@ -393,7 +393,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     sll_insert(vars, "ocr", "m" );
 #else
     sll_insert(vars, "ocr", "m" );
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
     sll_insert(vars, "pagelength", "m" );
     ret += checkKeys(postdata, vars );
     ret += checkDeviceId(getPostData(postdata, "deviceid"));
@@ -402,7 +402,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkPages(getPostData(postdata, "pages"));
 #ifdef CAN_OCR
     ret += checkOCRLanguage(getPostData(postdata, "ocr"));
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
     ret += checkPageLength(getPostData(postdata, "pagelength"));
   }
 
@@ -417,7 +417,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkKeys(postdata, vars );
     ret += checkUUID(getPostData(postdata, "scanprogressid"));
   }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
   if ( 0 == strcmp(action, "updateDocDetails") ) {
     sll_insert(vars, "docid", "m" );
@@ -501,7 +501,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkKeys(postdata, vars );
     ret += checkDocId(getPostData(postdata, "docid"));
   }
-#endif // CAN_PDF //
+#endif /* CAN_PDF */
 
   if ( 0 == strcmp(action, "titleAutoComplete") ) {
     sll_insert(vars, "startsWith", "m" );
@@ -567,7 +567,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
   if ( 0 == strcmp(action, "getUserList") ) {
     ret += checkKeys(postdata, vars );
   }
-#endif // OPEN_TO_ALL //
+#endif /* OPEN_TO_ALL /*/
 
   // Needs further validation effort
 

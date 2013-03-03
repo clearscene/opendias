@@ -24,6 +24,6 @@
 #ifdef CAN_READODF
 char *get_odf_Text (const char *);
 void get_odf_Thumb (const char *, const char *);
-#endif // CAN_READODF //
+#endif /* CAN_READODF */
 
 #endif /* READ_ODF */

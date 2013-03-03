@@ -117,7 +117,7 @@ void updateScanProgress (char *uuid, int status, int value) {
   free(progressUpdate);
 
 }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 static char *addNewDoc (int ftype, int getLines, int ppl, int resolution, int pageCount, char *ocrText) {
 

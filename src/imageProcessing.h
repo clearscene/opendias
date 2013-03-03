@@ -25,7 +25,7 @@
 #include <leptonica/allheaders.h>
 
 char *getTextFromImage(PIX *, int, char *);
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
 
 #ifdef CAN_PHASH
 unsigned long long getImagePhash_fn( const char * );

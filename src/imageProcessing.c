@@ -25,7 +25,7 @@
 
 #ifdef CAN_IMAGE
 #include <leptonica/allheaders.h>
-#endif // CAN_IMAGE //
+#endif /* CAN_IMAGE */
 
 #include "debug.h"
 #include "utils.h"
@@ -51,7 +51,7 @@ char *getTextFromImage(PIX *pix, int ppi, char *lang) {
 
   return txt;
 }
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
 
 #ifdef CAN_PHASH
 unsigned long long getImagePhash_fn( const char *filename ) {

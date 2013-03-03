@@ -35,29 +35,7 @@
 
 #ifndef NULL
 #define NULL 0L
-#endif
-
-/*
-struct scanCallInfo {
-    PIX *image_pix;
-    int ppi;
-    const char* language;
-    char *ret;
-};
-
-void signal_handler(int sig) {
-    switch(sig) {
-        case SIGUSR1:
-            o_log(INFORMATION, "Received SIGUSR1 signal.");
-            server_shutdown();
-            exit(EXIT_SUCCESS);
-            break;
-        default:
-            o_log(INFORMATION, "Received signal %s. IGNORING. Try SIGUSR1 to stop the service.", strsignal(sig));
-            break;
-    }
-}
-*/
+#endif /* NULL */
 
 extern "C" void runocr(struct scanCallInfo *info) {
 
@@ -71,7 +49,7 @@ extern "C" void runocr(struct scanCallInfo *info) {
     tesseract::TessBaseAPI tessObject; // = new tesseract::TessBaseAPI();
 #ifdef EXTENDED_OCR
     o_log(DEBUGM, "Tesseract-ocr version: %s", tessObject.Version() );
-#endif // EXTENDED_OCR //
+#endif /* EXTENDED_OCR */
     char *lept_ver = getLeptonicaVersion();
     o_log(DEBUGM, "Leptonica version: %s", lept_ver);
     lept_free( lept_ver );
@@ -83,14 +61,14 @@ extern "C" void runocr(struct scanCallInfo *info) {
     }
 #ifdef EXTENDED_OCR
     o_log(DEBUGM, "Initalised language was: %s", tessObject.GetInitLanguagesAsString() );
-#endif // EXTENDED_OCR //
+#endif /* EXTENDED_OCR */
 
     tessObject.SetImage( info->image_pix );
 #ifdef EXTENDED_OCR
     if( info->ppi > 0 ) {
       tessObject.SetSourceResolution( info->ppi );
     }
-#endif // EXTENDED_OCR //
+#endif /* EXTENDED_OCR */
 
     ret = tessObject.GetUTF8Text();
     info->ret = strdup(ret);
@@ -101,4 +79,4 @@ extern "C" void runocr(struct scanCallInfo *info) {
 
 }
 
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
