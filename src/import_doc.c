@@ -173,14 +173,15 @@ char *uploadfile(char *filename, char *lang) {
     fcopy(tmp, to_name);
     unlink(tmp);
     free(tmp);
+
+#ifdef CAN_PHASH
+    unsigned long long hash = getImagePhash_fn( to_name );
+    savePhash( atoi(docid), hash );
+#endif /* CAN_PHASH */
+
     free(to_name);
     free(thumbext);
   }
-
-#ifdef CAN_PHASH
-//  unsigned long long hash = getImagePhash_fn( data->filename );
-//  savePhash( data->docid, hash );
-#endif /* CAN_PHASH */
 
   // Open the document for editing.
   tmp = o_printf("<html><HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/opendias/docDetail.html?docid=%s\"></HEAD><body></body></html>", docid);
