@@ -5,6 +5,7 @@
   }
   .cclear {
    clear: both;
+   display: block;
   }
   h1 {
    font-size: 1.15em;

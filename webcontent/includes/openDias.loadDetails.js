@@ -334,18 +334,36 @@ $(document).ready(function () {
               if(ret.find('Docs').find('Doc').text()) {
                 option = 1;
                 ret.find('Docs').find('Doc').each( function() {
+                  // Create the 'do you want to apply these tags' popup
                   $('#option'+option).html( 
                     "<h4>" + $(this).find('title').text() + "</h4>"
                     + "<span id='option"+option+"_tags'></span>"
                     + "<span><p>" + LOCAL_confidence_in_doc_match + "<strong>" 
                     + confidence( parseInt($(this).find('distance').text()))
-                    + "</strong></p><button>" + LOCAL_apply_title_tags + "</button>"
+                    + "</strong></p><button id='apply"+option+"'>" 
+                    + LOCAL_apply_title_tags + "</button>"
                     + "</span><span class='cclear'></span>");
-                  var tags = '';
+                  var tagslist = '';
+                  tags = new Array();
                   $(this).find('Tags').find('tag').each( function() {
-                    tags += "<li>" + $(this).text() + "</li>";
+                    tagslist += "<li>" + $(this).text() + "</li>";
+                    tags.push($(this).text());
                   });
-                  $('#option'+option+'_tags').html( "<ul>" + tags + "</ul>" );
+                  $('#option'+option+'_tags').html( "<ul>" + tagslist + "</ul>" );
+
+                  $('#apply'+option).bind('click', 
+                    { docid: officialDocId, tg: tags.join(), title: $(this).find('title').text() }, 
+                    function(e) {
+                      $('#title').val(e.data.title);
+                      sendUpdate('title', e.data.title);
+                      $.each(e.data.tg.split(','), function (k, v) {
+                        moveTag(v, e.data.docid, "addTag");
+                      });
+                      $("#tags").val(e.data.tg);
+                      $('#tags').tagsInput();
+                      $('#similarDocSelector').css({ display: 'none' });
+                  });
+
                   option++;
                 });
                 if(option < 4) {
