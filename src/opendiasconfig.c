@@ -47,10 +47,17 @@ int setup (char *configFile) {
   LOG_DIR = o_printf("%s/log/opendias", VAR_DIR);
 
   // Get 'DB' location
-  if (configFile != NULL)
+  if (configFile != NULL) {
     conf = o_strdup(configFile);
-  else
+  }
+  else {
     conf = o_printf("%s/opendias/opendias.conf", ETC_DIR);
+    if( 0 != access(conf, F_OK) ) {
+      o_log(INFORMATION, "Config not in GNU location: %s. Attempting system config dir /etc/opendias/opendias.conf", conf);
+      free(conf);
+      conf = o_strdup("/etc/opendias/opendias.conf");
+    }
+  }
 
   o_log(INFORMATION, "|Using config file: %s", conf);
   if( 0 == load_file_to_memory(conf, &location) ) {
