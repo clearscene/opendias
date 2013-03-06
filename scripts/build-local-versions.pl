@@ -166,13 +166,19 @@ sub generate_test_language {
         if ( $file =~ /includes\/local/ ) {
           # A javascript localise resource file
           my ( $key, $data ) = $line =~ /^(.*) = '(.*)';/;
-          $data =~ s/[^\s]/#/g;
+          $data =~ s/\%s/__/g;
+          $data =~ s/[^\s_]/#/g;
+          $data =~ s/__/%s/g;
+          $data =~ s/_/#/g;
           print TARGET "$key = '$data';\n";
         }
         else {
           # An application resource file
           my ( $key, $data ) = split( /\|/, $line );
-          $data =~ s/[^\s]/#/g;
+          $data =~ s/\%s/__/g;
+          $data =~ s/[^\s_]/#/g;
+          $data =~ s/__/%s/g;
+          $data =~ s/_/#/g;
           print TARGET "$key|$data\n";
         }
       }

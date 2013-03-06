@@ -338,9 +338,10 @@ $(document).ready(function () {
                   $('#option'+option).html( 
                     "<h4>" + $(this).find('title').text() + "</h4>"
                     + "<span id='option"+option+"_tags'></span>"
-                    + "<span><p>" + LOCAL_confidence_in_doc_match + "<strong>" 
-                    + confidence( parseInt($(this).find('distance').text()))
-                    + "</strong></p><button id='apply"+option+"'>" 
+                    + "<span><p>" 
+                    + sprintf(LOCAL_confidence_in_doc_match, 
+                        "<strong>" + confidence( parseInt($(this).find('distance').text()) ) + "</strong>" )
+                    + "</p><button id='apply"+option+"'>" 
                     + LOCAL_apply_title_tags + "</button>"
                     + "</span><span class='cclear'></span>");
                   var tagslist = '';
