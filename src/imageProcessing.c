@@ -18,17 +18,23 @@
 
 #include "config.h"
 
-#ifdef CAN_OCR
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <pthread.h>
+
+#ifdef CAN_IMAGE
 #include <leptonica/allheaders.h>
+#endif /* CAN_IMAGE */
 
 #include "debug.h"
+#include "utils.h"
 #include "ocr_plug.h"
+#include "phash_plug.h"
 
 #include "imageProcessing.h"
 
-
+#ifdef CAN_OCR
 char *getTextFromImage(PIX *pix, int ppi, char *lang) {
 
   char *txt = NULL;
@@ -45,4 +51,64 @@ char *getTextFromImage(PIX *pix, int ppi, char *lang) {
 
   return txt;
 }
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
+
+#ifdef CAN_PHASH
+unsigned long long getImagePhash_fn( const char *filename ) {
+
+  PIX *pix_orig;
+  if ( ( pix_orig = pixRead( filename ) ) == NULL) {
+    o_log(ERROR, "Could not load the image data into a PIX");
+    return 0;
+  }
+  unsigned long long ret = getImagePhash_px( pix_orig );
+  pixDestroy( &pix_orig );
+  return ret;
+}
+
+unsigned long long getImagePhash_px( PIX *pix_orig ) {
+
+  int free_8 = 0;
+
+  // Convert colour images down to grey
+  PIX *pix8;
+  if( pixGetDepth(pix_orig) > 8 ) {
+    pix8 = pixScaleRGBToGrayFast( pix_orig, 1, COLOR_GREEN );
+    if( pix8 == NULL ) {
+      o_log( ERROR, "Covertion to 8bit, did not go well.");
+      return  0;
+    }
+    free_8 = 1;
+  }
+  else {
+    // already gray
+    free_8 = 0;
+    pix8 = pix_orig;
+  }
+
+  // Convert image down to binary (no gray)
+  PIX *pix1 = pixThresholdToBinary( pix8, 100 );
+  if( pix1 == NULL ) {
+    o_log( ERROR, "Covertion to 1bit, did not go well.");
+    if(free_8 == 1) {
+      pixDestroy( &pix8 );
+    }
+    return 0;
+  }
+  if(free_8 == 1) {
+    pixDestroy( &pix8 );
+  }
+
+  // Save the file for pHash processnig
+  char *tmpFilename = o_printf( "/tmp/pHash_%X.bmp", pthread_self() );
+  pixWrite( tmpFilename, pix1, IFF_BMP);
+  pixDestroy( &pix1 );
+
+  unsigned long long ret = calculateImagePhash( tmpFilename );
+  unlink(tmpFilename);
+  free(tmpFilename);
+
+  return ret;
+}
+#endif /* CAN_PHASH */
+

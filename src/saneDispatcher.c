@@ -216,4 +216,4 @@ extern void freeSaneCache( void ) {
 
 }
 
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */

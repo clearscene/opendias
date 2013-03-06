@@ -43,6 +43,10 @@ opendias_SOURCES = \
   ocr_plug.h    \
   pdf_plug.cc    \
   pdf_plug.h    \
+  phash_plug.cc \
+  phash_plug.h \
+  backpopulate.c \
+  backpopulate.h \
   scan.c    \
   scan.h    \
   scanner.c    \

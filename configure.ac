@@ -155,6 +155,16 @@ AC_CHECK_LIB(magic, magic_open,
   AC_MSG_WARN(You are missing the magic libs) )
 
 
+phash="no"
+AC_LANG_PUSH([C++])
+AC_CHECK_LIB(pHash, ph_hamming_distance, 
+	[AC_CHECK_HEADER(pHash.h,
+    phash="yes",
+    AC_MSG_WARN(You are missing the development headers for the pHash libs))], 
+	AC_MSG_WARN(You are missing the pHash libs) )
+AC_LANG_POP([C++])
+
+
 
 
 dnl
@@ -162,19 +172,36 @@ dnl Determin what service we can provide based on available libs
 dnl
 
 
-if test "x$scanning" = "xyes" && test "x$imageprocessing" = "xyes" ; then
-	AC_DEFINE([CAN_SCAN],[],[Have everything that is needed for scanning documents])
-	OPENDIAS_LIBS="$OPENDIAS_LIBS -lsane -llept"
-else
-	AC_MSG_WARN(You will not be able to scan in any document.)
-fi
+if test "x$imageprocessing" = "xyes" ; then
+  OPENDIAS_LIBS="$OPENDIAS_LIBS -llept"
+	AC_DEFINE([CAN_IMAGE],[],[Can manipulate images])
+
+  if test "x$scanning" = "xyes" && test "x$imageprocessing" = "xyes" ; then
+	  AC_DEFINE([CAN_SCAN],[],[Have everything that is needed for scanning documents])
+  	OPENDIAS_LIBS="$OPENDIAS_LIBS -lsane"
+  else
+	  AC_MSG_WARN(You will not be able to scan in any document.)
+  fi
 
 
-if test "x$ocr" = "xyes" && test "x$imageprocessing" = "xyes" ; then
- AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
- OPENDIAS_LIBS="$OPENDIAS_LIBS -llept"
+  if test "x$ocr" = "xyes" && test "x$imageprocessing" = "xyes" ; then
+   AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
+   LOCALISATION_FLAGS="$LOCALISATION_FLAGS CAN_OCR"
+  else
+   AC_MSG_WARN(You will not be able to OCR any document.)
+  fi
+
+
+  if test "x$phash" = "xyes" ; then
+   AC_DEFINE([CAN_PHASH],[],[Have everything that is needed to PHASH documents])
+   OPENDIAS_LIBS="$OPENDIAS_LIBS -lpHash"
+   LOCALISATION_FLAGS="$LOCALISATION_FLAGS CAN_PHASH"
+  else
+   AC_MSG_WARN(You will not be able to compare document.)
+  fi
+
 else
- AC_MSG_WARN(You will not be able to OCR any document.)
+  AC_MSG_WARN(You will not be able to scan, OCR or compare any document.)
 fi
 
 

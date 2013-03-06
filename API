@@ -368,9 +368,7 @@ __endjob]]></example>
     x - the number of horizontal pizel required by the document
     y - the number of lines required by the document
     <Taqs>
-      <tag>
-        tagname - the name of the assigned tag
-      </tag>
+      tag - the name of the assigned tag
       ...
     </Tags>
     <DocLinks>
@@ -653,9 +651,9 @@ __endjob]]></example>
 
     <ApiCall>
       <call_name>getUserList</call_name>
-      <calls_method>pageREnder::getUserList</calls_method>
+      <calls_method>pageRender::getUserList</calls_method>
       <KnownCallers>
-        <caller>openDias.accessControls.js :: anonmousle()</caller>
+        <caller>openDias.accessControls.js :: anonmouse()</caller>
       </KnownCallers>
       <purpose>Provides a list of configured users on the system.</purpose>
       <Inputs>
@@ -676,6 +674,42 @@ __endjob]]></example>
       </User>
     </Users>
   </GetUserList>
+</Response>]]></example>
+    </ApiCall>
+
+    <ApiCall>
+      <call_name>checkForSimilar</call_name>
+      <calls_method>pageRender::checkForSimilar</calls_method>
+      <KnownCallers>
+        <caller>openDias.loadDetails.js :: anonmousle()</caller>
+      </KnownCallers>
+      <purpose>Find other documents that 'look' the same as this one.</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'getUserList'</value>
+        </Input>
+        <Input>
+          <name>docid</name>
+          <value>the documents id</value>
+        </Input>
+      </Inputs>
+      <example type='result'><![CDATA[<?xml version='1.0' encoding='utf-8'?>
+<Response>
+  <CheckForSimilar>
+    <Docs>
+      <Doc>
+        docid - the id of the matching doc
+        distance - how confident is the match [1 .. 100] lower the better
+        title - the title of a similar doc
+        <Taqs>
+          tag - the name of the assigned tag
+          ...
+        </Tags>
+      </Doc>
+      ...
+    </Docs>
+  </CheckForSimilar>
 </Response>]]></example>
     </ApiCall>
 

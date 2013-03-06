@@ -720,7 +720,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
             content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif
+#endif /* CAN_SCAN */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -751,7 +751,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
             content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif
+#endif /* CAN_SCAN */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -773,7 +773,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
             content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif
+#endif /* CAN_SCAN */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -799,7 +799,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
             content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif
+#endif /* CAN_SCAN */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -901,7 +901,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
             content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif
+#endif /* CAN_PDF */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -1052,7 +1052,29 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             mimetype = MIMETYPE_JSON;
             size = strlen(content);
           } 
-#endif // OPEN_TO_ALL //
+#endif /* OPEN_TO_ALL */
+
+          else if ( action && 0 == strcmp(action, "checkForSimilar") ) {
+            o_log(INFORMATION, "Processing request for: check For Similar");
+#ifdef CAN_PHASH
+            if ( accessPrivs.edit_doc == 0 )
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *docid = getPostData(con_info->post_data, "docid");
+              content = checkForSimilar(docid); //doc_editor.c
+              if(content == (void *)NULL) {
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+              }
+            }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
+#endif /* CAN_PHASH */
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
 
           else {
             // should have been picked up by validation! and so never got here

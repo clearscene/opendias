@@ -142,4 +142,4 @@ void get_odf_Thumb (const char *filename, const char *outfile) {
 
 }
 
-#endif // CAN_READODF //
+#endif /* CAN_READODF */

@@ -20,7 +20,7 @@
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
-#endif
+#endif /* _GNU_SOURCE */
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
@@ -43,8 +43,9 @@
 #ifdef CAN_SCAN
 #include "scan.h"
 #include "saneDispatcher.h"
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 #include "simpleLinkedList.h"
+#include "phash_plug.h"
 
 #include "pageRender.h"
 
@@ -94,7 +95,7 @@ extern void *doScanningOperation(void *saneOpData) {
   pthread_exit(0);
 #else
   return 0;
-#endif
+#endif /* THREAD_JOIN */
 }
 
 // Start the scanning process
@@ -209,7 +210,7 @@ char *nextPageReady(char *scanid, char *lang) {
     }
 #ifdef THREAD_JOIN
     thr = &thread;
-#endif
+#endif /* THREAD_JOIN */
     updateScanProgress(scanid, SCAN_WAITING_ON_SCANNER, 0);
   } else {
     o_log(WARNING, "scan id indicates a status not waiting for a new page signal.");
@@ -251,7 +252,7 @@ char *getScanningProgress(char *scanid) {
 
   return ret;
 }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder, char *lang ) {
 
@@ -917,5 +918,124 @@ char *deleteUser( char *username, char *lang ) {
 
   return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><DeleteUser><result>OK</result></DeleteUser></Response>");
 }
-#endif // OPEN_TO_ALL //
+#endif /* OPEN_TO_ALL */
+
+
+#ifdef CAN_PHASH
+char *checkForSimilar(const char *docid) {
+
+  char *sql = o_strdup( "SELECT image_phash FROM docs WHERE docid = ?" );
+  struct simpleLinkedList *vars = sll_init();
+  struct simpleLinkedList *matching = sll_init();
+  int match_count = 0;
+  unsigned long long hash, ref_hash;
+
+  // =================================================
+  // Get the pHash of the image we want to match against.
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, o_strdup(docid) );
+  struct simpleLinkedList *rSet = runquery_db(sql, vars);
+  free( sql );
+  if( rSet == NULL ) {
+    o_log( ERROR, "Doc with id %s, not available.", docid);
+    return NULL;
+  }
+  else {
+    ref_hash = strtoull(readData_db(rSet, "image_phash"), NULL, 10);
+    free_recordset( rSet );
+  }
+
+  // ===================================================
+  // Check over each doc to see if any 'look' the same
+  sql = o_strdup( "SELECT docid, image_phash FROM docs WHERE image_phash != 0 and docid != ?" );
+  vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, o_strdup(docid) );
+  rSet = runquery_db(sql, vars);
+  free( sql );
+
+  if( rSet == NULL ) {
+    o_log( ERROR, "Docs that don't have a doc id %s, not available.", docid);
+    return NULL;
+  }
+  else {
+    do {
+      char *this_docid = o_strdup(readData_db(rSet, "docid"));
+      hash = strtoull(readData_db(rSet, "image_phash"), NULL, 10);
+      int d = getDistance( ref_hash, hash );
+      // A distance of 15 is the largest difference to be considered 'the same'
+      if( d <= 15 ) { 
+        o_log( DEBUGM, "similar doc %s found, with a distance of %d", this_docid, d);
+        sll_insert( matching, this_docid, o_printf("%d", d) );
+        match_count++;
+      }
+    } while ( nextRow( rSet ) );
+    free_recordset( rSet );
+  }
+
+  if( match_count == 0 ) {
+    o_log( INFORMATION, "No matching documents found.");
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><CheckForSimilar><Docs></Docs></CheckForSimilar></Response>");
+  }
+
+  // ======================================
+  // We have all the matches - get the details for the 3 closest matching docs
+  int x;
+  char *data = o_strdup("");
+  char *tags = o_strdup("");
+  o_log( ERROR, "sorting");
+  sll_sort( matching );
+  matching = sll_findFirstElement( matching );
+  for( x = 0 ; x < 3 ; x++ ) {
+
+    char *this_docid = matching->key;
+    char *distance = matching->data;
+
+    // Get a list of tags
+    tags = o_strdup("");
+    sql = o_strdup(
+      "SELECT tagname \
+      FROM tags JOIN \
+      (SELECT * \
+      FROM doc_tags \
+      WHERE docid = ? ) dt \
+      ON tags.tagid = dt.tagid \
+      ORDER BY tagname");
+
+    vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, o_strdup(this_docid) );
+    rSet = runquery_db(sql, vars);
+    free(sql);
+
+    if( rSet ) {
+      do  {
+        o_concatf(&tags, "<tag>%s</tag>", readData_db(rSet, "tagname") );
+      } while ( nextRow( rSet ) );
+    }
+    free_recordset( rSet );
+  
+    // Get the docs title  
+    char *sql = o_strdup( "SELECT title FROM docs WHERE docid = ?" );
+    vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, o_strdup(this_docid) );
+    rSet = runquery_db(sql, vars);
+    free( sql );
+
+    char *title = o_strdup(readData_db(rSet, "title"));
+    free_recordset( rSet );
+
+    o_concatf(&data, "<Doc><docid>%s</docid><distance>%s</distance><title>%s</title><Tags>%s</Tags></Doc>", this_docid, distance, title, tags); 
+    free(tags);
+    free(title);
+
+    matching = sll_getNext( matching );
+    if ( matching == NULL ) {
+      break;
+    }
+  }
+  return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><CheckForSimilar><Docs>%s</Docs></CheckForSimilar></Response>", data);
+}
+#endif /* CAN_PHASH */
 

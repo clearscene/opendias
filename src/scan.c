@@ -500,7 +500,7 @@ void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix
     }
   }
   else
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
     ocrText = o_strdup("");
   free(ocrLang);
 
@@ -656,24 +656,6 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   sane_close(openDeviceHandle);
 
 
-  /*
-   *
-   * Change this whole section for the method call in imageProcessing
-   *
-   */
-/*
-  FILE *ptr_fp;
-  if((ptr_fp = fopen("/tmp/OUTPUT.ppm", "wb")) == NULL) {
-    printf("Unable to open file!\n");
-    exit(1);
-  }
-  if( fwrite( raw_image, (pars.bytes_per_line*pars.lines)+strlen(header), 1, ptr_fp) != 1) {
-    printf("Write error!\n");
-    exit(1);
-  }
-  fclose(ptr_fp);
-*/
-
   // Convert Raw into JPEG
   //
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 0);
@@ -687,7 +669,6 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   free(header);
 
   outFilename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, current_page);
-  //pixWriteJpeg(outFilename, pix, 95, 0);
   pixWrite(outFilename, pix, IFF_JFIF_JPEG);
   free(outFilename);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
@@ -701,9 +682,17 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   ocrImage( uuid, docid, current_page, request_resolution, pix, lang );
   //free(raw_image);
   //free(header);
+
+
+#ifdef CAN_PHASH
+  // Calulate the pHash, so we can compare images later
+  if( current_page == 1 ) {
+    updateScanProgress(uuid, SCAN_CALULATING_PHASH, 0);
+    unsigned long long hash = getImagePhash_px( pix );
+    savePhash( docid, hash );
+  }
+#endif /* CAN_PHASH */
   pixDestroy( &pix );
-
-
 
 
   // cleaup && What should we do next
@@ -922,4 +911,4 @@ extern char *internalGetScannerList(char *lang) {
 
 }
 
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */

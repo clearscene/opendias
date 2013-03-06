@@ -34,7 +34,7 @@ extern char *LOG_DIR;
  */
 int VERBOSITY;
 char *LOG_DIR;
-#endif
+#endif /* __cplusplus */
 
 enum {
   SILENT = 0,
@@ -51,6 +51,6 @@ void oo_log(const char *, const int, const int, const char *, ...);
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
 #endif /* DEBUG */

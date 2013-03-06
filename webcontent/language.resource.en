@@ -67,6 +67,9 @@ LOCAL_docdetail_extractedtext|Extracted Text:
 LOCAL_docdetail_assignedtags|Assigned Tags:
 LOCAL_docdetail_linkeddocs|Linked Docs:
 LOCAL_docdetail_defaultdoclink|link to doc
+LOCAL_docdetail_similar_docs_title|Similar Docs
+LOCAL_docdetail_similar_docs_tagline|There are similar document to the one you've just created. Do you want to apply the same title/tags?
+LOCAL_docdetail_no_thanks|No Thanks
 LOCAL_acquire_title|Acquire new Document
 LOCAL_acquire_notcurrent_title|Details are not current
 LOCAL_acquire_notcurrent_p1|At the time these details were requested, the SANE subsystem was busy serving a scanning request. Unfortunately, SANE can only handle one request at a time. Therefor, the details shown here are not current and are from the last successful request.
@@ -85,19 +88,22 @@ LOCAL_acquire_office_upload_file|Filename to upload:
 LOCAL_acquire_office_upload_botton|Upload
 LOCAL_acquire_scanner_pages_alt|The number of pages that make up the document you are going to scan
 LOCAL_acquire_scanner_pages|Pages:
+LOCAL_acquire_scanscale_alt|The colour depth of the scanned image
 LOCAL_acquire_scanscale|Format:
 LOCAL_acquire_scanscale_grey|Gray Scale
 LOCAL_acquire_scanscale_colour|Colour
 LOCAL_acquire_scanner_no_of_page|pages
 LOCAL_acquire_scanner_resolution_alt|The resolution the scanner should use when scanning your document. The higher, the better quality. But also, the higher, the larger file and slower operations will be.
 LOCAL_acquire_scanner_resolution|Resolution:
-LOCAL_acquire_scanner_ocr_alt|Check this to get opendias to read the scanned image and return the text of the document. You will then be able to search on this text later.
+LOCAL_acquire_scanner_ocr_alt|Select the lanuage the is used to resolve the text from this document.
 LOCAL_acquire_scanner_ocr|OCR:
 LOCAL_acquire_scanner_best_ocr_alt|Indication of the best resolution for OCRing. Stay within the green area for best results.
 LOCAL_acquire_scanner_best_oct|The ideal scanning resolution zone for OCRing.
 LOCAL_acquire_scanner_page_length_alt|How much of the page do you want to scan. If your scanning a document smaller than the max length than your scanner supports. don&quot;t waste time and space.
 LOCAL_acquire_scanner_page_length|Page Length:
 LOCAL_acquire_scanner_scan_now_button|Scan
+LOCAL_acquire_look_for_similar|Look for similar documents:
+LOCAL_acquire_look_for_similar_alt|After scanning attempt to find other documents that look the same. Then apply the title and tags to matching document to your new document - saving time.
 LOCAL_admin_title|User Admin
 LOCAL_admin_tab_mydetails|My details
 LOCAL_admin_tab_create_user|Create Users

@@ -1,8 +1,8 @@
 /*
- * imageProcessing.h
+ * backpopulate.h
  * Copyright (C) Clearscene Ltd 2008 <wbooth@essentialcollections.co.uk>
  * 
- * imageProcessing.h is free software: you can redistribute it and/or modify it
+ * backpopulate.h is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -16,20 +16,11 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IMAGEPROCESSING
-#define IMAGEPROCESSING
+#ifndef BACKPOPULATE
+#define BACKPOPULATE
 
 #include "config.h"
 
-#ifdef CAN_OCR
-#include <leptonica/allheaders.h>
+void backpopulate_phash();
 
-char *getTextFromImage(PIX *, int, char *);
-#endif /* CAN_OCR */
-
-#ifdef CAN_PHASH
-unsigned long long getImagePhash_fn( const char * );
-unsigned long long getImagePhash_px( PIX * );
-#endif /* CAN_PHASH */
-
-#endif /* IMAGEPROCESSING */
+#endif /* BACKPOPULATE */

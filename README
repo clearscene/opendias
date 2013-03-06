@@ -74,6 +74,9 @@ Use the application, by visiting:
     magic
     poppler-cpp
 
+  2.2.5 For image comparision
+    pHash
+
 2.3 Short cut
 -------------
 
@@ -81,7 +84,8 @@ On, Debian or Ubuntu, you can do this by running:
 
   sudo apt-get install build-essential libsqlite3-dev libsane-dev \
     libmicrohttpd-dev uuid-dev libleptonica-dev libpoppler-cpp-dev \
-    libtesseract-dev libxml2-dev libzzip-dev libmagic-dev libssl-dev
+    libtesseract-dev libxml2-dev libzzip-dev libmagic-dev libssl-dev \
+    libphash0-dev
 
 On, RedHat or Fedora, you can do this by running:
 

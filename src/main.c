@@ -37,7 +37,7 @@
 //#include <sane/sane.h>
 
 #include "saneDispatcher.h"
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 #include "db.h" 
 #include "utils.h"
@@ -45,6 +45,7 @@
 #include "web_handler.h"
 #include "localisation.h"
 #include "sessionmanagement.h"
+#include "backpopulate.h"
 
 #include "main.h"
 
@@ -133,6 +134,12 @@ int setup (char *configFile) {
         MAX_SESSION_AGE = (unsigned int) atoi(config_value);
       }
 
+      else if ( 0 == strcmp(config_option, "backpopulate_phash") ) {
+        if ( 0 == strcmp(config_value, "yes") ) {
+          backpopulate_phash();
+        }
+      }
+
       free(config_option);
       free(config_value);
     } while ( nextRow( rSet ) );
@@ -175,7 +182,7 @@ void server_shutdown() {
 //    o_log(DEBUGM, "... sane backend [done]");
 //    sane_exit();
 //  }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
   if( startedServices.sessions ) {
     cleanup_session_management();
@@ -372,7 +379,7 @@ int createSocket(void) {
 
   return 0;
 }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 void usage(void) {
     fprintf(stdout,"openDIAS. v%s\n", PACKAGE_VERSION);
@@ -469,7 +476,7 @@ int main (int argc, char **argv) {
   }
   startedServices.command = 1;
   o_log(INFORMATION, "Sane command socket is open");
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 
   // Start the webservice
@@ -534,7 +541,7 @@ int main (int argc, char **argv) {
     printf("Hit [enter] to close the service.\n");
     getchar();
   }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
   server_shutdown();
   exit(EXIT_SUCCESS);
 
