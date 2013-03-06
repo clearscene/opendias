@@ -157,10 +157,14 @@ function getScanningProgress(progressId, device) {
       } else if (status == 16) { // SCAN_FINISHED
         showStatus(device, undefined, undefined);
         $('#status_' + device).text(LOCAL_scan_complete);
-        document.location.href = "/opendias/docDetail.html?docid=" + vvalue;
+        var findSimilar = '';
+        if( $('#look_for_similar_'+device).is(':checked') ) {
+          findSimilar = "&findSimilar=1";
+        }
+        document.location.href = "/opendias/docDetail.html?docid=" + vvalue + findSimilar;
         action = 'finish';
-
       }
+
     },
     error: function (x, t, m) {
       if (t == "timeout") {

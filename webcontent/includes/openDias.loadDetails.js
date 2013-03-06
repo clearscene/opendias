@@ -307,7 +307,7 @@ $(document).ready(function () {
 
       // Check for similkar images and give the option to 
       // apply the same tags and title
-      if ( 1 ) {
+      if ( getUrlVars()['findSimilar'] ) {
         $.ajax({
           url: "/opendias/dynamic",
           dataType: "xml",
