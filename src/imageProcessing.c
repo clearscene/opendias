@@ -86,18 +86,16 @@ unsigned long long getImagePhash_px( PIX *pix_orig ) {
     pix8 = pix_orig;
   }
 
-  // Convert image down to binary (no gray)
-  PIX *pix1 = pixThresholdToBinary( pix8, 100 );
-  if( pix1 == NULL ) {
-    o_log( ERROR, "Covertion to 1bit, did not go well.");
-    if(free_8 == 1) {
-      pixDestroy( &pix8 );
-    }
-    return 0;
-  }
+  int width = pixGetWidth( pix8 );
+  int height = pixGetHeight( pix8 );
+  BOX* box = boxCreate(1, 1, width-2, height-2);
+  PIX* pixc = pixClipRectangle(pix8, box, NULL);
   if(free_8 == 1) {
     pixDestroy( &pix8 );
   }
+
+  PIX *pix1 = pixScale(pixc, 0.2, 0.2);
+  pixDestroy( &pixc );
 
   // Save the file for pHash processnig
   char *tmpFilename = o_printf( "/tmp/pHash_%X.bmp", pthread_self() );
