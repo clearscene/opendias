@@ -158,7 +158,7 @@ function getScanningProgress(progressId, device) {
         showStatus(device, undefined, undefined);
         $('#status_' + device).text(LOCAL_scan_complete);
         var findSimilar = '';
-        if( $('#look_for_similar_'+device).is(':checked') ) {
+        if( $('#lookForSimilar_'+device).is(':checked') ) {
           findSimilar = "&findSimilar=1";
         }
         document.location.href = "/opendias/docDetail.html?docid=" + vvalue + findSimilar;
@@ -258,7 +258,8 @@ $(document).ready(function () {
           var newTabHtml = document.getElementById('scannerTemplate').innerHTML;
           idchange = new Array('title', 'deviceid', 'format', 'pages', 'pagesSlider', 'resolution',
             'resolutionSlider', 'ocr', 'progressbar', 'resolutionDisplay', 'pagesDisplay',
-            'scanButton', 'status', 'resolutionGood', 'length', 'lengthDisplay', 'lengthSlider');
+            'scanButton', 'status', 'resolutionGood', 'length', 'lengthDisplay', 'lengthSlider',
+            'lookForSimilar');
           for (change in idchange) {
             //alert("replace: '" + idchange[change]+"_DEVICE'   with    '" + idchange[change]+"_"+device + "'.");
             newTabHtml = newTabHtml.replace(new RegExp(idchange[change] + "_DEVICE", "g"), idchange[change] + "_" + device);
