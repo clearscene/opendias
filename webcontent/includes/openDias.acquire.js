@@ -127,26 +127,27 @@ function getScanningProgress(progressId, device) {
       } else if (status == 13) { // SCAN_SANE_BUSY
         // Put everything back like it was, ready for a new attempt.
         showStatus(device, undefined, undefined);
-        $("#format_" + device).removeAttr('disabled');
-        $("#pagesSlider_" + device).slider({
-          disabled: false
-        });
-        $("#resolutionSlider_" + device).slider({
-          disabled: false
-        });
-        $("#ocr_" + device).removeAttr('disabled');
-        $("#lengthSlider_" + device).slider({
-          disabled: false
-        });
-        $("#scanButton_" + device).removeAttr('disabled');
-        $("#resolutionGood_" + device).parent().removeClass("greyResolution");
-        $("#resolutionGood_" + device).removeClass("greySweetResolution");
-        $("#resolutionGood_" + device).addClass("sweetResolution");
-        $('#status_' + device).text(LOCAL_try_again_in_a_minute);
-        alert(LOCAL_sane_is_busy);
-        action = 'finish';
         if (doneAtLeastOnePage == 1) {
-          action == 'postnewpage';
+          action = 'postnewpage';
+        } else {
+          $("#format_" + device).removeAttr('disabled');
+          $("#pagesSlider_" + device).slider({
+            disabled: false
+          });
+          $("#resolutionSlider_" + device).slider({
+            disabled: false
+          });
+          $("#ocr_" + device).removeAttr('disabled');
+          $("#lengthSlider_" + device).slider({
+            disabled: false
+          });
+          $("#scanButton_" + device).removeAttr('disabled');
+          $("#resolutionGood_" + device).parent().removeClass("greyResolution");
+          $("#resolutionGood_" + device).removeClass("greySweetResolution");
+          $("#resolutionGood_" + device).addClass("sweetResolution");
+          $('#status_' + device).text(LOCAL_try_again_in_a_minute);
+          alert(LOCAL_sane_is_busy);
+          action = 'finish';
         }
 
       } else if (status == 14) { // Calculating pHash,
@@ -331,7 +332,7 @@ $(document).ready(function () {
             range: "min",
             value: 1,
             min: 1,
-            max: 10,
+            max: 30,
             slide: function (event, ui) {
               $("#pages_" + device).val(ui.value);
               $("#pagesDisplay_" + device).text(sprintf(LOCAL_x_pages, ui.value));

@@ -10,6 +10,8 @@
         Localisation is now much easier
         Improve scanning performance
         Can now scan in colour
+        Increased the max number of scanning pages to 30 (from 10)
+        Auto detect similar documents, offer to 'tag' and 'title' new docs for you.
 
  0.8.1  A localisation framework has been put in place (with en and de languages added)
         Remove defunct speak functionality
