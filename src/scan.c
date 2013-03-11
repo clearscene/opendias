@@ -896,15 +896,16 @@ extern char *internalGetScannerList(char *lang) {
       free(deviceList);
     }
     else {
+      // No devices
       // The escaped string placeholder will be interprited in the sane dispatcher client
-      answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s></ScannerList></Response>");
+      answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
     }
   }
 
   else {
-    // No devices or sane failed.
+    // sane failed.
     // The escaped string placeholder will be interprited in the sane dispatcher client
-    answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s></ScannerList></Response>");
+    answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
   }
 
   return answer;

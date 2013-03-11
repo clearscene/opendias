@@ -197,8 +197,8 @@ char *send_command(char *command) {
     o_log(DEBUGM, "Caching the response.");
     freeSaneCache();
     // The getdevice call will return XML that contains a placholder.
-    // /Write into that placholder 'cached' for the cached value,
-    // and '' n(blank) for the actualy live result.
+    // Write into that placholder 'cached' for the cached value,
+    // and '' (blank) for the actualy live result.
     // All other responses don't have a placholder like this.
     deviceListCache = o_printf(answer, " cached='true'");
     result = o_printf(answer, "");
