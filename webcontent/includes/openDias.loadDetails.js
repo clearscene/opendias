@@ -188,56 +188,7 @@ $(document).ready(function () {
         tags.push($(this).text());
       });
       $("#tags").val(tags.join());
-      $('#tags').tagsInput({
-        defaultText: LOCAL_add_tag_default_text,
-        autocomplete_url: '', // Were going to use the ui.autocomplete (since the plugins autocomplete stuff doesn't seam to work correctly. However, added this here as a hack to handle bluring correctly.
-        onAddTag: function (tag) {
-          moveTag(tag, officialDocId, "addTag");
-        },
-        onRemoveTag: function (tag) {
-          moveTag(tag, officialDocId, "removeTag");
-        },
-      });
-      $('#tags_tag').autocomplete({
-        source: function (request, response) {
-          $.ajax({
-            url: "/opendias/dynamic",
-            dataType: "json",
-            timeout: AJAX_TIMEOUT,
-            type: "POST",
-            data: {
-              action: "tagsAutoComplete",
-              startsWith: request.term,
-              docid: officialDocId
-            },
-            error: function (x, t, m) {
-              if (t == "timeout") {
-                alert("[d003] " + LOCAL_timeout_talking_to_server);
-              } else {
-                alert("[d004] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
-              }
-            },
-            success: function (data) {
-              response($.map(data.results, function (item) {
-                return {
-                  label: item.tag,
-                  value: item.tag
-                }
-              }));
-            }
-          });
-        },
-        minLength: 1, // because most tags are so short - and there are not that many tags,
-        select: function (event, ui) {
-          //  log( ui.item ?  "Selected: " + ui.item.label : "Nothing selected, input was " + this.value);
-        },
-        open: function () {
-          $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
-        },
-        close: function () {
-          $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
-        }
-      });
+      inisaliseTags();
 
 
       //
@@ -353,15 +304,19 @@ $(document).ready(function () {
                   $('#option'+option+'_tags').html( "<ul>" + tagslist + "</ul>" );
 
                   $('#apply'+option).bind('click', 
-                    { docid: officialDocId, tg: tags.join(), title: $(this).find('title').text() }, 
+                    { docid: officialDocId, 
+                      tg: tags.join(), 
+                      title: $(this).find('title').text() 
+                    }, 
                     function(e) {
                       $('#title').val(e.data.title);
                       sendUpdate('title', e.data.title);
                       $.each(e.data.tg.split(','), function (k, v) {
                         moveTag(v, e.data.docid, "addTag");
                       });
+                      $('#tags_tagsinput').html("");
                       $("#tags").val(e.data.tg);
-                      $('#tags').tagsInput();
+                      inisaliseTags();
                       $('#similarDocSelector').css({ display: 'none' });
                   });
 
@@ -432,6 +387,59 @@ $(document).ready(function () {
   });
 
 });
+
+function inisaliseTags() {
+  $('#tags').tagsInput({
+    defaultText: LOCAL_add_tag_default_text,
+    autocomplete_url: '', // Were going to use the ui.autocomplete (since the plugins autocomplete stuff doesn't seam to work correctly. However, added this here as a hack to handle bluring correctly.
+    onAddTag: function (tag) {
+      moveTag(tag, officialDocId, "addTag");
+    },
+    onRemoveTag: function (tag) {
+      moveTag(tag, officialDocId, "removeTag");
+    },
+  });
+  $('#tags_tag').autocomplete({
+    source: function (request, response) {
+      $.ajax({
+        url: "/opendias/dynamic",
+        dataType: "json",
+        timeout: AJAX_TIMEOUT,
+        type: "POST",
+        data: {
+          action: "tagsAutoComplete",
+          startsWith: request.term,
+          docid: officialDocId
+        },
+        error: function (x, t, m) {
+          if (t == "timeout") {
+            alert("[d003] " + LOCAL_timeout_talking_to_server);
+          } else {
+            alert("[d004] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+          }
+        },
+        success: function (data) {
+          response($.map(data.results, function (item) {
+            return {
+              label: item.tag,
+              value: item.tag
+            }
+          }));
+        }
+      });
+    },
+    minLength: 1, // because most tags are so short - and there are not that many tags,
+    select: function (event, ui) {
+      //  log( ui.item ?  "Selected: " + ui.item.label : "Nothing selected, input was " + this.value);
+    },
+    open: function () {
+      $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+    },
+    close: function () {
+      $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+    }
+  });
+}
 
 function confidence(distance) {
   if( distance < 5 ) {
