@@ -1,6 +1,7 @@
 STDOUT
 --------------------------------------------------
 LOG-OUTPUT
+-date-:-thread-:INF:-file-:-line- openDIAS version 'opendias [VERSION]' has been invoked.
 -date-:-thread-:INF:-file-:-line- Running in daemon mode.
 -date-:-thread-:INF:-file-:-line- Child process created [CONFIG_FILE]
 -date-:-thread-:DBG:-file-:-line- setup launched
