@@ -360,13 +360,16 @@ void deleteTag( char *tagid ) {
 
 void savePhash(int docid, unsigned long long hash) {
   char *sql = o_strdup("UPDATE docs SET image_phash = ? WHERE docid = ?");
+  char *hash_s = o_printf("%llu", hash);
 
   struct simpleLinkedList *vars = sll_init();
   sll_append(vars, DB_TEXT );
-  sll_append(vars, o_printf("%llu", hash) );
+  sll_append(vars, hash_s );
   sll_append(vars, DB_INT );
   sll_append(vars, &docid );
 
   runUpdate_db(sql, vars);
   free(sql);
+  free(hash_s);
 }
+

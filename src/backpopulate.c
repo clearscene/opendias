@@ -133,9 +133,14 @@ void *backpopulate_phash_inner( void *u) {
       pthread_create( &thread[ thread_pointer], &attr, process_doc, (void *)data );
 
     } while ( nextRow( rSet ) );
+    free_recordset( rSet );
   }
-  free_recordset( rSet );
   free(sql);
+
+  // Wait for everything t ofinish
+  for( thread_pointer = 0; thread_pointer < MAX_THREADS; thread_pointer++ ) {
+    pthread_join( thread[ thread_pointer ], NULL);
+  }
 
   // Set the config flag, so we don't try this again.
   o_log(INFORMATION, "Marking that the backpopulation of pHash is: complete" );
@@ -149,7 +154,7 @@ void *backpopulate_phash_inner( void *u) {
 
 void backpopulate_phash() {
 #ifdef CAN_PHASH
-  pthread_t backpopulate_thread;
+ pthread_t backpopulate_thread;
   pthread_attr_t attr;
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);

@@ -93,7 +93,9 @@ unsigned long long getImagePhash_px( PIX *pix_orig ) {
   if(free_8 == 1) {
     pixDestroy( &pix8 );
   }
+  boxDestroy( &box );
 
+  // Reduce to a 1/5th original size
   PIX *pix1 = pixScale(pixc, 0.2, 0.2);
   pixDestroy( &pixc );
 
