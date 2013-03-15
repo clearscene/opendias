@@ -106,6 +106,10 @@ test/override_libs/liblept/liblept.o
 test/override_libs/liblept/liblept.so
 test/override_libs/liblept/liblept.so.3
 test/override_libs/liblept/liblept.so.3.0.0
+test/override_libs/libpHash/libpHash.o
+test/override_libs/libpHash/libpHash.so
+test/override_libs/libpHash/libpHash.so.0
+test/override_libs/libpHash/libpHash.so.0.0.0
 test/override_libs/libpoppler/libpoppler-cpp.so
 test/override_libs/libpoppler/libpoppler-cpp.so.0
 test/override_libs/libpoppler/libpoppler-cpp.so.0.2.0
