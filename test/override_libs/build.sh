@@ -35,6 +35,17 @@ ln -s liblept.so.3 liblept.so
 cd ../
 
 
+# pHash
+cd libpHash
+echo Building libpHash
+rm -f libpHash.so* libpHash.o
+g++ -fPIC -g -c -Wall libpHash.cc
+g++ -shared -Wl,-soname,libpHash.so.0 -o libpHash.so.0.0.0 libpHash.o -lc
+ln -s libpHash.so.0.0.0 libpHash.so.0
+ln -s libpHash.so.0 libpHash.so
+cd ../
+
+
 # Poppler
 #
 # Poppler is a wee bit more complex than other libs. Other libs we can just implement the methods
