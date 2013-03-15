@@ -56,6 +56,7 @@ char *getTextFromImage(PIX *pix, int ppi, char *lang) {
 #ifdef CAN_PHASH
 unsigned long long getImagePhash_fn( const char *filename ) {
 
+#ifdef CAN_IMAGE
   PIX *pix_orig;
   if ( ( pix_orig = pixRead( filename ) ) == NULL) {
     o_log(ERROR, "Could not load the image data into a PIX");
@@ -69,10 +70,12 @@ unsigned long long getImagePhash_fn( const char *filename ) {
 unsigned long long getImagePhash_px( PIX *pix_orig ) {
 
   int free_8 = 0;
+  o_log( DEBUGM, "Attempting pHash on pix");
 
   // Convert colour images down to grey
   PIX *pix8;
   if( pixGetDepth(pix_orig) > 8 ) {
+    o_log( DEBUGM, "Downscaling to 8 bits");
     pix8 = pixScaleRGBToGrayFast( pix_orig, 1, COLOR_GREEN );
     if( pix8 == NULL ) {
       o_log( ERROR, "Covertion to 8bit, did not go well.");
@@ -86,27 +89,43 @@ unsigned long long getImagePhash_px( PIX *pix_orig ) {
     pix8 = pix_orig;
   }
 
+  // Trimming off a border
   int width = pixGetWidth( pix8 );
   int height = pixGetHeight( pix8 );
-  BOX* box = boxCreate(1, 1, width-2, height-2);
-  PIX* pixc = pixClipRectangle(pix8, box, NULL);
+  BOX *box = boxCreate(1, 1, width-2, height-2);
+  PIX *pixc;
+  if ( ( pixc = pixClipRectangle(pix8, box, NULL) ) == NULL) {
+    o_log( ERROR, "Error trimming image");
+    boxDestroy( &box );
+    if(free_8 == 1) {
+      pixDestroy( &pix8 );
+    }
+    return 0;
+  }
+  boxDestroy( &box );
   if(free_8 == 1) {
     pixDestroy( &pix8 );
   }
-  boxDestroy( &box );
 
   // Reduce to a 1/5th original size
-  PIX *pix1 = pixScale(pixc, 0.2, 0.2);
+  PIX *pix1;
+  if ( ( pix1 = pixScale(pixc, 0.2, 0.2) ) == NULL) {
+    o_log( ERROR, "Error scaling image");
+    pixDestroy( &pixc );
+    return 0;
+  }
   pixDestroy( &pixc );
 
   // Save the file for pHash processnig
-  char *tmpFilename = o_printf( "/tmp/pHash_%X.bmp", pthread_self() );
-  pixWrite( tmpFilename, pix1, IFF_BMP);
+  o_log( DEBUGM, "Saving processed image for pHash calc");
+  char *filename = o_printf( "/tmp/pHash_%X.jpg", pthread_self() );
+  pixWrite( filename, pix1, IFF_JFIF_JPEG);
   pixDestroy( &pix1 );
+#endif /* CAN_IMAGE */
 
-  unsigned long long ret = calculateImagePhash( tmpFilename );
-  unlink(tmpFilename);
-  free(tmpFilename);
+  unsigned long long ret = calculateImagePhash( filename );
+  unlink(filename);
+  free(filename);
 
   return ret;
 }
