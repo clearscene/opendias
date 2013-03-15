@@ -39,10 +39,27 @@ PIX * pixScaleRGBToGrayFast ( PIX *pixs, l_int32 factor, l_int32 color ) {
   return malloc( sizeof( PIX ) );
 }
 
-l_int32 pixWrite ( const char *filename, PIX *pix, l_int32 format ) {
+BOX * boxCreate( l_int32 tlx, l_int32 tly, l_int32 brx, l_int32 bry ) {
+  return malloc( sizeof( BOX ) );
+}
+
+PIX * pixClipRectangle( PIX *pix, BOX *box, BOX **t ) {
+  return malloc( sizeof( PIX ) );
+}
+
+PIX * pixScale( PIX *pixs, l_float32 scalex, l_float32 scaley ) {
+  return malloc( sizeof( PIX ) );
+}
+
+l_int32 pixWrite( const char *filename, PIX *pix, l_int32 format ) {
   return 1;
 }
 
-void pixDestroy ( PIX **ppix ) {
+void pixDestroy( PIX **ppix ) {
   free( *ppix );
 }
+
+void boxDestroy( BOX **pbox ) {
+  free( *pbox );
+}
+
