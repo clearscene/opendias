@@ -12,4 +12,3 @@ install-exec-hook:
 	test ! -e ${libdir}/opendias && mkdir -p ${libdir}/opendias || echo Lib directory already exists
 	test ! -e ${sysconfdir}/opendias && mkdir -p ${sysconfdir}/opendias || echo openDIAS config directory already exists
 	test ! -e ${sysconfdir}/opendias/opendias.conf && echo ${libdir}/opendias >> ${sysconfdir}/opendias/opendias.conf || echo config file already exists
-	perl -pi -e 's|__package_string__|$(PACKAGE_STRING)|g' $(pkgdatadir)/webcontent/includes/header.txt.*
