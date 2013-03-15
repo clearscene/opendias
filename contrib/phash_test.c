@@ -25,9 +25,6 @@ unsigned long long getImagePhash_px( PIX *pix_orig, char *tmpFilename ) {
     pix8 = pix_orig;
   }
 
-  PIX *pix8s = pixScale(pixc, 0.2, 0.2);
-  pixDestroy( &pixc );
-
   int width = pixGetWidth( pix8 );
   int height = pixGetHeight( pix8 );
   BOX* box = boxCreate(1, 1, width-2, height-2);
@@ -36,6 +33,9 @@ unsigned long long getImagePhash_px( PIX *pix_orig, char *tmpFilename ) {
     pixDestroy( &pix8 );
   }
 
+
+  PIX *pix8s = pixScale(pixc, 0.2, 0.2);
+  pixDestroy( &pixc );
 
   // Convert image down to binary (no gray)
 /*  PIX *pix1 = pixThresholdToBinary( pix8s, 200 );

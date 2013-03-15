@@ -24,7 +24,7 @@
 #include <string.h>
 #include <pHash.h>
 
-#include "phash_plug.h"
+#include "phash_tmp.h"
 
 extern "C" unsigned long long calculateImagePhash(const char *filename) {
 
