@@ -11,7 +11,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -83,7 +83,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -111,7 +111,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -183,7 +183,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -211,7 +211,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -283,7 +283,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -311,7 +311,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -383,7 +383,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -411,7 +411,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -483,7 +483,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -511,7 +511,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -583,7 +583,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -611,7 +611,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -683,7 +683,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -711,7 +711,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -783,7 +783,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -811,7 +811,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -883,7 +883,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -911,7 +911,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -983,7 +983,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1011,7 +1011,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1083,7 +1083,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1111,7 +1111,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1183,7 +1183,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1211,7 +1211,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1283,7 +1283,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1311,7 +1311,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1383,7 +1383,7 @@ $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      body.tmpl - for the structure, and
+      webcontent/body.tmpl - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1493,7 +1493,7 @@ $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1521,7 +1521,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1593,7 +1593,7 @@ $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      body.tmpl - for the structure, and
+      webcontent/body.tmpl - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1703,7 +1703,7 @@ $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1731,7 +1731,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1803,7 +1803,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>An internal server error has occured.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1891,7 +1891,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1963,7 +1963,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1991,7 +1991,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2063,7 +2063,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2091,7 +2091,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2163,7 +2163,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2191,7 +2191,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2263,7 +2263,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2291,7 +2291,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2363,7 +2363,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2391,7 +2391,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2463,7 +2463,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2491,7 +2491,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2563,7 +2563,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2591,7 +2591,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2663,7 +2663,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2691,7 +2691,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2763,7 +2763,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2791,7 +2791,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2863,7 +2863,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2891,7 +2891,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2963,7 +2963,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2991,7 +2991,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -3063,7 +3063,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -3091,7 +3091,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -3163,7 +3163,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -3203,7 +3203,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -3275,7 +3275,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>An internal server error has occured.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 

@@ -22,10 +22,8 @@ LOG-OUTPUT
 -date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
 -date-:-thread-:INF:-file-:-line- Config setting: log_verbosity = 3
 -date-:-thread-:INF:-file-:-line- Moving log verbosity from 4 to 3
--date-:-thread-:INF Config setting: scan_directory = /tmp/opendiastest
--date-:-thread-:INF Config setting: show_all_available = 1
 -date-:-thread-:INF Config setting: port = 8988
--date-:-thread-:INF Config setting: log_directory = /tmp/opendias_test/var/log/opendias
+-date-:-thread-:INF Config setting: backpopulate_phash = no
 -date-:-thread-:INF Created directory.
 -date-:-thread-:INF Sane command socket is open
 -date-:-thread-:INF ... Starting up the openDias service.
@@ -49,6 +47,7 @@ LOG-OUTPUT
 -date-:-thread-:INF Scanning done.
 -date-:-thread-:INF Convertion process: Loaded (depth: 8)
 -date-:-thread-:INF Conversion process: Complete
+-date-:-thread-:ERR Could not calculate the pHash of /tmp/pHash_6080C80.jpg
 -date-:-thread-:INF Processing request for: getScanning Progress
 -date-:-thread-:INF Processing request for: getScannerList
 -date-:-thread-:INF SERVER: Sane dispatcher received the command: 'internalGetScannerList' with param of 'en'
@@ -56,10 +55,10 @@ LOG-OUTPUT
 -date-:-thread-:INF SERVER: Sane dispatcher received the command: 'internalDoScanningOperation' with param of '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ],en'
 -date-:-thread-:INF Setting scanner param resolution to 100.000000
 -date-:-thread-:INF Setting scanner param read-limit to SANE_TRUE
--date-:-thread-:INF Setting scanner param read-limit-size to 65536
--date-:-thread-:INF Setting scanner param read-delay to SANE_TRUE
 -date-:-thread-:INF Processing request for: getScannerList
 -date-:-thread-:INF The SANE sub system is busy, trying to return a cached response.
+-date-:-thread-:INF Setting scanner param read-limit-size to 65536
+-date-:-thread-:INF Setting scanner param read-delay to SANE_TRUE
 -date-:-thread-:INF Setting scanner param br-x to 200.000000
 -date-:-thread-:INF Setting scanner param br-y to 200.000000
 -date-:-thread-:INF Scanner Parm : stat=Success form=0,lf=1,bpl=787,pixpl=787,lin=787,dep=8

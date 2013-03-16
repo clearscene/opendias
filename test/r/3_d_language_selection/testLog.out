@@ -10,7 +10,7 @@ No language indication = $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -82,7 +82,7 @@ No language indication = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      body.tmpl - for the structure, and
+      webcontent/body.tmpl - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -192,7 +192,7 @@ No language indication = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -217,7 +217,7 @@ header says en = $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -289,7 +289,7 @@ header says en = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      body.tmpl - for the structure, and
+      webcontent/body.tmpl - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -399,7 +399,7 @@ header says en = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -424,7 +424,7 @@ header says de = $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.de - for the readable text
      ############################################## -->
 
@@ -496,7 +496,7 @@ header says de = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      body.tmpl - for the structure, and
+      webcontent/body.tmpl - for the structure, and
       language.resource.de - for the readable text
      ############################################## -->
 
@@ -606,7 +606,7 @@ header says de = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.de - for the readable text
      ############################################## -->
 
@@ -631,7 +631,7 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.de - for the readable text
      ############################################## -->
 
@@ -703,7 +703,7 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      body.tmpl - for the structure, and
+      webcontent/body.tmpl - for the structure, and
       language.resource.de - for the readable text
      ############################################## -->
 
@@ -813,7 +813,7 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.de - for the readable text
      ############################################## -->
 
@@ -838,7 +838,7 @@ bad cookie, header says ## = $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      webcontent/includes/header.txt - for the structure, and
       language.resource.hh - for the readable text
      ############################################## -->
 
@@ -910,7 +910,7 @@ bad cookie, header says ## = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      body.tmpl - for the structure, and
+      webcontent/body.tmpl - for the structure, and
       language.resource.hh - for the readable text
      ############################################## -->
 
@@ -1020,7 +1020,7 @@ bad cookie, header says ## = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      webcontent/includes/footer.txt - for the structure, and
       language.resource.hh - for the readable text
      ############################################## -->
 

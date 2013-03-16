@@ -22,10 +22,8 @@ LOG-OUTPUT
 -date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
 -date-:-thread-:INF:-file-:-line- Config setting: log_verbosity = 4
 -date-:-thread-:INF:-file-:-line- Moving log verbosity from 4 to 4
--date-:-thread-:INF:-file-:-line- Config setting: scan_directory = /tmp/opendiastest
--date-:-thread-:INF:-file-:-line- Config setting: show_all_available = 1
 -date-:-thread-:INF:-file-:-line- Config setting: port = 8988
--date-:-thread-:INF:-file-:-line- Config setting: log_directory = /tmp/opendias_test/var/log/opendias
+-date-:-thread-:INF:-file-:-line- Config setting: backpopulate_phash = no
 -date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
 -date-:-thread-:INF:-file-:-line- Created directory.
 -date-:-thread-:DBG:-file-:-line- loading translation file: /tmp/opendias_test/share/opendias/language.resource.en
