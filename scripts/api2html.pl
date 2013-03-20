@@ -33,7 +33,7 @@ li .code {
 </style>
 EOS
 
-print "<h2>openDIAS API Spec</h2>\n";
+print "<h2>openDias API Spec</h2>\n";
 print "<p>Version: " . $xml->{version}[0] . "</p>\n";
 
 #
@@ -49,7 +49,7 @@ print <<EOS;
       <ul>
 EOS
 
-foreach my $spec ( @{$xml->{ApiSpec}[0]->{ApiCall}} ) {
+foreach my $spec ( sort {$a->{call_name}[0] cmp $b->{call_name}[0]} @{$xml->{ApiSpec}[0]->{ApiCall}} ) {
   print "<li><a href='#" . $spec->{call_name}[0] . "'>" . $spec->{call_name}[0] . "</a></li>\n";
 }
 print "</ul></ul>\n";
@@ -73,7 +73,7 @@ foreach my $spec ( @{$xml->{GeneralHelp}[0]->{Section}} ) {
 #
 # API sections
 #
-foreach my $spec ( @{$xml->{ApiSpec}[0]->{ApiCall}} ) {
+foreach my $spec ( sort {$a->{call_name}[0] cmp $b->{call_name}[0]} @{$xml->{ApiSpec}[0]->{ApiCall}} ) {
   print "<h3 id='" . $spec->{call_name}[0] . "'>" . $spec->{call_name}[0] . "</h3>\n";
   print "<div class='spec'>\n";
   print "<p><strong>" . $spec->{purpose}[0] . "</strong></p>\n";
