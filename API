@@ -7,7 +7,7 @@
 
     <Section type='request'>
       <title>Request method</title>
-      <body>Any of the API calls can be make invoken by making an HTTP POST request to the "/opendias/dynamic" entry point, over the port that the application is running on. Usually this would be done via an AJAX call on a webpage, but could just as easily be make from any application. eg, this is a call to invoke a new scanning operation from bash.</body>
+      <body>Any of the API calls can be make invoked by making an HTTP POST request to the "/opendias/dynamic" entry point, over the port that the application is running on. Usually this would be done via an AJAX call on a webpage, but could just as easily be make from any application. eg, this is a call to invoke a new scanning operation from bash.</body>
       <example><![CDATA[telnet localhost 8988 <<__endjob
 POST /opendias/dynamic HTTP/1.1
 Host: localhost:8988
@@ -32,7 +32,7 @@ __endjob]]></example>
 
     <Section type='authentication'>
       <title>Authentication</title>
-      <body>After login (see 'checkLogin' API call), openDIAS will return a session id (o_session_id) via a cookie. This cookie must be returned with each request to the server in order for prevelages to be used.</body>
+      <body>After login (see 'checkLogin' API call), openDias will return a session id (o_session_id) via a cookie. This cookie must be returned with each request to the server in order for privileges to be used.</body>
     </Section>
 
     <Section type='response'>
@@ -115,7 +115,7 @@ __endjob]]></example>
       <KnownCallers>
         <caller>openDias.acquire.js :: getScanningProgress()</caller>
       </KnownCallers>
-      <purpose>Read the state of an asyncronouse scan.</purpose>
+      <purpose>Read the state of an asynchronous scan.</purpose>
       <Inputs>
         <Input>
           <name>action</name>
@@ -139,7 +139,7 @@ __endjob]]></example>
       <call_name>nextPageReady</call_name>
       <calls_method>pageRender::nextPageReady()</calls_method>
       <KnownCallers>
-        <caller>openDias.acquire.js :: ananoumouse()</caller>
+        <caller>openDias.acquire.js :: anonymous()</caller>
       </KnownCallers>
       <purpose>Signal to the application that the user has correctly placed the next page for scanning.</purpose>
       <Inputs>
@@ -164,7 +164,7 @@ __endjob]]></example>
       <call_name>getScannerList</call_name>
       <calls_method>pageRender::getScannerList()</calls_method>
       <KnownCallers>
-        <caller>openDias.acquire.js :: ananoumouse()</caller>
+        <caller>openDias.acquire.js :: anonymous()</caller>
       </KnownCallers>
       <purpose>Get a list of scanners (and their usage parameters) that the application can use.</purpose>
       <Inputs>
@@ -188,7 +188,7 @@ __endjob]]></example>
         host - text representation of the location of the scanner
         name - the machine id for the scanning device
         default - the default resolution
-        min - the minimum resolution allowed by the scanning decice
+        min - the minimum resolution allowed by the scanning device
         max - the maximum resolution allowed by the scanning device
       </Device>
       ...
@@ -201,7 +201,7 @@ __endjob]]></example>
       <call_name>doScan</call_name>
       <calls_method>pageRender::doScan()</calls_method>
       <KnownCallers>
-        <caller>openDias.acquire.js :: ananoumouse()</caller>
+        <caller>openDias.acquire.js :: anonymous()</caller>
       </KnownCallers>
       <purpose>Starts a scanning process.</purpose>
       <Inputs>
@@ -215,7 +215,7 @@ __endjob]]></example>
         </Input>
         <Input>
           <name>format</name>
-          <value>The format to use for scannsing, one of getScanningList - Response.ScanningList.Devices.Device.Formats.format</value>
+          <value>The format to use for scanning, one of getScanningList - Response.ScanningList.Devices.Device.Formats.format</value>
         </Input>
         <Input>
           <name>pages</name>
@@ -246,9 +246,9 @@ __endjob]]></example>
       <call_name>docFilter</call_name>
       <calls_method>pageRender::docFilter</calls_method>
       <KnownCallers>
-        <caller>openDias.filter.js :: ananoumouse()</caller>
+        <caller>openDias.filter.js :: anonymous()</caller>
       </KnownCallers>
-      <purpose>Get a list of documents that fit a specific set of cryteria</purpose>
+      <purpose>Get a list of documents that fit a specific set of criteria</purpose>
       <Inputs>
         <Input>
           <name>action</name>
@@ -292,7 +292,7 @@ __endjob]]></example>
         </Input>
         <Input>
           <name>sortorder</name>
-          <value>present results in acending/decending order ['0','1']</value>
+          <value>present results in ascending/descending order ['0','1']</value>
         </Input>
       </Inputs>
       <example type='result'><![CDATA[<?xml version='1.0' encoding='utf-8'?>
@@ -315,9 +315,9 @@ __endjob]]></example>
       <call_name>getAudio</call_name>
       <calls_method>[stump - not currently implemented]</calls_method>
       <KnownCallers>
-        <caller>openDias.loadDetails.js :: ananoumouse()</caller>
+        <caller>openDias.loadDetails.js :: anonymous()</caller>
       </KnownCallers>
-      <purpose>Get the web accessable filename that contains the read OCR</purpose>
+      <purpose>Get the web accessible filename that contains the read OCR</purpose>
       <Inputs>
         <Input>
           <name>action</name>
@@ -340,7 +340,7 @@ __endjob]]></example>
       <call_name>getDocDetail</call_name>
       <calls_method>docEditor::getDocDetail</calls_method>
       <KnownCallers>
-        <caller>openDias.loadDetails.js :: ananoumouse()</caller>
+        <caller>openDias.loadDetails.js :: anonymous()</caller>
       </KnownCallers>
       <purpose>Get all the current information about a document</purpose>
       <Inputs>
@@ -365,7 +365,7 @@ __endjob]]></example>
     pages - the number of pages used by the document
     actionrequired - indication if the document has been flagged as requiring an action
     hardcopyKept - indication if the original document has been retained
-    x - the number of horizontal pizel required by the document
+    x - the number of horizontal pixel required by the document
     y - the number of lines required by the document
     <Taqs>
       tag - the name of the assigned tag
@@ -386,7 +386,7 @@ __endjob]]></example>
       <call_name>updateDocDetails</call_name>
       <calls_method>docEditor::updateDocDetails</calls_method>
       <KnownCallers>
-        <caller>openDias.saveDetails.js :: ananoumouse()</caller>
+        <caller>openDias.saveDetails.js :: anonymous()</caller>
       </KnownCallers>
       <purpose>Update a documents field with a specific value.</purpose>
       <Inputs>
@@ -419,7 +419,7 @@ __endjob]]></example>
       <call_name>moveTag</call_name>
       <calls_method>docEditor::updateTagLinkage</calls_method>
       <KnownCallers>
-        <caller>openDias.saveDetails.js :: ananoumouse()</caller>
+        <caller>openDias.saveDetails.js :: anonymous()</caller>
       </KnownCallers>
       <purpose>Updates links between documents n tags, and document n documents</purpose>
       <Inputs>
@@ -452,7 +452,7 @@ __endjob]]></example>
       <call_name>deleteDoc</call_name>
       <calls_method>docEditor::doDelete</calls_method>
       <KnownCallers>
-        <caller>openDias.saveDetails.js :: ananoumouse()</caller>
+        <caller>openDias.saveDetails.js :: anonymous()</caller>
       </KnownCallers>
       <purpose>Removes a document from the database and scanned images store.</purpose>
       <Inputs>
@@ -477,9 +477,9 @@ __endjob]]></example>
       <call_name>regenerateThumb</call_name>
       <calls_method>import_doc::extractThumbnail</calls_method>
       <KnownCallers>
-        <caller>openDias.acquire.js :: ananoumouse()</caller>
+        <caller>openDias.acquire.js :: anonymous()</caller>
       </KnownCallers>
-      <purpose>Creates a thumbnail of PDF documents (some PDFs imported with earlier version of openDIAS did not have a thumbnail created for them at import time)</purpose>
+      <purpose>Creates a thumbnail of PDF documents (some PDFs imported with earlier version of openDias did not have a thumbnail created for them at import time)</purpose>
       <Inputs>
         <Input>
           <name>action</name>
@@ -554,7 +554,7 @@ __endjob]]></example>
       <call_name>updateUser</call_name>
       <calls_method>pageRender::updateUser</calls_method>
       <KnownCallers>
-        <caller>openDias.accessControls.js :: ananoumouse()</caller>
+        <caller>openDias.accessControls.js :: anonymous()</caller>
       </KnownCallers>
       <purpose>Update a user with new details</purpose>
       <Inputs>
@@ -591,7 +591,7 @@ __endjob]]></example>
       <call_name>createUser</call_name>
       <calls_method>pageRender::createUser</calls_method>
       <KnownCallers>
-        <caller>openDias.accessControls.js :: ananoumouse()</caller>
+        <caller>openDias.accessControls.js :: anonymous()</caller>
       </KnownCallers>
       <purpose>Create a new user</purpose>
       <Inputs>
@@ -628,7 +628,7 @@ __endjob]]></example>
       <call_name>deleteUser</call_name>
       <calls_method>pageRender::deleteUser</calls_method>
       <KnownCallers>
-        <caller>openDias.accessControls.js :: ananoumouse()</caller>
+        <caller>openDias.accessControls.js :: anonymous()</caller>
       </KnownCallers>
       <purpose>Remove the user from the system</purpose>
       <Inputs>
@@ -653,7 +653,7 @@ __endjob]]></example>
       <call_name>getUserList</call_name>
       <calls_method>pageRender::getUserList</calls_method>
       <KnownCallers>
-        <caller>openDias.accessControls.js :: anonmouse()</caller>
+        <caller>openDias.accessControls.js :: anonymous()</caller>
       </KnownCallers>
       <purpose>Provides a list of configured users on the system.</purpose>
       <Inputs>
@@ -681,7 +681,7 @@ __endjob]]></example>
       <call_name>checkForSimilar</call_name>
       <calls_method>pageRender::checkForSimilar</calls_method>
       <KnownCallers>
-        <caller>openDias.loadDetails.js :: anonmousle()</caller>
+        <caller>openDias.loadDetails.js :: anonymous()</caller>
       </KnownCallers>
       <purpose>Find other documents that 'look' the same as this one.</purpose>
       <Inputs>
@@ -771,10 +771,10 @@ __endjob]]></example>
       <call_name>uploadfile</call_name>
       <calls_method>import_doc::uploadfile</calls_method>
       <KnownCallers>
-        <caller>openDias.acquire.js :: ananoumouse()</caller>
+        <caller>openDias.acquire.js :: anonymous()</caller>
       </KnownCallers>
-      <purpose>Uploads a file, determins its type and includes PDF, ODF and JPEG docs into the document store.</purpose>
-      <encoding>The form submitting this request should not be an AJAX request, but instead a form submision with encoding of enctype="multipart/form-data"</encoding>
+      <purpose>Uploads a file, determines its type and includes PDF, ODF and JPEG docs into the document store.</purpose>
+      <encoding>The form submitting this request should not be an AJAX request, but instead a form submission with encoding of enctype="multipart/form-data"</encoding>
       <Inputs>
         <Input>
           <name>action</name>
