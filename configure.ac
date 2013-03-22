@@ -228,9 +228,9 @@ else
 	AC_MSG_WARN(You will not be able to import in any document.)
 fi
 
-
-perl scripts/build-local-versions.pl "$PACKAGE_STRING" $LOCALISATION_FLAGS
-
+if test -f ./scripts/build-local-versions.pl; then
+  perl ./scripts/build-local-versions.pl "$PACKAGE_STRING" $LOCALISATION_FLAGS
+fi
 
 dnl
 dnl Write what we've learnt
