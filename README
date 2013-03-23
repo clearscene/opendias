@@ -265,6 +265,6 @@ The application is localised using three kinds of file:
  * Get the api doc and Changelog diffs, and update the website.
  * Bump the configure.ac version number
  * Generate distribution tarball
-    make distcheck
+    make dist
 
 
