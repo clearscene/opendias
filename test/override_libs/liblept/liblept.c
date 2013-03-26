@@ -55,6 +55,13 @@ l_int32 pixWrite( const char *filename, PIX *pix, l_int32 format ) {
   return 1;
 }
 
+l_int32 pixGetDimensions ( PIX *pix, l_int32 *pw, l_int32 *ph, l_int32 *pd ) {
+  *pw = pixGetWidth( pix );
+  *ph = pixGetHeight( pix );
+  *pd = pixGetDepth( pix );
+  return 1;
+}
+
 void pixDestroy( PIX **ppix ) {
   free( *ppix );
 }

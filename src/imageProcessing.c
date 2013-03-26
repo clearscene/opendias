@@ -69,6 +69,7 @@ unsigned long long getImagePhash_fn( const char *filename ) {
 
 unsigned long long getImagePhash_px( PIX *pix_orig ) {
 
+  int width, height, d;
   int free_8 = 0;
   o_log( DEBUGM, "Attempting pHash on pix");
 
@@ -90,8 +91,7 @@ unsigned long long getImagePhash_px( PIX *pix_orig ) {
   }
 
   // Trimming off a border
-  int width = pixGetWidth( pix8 );
-  int height = pixGetHeight( pix8 );
+  pixGetDimensions( pix8, &width, &height, &d );
   BOX *box = boxCreate(1, 1, width-2, height-2);
   PIX *pixc;
   if ( ( pixc = pixClipRectangle(pix8, box, NULL) ) == NULL) {

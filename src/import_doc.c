@@ -120,9 +120,9 @@ char *uploadfile(char *filename, char *lang) {
       o_log(ERROR, "Could not load the image data into a PIX");
       return NULL;
     }
-    width = pixGetWidth( pix_l );
-    height = pixGetHeight( pix_l );
-    o_log(INFORMATION, "Convertion process: Loaded (depth: %d)", pixGetDepth(pix_l) );
+    int depth;
+    pixGetDimensions( pix_l, &width, &height, &depth );
+    o_log(INFORMATION, "Convertion process: Loaded (depth: %d)", depth );
     pix = pixScaleRGBToGrayFast( pix_l, 1, COLOR_GREEN );
     pixDestroy( &pix_l );
     if (pix == NULL ) {
