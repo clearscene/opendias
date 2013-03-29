@@ -90,9 +90,11 @@ On, Debian or Ubuntu, you can do this by running:
 On, RedHat or Fedora, you can do this by running:
 
   su - 
-  yum install gcc-c++ make sqlite-devel libmicrohttpd-devel libssl-devel \
+  yum install gcc-c++ make sqlite-devel libmicrohttpd-devel openssl-devel \
     libuuid-devel sane-backends-devel leptonica-devel file-devel \
     tesseract-devel libxml2-devel zziplib-devel poppler-cpp-devel
+
+  # NB: Fedora does not ship pHash libraries, so Fedora uses will not be able to compare document.
 
 -----------------------------------
 
