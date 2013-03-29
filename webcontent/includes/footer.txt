@@ -1,0 +1,14 @@
+---UPDATE_WARNING---
+
+    </div>
+  </div>
+
+  <div id='footerpadding'></div>
+
+  <div id='footer'>
+    <p>---LOCAL_copyright--- Clearscene Ltd 2008 - ---CURRENT_YEAR---</p>
+  </div>
+
+</div>
+</body>
+</html>

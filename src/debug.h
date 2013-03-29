@@ -34,7 +34,7 @@ extern char *LOG_DIR;
  */
 int VERBOSITY;
 char *LOG_DIR;
-#endif
+#endif /* __cplusplus */
 
 enum {
   SILENT = 0,
@@ -45,10 +45,12 @@ enum {
   SQLDEBUG
 };
 
-void o_log(const int, const char *, ...);
+int trigger_log_verbosity( const int );
+void oo_log(const char *, const int, const int, const char *, ...);
+#define o_log( a, b, ... ) oo_log( __FILE__, __LINE__, a, b, ##__VA_ARGS__ )
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
 #endif /* DEBUG */

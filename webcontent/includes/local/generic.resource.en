@@ -6,3 +6,8 @@ LOCAL_scanned_doc = 'Scanned Document';
 LOCAL_pdf_doc = 'PDF Document';
 LOCAL_jpeg_img = 'JPEG Images';
 LOCAL_unknown = 'unknown';
+LOCAL_role_admin = 'Admin (can do all operations)';
+LOCAL_role_user = 'User (everything, except update access)';
+LOCAL_role_view = 'View (can view document only)';
+LOCAL_role_add = 'Add (can add documents only)';
+

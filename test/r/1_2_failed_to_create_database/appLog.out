@@ -1,0 +1,18 @@
+STDOUT
+--------------------------------------------------
+LOG-OUTPUT
+-date-:-thread-:INF:-file-:-line- openDIAS version 'opendias [VERSION]' has been invoked.
+-date-:-thread-:INF:-file-:-line- Running in daemon mode.
+-date-:-thread-:INF:-file-:-line- Child process created [CONFIG_FILE]
+-date-:-thread-:DBG:-file-:-line- setup launched
+-date-:-thread-:INF:-file-:-line- Setting default log (/tmp/opendias_test/var/log/opendias) verbosity to 4.
+-date-:-thread-:INF:-file-:-line- Using config file: [CONFIG_FILE]
+-date-:-thread-:INF:-file-:-line- Which says the database is at: /root
+-date-:-thread-:DBG:-file-:-line- database file is /root/openDIAS.sqlite3
+-date-:-thread-:INF:-file-:-line- Creating new database /root/openDIAS.sqlite3 (BASE_DIR = /root)
+-date-:-thread-:ERR:-file-:-line- Can't open database: [ERROR]
+-date-:-thread-:DBG:-file-:-line- Closing database
+-date-:-thread-:WRN:-file-:-line- Could not create/connect to new database
+-date-:-thread-:WRN:-file-:-line- /root/openDIAS.sqlite3
+-date-:-thread-:INF:-file-:-line- openDias service is shutting down....
+-date-:-thread-:INF:-file-:-line- openDias service has shutdown.

@@ -18,6 +18,9 @@
 
 #include "config.h"
 
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif /* _GNU_SOURCE */
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
@@ -29,18 +32,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include <uuid/uuid.h>
+#include <time.h>
 
 #include "main.h"
 #include "db.h"
 #include "dbaccess.h"
 #include "utils.h"
 #include "debug.h"
-#include "validation.h" // for con_info struct - move me to web_handler.h
 #include "localisation.h"
 #ifdef CAN_SCAN
 #include "scan.h"
 #include "saneDispatcher.h"
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
+#include "simpleLinkedList.h"
+#include "phash_plug.h"
 
 #include "pageRender.h"
 
@@ -56,6 +61,10 @@ char *getScannerList(void *lang) {
   char *answer = send_command( o_printf("internalGetScannerList:%s", (char *)lang) ); // scan.c
   o_log(DEBUGM, "RESPONSE WAS: %s", answer);
 
+  if( 0 == strcmp(answer, "BUSY") ) {
+    free( answer );
+    return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>BUSY</error></Response>");
+  }
   return answer;
 }
 
@@ -86,12 +95,16 @@ extern void *doScanningOperation(void *saneOpData) {
   pthread_exit(0);
 #else
   return 0;
-#endif
+#endif /* THREAD_JOIN */
 }
 
 // Start the scanning process
 //
-char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *ocr, char *pagelength, struct connection_info_struct *con_info) {
+#ifdef THREAD_JOIN
+char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *ocr, char *pagelength, char *lang, pthread_t *thr) {
+#else
+char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *ocr, char *pagelength, char *lang ) {
+#endif /* THREAD_JOIN */
 
   char *ret = NULL;
 
@@ -130,7 +143,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
 
   struct doScanOpData *tr = malloc( sizeof(struct doScanOpData) );
   tr->uuid = o_strdup(scanUuid);
-  tr->lang = o_strdup(con_info->lang);
+  tr->lang = o_strdup(lang);
   o_log(DEBUGM,"doScan launching doScanningOperation");
   rc = pthread_create(&thread, &attr, doScanningOperation, (void *)tr );
   if(rc != 0) {
@@ -138,7 +151,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
     return NULL;
   }
 #ifdef THREAD_JOIN
-  con_info->thread = thread;
+  thr = &thread;
 #endif /* THREAD_JOIN */
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
@@ -150,7 +163,11 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
   return ret;
 }
 
-char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
+#ifdef THREAD_JOIN
+char *nextPageReady(char *scanid, char *lang, pthread_t *thr) {
+#else
+char *nextPageReady(char *scanid, char *lang) {
+#endif /* THREAD_JOIN */
 
   pthread_t thread;
   pthread_attr_t attr;
@@ -158,11 +175,13 @@ char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
   int status=0;
   struct simpleLinkedList *rSet;
 
-  sql = o_printf("SELECT status \
+  sql = o_strdup("SELECT status \
                   FROM scan_progress \
-                  WHERE client_id = '%s'", scanid);
-
-  rSet = runquery_db(sql);
+                  WHERE client_id = ?");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, scanid );
+  rSet = runquery_db(sql, vars);
   if( rSet != NULL ) {
     do {
       status = atoi(readData_db(rSet, "status"));
@@ -183,15 +202,15 @@ char *nextPageReady(char *scanid, struct connection_info_struct *con_info) {
 #endif /* THREAD_JOIN */
     struct doScanOpData *tr = malloc( sizeof(struct doScanOpData) );
     tr->uuid = o_strdup(scanid);
-    tr->lang = o_strdup(con_info->lang);
+    tr->lang = o_strdup(lang);
     rc = pthread_create(&thread, &attr, doScanningOperation, (void *)tr);
     if(rc != 0) {
       o_log(ERROR, "Failed to create a new thread - for scanning operation.");
       return NULL;
     }
 #ifdef THREAD_JOIN
-    con_info->thread = thread;
-#endif
+    thr = &thread;
+#endif /* THREAD_JOIN */
     updateScanProgress(scanid, SCAN_WAITING_ON_SCANNER, 0);
   } else {
     o_log(WARNING, "scan id indicates a status not waiting for a new page signal.");
@@ -209,11 +228,13 @@ char *getScanningProgress(char *scanid) {
   struct simpleLinkedList *rSet;
   char *sql, *status=0, *value=0, *ret;
 
-  sql = o_printf("SELECT status, value \
+  sql = o_strdup("SELECT status, value \
                   FROM scan_progress \
-                  WHERE client_id = '%s'", scanid);
-
-  rSet = runquery_db(sql);
+                  WHERE client_id = ?");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, scanid );
+  rSet = runquery_db(sql, vars);
   if( rSet != NULL ) {
     do {
       status = o_strdup(readData_db(rSet, "status"));
@@ -231,16 +252,18 @@ char *getScanningProgress(char *scanid) {
 
   return ret;
 }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder, char *lang ) {
 
+  struct simpleLinkedList *vars = sll_init();
   struct simpleLinkedList *rSet;
   const char *type;
   char *docList, *actionrequired, *title, *docid, *humanReadableDate, 
     *rows, *token, *olds, *sql, *textWhere=NULL, *dateWhere=NULL, 
     *tagWhere=NULL, *actionWhere=NULL, *page_ret;
   int count = 0;
+  char *sqlTextSearch = o_printf( "%%%s%%", textSearch );
 
   if( 0 == strcmp(subaction, "fullList") ) {
     sql = o_strdup("SELECT DISTINCT docs.* FROM docs ");
@@ -252,7 +275,11 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   // Filter by title or OCR
   //
   if( textSearch!=NULL && strlen(textSearch) ) {
-    textWhere = o_printf("(title LIKE '%%%s%%' OR ocrText LIKE '%%%s%%') ", textSearch, textSearch);
+    textWhere = o_strdup("(title LIKE ? OR ocrText LIKE ?) ");
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, sqlTextSearch );
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, sqlTextSearch );
   }
 
   // Filter by ActionRequired
@@ -264,7 +291,11 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   // Filter by Doc Date
   //
   if( startDate && strlen(startDate) && endDate && strlen(endDate) ) {
-    dateWhere = o_printf("date(docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2)) BETWEEN date('%s') AND date('%s') ", startDate, endDate);
+    dateWhere = o_strdup("date(docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2)) BETWEEN date(?) AND date(?) ");
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, startDate );
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, endDate );
   }
 
   // Filter By Tags
@@ -287,11 +318,12 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
       olds = tags;
     }
     tagWhere[strlen(tagWhere)-1] = ')';
-
     o_concatf(&sql, " JOIN (SELECT docid, COUNT(docid) c FROM doc_tags \
                     JOIN tags ON tags.tagid = doc_tags.tagid \
-                    WHERE %s GROUP BY docid HAVING c = %i ) t \
-                    ON docs.docid = t.docid ", tagWhere, count);
+                    WHERE %s GROUP BY docid HAVING c = ? ) t \
+                    ON docs.docid = t.docid ", tagWhere);
+    sll_append(vars, DB_INT );
+    sll_append(vars, &count );
     free(tagWhere);
   }
 
@@ -385,10 +417,11 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   // Get Results
   //
   rows = o_strdup("");
-  count = 0;
   o_log(DEBUGM, "sql=%s", sql);
 
-  rSet = runquery_db(sql);
+  rSet = runquery_db(sql, vars);
+  count = 0;
+  free( sqlTextSearch );
   if( rSet != NULL ) {
     do {
 
@@ -441,73 +474,9 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   return docList;
 }
 
-char *getAccessDetails() {
-
-  char *userAccess, *access;
-
-  // Access by location
-  char *sql = o_strdup("SELECT location, r.rolename FROM location_access a left join access_role r on a.role = r.role");
-  char *locationAccess = o_strdup("");
-  struct simpleLinkedList *rSet = runquery_db(sql);
-  if( rSet != NULL ) {
-    do {
-      o_concatf(&locationAccess, "<Access><location>%s</location><role>%s</role></Access>", 
-                                readData_db(rSet, "location"), readData_db(rSet, "rolename"));
-    } while ( nextRow( rSet ) );
-    free_recordset( rSet );
-  }
-  free(sql);
-
-  // Access by user
-  sql = o_strdup("SELECT * FROM user_access a left join access_role r on a.role = r.role");
-  userAccess = o_strdup("");
-  rSet = runquery_db(sql);
-  if( rSet != NULL ) {
-    do {
-      o_concatf(&userAccess, "<Access><user>%s</user><role>%s</role></Access>", 
-                            readData_db(rSet, "username"), readData_db(rSet, "rolename"));
-    } while ( nextRow( rSet ) );
-    free_recordset( rSet );
-  }
-  free(sql);
-
-  access = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><AccessDetails><LocationAccess>%s</LocationAccess><UserAccess>%s</UserAccess></AccessDetails></Response>", locationAccess, userAccess);
-  free(locationAccess);
-  free(userAccess);
-
-  return access;
-}
-
-char *controlAccess(char *submethod, char *location, char *user, char *password, int role) {
-
-  if(!strcmp(submethod, "addLocation")) {
-    o_log(INFORMATION, "Adding access %i to location %s", role, location);
-    addLocation(location, role);
-
-  } else if(!strcmp(submethod, "removeLocation")) {
-
-
-
-  } else if(!strcmp(submethod, "addUser")) {
-
-
-
-  } else if(!strcmp(submethod, "removeUser")) {
-
-
-
-  } else {
-
-    // Should not have gotten here (validation)
-    o_log(ERROR, "Unknown accessControl Method");
-    return NULL;
-  }
-
-  return o_strdup("<html><HEAD><title>refresh</title><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/opendias/accessControls.html\"></HEAD><body></body></html>");
-}
-
 char *titleAutoComplete(char *startsWith, char *notLinkedTo) {
 
+  struct simpleLinkedList *vars = sll_init();
   char *docid, *title, *data;
   char *result = o_strdup("{\"results\":[");
   char *line = o_strdup("{\"docid\":\"%s\",\"title\":\"%s\"}");
@@ -516,20 +485,28 @@ char *titleAutoComplete(char *startsWith, char *notLinkedTo) {
 
   if(notLinkedTo != NULL) {
     o_concatf(&sql, "LEFT JOIN (SELECT * FROM doc_links \
-                        WHERE linkeddocid = %s) dl \
-                     ON docs.docid = dl.docid ", notLinkedTo);
+                        WHERE linkeddocid = ?) dl \
+                     ON docs.docid = dl.docid ");
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, notLinkedTo );
   }
 
-  o_concatf(&sql, "WHERE title LIKE '%s%%' ", startsWith);
+  char *sqlStartsWith = o_printf( "%s%%", startsWith );
+  o_concatf(&sql, "WHERE title LIKE ? ");
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, sqlStartsWith );
 
   if(notLinkedTo != NULL) {
     o_concatf(&sql, "AND dl.docid IS NULL \
-                     AND docs.docid != %s ", notLinkedTo);
+                     AND docs.docid != ? ");
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, notLinkedTo );
   }
 
   conCat(&sql, "ORDER BY title ");
 
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  struct simpleLinkedList *rSet = runquery_db(sql, vars);
+  free( sqlStartsWith );
   if( rSet != NULL ) {
     int notFirst = 0;
     do {
@@ -559,18 +536,25 @@ char *tagsAutoComplete(char *startsWith, char *docid) {
   char *title, *data;
   char *result = o_strdup("{\"results\":[");
   char *line = o_strdup("{\"tag\":\"%s\"}");
-  char *sql = o_printf(
+  char *sql = o_strdup(
     "SELECT tagname \
     FROM tags LEFT JOIN \
       (SELECT docid, tagid \
       FROM doc_tags \
-      WHERE docid=%s) dt \
+      WHERE docid = ?) dt \
     ON tags.tagid = dt.tagid \
     WHERE dt.docid IS NULL \
-    AND tagname like '%s%%' \
-    ORDER BY tagname", docid, startsWith);
+    AND tagname like ? \
+    ORDER BY tagname");
 
-  rSet = runquery_db(sql);
+  char *sqlTagName = o_printf( "%s%%", startsWith );
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, docid );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, sqlTagName);
+  rSet = runquery_db(sql, vars);
+  free( sqlTagName );
   if( rSet != NULL ) {
     int notFirst = 0;
     do {
@@ -591,4 +575,467 @@ char *tagsAutoComplete(char *startsWith, char *docid) {
 
   return result;
 }
+
+#ifndef OPEN_TO_ALL
+char *checkLogin( char *username, char *password, char *lang, struct simpleLinkedList *session_data ) {
+  struct simpleLinkedList *rSet;
+  int retry_throttle = 5;
+
+  char str[27];
+  struct tm *ptr;
+  time_t current_time;
+
+  // Get the current time in a parsable format.
+  time( &current_time );
+  ptr = localtime( &current_time );
+  strftime(str, 26, "%F %z %T", ptr);
+  str[26] = '\0';
+  char *rtp = o_strdup( str );
+
+  //
+  // Check that a login attemp was not made earlier than retry_throttle seconds ago.
+  //
+  struct simpleLinkedList *last_attempt = sll_searchKeys( session_data, "next_login_attempt" );
+  if( last_attempt != NULL ) {
+    struct tm last_attempt_date_struct;
+    time_t last_attempt_time;
+
+    last_attempt_date_struct.tm_isdst = -1;
+    char *last_attempt_date_string = (char *)last_attempt->data;
+    strptime( last_attempt_date_string, "%F %z %T", &last_attempt_date_struct);
+    last_attempt_time = mktime( &last_attempt_date_struct );
+
+    if( difftime( current_time, last_attempt_time ) <= retry_throttle ) {
+      o_log( ERROR, "Login attempt was too soon (by %d seconds) after previous login fail", 
+                                      retry_throttle - difftime( current_time, last_attempt_time ) );
+      free( last_attempt_date_string );
+      last_attempt->data = rtp;
+
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_login_retry_too_soon", lang), retry_throttle);
+    }
+
+    else {
+      // last attempt is not no longer used (unless it gets set again later), so we can remove it.
+      free( last_attempt->data );
+      free( last_attempt->key );
+      sll_delete( last_attempt );
+    }
+
+  }
+
+
+  //
+  // Check we have a user of the name provided
+  //
+  char *sql = o_strdup(
+    "SELECT created \
+    FROM user_access \
+    WHERE username = ?");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, username );
+  rSet = runquery_db( sql, vars );
+  free( sql );
+
+  if( rSet == NULL ) {
+    o_log( ERROR, "User provded an incorrect username!" );
+    sll_insert( session_data, o_strdup("next_login_attempt"), rtp );
+
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_bad_login", lang), retry_throttle);
+  }
+
+
+  // Create a password hash
+  // Would have liked to do this directly in sqlite, but hashing functions
+  // are not available, and defining one is a major dependency pain.
+  char *salted_password = o_printf( "%s%s%s", readData_db(rSet, "created"), password, username );
+  free_recordset( rSet );
+  char *password_hash = str2md5( salted_password, strlen(salted_password) );
+  free( salted_password );
+
+
+  //
+  // Update last_access if the password matches
+  //
+  sql = o_strdup( 
+    "UPDATE user_access \
+    SET last_access = datetime('now') \
+    WHERE username = ? \
+    AND password = ? ");
+  vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, username );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, password_hash );
+  runUpdate_db( sql, vars );
+  free( sql );
+
+
+  //
+  // Get user info if the password matches
+  //
+  sql = o_strdup(
+    "SELECT realname, role \
+    FROM user_access \
+    WHERE username = ? \
+    AND password = ?");
+  vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, username );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, password_hash );
+  rSet = runquery_db( sql, vars );
+  free( sql );
+  free( password_hash );
+
+  if( rSet == NULL ) {
+    o_log( ERROR, "User provded an incorrect password!" );
+    sll_insert( session_data, o_strdup("next_login_attempt"), rtp );
+
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>FAIL</result><message>%s</message><retry_throttle>%d</retry_throttle></Login></Response>", getString("LOCAL_bad_login", lang), retry_throttle);
+  }
+
+  char *realname = o_strdup(readData_db(rSet, "realname"));
+  char *role = o_strdup(readData_db(rSet, "role"));
+
+  // Before we assign these values to a user session, ensure we've not 
+  // gone nutz and fetched more than one record
+  if ( nextRow( rSet ) ) {
+    free_recordset( rSet );
+    free( realname );
+    free( role );
+    free(rtp);
+    o_log( ERROR, "User login check, returned more than one row!" );
+    return NULL;
+  }
+  free_recordset( rSet );
+
+  // Save the details to the session/
+  sll_insert( session_data, o_strdup("username"), o_strdup(username) );
+  sll_insert( session_data, o_strdup("realname"), realname );
+  sll_insert( session_data, o_strdup("role"), role );
+
+  free(rtp);
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>OK</result></Login></Response>");
+}
+
+char *doLogout( struct simpleLinkedList *session_data ) {
+  
+  struct simpleLinkedList *details;
+  const char *elements[] = { "next_login_attempt", "username", "realname", "role", NULL };
+  int i;
+
+  for (i = 0; elements[i]; i++) {
+    details = sll_searchKeys( session_data, elements[i] );
+    if ( details != NULL ) {
+      free( details->data );
+      free( details->key );
+      sll_delete( details );
+    }
+  }
+
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Logout><result>OK</result></Logout></Response>");
+}
+
+char *updateUser( char *username, char *realname, char *password, char *role, int can_edit_access, struct simpleLinkedList *session_data, char *lang) {
+  struct simpleLinkedList *rSet;
+  char *useUsername = NULL;
+  char *created = NULL;
+  char *sql;
+
+  // User cannot specify the actual username
+  if ( 0 == strcmp(username, "[current]") ) {
+    rSet = sll_searchKeys( session_data, "username" );
+    if ( rSet != NULL ) {
+      useUsername = rSet->data;
+    }
+    else {
+      o_log(ERROR, "A client tried to update her user, but was not logged in,");
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", lang) );
+    }
+  }
+  else {
+    if ( can_edit_access == 1 ) {
+      useUsername = username;
+    }
+    else {
+      o_log(ERROR, "Client specified a user to update, but they do not have permission.");
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", lang) );
+    }
+  }
+
+  // Check the calculated user is actually a user
+  sql = o_strdup(
+    "SELECT created \
+    FROM user_access \
+    WHERE username = ?" );
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, useUsername );
+  rSet = runquery_db( sql, vars );
+  free( sql );
+  if( rSet == NULL ) {
+    if ( can_edit_access == 1 ) {
+      // Create a new user
+      sql = o_strdup( "INSERT INTO user_access \
+                      VALUES (?, '-no password yet-', '-not set yet-', \
+                      datetime('now'), datetime('now'), 0);" );
+      vars = sll_init();
+      sll_append(vars, DB_TEXT );
+      sll_append(vars, useUsername );
+      runUpdate_db( sql, vars );
+      free( sql );
+
+      sql = o_strdup(
+        "SELECT created \
+        FROM user_access \
+        WHERE username = ?" );
+      vars = sll_init();
+      sll_append(vars, DB_TEXT );
+      sll_append(vars, useUsername );
+      rSet = runquery_db( sql, vars );
+      free( sql );
+    }
+    else {
+      o_log(ERROR, "A client tried to update a unknown user. We should never have been able to get here!");
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", lang) );
+    }
+  }
+
+  created = o_strdup( readData_db(rSet, "created") );
+  free_recordset( rSet );
+
+  // Update the users 'role'
+  if ( role != NULL ) {
+    if ( can_edit_access == 1 ) {
+      char *sql = o_strdup(
+        "UPDATE user_access \
+        SET role = ? \
+        WHERE username = ? " );
+      vars = sll_init();
+      sll_append(vars, DB_TEXT );
+      sll_append(vars, role );
+      sll_append(vars, DB_TEXT );
+      sll_append(vars, useUsername );
+      runUpdate_db( sql, vars );
+      free( sql );
+    }
+    else {
+      free( created );
+      o_log(ERROR, "Client specified a user to update, but they do not have permission.");
+      return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", lang) );
+    }
+  }
+
+  // Update the users 'realname'
+  if ( realname != NULL ) {
+    char *sql = o_strdup(
+      "UPDATE user_access \
+      SET realname = ? \
+      WHERE username = ? " );
+    vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, realname );
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, useUsername );
+    runUpdate_db( sql, vars );
+    free( sql );
+  }
+
+  // Update the users 'password'
+  if ( password != NULL ) {
+    char *salted_password = o_printf( "%s%s%s", created, password, useUsername );
+    char *password_hash = str2md5( salted_password, strlen(salted_password) );
+    free( salted_password );
+    char *sql = o_strdup(
+      "UPDATE user_access \
+      SET password = ? \
+      WHERE username = ? " );
+    vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, password_hash );
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, useUsername );
+    runUpdate_db( sql, vars );
+    free( sql );
+    free( password_hash );
+  }
+
+  free( created );
+  return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateUser><result>OK</result></UpdateUser></Response>");
+}
+
+char *getUserList() {
+
+  struct simpleLinkedList *rSet;
+  char *sql = o_strdup(
+    "SELECT username, realname, last_access, role \
+    FROM user_access " );
+  rSet = runquery_db( sql, NULL );
+  free( sql );
+
+  if( rSet == NULL ) {
+    o_log( ERROR, "Could not get a list of users." );
+    return NULL;
+  }
+
+  char *userTemplate = o_strdup( "<User><username>%s</username><realname>%s</realname><last_access>%s</last_access><role>%s</role></User>" );
+  char *userList = o_strdup("");
+  do {
+    o_concatf(&userList, userTemplate,
+                            readData_db(rSet, "username"),
+                            readData_db(rSet, "realname"),
+                            readData_db(rSet, "last_access"),
+                            readData_db(rSet, "role") );
+  } while ( nextRow( rSet ) );
+  free_recordset( rSet );
+
+  char *result = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><GetUserList><Users>%s</Users></GetUserList></Response>", userList);
+  free( userList );
+  free( userTemplate );
+o_log( ERROR, "%s", result );
+
+  return result;
+}
+
+char *deleteUser( char *username, char *lang ) {
+  char *sql;
+
+  if ( 0 == strcmp(username, "admin") ) {
+    o_log(ERROR, "A client tried to delete the 'admin' user. Prevented!,");
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", lang) );
+  }
+
+  // Check the calculated user is actually a user
+  sql = o_strdup(
+    "DELETE FROM user_access \
+    WHERE username = ?" );
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, username );
+  runUpdate_db( sql, vars );
+  free( sql );
+
+  return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><DeleteUser><result>OK</result></DeleteUser></Response>");
+}
+#endif /* OPEN_TO_ALL */
+
+
+#ifdef CAN_PHASH
+char *checkForSimilar(const char *docid) {
+
+  char *sql = o_strdup( "SELECT image_phash FROM docs WHERE docid = ?" );
+  struct simpleLinkedList *vars = sll_init();
+  struct simpleLinkedList *matching = sll_init();
+  int match_count = 0;
+  unsigned long long hash, ref_hash;
+
+  // =================================================
+  // Get the pHash of the image we want to match against.
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, o_strdup(docid) );
+  struct simpleLinkedList *rSet = runquery_db(sql, vars);
+  free( sql );
+  if( rSet == NULL ) {
+    o_log( ERROR, "Doc with id %s, not available.", docid);
+    return NULL;
+  }
+  else {
+    ref_hash = strtoull(readData_db(rSet, "image_phash"), NULL, 10);
+    free_recordset( rSet );
+  }
+
+  // ===================================================
+  // Check over each doc to see if any 'look' the same
+  sql = o_strdup( "SELECT docid, image_phash FROM docs WHERE image_phash != 0 and docid != ?" );
+  vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, o_strdup(docid) );
+  rSet = runquery_db(sql, vars);
+  free( sql );
+
+  if( rSet == NULL ) {
+    o_log( ERROR, "Docs that don't have a doc id %s, not available.", docid);
+    return NULL;
+  }
+  else {
+    do {
+      char *this_docid = o_strdup(readData_db(rSet, "docid"));
+      hash = strtoull(readData_db(rSet, "image_phash"), NULL, 10);
+      int d = getDistance( ref_hash, hash );
+      // A distance of 15 is the largest difference to be considered 'the same'
+      if( d <= 15 ) { 
+        o_log( DEBUGM, "similar doc %s found, with a distance of %d", this_docid, d);
+        sll_insert( matching, this_docid, o_printf("%d", d) );
+        match_count++;
+      }
+    } while ( nextRow( rSet ) );
+    free_recordset( rSet );
+  }
+
+  if( match_count == 0 ) {
+    o_log( INFORMATION, "No matching documents found.");
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><CheckForSimilar><Docs></Docs></CheckForSimilar></Response>");
+  }
+
+  // ======================================
+  // We have all the matches - get the details for the 3 closest matching docs
+  int x;
+  char *data = o_strdup("");
+  char *tags = o_strdup("");
+  o_log( ERROR, "sorting");
+  sll_sort( matching );
+  matching = sll_findFirstElement( matching );
+  for( x = 0 ; x < 3 ; x++ ) {
+
+    char *this_docid = matching->key;
+    char *distance = matching->data;
+
+    // Get a list of tags
+    tags = o_strdup("");
+    sql = o_strdup(
+      "SELECT tagname \
+      FROM tags JOIN \
+      (SELECT * \
+      FROM doc_tags \
+      WHERE docid = ? ) dt \
+      ON tags.tagid = dt.tagid \
+      ORDER BY tagname");
+
+    vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, o_strdup(this_docid) );
+    rSet = runquery_db(sql, vars);
+    free(sql);
+
+    if( rSet ) {
+      do  {
+        o_concatf(&tags, "<tag>%s</tag>", readData_db(rSet, "tagname") );
+      } while ( nextRow( rSet ) );
+    }
+    free_recordset( rSet );
+  
+    // Get the docs title  
+    char *sql = o_strdup( "SELECT title FROM docs WHERE docid = ?" );
+    vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, o_strdup(this_docid) );
+    rSet = runquery_db(sql, vars);
+    free( sql );
+
+    char *title = o_strdup(readData_db(rSet, "title"));
+    free_recordset( rSet );
+
+    o_concatf(&data, "<Doc><docid>%s</docid><distance>%s</distance><title>%s</title><Tags>%s</Tags></Doc>", this_docid, distance, title, tags); 
+    free(tags);
+    free(title);
+
+    matching = sll_getNext( matching );
+    if ( matching == NULL ) {
+      break;
+    }
+  }
+  return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><CheckForSimilar><Docs>%s</Docs></CheckForSimilar></Response>", data);
+}
+#endif /* CAN_PHASH */
 

@@ -19,10 +19,8 @@
 #ifndef MAIN
 #define MAIN
 
-#define DEFAULT_CONF_FILE "/etc/opendias/opendias.conf"
 #define QUEUE_LENGTH 3
 
-int DB_VERSION;
 char *BASE_DIR;
 unsigned short PORT;
 
@@ -42,6 +40,7 @@ struct services {
   int sane;
   int command;
   int httpd;
+  int sessions;
 };
 
 void server_shutdown(void);

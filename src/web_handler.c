@@ -25,9 +25,10 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <microhttpd.h>
-#include <arpa/inet.h>
 #include <uuid/uuid.h>
+#ifdef THREAD_JOIN
 #include <pthread.h>
+#endif /* THREAD_JOIN */
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -42,6 +43,7 @@
 #include "import_doc.h"
 #include "simpleLinkedList.h"
 #include "localisation.h"
+#include "sessionmanagement.h"
 
 #include "web_handler.h"
 
@@ -79,7 +81,7 @@ static size_t getFromFile_fullPath(const char *url, const char *lang, char **dat
   if ( localised == NULL ) {
     localised = o_printf("%s", url);
   }
-	o_log(SQLDEBUG,"enterting getFromFile_fullpath: %s", localised);
+  o_log(SQLDEBUG,"enterting getFromFile_fullpath: %s", localised);
 
   size = load_file_to_memory(localised, data);
   free(localised);
@@ -87,10 +89,10 @@ static size_t getFromFile_fullPath(const char *url, const char *lang, char **dat
 }
 
 static size_t getFromFile(const char *url, const char *lang, char **data) {
-	o_log(SQLDEBUG,"enterting getFromFile: ");
+  o_log(SQLDEBUG,"enterting getFromFile: ");
 
   // Build Document Root
-  char *htmlFrag = o_printf("%s/opendias/webcontent%s", PACKAGE_DATA_DIR, url);
+  char *htmlFrag = o_printf("%s/opendias/webcontent%s", SHARE_DIR, url);
 
   size_t size = getFromFile_fullPath(htmlFrag, lang, data);
   free(htmlFrag);
@@ -132,78 +134,107 @@ static char *build_page (char *page, const char *lang) {
 // | struct simpleLinkedList *post_data  -------->  struct simpleLinkedList *post_data
 // ----                                             ---- (details about what the user POSTed)
 //                                                  | char *key
-//                                                  | void *data  --------->  struct post_data_struct 
-//                                                  | sll *next               ---- (individual post data elements)
-//                                                  | sll *prev               | int size
-//                                                  ----                      | char *data
-//                                                                            ----
+//                                                  | void *data
+//                                                  | sll *next
+//                                                  | sll *prev
+//                                                  ----
 
-static int send_page (struct MHD_Connection *connection, char *page, int status_code, const char* mimetype, size_t contentSize) {
+static int send_page (struct MHD_Connection *connection, char *page, int status_code, const char* mimetype, size_t contentSize, struct connection_info_struct *con_info ) {
   int ret;
   struct MHD_Response *response;
+
   response = MHD_create_response_from_data (contentSize, (void *) page, MHD_NO, MHD_YES);
   free(page);
   if (!response)
     return MHD_NO;
-  MHD_add_response_header (response, "Content-Type", mimetype);
+
+  if( con_info && con_info->session_id ) {
+    char *cookie2;
+    char *cookie = o_printf( "o_session_id=%s; path=/; max-age=%d", con_info->session_id, MAX_AGE - 5);
+    MHD_add_response_header (response, MHD_HTTP_HEADER_SET_COOKIE, cookie);
+    o_log( DEBUGM, "setting cookie '%s'", cookie);
+    free( cookie );
+
+    // Do we need to show a login form?
+    char *cookiedata = NULL;
+    struct simpleLinkedList *role_element = sll_searchKeys(con_info->session_data, "realname");
+    if( role_element && ( role_element != NULL ) && ( role_element->data != NULL ) ) {
+      cookiedata = (char *)role_element->data;
+    }
+    if( cookiedata == NULL ) {
+      // This effectivly clears the cookie. 
+      // What the frontend actually looks for is "realname=<anything>"
+      // If it doesn't find that, then the login will be shown.
+      cookie = o_printf( "realname=; path=/; max-age=%d", -5);
+      cookie2 = o_printf( "role=; path=/; max-age=%d", -5);
+    }
+    else {
+      cookie = o_printf( "realname=%s; path=/; max-age=%d", cookiedata, MAX_AGE - 1);
+      struct simpleLinkedList *role_element = sll_searchKeys(con_info->session_data, "role");
+      if( role_element && ( role_element != NULL ) && ( role_element->data != NULL ) ) {
+        cookiedata = (char *)role_element->data;
+      }
+      cookie2 = o_printf( "role=%s; path=/; max-age=%d", cookiedata, MAX_AGE - 1);
+    }
+    MHD_add_response_header (response, MHD_HTTP_HEADER_SET_COOKIE, cookie);
+    MHD_add_response_header (response, MHD_HTTP_HEADER_SET_COOKIE, cookie2);
+    free( cookie );
+    free( cookie2 );
+  }
+
+  MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE, mimetype);
   ret = MHD_queue_response (connection, (unsigned int)status_code, response);
   MHD_destroy_response (response);
   return ret;
 }
 
 static int send_page_bin (struct MHD_Connection *connection, char *page, int status_code, const char* mimetype) {
-  return send_page(connection, page, status_code, mimetype, strlen(page));
+  return send_page(connection, page, status_code, mimetype, strlen(page), NULL);
 }
 
 static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key, const char *filename, const char *content_type, const char *transfer_encoding, const char *data, uint64_t off, size_t size) {
 
   struct connection_info_struct *con_info = coninfo_cls;
   struct simpleLinkedList *post_element = sll_searchKeys(con_info->post_data, key);
-  struct post_data_struct *data_struct = NULL;
-  if( post_element && ( post_element != NULL ) && ( post_element->data != NULL ) ) {
-    data_struct = (struct post_data_struct *)post_element->data;
-  }
 
   if(size > 0) {
     char *trimedData = calloc(size+1, sizeof(char));
     strncat(trimedData, data, size);
 
-    if(NULL == data_struct) {
-      data_struct = (struct post_data_struct *) malloc (sizeof (struct post_data_struct));
-      data_struct->size = size;
+    if( NULL == post_element ) {
       if(0 == strcmp(key, "uploadfile")) {
           uuid_t uu;
           char *fileid = malloc(36+1);
           uuid_generate(uu);
           uuid_unparse(uu, fileid);
-          data_struct->data = o_strdup(fileid);
-          o_log(DEBUGM, "Generated upload handlename %s", data_struct->data);
+          sll_insert(con_info->post_data, o_strdup(key), o_strdup(fileid) );
+          o_log(DEBUGM, "Generated upload handlename %s", fileid );
           free(fileid);
       }
       else {
-        data_struct->data = o_strdup(trimedData);
+        sll_insert(con_info->post_data, o_strdup(key), o_strdup(trimedData) );
       }
-      sll_insert(con_info->post_data, o_strdup(key), data_struct);
+      post_element = sll_searchKeys(con_info->post_data, key);
     }
 
     else if(0 != strcmp(key, "uploadfile")) {
-      conCat(&(data_struct->data), trimedData);
-      data_struct->size += size;
+      char *t=(char *)post_element->data;
+      conCat(&t, trimedData);
     }
 
     if(0 == strcmp(key, "uploadfile")) {
       int fd;
-      char *filename = o_printf("/tmp/%s.dat", data_struct->data);
+      char *filename = o_printf("/tmp/%s.dat", post_element->data);
       struct stat fstat;
 
       mode_t fmode;
       fmode = S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP;
       int flags;
-      if (stat(filename,&fstat) == -1 ) {
-        flags=O_CREAT|O_WRONLY;
+      if ( stat( filename, &fstat ) == -1 ) {
+        flags = O_CREAT|O_WRONLY;
       } 
       else {
-        flags=O_RDWR;
+        flags = O_RDWR;
       }
 
       if ((fd = open(filename, flags, fmode)) == -1 )
@@ -227,13 +258,13 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
 void request_completed (void *cls, struct MHD_Connection *connection, void **con_cls, enum MHD_RequestTerminationCode toe) {
 
   struct simpleLinkedList *row;
-  struct post_data_struct *data_struct;
   struct connection_info_struct *con_info = *con_cls;
   char *uploadedFileName, *filename;
   if (NULL == con_info)
     return;
 
   free(con_info->lang);
+  free(con_info->session_id);
   if (con_info->connectiontype == POST) {
     if (NULL != con_info->postprocessor) {
       MHD_destroy_post_processor (con_info->postprocessor);
@@ -249,11 +280,9 @@ void request_completed (void *cls, struct MHD_Connection *connection, void **con
     for( row = sll_findFirstElement( con_info->post_data ) ; row != NULL ; row = sll_getNext(row) ) {
       free(row->key);
       row->key = NULL;
-      data_struct = (struct post_data_struct *)row->data;
       // Incase do data is sent in the post
-      if( data_struct != NULL ) {
-        free(data_struct->data);
-        free(data_struct);
+      if( row->data != NULL ) {
+        free(row->data);
       }
       row->data = NULL;
     }
@@ -275,88 +304,48 @@ void request_completed (void *cls, struct MHD_Connection *connection, void **con
 #endif /* THREAD_JOIN */
 }
 
-static char *accessChecks(struct MHD_Connection *connection, const char *url, struct priverlage *privs, char *lang) {
+#ifdef OPEN_TO_ALL
+void accessChecks(struct MHD_Connection *connection, const char *url, struct priverlage *privs, char *lang, struct simpleLinkedList *session_data) {
+    privs->update_access += 1;
+    privs->view_doc += 1;
+    privs->edit_doc += 1;
+    privs->delete_doc += 1;
+    privs->add_import += 1;
+    privs->add_scan += 1;
+}
+#else
+void accessChecks(struct MHD_Connection *connection, const char *url, struct priverlage *privs, char *lang, struct simpleLinkedList *session_data) {
 
-  int locationLimited = 0, userLimited = 0, locationAccess = 0; //, userAccess = 0;
-  const char *tmp;
-  char *sql, *type, client_address[INET6_ADDRSTRLEN+14];
+  char *role = "";
+  char *sql;
+  struct simpleLinkedList *role_element;
   struct simpleLinkedList *rSet;
-  const union MHD_ConnectionInfo *c_info;
-  struct sockaddr_in *p;
 
-  // Check if there are any restrictions
-  sql = o_strdup("SELECT 'location' as type, role FROM location_access UNION SELECT 'user' as type, role FROM user_access");
-  rSet = runquery_db(sql);
+  role_element = sll_searchKeys(session_data, "role");
+  if( role_element && ( role_element != NULL ) && ( role_element->data != NULL ) ) {
+    role = (char *)role_element->data;
+  }
+
+  sql = o_strdup("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan \
+            FROM access_role \
+            WHERE role = ?");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, role );
+
+  rSet = runquery_db(sql, vars);
   if( rSet != NULL ) {
-    do  {
-      type = o_strdup(readData_db(rSet, "type"));
-      if(0 == strcmp(type, "location")) {
-        locationLimited = 1;
-      }
-      else if (0 == strcmp(type, "user")) {
-        userLimited = 1;
-      }
-      free(type);
-    } while ( nextRow( rSet ) );
+    privs->update_access += atoi(readData_db(rSet, "update_access"));
+    privs->view_doc += atoi(readData_db(rSet, "view_doc"));
+    privs->edit_doc += atoi(readData_db(rSet, "edit_doc"));
+    privs->delete_doc += atoi(readData_db(rSet, "delete_doc"));
+    privs->add_import += atoi(readData_db(rSet, "add_import"));
+    privs->add_scan += atoi(readData_db(rSet, "add_scan"));
   }
   free_recordset( rSet );
   free(sql);
-
-
-  if ( locationLimited == 1 ) {
-    // Get the client address
-    c_info = MHD_get_connection_info(connection, MHD_CONNECTION_INFO_CLIENT_ADDRESS );
-    p = (struct sockaddr_in *) c_info->client_addr;
-    if ( AF_INET == p->sin_family) {
-      tmp = inet_ntop((int)(p->sin_family), &(p->sin_addr), client_address, INET_ADDRSTRLEN);
-      if( tmp == NULL )
-        o_log(ERROR, "Could not convert the address.");
-    }
-
-    sql = o_printf("SELECT update_access, view_doc, edit_doc, delete_doc, add_import, add_scan \
-            FROM location_access LEFT JOIN access_role ON location_access.role = access_role.role \
-            WHERE '%s' LIKE location", client_address);
-    rSet = runquery_db(sql);
-    if( rSet != NULL ) {
-      do  {
-        locationAccess = 1;
-        privs->update_access += atoi(readData_db(rSet, "update_access"));
-        privs->view_doc += atoi(readData_db(rSet, "view_doc"));
-        privs->edit_doc += atoi(readData_db(rSet, "edit_doc"));
-        privs->delete_doc += atoi(readData_db(rSet, "delete_doc"));
-        privs->add_import += atoi(readData_db(rSet, "add_import"));
-        privs->add_scan += atoi(readData_db(rSet, "add_scan"));
-      } while ( nextRow( rSet ) );
-    }
-    free_recordset( rSet );
-    free(sql);
-  }
-
-  // username / password is a fallcack to location access
-  if ( userLimited == 1 && locationAccess == 0 ) {
-    // TODO - fetch username/password and process
-  }
-
-  if ( locationLimited == 1 || userLimited == 1 ) {
-    // requires some access grant
-    if ( locationAccess == 1 ) { //|| userAccess == 1 ) 
-      o_log(DEBUGM, "Access 'granted' to user on %s for request: %s", client_address, url);
-      return NULL; // User has access
-    }
-    o_log(DEBUGM, "Access 'DENIED' to use on %s for request: %s", client_address, url);
-    return o_printf("<h1>%s</h1>", getString("LOCAL_access_denied", lang) ); // Requires access, but none found
-  }
-  else {
-    o_log(DEBUGM, "Access OPEN");
-    privs->update_access=1;
-    privs->view_doc=1;
-    privs->edit_doc=1;
-    privs->delete_doc=1;
-    privs->add_import=1;
-    privs->add_scan=1;
-    return NULL; // No limitation
-  }
 }
+#endif /* OPEN_TO_ALL */
 
 char *userLanguage( struct MHD_Connection *connection ) {
 
@@ -417,16 +406,6 @@ char *userLanguage( struct MHD_Connection *connection ) {
   return lang;
 }
 
-static void postDumper(struct simpleLinkedList *table) {
-
-  struct simpleLinkedList *row;
-  o_log(DEBUGM, "Collected post data: ");
-  for( row = sll_findFirstElement( table ) ; row != NULL ; row = sll_getNext(row) ) {
-    char *data = getPostData(table, row->key);
-    o_log(DEBUGM, "      %s : %s", row->key, data);
-  }
-}
-
 int answer_to_connection (void *cls, struct MHD_Connection *connection,
               const char *url_orig, const char *method,
               const char *version, const char *upload_data,
@@ -438,6 +417,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   int status = MHD_HTTP_OK;
   struct priverlage accessPrivs;
   const char *url;
+  struct simpleLinkedList *session_data = NULL;
+  char *session_id = NULL;
 
   // Remove the begining "/opendias" (so this URL can be used like:)
   // http://server:port/opendias/
@@ -458,16 +439,57 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
   // Discover Params
   if (NULL == *con_cls) {
+
+    // Check client language
     char *lang = userLanguage(connection);
+
+    // Check that we've not got too many clients
     if (nr_of_clients >= MAXCLIENTS)
-      return send_page_bin (connection, build_page(o_printf("<p>%s</p>", getString("LOCAL_server_busy", lang) ), lang), MHD_HTTP_SERVICE_UNAVAILABLE, MIMETYPE_HTML);
+      return send_page_bin (connection, 
+                            build_page(o_printf("<p>%s</p>", getString("LOCAL_server_busy", lang) ), lang), 
+                            MHD_HTTP_SERVICE_UNAVAILABLE, 
+                            MIMETYPE_HTML);
+
+    // Retrieve or create a session data store
+    clear_old_sessions();
+    const char *sid = MHD_lookup_connection_value (connection, MHD_COOKIE_KIND, "o_session_id" );
+    if( sid != NULL ) {
+      session_id = o_strdup(sid);
+      o_log( DEBUGM, "Client provided session cookie: %s", session_id);
+      session_data = get_session( session_id );
+      if( session_data == NULL ) {
+        o_log( INFORMATION, "Provided session is not available");
+      }
+    }
+    if( session_data == NULL ) {
+      free( session_id );
+      session_id = create_session();
+      session_data = get_session( session_id );
+    }
+    if( session_data != NULL ) {
+      if( trigger_log_verbosity( DEBUGM ) ) {
+        o_log( DEBUGM, "Using session: %s", session_id );
+        char *dump = sll_dumper( session_data );
+        o_log(DEBUGM, "Session contains: %s", dump );
+        free( dump );
+      }
+
+    }
+    else {
+      o_log( ERROR, "Could not build a new session" );
+    }
+
+    // Create connection storage
     con_info = malloc (sizeof (struct connection_info_struct));
     if (NULL == con_info)
       return MHD_NO;
+
 #ifdef THREAD_JOIN
     con_info->thread = NULL;
 #endif /* THREAD_JOIN */
     con_info->lang = lang;
+    con_info->session_data = session_data;
+    con_info->session_id = session_id;
 
     if (0 == strcmp (method, "POST")) {
       con_info->post_data = sll_init();
@@ -495,14 +517,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   accessPrivs.add_scan = 0;
 
   if (0 == *upload_data_size) {
-
-    if ((0 == strcmp (method, "GET") && (0!=strstr(url,".html") || 0!=strstr(url,"/scans/"))) || 0 == strcmp(method,"POST")) {
-      char *accessError = accessChecks(connection, url, &accessPrivs, con_info->lang);
-      if(accessError != NULL) {
-        char *accessErrorPage = build_page(accessError, con_info->lang);
-        size = strlen(accessErrorPage);
-        return send_page (connection, accessErrorPage, MHD_HTTP_UNAUTHORIZED, MIMETYPE_HTML, size);
-      }
+    if ((0 == strcmp(method, "GET") && (0!=strstr(url,".html") || 0!=strstr(url,"/scans/"))) || 0 == strcmp(method,"POST")) {
+      accessChecks(connection, url, &accessPrivs, con_info->lang, con_info->session_data);
     }
   }
 
@@ -545,7 +561,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
-      	mimetype = MIMETYPE_HTML;
+        mimetype = MIMETYPE_HTML;
         size = 0;
       }
       else
@@ -558,7 +574,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
-      	mimetype = MIMETYPE_HTML;
+        mimetype = MIMETYPE_HTML;
         size = 0;
       }
       else
@@ -594,7 +610,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
           free(content);
           content = o_strdup("");
           status = MHD_HTTP_NOT_FOUND;
-      	  mimetype = MIMETYPE_HTML;
+          mimetype = MIMETYPE_HTML;
           size = 0;
         }
       }
@@ -607,7 +623,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
-      	mimetype = MIMETYPE_HTML;
+        mimetype = MIMETYPE_HTML;
         size = 0;
       }
       else
@@ -621,7 +637,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         free(content);
         content = o_strdup("");
         status = MHD_HTTP_NOT_FOUND;
-      	mimetype = MIMETYPE_HTML;
+        mimetype = MIMETYPE_HTML;
         size = 0;
       }
       else
@@ -636,13 +652,12 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
       size = 0;
     }
 
-    return send_page (connection, content, status, mimetype, size);
+    return send_page (connection, content, status, mimetype, size, con_info);
   }
 
   if (0 == strcmp (method, "POST")) {
     // Serve up content that needs a top and tailed
     if( 0!=strstr(url,"/dynamic") ) {
-      //struct connection_info_struct *con_info = *con_cls;
       con_info = *con_cls;
       if (0 != *upload_data_size) {
         MHD_post_process (con_info->postprocessor, upload_data, *upload_data_size);
@@ -664,7 +679,13 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         else {
 
           // Validation was OK?, then get ready to build a page.
-          postDumper(con_info->post_data);
+
+          if( trigger_log_verbosity( DEBUGM ) ) {
+            char *dump = sll_dumper( con_info->post_data );
+            o_log(DEBUGM, "Collected post data: %s", dump );
+            free( dump );
+          }
+
           action = getPostData(con_info->post_data, "action");
 
           if ( action && 0 == strcmp(action, "getDocDetail") ) {
@@ -698,8 +719,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             }
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString(LOCAL_missing_support, con_info->lang) );
-#endif
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
+#endif /* CAN_SCAN */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -718,15 +739,19 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               char *pages = getPostData(con_info->post_data, "pages");
               char *ocr = getPostData(con_info->post_data, "ocr");
               char *pagelength = getPostData(con_info->post_data, "pagelength");
-              content = doScan(deviceid, format, resolution, pages, ocr, pagelength, (void *) con_info); // pageRender.c
+#ifdef THREAD_JOIN
+              content = doScan(deviceid, format, resolution, pages, ocr, pagelength, con_info->lang, &(con_info->thread) ); // pageRender.c
+#else
+              content = doScan(deviceid, format, resolution, pages, ocr, pagelength, con_info->lang); // pageRender.c
+#endif /* THREAD_JOIN */
               if(content == (void *)NULL) {
                 content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
               }
             }
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString(LOCAL_missing_support, con_info->lang) );
-#endif
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
+#endif /* CAN_SCAN */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -747,8 +772,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             }
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString(LOCAL_missing_support, con_info->lang) );
-#endif
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
+#endif /* CAN_SCAN */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -762,15 +787,19 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             else {
               char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
-              content = nextPageReady(scanprogressid, (void *) con_info); //pageRender.c
+#ifdef THREAD_JOIN
+              content = nextPageReady(scanprogressid, con_info->lang, &(con_info->thread) ); //pageRender.c
+#else
+              content = nextPageReady(scanprogressid, con_info->lang); //pageRender.c
+#endif /* THREAD_JOIN */
               if(content == (void *)NULL) {
                 content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
               }
             }
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString(LOCAL_missing_support, con_info->lang) );
-#endif
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
+#endif /* CAN_SCAN */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -864,15 +893,15 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             else {
               char *docid = getPostData(con_info->post_data, "docid");
-              content = extractThumbnail( docid );
+              content = extractThumbnail( docid ); //import_doc.c
               if(content == (void *)NULL) {
                 content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
               }
             }
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString(LOCAL_missing_support, con_info->lang) );
-#endif
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
+#endif /* CAN_PDF */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -885,43 +914,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             else {
               char *filename = getPostData(con_info->post_data, "uploadfile");
-              char *ftype = getPostData(con_info->post_data, "ftype");
-              content = uploadfile(filename, ftype, con_info->lang); // import_doc.c
-              if(content == (void *)NULL)
-                content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_HTML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "getAccessDetails") ) {
-            o_log(INFORMATION, "Processing request for: getAccessDetails");
-            if ( accessPrivs.update_access == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              content = getAccessDetails(); // pageRender.c
-              if(content == (void *)NULL)
-                content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_XML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "controlAccess") ) {
-            o_log(INFORMATION, "Processing request for: controlAccess");
-            if ( accessPrivs.update_access == 0 )
-              content = build_page(o_printf("<h1>%s</h1>", getString("LOCAL_access_denied", con_info->lang) ), con_info->lang);
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *submethod = getPostData(con_info->post_data, "submethod");
-              char *location = getPostData(con_info->post_data, "address");
-              //char *user = getPostData(con_info->post_data, "user");
-              //char *password = getPostData(con_info->post_data, "password");
-              int role = atoi(getPostData(con_info->post_data, "role"));
-              content = controlAccess(submethod, location, NULL, NULL, role); // pageRender.c
+              content = uploadfile(filename, con_info->lang); // import_doc.c
               if(content == (void *)NULL)
                 content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
             }
@@ -963,6 +956,126 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             size = strlen(content);
           }
   
+#ifndef OPEN_TO_ALL
+          else if ( action && 0 == strcmp(action, "checkLogin") ) {
+            o_log(INFORMATION, "Processing request for: checkLogin");
+            if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *username = getPostData(con_info->post_data, "username");
+              char *password = getPostData(con_info->post_data, "password");
+              content = checkLogin(username, password, con_info->lang, con_info->session_data); // pageRender.c
+              if(content == (void *)NULL) 
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            }
+            mimetype = MIMETYPE_JSON;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "logout") ) {
+            o_log(INFORMATION, "Processing request for: logout");
+            if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              content = doLogout( con_info->session_data ); // pageRender.c
+              if(content == (void *)NULL) 
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            }
+            mimetype = MIMETYPE_JSON;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "updateUser") ) {
+            o_log(INFORMATION, "Processing request for: updateUser");
+            if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *username = getPostData(con_info->post_data, "username");
+              char *realname = getPostData(con_info->post_data, "realname");
+              char *password = getPostData(con_info->post_data, "password");
+              char *role = getPostData(con_info->post_data, "role");
+              content = updateUser(username, realname, password, role, accessPrivs.update_access, con_info->session_data, con_info->lang); // pageRender.c
+              if(content == (void *)NULL) 
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            }
+            mimetype = MIMETYPE_JSON;
+            size = strlen(content);
+          }
+ 
+          else if ( action && 0 == strcmp(action, "createUser") ) {
+            o_log(INFORMATION, "Processing request for: createUser");
+            if ( accessPrivs.update_access == 0 )
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *username = getPostData(con_info->post_data, "username");
+              char *realname = getPostData(con_info->post_data, "realname");
+              char *password = getPostData(con_info->post_data, "password");
+              char *role = getPostData(con_info->post_data, "role");
+              // re-use the updateUser function for creating a user.
+              content = updateUser(username, realname, password, role, accessPrivs.update_access, con_info->session_data, con_info->lang); // pageRender.c
+              if(content == (void *)NULL) 
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            }
+            mimetype = MIMETYPE_JSON;
+            size = strlen(content);
+          } 
+ 
+          else if ( action && 0 == strcmp(action, "deleteUser") ) {
+            o_log(INFORMATION, "Processing request for: deleteUser");
+            if ( accessPrivs.update_access == 0 )
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *username = getPostData(con_info->post_data, "username");
+              content = deleteUser(username, con_info->lang); // pageRender.c
+              if(content == (void *)NULL) 
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            }
+            mimetype = MIMETYPE_JSON;
+            size = strlen(content);
+          } 
+ 
+          else if ( action && 0 == strcmp(action, "getUserList") ) {
+            o_log(INFORMATION, "Processing request for: getUserList");
+            if ( accessPrivs.update_access == 0 )
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              content = getUserList(); // pageRender.c
+              if(content == (void *)NULL) 
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            }
+            mimetype = MIMETYPE_JSON;
+            size = strlen(content);
+          } 
+#endif /* OPEN_TO_ALL */
+
+          else if ( action && 0 == strcmp(action, "checkForSimilar") ) {
+            o_log(INFORMATION, "Processing request for: check For Similar");
+#ifdef CAN_PHASH
+            if ( accessPrivs.edit_doc == 0 )
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *docid = getPostData(con_info->post_data, "docid");
+              content = checkForSimilar(docid); //doc_editor.c
+              if(content == (void *)NULL) {
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+              }
+            }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
+#endif /* CAN_PHASH */
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+
           else {
             // should have been picked up by validation! and so never got here
             o_log(WARNING, "disallowed content: post request for unknown action.");
@@ -982,7 +1095,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     }
 
     o_log(DEBUGM, "Serving the following content: %s", content);
-    return send_page (connection, content, status, mimetype, size);
+    return send_page (connection, content, status, mimetype, size, con_info);
   }
 
   return send_page_bin (connection, build_page(o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) ), con_info->lang), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);

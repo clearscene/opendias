@@ -32,6 +32,6 @@ struct doScanOpData {
 extern void dispatch_sane_work(int);
 extern char *send_command(char *);
 extern void freeSaneCache(void);
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 #endif /* SANEDISPATCHER */

@@ -23,7 +23,7 @@
 
 void locale_init( char * );
 void locale_cleanup( void );
-const char *getString( char *, char * );
-struct simpleLinkedList *loadLangList( char * );
+const char *getString( const char *, const char * );
+struct simpleLinkedList *loadLangList( const char * );
 
 #endif /* LOCAL */

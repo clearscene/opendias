@@ -1,0 +1,3 @@
+LOCAL_new_password_do_not_match = 'New Passwörter stimmen nicht überein';
+LOCAL_details_updated = 'Details aktualisiert';
+LOCAL_user_created = 'Benutzer erstellt';

@@ -37,6 +37,6 @@ enum {
 
 char *internalDoScanningOperation(char *, char *);
 char *internalGetScannerList(char *); // The workhorse for the command port request
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 #endif /* SCAN */

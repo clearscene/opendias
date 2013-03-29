@@ -1,0 +1,13 @@
+STDOUT
+--------------------------------------------------
+LOG-OUTPUT
+-date-:-thread-:INF:-file-:-line- openDIAS version 'opendias [VERSION]' has been invoked.
+-date-:-thread-:INF:-file-:-line- Running in daemon mode.
+-date-:-thread-:INF:-file-:-line- Child process created [CONFIG_FILE]
+-date-:-thread-:DBG:-file-:-line- setup launched
+-date-:-thread-:INF:-file-:-line- Setting default log (/tmp/opendias_test/var/log/opendias) verbosity to 4.
+-date-:-thread-:INF:-file-:-line- Using config file: [CONFIG_FILE]
+-date-:-thread-:ERR:-file-:-line- Could not open file: /tmp/opendias_test/etc/opendias/testappMISSING.conf
+-date-:-thread-:ERR:-file-:-line- Cannot find main config file: /tmp/opendias_test/etc/opendias/testappMISSING.conf
+-date-:-thread-:INF:-file-:-line- openDias service is shutting down....
+-date-:-thread-:INF:-file-:-line- openDias service has shutdown.

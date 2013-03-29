@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-use lib qw( regressionTests regressionTests/lib );
+use lib qw( r lib );
 use Getopt::Std;
 use Time::HiRes qw( gettimeofday tv_interval );
 use standardTests;
@@ -15,7 +15,7 @@ my $testCount=0;
 my $passCount=0;
 my $failCount=0;
 my $outputDir="results/resultsFiles";
-my $TESTPATH="regressionTests";
+my $TESTPATH="t";
 my $startCmd=`cat config/startAppCommands`;
 
 ##############################
@@ -95,25 +95,25 @@ for my $requested (@runTests) {
 
     openlog( "$outputDir/$TESTCASENAME/testLog.out" );
 
-    unless( -e "$TESTPATH/expected/$TESTCASENAME" ) {
-      system("mkdir -p $TESTPATH/expected/$TESTCASENAME");
+    unless( -e "r/$TESTCASENAME" ) {
+      system("mkdir -p r/$TESTCASENAME");
     }
 
     # Build new environment
-    if( -d "$TESTPATH/inputs/$TESTCASENAME" ) {
-      if( -d "$TESTPATH/inputs/$TESTCASENAME/homeDir" ) {
+    if( -d "i/$TESTCASENAME" ) {
+      if( -d "i/$TESTCASENAME/homeDir" ) {
         o_log("Copying pre defined environment");
-        system("cp -r $TESTPATH/inputs/$TESTCASENAME/homeDir/* /tmp/opendiastest/");
+        system("cp -r i/$TESTCASENAME/homeDir/* /tmp/opendiastest/");
       }
       if( -e "/tmp/opendiastest/DEFAULTDB" ) {
         o_log("Copying default database");
         system("cp -r config/defaultdatabase.sqlite3 /tmp/opendiastest/openDIAS.sqlite3");
         system("rm -f /tmp/opendiastest/DEFAULTDB");
       }
-      opendir(DIR, "$TESTPATH/inputs/$TESTCASENAME/" ) or die "Cannot read SQL directory $TESTPATH/inputs/$TESTCASENAME/, because: $!\n";
+      opendir(DIR, "i/$TESTCASENAME/" ) or die "Cannot read SQL directory i/$TESTCASENAME/, because: $!\n";
       while( ($filename = readdir(DIR))) {
         next if ( $filename eq "." || $filename eq ".." );
-        my $fullPath = "$TESTPATH/inputs/$TESTCASENAME/".$filename;
+        my $fullPath = "i/$TESTCASENAME/".$filename;
         if ( -f $fullPath && $fullPath =~ /\.sql$/ ) {
           system("/usr/bin/sqlite3 /tmp/opendiastest/openDIAS.sqlite3 \".read $fullPath\""); 
         }
@@ -145,10 +145,11 @@ for my $requested (@runTests) {
 
       my $startCommand = $startCmd;
 
-      my $testProfile = eval("regressionTests::".$TESTCASENAME."::testProfile();");
+      my $testProfile = eval("${TESTPATH}::${TESTCASENAME}::testProfile();");
 
+      my $wait = 0;
       if( $testProfile->{updateStartCommand} ) {
-        eval "regressionTests::${TESTCASENAME}::".$testProfile->{updateStartCommand}."(\\\$startCommand)";
+        eval "\$wait = ${TESTPATH}::${TESTCASENAME}::".$testProfile->{updateStartCommand}."(\\\$startCommand)";
       }
 
 
@@ -158,11 +159,10 @@ for my $requested (@runTests) {
       }
       else {
         printProgressLine($TEST, "Starting service");
-        $startCommand =~ s{^.*\.\./src/opendias}
-                      {../src/opendias}xms;
+        $startCommand =~ s{valgrind.*\s([a-z_\/]*/bin/opendias)}{$1}xms;
         o_log("No need for valgrind on this test.");
       }
-      $RES = 1 unless startService( $startCommand, $testProfile->{startTimeout} );
+      $RES = 1 unless startService( $startCommand, $testProfile->{startTimeout}, $wait );
 
 
       # Start a web client
@@ -182,7 +182,7 @@ for my $requested (@runTests) {
       unless( $RES ) {
         printProgressLine($TEST, "Running");
         my $t0 = [gettimeofday];
-        eval "\$RES = regressionTests::".$TESTCASENAME."::test()";
+        eval "\$RES = ${TESTPATH}::${TESTCASENAME}::test()";
         $testTime = sprintf("%.2f", tv_interval( $t0, [gettimeofday]) );
         o_log("Error while running test: $@") if ($@);
         printProgressLine($TEST, "Stopping");
@@ -200,17 +200,17 @@ for my $requested (@runTests) {
 
           # Make this the expected, if required
           if( length $GENERATE ) {
-            system("cp $outputDir/$TESTCASENAME/valgrind4Compare.out $TESTPATH/expected/$TESTCASENAME/valgrind.out");
+            system("cp $outputDir/$TESTCASENAME/valgrind4Compare.out r/$TESTCASENAME/valgrind.out");
           }
 
           $MEM_RES="<td class='none'><a href='./$TESTCASENAME/valgrind.out'>actual</a></td>";
-          system("diff -ydN $TESTPATH/expected/$TESTCASENAME/valgrind.out $outputDir/$TESTCASENAME/valgrind4Compare.out > $outputDir/$TESTCASENAME/valgrindDiff.out");
+          system("diff -ydN r/$TESTCASENAME/valgrind.out $outputDir/$TESTCASENAME/valgrind4Compare.out > $outputDir/$TESTCASENAME/valgrindDiff.out");
           if($? >> 8 == 0) {
             system("rm $outputDir/$TESTCASENAME/valgrindDiff.out");
             $MEM_RES .= "<td class='ok'>OK</td>";
           }
           else {
-            $MEM_RES .= "<td><a href='./$TESTCASENAME/valgrindDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../$TESTPATH/expected/$TESTCASENAME/valgrind.out'>expected</a></td>";
+            $MEM_RES .= "<td><a href='./$TESTCASENAME/valgrindDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../r/$TESTCASENAME/valgrind.out'>expected</a></td>";
             $RES=1
           }
         }
@@ -226,16 +226,16 @@ for my $requested (@runTests) {
       # test log - output from the testing harness
       system("sed -f config/testLogUnify.sed < $outputDir/$TESTCASENAME/testLog.out > $outputDir/$TESTCASENAME/testLog4Compare.out");
       if( length $GENERATE ) {
-        system("cp $outputDir/$TESTCASENAME/testLog4Compare.out $TESTPATH/expected/$TESTCASENAME/testLog.out");
+        system("cp $outputDir/$TESTCASENAME/testLog4Compare.out r/$TESTCASENAME/testLog.out");
       }
       $TEST_RES="<td class='none'><a href='./$TESTCASENAME/testLog.out'>actual</a></td>";
-      system("diff -ydN $TESTPATH/expected/$TESTCASENAME/testLog.out $outputDir/$TESTCASENAME/testLog4Compare.out > $outputDir/$TESTCASENAME/testLogDiff.out");
+      system("diff -ydN r/$TESTCASENAME/testLog.out $outputDir/$TESTCASENAME/testLog4Compare.out > $outputDir/$TESTCASENAME/testLogDiff.out");
       if( $? >> 8 == 0 ) {
         system("rm $outputDir/$TESTCASENAME/testLogDiff.out");
         $TEST_RES .= "<td class='ok'>OK</td>";
       }
       else {
-        $TEST_RES .= "<td><a href='./$TESTCASENAME/testLogDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../$TESTPATH/expected/$TESTCASENAME/testLog.out'>expected</a></td>";
+        $TEST_RES .= "<td><a href='./$TESTCASENAME/testLogDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../r/$TESTCASENAME/testLog.out'>expected</a></td>";
         $RES=1;
       }
 
@@ -245,21 +245,21 @@ for my $requested (@runTests) {
       system("cat $outputDir/appLog.out >> $outputDir/$TESTCASENAME/appLog.out");
       system("echo -------------------------------------------------- >> $outputDir/$TESTCASENAME/appLog.out");
       system("echo LOG-OUTPUT >> $outputDir/$TESTCASENAME/appLog.out");
-      system("cat /var/log/opendias/opendias.log >> $outputDir/$TESTCASENAME/appLog.out");
-      unlink("/var/log/opendias/opendias.log");
+      system("cat /tmp/opendias_test/var/log/opendias/opendias.log >> $outputDir/$TESTCASENAME/appLog.out");
+      unlink("/tmp/opendias_test/var/log/opendias/opendias.log");
       system("sed -f config/appLogUnify.sed < $outputDir/$TESTCASENAME/appLog.out > $outputDir/$TESTCASENAME/appLog4Compare.out");
       removeDuplicateLines("$outputDir/$TESTCASENAME/appLog4Compare.out");
       if( length $GENERATE ) {
-        system("cp $outputDir/$TESTCASENAME/appLog4Compare.out $TESTPATH/expected/$TESTCASENAME/appLog.out");
+        system("cp $outputDir/$TESTCASENAME/appLog4Compare.out r/$TESTCASENAME/appLog.out");
       }
       $APP_RES="<td class='none'><a href='./$TESTCASENAME/appLog.out'>actual</a></td>";
-      system("diff -ydN $TESTPATH/expected/$TESTCASENAME/appLog.out $outputDir/$TESTCASENAME/appLog4Compare.out > $outputDir/$TESTCASENAME/appLogDiff.out");
+      system("diff -ydN r/$TESTCASENAME/appLog.out $outputDir/$TESTCASENAME/appLog4Compare.out > $outputDir/$TESTCASENAME/appLogDiff.out");
       if( $? >> 8 == 0 ) {
         system("rm $outputDir/$TESTCASENAME/appLogDiff.out");
         $APP_RES .= "<td class='ok'>OK</td>";
       }
       else {
-        $APP_RES .= "<td><a href='./$TESTCASENAME/appLogDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../$TESTPATH/expected/$TESTCASENAME/appLog.out'>expected</a></td>";
+        $APP_RES .= "<td><a href='./$TESTCASENAME/appLogDiff.out'>diff</a>&nbsp;|&nbsp;<a href='../../r/$TESTCASENAME/appLog.out'>expected</a></td>";
         $RES=1;
       }
 

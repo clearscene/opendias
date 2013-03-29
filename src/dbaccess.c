@@ -60,12 +60,17 @@ char *getScanParam(char *scanid, int param_option) {
 
 	o_log(DEBUGM,"Entering getScanParam");
 
-  sql = o_printf("SELECT param_value \
+  sql = o_strdup("SELECT param_value \
                   FROM scan_params \
-                  WHERE client_id = '%s' \
-                  AND param_option = %i", scanid, param_option);
+                  WHERE client_id = ? \
+                  AND param_option = ?");
 
-  rSet = runquery_db(sql);
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, scanid );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &param_option );
+  rSet = runquery_db(sql, vars);
   if( rSet ) {
     vvalue = o_strdup(readData_db(rSet, "param_value"));
   }
@@ -112,7 +117,7 @@ void updateScanProgress (char *uuid, int status, int value) {
   free(progressUpdate);
 
 }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 static char *addNewDoc (int ftype, int getLines, int ppl, int resolution, int pageCount, char *ocrText) {
 
@@ -149,8 +154,8 @@ char *addNewScannedDoc (int getLines, int ppl, int resolution, int pageCount) {
   return addNewDoc(SCAN_FILETYPE, getLines, ppl, resolution, pageCount, o_strdup("") );
 }
 
-char *addNewFileDoc (int ftype, char *ocrText) {
-  return addNewDoc(ftype, 0, 0, 0, 1, ocrText);
+char *addNewFileDoc (int ftype, int x, int y, char *ocrText) {
+  return addNewDoc(ftype, y, x, 0, 1, ocrText);
 }
 
 void updateNewScannedPage (int docid, char *ocrText, int page) {
@@ -289,26 +294,16 @@ void removeDoc (char *docid) {
   free(sql);
 }
 
-void addLocation(char *location, int role) {
-
-  char *sql = o_strdup("INSERT INTO location_access (location, role) VALUES (?, ?);");
-  struct simpleLinkedList *vars = sll_init();
-  sll_append(vars, DB_TEXT );
-  sll_append(vars, location );
-  sll_append(vars, DB_INT );
-  sll_append(vars, &role );
-
-  runUpdate_db(sql, vars);
-  free(sql);
-}
-
 char *getTagId(char *tagname) {
 
   struct simpleLinkedList *vars, *rSet;
   char *sql2, *ret = NULL;
-  char *sql = o_printf("SELECT tagid FROM tags WHERE tagname = '%s'", tagname);
+  char *sql = o_strdup("SELECT tagid FROM tags WHERE tagname = ?");
 
-  rSet = runquery_db(sql);
+  vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, tagname );
+  rSet = runquery_db(sql, vars);
   if( rSet != NULL ) {
     ret = o_strdup(readData_db(rSet, "tagid"));
   }
@@ -334,10 +329,13 @@ char *getTagId(char *tagname) {
 
 int countDocsWithTag( char *tagid ) {
 
-  char *sql = o_printf("SELECT COUNT(tagid) ct FROM doc_tags WHERE tagid = '%s'", tagid);
+  char *sql = o_strdup("SELECT COUNT(tagid) ct FROM doc_tags WHERE tagid = ?");
   int ret = 0;
 
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, tagid );
+  struct simpleLinkedList *rSet = runquery_db(sql, vars);
   if( rSet ) {
     ret = atoi(readData_db(rSet, "ct"));
   }
@@ -358,5 +356,20 @@ void deleteTag( char *tagid ) {
 
   runUpdate_db(sql, vars);
   free(sql);
+}
+
+void savePhash(int docid, unsigned long long hash) {
+  char *sql = o_strdup("UPDATE docs SET image_phash = ? WHERE docid = ?");
+  char *hash_s = o_printf("%llu", hash);
+
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, hash_s );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &docid );
+
+  runUpdate_db(sql, vars);
+  free(sql);
+  free(hash_s);
 }
 

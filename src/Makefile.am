@@ -1,11 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 
-## Created by Anjuta
-
 AM_CPPFLAGS = \
-	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
-	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\" $(OPENDIAS_CFLAGS)
+  -DETC_DIR=\""$(sysconfdir)"\" \
+  -DVAR_DIR=\""$(VAR_DIR)"\" \
+  -DSHARE_DIR=\""$(datadir)"\" \
+  $(OPENDIAS_CFLAGS)
 
 AM_CFLAGS =\
 	 -Wall
@@ -44,6 +43,10 @@ opendias_SOURCES = \
   ocr_plug.h    \
   pdf_plug.cc    \
   pdf_plug.h    \
+  phash_plug.cc \
+  phash_plug.h \
+  backpopulate.c \
+  backpopulate.h \
   scan.c    \
   scan.h    \
   scanner.c    \
@@ -66,7 +69,9 @@ opendias_SOURCES = \
   saneDispatcher.c    \
   saneDispatcher.h    \
   simpleLinkedList.c    \
-  simpleLinkedList.h
+  simpleLinkedList.h \
+  sessionmanagement.c \
+  sessionmanagement.h
 
 opendias_LDFLAGS = 
 

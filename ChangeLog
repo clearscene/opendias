@@ -1,3 +1,19 @@
+ 0.9.1  Auto detect similar documents, offer to 'tag' and 'title' new docs for you.
+        Priverlage assignment by username and password.
+        Added Dutch translations.
+        Can now scan in colour.
+        Detail page now has a print now button (for scans and jpeg imports).
+        Increased the max number of scanning pages to 30 (from 10).
+        Depricated location based priverlage assignments.
+        Cleaned up homepage.
+        Improve scanning performance.
+        Application and install, now honours GNU autotools --prefix option.
+        Tests no longer need special permissions to run.
+        Web application is now session aware.
+        Implement bind vars for result returning SQL statements.
+        Stubbed out many external libs for testing (performance).
+        Localisation is now much easier.
+
  0.8.1  A localisation framework has been put in place (with en and de languages added)
         Remove defunct speak functionality
         Implement Issue #7 - Document Linkage
@@ -6,7 +22,7 @@
         PDF, ODF and Image imports, now correctly have a thumbnail and OCR performed.
         Now works on 64-bit machines
         Migrated to tesseract v3
-        IO is all utf8
+        IO is all utf8 (Thanks Steve Meifert)
         Frontend will now timeout, rather than hang on error.
         Document list is now autoloaded, rather than using a paged table.
         various bug fixes and cleanups.

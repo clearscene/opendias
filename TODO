@@ -1,0 +1,77 @@
+####################################################################################
+## EDITED THIS DOC? NOW GO UPDATE essesntialcollections.co.uk/opendias_website/todo.shtml ##
+####################################################################################
+
+
+Version 0.9 [active]
+--------------------
+
+Testing
+
+  Migrate 8_* tests to use QUnit instead of HTMLUnit. ie remove 2.3 from tests/README
+
+  Fix intermittent test failures (log timings mainly) & rationalise valgrind suppressions.
+
+  Implement the remainder of the test plan 'test/regressionTests/testplan', check coverage.
+
+App Improvments
+
+  [all done]
+
+Functionality
+
+  [all done]
+
+Project
+
+  Get included into major repositories
+
+
+
+Version 0.10
+------------
+
+Functionality
+
+  Implement 'OCR now' on document detail page.
+
+  Frontend remembers user options [not sure what options a user need opendias to remember]
+
+  New doc detail data (doc meta data) by category or assigned tag.
+
+App Improvments
+
+  Add a plugin framework
+
+
+Version 1.0
+-----------
+
+Implement webservice to allow cloud backend datastores
+
+Turn OCR into a plugin
+
+
+
+After That (possible ideas)
+----------
+
+ * Print doc details label (to stick onto doc after scanning)
+ * document workflow
+ * Updates versioning/audit
+ * auto (learning) tagging of new docs
+
+
+==================================================
+
++-----------------------------------------------+
+|          RPM          |           DEB         |
++-----------------------------------------------+
+| Package Built      Y  |  Package Built     Y  |
+| rpmfusion.org         |  software center   Y  |
+| Fedora                |  getdeb.net           |
+| OpenSUSE              |  Debian               |
+| Mandriva              |  Ubuntu               |
++-----------------------------------------------+
+
+

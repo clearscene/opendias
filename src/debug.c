@@ -28,7 +28,14 @@
 
 #include "debug.h"
 
-void i_o_log(const int verbosity, const char *message, va_list inargs) {
+int trigger_log_verbosity( const int verbosity ) {
+  if( verbosity <= VERBOSITY ) {
+    return 1;
+  }
+  return 0;
+}
+
+void i_o_log(const char *file, const int line, const int verbosity, const char *message, va_list inargs) {
 
   FILE *fp;
   char *logFile;
@@ -36,9 +43,15 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
 	va_list ap;
 	va_copy(ap,inargs);
 
-  if( verbosity <= VERBOSITY ) {
+  if( trigger_log_verbosity( verbosity ) ) {
 
-    char *thumb = o_strdup("%s:%X:%s: ");
+    char *thumb;
+    if( VERBOSITY >= DEBUGM ) { 
+      thumb = o_strdup("%s:%X:%s:%s:%d ");
+    }
+    else {
+      thumb = o_strdup("%s:%X:%s ");
+    }
     char *ltime = getTimeStr();
     char *vb;
     if(verbosity == 1) {
@@ -62,28 +75,37 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
     if( message == strstr(message,"|") ) {
       vprintf((char *)message+1,inargs);
       printf("\n");
-	//need to reset inargs to saved ap. reason vprintf function do not do so.
-	va_end(inargs);
-	va_copy(inargs,ap);
+      //need to reset inargs to saved ap. reason vprintf function do not do so.
+      va_end(inargs);
+      va_copy(inargs,ap);
     }
 
-
     // Output to file
-    logFile = o_strdup(LOG_DIR);
-	//printf("running conCat %s !!!\n",logFile);
-
-
-    conCat(&logFile, "/opendias.log");
+    if( LOG_DIR ) {
+      logFile = o_printf("%s/opendias.log", LOG_DIR);
+    }
+    else {
+      logFile = o_printf("%s/log/opendias/opendias.log", VAR_DIR);
+    }
     if((fp = fopen(logFile, "a"))==NULL) {
       fprintf(stderr,"Cannot open log file %s.\n",logFile);
       exit(1);
-    } 
-    fprintf(fp,thumb,ltime,pthread_self(),vb);
+    }
+
+    // if the apps debug level at DEBUGM or TRACE, then include
+    // __FILE__ and __LINE__ detail in the log entry.
+    if( VERBOSITY >= DEBUGM ) { 
+      fprintf(fp,thumb,ltime,pthread_self(),vb,file,line);
+    }
+    else {
+      fprintf(fp,thumb,ltime,pthread_self(),vb);
+    }
     vfprintf(fp,message,inargs);
     fprintf(fp,"\n");
-    fclose(fp);
-    free(logFile);
 
+    fclose(fp);
+
+    free(logFile);
     free(ltime);
     free(thumb);
     free(vb);
@@ -91,12 +113,12 @@ void i_o_log(const int verbosity, const char *message, va_list inargs) {
 
 }
 
-extern void o_log(const int verbosity, const char *message, ... ) {
+extern void oo_log(const char *file, const int line, const int verbosity, const char *message, ... ) {
 
-  if( verbosity <= VERBOSITY ) {
+  if( trigger_log_verbosity( verbosity ) ) {
     va_list inargs;
     va_start(inargs, message);
-    i_o_log(verbosity, message, inargs);
+    i_o_log(file, line, verbosity, message, inargs);
     va_end(inargs);
   }
 

@@ -25,6 +25,7 @@
 #include <unistd.h> // for getpid & readlink
 #include <sys/stat.h> // for mkdir
 #include <ctype.h>
+#include <openssl/md5.h>
 
 #include "main.h"
 #include "debug.h"
@@ -337,51 +338,51 @@ char *i_printf(const char *fmt, va_list inargs) {
   char *str;
   size_t xs;
   FILE *DEVZERO;
-	/*printf("i_printf working on format %s:",fmt);
-	vprintf(fmt,inargs);
+  /*printf("i_printf working on format %s:",fmt);
+  vprintf(fmt,inargs);
 
-	printf("\nsecond call\n");
-	printf("i_printf working on format %s:",fmt);
-	vprintf(fmt,inargs);
+  printf("\nsecond call\n");
+  printf("i_printf working on format %s:",fmt);
+  vprintf(fmt,inargs);
 
-	printf("\n");
-	exit(43);	*/
-	/* in order to allocate sufficient amount of memory, use the following approach:
-		+ copy initial argument state
-		+ vfprintf to /dev/null to examine buffer size 
-		+ allocate memory
-		+ reset argument pointer
-		+ use vsnprintf to write result in str
-	*/
-	//printf("entering i_printf fmt = %s\n",fmt);
-	va_copy(ap,inargs);
+  printf("\n");
+  exit(43);  */
+  /* in order to allocate sufficient amount of memory, use the following approach:
+    + copy initial argument state
+    + vfprintf to /dev/null to examine buffer size 
+    + allocate memory
+    + reset argument pointer
+    + use vsnprintf to write result in str
+  */
+  //printf("entering i_printf fmt = %s\n",fmt);
+  va_copy(ap,inargs);
 
-	//open dev zero as stream
-	if ( (DEVZERO=fopen("/dev/null","w+")) == NULL ) {
-		printf("cannot open /dev/null.");
-		exit(110);	
-	}
-	xs=(size_t)vfprintf(DEVZERO,fmt,inargs);
-	//printf("\n%d bytes written\n",(int)xs);
-	fclose(DEVZERO);
+  //open dev zero as stream
+  if ( (DEVZERO = fopen("/dev/null","w+")) == NULL ) {
+    printf("cannot open /dev/null.");
+    exit(110);  
+  }
+  xs = (size_t)vfprintf( DEVZERO, fmt, inargs );
+  //printf("\n%d bytes written\n",(int)xs);
+  fclose(DEVZERO);
 
-	xs=xs+sizeof(*str);
-	if ( (str=(char*)malloc(xs)) == NULL ) {
+  xs = xs + sizeof(*str);
+  if ( (str = (char*)malloc(xs) ) == NULL ) {
     printf("memory allocation error\n");
     exit(1);
   }
-	//printf("allocated %d bytes\n",(int)xs);
+  //printf("allocated %d bytes\n",(int)xs);
 
-	va_end(inargs);
-	va_copy(inargs,ap);
-	
-	if (vsnprintf(str,xs,fmt,inargs) > (int)xs) {
-		printf("serious memory problem\n");
-		exit(110);
-	}
-	
-	//printf("leaving i_printf result = %s\n",str);
-	return(str);
+  va_end(inargs);
+  va_copy(inargs,ap);
+  
+  if (vsnprintf(str,xs,fmt,inargs) > (int)xs) {
+    printf("serious memory problem\n");
+    exit(110);
+  }
+  
+  //printf("leaving i_printf result = %s\n",str);
+  return(str);
 }
 
 char *o_printf(const char *fmt, ...) {
@@ -410,3 +411,30 @@ void o_concatf(char **mainStr, const char *fmt, ...) {
 
 }
 
+char *str2md5(const char *str, int length) {
+  int n;
+  MD5_CTX c;
+  unsigned char digest[16];
+  char *out = (char*)malloc(33);
+
+  MD5_Init(&c);
+
+  while (length > 0) {
+    if (length > 512) {
+      MD5_Update(&c, str, 512);
+    } 
+    else {
+      MD5_Update(&c, str, length);
+    }
+    length -= 512;
+    str += 512;
+  }
+
+  MD5_Final(digest, &c);
+
+  for (n = 0; n < 16; ++n) {
+    snprintf(&(out[n*2]), 16*2, "%02x", (unsigned int)digest[n]);
+  }
+
+  return out;
+}

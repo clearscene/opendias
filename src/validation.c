@@ -29,14 +29,10 @@
 
 char *getPostData(struct simpleLinkedList *post_hash, char *key) {
   struct simpleLinkedList *data = sll_searchKeys(post_hash, key);
-  struct post_data_struct *data_struct = NULL;
-  if( data != NULL && data->data != NULL )
-    data_struct = (struct post_data_struct *)data->data;
-
-  if(data_struct == NULL || data_struct->data == NULL)
+  if( data == NULL || data->data == NULL )
     return NULL;
   else
-    return data_struct->data;
+    return data->data;
 }
 
 
@@ -159,17 +155,6 @@ static int checkFullCount(char *val) {
   return 1;
 }
 
-static int validUploadType(char *val) {
-  if( val == NULL ) return 1;
-  if ( 0 == strcmp(val, "PDF" )
-    || 0 == strcmp(val, "ODF" ) 
-    || 0 == strcmp(val, "jpg" ) ) {
-    return 0;
-  }
-  o_log(ERROR, "Validation failed: uploadType check");
-  return 1;
-}
-
 //
 static int checkDate(char *val) {
   struct dateParts *dp = dateStringToDateParts(val);
@@ -214,7 +199,7 @@ static int checkOCRLanguage(char *val) {
   o_log(ERROR, "Validation failed: Unknown ocr language");
   return 1;
 }
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
 
 static int checkDeviceId(char *val) {
   if( val == NULL ) return 1;
@@ -225,7 +210,10 @@ static int checkDeviceId(char *val) {
 static int checkFormat(char *val) {
   if( val == NULL ) return 1;
   lower(val); // convert the whole string to lower case
-  if ( 0 == strcmp(val, "grey scale") ) return 0;
+  if ( 0 == strcmp(val, "gray")
+    || 0 == strcmp(val, "colour") ) {
+    return 0;
+  }
   o_log(ERROR, "Validation failed: scan format check");
   return 1;
 }
@@ -250,12 +238,12 @@ static int checkResolution(char *val) {
   if(checkSaneRange(val, 10, 3000)) return 1;
   return 0;
 }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 static int checkUpdateKey(char *val) {
   if( val == NULL ) return 1;
   if ( 0 != strcmp(val, "title") 
-    && 0 != strcmp(val, "isActionRequired") 
+    && 0 != strcmp(val, "actionrequired") 
     && 0 != strcmp(val, "hardcopyKept") 
     && 0 != strcmp(val, "ocrtext") 
     && 0 != strcmp(val, "docDate") ) {
@@ -265,23 +253,13 @@ static int checkUpdateKey(char *val) {
   return 0;
 }
 
-static int checkControlAccessMethod(char *submethod) {
-  if( submethod == NULL ) return 1;
-  if ( 0 == strcmp(submethod, "addLocation")
-    || 0 == strcmp(submethod, "removeLocation" )
-    || 0 == strcmp(submethod, "addUser" )
-    || 0 == strcmp(submethod, "removeUser" ) ) {
-    return 0;
-  }
-  o_log(ERROR, "Validation failed: accessConrol Method check");
-  return 1;
-}
-
+#ifndef OPEN_TO_ALL
 static int checkRole(char *role) {
   if(checkStringIsInt(role)) return 1;
   if(checkSaneRange(role, 1, 10)) return 1;
   return 0;
 }
+#endif /* OPEN_TO_ALL */
 
 // need more here (ie comma delimited)
 static int checkTagList(char *val) {
@@ -360,10 +338,16 @@ int basicValidation(struct simpleLinkedList *postdata) {
     && 0 != strcmp(action, "deleteDoc") 
     && 0 != strcmp(action, "regenerateThumb")
     && 0 != strcmp(action, "uploadfile")
-    && 0 != strcmp(action, "getAccessDetails")
     && 0 != strcmp(action, "titleAutoComplete")
     && 0 != strcmp(action, "tagsAutoComplete")
-    && 0 != strcmp(action, "controlAccess") ) {
+    && 0 != strcmp(action, "checkLogin")
+    && 0 != strcmp(action, "logout")
+    && 0 != strcmp(action, "updateUser")
+    && 0 != strcmp(action, "createUser")
+    && 0 != strcmp(action, "getUserList")
+    && 0 != strcmp(action, "deleteUser")
+    && 0 != strcmp(action, "checkForSimilar")
+                                        ) {
     o_log(ERROR, "requested 'action' (of '%s') is not available.", action);
     return 1;
   }
@@ -409,7 +393,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     sll_insert(vars, "ocr", "m" );
 #else
     sll_insert(vars, "ocr", "m" );
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
     sll_insert(vars, "pagelength", "m" );
     ret += checkKeys(postdata, vars );
     ret += checkDeviceId(getPostData(postdata, "deviceid"));
@@ -418,7 +402,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkPages(getPostData(postdata, "pages"));
 #ifdef CAN_OCR
     ret += checkOCRLanguage(getPostData(postdata, "ocr"));
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
     ret += checkPageLength(getPostData(postdata, "pagelength"));
   }
 
@@ -433,7 +417,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkKeys(postdata, vars );
     ret += checkUUID(getPostData(postdata, "scanprogressid"));
   }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
   if ( 0 == strcmp(action, "updateDocDetails") ) {
     sll_insert(vars, "docid", "m" );
@@ -452,6 +436,12 @@ int validate(struct simpleLinkedList *postdata, char *action) {
         ret += checkVal(vvalue);
       }
     }
+  }
+
+  if ( 0 == strcmp(action, "checkForSimilar") ) {
+    sll_insert(vars, "docid", "m" );
+    ret += checkKeys(postdata, vars );
+    ret += checkDocId(getPostData(postdata, "docid"));
   }
 
   if ( 0 == strcmp(action, "moveTag") ) {
@@ -511,11 +501,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkKeys(postdata, vars );
     ret += checkDocId(getPostData(postdata, "docid"));
   }
-#endif // CAN_PDF //
-
-  if ( 0 == strcmp(action, "getAccessDetails") ) {
-    ret += checkKeys(postdata, vars );
-  }
+#endif /* CAN_PDF */
 
   if ( 0 == strcmp(action, "titleAutoComplete") ) {
     sll_insert(vars, "startsWith", "m" );
@@ -532,25 +518,62 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkDocId(getPostData(postdata, "docid"));
   }
 
-  // Needs further validation effort
+#ifndef OPEN_TO_ALL
+  if ( 0 == strcmp(action, "checkLogin") ) {
+    sll_insert(vars, "username", "m" );
+    sll_insert(vars, "password", "m" );
+    ret += checkKeys(postdata, vars );
+  }
 
-  if ( 0 == strcmp(action, "controlAccess") ) {
-    sll_insert(vars, "submethod", "m" );
-    sll_insert(vars, "address", "o" );
-    sll_insert(vars, "user", "o" );
+  if ( 0 == strcmp(action, "logout") ) {
+    ret += checkKeys(postdata, vars );
+  }
+
+  if ( 0 == strcmp(action, "updateUser") ) {
+    sll_insert(vars, "username", "m" );
+    sll_insert(vars, "realname", "o" );
     sll_insert(vars, "password", "o" );
     sll_insert(vars, "role", "o" );
-    sll_insert(vars, "addButton", "o" ); // Ultimatly ignored
     ret += checkKeys(postdata, vars );
-    ret += checkControlAccessMethod(getPostData(postdata, "submethod"));
-    ret += checkRole(getPostData(postdata, "role"));
+    if ( getPostData(postdata, "username") != NULL ) {
+      if ( getPostData(postdata, "role") != NULL ) {
+        ret += checkRole( getPostData(postdata, "role") );
+        if ( 0 == strcmp( getPostData(postdata, "username"), "[current]") ) {
+          // Cannot update your own role
+          ret += 1;
+        }
+      }
+    }
   }
+
+  if ( 0 == strcmp(action, "createUser") ) {
+    sll_insert(vars, "username", "m" );
+    sll_insert(vars, "realname", "m" );
+    sll_insert(vars, "password", "m" );
+    sll_insert(vars, "role", "m" );
+    ret += checkKeys(postdata, vars );
+    if ( getPostData(postdata, "username") != NULL ) {
+      if ( getPostData(postdata, "role") != NULL ) {
+        ret += checkRole( getPostData(postdata, "role") );
+      }
+    }
+  }
+
+  if ( 0 == strcmp(action, "deleteUser") ) {
+    sll_insert(vars, "username", "m" );
+    ret += checkKeys(postdata, vars );
+  }
+
+  if ( 0 == strcmp(action, "getUserList") ) {
+    ret += checkKeys(postdata, vars );
+  }
+#endif /* OPEN_TO_ALL /*/
+
+  // Needs further validation effort
 
   if ( 0 == strcmp(action, "uploadfile") ) {
     sll_insert(vars, "uploadfile", "m" );
-    sll_insert(vars, "ftype", "m" );
     ret += checkKeys(postdata, vars );
-    ret += validUploadType(getPostData(postdata, "ftype"));
     ret += checkUUID(getPostData(postdata, "uploadfile"));
   }
 
@@ -566,6 +589,7 @@ int validateLanguage( const char *requestedLang ) {
   // "hh" is the test lang (hash-hash).
   if ( ( 0 == strcmp(requestedLang, "en") ) 
     || ( 0 == strcmp(requestedLang, "de") ) 
+    || ( 0 == strcmp(requestedLang, "nl") ) 
     || ( 0 == strcmp(requestedLang, "hh") ) ) {
     return 1;
   }

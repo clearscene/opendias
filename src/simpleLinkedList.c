@@ -34,6 +34,7 @@
 #include <string.h>
 
 #include "debug.h"
+#include "utils.h"
 
 #include "simpleLinkedList.h"
 
@@ -84,6 +85,9 @@ void sll_insert ( struct simpleLinkedList *element, char *key, void *data ) {
 }
 
 struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *element, const char *key ) {
+  if( key == NULL ) {
+    return NULL;
+  }
   if( element && ( element != NULL ) ) {
     if( element->key && ( element->key != NULL ) && ( 0 == strcmp(element->key, key) ) ) {
       return element;
@@ -117,22 +121,104 @@ struct simpleLinkedList *sll_getNext( struct simpleLinkedList *element ) {
 
 void sll_destroy( struct simpleLinkedList *element ) {
   if( element && ( element != NULL ) ) {
+
     o_log(SQLDEBUG, "preparing to delete element: %x, with prev=%x, and next=%x", element, element->prev, element->next);
+
     sll_destroy( sll_getNext( element ) );
+
+    int set_delete_here = 0;
+    if( element->prev == NULL ) {
+      // The last element is never deleted by sll_delete,
+      // But if we're destroying the object WE should
+      set_delete_here = 1;
+    }
+
     sll_delete( element );
+
+    if( set_delete_here == 1 ) {
+      free( element );
+    }
   }
 }
 
 void sll_delete( struct simpleLinkedList *element ) {
   struct simpleLinkedList *prev_element = element->prev;
   struct simpleLinkedList *next_element = element->next;
+
   o_log(SQLDEBUG, "Asked to delete element: %x, with prev=%x, and next=%x", element, element->prev, element->next);
-  if( next_element && ( next_element != NULL ) ) {
-    next_element->prev = prev_element;
-  }
+
   if( prev_element && ( prev_element != NULL ) ) {
+    if( next_element && ( next_element != NULL ) ) {
+      next_element->prev = prev_element;
+    }
     prev_element->next = next_element;
+    free( element );
+    element = NULL;
   }
-  free( element );
+  else {
+    element->key = NULL;
+    element->data = NULL;
+  }
+}
+
+int _sll_count( struct simpleLinkedList *element, int current_count ) {
+  if( element->next == NULL ) {
+    return current_count;
+  }
+  return _sll_count( element->next, ++current_count );
+}
+
+int sll_count( struct simpleLinkedList *element ) {
+  return _sll_count( element, 0 );
+}
+
+char *sll_dumper( struct simpleLinkedList *container ) {
+  struct simpleLinkedList *row;
+  char *ret = o_strdup("");
+  for( row = sll_findFirstElement( container ) ; row != NULL ; row = sll_getNext(row) ) {
+    conCat( &ret, "\n" );
+    char *data;
+    data = row->data;
+
+    // Obscure sensitive data
+    if( row->key != NULL && 0 == strcmp( row->key, "password" ) ) {
+      data = "###############";
+    }
+
+    o_concatf( &ret, "      %s : %s", row->key, data);
+  }
+  return ret;
+}
+
+// Bubble sort the 'data', (low -> high) assuming data contains an int ref
+// Lots of opertunity to make this method more flexable 
+// - (sort order; sort by key/data; data contains chars; etc...)
+void sll_sort( struct simpleLinkedList *element ) {
+  struct simpleLinkedList *row;
+  if( element && ( element != NULL ) ) {
+    int swapped = 1;
+    while( swapped != 0 ) {
+      o_log(SQLDEBUG, "looping over data-set.");
+      swapped = 0;
+      for( row = sll_findFirstElement( element ) ; row != NULL ; row = sll_getNext(row) ) {
+        if( row->next != NULL ) {
+          char *this_data = row->data;
+          char *next_data = row->next->data;
+          if( atoi(this_data) > atoi(next_data) ) {
+            // Swap the data
+            char *this_key = row->key;
+            char *next_key = row->next->key;
+            o_log(SQLDEBUG, "swapping %s->%s for %s->%s", this_key, this_data, next_key, next_data);
+            row->next->key = this_key;
+            row->key = next_key;
+            row->next->data = this_data;
+            row->data = next_data;
+            swapped = 1;
+            break;
+          }
+        }
+      }
+    }
+  }
 }
 

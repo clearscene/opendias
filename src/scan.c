@@ -19,13 +19,14 @@
 #include "config.h"
 
 #ifdef CAN_SCAN
+#include <unistd.h>     // for usleep
 #include <stdlib.h>
 #include <stdio.h>      // printf, file operations
 #include <string.h>     // compares
 #include <math.h>       // for fmod
+#include <sys/time.h>   // for gettimeofday
 
 #include <leptonica/allheaders.h>
-#include <FreeImage.h>  // 
 #include <sane/sane.h>  // Scanner Interface
 #include <sane/saneopts.h>  // Scanner Interface
 #include <netinet/in.h>
@@ -43,7 +44,8 @@
 
 #include "scan.h"
 
-int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resolution, int *buff_requested_len ) {
+
+int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resolution ) {
 
   int option = 0;
   SANE_Status status;
@@ -51,7 +53,9 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
   SANE_Int v_i;
   SANE_Bool v_b;
   char *v_c;
-  const char *modes[] = { SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
+  //const char *modes[] = { SANE_VALUE_SCAN_MODE_COLOR, SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
+  const char *modes_colour[] = { SANE_VALUE_SCAN_MODE_COLOR, "Color", SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
+  const char *modes_gray[] = { SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
   const char *speeds[] = { "Auto", "Normal", "Fast", NULL };
   const char *sources[] = { "Auto", SANE_I18N ("Auto"), "Flatbed", SANE_I18N ("Flatbed"), 
                             "FlatBed", "Normal", SANE_I18N ("Normal"), NULL };
@@ -63,11 +67,10 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
   }
   free(devName);
 
+
   for (option = 0; option < 9999; option++) {
 
-    const SANE_Option_Descriptor *sod;
-
-    sod = sane_get_option_descriptor (openDeviceHandle, option);
+    const SANE_Option_Descriptor *sod = sane_get_option_descriptor (openDeviceHandle, option);
 
     // No more options    
     if (sod == NULL)
@@ -101,49 +104,9 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
 
         int paramSetRet = 0;
 
-        // Set scanning resolution
-        if ( strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) == 0) {
-
-          char *request_resolution_s;
-
-          request_resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
-          *request_resolution = atoi(request_resolution_s);
-          free(request_resolution_s);
-
-          if (sod->type == SANE_TYPE_FIXED) {
-            v_f = SANE_FIX( *request_resolution );
-            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
-            if(status != SANE_STATUS_GOOD) {
-              handleSaneErrors("Cannot set resolution (fixed)", status, paramSetRet);
-              updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-              return 0;
-            }
-          }
-          else if (sod->type == SANE_TYPE_INT) {
-            int sane_resolution = *request_resolution;
-            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &sane_resolution, &paramSetRet);
-            if(status != SANE_STATUS_GOOD) {
-              handleSaneErrors("Cannot set resolution (int)", status, paramSetRet);
-              updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-              return 0;
-            }
-          }
-          else {
-            int sane_resolution = *request_resolution;
-            if( sod->constraint.range->quant != 0 ) 
-              sane_resolution = sane_resolution * sod->constraint.range->quant;
-            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &sane_resolution, &paramSetRet);
-            if(status != SANE_STATUS_GOOD) {
-              handleSaneErrors("Cannot set resolution (range)", status, paramSetRet);
-              updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-              return 0;
-            }
-          }
-        }
-
         // Set scanning Source
-        else if ( strcmp(sod->name, SANE_NAME_SCAN_SOURCE) == 0 ) {
-          if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
+        if ( strcmp(sod->name, SANE_NAME_SCAN_SOURCE) == 0 ) {
+          if ( !setDefaultScannerOption(openDeviceHandle, sod, option, &paramSetRet) ) {
             int i, j; 
             int foundMatch = 0;
             for (i = 0; sources[i] != NULL; i++) {
@@ -155,91 +118,120 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
                 v_c = o_strdup(sources[i]);
                 status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
                 free(v_c);
-                if(status != SANE_STATUS_GOOD) {
-                  handleSaneErrors("Cannot set source", status, paramSetRet);
-                  updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-                  return 0;
-                }
                 foundMatch = 1;
                 break;
               }
             }
             if( foundMatch == 0 ) {
               o_log(DEBUGM, "Non of the available options are appropriate.");
-            }
-          }
-        }
-
-        // Set scanning depth
-        else if ( strcmp(sod->name, SANE_NAME_BIT_DEPTH) == 0 ) {
-          if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
-            if( sod->type == SANE_TYPE_STRING ) {
-              v_c = o_strdup("8");
-              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
-              free(v_c);
-            }
-            else {
-              v_i = 8;
-              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_i, &paramSetRet);
-            }
-            if(status != SANE_STATUS_GOOD) {
-              handleSaneErrors("Cannot set depth", status, paramSetRet);
-              updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-              return 0;
             }
           }
         }
 
         // Set scanning mode
-        else if ( strcmp(sod->name, SANE_NAME_SCAN_MODE) == 0 ) {
-          if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
-            int i, j; 
-            int foundMatch = 0;
-            for (i = 0; modes[i] != NULL; i++) {
-              for (j = 0; sod->constraint.string_list[j]; j++) {
-                if (strcmp (modes[i], sod->constraint.string_list[j]) == 0)
-                  break;
-              }
-              if (sod->constraint.string_list[j] != NULL) {
-                v_c = o_strdup(modes[i]);
-                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
-                free(v_c);
-                if(status != SANE_STATUS_GOOD) {
-                  handleSaneErrors("Cannot set mode", status, paramSetRet);
-                  updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-                  return 0;
-                }
-                foundMatch = 1;
+        else if ( strcmp(sod->name, SANE_NAME_SCAN_MODE ) == 0 ) {
+          const char **modes;
+          char *requested_mode = getScanParam(uuid, SCAN_PARAM_FORMAT );
+          if( 0 == strcmp( "colour", requested_mode ) ) {
+            modes = modes_colour;
+          }
+          else {
+            modes = modes_gray;
+          }
+          free( requested_mode );
+          int i, j; 
+          int foundMatch = 0;
+          for (i = 0; modes[i] != NULL; i++) {
+            for (j = 0; sod->constraint.string_list[j]; j++) {
+              if (strcmp (modes[i], sod->constraint.string_list[j]) == 0)
                 break;
-              }
             }
-            if( foundMatch == 0 ) {
-              o_log(DEBUGM, "Non of the available options are appropriate.");
+            if (sod->constraint.string_list[j] != NULL) {
+              v_c = o_strdup(modes[i]);
+              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
+              free(v_c);
+              foundMatch = 1;
+              break;
+            }
+          }
+          if( foundMatch == 0 ) {
+            o_log(DEBUGM, "Non of the available options are appropriate.");
+          }
+        }
+
+        else if ( strcmp(sod->name, "batch-scan" ) == 0 ) {
+          v_b = SANE_FALSE;
+          status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
+        }
+
+        else if ( strcmp(sod->name, "compression") == 0 ) {
+          if ( !setDefaultScannerOption(openDeviceHandle, sod, option, &paramSetRet) ) {
+            v_c = o_strdup("None");
+            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
+            free(v_c);
+          }
+        }
+
+        // Set scanning depth
+        else if ( strcmp(sod->name, SANE_NAME_BIT_DEPTH) == 0 ) {
+          if ( !setDefaultScannerOption(openDeviceHandle, sod, option, &paramSetRet) ) {
+            if( sod->type == SANE_TYPE_STRING ) {
+              v_c = o_strdup("8");
+              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
+              free(v_c);
+            }
+            if (sod->type == SANE_TYPE_FIXED) {
+              v_f = SANE_FIX( 8 );
+              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
+            }
+            else {
+              v_i = 8;
+              status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_i, &paramSetRet);
             }
           }
         }
 
         // Set Preview mode
         else if ( strcmp(sod->name, SANE_NAME_PREVIEW) == 0 ) {
-          if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
+          if ( !setDefaultScannerOption(openDeviceHandle, sod, option, &paramSetRet) ) {
             v_b = SANE_FALSE;
             status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
-            if(status != SANE_STATUS_GOOD) {
-              handleSaneErrors("Cannot set mode", status, paramSetRet);
-              updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-              return 0;
-            }
           }
         }
 
-        else if ( strcmp(sod->name, SANE_NAME_SCAN_TL_X) == 0 || strcmp(sod->name, SANE_NAME_SCAN_TL_Y) == 0 ) {
+        // Set scanning resolution
+        else if ( strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) == 0 ) {
+
+          char *request_resolution_s;
+
+          request_resolution_s = getScanParam(uuid, SCAN_PARAM_REQUESTED_RESOLUTION);
+          *request_resolution = atoi(request_resolution_s);
+          free(request_resolution_s);
+
+          if (sod->type == SANE_TYPE_FIXED) {
+            v_f = SANE_FIX( *request_resolution );
+            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
+          }
+          else if (sod->type == SANE_TYPE_INT) {
+            int sane_resolution = *request_resolution;
+            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &sane_resolution, &paramSetRet);
+          }
+         else {
+            int sane_resolution = *request_resolution;
+            if( sod->constraint.range->quant != 0 ) 
+              sane_resolution = sane_resolution * sod->constraint.range->quant;
+            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &sane_resolution, &paramSetRet);
+          }
+        }
+
+        else if ( strcmp(sod->name, SANE_NAME_SCAN_TL_Y) == 0 ) {
           v_f = sod->constraint.range->min;
           status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
-          if(status != SANE_STATUS_GOOD) {
-            handleSaneErrors("Cannot set TL", status, paramSetRet);
-            updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return 0;
-          }
+        }
+
+        else if ( strcmp(sod->name, SANE_NAME_SCAN_TL_X) == 0 ) {
+          v_f = sod->constraint.range->min;
+          status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
         }
 
         else if ( strcmp(sod->name, SANE_NAME_SCAN_BR_Y) == 0 ) {
@@ -254,45 +246,25 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
           free(length_s);
 
           status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
-          if(status != SANE_STATUS_GOOD) {
-            handleSaneErrors("Cannot set BR", status, paramSetRet);
-            updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return 0;
-          }
         }
 
         else if ( strcmp(sod->name, SANE_NAME_SCAN_BR_X) == 0 ) {
           v_f = sod->constraint.range->max;
           status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
-          if(status != SANE_STATUS_GOOD) {
-            handleSaneErrors("Cannot set BR", status, paramSetRet);
-            updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return 0;
-          }
         }
 
         else if ( strcmp(sod->name, SANE_NAME_BRIGHTNESS) == 0 ) {
           v_f = 0;
           status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
-          if(status != SANE_STATUS_GOOD) {
-            handleSaneErrors("Cannot set brightness", status, paramSetRet);
-            updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return 0;
-          }
         }
 
         else if ( strcmp(sod->name, SANE_NAME_CONTRAST) == 0 ) {
           v_f = 0;
           status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_f, &paramSetRet);
-          if(status != SANE_STATUS_GOOD) {
-            handleSaneErrors("Cannot set contrast", status, paramSetRet);
-            updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return 0;
-          }
         }
 
-        else if ( strcmp(sod->name, SANE_NAME_SCAN_SPEED) == 0 ) {
-          if ( !setDefaultScannerOption(openDeviceHandle, sod, option) ) {
+        else if ( strcmp(sod->name, SANE_NAME_SCAN_SPEED) == 0) {
+          if ( !setDefaultScannerOption(openDeviceHandle, sod, option, &paramSetRet) ) {
             int i, j; 
             int foundMatch = 0;
             for (i = 0; speeds[i] != NULL; i++) {
@@ -304,11 +276,6 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
                 v_c = o_strdup(speeds[i]);
                 status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
                 free(v_c);
-                if(status != SANE_STATUS_GOOD) {
-                  handleSaneErrors("Cannot set speed", status, paramSetRet);
-                  updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-                  return 0;
-                }
                 foundMatch = 1;
                 break;
               }
@@ -319,250 +286,189 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
           }
         }
 
-        // Set Preview mode
-        else if (strcmp (sod->name, "non-blocking") == 0) {
-          v_b = SANE_TRUE;
-          status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
-          if(status != SANE_STATUS_GOOD) {
-            handleSaneErrors("Cannot set non-blocking", status, paramSetRet);
-            updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return 0;
-          }
-        }
-
-        else if (strcmp (sod->name, "custom-gamma") == 0) {
+        else if ( strcmp(sod->name, "custom-gamma") == 0 ) {
           v_b = SANE_FALSE;
           status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
-          if(status != SANE_STATUS_GOOD) {
-            handleSaneErrors("Cannot set no to custonmer-gamma", status, paramSetRet);
-            updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return 0;
-          }
         }
 
         // For the test 'virtual scanner'
         else if (testScanner == 1) {
-          status = SANE_STATUS_GOOD;
-          if (strcmp (sod->name, "hand-scanner") == 0) {
+
+          if ( strcmp(sod->name, "hand-scanner" ) == 0 ) {
             v_b = SANE_FALSE;
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
           }
-          else if (strcmp (sod->name, "three-pass") == 0) {
+          else if ( strcmp(sod->name, "three-pass") == 0 ){
             v_b = SANE_FALSE;
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
           }
-          else if (strcmp (sod->name, "three-pass-order") == 0) {
+          else if ( strcmp(sod->name, "three-pass-order") == 0 ) {
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, "RGB", &paramSetRet);
           }
-          else if (strcmp (sod->name, "test-raw_imageture") == 0) {
+          else if ( strcmp(sod->name, "test-raw_imageture") == 0 ) {
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, "Color pattern", &paramSetRet);
           }
-          else if (strcmp (sod->name, "read-delay") == 0) {
+          else if ( strcmp(sod->name, "read-delay") == 0 ) {
             v_b = SANE_TRUE;
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
           }
-          else if (strcmp (sod->name, "fuzzy-parameters") == 0) {
+          else if ( strcmp(sod->name, "fuzzy-parameters") == 0 ) {
             v_b = SANE_TRUE;
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
           }
-          else if (strcmp (sod->name, "read-delay-duration") == 0) {
+          else if ( strcmp(sod->name, "read-delay-duration") == 0 ) {
             v_i = 1000;
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_i, &paramSetRet);
           }
-          else if (strcmp (sod->name, "read-limit") == 0) {
+          else if ( strcmp(sod->name, "read-limit") == 0 ) {
             v_b = SANE_TRUE;
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
           }
-          else if (strcmp (sod->name, "read-limit-size") == 0) {
+          else if ( strcmp(sod->name, "read-limit-size") == 0 ) {
             v_i = sod->constraint.range->max;
-            *buff_requested_len = sod->constraint.range->max;
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_i, &paramSetRet);
           }
-          else if (strcmp (sod->name, "read-return-value") == 0) {
+          else if ( strcmp(sod->name, "read-return-value") == 0 ) {
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, "Default", &paramSetRet);
           }
-          else if (strcmp (sod->name, "ppl-loss") == 0) {
+          else if ( strcmp(sod->name, "ppl-loss") == 0 ) {
             v_i = 0;
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_i, &paramSetRet);
           }
-          else if (strcmp (sod->name, "invert-endianess") == 0) {
+          else if ( strcmp(sod->name, "invert-endianess") == 0 ) {
             v_b = SANE_FALSE;
             status = control_option(openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, &v_b, &paramSetRet);
-          }
-          if(status != SANE_STATUS_GOOD) {
-            handleSaneErrors("Cannot set option", status, paramSetRet);
-            updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-            return 0;
           }
         }
 
         // not a 'well known' option
         else {
-
           // try setting automatically
-          if ( !setDefaultScannerOption(openDeviceHandle, sod, option) )
+          if ( !setDefaultScannerOption(openDeviceHandle, sod, option, &paramSetRet) )
             o_log(DEBUGM, "Could not set authmatically", sod->name);
-
         }
-      }
+
+        if( status != SANE_STATUS_GOOD ) {
+          handleSaneErrors("Cannot set no to", sod->name, status, paramSetRet);
+          updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
+          return 0;
+        }
+
+        if ( paramSetRet & SANE_INFO_RELOAD_OPTIONS ) {
+          //start from the beginning again.
+          option = 0;
+        } 
+
+
+      } // setable option
     }
     else {
       o_log(DEBUGM, "The option does not need to be set.");
     }
 
-  }
+  } // options loop
 
   return 1;
 }
 
+long timevaldiff(struct timeval *starttime, struct timeval *finishtime)
+{
+  long msec;
+  msec=(finishtime->tv_sec-starttime->tv_sec)*1000;
+  msec+=(finishtime->tv_usec-starttime->tv_usec)/1000;
+  return msec;
+}
 
-SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, int *buff_requested_len, int expectFrames, size_t totbytes, int bpl, char *header ) {
+SANE_Byte *collectData( char *uuid, SANE_Handle *openDeviceHandle, size_t totbytes, int bpl, char *header ) {
 
   SANE_Status status;
   SANE_Int received_length_from_sane = 0;
-  SANE_Byte *tmp_buffer;
-  SANE_Byte *buffer;
   SANE_Byte *raw_image;
+  SANE_Byte *raw_image_current_pos;
   int progress = 0;
-  int noMoreReads = 0;
-  int counter;
-  int onlyReadxFromBlockofThree = 0;
-  int readItteration = 0;
-  size_t readSoFar = strlen(header);
+  int feedback = 5;
+  int bufferSize = 32768;
+  size_t readSoFar = 0;
+  size_t headerLength = strlen(header);
+  size_t stillToRead = totbytes;
+  struct timeval start, end;
 
-  // Initialise the initial buffer and blank image;
-  o_log(DEBUGM, "Using a buff_requested_len of %d to collect a total of %d", *buff_requested_len, totbytes);
-  raw_image = (unsigned char *)malloc( totbytes + readSoFar );
+  // Initialise the blank image;
+  raw_image = calloc( totbytes + headerLength + 1, sizeof(unsigned char) );
   if( raw_image == NULL ) {
     o_log(ERROR, "Out of memory, when assiging the new image storage.");
     return NULL;
   }
-
-  // Initialise the image to black.
-  for (counter = readSoFar ; (size_t)counter < totbytes+readSoFar ; counter++) raw_image[counter]=125;
   strcpy((char *)raw_image, header);
+  raw_image_current_pos = raw_image + headerLength;
 
-  buffer = malloc( (size_t)( sizeof(SANE_Byte) * *buff_requested_len ) );
-  if( buffer == NULL ) {
-    free(raw_image);
-    o_log(ERROR, "Out of memory, when assiging the reading buffer.");
-    return NULL;
-  }
 
-  o_log(DEBUGM, "setting non-blocking mode was %s", sane_strstatus( sane_set_io_mode (openDeviceHandle, SANE_TRUE) ) );
+  //status = sane_set_io_mode (openDeviceHandle, SANE_TRUE);
+  //o_log(DEBUGM, "setting non-blocking mode was %s", sane_strstatus( status ) );
   o_log(DEBUGM, "scan_read - start");
+
+
+  gettimeofday(&start, NULL);
   do {
+
     // Set status as 'scanning'
-    updateScanProgress(uuid, SCAN_SCANNING, progress);
+    if ( 0 > feedback ) {
+      updateScanProgress(uuid, SCAN_SCANNING, progress);
+      feedback = 5;
+    }
+    feedback--;
 
 
     //
     // Read buffer from sane (the scanner)
-    readItteration++;
-    status = sane_read (openDeviceHandle, buffer, *buff_requested_len, &received_length_from_sane);
-    o_log(DEBUGM, "At %d%, requested %d bytes, got %d, with status %d)", progress, *buff_requested_len, received_length_from_sane, status);
-    if (status != SANE_STATUS_GOOD) {
-      if (status == SANE_STATUS_EOF)
-        noMoreReads = 1;
-      else
-        o_log(ERROR, "something wrong while scanning: %s", sane_strstatus(status) );
-    }
+    //status = sane_read (openDeviceHandle, raw_image_current_pos, stillToRead, &received_length_from_sane);
+    status = sane_read (openDeviceHandle, raw_image_current_pos, bufferSize, &received_length_from_sane);
+    o_log(DEBUGM, "At %d%, requested %d bytes, got %d, with status %d)", progress, stillToRead, received_length_from_sane, status);
 
 
     //
     // Write the read 'buffer' onto 'raw_image'
     if( received_length_from_sane > 0 ) {
 
-      if( expectFrames == 3 ) {
-        int offset = 0;
-        int samp_inc;
-
-        // Do we have to finish the RGB from the last read?
-        if( onlyReadxFromBlockofThree ) {
-
-          // A bit of sanity checking!
-          if( (received_length_from_sane + onlyReadxFromBlockofThree - 3) < 0) {
-            o_log(DEBUGM, "Things dont add up. Stopping reading");
-            break;
-          }
-
-          offset = 3 - onlyReadxFromBlockofThree;
-          for(samp_inc = 0; samp_inc < offset; samp_inc++) {
-            raw_image[(int)readSoFar] = (SANE_Byte)max( raw_image[(int)readSoFar], (int)buffer[(int)samp_inc] );
-          }
-          readSoFar++;
-        }
-
-        // Check we have full blocks of data
-        onlyReadxFromBlockofThree = (int)fmod( (double)(received_length_from_sane - offset), 3 );
-
-        // process each three frame block - looking out for the last frame (that could be a partial block)
-        counter = offset;
-        while( counter < received_length_from_sane ) {
-          int sample = 0;
-          int pixelIncrement = 1;
-          int bytesInThisBlock = 3;
-
-          if ( (counter+3) > received_length_from_sane ) {
-            bytesInThisBlock = onlyReadxFromBlockofThree;
-            pixelIncrement = 0;
-          }
-          for(samp_inc = 0; samp_inc < bytesInThisBlock; samp_inc++)
-            sample = max(sample, (int)buffer[(int)counter+samp_inc]);
-
-          raw_image[(int)readSoFar] = (SANE_Byte)sample;
-          counter += bytesInThisBlock; // cos were gonna add one at the top of the loop
-          readSoFar += pixelIncrement;
-        }
+      readSoFar += received_length_from_sane;
+      stillToRead -= received_length_from_sane;
+      raw_image_current_pos += received_length_from_sane;
+      if ( received_length_from_sane == bufferSize ) {
+        bufferSize += 32768;
       }
-
-      // Only one frame in "Gray" mode.
-      else {
-        for( counter = 0; counter < received_length_from_sane; counter++ )
-          raw_image[(int)(readSoFar + counter)] = 
-            (SANE_Byte)buffer[(int)counter];
-        readSoFar += received_length_from_sane;
+      if ( bufferSize > stillToRead ) {
+        bufferSize = stillToRead;
       }
 
       // Update the progress info
       progress = (int)((readSoFar*100) / totbytes);
-      //o_log(DEBUGM, "readSoFar = %d, totalbytes = %d, progress = %d", readSoFar, totbytes, progress);
       if(progress > 100)
         progress = 100;
+
+      if ( stillToRead == 0 ) {
+        o_log(ERROR, "No more bytes to read" );
+        break;
+      }
 
     } // get some data from sane
 
 
-    //
-    // If were finished (EOF), then drop out of reading loop
-    if( noMoreReads == 1 ) {
-      // Some sanity checks on result of multi-frames
-      if( onlyReadxFromBlockofThree )
-        o_log(ERROR, "Finished after only reading %d / 3 bytes from the last block", onlyReadxFromBlockofThree);
-      break;
-    }
-
-    //
-    // Update the buffer (based on read feedback), in an attempt to 
-    // smooth the physical reading mechanisum
-    if( *buff_requested_len == received_length_from_sane ) {
-
-      *buff_requested_len += bpl;
-      tmp_buffer = realloc(buffer, (size_t)*buff_requested_len);
-      if( tmp_buffer == NULL ) {
-        free(buffer);
-        o_log(ERROR, "Out of memory, when assiging new scan reading buffer.");
+    if (status != SANE_STATUS_GOOD) {
+      if (status == SANE_STATUS_EOF) {
+        o_log(ERROR, "sane told us were at the end" );
         break;
       }
       else {
-        buffer = tmp_buffer;
-        o_log(DEBUGM, "Increasing read buffer to %d bytes.", *buff_requested_len);
+        o_log(ERROR, "something wrong while scanning: %s", sane_strstatus(status) );
+        break;
       }
     }
-  } while (1);
-  o_log(DEBUGM, "scan_read - end");
 
-  free(buffer);
+  } while (1);
+
+  gettimeofday(&end, NULL);
+  o_log(DEBUGM, "scan_read - end." );
+  o_log( INFORMATION, "Read %d of an expected %d bytes, in %lu ms", readSoFar, totbytes, timevaldiff(&start, &end) );
 
   return raw_image;
 }
@@ -594,7 +500,7 @@ void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix
     }
   }
   else
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
     ocrText = o_strdup("");
   free(ocrLang);
 
@@ -607,8 +513,6 @@ void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix
 char *internalDoScanningOperation(char *uuid, char *lang) {
 
   int request_resolution = 0;
-  int buff_requested_len = 0; 
-  int expectFrames = 0;
   int docid;
   int current_page = 0;
   int total_requested_pages;
@@ -621,17 +525,18 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   char *total_requested_pages_s;
   char *devName;
   char *outFilename;
+  char *raw_image_format;
+  char *header;
 
   o_log(DEBUGM, "doScanningOperation: sane initialized uuid(%s)",(char *)uuid);
-  // Open the device
-  o_log(DEBUGM, "sane_open");
   updateScanProgress(uuid, SCAN_WAITING_ON_SCANNER, 0);
-  o_log(DEBUGM, "doScanningOperation: updateScanProgess done");
+
+  // Open the device
   devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
-  o_log(DEBUGM,"getScanParam ready devName(%s)",devName);
+  o_log(DEBUGM, "sane_open of \"%s\"",devName);
   status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {
-    handleSaneErrors("Cannot open device", status, 0);
+    handleSaneErrors("Cannot open device ", devName, status, 0);
     updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
     free(devName);
     return 0;
@@ -639,15 +544,37 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   free(devName);
 
   /* ========================================================== */
-  if ( ! setOptions( (char *)uuid, openDeviceHandle, &request_resolution, &buff_requested_len ) )
+  if ( ! setOptions( (char *)uuid, openDeviceHandle, &request_resolution ) )
     return 0;
-
   o_log(DEBUGM, "sane_start: setOptions returned request_resolution %d\n",request_resolution);
-  status = sane_start (openDeviceHandle);
-  if(status != SANE_STATUS_GOOD) {  
-    handleSaneErrors("Cannot start scanning", status, 0);
-    updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
-    return 0;
+
+  int timeout = 5;
+  while( 0 < timeout ) {
+    status = sane_start (openDeviceHandle);
+    if(status == SANE_STATUS_GOOD) {  
+      break;
+    }
+    else {
+      if(status == SANE_STATUS_DEVICE_BUSY ) {  
+        // BUSY signal could be the scanner just having a 
+        // bit of lag - specially network connected devices
+        timeout--;
+        if ( timeout == 0 ) {
+          handleSaneErrors("Cannot start scanning", "even after trying several time", status, 0);
+          updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
+          return 0;
+        }
+        else {
+          o_log(WARNING, "Device reports not ready to 'start', waiting 500ms. Will try another %d times", timeout);
+          usleep(500);
+        }
+      }
+      else {
+        handleSaneErrors("Cannot start scanning", "", status, 0);
+        updateScanProgress(uuid, SCAN_ERRO_FROM_SCANNER, status);
+        return 0;
+      }
+    }
   }
 
   // Get scanning params (from the scanner)
@@ -656,8 +583,6 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
     updateScanProgress(uuid, SCAN_INTERNAL_ERROR, 10004);
     return 0;
   }
-
-  status = sane_set_io_mode(openDeviceHandle, SANE_TRUE);
 
   o_log(DEBUGM, "Get scanning params");
   status = sane_get_parameters (openDeviceHandle, &pars);
@@ -670,18 +595,24 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   switch (pars.format) {
     case SANE_FRAME_GRAY:
       o_log(DEBUGM, "Expecting Gray data (1 channel only).");
-      expectFrames = 1;
+      raw_image_format = o_strdup( "P5" );
       break;
     case SANE_FRAME_RGB:
       o_log(DEBUGM, "Expecting RGB data (3 channels).");
-      expectFrames = 3;
+      raw_image_format = o_strdup( "P6" );
       break;
     default:
       o_log(DEBUGM, "backend returns three frames speratly. We do not currently support this.");
       updateScanProgress(uuid, SCAN_INTERNAL_ERROR, 10003);
       return 0;
       break;
-  }  
+  }
+  
+  header = o_printf ("%s\n# SANE data follows\n%d %d\n%d\n", 
+    raw_image_format, pars.pixels_per_line, pars.lines,
+    (pars.depth <= 8) ? 255 : 65535);
+  free( raw_image_format );
+
 
   // Save Record
   //
@@ -712,17 +643,10 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   docid = atoi(docid_s);
   free(docid_s);
 
-  totbytes = (double)((pars.bytes_per_line * pars.lines) / expectFrames);
-
-  if( buff_requested_len <= 1 )
-    buff_requested_len = 30 * pars.bytes_per_line * pars.depth;
-
-  char *header = o_printf ("P5\n# SANE data follows\n%d %d\n%d\n", 
-    pars.pixels_per_line, pars.lines,
-    (pars.depth <= 8) ? 255 : 65535);
+  totbytes = (double)((pars.bytes_per_line * pars.lines));
 
   /* ========================================================== */
-  raw_image = collectData( (char *)uuid, openDeviceHandle, &buff_requested_len, expectFrames, totbytes, pars.bytes_per_line, header );
+  raw_image = collectData( (char *)uuid, openDeviceHandle, totbytes, pars.bytes_per_line, header );
   o_log(INFORMATION, "Scanning done.");
 
   o_log(DEBUGM, "sane_cancel");
@@ -732,16 +656,11 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   sane_close(openDeviceHandle);
 
 
-  /*
-   *
-   * Change this whole section for the method call in imageProcessing
-   *
-   */
   // Convert Raw into JPEG
   //
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 0);
   PIX *pix;
-  if ( ( pix = pixReadMem( raw_image, (pars.pixels_per_line*pars.lines)+strlen(header) ) ) == NULL) {
+  if ( ( pix = pixReadMem( raw_image, (pars.bytes_per_line*pars.lines)+strlen(header) ) ) == NULL) {
     o_log(ERROR, "Could not load the image data into a PIX");
   }
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 55);
@@ -750,7 +669,6 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   free(header);
 
   outFilename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, current_page);
-  //pixWriteJpeg(outFilename, pix, 95, 0);
   pixWrite(outFilename, pix, IFF_JFIF_JPEG);
   free(outFilename);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
@@ -764,9 +682,17 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   ocrImage( uuid, docid, current_page, request_resolution, pix, lang );
   //free(raw_image);
   //free(header);
+
+
+#ifdef CAN_PHASH
+  // Calulate the pHash, so we can compare images later
+  if( current_page == 1 ) {
+    updateScanProgress(uuid, SCAN_CALULATING_PHASH, 0);
+    unsigned long long hash = getImagePhash_px( pix );
+    savePhash( docid, hash );
+  }
+#endif /* CAN_PHASH */
   pixDestroy( &pix );
-
-
 
 
   // cleaup && What should we do next
@@ -790,7 +716,7 @@ extern char *internalGetScannerList(char *lang) {
   int scanOK = SANE_FALSE;
   char *replyTemplate, *deviceList; 
 
-  status = sane_get_devices (&SANE_device_list, SANE_FALSE);
+  status = sane_get_devices (&SANE_device_list, SANE_TRUE);
   if(status == SANE_STATUS_GOOD) {
     if (SANE_device_list && SANE_device_list[0]) {
       scanOK = SANE_TRUE;
@@ -819,11 +745,11 @@ extern char *internalGetScannerList(char *lang) {
       char *scannerHost;
       SANE_Handle *openDeviceHandle;
 
-      o_log(DEBUGM, "sane_open");
+      o_log(DEBUGM, "sane_open of \"%s\"",SANE_device_list[i]->name);
       status = sane_open (SANE_device_list[i]->name, (SANE_Handle)&openDeviceHandle);
       if(status != SANE_STATUS_GOOD) {
-        o_log(ERROR, "Could not open: %s %s with error: %s", SANE_device_list[i]->vendor, SANE_device_list[i]->model, status);
-        return NULL;
+        o_log(ERROR, "Could not open: '%s' with error: %s", SANE_device_list[i]->name, sane_strstatus(status));
+        continue;
       }
 
       vendor = o_strdup(SANE_device_list[i]->vendor);
@@ -895,7 +821,6 @@ extern char *internalGetScannerList(char *lang) {
           continue;
 
         if ( 0 == strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) ) {
-          //log_option(hlp, sod);
 
           // Some kind of sliding range
           if (sod->constraint_type == SANE_CONSTRAINT_RANGE) {
@@ -965,13 +890,21 @@ extern char *internalGetScannerList(char *lang) {
     }
 
     free(replyTemplate);
-    // The escaped string placeholder will be interprited in the sane dispatcher client
-    answer = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s><Devices>%s</Devices></ScannerList></Response>", deviceList);
-    free(deviceList);
+    if(deviceList) {
+      // The escaped string placeholder will be interprited in the sane dispatcher client
+      answer = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s><Devices>%s</Devices></ScannerList></Response>", deviceList);
+      free(deviceList);
+    }
+    else {
+      // No devices
+      // The escaped string placeholder will be interprited in the sane dispatcher client
+      answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
+    }
   }
 
   else {
-    // No devices or sane failed.
+    // sane failed.
+    // The escaped string placeholder will be interprited in the sane dispatcher client
     answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
   }
 
@@ -979,4 +912,4 @@ extern char *internalGetScannerList(char *lang) {
 
 }
 
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */

@@ -19,6 +19,7 @@ usage() {
 # Parse off all the parameters
 #
 
+INSTALLLOCATION="/tmp/opendias_test"
 NOBUILD=""
 RECORD=""
 SKIPMEMORY=""
@@ -72,29 +73,28 @@ if [ ! -f "/usr/bin/lcov" ]; then
   echo "Will skip analysing code coverage (package not available)."
 fi
 
-# So that everything else does not have to run as root (for testing), reset back later
-for W in /var/run/opendias.pid; do # /var/log/opendias/opendias.log; do
-  if [ ! -w "$W" ]; then
-    echo $W is not writable. Please correct before running testing.
-    exit
-  fi
-done
-
-# Check we dont have a running service atm.
-ps -ef | grep -v "grep" | grep "opendias"
+# Check we don't have a running service atm.
+ps -ef | grep -v "grep" | grep "bin/opendias"
 if [ "$?" -eq "0" ]; then
   echo "It looks like the opendias service is already running. Please stop before running testing."
   exit
 fi
-rm -f /var/log/opendias/opendias.log
+rm -f /tmp/opendias_test/var/log/opendias/opendias.log
 
 #
 # Cleanup
 #
-rm -rf ../src/*.gcda ../src/*.gcno results
-mkdir -p results/coverage/
-mkdir -p results/resultsFiles/
+if [ "$NOBUILD" == "" ]; then
+  rm -rf results
+  rm -rf ../src/*.gcda ../src/*.gcno
+  mkdir -p results/coverage/
+else
+  # If we're not building the source, save the coverage information
+  rm -f results/buildLog.out
+  rm -rf results/resultsFiles
+fi
 
+mkdir -p results/resultsFiles/
 
 if [ "$NOBUILD" == "" ]; then
   #
@@ -118,15 +118,21 @@ if [ "$NOBUILD" == "" ]; then
 
   echo Performing code analysis ...
   cd ../
-  cppcheck --verbose --enable=all --error-exitcode=1 src/ &> test/results/buildLog2.out
+  mv config.h config.h.orig
+  mv config.h.for_cppcheck config.h
+  cppcheck --verbose --enable=all --max-configs=999 --platform=unix32 --platform=unix64 --error-exitcode=1 src/ &> test/results/buildLog2.out
   if [ "$?" -ne "0" ]; then
     echo "Code analysis found a problem. Check the buildLog.out for details."
+    mv config.h config.h.for_cppcheck
+    mv config.h.orig config.h
     cd test
     # unfortunatly bash cannot support "&>>" - yet!
     cat results/buildLog2.out >> results/buildLog.out
     rm results/buildLog2.out
     exit
   fi
+  mv config.h config.h.for_cppcheck
+  mv config.h.orig config.h
   cd test
   # unfortunatly bash cannot support "&>>" - yet!
   cat results/buildLog2.out >> results/buildLog.out
@@ -138,10 +144,10 @@ if [ "$NOBUILD" == "" ]; then
   cd ../
   if [ "$SKIPCOVERAGE" == "-c" ]; then
     echo " (without coverage) ..."
-    ./configure --enable-werror -C CFLAGS=' -g -O ' &> test/results/buildLog2.out
+    ./configure --prefix=$INSTALLLOCATION --enable-create_test_language --enable-werror -C CFLAGS=' -g -O ' &> test/results/buildLog2.out
   else
     echo " (with coverage) ..."
-    ./configure --enable-werror -C CFLAGS=' -g -O --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
+    ./configure --prefix=$INSTALLLOCATION --enable-create_test_language --enable-werror -C CFLAGS=' -g -O --coverage' LIBS='-lgcov' &> test/results/buildLog2.out
   fi
   cd test
   # unfortunatly bash cannot support "&>>" - yet!
@@ -165,6 +171,28 @@ if [ "$NOBUILD" == "" ]; then
   cat results/buildLog2.out >> results/buildLog.out
   rm results/buildLog2.out
 
+  # Install the app into the configured test location.
+  echo Installing ...
+  cd ../
+  make install &> test/results/buildLog2.out
+  if [ "$?" -ne "0" ]; then
+    echo "Install stage failed. Check the buildLog.out for details."
+    cd test
+    # unfortunatly bash cannot support "&>>" - yet!
+    cat results/buildLog2.out >> results/buildLog.out
+    rm results/buildLog2.out
+    exit
+  fi
+  cd test
+  # unfortunatly bash cannot support "&>>" - yet!
+  cat results/buildLog2.out >> results/buildLog.out
+  rm results/buildLog2.out
+
+  echo Creating testing \(override\) libs...
+  cd override_libs
+  ./build.sh
+  cd ../
+
 else
   echo Skipping the build process
 fi
@@ -174,8 +202,10 @@ fi
 # Generate baseline (coverage) information
 #
 if [ "$SKIPCOVERAGE" == "" ]; then
-  echo Getting baseline coverage information ...
-  lcov -c -i -d ../src -o results/coverage/app_base.info >> results/buildLog.out
+  if [ "$NOBUILD" == "" ]; then
+    echo Getting baseline coverage information ...
+    lcov -c -i -d ../src -o results/coverage/app_base.info >> results/buildLog.out
+  fi
 fi
 
 
@@ -210,9 +240,9 @@ mkdir -p /tmp/opendiassaneconfig
 cp config/sane/* /tmp/opendiassaneconfig/
 export SANE_CONFIG_DIR=/tmp/opendiassaneconfig/
 
+echo /tmp/opendiastest > $INSTALLLOCATION/etc/opendias/opendias.conf
 
-PWD=`pwd`
-echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP ../src/opendias -c $PWD/config/testapp.conf \> results/resultsFiles/appLog.out > config/startAppCommands
+echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP $INSTALLLOCATION/bin/opendias \> results/resultsFiles/appLog.out > config/startAppCommands
 
 
 
@@ -220,7 +250,6 @@ echo $VALGRIND $SUPPRESS $VALGRINDOPTS $GENSUPP ../src/opendias -c $PWD/config/t
 #######################################
 # Run automated tests
 echo Starting test harness ...
-#echo perl ./harness.pl -z $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@
 perl ./harness.pl -z $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@ 2> /dev/null
 #######################################
 #######################################
@@ -230,8 +259,8 @@ perl ./harness.pl -z $GRAPHICALCLIENT $RECORD $SKIPMEMORY $@ 2> /dev/null
 # Collect process and build coverage report
 #
 if [ "$SKIPCOVERAGE" == "" ]; then
-  echo Creating run coverage information ...
-  echo Creating run coverage information ... >> results/buildLog.out
+  echo Creating total coverage report ...
+  echo Creating total coverage report... >> results/buildLog.out
   lcov -c -d ../src -o results/coverage/app_test.info >> results/buildLog.out
   lcov -a results/coverage/app_base.info -a results/coverage/app_test.info -o results/coverage/app_total.info >> results/buildLog.out
   genhtml -o results/coverage results/coverage/app_total.info >> results/buildLog.out

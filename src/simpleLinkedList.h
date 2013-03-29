@@ -21,7 +21,7 @@
 
 #ifndef NULL
 #define NULL 0L
-#endif
+#endif /* NULL */
 
 struct simpleLinkedList {
   char *key;
@@ -40,5 +40,8 @@ void sll_append( struct simpleLinkedList *, void * );
 void sll_insert( struct simpleLinkedList *, char *, void * );
 void sll_destroy( struct simpleLinkedList * );
 void sll_delete( struct simpleLinkedList * );
+int sll_count( struct simpleLinkedList * );
+char *sll_dumper( struct simpleLinkedList * );
+void sll_sort( struct simpleLinkedList * );
 
 #endif /* SIMPLELINKEDLIST */

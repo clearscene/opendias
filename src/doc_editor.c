@@ -37,11 +37,17 @@
 
 char *doDelete (char *documentId) {
 
-  int pages, i;
+  int doc_id, pages, i;
   char *docTemplate, *docPath;
 
-  char *sql = o_printf("SELECT pages FROM docs WHERE docid = %s", documentId);
-  struct simpleLinkedList *rSet = runquery_db(sql);
+  doc_id = atoi( documentId );
+
+  char *sql = o_strdup("SELECT pages FROM docs WHERE docid = ?");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_INT );
+  sll_append(vars, &doc_id );
+  struct simpleLinkedList *rSet = runquery_db(sql, vars);
+
   if( rSet != NULL ) {
     char *pages_s = o_strdup(readData_db(rSet, "pages"));
     pages = atoi(pages_s);
@@ -79,17 +85,24 @@ char *doDelete (char *documentId) {
 
 char *getDocDetail (char *documentId, char *lang ) {
 
+  int doc_id;
   struct simpleLinkedList *rSet;
   char *sql, *tags, *tagsTemplate, *title, *humanReadableDate,
       *docs, *docsTemplate, *returnXMLtemplate, *returnXML;
+
+  doc_id = atoi( documentId );
 
   // Remove any trailing '#' marks
   replace(documentId, "#", "");
  
   // Validate document id
   //
-  sql = o_printf("SELECT docid FROM docs WHERE docid = %s", documentId);
-  rSet = runquery_db(sql);
+  sql = o_strdup("SELECT docid FROM docs WHERE docid = ?");
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_INT );
+  sll_append(vars, &doc_id );
+
+  rSet = runquery_db(sql, vars);
   if( rSet == NULL ) {
     o_log(ERROR, "Could not select record %s.", documentId);
     free_recordset( rSet );
@@ -105,16 +118,20 @@ char *getDocDetail (char *documentId, char *lang ) {
   //
   tags = o_strdup("");
   tagsTemplate = o_strdup("<tag>%s</tag>");
-  sql = o_printf(
+  sql = o_strdup(
     "SELECT tagname \
     FROM tags JOIN \
     (SELECT * \
     FROM doc_tags \
-    WHERE docid=%s) dt \
+    WHERE docid = ? ) dt \
     ON tags.tagid = dt.tagid \
-    ORDER BY tagname", documentId);
+    ORDER BY tagname");
 
-  rSet = runquery_db(sql);
+  vars = sll_init();
+  sll_append(vars, DB_INT );
+  sll_append(vars, &doc_id );
+  rSet = runquery_db(sql, vars);
+
   if( rSet ) {
     do  {
       o_concatf(&tags, tagsTemplate, readData_db(rSet, "tagname") );
@@ -132,17 +149,26 @@ char *getDocDetail (char *documentId, char *lang ) {
   //
   docs = o_strdup("");
   docsTemplate = o_strdup("<doc><targetDocid>%s</targetDocid><targetTitle>%s</targetTitle></doc>");
-  sql = o_printf(
+  sql = o_strdup(
     "SELECT l.linkeddocid, d.title \
     FROM doc_links l JOIN docs d \
     ON l.linkeddocid = d.docid \
-    WHERE l.docid = %s \
-    ORDER BY d.title", documentId);
+    WHERE l.docid = ? \
+    ORDER BY d.title");
+  vars = sll_init();
+  sll_append(vars, DB_INT );
+  sll_append(vars, &doc_id );
 
-  rSet = runquery_db(sql);
+  rSet = runquery_db(sql, vars);
   if( rSet ) {
     do  {
-      o_concatf(&docs, docsTemplate, readData_db(rSet, "linkeddocid"), readData_db(rSet, "title") );
+      title = o_strdup(readData_db(rSet, "title"));
+      if( 0 == strcmp(title, "NULL") ) {
+        free(title);
+        title = o_strdup( getString( "LOCAL_default_title", lang ) );
+      }
+      o_concatf(&docs, docsTemplate, readData_db(rSet, "linkeddocid"), title );
+      free( title );
     } while ( nextRow( rSet ) );
   }
   free_recordset( rSet );
@@ -153,15 +179,13 @@ char *getDocDetail (char *documentId, char *lang ) {
 
 
   // Get docinformation
-  //
-  sql = o_printf("SELECT * FROM docs WHERE docid = %s", documentId);
-  rSet = runquery_db(sql);
-  if( rSet == NULL ) {
-    o_log(ERROR, "Could not select record %s.", documentId);
-    free_recordset( rSet );
-    free(sql);
-    return NULL;
-  }
+  // (we will get a result, since we've checked this above)
+  sql = o_strdup("SELECT * FROM docs WHERE docid = ?");
+  vars = sll_init();
+  sll_append(vars, DB_INT );
+  sll_append(vars, &doc_id );
+  rSet = runquery_db(sql, vars);
+
 
   // Build Human Readable
   //
@@ -203,7 +227,7 @@ char *getDocDetail (char *documentId, char *lang ) {
           humanReadableDate, readData_db(rSet, "pages"), readData_db(rSet, "ocrtext"), 
           readData_db(rSet, "ppl"), readData_db(rSet, "lines"), tags, docs,
           readData_db(rSet, "hardcopyKept"),
-			    readData_db(rSet, "actionrequired") );
+          readData_db(rSet, "actionrequired") );
 
   free_recordset(rSet);
   free(sql);
@@ -253,13 +277,13 @@ char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
     }
   } 
 
-	else if ( 0 == strcmp(kkey, "hardcopyKept") ) {
-		if ( vvalue && 0 == strcmp(vvalue,"true") ) {
-			rc = updateDocValue_int(docid,kkey ,1);
-		} else {
-			rc = updateDocValue_int(docid,kkey, 0);
-		}
-	}
+  else if ( 0 == strcmp(kkey, "hardcopyKept") ) {
+    if ( vvalue && 0 == strcmp(vvalue,"true") ) {
+      rc = updateDocValue_int(docid,kkey ,1);
+    } else {
+      rc = updateDocValue_int(docid,kkey, 0);
+    }
+  }
 
   else 
     rc = updateDocValue(docid, kkey, vvalue);

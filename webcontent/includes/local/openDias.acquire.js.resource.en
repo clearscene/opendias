@@ -19,3 +19,4 @@ LOCAL_failed_to_get_list_of_scanners = 'Unable to fetch a list of available scan
 LOCAL_unable_to_start_scanning = 'Unable to start the scanning process';
 LOCAL_on_host = 'on host';
 LOCAL_x_pages = '%s pages';
+LOCAL_calculating_image_comparison_vector = 'Calculating image comparison vector';

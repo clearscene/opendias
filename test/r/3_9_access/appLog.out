@@ -1,0 +1,746 @@
+STDOUT
+--------------------------------------------------
+LOG-OUTPUT
+-date-:-thread-:INF:-file-:-line- openDIAS version 'opendias [VERSION]' has been invoked.
+-date-:-thread-:INF:-file-:-line- Running in daemon mode.
+-date-:-thread-:INF:-file-:-line- Child process created [CONFIG_FILE]
+-date-:-thread-:DBG:-file-:-line- setup launched
+-date-:-thread-:INF:-file-:-line- Setting default log (/tmp/opendias_test/var/log/opendias) verbosity to 4.
+-date-:-thread-:INF:-file-:-line- Using config file: [CONFIG_FILE]
+-date-:-thread-:INF:-file-:-line- Which says the database is at: /tmp/opendiastest
+-date-:-thread-:DBG:-file-:-line- database file is /tmp/opendiastest/openDIAS.sqlite3
+-date-:-thread-:DBG:-file-:-line- Dir structure is in-place, database should exist
+-date-:-thread-:DBG:-file-:-line- Checking for a populated database
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- We have one. So will check to see what version it is.
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Database reports that it is version: 7
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:INF:-file-:-line- Connected to database
+-date-:-thread-:INF:-file-:-line- database opened
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:INF:-file-:-line- Config setting: log_verbosity = 4
+-date-:-thread-:INF:-file-:-line- Moving log verbosity from 4 to 4
+-date-:-thread-:INF:-file-:-line- Config setting: port = 8988
+-date-:-thread-:INF:-file-:-line- Config setting: backpopulate_phash = no
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:INF:-file-:-line- Created directory.
+-date-:-thread-:DBG:-file-:-line- loading translation file: /tmp/opendias_test/share/opendias/language.resource.en
+-date-:-thread-:INF:-file-:-line- Sane command socket is open
+-date-:-thread-:INF:-file-:-line- ... Starting up the openDias service.
+-date-:-thread-:INF:-file-:-line- ready to accept connectons
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- There are currently 0 active sessions
+-date-:-thread-:DBG:-file-:-line- Generated new session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : checkLogin
+      password : ###############
+      username : bad-user
+-date-:-thread-:INF:-file-:-line- Processing request for: checkLogin
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:ERR:-file-:-line- User provded an incorrect username!
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><Login><result>FAIL</result><message>Username or password incorrect</message><retry_throttle>5</retry_throttle></Login></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      next_login_attempt : YYYY-MM-DD +-UTC HH:MM:SS
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : checkLogin
+      password : ###############
+      username : test-user
+-date-:-thread-:INF:-file-:-line- Processing request for: checkLogin
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:ERR:-file-:-line- User provded an incorrect password!
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><Login><result>FAIL</result><message>Username or password incorrect</message><retry_throttle>5</retry_throttle></Login></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      next_login_attempt : YYYY-MM-DD +-UTC HH:MM:SS
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : checkLogin
+      password : ###############
+      username : test-user
+-date-:-thread-:INF:-file-:-line- Processing request for: checkLogin
+-date-:-thread-:ERR:-file-:-line- Login attempt was too soon (by 0 seconds) after previous login fail
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><Login><result>FAIL</result><message>Login attempt retry was too soon</message><retry_throttle>5</retry_throttle></Login></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      next_login_attempt : YYYY-MM-DD +-UTC HH:MM:SS
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : checkLogin
+      password : ###############
+      username : test-user
+-date-:-thread-:INF:-file-:-line- Processing request for: checkLogin
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><Login><result>OK</result></Login></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- There are currently 1 active sessions
+-date-:-thread-:DBG:-file-:-line- Generated new session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:INF:-file-:-line- Serving request: /scans/unknown.jpg
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : deleteDoc
+      docid : 1234
+-date-:-thread-:INF:-file-:-line- Processing request for: delete document
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : doScan
+      deviceid : some text
+      ocr : eng
+      pages : 8
+-date-:-thread-:INF:-file-:-line- Processing request for: doScan
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : docFilter
+      endDate : 2012-12-31
+      isActionRequired : true
+      page : 8
+      range : 8
+      sortfield : 1234
+      sortorder : 1234
+      startDate : 2012-12-31
+      subaction : count
+      tags : some text
+      textSearch : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: Doc List Filter
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : docFilter
+      endDate : 2012-12-31
+      isActionRequired : true
+      page : 8
+      range : 8
+      sortfield : 1234
+      sortorder : 1234
+      startDate : 2012-12-31
+      subaction : fullList
+      tags : some text
+      textSearch : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: Doc List Filter
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : getDocDetail
+      docid : 1234
+-date-:-thread-:INF:-file-:-line- Processing request for: document details
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : getScannerList
+-date-:-thread-:INF:-file-:-line- Processing request for: getScannerList
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : getScanningProgress
+      scanprogressid : [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:INF:-file-:-line- Processing request for: getScanning Progress
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : moveTag
+      docid : 1234
+      subaction : addDoc
+      tag : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: Move Tag
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : moveTag
+      docid : 1234
+      subaction : addTag
+      tag : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: Move Tag
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : moveTag
+      docid : 1234
+      subaction : removeDoc
+      tag : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: Move Tag
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : moveTag
+      docid : 1234
+      subaction : removeTag
+      tag : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: Move Tag
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : nextPageReady
+      scanprogressid : [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:INF:-file-:-line- Processing request for: restart scan after page change
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : tagsAutoComplete
+      docid : 1234
+-date-:-thread-:INF:-file-:-line- Processing request for: tagsAutoComplete
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : titleAutoComplete
+      notLinkedTo : 1234
+-date-:-thread-:INF:-file-:-line- Processing request for: titleAutoComplete
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : updateDocDetails
+      docid : 1234
+      kkey : 1234
+      vvalue : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: update doc details
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>You do not have permissions to complete the request</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      (null) : (null)
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : updateUser
+      password : ###############
+      realname : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: updateUser
+-date-:-thread-:ERR:-file-:-line- Missing manditory post data with key of username
+-date-:-thread-:DBG:-file-:-line- Looks like we failed validation (at least 1 times)
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>Your request could not be processed</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:INF:-file-:-line- Serving request: /scans/unknown.jpg
+-date-:-thread-:ERR:-file-:-line- Could not open file: /tmp/opendiastest/scans/unknown.jpg
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : deleteDoc
+      docid : 1234
+-date-:-thread-:INF:-file-:-line- Processing request for: delete document
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:ERR:-file-:-line- Could not select record 1234.
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>Your request could not be processed</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : doScan
+      deviceid : some text
+      ocr : eng
+      pages : 8
+-date-:-thread-:INF:-file-:-line- Processing request for: doScan
+-date-:-thread-:ERR:-file-:-line- Missing manditory post data with key of format
+-date-:-thread-:ERR:-file-:-line- Missing manditory post data with key of resolution
+-date-:-thread-:ERR:-file-:-line- Missing manditory post data with key of pagelength
+-date-:-thread-:DBG:-file-:-line- Looks like we failed validation (at least 6 times)
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>Your request could not be processed</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : docFilter
+      endDate : 2012-12-31
+      isActionRequired : true
+      page : 8
+      range : 8
+      sortfield : 1234
+      sortorder : 1234
+      startDate : 2012-12-31
+      subaction : count
+      tags : some text
+      textSearch : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: Doc List Filter
+-date-:-thread-:DBG:-file-:-line- sql=SELECT COUNT(docs.docid) c FROM docs  JOIN (SELECT docid, COUNT(docid) c FROM doc_tags                     JOIN tags ON tags.tagid = doc_tags.tagid                     WHERE tags.tagname IN ('some text') GROUP BY docid HAVING c = ? ) t                     ON docs.docid = t.docid WHERE (title LIKE ? OR ocrText LIKE ?) AND date(docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2)) BETWEEN date(?) AND date(?) AND actionrequired=1 
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><DocFilter><count>0</count><Results></Results></DocFilter></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : docFilter
+      endDate : 2012-12-31
+      isActionRequired : true
+      page : 8
+      range : 8
+      sortfield : 1234
+      sortorder : 1234
+      startDate : 2012-12-31
+      subaction : fullList
+      tags : some text
+      textSearch : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: Doc List Filter
+-date-:-thread-:DBG:-file-:-line- sql=SELECT DISTINCT docs.* FROM docs  JOIN (SELECT docid, COUNT(docid) c FROM doc_tags                     JOIN tags ON tags.tagid = doc_tags.tagid                     WHERE tags.tagname IN ('some text') GROUP BY docid HAVING c = ? ) t                     ON docs.docid = t.docid WHERE (title LIKE ? OR ocrText LIKE ?) AND date(docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2)) BETWEEN date(?) AND date(?) AND actionrequired=1 LIMIT 56, 8 
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><DocFilter><count>0</count><page>8</page><Results></Results></DocFilter></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : getDocDetail
+      docid : 1234
+-date-:-thread-:INF:-file-:-line- Processing request for: document details
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:ERR:-file-:-line- Could not select record 1234.
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>Your request could not be processed</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : getScannerList
+-date-:-thread-:INF:-file-:-line- Processing request for: getScannerList
+-date-:-thread-:DBG:-file-:-line- CLIENT: The command structure has been initalised and wants to send the command of: internalGetScannerList:en.
+-date-:-thread-:DBG:-file-:-line- SERVER: The sane command port has received an incomming connection.
+-date-:-thread-:INF:-file-:-line- SERVER: Sane dispatcher received the command: 'internalGetScannerList' with param of 'en'
+-date-:-thread-:DBG:-file-:-line- device(s) found
+-date-:-thread-:DBG:-file-:-line- sane_open of "test:0"
+-date-:-thread-:DBG:-file-:-line- Resolution setting detected as 'range'
+-date-:-thread-:DBG:-file-:-line- Determined max resultion to be 800
+-date-:-thread-:DBG:-file-:-line- sane_cancel
+-date-:-thread-:DBG:-file-:-line- sane_close
+-date-:-thread-:DBG:-file-:-line- SERVER: Going to send the response of: <?xml version='1.0' encoding='utf-8'?>
+<Response><ScannerList%s><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><Formats><format>Grey Scale</format></Formats><max>800</max><min>50</min><default>300</default><host>opendias server</host></Device></Devices></ScannerList></Response>
+-date-:-thread-:DBG:-file-:-line- SERVER: Server has closed it's socket.
+-date-:-thread-:DBG:-file-:-line- CLIENT: has closed its socket.
+-date-:-thread-:DBG:-file-:-line- Caching the response.
+-date-:-thread-:DBG:-file-:-line- RESPONSE WAS: <?xml version='1.0' encoding='utf-8'?>
+<Response><ScannerList><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><Formats><format>Grey Scale</format></Formats><max>800</max><min>50</min><default>300</default><host>opendias server</host></Device></Devices></ScannerList></Response>
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><ScannerList><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><Formats><format>Grey Scale</format></Formats><max>800</max><min>50</min><default>300</default><host>opendias server</host></Device></Devices></ScannerList></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : getScanningProgress
+      scanprogressid : [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:INF:-file-:-line- Processing request for: getScanning Progress
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><ScanningProgress><status>(null)</status><value>(null)</value></ScanningProgress></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : moveTag
+      docid : 1234
+      subaction : addDoc
+      tag : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: Move Tag
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><MoveTag><status>OK</status></MoveTag></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : moveTag
+      docid : 1234
+      subaction : addTag
+      tag : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: Move Tag
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- no tag was found. Adding a new one.
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Using tagid of 34
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><MoveTag><status>OK</status></MoveTag></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : moveTag
+      docid : 1234
+      subaction : removeDoc
+      tag : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: Move Tag
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><MoveTag><status>OK</status></MoveTag></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : moveTag
+      docid : 1234
+      subaction : removeTag
+      tag : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: Move Tag
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Using tagid of 34
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Tag is being used on 0 docs
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><MoveTag><status>OK</status></MoveTag></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : nextPageReady
+      scanprogressid : [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:INF:-file-:-line- Processing request for: restart scan after page change
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:WRN:-file-:-line- scan id indicates a status not waiting for a new page signal.
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>Your request could not be processed</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : tagsAutoComplete
+      docid : 1234
+-date-:-thread-:INF:-file-:-line- Processing request for: tagsAutoComplete
+-date-:-thread-:ERR:-file-:-line- Missing manditory post data with key of startsWith
+-date-:-thread-:DBG:-file-:-line- Looks like we failed validation (at least 1 times)
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>Your request could not be processed</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : titleAutoComplete
+      notLinkedTo : 1234
+-date-:-thread-:INF:-file-:-line- Processing request for: titleAutoComplete
+-date-:-thread-:ERR:-file-:-line- Missing manditory post data with key of startsWith
+-date-:-thread-:DBG:-file-:-line- Looks like we failed validation (at least 1 times)
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>Your request could not be processed</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : updateDocDetails
+      docid : 1234
+      kkey : 1234
+      vvalue : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: update doc details
+-date-:-thread-:ERR:-file-:-line- trying to update an invalid doc field: 1234.
+-date-:-thread-:DBG:-file-:-line- Looks like we failed validation (at least 1 times)
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>Your request could not be processed</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : updateUser
+      password : ###############
+      realname : some text
+-date-:-thread-:INF:-file-:-line- Processing request for: updateUser
+-date-:-thread-:ERR:-file-:-line- Missing manditory post data with key of username
+-date-:-thread-:DBG:-file-:-line- Looks like we failed validation (at least 1 times)
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><error>Your request could not be processed</error></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
+-date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Using session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Session contains: 
+      username : test-user
+      realname : Test - User
+      role : 2
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Collected post data: 
+      action : logout
+-date-:-thread-:INF:-file-:-line- Processing request for: logout
+-date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
+<Response><Logout><result>OK</result></Logout></Response>
+-date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
+-date-:-thread-:INF:-file-:-line- Received SIGUSR1 signal.
+-date-:-thread-:INF:-file-:-line- openDias service is shutting down....
+-date-:-thread-:DBG:-file-:-line- ... httpd service [done]
+-date-:-thread-:DBG:-file-:-line- ... sane command socket [done]
+-date-:-thread-:DBG:-file-:-line- Deleting session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
+-date-:-thread-:DBG:-file-:-line- Expired 2 sessions
+-date-:-thread-:DBG:-file-:-line- ... session management [done]
+-date-:-thread-:DBG:-file-:-line- ... locale [done]
+-date-:-thread-:DBG:-file-:-line- ... database [done]
+-date-:-thread-:DBG:-file-:-line- Closing database
+-date-:-thread-:INF:-file-:-line- openDias service has shutdown.

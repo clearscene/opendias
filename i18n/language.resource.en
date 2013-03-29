@@ -41,6 +41,12 @@ LOCAL_file_type_pdf|Imported PDF Doc
 LOCAL_file_type_image|Imported Image
 LOCAL_file_type_scanned|Scanned Doc
 LOCAL_default_title|New (untitled) document.
+LOCAL_bad_login|Username or password incorrect
+LOCAL_login_retry_too_soon|Login attempt retry was too soon
+
+# createUser()
+LOCAL_user_already_exists|Requested new userid already exists
+
 
 #########################################
 

@@ -1,6 +1,7 @@
 openDias - Document Imaging Archive System
 
   1. Introduction
+    1.1 Quick Start
   2. Satisfying Dependencies
     2.1 Required
     2.2 Optional
@@ -8,13 +9,34 @@ openDias - Document Imaging Archive System
   3. Building
     3.1 As a user
     3.2 As a developer
+      3.2.1 Configure options
   4. Running
+  5. Helping the project
+    5.1 Localisation
+    5.2 Developing
+      5.2.1 Tips and standards
+      5.2.2 Before submitting a 'pull request'
+      5.2.3 Accepting a pull request
+      5.2.4 Distribution
 
 -----------------------------------
 
 1. Introduction
 
   [please add]
+
+1.1 Quick Start
+---------------
+Download the latest tarball (opendias-x.y.x.tar.gz) from http://opendias.essentialcollections.co.uk/downloads
+  tar -xvfz opendias-x.y.z.tar.gz
+  cd opendias-x.y.z
+  ./configure
+  make
+  make install
+Start the application:
+  sudo /usr/local/bin/opendias
+Use the application, by visiting:
+  http://localhost:8988/opendias
 
 -----------------------------------
 
@@ -30,6 +52,7 @@ openDias - Document Imaging Archive System
   sqlite3
   microhttpd
   uuid
+  ssl
 
 2.2 Optional
 ------------ 
@@ -39,16 +62,20 @@ openDias - Document Imaging Archive System
     leptonica
 
   2.2.2 For OCR
-    tesseract-ocr
+    tesseract3-ocr
     leptonica
 
   2.2.3 For ODF import
+    magic
     xml2
     zzip
-    archive
 
   2.2.4 For PDF import
+    magic
     poppler-cpp
+
+  2.2.5 For image comparision
+    pHash
 
 2.3 Short cut
 -------------
@@ -57,14 +84,17 @@ On, Debian or Ubuntu, you can do this by running:
 
   sudo apt-get install build-essential libsqlite3-dev libsane-dev \
     libmicrohttpd-dev uuid-dev libleptonica-dev libpoppler-cpp-dev \
-    libtesseract-dev libxml2-dev libzzip-dev 
+    libtesseract-dev libxml2-dev libzzip-dev libmagic-dev libssl-dev \
+    libphash0-dev
 
 On, RedHat or Fedora, you can do this by running:
 
   su - 
-  yum install gcc-c++ make sqlite-devel libmicrohttpd-devel \
-    libuuid-devel sane-backends-devel freeimage-devel leptonica-devel \
+  yum install gcc-c++ make sqlite-devel libmicrohttpd-devel openssl-devel \
+    libuuid-devel sane-backends-devel leptonica-devel file-devel \
     tesseract-devel libxml2-devel zziplib-devel poppler-cpp-devel
+
+  # NB: Fedora does not ship pHash libraries, so Fedora uses will not be able to compare document.
 
 -----------------------------------
 
@@ -94,11 +124,34 @@ You need to pre configure the source:
   [get setup by following the local README file]
   ./setupRun.sh 
   [run client side tests test/clientSideTesting/README]
-  [refer to ../howto_build_distribute for details on publishing]
+  [refer '5. Developing' for details on publishing]
+
+3.2.1 Configure options
+To get a full list of options add "--help" to the configure script.
+Here is an overview of the openDIAS specific options.
+
+  --prefix={path-to-directory}
+    The location files will be deployed to (and the app will look for them)
+
+  --enable-force_var_at_root
+    override "prefix" to put "/var" at the systems root
+
+  --enable-werror
+    upgrade all warnings to errors (useful in development)
+
+  --enable-open_to_all
+    Removes all user access checking code (makes the application fully open)
+
+  --enable-create_test_language
+    Adds a test language (all words show as '####'), useful to ensure you've not hard coded some text
+
+  --enable-thread_join
+    Don't let the main calling thread finish until the child thread is done (useful for debugging)
 
 -----------------------------------
 
 4. Running
+---------
 
 Start and get to the apllication with:
 
@@ -122,5 +175,98 @@ or use a forwarding proxy (eg Apache) to remove the port number. eg:
 to be able to point a web browser at:
 
   http://myproxyServer.com/opendias
+
+
+
+-----------------------------------
+
+5. Helping the project
+
+5.1 Localisation
+----------------
+
+The application is localised using three kinds of file:
+
+ * Backend service language files, named: i18n/language.resource.<lang>
+    There is one of these per language. It is used by the application to localise
+    messages returned by the backend API. As such there are very few entries here,
+    since most user feedback is provided by the frontend HTML and JS.
+
+ * Javascript language files, eg: webcontent/includes/local/*.js.resource.<lang>
+    In general there is a 1:1 mapping between these files are their counterpart
+    Javascript file. Localisation here are provided so the active part of the 
+    user frontend can respond in a localised way. The majority of localisation
+    elements are found here.
+    Note: The frontend will request just the filename (without the ".<lang>", the 
+    application will return the correct language version to the user.
+
+ * HTML language files, named: webcontent/language.resource.<lang>
+    For each HTML page (and there are only five), there is a ".tmpl" file. 
+    HTML is localised by the "./configure" script, by building language specific
+    ".html.<lang>" files using these ".tmpl" and "language.resource.<lang>" files.
+    The ".tmpl" files contain placeholders "---LOCAL_x_y_z---" which are replaced
+    from entried in the "language.resource" file. 
+    (This way localised versions of pages do not have to be rebuilt by the 
+    application each time they are requested.)
+    Note: The frontend will request just the filename (without the ".<lang>", the 
+    application will return the correct language version to the user.
+
+5.2. Developing
+---------------
+
+5.2.1 Tips and standards
+------------------------
+ * Ensure you are working against the most current codebase. Merge up from the 
+    development branch regularly.
+ * Please indent with two spaces and not a tab.
+ * Create a git branch off the current development branch (eg development_0_9)
+    and name it something like "my_new_functionality_0_9".
+ * To get better valgrind backtrace resolution, (for memory failed tests) you 
+    may want to include "'CFLAGS=-O0 -g'" as an option to ./configure. 
+    Rebuilding the app after a clean, and re-running tests with the '-b' flag 
+    (to stop your specific configured app from being rebuilt).
+
+
+5.2.2 Before submitting a 'pull request'
+----------------------------------------
+ * Update Changelog, api doc, builds file (eg. Make.am or configure.ac).
+ * Write new tests and/or update existing tests, to cover your changes
+ * Run autoscan, cppcheck.
+    autoscan
+    cppcheck --verbose --enable=all src/
+ * Ensure all tests pass
+    cd test && ./setupRun.sh
+ * Submit a 'pull request' onn github, for the current development branch
+
+
+5.2.3 Accepting a pull request
+------------------------------
+ * Inspect the diffs between the current development branch and the end of the authors branch.
+ * Ensure the authors branch is merged up to a resonable level.
+ * Ensure that tests have been added/updated to support new functionality.
+ * Submit update feedback to the author, if required.
+ * Create or move to an 'accepting branch' (off from the current development branch)
+ * Merge in the pull request
+    git remote add <sending_user> git://github.com/<sending_user>/opendias_fork.git
+    git fetch <sending_user>
+    git merge <sending_user> <branch_name>
+ * Ensure the tests all pass.
+ * Merge the 'accepting branch' into the development branch
+ * Bump the configure.ac version number.
+ * Consolidate Changelog
+
+
+5.2.4 Distribution
+------------------
+ * git merge the development branch into master
+ * Checkout master and ensure the tests pass.
+ * Ensure the general checks are satisfied
+    autoreconf -iv
+    autoscan
+    cppcheck --verbose --enable=all src/
+ * Get the api doc and Changelog diffs, and update the website.
+ * Bump the configure.ac version number
+ * Generate distribution tarball
+    make dist
 
 

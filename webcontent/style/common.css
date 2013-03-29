@@ -5,6 +5,7 @@
   }
   .cclear {
    clear: both;
+   display: block;
   }
   h1 {
    font-size: 1.15em;
@@ -40,6 +41,9 @@
   #logo {
     left: 10px;
     top: 20px;
+  }
+  .hidden {
+    display: none;
   }
   .row {
     width: 680px;
@@ -95,34 +99,32 @@
    border-bottom: 2px solid #555;
   }
   #menu li {
+   width: 120px;
+  }
+  #loginout li,
+  #menu li {
    margin-top: 1px;
    padding-top: 1px;
    list-style-type: none;
    display: inline-block;
-   width: 120px;
    text-align: center;
    border-right: 1px dotted #aaa;
   }
+  #loginout ul li:last-child,
   #menu ul li:last-child {
    border-right: none;
   }
+  #loginout li span a,
   #menu li a {
    color: #aaa;
    text-decoration: none;
   }
+  .version {
+    color: #888;
+  }
+  #loginout li span a:hover,
   #menu li a:hover {
    color: #ddd;
-  }
-  #menu li select {
-   background-color: #000;
-   border-color: #000;
-   color: #aaa;
-   font-family: arial;
-  }
-  #menu li select option {
-   background-color: #333;
-   border-color: #444;
-   color: #bbb;
   }
 
   #body {
@@ -235,10 +237,6 @@
     margin-left: 15px;
   }
 
-  #playAudio {
-    display: none;
-  }
-
   .float5050 {
     width: 210px;
     float: left;
@@ -311,6 +309,11 @@
     border-bottom: 3px solid black;
     margin-left: 30px;
   }
+  .accessControl table tr td {
+    padding: 5px;
+    margin: 0px;
+    border: 0px;
+  }
   .accessControl table thead {
     background-color: #9999ee;
   }
@@ -318,8 +321,8 @@
     background-color: #bbbbff;
     border: 1px solid #9999ee;
   }
-  .accessControl table tbody td {
-    padding: 3px;
+  .accessControl table tbody tr td.actions {
+    background-color: #ffbbbb;
   }
   .accessControl div {
     margin-left: 30px;
@@ -359,8 +362,8 @@
     box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
     -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
     -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
-    -moz-border-radius: 7px;
-    -webkit-border-radius: 7px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
   } 
   .checkbox {
     background: #000;
@@ -463,4 +466,126 @@
   }
   .divider {
     border-top: 1px dotted #888;
+  }
+  #loginout {
+    position: absolute;
+    top: -3px;
+    left: 275px;
+    background: #442222;
+   -moz-border-radius:4px;
+   -webkit-border-radius:4px;
+    padding: 5px 8px 3px 8px;
+    border: 1px solid #555;
+  }
+  #loginout input {
+    border-color: #555;
+    background: #333;
+    color: #bbb;
+    width: 55px;
+   -moz-border-radius:2px;
+   -webkit-border-radius:2px;
+  }
+  #loginout button {
+    background: #333;
+    color: #bbb;
+    border-color: #555;
+   -moz-border-radius:3px;
+   -webkit-border-radius:3px;
+  }
+  #loginout input::-webkit-input-placeholder {
+    color: #777;
+  }
+  #loginout input:-moz-placeholder {
+    color: #777;
+  }
+  #loginout input:-ms-input-placeholder {
+    color: #777;
+  }
+  #login {
+    display: none;
+  }
+  #logout {
+    display: none;
+  }
+  #realname {
+    color: #aaa;
+    display: inline-block;
+    text-align: center;
+  }
+  #loginout li select {
+   background-color: #333;
+   border-color: #333;
+   color: #aaa;
+   font-family: arial;
+  }
+  #loginout li select option {
+   background-color: #444;
+   border-color: #555;
+   color: #bbb;
+  }
+  .useradmin li {
+   list-style-type: none;
+   padding-left: 40px;
+  }
+  #newuser li {
+   list-style-type: none;
+   padding-left: 100px;
+  }
+  #similarDocSelector {
+    width: 550px;
+    position: absolute;
+    top: -70px;
+    left: 100px;
+    z-index: 1001;
+    border: 2px solid #333;
+    background-color: #ddddff;
+    padding: 10px;
+    display: none;
+  }
+  #similarDocSelector div {
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #bbbbdd;
+    background-color: #ccccee;
+   -moz-border-radius: 10px;
+   -webkit-border-radius: 10px;
+  }
+  #similarDocSelector h3 {
+    font-size: 18px;
+    text-decoration: underline;
+    margin-top: 3px;
+  }
+  #similarDocSelector span {
+    width: 100%;
+  }
+  #similarDocSelector h4 {
+    font-size: 18px;
+    font-weight: normal;
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+  #similarDocSelector ul {
+    margin-bottom: 5px;
+  }
+  #similarDocSelector li {
+   list-style-type: none;
+   display: inline-block;
+    color: #7777aa;
+    border: 1px solid #7777aa;
+    background-color: #aaddff;
+    padding: 4px;
+    margin: 5px;
+   -moz-border-radius:3px;
+   -webkit-border-radius:3px;
+  }
+  #similarDocSelector button {
+    padding: 3px 5px 3px 5px;
+    font-size: 14px;
+    float: right;
+    width: 170px;
+  }
+  #similarDocSelector div p {
+    float: left;
+    width: 310px;
+    margin: 0px;
   }

@@ -1,10 +1,8 @@
 SUBDIRS = local
 
 web_DATA = \
-  header.txt.en \
-  header.txt.de \
-  footer.txt.en \
-  footer.txt.de \
+  header.txt.* \
+  footer.txt.* \
 	jquery.canvas-loader.js \
 	jquery.easySlider.js \
 	jquery.gzoom.js \
@@ -18,8 +16,9 @@ web_DATA = \
 	openDias.filter.js \
 	openDias.loadDetails.js \
 	openDias.saveDetails.js \
-	openDias.getAccessDetails.js \
-  openDias.language.js 
+	openDias.accessControls.js \
+  openDias.accessMethods.js \
+  openDias.userdetails.js 
 
 webdir = \
 	$(pkgdatadir)/webcontent/includes

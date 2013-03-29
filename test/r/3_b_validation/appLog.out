@@ -1,0 +1,111 @@
+STDOUT
+--------------------------------------------------
+LOG-OUTPUT
+-date-:-thread-:INF:-file-:-line- openDIAS version 'opendias [VERSION]' has been invoked.
+-date-:-thread-:INF:-file-:-line- Running in daemon mode.
+-date-:-thread-:INF:-file-:-line- Child process created [CONFIG_FILE]
+-date-:-thread-:DBG:-file-:-line- setup launched
+-date-:-thread-:INF:-file-:-line- Setting default log (/tmp/opendias_test/var/log/opendias) verbosity to 4.
+-date-:-thread-:INF:-file-:-line- Using config file: [CONFIG_FILE]
+-date-:-thread-:INF:-file-:-line- Which says the database is at: /tmp/opendiastest
+-date-:-thread-:DBG:-file-:-line- database file is /tmp/opendiastest/openDIAS.sqlite3
+-date-:-thread-:DBG:-file-:-line- Dir structure is in-place, database should exist
+-date-:-thread-:DBG:-file-:-line- Checking for a populated database
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- We have one. So will check to see what version it is.
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:DBG:-file-:-line- Database reports that it is version: 7
+-date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
+-date-:-thread-:INF:-file-:-line- Connected to database
+-date-:-thread-:INF:-file-:-line- database opened
+-date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
+-date-:-thread-:INF:-file-:-line- Config setting: log_verbosity = 3
+-date-:-thread-:INF:-file-:-line- Moving log verbosity from 4 to 3
+-date-:-thread-:INF Config setting: port = 8988
+-date-:-thread-:INF Config setting: backpopulate_phash = no
+-date-:-thread-:INF Created directory.
+-date-:-thread-:INF Sane command socket is open
+-date-:-thread-:INF ... Starting up the openDias service.
+-date-:-thread-:INF ready to accept connectons
+-date-:-thread-:INF Processing request for: checkLogin
+-date-:-thread-:ERR no requested 'action' given.
+-date-:-thread-:ERR requested 'action' (of 'rumplestilskin') is not available.
+-date-:-thread-:INF Processing request for: checkLogin
+-date-:-thread-:ERR Missing manditory post data with key of username
+-date-:-thread-:ERR Missing manditory post data with key of password
+-date-:-thread-:INF Processing request for: delete document
+-date-:-thread-:ERR Missing manditory post data with key of docid
+-date-:-thread-:INF Processing request for: doScan
+-date-:-thread-:ERR Missing manditory post data with key of deviceid
+-date-:-thread-:ERR Missing manditory post data with key of format
+-date-:-thread-:ERR Missing manditory post data with key of resolution
+-date-:-thread-:ERR Missing manditory post data with key of pages
+-date-:-thread-:ERR Missing manditory post data with key of ocr
+-date-:-thread-:ERR Missing manditory post data with key of pagelength
+-date-:-thread-:INF Processing request for: Doc List Filter
+-date-:-thread-:ERR Missing manditory post data with key of subaction
+-date-:-thread-:INF Processing request for: document details
+-date-:-thread-:ERR Missing manditory post data with key of docid
+-date-:-thread-:INF Processing request for: getScannerList
+-date-:-thread-:INF SERVER: Sane dispatcher received the command: 'internalGetScannerList' with param of 'en'
+-date-:-thread-:INF Processing request for: getScanning Progress
+-date-:-thread-:ERR Missing manditory post data with key of scanprogressid
+-date-:-thread-:INF Processing request for: logout
+-date-:-thread-:INF Processing request for: Move Tag
+-date-:-thread-:INF Processing request for: restart scan after page change
+-date-:-thread-:INF Processing request for: tagsAutoComplete
+-date-:-thread-:INF Processing request for: titleAutoComplete
+-date-:-thread-:INF Processing request for: update doc details
+-date-:-thread-:INF Processing request for: updateUser
+-date-:-thread-:ERR Missing manditory post data with key of username
+-date-:-thread-:INF Processing request for: Doc List Filter
+-date-:-thread-:INF Processing request for: Move Tag
+-date-:-thread-:INF Processing request for: Doc List Filter
+-date-:-thread-:INF Processing request for: Move Tag
+-date-:-thread-:INF Processing request for: checkLogin
+-date-:-thread-:ERR Unexpected post data with key of rogue_field
+-date-:-thread-:INF Processing request for: delete document
+-date-:-thread-:INF Processing request for: doScan
+-date-:-thread-:INF Processing request for: Doc List Filter
+-date-:-thread-:INF Processing request for: document details
+-date-:-thread-:INF Processing request for: getScannerList
+-date-:-thread-:INF Processing request for: getScanning Progress
+-date-:-thread-:INF Processing request for: logout
+-date-:-thread-:ERR Unexpected post data with key of rogue_field
+-date-:-thread-:INF Processing request for: Move Tag
+-date-:-thread-:INF Processing request for: restart scan after page change
+-date-:-thread-:INF Processing request for: tagsAutoComplete
+-date-:-thread-:INF Processing request for: titleAutoComplete
+-date-:-thread-:INF Processing request for: update doc details
+-date-:-thread-:INF Processing request for: updateUser
+-date-:-thread-:ERR Unexpected post data with key of rogue_field
+-date-:-thread-:INF Processing request for: checkLogin
+-date-:-thread-:ERR Missing manditory post data with key of password
+-date-:-thread-:INF Processing request for: checkLogin
+-date-:-thread-:ERR Missing manditory post data with key of username
+-date-:-thread-:INF Processing request for: delete document
+-date-:-thread-:INF Processing request for: doScan
+ ----- line duplicated more than three times ----- 
+-date-:-thread-:INF Processing request for: doScan
+-date-:-thread-:INF Processing request for: Doc List Filter
+ ----- line duplicated more than three times ----- 
+-date-:-thread-:INF Processing request for: Doc List Filter
+-date-:-thread-:INF Processing request for: document details
+-date-:-thread-:INF Processing request for: getScanning Progress
+-date-:-thread-:INF Processing request for: Move Tag
+ ----- line duplicated more than three times ----- 
+-date-:-thread-:INF Processing request for: Move Tag
+-date-:-thread-:INF Processing request for: restart scan after page change
+-date-:-thread-:INF Processing request for: tagsAutoComplete
+-date-:-thread-:INF Processing request for: titleAutoComplete
+-date-:-thread-:INF Processing request for: update doc details
+-date-:-thread-:INF Processing request for: updateUser
+-date-:-thread-:ERR Client specified a user to update, but they do not have permission.
+-date-:-thread-:INF Processing request for: updateUser
+-date-:-thread-:ERR Client specified a user to update, but they do not have permission.
+-date-:-thread-:INF Processing request for: updateUser
+-date-:-thread-:ERR Missing manditory post data with key of username
+-date-:-thread-:INF Received SIGUSR1 signal.
+-date-:-thread-:INF openDias service is shutting down....
+-date-:-thread-:INF openDias service has shutdown.

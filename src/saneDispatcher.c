@@ -75,16 +75,18 @@ extern void dispatch_sane_work( int ns ) {
 
   o_log(INFORMATION, "SERVER: Sane dispatcher received the command: '%s' with param of '%s'", command, param);
 
+  if( SANE_STATUS_GOOD != sane_init(NULL, NULL) ) {
+    o_log( ERROR, "Could not start sane");
+  }
+
   if ( command && 0 == strcmp(command, "internalGetScannerList") ) {
     response = internalGetScannerList( param );
   }
   else if ( command && 0 == strcmp(command, "internalDoScanningOperation") ) {
-    inLongRunningOperation = 1;
-    char *p1 = strtok(o_strdup(param), ","); // uuid
-    char *p2 = strtok( NULL, ","); // lang
-    response = internalDoScanningOperation( p1, p2 );
-    free(p1);
-    inLongRunningOperation = 0;
+    char *uuid = strtok(o_strdup(param), ","); // uuid
+    char *lang = strtok( NULL, ","); // lang
+    response = internalDoScanningOperation( uuid, lang );
+    free( uuid );
   }
   else {
     response = o_strdup("");
@@ -96,7 +98,9 @@ extern void dispatch_sane_work( int ns ) {
     response = o_strdup("");
   }
   o_log(DEBUGM, "SERVER: Going to send the response of: %s", response);
-    
+
+  sane_exit();
+
   // Post the reply
   send(ns, response, strlen(response), 0);
 
@@ -130,6 +134,9 @@ char *send_command(char *command) {
         return o_strdup(deviceListCache);
       }
       o_log(INFORMATION, "We dont have a cache of the result, we're going to have to wait.");
+      free(command);
+      free(answer);
+      return o_strdup("BUSY");
     }
   }
   else if( 0 == strncmp(command,"internalDoScanningOperation", 27) ) {
@@ -139,6 +146,9 @@ char *send_command(char *command) {
       return o_strdup("BUSY");
     }
   }
+
+  // Lock the SANE sub-system
+  inLongRunningOperation = 1;
 
   o_log(DEBUGM, "CLIENT: The command structure has been initalised and wants to send the command of: %s.", command);
   saun.sun_family = AF_UNIX;
@@ -179,13 +189,16 @@ char *send_command(char *command) {
   close(clientSocket);
   o_log(DEBUGM, "CLIENT: has closed its socket.");
 
+  // Unlock the SANE sub-system
+  inLongRunningOperation = 0;
+
   // Save a cached respone, incase we need it later
   if ( 1 == cacheResponse ) {
     o_log(DEBUGM, "Caching the response.");
     freeSaneCache();
     // The getdevice call will return XML that contains a placholder.
-    // /Write into that placholder 'cached' for the cached value,
-    // and '' n(blank) for the actualy live result.
+    // Write into that placholder 'cached' for the cached value,
+    // and '' (blank) for the actualy live result.
     // All other responses don't have a placholder like this.
     deviceListCache = o_printf(answer, " cached='true'");
     result = o_printf(answer, "");
@@ -203,4 +216,4 @@ extern void freeSaneCache( void ) {
 
 }
 
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */

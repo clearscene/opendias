@@ -1,0 +1,138 @@
+---UPDATE_WARNING---
+
+<script type="text/javascript" src="/opendias/includes/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="/opendias/style/jquery-ui.css" type="text/css" media="screen" /> 
+<style>
+  #tabs {font-size: 11px;}
+  .onlyadmin { display: none; }
+</style>
+
+<h2>---LOCAL_admin_title---</h2>
+
+<div id="tabs">
+
+  <ul id='tabList'>
+    <li><a href="#mydetails">---LOCAL_admin_tab_mydetails---</a></li>
+    <li class='onlyadmin'><a href="#newuser">---LOCAL_admin_tab_create_user---</a></li>
+    <li class='onlyadmin'><a href="#useradmin">---LOCAL_admin_tab_edit_user---</a></li>
+  <!--  <li class='onlyadmin'><a href="#sessionman">---LOCAL_admin_tab_manage_session---</a></li> -->
+  </ul>
+
+  <div id="mydetails" class='useradmin'>
+    <h3>---LOCAL_admin_mydetails_title---</h3>
+    <ul>
+      <li class='row'>
+        <div class='label'>---LOCAL_admin_mydetails_changename---</div>
+        <div class='data'><input id='newrealname' type='input' /></div>
+      </li>
+      <li class='row'>
+        <div class='label'>---LOCAL_admin_mydetails_changepassword---</div>
+        <div class='data'><input id='newpassword' type='password' /> / <input id='newpassword2' type='password' /></div>
+      </li>
+      <li class='row'>
+        <div class='label'>---LOCAL_admin_mydetails_currentrole---</div>
+        <div class='data'><span id='currentrole'>---</span></div>
+      </li>
+      <li class='row'>
+        <div class='label'>&nbsp;</div>
+        <div class='data'><button id='updateThisUser'>---LOCAL_admin_save_button---</button></div>
+      </li>
+    </ul>
+  </div>
+
+  <div id="newuser" class='useradmin onlyadmin'>
+
+    <h3>---LOCAL_admin_createuser_title---</h3>
+    <p>---LOCAL_admin_createuser_intro---</p>
+
+    <ul>
+      <li class='row'>
+        <div class='label'>---LOCAL_admin_createuser_id---</div>
+        <div class='data'><input id='createuserid' type='input' /></div>
+      </li>
+      <li class='row'>
+        <div class='label'>---LOCAL_admin_createuser_name---</div>
+        <div class='data'><input id='createrealname' type='input' /></div>
+      </li>
+      <li class='row'>
+        <div class='label'>---LOCAL_admin_createuser_password---</div>
+        <div class='data'><input id='createpassword' type='password' /> / <input id='createpassword2' type='password' /></div>
+      </li>
+      <li class='row'>
+        <div class='label'>---LOCAL_admin_createuser_role---</div>
+        <div class='data'><select id='createuserrole'>
+            <option value='1'><script>document.write(LOCAL_role_admin);</script></option>
+            <option value='2'><script>document.write(LOCAL_role_user);</script></option>
+            <option value='3'><script>document.write(LOCAL_role_view);</script></option>
+            <option value='4'><script>document.write(LOCAL_role_add);</script></option>
+          </select></div>
+      </li>
+      <li class='row'>
+        <div class='label'>&nbsp;</div>
+        <div class='data'><button id='createNewUser'>---LOCAL_admin_save_button---</button></div>
+      </li>
+    </ul>
+  </div>
+
+  <div id="useradmin" class='onlyadmin'>
+
+    <h3>Manager Users</h3>
+    <p>As an admin user, you have the power to manage users. This tab allows you
+      to update users 'user name' and their assigned role.</p>
+
+    <div class='accessControl'>
+    <table cellpadding="3px" cellspacing="0px">
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Last Login</th>
+          <th>Role</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+<!--
+  <div id='sessionman' class='onlyadmin'>
+    <h3>Manage Current Sessions</h3>
+    <p>Sessions are created when users visit the application. One session is created 
+      per visiting browser. The session holds information about there loggedin status
+      and other things the application needs to keep track of between page views. If
+      a user does not visit the application for longer than the 'session timeout' the
+      session is automatically deleted.</p>
+
+    <div class='row'>
+      <div class='label'>Session Timeout</div>
+      <div class='data'><select>
+                          <option value='1'>1 Min</option>
+                          <option value='5'>5 Mins</option>
+                          <option value='10'>10 Mins</option>
+                          <option value='30'>30 Mins</option>
+                          <option value='60'>60 Mins</option>
+                          <option value='90'>90 Mins</option>
+                        </select></div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Session Id</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Last Activity</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>*This session</p>
+  </div>
+-->
+
+</div>
+
+<script type="text/javascript" src="/opendias/includes/local/openDias.accessControls.js.resource"></script>
+<script type="text/javascript" src="/opendias/includes/openDias.accessControls.js"></script>

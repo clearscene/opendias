@@ -1,6 +1,0 @@
-Updated start command to specify a mmissing config file.
-STARTING app...
-Could not start the service.
-No need for a web client for this test.
-Stopping service
-Waiting for valgrind to finish.
