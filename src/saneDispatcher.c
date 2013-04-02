@@ -29,6 +29,7 @@
 #include <errno.h>
 #include <sane/sane.h>
 #include <sane/saneopts.h>
+#include <sys/wait.h>
 
 #include "scanner.h"
 #include "utils.h"
@@ -75,40 +76,84 @@ extern void dispatch_sane_work( int ns ) {
 
   o_log(INFORMATION, "SERVER: Sane dispatcher received the command: '%s' with param of '%s'", command, param);
 
-  if( SANE_STATUS_GOOD != sane_init(NULL, NULL) ) {
-    o_log( ERROR, "Could not start sane");
+  /*
+   * We fork here, since some SANE backends are 'a bit flakey' (especially networked devices)
+   * If sane causes a crash, it will take down the child, but not the main app.
+   *    - A rudimentart "eval" block.
+   */
+  pid_t pid = fork();
+  if (pid < 0) {
+    /* Could not fork */
+    o_log(ERROR, "Could not fork.");
+    send(ns, "", strlen( "" ), 0);
+
+    fclose(fp);
+    close(ns);
+    o_log(DEBUGM, "SERVER: Could not create a SANE processing child.");
+    return;
   }
 
-  if ( command && 0 == strcmp(command, "internalGetScannerList") ) {
-    response = internalGetScannerList( param );
+  // PARENT: Child created ok, so wait for child to finish (or die)
+  if (pid > 0) {
+    int status;
+    o_log(INFORMATION, "Child process created %d", pid);
+    while ( waitpid( pid, &status, WNOHANG ) == 0 ) {
+      usleep( 5000 );
+    }
+    if( WIFSIGNALED(status) ) {
+      o_log( ERROR, "Child sane process was signalled (%s) to finish early", strsignal(WTERMSIG(status)) );
+    }
+    if( WCOREDUMP(status) ) {
+      o_log( DEBUGM, "Child sane process created a dump file" );
+    }
   }
-  else if ( command && 0 == strcmp(command, "internalDoScanningOperation") ) {
-    char *uuid = strtok(o_strdup(param), ","); // uuid
-    char *lang = strtok( NULL, ","); // lang
-    response = internalDoScanningOperation( uuid, lang );
-    free( uuid );
-  }
+
+  // CHILD: All the SANE magic happens in the child
   else {
-    response = o_strdup("");
+
+    if( SANE_STATUS_GOOD != sane_init(NULL, NULL) ) {
+      o_log( ERROR, "Could not start sane");
+    }
+
+    // Get a list of scanners
+    if ( command && 0 == strcmp(command, "internalGetScannerList") ) {
+      response = internalGetScannerList( param );
+    }
+
+    // Scan a page
+    else if ( command && 0 == strcmp(command, "internalDoScanningOperation") ) {
+      char *uuid = strtok(o_strdup(param), ","); // uuid
+      char *lang = strtok( NULL, ","); // lang
+      response = internalDoScanningOperation( uuid, lang );
+      free( uuid );
+    }
+
+    else {
+      response = o_strdup("");
+    }
+
+    free(command);
+    free(param);
+
+    if( response == NULL ) {
+      response = o_strdup("");
+    }
+    o_log(DEBUGM, "SERVER: Going to send the response of: %s", response);
+
+    sane_exit();
+
+    // Post the reply
+    send(ns, response, strlen(response), 0);
+    free(response);
+
+    // Finish the child. The waiting parent will then continue
+    exit(EXIT_SUCCESS);
   }
-  free(command);
-  free(param);
-
-  if( response == NULL ) {
-    response = o_strdup("");
-  }
-  o_log(DEBUGM, "SERVER: Going to send the response of: %s", response);
-
-  sane_exit();
-
-  // Post the reply
-  send(ns, response, strlen(response), 0);
 
   fclose(fp);
   close(ns);
   o_log(DEBUGM, "SERVER: Server has closed it's socket.");
 
-  free(response);
 }
 
 char *send_command(char *command) {
