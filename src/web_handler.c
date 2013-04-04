@@ -725,6 +725,28 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             size = strlen(content);
           }
   
+          else if ( action && 0 == strcmp(action, "getScannerDetails") ) {
+            o_log(INFORMATION, "Processing request for: getScannerDetails");
+#ifdef CAN_SCAN
+            if ( accessPrivs.add_scan == 0 )
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *deviceid = getPostData(con_info->post_data, "deviceid");
+              content = getScannerDetails(deviceid, con_info->lang); // pageRender.c
+              if(content == (void *)NULL) {
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+              }
+            }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
+#endif /* CAN_SCAN */
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
           else if ( action && 0 == strcmp(action, "doScan") ) {
             o_log(INFORMATION, "Processing request for: doScan");
 #ifdef CAN_SCAN

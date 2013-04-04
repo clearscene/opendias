@@ -26,7 +26,8 @@
 #include "main.h" // for con_info struct
 
 #ifdef CAN_SCAN
-char *getScannerList(void *);  // Command port frontend to the internalGetScannerList function
+char *getScannerList(char *);  // Command port frontend to the internalGetScannerList function
+char *getScannerDetails(char *, char *);  // Command port frontend to the internalGetScannerDetails function
 void *doScanningOperation(void *); //command port frontend to the internalDoScanningOperation function
 char *getScanningProgress(char *);
 #ifdef THREAD_JOIN

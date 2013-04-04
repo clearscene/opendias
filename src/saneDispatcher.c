@@ -51,6 +51,7 @@ extern void dispatch_sane_work( int ns ) {
   char *command = o_strdup("");
   char *param = o_strdup("");
   int parsingCommand = 1;
+  pid_t pid;
 
   // Read the request
   fp = fdopen(ns, "r");
@@ -60,7 +61,7 @@ extern void dispatch_sane_work( int ns ) {
     if (c == '\n')
       break;
 
-    if (c == ':') {
+    if ( parsingCommand == 1 && c == ':') {
       parsingCommand = 0;
     }
     else {
@@ -76,25 +77,30 @@ extern void dispatch_sane_work( int ns ) {
 
   o_log(INFORMATION, "SERVER: Sane dispatcher received the command: '%s' with param of '%s'", command, param);
 
-  /*
-   * We fork here, since some SANE backends are 'a bit flakey' (especially networked devices)
-   * If sane causes a crash, it will take down the child, but not the main app.
-   *    - A rudimentart "eval" block.
-   */
-  pid_t pid = fork();
-  if (pid < 0) {
-    /* Could not fork */
-    o_log(ERROR, "Could not fork.");
-    send(ns, "", strlen( "" ), 0);
+  // If the command start with "fork" then spown a new process and do the request
+  // over there. However, we can do any DB work on the new process!
+  if( 0 == strncmp(command, "fork", 4) ) {
+    /*
+     * We fork here, since some SANE backends are 'a bit flakey' (especially networked devices)
+     * If sane causes a crash, it will take down the child, but not the main app.
+     *    - A rudimentart "eval" block.
+     */
+    o_log(DEBUGM, "SERVER: Forking a new SANE processing child.");
+    pid = fork();
+    if (pid < 0) {
+      /* Could not fork */
+      o_log(ERROR, "Could not fork.");
+      send(ns, "", strlen( "" ), 0);
 
-    fclose(fp);
-    close(ns);
-    o_log(DEBUGM, "SERVER: Could not create a SANE processing child.");
-    return;
+      fclose(fp);
+      close(ns);
+      o_log(DEBUGM, "SERVER: Could not create a SANE processing child.");
+      return;
+    }
   }
 
   // PARENT: Child created ok, so wait for child to finish (or die)
-  if (pid > 0) {
+  if( 0 == strncmp(command, "fork", 4) && pid > 0) {
     int status;
     o_log(INFORMATION, "Child process created %d", pid);
     while ( waitpid( pid, &status, WNOHANG ) == 0 ) {
@@ -116,8 +122,16 @@ extern void dispatch_sane_work( int ns ) {
     }
 
     // Get a list of scanners
-    if ( command && 0 == strcmp(command, "internalGetScannerList") ) {
+    if ( command && 0 == strcmp(command, "forkGetScannerList") ) {
       response = internalGetScannerList( param );
+    }
+
+    // Get scanner details (attributes)
+    else if ( command && 0 == strcmp(command, "forkGetScannerDetails") ) {
+      char *deviceid = strtok(o_strdup(param), ","); // device
+      char *lang = strtok( NULL, ","); // lang
+      response = internalGetScannerDetails( deviceid, lang );
+      free( deviceid );
     }
 
     // Scan a page
@@ -132,7 +146,6 @@ extern void dispatch_sane_work( int ns ) {
       response = o_strdup("");
     }
 
-    free(command);
     free(param);
 
     if( response == NULL ) {
@@ -146,8 +159,13 @@ extern void dispatch_sane_work( int ns ) {
     send(ns, response, strlen(response), 0);
     free(response);
 
-    // Finish the child. The waiting parent will then continue
-    exit(EXIT_SUCCESS);
+    if( 0 == strncmp(command,"fork", 4) ) {
+      free(command);
+      // Finish the child. The waiting parent will then continue
+      exit(EXIT_SUCCESS);
+    }
+    free(command);
+
   }
 
   fclose(fp);
@@ -169,7 +187,7 @@ char *send_command(char *command) {
 
 
   // Handle 'busy' cases.
-  if ( 0 == strncmp(command, "internalGetScannerList", 22) ) {
+  if ( 0 == strncmp(command, "forkGetScannerList", 18) ) {
     cacheResponse = 1;
     if( 1 == inLongRunningOperation ) {
       o_log(INFORMATION, "The SANE sub system is busy, trying to return a cached response.");
