@@ -434,7 +434,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   // First Validate the request basic fields
   if( 0 != strstr(url, "..") ) {
     o_log(DEBUGM, "request trys to move outside the document root");
-    return send_page_bin (connection, build_page(o_printf("<p>%s</p>", getString("LOCAL_server_error", "en") ), "en"), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
+    return send_page_bin (connection, build_page(o_printf("<p>%s</p>", getString("LOCAL_request_error", "en") ), "en"), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
   }
 
   // Discover Params
@@ -938,7 +938,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               char *filename = getPostData(con_info->post_data, "uploadfile");
               content = uploadfile(filename, con_info->lang); // import_doc.c
               if(content == (void *)NULL)
-                content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
+                status = MHD_HTTP_BAD_REQUEST;
+                content = build_page(o_printf("<p>%s</p>", getString("LOCAL_unsuported_file_type", "en") ), "en");
             }
             mimetype = MIMETYPE_HTML;
             size = strlen(content);

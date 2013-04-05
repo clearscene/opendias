@@ -834,7 +834,7 @@ extern char *internalGetScannerDetails(char *device, char *lang) {
 
   char *answer = NULL;
   SANE_Status status;
-  char *replyTemplate, *deviceList = o_strdup("");; 
+  char *deviceList = o_strdup("");; 
   int hlp = 0, resolution = 300, minRes=50, maxRes=50;
   char *resolution_s, *maxRes_s, *minRes_s;
   SANE_Handle *openDeviceHandle;
