@@ -193,7 +193,11 @@ char *uploadfile(char *filename, char *lang) {
   free(final_filename);
 
   // Open the document for editing.
+#ifdef CAN_PHASH
   tmp = o_printf("<html><HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/opendias/docDetail.html?docid=%s&findSimilar=1\"></HEAD><body></body></html>", docid);
+#else
+  tmp = o_printf("<html><HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/opendias/docDetail.html?docid=%s\"></HEAD><body></body></html>", docid);
+#endif /*  CAN_PHASH */
   free(docid);
 
   return tmp;
