@@ -262,13 +262,6 @@ void daemonize(char *rundir) {
     char *str;
     size_t size;
  
-    /* Check if parent process id is set */
-    if (getppid() == 1) {
-        /* PPID exists, therefore we are already a daemon */
-        o_log(ERROR, "Code called to make this process a daemon, but we are already such.");
-        return;
-    }
-
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
     close(STDIN_FILENO);
