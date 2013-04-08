@@ -80,3 +80,4 @@ LOCAL_access_denied|Zugriff verweigert
 LOCAL_no_access|Sie haben keine Berechtigung, um die Anforderung abzuschließen
 LOCAL_processing_error|Ihre Anfrage konnte nicht verarbeitet werden
 LOCAL_missing_support|Unterstützung für diese Funktion ist nicht in zusammengestellt
+LOCAL_unsuported_file_type|LOCALISE_ME Your file type is not supported

@@ -496,7 +496,7 @@ void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix
     }
     else {
       o_log(DEBUGM, "OCR was requested, but the specified resolution means it's not safe to be attempted");
-      ocrText = o_printf( getString("LOCAL_resolution_outside_range_to_attempt", lang) );
+      ocrText = o_printf( getString("LOCAL_resolution_outside_range_to_attempt_ocr", lang) );
     }
   }
   else
@@ -734,23 +734,13 @@ extern char *internalGetScannerList(char *lang) {
 
     int i = 0;
 
-    replyTemplate = o_strdup("<Device><vendor>%s</vendor><model>%s</model><type>%s</type><name>%s</name><Formats>%s</Formats><max>%s</max><min>%s</min><default>%s</default><host>%s</host></Device>");
+    replyTemplate = o_strdup("<Device><vendor>%s</vendor><model>%s</model><type>%s</type><name>%s</name><Formats>%s</Formats><host>%s</host></Device>");
     deviceList = o_strdup("");
 
     for (i=0 ; SANE_device_list[i] ; i++) {
 
-      int hlp = 0, resolution = 300, minRes=50, maxRes=50;
       char *vendor, *model, *type, *name, *format;
-      char *resolution_s, *maxRes_s, *minRes_s;
       char *scannerHost;
-      SANE_Handle *openDeviceHandle;
-
-      o_log(DEBUGM, "sane_open of \"%s\"",SANE_device_list[i]->name);
-      status = sane_open (SANE_device_list[i]->name, (SANE_Handle)&openDeviceHandle);
-      if(status != SANE_STATUS_GOOD) {
-        o_log(ERROR, "Could not open: '%s' with error: %s", SANE_device_list[i]->name, sane_strstatus(status));
-        continue;
-      }
 
       vendor = o_strdup(SANE_device_list[i]->vendor);
       model = o_strdup(SANE_device_list[i]->model);
@@ -803,6 +793,59 @@ extern char *internalGetScannerList(char *lang) {
       else {
         scannerHost = o_strdup( getString("LOCAL_opendias_server", lang) );
       }
+
+      // Build Reply
+      //
+      o_concatf(&deviceList, replyTemplate, vendor, model, type, name, format, scannerHost);
+
+      free(vendor);
+      free(model);
+      free(type);
+      free(name);
+      free(format);
+      free(scannerHost);
+    }
+
+    free(replyTemplate);
+    if(deviceList) {
+      // The escaped string placeholder will be interprited in the sane dispatcher client
+      answer = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s><Devices>%s</Devices></ScannerList></Response>", deviceList);
+      free(deviceList);
+    }
+    else {
+      // No devices
+      // The escaped string placeholder will be interprited in the sane dispatcher client
+      answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
+    }
+  }
+
+  else {
+    // sane failed.
+    // The escaped string placeholder will be interprited in the sane dispatcher client
+    answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
+  }
+
+o_log( DEBUGM, "resp = %s", answer);
+  return answer;
+
+}
+
+extern char *internalGetScannerDetails(char *device, char *lang) {
+
+  char *answer = NULL;
+  SANE_Status status;
+  char *deviceList = o_strdup("");; 
+  int hlp = 0, resolution = 300, minRes=50, maxRes=50;
+  char *resolution_s, *maxRes_s, *minRes_s;
+  SANE_Handle *openDeviceHandle;
+
+  o_log(DEBUGM, "sane_open of \"%s\"", device);
+  status = sane_open (device, (SANE_Handle)&openDeviceHandle);
+  if(status != SANE_STATUS_GOOD) {
+    o_log(ERROR, "Could not open: '%s' with error: %s", device, sane_strstatus(status));
+    free(deviceList);
+    return NULL;
+  }
 
 
       // Find resolution ranges
@@ -870,43 +913,21 @@ extern char *internalGetScannerList(char *lang) {
       o_log(DEBUGM, "sane_close");
       sane_close(openDeviceHandle);
 
-      // Build Reply
-      //
-      resolution_s = itoa(resolution,10);
-      maxRes_s = itoa(maxRes,10);
-      minRes_s = itoa(minRes,10);
-      o_concatf(&deviceList, replyTemplate, 
-                           vendor, model, type, name, format, maxRes_s, minRes_s, resolution_s, scannerHost);
+  // Build Reply
+  //
+  resolution_s = itoa(resolution,10);
+  maxRes_s = itoa(maxRes,10);
+  minRes_s = itoa(minRes,10);
 
-      free(vendor);
-      free(model);
-      free(type);
-      free(name);
-      free(format);
-      free(maxRes_s);
-      free(minRes_s);
-      free(resolution_s);
-      free(scannerHost);
-    }
+  o_concatf(&deviceList, "<max>%s</max><min>%s</min><default>%s</default>", maxRes_s, minRes_s, resolution_s);
 
-    free(replyTemplate);
-    if(deviceList) {
-      // The escaped string placeholder will be interprited in the sane dispatcher client
-      answer = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s><Devices>%s</Devices></ScannerList></Response>", deviceList);
-      free(deviceList);
-    }
-    else {
-      // No devices
-      // The escaped string placeholder will be interprited in the sane dispatcher client
-      answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
-    }
-  }
+  free(maxRes_s);
+  free(minRes_s);
+  free(resolution_s);
 
-  else {
-    // sane failed.
-    // The escaped string placeholder will be interprited in the sane dispatcher client
-    answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
-  }
+  // The escaped string placeholder will be interprited in the sane dispatcher client
+  answer = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerDetails>%s</ScannerDetails></Response>", deviceList);
+  free(deviceList);
 
   return answer;
 

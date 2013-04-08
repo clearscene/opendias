@@ -161,9 +161,10 @@
    text-align: center;
    background-image: url('/opendias/images/texture.png');
   }
-  #footer p {
-   margin-top: 4px;
-   color: #ccc;
+  #footer p, #footer a {
+   margin-top: 6px;
+   font-size: 0.9em;
+   color: #999;
   }
 
   .alert {

@@ -2,6 +2,7 @@ var baron = 0;
 var canon = 0;
 var PROGRESS_REFRESH_TIME = 400; // ms
 var doneAtLeastOnePage = 0;
+var collectedDetails = new Array();
 
 function showStatus(dev, canv, prog) {
   if (canv == 1 && canon == 0) {
@@ -215,7 +216,84 @@ function getScanningProgress(progressId, device) {
 
 $(document).ready(function () {
 
-  $("#tabs").tabs();
+  $("#tabs").tabs({ show: function(event ,ui) {
+      if (ui.index >= 2) {
+        if( collectedDetails[ ui.index ] == undefined ) {
+
+          dev = ui.index - 1;
+          collectedDetails[ ui.index ] = 1;
+
+          $.ajax({
+            url: "/opendias/dynamic",
+            dataType: "xml",
+            timeout: AJAX_TIMEOUT,
+            data: {
+              action: "getScannerDetails",
+              deviceid: $("#deviceid_" + dev).val(),
+            },
+            cache: false,
+            type: "POST",
+            error: function (x, t, m) {
+              if (t == "timeout") {
+                alert("[a009] " + LOCAL_timeout_talking_to_server);
+              } else {
+                alert("[a010] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+              }
+            },
+            success: function (data) {
+              if ($(data).find('error').text()) {
+                alert(LOCAL_unable_to_start_scanning + ": " + $(data).find('error').text());
+                return 1;
+              }
+
+              d = $(data).find('ScannerDetails');
+
+              $("#resolutionSlider_" + dev).slider({
+                range: "min",
+                value: parseInt(d.find("default").text()),
+                min: parseInt(d.find("min").text()),
+                max: parseInt(d.find("max").text()),
+                step: 50,
+                slide: function (event, ui) {
+                  $("#resolution_" + dev).val(ui.value);
+                  $("#resolutionDisplay_" + dev).text(ui.value + " dpi");
+                  if (ui.value >= bestLow && ui.value <= bestHigh) {
+                    $("#resolutionGood_" + dev).addClass("sweetResolution");
+                    $("#resolutionGood_" + dev).parent().removeClass("poorResolution");
+                    $("#ocr_" + dev).removeAttr('disabled');
+                  } else {
+                    $("#resolutionGood_" + dev).parent().addClass("poorResolution");
+                    $("#resolutionGood_" + dev).removeClass("sweetResolution");
+                    $("#ocr_" + dev).attr('disabled', 'disabled');
+                    $("#ocr_" + dev).removeAttr('checked');
+                  }
+                }
+              });
+              var bestLow = 300;
+              var bestHigh = 400;
+              var resFactor = 215 / (parseInt(d.find("max").text()) - parseInt(d.find("min").text()));
+              $("#resolutionGood_" + dev).css({
+                'left': resFactor * (bestLow - parseInt(d.find("min").text())),
+                'width': (bestHigh - bestLow) * resFactor * 1.05
+              });
+              $("#resolution_" + dev).val(d.find("default").text());
+              $("#resolutionDisplay_" + dev).text(d.find("default").text() + " dpi");
+              if (parseInt(d.find("default").text()) >= bestLow && parseInt(d.find("default").text()) <= bestHigh) {
+                $("#resolutionGood_" + dev).addClass("sweetResolution");
+                $("#ocr_" + dev).removeAttr('disabled');
+              } else {
+                $("#resolutionGood_" + dev).parent().addClass("poorResolution");
+                $("#ocr_" + dev).attr('disabled', 'disabled');
+              }
+
+            // end of ajax success
+            },
+          }); // end of ajax "getScannerDetails"
+
+        }
+      }
+    }
+  });
 
   var role = getCookie("role");
   if (!get_priv_from_role(role, 'add_import')) {
@@ -231,7 +309,7 @@ $(document).ready(function () {
     $.ajax({
       url: "/opendias/dynamic",
       dataType: "xml",
-      timeout: 5*AJAX_TIMEOUT,
+      timeout: 4*AJAX_TIMEOUT,
       data: {
         action: "getScannerList"
       },
@@ -269,7 +347,7 @@ $(document).ready(function () {
           $('#tabs').append(div);
 
           // Create new tab
-          $('#tabs').tabs("add", '#deviceTab_' + device,
+          newtab = $('#tabs').tabs("add", '#deviceTab_' + device,
           $(this).find("type").text() + ": " + $(this).find("vendor").text() + " - " + $(this).find("model").text());
 
           // Bring the tab contents up-2-date
@@ -279,44 +357,6 @@ $(document).ready(function () {
           }
           $('#title_' + device).text($(this).find("type").text() + ": " + $(this).find("vendor").text() + " - " + $(this).find("model").text() + host);
           $('#deviceid_' + device).val($(this).find("name").text());
-          //$('#format_'+device).append('<option>'+$(this).find("format").text()+'</option>');
-          $("#resolutionSlider_" + device).slider({
-            range: "min",
-            value: parseInt($(this).find("default").text()),
-            min: parseInt($(this).find("min").text()),
-            max: parseInt($(this).find("max").text()),
-            step: 50,
-            slide: function (event, ui) {
-              $("#resolution_" + device).val(ui.value);
-              $("#resolutionDisplay_" + device).text(ui.value + " dpi");
-              if (ui.value >= bestLow && ui.value <= bestHigh) {
-                $("#resolutionGood_" + device).addClass("sweetResolution");
-                $("#resolutionGood_" + device).parent().removeClass("poorResolution");
-                $("#ocr_" + device).removeAttr('disabled');
-              } else {
-                $("#resolutionGood_" + device).parent().addClass("poorResolution");
-                $("#resolutionGood_" + device).removeClass("sweetResolution");
-                $("#ocr_" + device).attr('disabled', 'disabled');
-                $("#ocr_" + device).removeAttr('checked');
-              }
-            }
-          });
-          var bestLow = 300;
-          var bestHigh = 400;
-          var resFactor = 215 / (parseInt($(this).find("max").text()) - parseInt($(this).find("min").text()));
-          $("#resolutionGood_" + device).css({
-            'left': resFactor * (bestLow - parseInt($(this).find("min").text())),
-            'width': (bestHigh - bestLow) * resFactor * 1.05
-          });
-          $("#resolution_" + device).val($(this).find("default").text());
-          $("#resolutionDisplay_" + device).text($(this).find("default").text() + " dpi");
-          if (parseInt($(this).find("default").text()) >= bestLow && parseInt($(this).find("default").text()) <= bestHigh) {
-            $("#resolutionGood_" + device).addClass("sweetResolution");
-            $("#ocr_" + device).removeAttr('disabled');
-          } else {
-            $("#resolutionGood_" + device).parent().addClass("poorResolution");
-            $("#ocr_" + device).attr('disabled', 'disabled');
-          }
 
           $("#lengthSlider_" + device).slider({
             range: "min",
@@ -338,6 +378,8 @@ $(document).ready(function () {
               $("#pagesDisplay_" + device).text(sprintf(LOCAL_x_pages, ui.value));
             }
           });
+
+
           $("#scanButton_" + device).click(function () {
             // Stop the form from being changed after submittion
             $("#format_" + device).attr('disabled', 'disabled');

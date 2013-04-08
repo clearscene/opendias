@@ -56,9 +56,9 @@
  *
  */
 #ifdef CAN_SCAN
-char *getScannerList(void *lang) {
+char *getScannerList(char *lang) {
 
-  char *answer = send_command( o_printf("internalGetScannerList:%s", (char *)lang) ); // scan.c
+  char *answer = send_command( o_printf("forkGetScannerList:%s", lang) ); // scan.c
   o_log(DEBUGM, "RESPONSE WAS: %s", answer);
 
   if( 0 == strcmp(answer, "BUSY") ) {
@@ -68,6 +68,17 @@ char *getScannerList(void *lang) {
   return answer;
 }
 
+char *getScannerDetails(char *deviceid, char *lang) {
+
+  char *answer = send_command( o_printf("forkGetScannerDetails:%s,%s", deviceid, lang) ); // scan.c
+  o_log(DEBUGM, "RESPONSE WAS: %s", answer);
+
+  if( 0 == strcmp(answer, "BUSY") ) {
+    free( answer );
+    return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>BUSY</error></Response>");
+  }
+  return answer;
+}
 extern void *doScanningOperation(void *saneOpData) {
 
   struct doScanOpData *tr = saneOpData;
@@ -226,7 +237,10 @@ char *nextPageReady(char *scanid, char *lang) {
 char *getScanningProgress(char *scanid) {
 
   struct simpleLinkedList *rSet;
-  char *sql, *status=0, *value=0, *ret;
+  char *sql, *status, *value, *ret;
+
+  status = o_strdup("0");
+  value = o_strdup("0");
 
   sql = o_strdup("SELECT status, value \
                   FROM scan_progress \
@@ -237,6 +251,8 @@ char *getScanningProgress(char *scanid) {
   rSet = runquery_db(sql, vars);
   if( rSet != NULL ) {
     do {
+      free(status);
+      free(value);
       status = o_strdup(readData_db(rSet, "status"));
       value = o_strdup(readData_db(rSet, "value"));
     } while ( nextRow( rSet ) );
@@ -955,8 +971,9 @@ char *checkForSimilar(const char *docid) {
   free( sql );
 
   if( rSet == NULL ) {
+    // This could be there are no docs in the store - yet
     o_log( ERROR, "Docs that don't have a doc id %s, not available.", docid);
-    return NULL;
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><CheckForSimilar><Docs></Docs></CheckForSimilar></Response>");
   }
   else {
     do {

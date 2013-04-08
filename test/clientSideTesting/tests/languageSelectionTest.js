@@ -34,7 +34,7 @@
     console.log("1. Running: native language");
 
     equal($('#homeLink').text(), "Home", "Was the home link in the expeced language" );
-    equal($('#home div p:first').text(), "Welcome to openDias. The Document Imaging Archive System.", "Was the welcome message expeced language" );
+    equal($('#home div p:first').text(), "The openDias architecture has been designed to allow many users to access the system.", "Was the welcome message expeced language" );
     equal(getCookie('requested_lang'), null, "Was the cookie set as expected.");
 
     start();
@@ -50,7 +50,7 @@
       langUpdated = 1;
       $ = window.frames[0].jQuery; 
       equal($('#homeLink').text(), "####", "Was the home link in the expeced language" );
-      equal($('#home div p:first').text(), "####### ## openDias. ### Document Imaging Archive System.", "Was the welcome message updated to the expeced language" );
+      equal($('#home div p:first').text(), "### ######## ############ ### #### ######## ## ##### #### ##### ## ###### ### #######", "Was the welcome message updated to the expeced language" );
       equal(getCookie('requested_lang'), 'hh', "Was the cookie set as expected.");
       start();
     });
@@ -73,7 +73,7 @@
       langUpdated = 1;
       $ = window.frames[0].jQuery; 
       equal($('#homeLink').text(), "Zuhause", "Was the home link in the expeced language" );
-      equal($('#home div p:first').text(), "Willkommen, um openDias. Die Document Imaging Archive System.", "Was the welcome message updated to the expeced language" );
+      equal($('#home div p:first').text(), "openDias architektur wurde so konzipiert, dass viele Anwender auf das System zuzugreifen.", "Was the welcome message updated to the expeced language" );
       equal(getCookie('requested_lang'), 'de', "Was the cookie set as expected.");
       start();
     });
@@ -95,7 +95,7 @@
       langUpdated = 1;
       $ = window.frames[0].jQuery; 
       equal($('#homeLink').text(), "Home", "Was the home link in the expeced language" );
-      equal($('#home div p:first').text(), "Welcome to openDias. The Document Imaging Archive System.", "Was the welcome message expeced language" );
+      equal($('#home div p:first').text(), "The openDias architecture has been designed to allow many users to access the system.", "Was the welcome message expeced language" );
       equal(getCookie('requested_lang'), null, "Was the cookie set as expected.");
       start();
     });

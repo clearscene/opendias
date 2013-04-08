@@ -434,7 +434,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   // First Validate the request basic fields
   if( 0 != strstr(url, "..") ) {
     o_log(DEBUGM, "request trys to move outside the document root");
-    return send_page_bin (connection, build_page(o_printf("<p>%s</p>", getString("LOCAL_server_error", "en") ), "en"), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
+    return send_page_bin (connection, build_page(o_printf("<p>%s</p>", getString("LOCAL_request_error", "en") ), "en"), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
   }
 
   // Discover Params
@@ -725,6 +725,28 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             size = strlen(content);
           }
   
+          else if ( action && 0 == strcmp(action, "getScannerDetails") ) {
+            o_log(INFORMATION, "Processing request for: getScannerDetails");
+#ifdef CAN_SCAN
+            if ( accessPrivs.add_scan == 0 )
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *deviceid = getPostData(con_info->post_data, "deviceid");
+              content = getScannerDetails(deviceid, con_info->lang); // pageRender.c
+              if(content == (void *)NULL) {
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+              }
+            }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
+#endif /* CAN_SCAN */
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
           else if ( action && 0 == strcmp(action, "doScan") ) {
             o_log(INFORMATION, "Processing request for: doScan");
 #ifdef CAN_SCAN
@@ -916,7 +938,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               char *filename = getPostData(con_info->post_data, "uploadfile");
               content = uploadfile(filename, con_info->lang); // import_doc.c
               if(content == (void *)NULL)
-                content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
+                status = MHD_HTTP_BAD_REQUEST;
+                content = build_page(o_printf("<p>%s</p>", getString("LOCAL_unsuported_file_type", "en") ), "en");
             }
             mimetype = MIMETYPE_HTML;
             size = strlen(content);

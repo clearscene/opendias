@@ -8,10 +8,11 @@ $q(function() {
   $q.getScript("http://testswarmhost/testswarm/js/inject.js");
 
   var tests = [
+              'languageSelectionTest',
+              'authenticationTest',
               'listPageTest',
               'acquirePageTest',
               'detailPageTest',
-              'homePageTest',
               ];
   var runners = [];
 

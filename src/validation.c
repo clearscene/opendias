@@ -329,6 +329,7 @@ int basicValidation(struct simpleLinkedList *postdata) {
   // Check the main request param is sane
   if ( 0 != strcmp(action, "getDocDetail") 
     && 0 != strcmp(action, "getScannerList") 
+    && 0 != strcmp(action, "getScannerDetails") 
     && 0 != strcmp(action, "doScan") 
     && 0 != strcmp(action, "getScanningProgress") 
     && 0 != strcmp(action, "nextPageReady") 
@@ -382,6 +383,12 @@ int validate(struct simpleLinkedList *postdata, char *action) {
 #ifdef CAN_SCAN
   if ( 0 == strcmp(action, "getScannerList") ) {
     ret += checkKeys(postdata, vars );
+  }
+
+  if ( 0 == strcmp(action, "getScannerDetails") ) {
+    sll_insert(vars, "deviceid", "m" );
+    ret += checkKeys(postdata, vars );
+    ret += checkDeviceId(getPostData(postdata, "deviceid"));
   }
 
   if ( 0 == strcmp(action, "doScan") ) {

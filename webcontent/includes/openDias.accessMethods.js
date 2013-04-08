@@ -68,7 +68,8 @@ function attemptLogin() {
       } else {
         if ($(data).find('result').text() == 'OK') {
           $('#loginbutton').attr("disabled", false);
-          setLoginOutArea( 1 );
+          //setLoginOutArea( 1 );
+          document.location.reload(true);
         } else {
           $('#loginbutton').css({
             display: 'none'
@@ -86,13 +87,18 @@ function attemptLogin() {
   });
 }
 
-function setLoginOutArea( justloggedin ) {
+function setLoginOutArea() {
   // Display or not, the login area
   // If we have a cookie "realname=<anything>"
   // then show the logout only. Otherwise
   // show the login area.
   var realname = getCookie("realname");
   if (realname == null || realname == "") {
+    if ( window.location.pathname != '/opendias/') {
+      // Not logged in and not on the homepage.
+      document.location.href='/opendias/';
+    }
+    // Not logged in, but on the homepage
     $('#logout').css({
       display: 'none'
     });
@@ -100,6 +106,7 @@ function setLoginOutArea( justloggedin ) {
       display: 'block'
     });
   } else {
+    // Logged in
     $('#realname').html(realname);
     $('#login').css({
       display: 'none'
@@ -108,34 +115,19 @@ function setLoginOutArea( justloggedin ) {
       display: 'block'
     });
   }
-  updateMenuLinks( justloggedin );
+  updateMenuLinks();
 }
 
-function updateMenuLinks( justloggedin ) {
-
-  if ( justloggedin && window.location.pathname != '/opendias/') {
-    // We're not on the homepage, so chances are there is some dynamic content
-    // needing adding to this page. So just refresh.
-    document.location.reload(true);
-    return;
-  }
+function updateMenuLinks() {
 
   // Remove links the user can't use
   var role = getCookie("role");
-  if (get_priv_from_role(role, 'view_doc')) {
-    $('#doclistLink').parent().css({
-      display: 'inline-block'
-    });
-  } else {
+  if ( ! get_priv_from_role(role, 'view_doc')) {
     $('#doclistLink').parent().css({
       display: 'none'
     });
   }
-  if (get_priv_from_role(role, 'add_import') || get_priv_from_role(role, 'add_scan')) {
-    $('#acquireLink').parent().css({
-      display: 'inline-block'
-    });
-  } else {
+  if ( ! ( get_priv_from_role(role, 'add_import') || get_priv_from_role(role, 'add_scan') ) ) {
     $('#acquireLink').parent().css({
       display: 'none'
     });

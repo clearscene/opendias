@@ -7,7 +7,7 @@ LOCAL_link_home|Home
 LOCAL_link_doclist|Documentlijst
 LOCAL_link_acquire|Nieuw Document
 LOCAL_link_projecthome|Project Home
-LOCAL_copyright|Copyright
+LOCAL_released_under|LOCALISE_ME is released under the
 LOCAL_app_home|Applicatie Home
 LOCAL_welcome|Welkom
 LOCAL_home_intro|Met openDIAS (Document Imaging Archive System) kunt u documenten -imagen- met OCR. U kunt documenten scannen (met SANE) of ODF-documenten importeren en daarna categoriseren. Al uw brieven, rekeningen, overzichten, etc. kunnen op een makkelijke, veilige en eenvoudig vindbare manier opgeslagen worden.

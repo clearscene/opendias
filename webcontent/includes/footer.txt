@@ -6,7 +6,7 @@
   <div id='footerpadding'></div>
 
   <div id='footer'>
-    <p>---LOCAL_copyright--- Clearscene Ltd 2008 - ---CURRENT_YEAR---</p>
+    <p>---PACKAGE_STRING--- ---LOCAL_released_under--- <a href='http://www.gnu.org/licenses/'>GPL v3</a>. OpenDias <a href='http://opendias.essentialcollections.co.uk/' target='_blank'>---LOCAL_link_projecthome---</a> (2008 - ---CURRENT_YEAR---)</p>
   </div>
 
 </div>
