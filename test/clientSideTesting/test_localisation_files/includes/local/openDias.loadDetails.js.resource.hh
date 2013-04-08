@@ -1,9 +1,0 @@
-LOCAL_unable_to_get_doc_details = '###### ## ### ########'; 
-LOCAL_open_odf_doc = '#### ODF ########';
-LOCAL_open_page_fullsize = '#### #### %s ########';
-LOCAL_open_pdf_doc = '#### PDF ########';
-LOCAL_pdf_thumb_not_available_attempt_to_generate_now = '<p>PDF ######### ## ### #########</p><p>####### ## ######## ###.</p>';
-LOCAL_generate_thumbnail = '########## #########';
-LOCAL_error_generating_thumbnail = '###### ## ######## #########';
-LOCAL_removing_tag = '######## ###';
-LOCAL_add_tag_default_text = '### # ###';
