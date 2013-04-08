@@ -496,7 +496,7 @@ void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix
     }
     else {
       o_log(DEBUGM, "OCR was requested, but the specified resolution means it's not safe to be attempted");
-      ocrText = o_printf( getString("LOCAL_resolution_outside_range_to_attempt", lang) );
+      ocrText = o_printf( getString("LOCAL_resolution_outside_range_to_attempt_ocr", lang) );
     }
   }
   else
