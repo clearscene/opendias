@@ -37,6 +37,9 @@ $(document).ready(function () {
       }
     });
   });
+
+  showBubble();
+
 });
 
 
@@ -196,3 +199,32 @@ function get_priv_from_role(user_role, priv) {
 
   return role[user_role][priv];
 }
+
+function showBubble() {
+
+  var newProgress = "";
+  var progress = getCookie("progress");
+  if (progress == null) {
+    $('#infoBubble').css({ display: 'block' });
+    $('#message').html("<p>" + LOCAL_howto_login + "</p>"
+                    + "<p>" + LOCAL_login_firsttime + "</p>");
+    newProgress = "shown_login_help";
+  }
+
+  else if( progress == "shown_login_help" && getCookie("realname") != null ) {
+    $('#infoBubble').css({ display: 'block' });
+    $('#infoBubble').css({ width: '180px' });
+    $('#message').html("<p>" + LOCAL_user_admin + "</p>");
+    newProgress = "shown_user_admin";
+  }
+
+  $('#infoBubble #dismiss').click( function() {
+    $('#infoBubble').css({ display: 'none' });
+    if( newProgress != "" ) {
+      setCookie("progress", newProgress);
+      showBubble();
+    }
+  });
+
+}
+

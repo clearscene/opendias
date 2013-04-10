@@ -29,6 +29,11 @@
   <div id='header'>
     <div class="container">
       <img id='logo' src='/opendias/images/openDIAS_sml.png' />
+      <div id='infoBubble'>
+        <div id='arrow'></div>
+        <div id='dismiss'><img src='/opendias/images/close.png' /></div>
+        <div id='message'></div>
+      </div>
       <div id='loginout'>
 #ifndef OPEN_TO_ALL
         <ul>

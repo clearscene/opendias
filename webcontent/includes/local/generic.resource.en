@@ -10,4 +10,6 @@ LOCAL_role_admin = 'Admin (can do all operations)';
 LOCAL_role_user = 'User (everything, except update access)';
 LOCAL_role_view = 'View (can view document only)';
 LOCAL_role_add = 'Add (can add documents only)';
-
+LOCAL_howto_login = 'Enter your username and password and hit \'login\' to access all features.';
+LOCAL_login_firsttime = 'If you&quot;ve just installed openDias, please read <a href=\'http://opendias.essentialcollections.co.uk/support/#AuthenticationSetup\'>Authentication Setup</a> for details in getting started.';
+LOCAL_user_admin = 'Click your name to change your details.';
