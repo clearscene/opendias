@@ -54,7 +54,7 @@ extern "C" void runocr(struct scanCallInfo *info) {
     o_log(DEBUGM, "Leptonica version: %s", lept_ver);
     lept_free( lept_ver );
 
-    if ( tessObject.Init( "/usr/share/tesseract-ocr/tessdata", info->language ) ) {
+    if ( tessObject.Init( TESSERACT_BASE, info->language ) ) {
       o_log(ERROR, "Could not initialize tesseract.");
       tessObject.End();
       return;

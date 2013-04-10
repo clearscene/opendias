@@ -39,6 +39,7 @@
 #include "dbaccess.h"
 #include "main.h"
 #include "utils.h"
+#include "validation.h"
 #include "debug.h"
 #include "localisation.h"
 
@@ -734,19 +735,18 @@ extern char *internalGetScannerList(char *lang) {
 
     int i = 0;
 
-    replyTemplate = o_strdup("<Device><vendor>%s</vendor><model>%s</model><type>%s</type><name>%s</name><Formats>%s</Formats><host>%s</host></Device>");
+    replyTemplate = o_strdup("<Device><vendor>%s</vendor><model>%s</model><type>%s</type><name>%s</name><host>%s</host></Device>");
     deviceList = o_strdup("");
 
     for (i=0 ; SANE_device_list[i] ; i++) {
 
-      char *vendor, *model, *type, *name, *format;
+      char *vendor, *model, *type, *name;
       char *scannerHost;
 
       vendor = o_strdup(SANE_device_list[i]->vendor);
       model = o_strdup(SANE_device_list[i]->model);
       type = o_strdup(SANE_device_list[i]->type);
       name = o_strdup(SANE_device_list[i]->name);
-      format = o_strdup("<format>Grey Scale</format>");
       propper(vendor);
       propper(model);
       propper(type);
@@ -796,13 +796,12 @@ extern char *internalGetScannerList(char *lang) {
 
       // Build Reply
       //
-      o_concatf(&deviceList, replyTemplate, vendor, model, type, name, format, scannerHost);
+      o_concatf(&deviceList, replyTemplate, vendor, model, type, name, scannerHost);
 
       free(vendor);
       free(model);
       free(type);
       free(name);
-      free(format);
       free(scannerHost);
     }
 
@@ -835,7 +834,7 @@ extern char *internalGetScannerDetails(char *device, char *lang) {
   char *answer = NULL;
   SANE_Status status;
   char *deviceList = o_strdup("");; 
-  int hlp = 0, resolution = 300, minRes=50, maxRes=50;
+  int hlp = 0, resolution = 300, minRes=50, maxRes=50, phashAvailable=0;
   char *resolution_s, *maxRes_s, *minRes_s;
   SANE_Handle *openDeviceHandle;
 
@@ -848,70 +847,97 @@ extern char *internalGetScannerDetails(char *device, char *lang) {
   }
 
 
-      // Find resolution ranges
-      for (hlp = 0; hlp < 9999; hlp++) {
+  //
+  // Find resolution ranges
+  //
+  for (hlp = 0; hlp < 9999; hlp++) {
 
-        const SANE_Option_Descriptor *sod;
+    const SANE_Option_Descriptor *sod;
 
-        sod = sane_get_option_descriptor (openDeviceHandle, hlp);
-        if (sod == NULL)
-          break;
+    sod = sane_get_option_descriptor (openDeviceHandle, hlp);
+    if (sod == NULL)
+      break;
 
-        // Just a placeholder
-        if (sod->type == SANE_TYPE_GROUP
-        || sod->name == NULL
-        || hlp == 0)
-          continue;
+    // Just a placeholder
+    if (sod->type == SANE_TYPE_GROUP
+    || sod->name == NULL
+    || hlp == 0)
+      continue;
 
-        if ( 0 == strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) ) {
+    if ( 0 == strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) ) {
 
-          // Some kind of sliding range
-          if (sod->constraint_type == SANE_CONSTRAINT_RANGE) {
-            o_log(DEBUGM, "Resolution setting detected as 'range'");
+      // Some kind of sliding range
+      if (sod->constraint_type == SANE_CONSTRAINT_RANGE) {
+        o_log(DEBUGM, "Resolution setting detected as 'range'");
 
-            // Fixed resolution
-            if (sod->type == SANE_TYPE_FIXED)
-              maxRes = (int)SANE_UNFIX (sod->constraint.range->max);
-            else
-              maxRes = sod->constraint.range->max;
-          }
-
-          // A fixed list of options
-          else if (sod->constraint_type == SANE_CONSTRAINT_WORD_LIST) {
-            int lastIndex = sod->constraint.word_list[0];
-            o_log(DEBUGM, "Resolution setting detected as 'word list': lastIndex = %d",lastIndex);
-
-            // maxRes = sod->constraint.word_list[lastIndex];
-            // resolution list cannot be treated as low to high ordered list 
-            // remark: impl capability to select scan resolution in webInterface
-            int n=0;
-            maxRes = 0;
-            for (n=1; n<=lastIndex; n++ ) {
-              o_log(DEBUGM, "index results %d --> %d", n ,(int)sod->constraint.word_list[n]);
-              if ( maxRes < sod->constraint.word_list[n] ) {
-                maxRes=sod->constraint.word_list[n];
-              }
-            }
-
-          }
-
-          break; // we've found our resolution - no need to search more
-        }
+        // Fixed resolution
+        if (sod->type == SANE_TYPE_FIXED)
+          maxRes = (int)SANE_UNFIX (sod->constraint.range->max);
+        else
+          maxRes = sod->constraint.range->max;
       }
-      o_log(DEBUGM, "Determined max resultion to be %d", maxRes);
+
+      // A fixed list of options
+      else if (sod->constraint_type == SANE_CONSTRAINT_WORD_LIST) {
+        int lastIndex = sod->constraint.word_list[0];
+        o_log(DEBUGM, "Resolution setting detected as 'word list': lastIndex = %d",lastIndex);
+
+        // maxRes = sod->constraint.word_list[lastIndex];
+        // resolution list cannot be treated as low to high ordered list 
+        // remark: impl capability to select scan resolution in webInterface
+        int n=0;
+        maxRes = 0;
+        for (n=1; n<=lastIndex; n++ ) {
+          o_log(DEBUGM, "index results %d --> %d", n ,(int)sod->constraint.word_list[n]);
+          if ( maxRes < sod->constraint.word_list[n] ) {
+            maxRes=sod->constraint.word_list[n];
+          }
+        }
+
+      }
+
+      break; // we've found our resolution - no need to search more
+    }
+  }
+  o_log(DEBUGM, "Determined max resultion to be %d", maxRes);
 
 
-      // Define a default
-      if(resolution >= maxRes)
-        resolution = maxRes;
-      if(resolution <= minRes)
-        resolution = minRes;
+  // Define a default
+  if(resolution >= maxRes)
+    resolution = maxRes;
+  if(resolution <= minRes)
+    resolution = minRes;
 
-      o_log(DEBUGM, "sane_cancel");
-      sane_cancel(openDeviceHandle);
+  o_log(DEBUGM, "sane_cancel");
+  sane_cancel(openDeviceHandle);
 
-      o_log(DEBUGM, "sane_close");
-      sane_close(openDeviceHandle);
+  o_log(DEBUGM, "sane_close");
+  sane_close(openDeviceHandle);
+
+
+
+  //
+  // What languages can we OCR for?
+  //
+  char *availableLangs = o_strdup("");
+#ifdef CAN_OCR
+  struct simpleLinkedList *languages = getOCRAvailableLanguages();
+  while (languages != NULL ) {
+    if ( checkOCRLanguage( languages->data ) == 0 ) {
+      o_concatf(&availableLangs, "<lang>%s</lang>", languages->data);
+    }
+    languages = sll_getNext(languages);
+  }
+  sll_destroy( languages );
+#endif /* CAN_OCR */
+
+
+  //
+  // Can we give the option of doing 'find simmilar'?
+  //
+#ifdef CAN_PHASH
+  phashAvailable = 1;
+#endif /* CAN_PHASH */
 
   // Build Reply
   //
@@ -919,16 +945,18 @@ extern char *internalGetScannerDetails(char *device, char *lang) {
   maxRes_s = itoa(maxRes,10);
   minRes_s = itoa(minRes,10);
 
-  o_concatf(&deviceList, "<max>%s</max><min>%s</min><default>%s</default>", maxRes_s, minRes_s, resolution_s);
+  o_concatf(&deviceList, "<Resolution><max>%s</max><min>%s</min><default>%s</default></Resolution><OCRLanguages>%s</OCRLanguages><phash>%d</phash>", maxRes_s, minRes_s, resolution_s, availableLangs, phashAvailable);
 
   free(maxRes_s);
   free(minRes_s);
   free(resolution_s);
+  free(availableLangs);
 
   // The escaped string placeholder will be interprited in the sane dispatcher client
   answer = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerDetails>%s</ScannerDetails></Response>", deviceList);
   free(deviceList);
 
+  o_log(INFORMATION, answer);
   return answer;
 
 }
