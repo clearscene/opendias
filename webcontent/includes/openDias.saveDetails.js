@@ -35,7 +35,9 @@ function sendUpdate(kkey, vvalue) {
 }
 
 function moveTag(tag, docid, action) {
-
+  if( tag == undefined || tag == '' ) {
+    return;
+  }
   lockForm();
   $.ajax({
     url: "/opendias/dynamic",
