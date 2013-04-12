@@ -35,6 +35,8 @@ struct scanCallInfo {
   char *ret;
 };
 
+#define TESSERACT_BASE  "/usr/share/tesseract-ocr/tessdata"
+
 #define OCR_LANG_BRITISH     "eng"   /*International English */
 #define OCR_LANG_GERMAN      "deu"   /*German */
 #define OCR_LANG_FRENCH      "fra"   /*French */

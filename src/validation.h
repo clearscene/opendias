@@ -25,5 +25,6 @@ char *getPostData(struct simpleLinkedList *, char *);
 int basicValidation(struct simpleLinkedList *);
 int validate(struct simpleLinkedList *, char *);
 int validateLanguage(const char *);
+int checkOCRLanguage(char *);
 
 #endif /* VALIDATION */

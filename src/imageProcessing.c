@@ -20,8 +20,12 @@
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <pthread.h>
+#ifdef CAN_OCR
+#include <dirent.h>
+#endif /* CAN_OCR */
 
 #ifdef CAN_IMAGE
 #include <leptonica/allheaders.h>
@@ -51,6 +55,38 @@ char *getTextFromImage(PIX *pix, int ppi, char *lang) {
 
   return txt;
 }
+
+int isOCRLanguageAvailable( const char *lang ) {
+  char *lang_file = o_printf( "%s/%s.traineddata", TESSERACT_BASE, lang );
+  if( 0 == access(lang_file, F_OK) ) {
+    return 1;
+  }
+  return 0;
+}
+
+struct simpleLinkedList *getOCRAvailableLanguages() {
+
+  struct simpleLinkedList *vars = sll_init();
+  DIR *dir = opendir( TESSERACT_BASE );
+  if (dir != NULL) {
+    struct dirent *dirent;
+    while ((dirent = readdir(dir))) {
+      if(dirent->d_name[0] != '.') {
+        if( strstr( dirent->d_name, ".traineddata") != NULL ) {
+          char *dot = strrchr(dirent->d_name, '.');
+          // This ensures that .traineddata is at the end of the file name
+          if ( strncmp( dot, ".traineddata", strlen( ".traineddata" ) ) == 0 ) {
+            *dot = '\0';
+            sll_append(vars, o_strdup( dirent->d_name ) );
+          }
+        }
+      }
+    }
+    closedir( dir );
+  }
+  return vars;
+}
+
 #endif /* CAN_OCR */
 
 #ifdef CAN_PHASH

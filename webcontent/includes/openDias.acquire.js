@@ -248,6 +248,30 @@ $(document).ready(function () {
 
               d = $(data).find('ScannerDetails');
 
+              // Set available OCR languages
+              languageDropdown = '';
+              $(data).find('OCRLanguages').find('lang').each( function() {
+                var human = '';
+                var lang = $(this).text();
+                if ( lang == 'nld' ) { human = 'Dutch'; }
+                else if ( lang == 'fra' ) { human = 'French'; }
+                else if ( lang == 'deu' ) { human = 'German'; }
+                else if ( lang == 'ita' ) { human = 'Italian'; }
+                else if ( lang == 'por' ) { human = 'Portuguese'; }
+                else if ( lang == 'spa' ) { human = 'Spanish'; }
+                else if ( lang == 'vie' ) { human = 'Vietnamese'; }
+
+                if( human != '' ) {
+                  var makeMeDefault = '';
+                  if ( lang == LOCAL_ocr_default ) { makeMeDefault = ' selected="selected"'; }
+                  languageDropdown += '<option value="'+lang+'"'+makeMeDefault+'>'+human+'</option>';
+                }
+              });
+              current = "<option value='eng'>English</option><option value='-'>No OCR</option>";
+              $("#ocr_" + dev).html( current + languageDropdown );
+              languageDropdown = '';
+
+              // Set appropriate resolution values (max, min, default)
               $("#resolutionSlider_" + dev).slider({
                 range: "min",
                 value: parseInt(d.find("default").text()),

@@ -23,6 +23,7 @@
 
 #include "debug.h"
 #include "utils.h"
+#include "imageProcessing.h"
 #include "ocr_plug.h"
 
 #include "validation.h"
@@ -183,7 +184,7 @@ static int checkDate(char *val) {
 #ifdef CAN_SCAN
 #ifdef CAN_OCR
 //
-static int checkOCRLanguage(char *val) {
+int checkOCRLanguage(char *val) {
   if( val == NULL ) return 1;
   if ( 0 == strcmp(val, "-" )                // No OCR
     || 0 == strcmp(val, OCR_LANG_BRITISH ) 
@@ -194,7 +195,7 @@ static int checkOCRLanguage(char *val) {
     || 0 == strcmp(val, OCR_LANG_DUTCH ) 
     || 0 == strcmp(val, OCR_LANG_BPORTUGUESE ) 
     || 0 == strcmp(val, OCR_LANG_VIETNAMESE ) ) {
-    return 0;
+    return 1 - isOCRLanguageAvailable( val );
   }
   o_log(ERROR, "Validation failed: Unknown ocr language");
   return 1;

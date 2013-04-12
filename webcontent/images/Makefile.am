@@ -7,6 +7,8 @@ web_DATA = \
 	openDIAS_sml.png \
         opendias.jpg \
         texture.png \
+        arrow.png \
+        close.png \
         actionrequired.png
 
 webdir = \

@@ -166,7 +166,7 @@ __endjob]]></example>
       <KnownCallers>
         <caller>openDias.acquire.js :: anonymous()</caller>
       </KnownCallers>
-      <purpose>Get a list of scanners (and their usage parameters) that the application can use.</purpose>
+      <purpose>Get a list of scanners that the application can use.</purpose>
       <Inputs>
         <Input>
           <name>action</name>
@@ -187,13 +187,40 @@ __endjob]]></example>
         model - sane text that names the scanning device
         host - text representation of the location of the scanner
         name - the machine id for the scanning device
-        default - the default resolution
-        min - the minimum resolution allowed by the scanning device
-        max - the maximum resolution allowed by the scanning device
       </Device>
       ...
     </Devices>
   </ScannerList>
+</Response>]]></example>
+    </ApiCall>
+
+    <ApiCall>
+      <call_name>getScannerDetails</call_name>
+      <calls_method>pageRender::getScannerDetails()</calls_method>
+      <KnownCallers>
+        <caller>openDias.acquire.js :: anonymous()</caller>
+      </KnownCallers>
+      <purpose>Get the available attributes for a given scanner.</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'getScannerDetails'</value>
+        </Input>
+      </Inputs>
+      <example type='result'><![CDATA[<?xml version='1.0' encoding='utf-8'?>
+<Response>
+  <ScannerDetails>
+    <Resolution>
+      default - the default resolution
+      min - the minimum resolution allowed by the scanning device
+      max - the maximum resolution allowed by the scanning device
+    </Resolution>
+    <OCRLanguages>
+      lang - the ocr language key
+      ...
+    </OCRLanguages>
+    phash - indicator if 'find similar' is available
+  </ScannerDetails>
 </Response>]]></example>
     </ApiCall>
 

@@ -1,6 +1,6 @@
 LOCAL_timeout_talking_to_server = 'Timeout tijdens de communicatie met de server';
 LOCAL_error_talking_to_server = 'Fout tijdens de communicatie met de server';
-LOCAL_date_format = 'jj/mm/dd';
+LOCAL_date_format = 'yy/mm/dd';
 LOCAL_odf_doc = 'ODF Document';
 LOCAL_scanned_doc = 'Gescand Document';
 LOCAL_pdf_doc = 'PDF Document';

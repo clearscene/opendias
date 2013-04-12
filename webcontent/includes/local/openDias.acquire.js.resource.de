@@ -20,3 +20,4 @@ LOCAL_unable_to_start_scanning = 'Kann um den Scanvorgang zu starten';
 LOCAL_on_host = 'auf dem Host';
 LOCAL_x_pages = '%s seiten';
 LOCAL_calculating_image_comparison_vector = 'LOCALISE_ME Calculating image comparison vector';
+LOCAL_ocr_default = 'deu';
