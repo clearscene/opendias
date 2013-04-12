@@ -596,6 +596,13 @@
     left: 250px;
     display: none;
   }
+  #infoBubble h3 {
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
   #infoBubble #arrow {
     position: relative;
     width: 20px;
