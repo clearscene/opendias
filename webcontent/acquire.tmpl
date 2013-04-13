@@ -42,6 +42,16 @@
         <div class='label'>---LOCAL_acquire_office_upload_file---</div>
         <div class='data'><input name='uploadfile' type='file' /></div>
       </div>
+
+#ifdef CAN_PHASH
+    <div class='row'>
+      <div class='label' title='---LOCAL_acquire_look_for_similar_alt---'>---LOCAL_acquire_look_for_similar---</div>
+      <div class='data'>
+        <input name='lookForSimilar' type='checkbox' checked='checked' />
+      </div>
+    </div>
+#endifdef CAN_PHASH
+
       <div class='row'>
         <div class='label'>&nbsp;</div>
         <div class='data'><input id='uploadButton' type='submit' value='---LOCAL_acquire_office_upload_botton---' /></div>

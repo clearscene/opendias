@@ -936,10 +936,12 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             else {
               char *filename = getPostData(con_info->post_data, "uploadfile");
-              content = uploadfile(filename, con_info->lang); // import_doc.c
-              if(content == (void *)NULL)
+              char *lookForSimilar = getPostData(con_info->post_data, "lookForSimilar");
+              content = uploadfile(filename, lookForSimilar, con_info->lang); // import_doc.c
+              if(content == (void *)NULL) {
                 status = MHD_HTTP_BAD_REQUEST;
                 content = build_page(o_printf("<p>%s</p>", getString("LOCAL_unsuported_file_type", "en") ), "en");
+              }
             }
             mimetype = MIMETYPE_HTML;
             size = strlen(content);
