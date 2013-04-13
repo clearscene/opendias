@@ -32,6 +32,7 @@ extern "C" unsigned long long calculateImagePhash(const char *filename) {
 
   ulong64 hash;
 
+  o_log( INFORMATION, "Calculating pHash of image %s", filename);
   if( ph_dct_imagehash( filename, hash ) < 0 ) {
     o_log( ERROR, "Could not calculate the pHash of %s", filename);
     return 0;

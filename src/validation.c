@@ -581,6 +581,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
 
   if ( 0 == strcmp(action, "uploadfile") ) {
     sll_insert(vars, "uploadfile", "m" );
+    sll_insert(vars, "lookForSimilar", "o" );
     ret += checkKeys(postdata, vars );
     ret += checkUUID(getPostData(postdata, "uploadfile"));
   }
