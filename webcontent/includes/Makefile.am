@@ -1,8 +1,8 @@
 SUBDIRS = local
 
 web_DATA = \
-  header.txt.* \
-  footer.txt.* \
+	$(srcdir)/header.txt.* \
+	$(srcdir)/footer.txt.* \
 	jquery.canvas-loader.js \
 	jquery.easySlider.js \
 	jquery.gzoom.js \
@@ -10,15 +10,15 @@ web_DATA = \
 	jquery.js \
 	jquery.mousewheel.js \
 	jquery-ui.min.js \
-  sprintf-0.7-beta1.js \
+	sprintf-0.7-beta1.js \
 	openDias.acquire.js \
 	openDias.docList.js \
 	openDias.filter.js \
 	openDias.loadDetails.js \
 	openDias.saveDetails.js \
 	openDias.accessControls.js \
-  openDias.accessMethods.js \
-  openDias.userdetails.js 
+	openDias.accessMethods.js \
+	openDias.userdetails.js
 
 webdir = \
 	$(pkgdatadir)/webcontent/includes
