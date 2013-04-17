@@ -61,6 +61,7 @@ int isOCRLanguageAvailable( const char *lang ) {
   if( 0 == access(lang_file, F_OK) ) {
     return 1;
   }
+  o_log( ERROR, "OCR language of %s, is not installed on this machine.", lang);
   return 0;
 }
 

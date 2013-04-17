@@ -956,7 +956,6 @@ extern char *internalGetScannerDetails(char *device, char *lang) {
   answer = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerDetails>%s</ScannerDetails></Response>", deviceList);
   free(deviceList);
 
-  o_log(INFORMATION, answer);
   return answer;
 
 }

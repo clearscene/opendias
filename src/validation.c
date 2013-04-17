@@ -186,8 +186,10 @@ static int checkDate(char *val) {
 //
 int checkOCRLanguage(char *val) {
   if( val == NULL ) return 1;
-  if ( 0 == strcmp(val, "-" )                // No OCR
-    || 0 == strcmp(val, OCR_LANG_BRITISH ) 
+  if ( 0 == strcmp(val, "-" ) ) {
+    return 0;
+  }
+  else if ( 0 == strcmp(val, OCR_LANG_BRITISH ) 
     || 0 == strcmp(val, OCR_LANG_GERMAN ) 
     || 0 == strcmp(val, OCR_LANG_FRENCH ) 
     || 0 == strcmp(val, OCR_LANG_SPANISH ) 
