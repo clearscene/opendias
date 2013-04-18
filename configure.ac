@@ -20,6 +20,7 @@ PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid libssl])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
 AC_SUBST(VAR_DIR)
+AC_SUBST(TESSERACT_BASE_DIR)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
 
 
@@ -153,6 +154,22 @@ if test "x$imageprocessing" = "xyes" ; then
   if test "x$ocr" = "xyes" && test "x$imageprocessing" = "xyes" ; then
    AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
    LOCALISATION_FLAGS="$LOCALISATION_FLAGS CAN_OCR"
+   if test -d "/usr/share/tesseract-ocr/tessdata" ; then
+     dnl Debian/Ubuntu location
+     TESSERACT_BASE_DIR="/usr/share/tesseract-ocr"
+   else
+     if test -d "/usr/share/tesseract/tessdata" ; then
+       dnl Redhat/Fedora location
+       TESSERACT_BASE_DIR="/usr/share/tesseract"
+     else
+       if test -d "/usr/share/tessdata" ; then
+         dnl Default/Gentoo location
+         TESSERACT_BASE_DIR="/usr/share"
+       else
+         TESSERACT_BASE_DIR=""
+       fi
+     fi
+   fi
   else
    AC_MSG_WARN(You will not be able to OCR any document.)
   fi

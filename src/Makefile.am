@@ -4,6 +4,7 @@ AM_CPPFLAGS = \
   -DETC_DIR=\""$(sysconfdir)"\" \
   -DVAR_DIR=\""$(VAR_DIR)"\" \
   -DSHARE_DIR=\""$(datadir)"\" \
+  -DTESS_DIR=\""$(TESSERACT_BASE_DIR)"\" \
   $(OPENDIAS_CFLAGS)
 
 AM_CFLAGS =\

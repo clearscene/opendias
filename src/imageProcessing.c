@@ -57,7 +57,7 @@ char *getTextFromImage(PIX *pix, int ppi, char *lang) {
 }
 
 int isOCRLanguageAvailable( const char *lang ) {
-  char *lang_file = o_printf( "%s/%s.traineddata", TESSERACT_BASE, lang );
+  char *lang_file = o_printf( "%s/tessdata/%s.traineddata", TESS_DIR, lang );
   if( 0 == access(lang_file, F_OK) ) {
     return 1;
   }
@@ -68,7 +68,9 @@ int isOCRLanguageAvailable( const char *lang ) {
 struct simpleLinkedList *getOCRAvailableLanguages() {
 
   struct simpleLinkedList *vars = sll_init();
-  DIR *dir = opendir( TESSERACT_BASE );
+  char *tess_dir_name = o_printf( "%s/tessdata/", TESS_DIR );
+  DIR *dir = opendir( tess_dir_name );
+  free( tess_dir_name );
   if (dir != NULL) {
     struct dirent *dirent;
     while ((dirent = readdir(dir))) {
