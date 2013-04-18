@@ -2,7 +2,7 @@
 sql_SCRIPTS = 
 
 sql_DATA = \
-	language.resource.* 
+	$(srcdir)/language.resource.*
 
 sqldir = \
 	$(pkgdatadir)
