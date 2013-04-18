@@ -220,6 +220,7 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
     else if(0 != strcmp(key, "uploadfile")) {
       char *t=(char *)post_element->data;
       conCat(&t, trimedData);
+      post_element->data = t;
     }
 
     if(0 == strcmp(key, "uploadfile")) {

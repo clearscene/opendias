@@ -161,10 +161,12 @@ extern void dispatch_sane_work( int ns ) {
 
     if( 0 == strncmp(command,"fork", 4) ) {
       free(command);
+      free(param);
       // Finish the child. The waiting parent will then continue
       exit(EXIT_SUCCESS);
     }
     free(command);
+    free(param);
 
   }
 

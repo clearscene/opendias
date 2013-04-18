@@ -1,7 +1,9 @@
- 0.9.2  Isolate SANE operations into their own process (protect against SANE segfaults)
-        Defer scanner detail lookup untill they are needed.
-        Add some new user help
+ 0.9.3  Add some new user help
         Restrict OCR operation to lanugages that tesseract has installed
+        Increase validation on 'new tag' assignment
+
+ 0.9.2  Isolate SANE operations into their own process (protect against SANE segfaults)
+        Defer scanner detail lookup until they are needed.
         Update application footer text to be less "copywrite" notice.
 
  0.9.1  Auto detect similar documents, offer to 'tag' and 'title' new docs for you.

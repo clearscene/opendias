@@ -204,17 +204,25 @@ function showBubble() {
 
   var newProgress = "";
   var progress = getCookie("progress");
+
+  if (progress == null && getCookie("realname") != null ) {
+    progress = "shown_login_help";
+    setCookie("progress", progress);
+  }
+
   if (progress == null) {
     $('#infoBubble').css({ display: 'block' });
-    $('#message').html("<p>" + LOCAL_howto_login + "</p>"
-                    + "<p>" + LOCAL_login_firsttime + "</p>");
+    $('#message').html("<h3>" + LOCAL_howto_login_title + "</h3>"
+                      + "<p>" + LOCAL_howto_login + "</p>"
+                      + "<p>" + LOCAL_login_firsttime + "</p>");
     newProgress = "shown_login_help";
   }
 
   else if( progress == "shown_login_help" && getCookie("realname") != null ) {
     $('#infoBubble').css({ display: 'block' });
     $('#infoBubble').css({ width: '180px' });
-    $('#message').html("<p>" + LOCAL_user_admin + "</p>");
+    $('#message').html("<h3>" + LOCAL_user_admin_title + "</h3>"
+                      + "<p>" + LOCAL_user_admin + "</p>");
     newProgress = "shown_user_admin";
   }
 
