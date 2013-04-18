@@ -12,40 +12,6 @@ AM_PROG_CC_STDC
 AC_HEADER_STDC
 
 
-
-dnl AC_CHECK_FUNCS([strcspn],[],AC_MSG_ERROR([Missing function strcspn]))
-dnl AC_CHECK_FUNCS([strndup],[],AC_MSG_ERROR([Missing function strndup]))
-dnl AC_CHECK_FUNCS([strdup],[],AC_MSG_ERROR([Missing function strdup]))
-dnl AC_CHECK_FUNCS([strstr],[],AC_MSG_ERROR([Missing function strstr]))
-dnl AC_CHECK_FUNCS([memset],[],AC_MSG_ERROR([Missing function memset])) 
-dnl AC_CHECK_FUNCS([mkdir],[],AC_MSG_ERROR([Missing function mkdir]))
-dnl AC_CHECK_FUNCS([socket],[],AC_MSG_ERROR([Missing function socket]))
-dnl AC_CHECK_FUNCS([strerror],[],AC_MSG_ERROR([Missing function strerror]))
-dnl AC_CHECK_FUNCS([dup2],[],AC_MSG_ERROR([Missing function dup2]))
-dnl AC_CHECK_FUNCS([gettimeofday],[],AC_MSG_ERROR([Missing function gettimeofday]))
-dnl AC_CHECK_HEADERS([arpa/inet.h],[],AC_MSG_ERROR([Missing header arpa/inet.h]))
-dnl AC_CHECK_HEADERS([fcntl.h],[],AC_MSG_ERROR([Missing header fcntl.h]))
-dnl AC_CHECK_HEADERS([netdb.h],[],AC_MSG_ERROR([Missing header netdb.h]))
-dnl AC_CHECK_HEADERS([netinet/in.h],[],AC_MSG_ERROR([Missing header netinet/in.h]))
-dnl AC_CHECK_HEADERS([sys/param.h],[],AC_MSG_ERROR([Missing header sys/param.h]))
-dnl AC_CHECK_HEADERS([sys/socket.h],[],AC_MSG_ERROR([Missing header sys/socket.h]))
-dnl AC_CHECK_HEADERS([sys/time.h],[],AC_MSG_ERROR([Missing header sys/time.h]))
-dnl AC_FUNC_FORK
-dnl AC_FUNC_MALLOC
-dnl AC_FUNC_REALLOC
-dnl AC_FUNC_MKTIME
-dnl AC_HEADER_STDBOOL
-dnl AC_TYPE_PID_T
-dnl AC_TYPE_SIZE_T
-dnl AC_TYPE_SSIZE_T
-dnl AC_TYPE_UINT64_T
-dnl AC_TYPE_MODE_T
-dnl AC_PROG_LN_S
-
-
-
-
-
 dnl
 dnl Ensure weve got everything we need to even start!
 dnl
