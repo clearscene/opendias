@@ -146,8 +146,6 @@ extern void dispatch_sane_work( int ns ) {
       response = o_strdup("");
     }
 
-    free(param);
-
     if( response == NULL ) {
       response = o_strdup("");
     }
@@ -160,15 +158,14 @@ extern void dispatch_sane_work( int ns ) {
     free(response);
 
     if( 0 == strncmp(command,"fork", 4) ) {
-      free(command);
-      free(param);
       // Finish the child. The waiting parent will then continue
       exit(EXIT_SUCCESS);
     }
-    free(command);
-    free(param);
 
   }
+
+  free(command);
+  free(param);
 
   fclose(fp);
   close(ns);
@@ -223,6 +220,7 @@ char *send_command(char *command) {
   // Create a blank client socket
   if ((clientSocket = socket(AF_UNIX, SOCK_STREAM, 0)) < 0) {
     o_log(ERROR, "Could not create a client command socket.");
+    free(answer);
     return NULL;
   }
 
@@ -231,6 +229,7 @@ char *send_command(char *command) {
   if (connect(clientSocket, (struct sockaddr *) &saun, len) < 0) {
     o_log(ERROR, "Could not connect to the command socket: %d - %s", errno, strerror(errno));
     close(clientSocket);
+    free(answer);
     return NULL;
   }
 
