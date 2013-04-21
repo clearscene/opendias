@@ -27,6 +27,7 @@
 #define DB_DOUBLE "double"
 
 int connect_db (int);
+int open_db (char *);
 void close_db (void);
 void free_recordset (struct simpleLinkedList *);
 int last_insert(void);

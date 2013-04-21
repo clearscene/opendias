@@ -193,6 +193,8 @@ for my $requested (@runTests) {
       ############
       # memory log - output from valgrind
       unless( length $SKIPMEMORY ) {
+        system("cat `ls -v $outputDir/valgrind.out.*` > $outputDir/valgrind.out");
+        system("rm -f $outputDir/valgrind.out.*");
         if( -f "$outputDir/valgrind.out" ) {
           # copy and parse out changeable content
           system("mv $outputDir/valgrind.out $outputDir/$TESTCASENAME/valgrind.out");

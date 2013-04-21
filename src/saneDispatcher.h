@@ -30,7 +30,7 @@ struct doScanOpData {
   char *lang;
 };
 extern void dispatch_sane_work(int);
-extern char *send_command(char *);
+extern char *send_command(char *, char *);
 extern void freeSaneCache(void);
 #endif /* CAN_SCAN */
 

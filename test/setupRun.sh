@@ -214,22 +214,22 @@ fi
 #
 echo Creating startup scripts ...
 if [ "$SKIPMEMORY" == "" ]; then
+  PWD=`pwd`;
   SUPPRESS=""
   if [ "$NOSUPPRESSIONS" == "" ]; then
     if [ -d suppressions ]; then
       for SUPP in `ls suppressions/*`; do
         if [ -f $SUPP ]; then
-          SUPPRESS="$SUPPRESS --suppressions=$SUPP"
+          SUPPRESS="$SUPPRESS --suppressions=${PWD}/$SUPP"
         fi
       done
     fi
   fi
-  VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=results/resultsFiles/valgrind.out --show-below-main=yes --track-origins=yes --track-fds=yes --show-reachable=yes "
-  # "-v --trace-children=yes "
+  VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=${PWD}/results/resultsFiles/valgrind.out.%p --show-below-main=yes --track-origins=yes --track-fds=yes --show-reachable=yes --trace-children=yes "
+  # --trace-syscalls=yes 
   GENSUPP="--gen-suppressions=all "
   VALGRIND="valgrind "
-#else
-#  VALGRIND="strace "
+#  VALGRIND="strace -f -o results/resultsFiles/valgrind.out "
 fi
 
 

@@ -38,6 +38,7 @@ enum {
 char *internalGetScannerList(char *);
 char *internalGetScannerDetails(char *, char *);
 char *internalDoScanningOperation(char *, char *);
+void sane_worker(char *, char *);
 #endif /* CAN_SCAN */
 
 #endif /* SCAN */

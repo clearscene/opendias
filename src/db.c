@@ -43,7 +43,7 @@ int open_db (char *db) {
     close_db ();
     return 1;
   }
-
+  sqlite3_busy_timeout(DBH, 5000);
   return 0;
 }
 
