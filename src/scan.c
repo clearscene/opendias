@@ -488,8 +488,6 @@ void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix
       o_log(INFORMATION, "Attempting OCR in lang of %s", ocrLang);
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
-      // Even if we have a scanner with three frames, we've already condenced
-      // that down to grey-scale (1 bpp) - hense the hard coded 1
       ocrScanText = getTextFromImage(pix, request_resolution, ocrLang);
 
       ocrText = o_printf( getString("LOCAL_page_delimiter", lang), page, ocrScanText);
@@ -988,7 +986,8 @@ void sane_worker( char *command, char *param ) {
   }
 
   else {
-    response = o_strdup("");
+    o_log( ERROR, "Unknown Command");
+    response = o_strdup("ERROR");
   }
 
   sane_exit();

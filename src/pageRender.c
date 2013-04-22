@@ -56,6 +56,12 @@
  *
  */
 #ifdef CAN_SCAN
+
+struct doScanOpData {
+  char *uuid;
+  char *lang;
+};
+
 char *getScannerList(char *lang) {
 
   char *answer = send_command( "internalGetScannerList", lang ); // scan.c
@@ -91,7 +97,8 @@ char *getScannerDetails(char *deviceid, char *lang) {
 }
 extern void *doScanningOperation(void *saneOpData) {
 
-  struct doScanOpData *tr = saneOpData;
+  struct doScanOpData *tr = (struct doScanOpData *)saneOpData;
+
   char *param = o_printf( "%s,%s", tr->uuid, tr->lang );
   char *answer = send_command( "internalDoScanningOperation", param ); // scan.c
   free(param);
@@ -102,14 +109,13 @@ extern void *doScanningOperation(void *saneOpData) {
   }
   free(answer);
 
-
   // Move:
   //   conver to JPEG 
   //   do OCR
   // to here (or at least the calls to do it are here).
 
-  free(tr->uuid);
-  free(tr->lang);
+  free((char *)tr->uuid);
+  free((char *)tr->lang);
   free(tr);
 
 #ifdef THREAD_JOIN
@@ -162,7 +168,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 #endif /* THREAD_JOIN */
 
-  struct doScanOpData *tr = malloc( sizeof(struct doScanOpData) );
+  struct doScanOpData *tr = (struct doScanOpData *)malloc( sizeof( struct doScanOpData ) );
   tr->uuid = o_strdup(scanUuid);
   tr->lang = o_strdup(lang);
   o_log(DEBUGM,"doScan launching doScanningOperation");

@@ -41,7 +41,7 @@ static int inLongRunningOperation = 0;
 char *send_command( char *command, char *param ) {
 
   char buffer;
-  char *response = o_strdup("");
+  char *response;
   int cacheResponse = 0;
   int cp[2]; /* Child to parent pipe */
 
@@ -51,17 +51,14 @@ char *send_command( char *command, char *param ) {
     if( 1 == inLongRunningOperation ) {
       o_log(INFORMATION, "The SANE sub system is busy, trying to return a cached response.");
       if( deviceListCache != NULL ) {
-        free(response);
         return o_strdup(deviceListCache);
       }
       o_log(INFORMATION, "We dont have a cache of the result, we're going to have to wait.");
-      free(response);
       return o_strdup("BUSY");
     }
   }
   else if( 0 == strcmp(command,"internalDoScanningOperation") ) {
     if( 1 == inLongRunningOperation ) {
-      free(response);
       return o_strdup("BUSY");
     }
   }
@@ -74,11 +71,9 @@ char *send_command( char *command, char *param ) {
    * If sane causes a crash, it will take down the child, but not the main app.
    *    - A rudimentart "eval" block.
    */
-  o_log(DEBUGM, "SERVER: Forking a new SANE processing child.");
 
   // Setup pipe
   if( pipe(cp) < 0) {
-    free(response);
     return o_strdup("BUSY");
   }
   pid_t pid = fork();
@@ -86,7 +81,7 @@ char *send_command( char *command, char *param ) {
   // ERROR: Could not fork
   if (pid < 0) {
     o_log(ERROR, "Could not fork.");
-    return NULL;
+    return o_strdup("BUSY");
   }
 
   // CHILD: All the SANE magic happens in the child
@@ -112,13 +107,15 @@ char *send_command( char *command, char *param ) {
     }
     fclose(f);
     char *exe = o_printf("%s_worker", buf);
+    //char *ld_library_path = o_printf( "LD_LIBRARY_PATH=%s", getenv("LD_LIBRARY_PATH") );
 
     // Pass of the request to a worker process.
+//    char *newenv[] = { ld_library_path, NULL };
+
     char *verbosity_s = o_printf("%d", VERBOSITY);
-    //char *newargv[] = { "/tmp/opendias_test/bin/opendias_worker", BASE_DIR, LOG_DIR, verbosity_s, command, param, NULL };
     char *newargv[] = { exe, BASE_DIR, LOG_DIR, verbosity_s, command, param, NULL };
-    o_log( DEBUGM, "Just about to start the WORKER: %s", exe);
-    execvp( exe, newargv);
+    o_log( INFORMATION, "Just about to start the worker: %s %s", exe, param);
+    execvp( exe, newargv); //, newenv );
 
     // execvp wont ussually return, so if we're here - something went wrong
     o_log( ERROR, "Sane worker, failed to start.");
@@ -136,12 +133,12 @@ char *send_command( char *command, char *param ) {
     while ( waitpid( pid, &status, WNOHANG ) == 0 ) {
       usleep( 5000 );
     }
-    if (WIFEXITED(status)) {
-      if (WEXITSTATUS(status)) {
+    if( WIFEXITED(status) ) {
+      if( WEXITSTATUS(status) ) {
         o_log( ERROR, "Worker process exited with status %d\n", WEXITSTATUS(status) );
       }
     }
-    if( WIFSIGNALED(status) ) {
+    else if( WIFSIGNALED(status) ) {
       o_log( ERROR, "Child sane process was signalled (%s) to finish early", strsignal(WTERMSIG(status)) );
     }
     if( WCOREDUMP(status) ) {
@@ -149,7 +146,8 @@ char *send_command( char *command, char *param ) {
     }
 
     // READ OFF THE RESPONSE FROM CHILDS STDOUT
-    close(cp[1]);
+    close( cp[1] );
+    response = o_strdup("");
     while ( read(cp[0], &buffer, sizeof(char)) > 0 ) {
       o_concatf(&response, "%c", buffer);
     }
@@ -157,7 +155,8 @@ char *send_command( char *command, char *param ) {
 
   }
 
-  if( response == NULL ) {
+  if( 0 == strcmp( response, "" ) ) {
+    free(response);
     response = o_strdup("ERROR");
   }
 

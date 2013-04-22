@@ -23,12 +23,6 @@
 
 #ifdef CAN_SCAN
 
-#define ADDRESS "/tmp/opendias"
-
-struct doScanOpData {
-  char *uuid;
-  char *lang;
-};
 extern void dispatch_sane_work(int);
 extern char *send_command(char *, char *);
 extern void freeSaneCache(void);

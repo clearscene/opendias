@@ -62,7 +62,7 @@ int main (int argc, char **argv) {
   locale_init( "en" );
 
   // Let's do the work
-  o_log( INFORMATION, "Worker started and ready to process.");
+  o_log( INFORMATION, "Worker started and ready to process: %s", command);
   sane_worker( command, param );
 
   // Finish up now
