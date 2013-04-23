@@ -2,9 +2,7 @@
 
 SUBDIRS = src sql webcontent i18n 
 
-opendiasdocdir = ${prefix}/doc/opendias
-opendiasdoc_DATA = ChangeLog
-EXTRA_DIST = $(opendiasdoc_DATA)
+dist_doc_DATA = ChangeLog README TODO
 
 install-exec-hook:
 	test ! -e ${VAR_DIR}/run && mkdir -p ${VAR_DIR}/run || echo Run directory already exists

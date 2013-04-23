@@ -12,40 +12,6 @@ AM_PROG_CC_STDC
 AC_HEADER_STDC
 
 
-
-dnl AC_CHECK_FUNCS([strcspn],[],AC_MSG_ERROR([Missing function strcspn]))
-dnl AC_CHECK_FUNCS([strndup],[],AC_MSG_ERROR([Missing function strndup]))
-dnl AC_CHECK_FUNCS([strdup],[],AC_MSG_ERROR([Missing function strdup]))
-dnl AC_CHECK_FUNCS([strstr],[],AC_MSG_ERROR([Missing function strstr]))
-dnl AC_CHECK_FUNCS([memset],[],AC_MSG_ERROR([Missing function memset])) 
-dnl AC_CHECK_FUNCS([mkdir],[],AC_MSG_ERROR([Missing function mkdir]))
-dnl AC_CHECK_FUNCS([socket],[],AC_MSG_ERROR([Missing function socket]))
-dnl AC_CHECK_FUNCS([strerror],[],AC_MSG_ERROR([Missing function strerror]))
-dnl AC_CHECK_FUNCS([dup2],[],AC_MSG_ERROR([Missing function dup2]))
-dnl AC_CHECK_FUNCS([gettimeofday],[],AC_MSG_ERROR([Missing function gettimeofday]))
-dnl AC_CHECK_HEADERS([arpa/inet.h],[],AC_MSG_ERROR([Missing header arpa/inet.h]))
-dnl AC_CHECK_HEADERS([fcntl.h],[],AC_MSG_ERROR([Missing header fcntl.h]))
-dnl AC_CHECK_HEADERS([netdb.h],[],AC_MSG_ERROR([Missing header netdb.h]))
-dnl AC_CHECK_HEADERS([netinet/in.h],[],AC_MSG_ERROR([Missing header netinet/in.h]))
-dnl AC_CHECK_HEADERS([sys/param.h],[],AC_MSG_ERROR([Missing header sys/param.h]))
-dnl AC_CHECK_HEADERS([sys/socket.h],[],AC_MSG_ERROR([Missing header sys/socket.h]))
-dnl AC_CHECK_HEADERS([sys/time.h],[],AC_MSG_ERROR([Missing header sys/time.h]))
-dnl AC_FUNC_FORK
-dnl AC_FUNC_MALLOC
-dnl AC_FUNC_REALLOC
-dnl AC_FUNC_MKTIME
-dnl AC_HEADER_STDBOOL
-dnl AC_TYPE_PID_T
-dnl AC_TYPE_SIZE_T
-dnl AC_TYPE_SSIZE_T
-dnl AC_TYPE_UINT64_T
-dnl AC_TYPE_MODE_T
-dnl AC_PROG_LN_S
-
-
-
-
-
 dnl
 dnl Ensure weve got everything we need to even start!
 dnl
@@ -54,6 +20,7 @@ PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid libssl])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
 AC_SUBST(VAR_DIR)
+AC_SUBST(TESSERACT_BASE_DIR)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
 
 
@@ -187,6 +154,22 @@ if test "x$imageprocessing" = "xyes" ; then
   if test "x$ocr" = "xyes" && test "x$imageprocessing" = "xyes" ; then
    AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
    LOCALISATION_FLAGS="$LOCALISATION_FLAGS CAN_OCR"
+   if test -d "/usr/share/tesseract-ocr/tessdata" ; then
+     dnl Debian/Ubuntu location
+     TESSERACT_BASE_DIR="/usr/share/tesseract-ocr"
+   else
+     if test -d "/usr/share/tesseract/tessdata" ; then
+       dnl Redhat/Fedora location
+       TESSERACT_BASE_DIR="/usr/share/tesseract"
+     else
+       if test -d "/usr/share/tessdata" ; then
+         dnl Default/Gentoo location
+         TESSERACT_BASE_DIR="/usr/share"
+       else
+         TESSERACT_BASE_DIR=""
+       fi
+     fi
+   fi
   else
    AC_MSG_WARN(You will not be able to OCR any document.)
   fi
@@ -228,8 +211,8 @@ else
 	AC_MSG_WARN(You will not be able to import in any document.)
 fi
 
-if test -f ./scripts/build-local-versions.pl; then
-  perl ./scripts/build-local-versions.pl "$PACKAGE_STRING" $LOCALISATION_FLAGS
+if test -f ${srcdir}/scripts/build-local-versions.pl; then
+  perl ${srcdir}/scripts/build-local-versions.pl "$PACKAGE_STRING" $LOCALISATION_FLAGS
 fi
 
 dnl

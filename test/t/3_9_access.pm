@@ -42,7 +42,7 @@ sub test {
           },
     doScan => { 
           deviceid => 'text',
-          format => 'grey scale',
+          format => 'gray',
           pages => 'page',
           resolution => '300',
           ocr => 'lang',

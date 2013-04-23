@@ -57,10 +57,12 @@ char *getTextFromImage(PIX *pix, int ppi, char *lang) {
 }
 
 int isOCRLanguageAvailable( const char *lang ) {
-  char *lang_file = o_printf( "%s/%s.traineddata", TESSERACT_BASE, lang );
+  char *lang_file = o_printf( "%s/tessdata/%s.traineddata", TESS_DIR, lang );
   if( 0 == access(lang_file, F_OK) ) {
+    free(lang_file);
     return 1;
   }
+  free(lang_file);
   o_log( ERROR, "OCR language of %s, is not installed on this machine.", lang);
   return 0;
 }
@@ -68,10 +70,16 @@ int isOCRLanguageAvailable( const char *lang ) {
 struct simpleLinkedList *getOCRAvailableLanguages() {
 
   struct simpleLinkedList *vars = sll_init();
-  DIR *dir = opendir( TESSERACT_BASE );
+
+  char *tess_dir_name = o_printf( "%s/tessdata/", TESS_DIR );
+  DIR *dir = opendir( tess_dir_name );
+  free( tess_dir_name );
+
   if (dir != NULL) {
+
     struct dirent *dirent;
     while ((dirent = readdir(dir))) {
+
       if(dirent->d_name[0] != '.') {
         if( strstr( dirent->d_name, ".traineddata") != NULL ) {
           char *dot = strrchr(dirent->d_name, '.');
@@ -82,8 +90,10 @@ struct simpleLinkedList *getOCRAvailableLanguages() {
           }
         }
       }
+
     }
     closedir( dir );
+
   }
   return vars;
 }

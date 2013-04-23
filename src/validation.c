@@ -190,14 +190,19 @@ int checkOCRLanguage(char *val) {
     return 0;
   }
   else if ( 0 == strcmp(val, OCR_LANG_BRITISH ) 
-    || 0 == strcmp(val, OCR_LANG_GERMAN ) 
-    || 0 == strcmp(val, OCR_LANG_FRENCH ) 
-    || 0 == strcmp(val, OCR_LANG_SPANISH ) 
-    || 0 == strcmp(val, OCR_LANG_ITALIAN ) 
-    || 0 == strcmp(val, OCR_LANG_DUTCH ) 
-    || 0 == strcmp(val, OCR_LANG_BPORTUGUESE ) 
-    || 0 == strcmp(val, OCR_LANG_VIETNAMESE ) ) {
-    return 1 - isOCRLanguageAvailable( val );
+  || 0 == strcmp(val, OCR_LANG_GERMAN ) 
+  || 0 == strcmp(val, OCR_LANG_FRENCH ) 
+  || 0 == strcmp(val, OCR_LANG_SPANISH ) 
+  || 0 == strcmp(val, OCR_LANG_ITALIAN ) 
+  || 0 == strcmp(val, OCR_LANG_DUTCH ) 
+  || 0 == strcmp(val, OCR_LANG_BPORTUGUESE ) 
+  || 0 == strcmp(val, OCR_LANG_VIETNAMESE ) ) {
+    if( isOCRLanguageAvailable( val ) ) {
+      return 0;
+    }
+    else {
+      o_log(ERROR, "Validation failed: ocr language is not installed");
+    }
   }
   o_log(ERROR, "Validation failed: Unknown ocr language");
   return 1;
@@ -399,11 +404,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     sll_insert(vars, "format", "m" );
     sll_insert(vars, "resolution", "m" );
     sll_insert(vars, "pages", "m" );
-#ifdef CAN_OCR
     sll_insert(vars, "ocr", "m" );
-#else
-    sll_insert(vars, "ocr", "m" );
-#endif /* CAN_OCR */
     sll_insert(vars, "pagelength", "m" );
     ret += checkKeys(postdata, vars );
     ret += checkDeviceId(getPostData(postdata, "deviceid"));

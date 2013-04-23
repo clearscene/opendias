@@ -56,35 +56,52 @@
  *
  */
 #ifdef CAN_SCAN
+
+struct doScanOpData {
+  char *uuid;
+  char *lang;
+};
+
 char *getScannerList(char *lang) {
 
-  char *answer = send_command( o_printf("forkGetScannerList:%s", lang) ); // scan.c
+  char *answer = send_command( "internalGetScannerList", lang ); // scan.c
   o_log(DEBUGM, "RESPONSE WAS: %s", answer);
 
   if( 0 == strcmp(answer, "BUSY") ) {
     free( answer );
     return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>BUSY</error></Response>");
+  }
+  else if( 0 == strcmp(answer, "ERROR") ) {
+    free( answer );
+    return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>ERROR</error></Response>");
   }
   return answer;
 }
 
 char *getScannerDetails(char *deviceid, char *lang) {
 
-  char *answer = send_command( o_printf("forkGetScannerDetails:%s,%s", deviceid, lang) ); // scan.c
+  char *param = o_printf( "%s,%s", deviceid, lang);
+  char *answer = send_command( "internalGetScannerDetails", param ); // scan.c
+  free( param );
   o_log(DEBUGM, "RESPONSE WAS: %s", answer);
 
   if( 0 == strcmp(answer, "BUSY") ) {
     free( answer );
     return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>BUSY</error></Response>");
   }
+  else if( 0 == strcmp(answer, "ERROR") ) {
+    free( answer );
+    return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>ERROR</error></Response>");
+  }
   return answer;
 }
 extern void *doScanningOperation(void *saneOpData) {
 
-  struct doScanOpData *tr = saneOpData;
-  char *command = o_printf("internalDoScanningOperation:%s,%s", tr->uuid, tr->lang);
+  struct doScanOpData *tr = (struct doScanOpData *)saneOpData;
 
-  char *answer = send_command( command ); // scan.c
+  char *param = o_printf( "%s,%s", tr->uuid, tr->lang );
+  char *answer = send_command( "internalDoScanningOperation", param ); // scan.c
+  free(param);
   o_log(DEBUGM, "RESPONSE WAS: %s", answer);
 
   if( 0 == strcmp(answer, "BUSY") ) {
@@ -92,14 +109,13 @@ extern void *doScanningOperation(void *saneOpData) {
   }
   free(answer);
 
-
   // Move:
   //   conver to JPEG 
   //   do OCR
   // to here (or at least the calls to do it are here).
 
-  free(tr->uuid);
-  free(tr->lang);
+  free((char *)tr->uuid);
+  free((char *)tr->lang);
   free(tr);
 
 #ifdef THREAD_JOIN
@@ -152,7 +168,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 #endif /* THREAD_JOIN */
 
-  struct doScanOpData *tr = malloc( sizeof(struct doScanOpData) );
+  struct doScanOpData *tr = (struct doScanOpData *)malloc( sizeof( struct doScanOpData ) );
   tr->uuid = o_strdup(scanUuid);
   tr->lang = o_strdup(lang);
   o_log(DEBUGM,"doScan launching doScanningOperation");
