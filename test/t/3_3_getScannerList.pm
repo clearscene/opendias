@@ -17,7 +17,7 @@ sub testProfile {
 sub updateStartCommand {
   my $startCommand = shift;
   chomp( my $pwd = `pwd` );
-  my $prefix = "LD_LIBRARY_PATH=$pwd/override_libs/libsane ";
+  my $prefix = "LD_LIBRARY_PATH=$pwd/override_libs/libsane:$pwd/override_libs/libtesseract:$pwd/override_libs/liblept:$pwd/override_libs/libpoppler:$pwd/override_libs/libpHash ";
   $$startCommand =~ s/^/$prefix/g;
   o_log("Updated start command to use overidden libs");
 }
@@ -33,9 +33,10 @@ sub test {
   login( "test-user", "password", $cookie_jar );
 
   my %scan = (
+    __cookiejar => $cookie_jar,
     action => 'doScan',
     deviceid => 'test:0',
-    format => 'Grey Scale',
+    format => 'gray',
     pages => 1,
     resolution => '50',
     ocr => '-',
@@ -49,6 +50,7 @@ sub test {
   # Get a scanning process going
   o_log( "Start long running scan" );
   my $result = directRequest( \%scan );
+  o_log( Dumper( $result ) );
   my $scan_uuid =  $result->{DoScan}->{scanuuid};
 
   # Request device list - expect a cached response

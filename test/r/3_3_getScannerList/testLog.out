@@ -11,43 +11,52 @@ $VAR1 = {
   'ScannerList' => {
     'Devices' => {
       'Device' => {
-        'Formats' => {
-          'format' => 'Grey Scale'
+        'test:0' => {
+          'host' => 'opendias server',
+          'model' => 'Frontend-tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
         },
-        'default' => '300',
-        'host' => 'opendias server',
-        'max' => '800',
-        'min' => '50',
-        'model' => 'Frontend-tester',
-        'name' => 'test:0',
-        'type' => 'Virtual Device',
-        'vendor' => 'Noname'
+        'test:1' => {
+          'host' => 'opendias server',
+          'model' => 'Timeout Frontend Tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
+        }
       }
     }
   }
 };
 
 Start long running scan
-Sending request = action=doScan&deviceid=test%3A0&format=Grey%20Scale&ocr=-&pagelength=100&pages=1&resolution=50
+Sending request = action=doScan&deviceid=test%3A0&format=gray&ocr=-&pagelength=100&pages=1&resolution=50
+$VAR1 = {
+  'DoScan' => {
+    'scanuuid' => '[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]'
+  }
+};
+
 Scanner List
 Sending request = action=getScannerList
 $VAR1 = {
   'ScannerList' => {
     'Devices' => {
       'Device' => {
-        'Formats' => {
-          'format' => 'Grey Scale'
+        'test:0' => {
+          'host' => 'opendias server',
+          'model' => 'Frontend-tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
         },
-        'default' => '300',
-        'host' => 'opendias server',
-        'max' => '800',
-        'min' => '50',
-        'model' => 'Frontend-tester',
-        'name' => 'test:0',
-        'type' => 'Virtual Device',
-        'vendor' => 'Noname'
+        'test:1' => {
+          'host' => 'opendias server',
+          'model' => 'Timeout Frontend Tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
+        }
       }
-    }
+    },
+    'cached' => 'true'
   }
 };
 

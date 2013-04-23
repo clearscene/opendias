@@ -488,8 +488,6 @@ void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix
       o_log(INFORMATION, "Attempting OCR in lang of %s", ocrLang);
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
-      // Even if we have a scanner with three frames, we've already condenced
-      // that down to grey-scale (1 bpp) - hense the hard coded 1
       ocrScanText = getTextFromImage(pix, request_resolution, ocrLang);
 
       ocrText = o_printf( getString("LOCAL_page_delimiter", lang), page, ocrScanText);
@@ -681,8 +679,6 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   // Do OCR - on this page
   // - OCR libs just wants the raw data and not the image header
   ocrImage( uuid, docid, current_page, request_resolution, pix, lang );
-  //free(raw_image);
-  //free(header);
 
 
 #ifdef CAN_PHASH
@@ -958,6 +954,47 @@ extern char *internalGetScannerDetails(char *device, char *lang) {
 
   return answer;
 
+}
+
+void sane_worker( char *command, char *param ) {
+
+  char *response;
+
+  if( SANE_STATUS_GOOD != sane_init(NULL, NULL) ) {
+    o_log( ERROR, "Could not start sane");
+  }
+
+  // Get a list of scanners
+  if ( command && 0 == strcmp(command, "internalGetScannerList") ) {
+    response = internalGetScannerList( param );
+  }
+
+  // Get scanner details (attributes)
+  else if ( command && 0 == strcmp(command, "internalGetScannerDetails") ) {
+    char *deviceid = strtok(o_strdup(param), ","); // device
+    char *lang = strtok( NULL, ","); // lang
+    response = internalGetScannerDetails( deviceid, lang );
+    free( deviceid );
+  }
+
+  // Scan a page
+  else if ( command && 0 == strcmp(command, "internalDoScanningOperation") ) {
+    char *uuid = strtok(o_strdup(param), ","); // uuid
+    char *lang = strtok( NULL, ","); // lang
+    response = internalDoScanningOperation( uuid, lang );
+    free( uuid );
+  }
+
+  else {
+    o_log( ERROR, "Unknown Command");
+    response = o_strdup("ERROR");
+  }
+
+  sane_exit();
+
+  // POST RESPONSE ON STDOUT
+  printf("%s", response);
+  free(response);
 }
 
 #endif /* CAN_SCAN */

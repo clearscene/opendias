@@ -29,7 +29,7 @@
 #include <fcntl.h>
 //#include <sys/stat.h>
 
-#include "opendiasconfig.h"
+#include "main.h"
 #include "db.h" 
 #include "utils.h"
 #include "debug.h"
