@@ -170,6 +170,9 @@ void server_shutdown() {
     o_log(DEBUGM, "... session management [done]");
   }
 
+  // Give sane processes time to finish.
+  waitForSaneProcesses();
+
   if( startedServices.locale ) {
     o_log(DEBUGM, "... locale [done]");
     locale_cleanup();

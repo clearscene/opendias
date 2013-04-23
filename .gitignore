@@ -64,6 +64,10 @@ src/opendiasconfig
 src/opendiasconfig.gcda
 src/opendiasconfig.gcno
 src/opendiasconfig.o
+src/opendias_worker
+src/opendias_worker.gcda
+src/opendias_worker.gcno
+src/opendias_worker.o
 src/pageRender.gcda
 src/pageRender.gcno
 src/pageRender.o

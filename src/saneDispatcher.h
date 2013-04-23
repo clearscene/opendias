@@ -25,7 +25,8 @@
 
 extern void dispatch_sane_work(int);
 extern char *send_command(char *, char *);
-extern void freeSaneCache(void);
+extern void freeSaneCache( void );
+extern void waitForSaneProcesses( void );
 #endif /* CAN_SCAN */
 
 #endif /* SANEDISPATCHER */

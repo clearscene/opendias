@@ -24,10 +24,6 @@ sub updateStartCommand {
 
 sub test {
 
-  my $dbh = DBI->connect( "dbi:SQLite:dbname=/tmp/opendiastest/openDIAS.sqlite3",
-                          "", "", { RaiseError => 1, AutoCommit => 1, sqlite_use_immediate_transaction => 1 } );
-  my $sth = $dbh->prepare("SELECT status FROM scan_progress WHERE client_id = ? ");
-
   my $cookie_jar = HTTP::Cookies->new();
   my %data = (
     __cookiejar => $cookie_jar,
@@ -62,32 +58,7 @@ sub test {
   o_log( "Scanner List" );
   o_log( Dumper( directRequest( \%data ) ) );
 
-  # Wait for the second page to finish scanning
-  my $attempt = 0;
-  while( 1 ) {
-    sleep(1);
-    $attempt++;
-    last if get_progress( $sth, $scan_uuid ) eq $SCAN_COMPLETE;
-    if( $attempt > 120 ) {
-      o_log( "Waiting for the final page to complete never happened!");
-      last;
-    }
-  }
-
-  $dbh->disconnect();
-  sleep(5);
   return 0;
-}
-
-sub get_progress {
-  my ($sth, $uuid, ) = @_;
-
-  $sth->execute($uuid);
-  my $hashRef = $sth->fetchrow_hashref();
-  my $ret = $hashRef->{status};
-  $sth->finish;
-  return $ret;
-
 }
 
 return 1;

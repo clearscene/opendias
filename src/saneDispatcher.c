@@ -107,11 +107,8 @@ char *send_command( char *command, char *param ) {
     }
     fclose(f);
     char *exe = o_printf("%s_worker", buf);
-    //char *ld_library_path = o_printf( "LD_LIBRARY_PATH=%s", getenv("LD_LIBRARY_PATH") );
 
     // Pass of the request to a worker process.
-//    char *newenv[] = { ld_library_path, NULL };
-
     char *verbosity_s = o_printf("%d", VERBOSITY);
     char *newargv[] = { exe, BASE_DIR, LOG_DIR, verbosity_s, command, param, NULL };
     o_log( INFORMATION, "Just about to start the worker: %s %s", exe, param);
@@ -131,7 +128,7 @@ char *send_command( char *command, char *param ) {
 
     // Once the worker has finished, the waiting parent will then continue
     while ( waitpid( pid, &status, WNOHANG ) == 0 ) {
-      usleep( 5000 );
+      usleep( 50000 );
     }
     if( WIFEXITED(status) ) {
       if( WEXITSTATUS(status) ) {
@@ -188,6 +185,18 @@ extern void freeSaneCache( void ) {
     free(deviceListCache);
   }
   deviceListCache = NULL;
+}
+
+extern void waitForSaneProcesses( void ) {
+  if( inLongRunningOperation == 1 ) {
+    o_log( INFORMATION, "There are running sane processes, waiting on them.");
+    while ( inLongRunningOperation == 1 ) {
+      usleep( 500000 );
+    }
+    o_log( INFORMATION, "The running sane processes have finished. Waiting on cleanup");
+    sleep( 3 );
+    o_log( INFORMATION, "Waiting [done].");
+  }
 }
 
 #endif /* CAN_SCAN */
