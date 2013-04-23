@@ -27,7 +27,6 @@ LOG-OUTPUT
 -date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
 -date-:-thread-:INF:-file-:-line- Created directory.
 -date-:-thread-:DBG:-file-:-line- loading translation file: /tmp/opendias_test/share/opendias/language.resource.en
--date-:-thread-:INF:-file-:-line- Sane command socket is open
 -date-:-thread-:INF:-file-:-line- ... Starting up the openDias service.
 -date-:-thread-:INF:-file-:-line- ready to accept connectons
 -date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en

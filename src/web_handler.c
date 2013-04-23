@@ -438,6 +438,11 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     return send_page_bin (connection, build_page(o_printf("<p>%s</p>", getString("LOCAL_request_error", "en") ), "en"), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
   }
 
+  if( 0 != strstr(url, "favicon.ico") ) {
+    o_log(DEBUGM, "favicon shortcut in effect.");
+    return send_page (connection, o_strdup(""), MHD_HTTP_NOT_FOUND, MIMETYPE_HTML, 0, con_info);
+  }
+
   // Discover Params
   if (NULL == *con_cls) {
 
