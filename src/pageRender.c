@@ -296,6 +296,7 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
     *tagWhere=NULL, *actionWhere=NULL, *page_ret;
   int count = 0;
   char *sqlTextSearch = o_printf( "%%%s%%", textSearch );
+  char *munged_start = NULL, *munged_end = NULL;
 
   if( 0 == strcmp(subaction, "fullList") ) {
     sql = o_strdup("SELECT DISTINCT docs.* FROM docs ");
@@ -324,10 +325,16 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   //
   if( startDate && strlen(startDate) && endDate && strlen(endDate) ) {
     dateWhere = o_strdup("date(docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2)) BETWEEN date(?) AND date(?) ");
+
     sll_append(vars, DB_TEXT );
-    sll_append(vars, startDate );
+    munged_start = o_strdup(startDate);
+    replace(munged_start, "/", "-");
+    sll_append(vars, munged_start );
+
     sll_append(vars, DB_TEXT );
-    sll_append(vars, endDate );
+    munged_end = o_strdup(endDate);
+    replace(munged_end, "/", "-");
+    sll_append(vars, munged_end );
   }
 
   // Filter By Tags
@@ -502,6 +509,12 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   docList = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><DocFilter><count>%i</count>%s<Results>%s</Results></DocFilter></Response>", count, page_ret, rows);
   free(rows);
   free(page_ret);
+  if( munged_start != NULL ) {
+    free( munged_start );
+  }
+  if( munged_end != NULL ) {
+    free( munged_end );
+  }
 
   return docList;
 }
