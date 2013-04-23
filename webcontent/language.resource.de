@@ -7,7 +7,7 @@ LOCAL_link_home|Zuhause
 LOCAL_link_doclist|Dokumentenliste
 LOCAL_link_acquire|Akquirieren
 LOCAL_link_projecthome|Projekt zuhause
-LOCAL_released_under|LOCALISE_ME is released under the
+LOCAL_released_under|wird unter der Freigabe
 LOCAL_app_home|Startseite
 LOCAL_welcome|Willkommen
 LOCAL_home_intro| openDIAS (Document Imaging Archive System) bietet Document Imaging mit OCR. Sie können Dokumente scannen (mit SANE) oder importieren ODF-Dokumente, und weisen Sie dann tags. es können Sie alle Ihre Briefe, Rechnungen, Kontoauszüge, etc. in einem bequemen, sicheren und einfach speichern abrufbaren Weise.
@@ -67,9 +67,9 @@ LOCAL_docdetail_extractedtext|Extrahierten Text:
 LOCAL_docdetail_assignedtags|Tags zugeordnet:
 LOCAL_docdetail_linkeddocs|Linked Docs:
 LOCAL_docdetail_defaultdoclink|link to doc
-LOCAL_docdetail_similar_docs_title|LOCALISE_ME Similar Docs
-LOCAL_docdetail_similar_docs_tagline|LOCALISE_ME There are similar document to the one you've just created. Do you want to apply the same title/tags?
-LOCAL_docdetail_no_thanks|LOCALISE_ME No Thanks
+LOCAL_docdetail_similar_docs_title|Ähnliche Docs
+LOCAL_docdetail_similar_docs_tagline|Es gibt ein ähnliches Dokument auf die Sie gerade erstellt haben. Möchten Sie den gleichen Titel / tags bewerben?
+LOCAL_docdetail_no_thanks|Nein Danke
 LOCAL_acquire_title|Gewinnen Sie neue Dokument
 LOCAL_acquire_notcurrent_title|Alle sind nicht aktuell
 LOCAL_acquire_notcurrent_p1|Zu der Zeit diese Angaben angefordert wurden, war die SANE-Subsystem beschäftigt Servieren ein Scan-Anfrage. Leider kann SANE immer nur eine Anfrage zu einem Zeitpunkt.  Dafür sind die Details hier gezeigten nicht aktuell sind und von der letzten erfolgreiche Anfrage.
@@ -88,10 +88,10 @@ LOCAL_acquire_office_upload_file|Dateiname zum Hochladen:
 LOCAL_acquire_office_upload_botton|laden
 LOCAL_acquire_scanner_pages_alt|Die Anzahl der Seiten, aus denen das Dokument, das Sie zum Scannen fest
 LOCAL_acquire_scanner_pages|Seiten:
-LOCAL_acquire_scanscale_alt|LOCALISE_ME The colour depth of the scanned image
-LOCAL_acquire_scanscale|---LOCALISE_ME-format--:
-LOCAL_acquire_scanscale_grey|---LOCALISE_ME-Gray Scale--
-LOCAL_acquire_scanscale_colour|--LOCALISE_ME-Colour--
+LOCAL_acquire_scanscale_alt|Die Farbtiefe des gescannten Bildes
+LOCAL_acquire_scanscale|--Formatieren--:
+LOCAL_acquire_scanscale_grey|--Graustufen--
+LOCAL_acquire_scanscale_colour|--Farbe--
 LOCAL_acquire_scanner_no_of_page|seiten
 LOCAL_acquire_scanner_resolution_alt| Die Auflösung des Scanners sollten Sie beim Scannen Ihres Dokuments. Je höher, desto besser die Qualität. Aber auch, werden die höher ist, desto größer und langsamer Datei-Operationen sein.
 LOCAL_acquire_scanner_resolution|Auflösung:
@@ -102,8 +102,8 @@ LOCAL_acquire_scanner_best_oct|Die ideale Scanauflösung ins Register OCR-Zone f
 LOCAL_acquire_scanner_page_length_alt|Wie viel von der Seite sehen Sie scannen möchten. Wenn Ihr ein Dokument scannen, kleiner als die maximale Länge als Ihr Scanner unterstützt. verschwende keine Zeit und Raum.
 LOCAL_acquire_scanner_page_length|Seitenlänge:
 LOCAL_acquire_scanner_scan_now_button|Erwerben
-LOCAL_acquire_look_for_similar|LOCALISE_ME Look for similar documents:
-LOCAL_acquire_look_for_similar_alt|LOCALISE_ME After scanning attempt to find other documents that look the same. Then apply the title and tags to matching document to your new document - saving time.
+LOCAL_acquire_look_for_similar|Suchen Sie nach ähnlichen Dokumenten:
+LOCAL_acquire_look_for_similar_alt|Nach dem Scannen Versuch auf andere Dokumente, die gleich aussehen zu finden. Dann bewerben Sie sich den Titel und Tags, um passende Dokument auf Ihren neuen Dokuments - das spart Zeit.
 LOCAL_admin_title|User Admin
 LOCAL_admin_tab_mydetails|Meine Details
 LOCAL_admin_tab_create_user|Benutzer erstellen
@@ -115,7 +115,7 @@ LOCAL_admin_mydetails_changepassword|Kennwort ändern:
 LOCAL_admin_mydetails_currentrole|aktuelle Rolle:
 LOCAL_admin_save_button|Sparen
 LOCAL_admin_createuser_title|Erstellen eines neuen Benutzerkontos
-LOCAL_admin_createuser_intro|LOCALISE_ME - To create a new user, enter the details below. The userId is the only details that cannot be change later.
+LOCAL_admin_createuser_intro|Um einen neuen Benutzer zu erstellen, geben Sie die Details unten. Die userId ist die einzige Änderung Details, die nicht später sein können.
 LOCAL_admin_createuser_id|Benutzer Id:
 LOCAL_admin_createuser_name|Echter Name:
 LOCAL_admin_createuser_password|Kennwort:
