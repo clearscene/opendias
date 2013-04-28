@@ -440,7 +440,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
   if( 0 != strstr(url, "favicon.ico") ) {
     o_log(DEBUGM, "favicon shortcut in effect.");
-    return send_page (connection, o_strdup(""), MHD_HTTP_NOT_FOUND, MIMETYPE_HTML, 0, con_info);
+    return send_page (connection, o_strdup(""), MHD_HTTP_NOT_FOUND, MIMETYPE_HTML, 0, NULL);
   }
 
   // Discover Params
@@ -945,7 +945,6 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               char *lookForSimilar = getPostData(con_info->post_data, "lookForSimilar");
               content = uploadfile(filename, lookForSimilar, con_info->lang); // import_doc.c
               if(content == (void *)NULL) {
-                status = MHD_HTTP_BAD_REQUEST;
                 content = build_page(o_printf("<p>%s</p>", getString("LOCAL_unsuported_file_type", "en") ), "en");
               }
             }
