@@ -65,7 +65,15 @@ sub startService {
 sub stopService {
 
   o_log("Stopping service");
-  system("kill -s USR1 `cat /tmp/opendias_test/var/run/opendias.pid`");
+  my $p = `cat /tmp/opendias_test/var/run/opendias.pid`;
+  chomp $p;
+  system("kill -s USR1 $p");
+  while( 1 ) {
+    if( ! -d "/proc/$p" ) {
+      last;
+    }
+    sleep(1);
+  }
 
   # We need valgrind (if running) so finish it's work nad write it's log
   o_log("Waiting for valgrind to finish.");

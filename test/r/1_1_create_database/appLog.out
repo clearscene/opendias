@@ -326,9 +326,9 @@ COMMIT;
 -date-:-thread-:INF Config setting: port = 8988
 -date-:-thread-:INF Config setting: backpopulate_phash = yes
 -date-:-thread-:INF Created directory.
--date-:-thread-:INF Marking that the backpopulation of pHash is: complete
 -date-:-thread-:INF ... Starting up the openDias service.
 -date-:-thread-:INF ready to accept connectons
+-date-:-thread-:INF Marking that the backpopulation of pHash is: complete
 -date-:-thread-:INF Received SIGUSR1 signal.
 -date-:-thread-:INF openDias service is shutting down....
 -date-:-thread-:INF openDias service has shutdown.

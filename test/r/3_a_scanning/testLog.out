@@ -38,13 +38,7 @@ a good response on getScannerList = $VAR1 = {
   'ScannerList' => {
     'Devices' => {
       'Device' => {
-        'Formats' => {
-          'format' => 'Grey Scale'
-        },
-        'default' => '300',
         'host' => 'opendias server',
-        'max' => '800',
-        'min' => '50',
         'model' => 'Frontend-tester',
         'name' => 'test:0',
         'type' => 'Virtual Device',
@@ -66,13 +60,7 @@ cached response on getScannerList = $VAR1 = {
   'ScannerList' => {
     'Devices' => {
       'Device' => {
-        'Formats' => {
-          'format' => 'Grey Scale'
-        },
-        'default' => '300',
         'host' => 'opendias server',
-        'max' => '800',
-        'min' => '50',
         'model' => 'Frontend-tester',
         'name' => 'test:0',
         'type' => 'Virtual Device',
