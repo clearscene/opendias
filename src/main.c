@@ -97,6 +97,7 @@ int setup (char *configFile) {
   o_log(INFORMATION, "Which says the database is at: %s", BASE_DIR);
 
   // Open (& maybe update) the database.
+  rmdir("/tmp/opendias.db.lock");
   if(1 == connect_db(1)) { // 1 = create if required
     free(location);
     return 1;

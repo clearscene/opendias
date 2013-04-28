@@ -71,3 +71,13 @@
    fun:__libc_start_main
    obj:/tmp/opendias_test/bin/opendias
 }
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:*
+   obj:*
+   obj:/usr/lib/i386-linux-gnu/libsane.so.1.0.22
+   obj:*
+}

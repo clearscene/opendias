@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <sane/sane.h>
 #include <sane/saneopts.h>
@@ -201,6 +202,7 @@ SANE_Status sane_read(SANE_Handle handle, SANE_Byte *data, SANE_Int max_length, 
   }
   *(data+376) = 'F';
   *length = 787;
+  usleep( 5000 );
   return SANE_STATUS_GOOD;
 }
 SANE_String_Const sane_strstatus(SANE_Status st) {

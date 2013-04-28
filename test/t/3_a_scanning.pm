@@ -114,17 +114,17 @@ sub test {
   o_log( "cached response on getScannerList = " . Dumper( directRequest( \%list ) ) );
 
 
-  # Wait for the second page to finish scanning
-  $attempt = 0;
-  while( 1 ) {
-    sleep(1);
-    $attempt++;
-    last if get_progress( $sth, $scan_uuid ) eq $SCAN_COMPLETE;
-    if( $attempt > 120 ) {
-      o_log( "Waiting for the final page to complete never happened!");
-      last;
-    }
-  }
+#  # Wait for the second page to finish scanning
+#  $attempt = 0;
+#  while( 1 ) {
+#    sleep(1);
+#    $attempt++;
+#    last if get_progress( $sth, $scan_uuid ) eq $SCAN_COMPLETE;
+#    if( $attempt > 120 ) {
+#      o_log( "Waiting for the final page to complete never happened!");
+#      last;
+#    }
+#  }
 
   $dbh->disconnect();
   return 0;

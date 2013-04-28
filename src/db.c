@@ -19,6 +19,9 @@
 #include "config.h"
 
 #include <stdio.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <errno.h>
 #include <sqlite3.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,18 +36,44 @@
 #include "db.h"
 
 sqlite3 *DBH;
+static int connectingInUse = 0;
 
 int open_db (char *db) {
 
   int rc;
-  rc = sqlite3_open_v2(db, &DBH, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_CREATE, NULL);
+  rc = sqlite3_open_v2(db, &DBH, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_CREATE, NULL);
   if ( rc ) {
     o_log(ERROR, "Can't open database: %s", sqlite3_errmsg(DBH));
     close_db ();
     return 1;
   }
-  sqlite3_busy_timeout(DBH, 5000);
   return 0;
+}
+
+void wait_for_connection_lock() {
+
+  // Get exclusivity for this thread
+  while ( connectingInUse != 0 ) {
+    usleep( 1000 );
+  }
+  connectingInUse = 1;
+
+  // Get exclusivity in this process
+  while( -1 == mkdir("/tmp/opendias.db.lock", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)) {
+    if ( errno == EEXIST ) {
+      o_log(SQLDEBUG, "Waiting for db lock...");
+    }
+    else {
+      o_log(ERROR, "Some directory create error: %d", errno );
+    }
+    usleep( 100 );
+  }
+
+}
+
+void free_connection_lock() {
+  connectingInUse = 0;
+  rmdir("/tmp/opendias.db.lock");
 }
 
 int get_db_version() {
@@ -234,17 +263,21 @@ int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
   sqlite3_stmt *stmt;
   int rc;
 
-  o_log(SQLDEBUG, "%s", sql);
+  o_log(SQLDEBUG, "Starting: %s", sql);
+
+  wait_for_connection_lock();
 
   if(vars != NULL) {
 
-    sqlite3_prepare(DBH, sql, (int)strlen(sql), &stmt, NULL);
+    sqlite3_prepare_v2(DBH, sql, (int)strlen(sql), &stmt, NULL);
     bind_vars( stmt, vars );
  
     rc = sqlite3_step(stmt);
     if( rc != SQLITE_DONE ) {
       o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);
+      rc = sqlite3_finalize(stmt);
       sll_destroy(vars);
+      free_connection_lock();
       return 1;
     }
 
@@ -255,6 +288,9 @@ int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
     char *zErrMsg;
     rc = sqlite3_exec(DBH, sql, NULL, NULL, &zErrMsg);
   }
+
+  free_connection_lock();
+  o_log(SQLDEBUG, "Finishing: %s", sql);
 
   if( rc != SQLITE_OK ) {
     o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\n\
@@ -272,13 +308,15 @@ struct simpleLinkedList *runquery_db (char *sql, struct simpleLinkedList *vars) 
   struct simpleLinkedList *rSet = sll_init();
 
   o_log(DEBUGM, "Run Query (%x)", rSet);
-  o_log(SQLDEBUG, "SQL = %s", sql);
+  o_log(SQLDEBUG, "Starting: %s", sql);
+
+  wait_for_connection_lock();
 
   if(vars != NULL) {
 
     sqlite3_stmt *stmt;
 
-    sqlite3_prepare(DBH, sql, (int)strlen(sql), &stmt, NULL);
+    sqlite3_prepare_v2(DBH, sql, (int)strlen(sql), &stmt, NULL);
     bind_vars( stmt, vars );
     sll_destroy(vars);
  
@@ -300,6 +338,8 @@ struct simpleLinkedList *runquery_db (char *sql, struct simpleLinkedList *vars) 
 
     if( rc != SQLITE_DONE ) {
       o_log(ERROR, "An SQL error has been produced. \nThe return code was: %d\nThe error was: %s\nThe following SQL gave the error: \n%s", rc, sqlite3_errmsg(DBH), sql);
+      rc = sqlite3_finalize(stmt);
+      free_connection_lock();
       return NULL;
     }
     rc = sqlite3_finalize(stmt);
@@ -316,6 +356,9 @@ struct simpleLinkedList *runquery_db (char *sql, struct simpleLinkedList *vars) 
         sqlite3_free(zErrMsg);
     }
   }
+
+  free_connection_lock();
+  o_log(SQLDEBUG, "Finishing: %s", sql);
 
   if(rSet->data != NULL ) {
     return rSet;
@@ -398,5 +441,7 @@ void free_recordset (struct simpleLinkedList *rSet) {
 void close_db () {
 
   o_log(DEBUGM, "Closing database");
+  wait_for_connection_lock();
   sqlite3_close(DBH);
+  free_connection_lock();
 }

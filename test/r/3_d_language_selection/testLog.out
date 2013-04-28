@@ -10,7 +10,7 @@ No language indication = $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -37,6 +37,11 @@ No language indication = $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
       <div id=\'loginout\'>
         <ul>
           <li>
@@ -82,7 +87,7 @@ No language indication = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/body.tmpl - for the structure, and
+      ./webcontent/body.tmpl - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -192,7 +197,7 @@ No language indication = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -203,7 +208,7 @@ No language indication = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -217,7 +222,7 @@ header says en = $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -244,6 +249,11 @@ header says en = $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
       <div id=\'loginout\'>
         <ul>
           <li>
@@ -289,7 +299,7 @@ header says en = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/body.tmpl - for the structure, and
+      ./webcontent/body.tmpl - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -399,7 +409,7 @@ header says en = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -410,7 +420,7 @@ header says en = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -424,7 +434,7 @@ header says de = $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.de - for the readable text
      ############################################## -->
 
@@ -451,6 +461,11 @@ header says de = $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
       <div id=\'loginout\'>
         <ul>
           <li>
@@ -496,7 +511,7 @@ header says de = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/body.tmpl - for the structure, and
+      ./webcontent/body.tmpl - for the structure, and
       language.resource.de - for the readable text
      ############################################## -->
 
@@ -606,7 +621,7 @@ header says de = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.de - for the readable text
      ############################################## -->
 
@@ -617,7 +632,7 @@ header says de = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Urheberrecht Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b wird unter der Freigabe <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -631,7 +646,7 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.de - for the readable text
      ############################################## -->
 
@@ -658,6 +673,11 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
       <div id=\'loginout\'>
         <ul>
           <li>
@@ -703,7 +723,7 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/body.tmpl - for the structure, and
+      ./webcontent/body.tmpl - for the structure, and
       language.resource.de - for the readable text
      ############################################## -->
 
@@ -813,7 +833,7 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.de - for the readable text
      ############################################## -->
 
@@ -824,7 +844,7 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Urheberrecht Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b wird unter der Freigabe <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -838,7 +858,7 @@ bad cookie, header says ## = $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.hh - for the readable text
      ############################################## -->
 
@@ -865,6 +885,11 @@ bad cookie, header says ## = $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
       <div id=\'loginout\'>
         <ul>
           <li>
@@ -910,7 +935,7 @@ bad cookie, header says ## = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/body.tmpl - for the structure, and
+      ./webcontent/body.tmpl - for the structure, and
       language.resource.hh - for the readable text
      ############################################## -->
 
@@ -1020,7 +1045,7 @@ bad cookie, header says ## = $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      webcontent/includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.hh - for the readable text
      ############################################## -->
 
@@ -1031,7 +1056,7 @@ bad cookie, header says ## = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>######### Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b ## ######## ##### ### <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>####### ####</a> (2008 - 2013)</p>
   </div>
 
 </div>

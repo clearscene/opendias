@@ -6,16 +6,115 @@ Now ready
 No need for a web client for this test.
 Sending request = action=checkLogin&password=password&username=test-user
 Uploading file of type JPG...
-Response was = $VAR1 = '<html><HEAD><META HTTP-EQUIV="refresh" CONTENT="0;URL=/opendias/docDetail.html?docid=5&findSimilar=1"></HEAD><body></body></html>';
+Response was = $VAR1 = '<html><HEAD><META HTTP-EQUIV="refresh" CONTENT="0;URL=/opendias/docDetail.html?docid=5"></HEAD><body></body></html>';
 
 Uploading file of type ODF...
-Response was = $VAR1 = '<html><HEAD><META HTTP-EQUIV="refresh" CONTENT="0;URL=/opendias/docDetail.html?docid=6&findSimilar=1"></HEAD><body></body></html>';
+Response was = $VAR1 = '<html><HEAD><META HTTP-EQUIV="refresh" CONTENT="0;URL=/opendias/docDetail.html?docid=6"></HEAD><body></body></html>';
 
 Uploading file of type PDF...
-Response was = $VAR1 = '<html><HEAD><META HTTP-EQUIV="refresh" CONTENT="0;URL=/opendias/docDetail.html?docid=7&findSimilar=1"></HEAD><body></body></html>';
+Response was = $VAR1 = '<html><HEAD><META HTTP-EQUIV="refresh" CONTENT="0;URL=/opendias/docDetail.html?docid=7"></HEAD><body></body></html>';
 
 Uploading file of type UNK...
-Response was = $VAR1 = '<p>An internal server error has occured.</p>';
+Response was = $VAR1 = '<!DOCTYPE html>
+<html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      ./webcontent/includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+ <head>
+  <title>openDias</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
+
+  <!--[if lt IE 7]>
+  <meta http-equiv="X-UA-Compatible" content="IE=8" />
+  <link rel="stylesheet" href="/opendias/style/ieFix.css" type="text/css" />
+  <![endif]-->
+
+ </head>
+
+<body>
+<div id=\'getdown\'>
+
+  <div id=\'header\'>
+    <div class="container">
+      <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id=\'menu\'>
+    <div class="container">
+      <ul>
+        <li><a id=\'homeLink\' href=\'/opendias/\'>Home</a></li>
+        <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
+        <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
+        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
+        <li class=\'version\'>[VERSION STRING]</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id=\'body\'>
+    <div class="container">
+
+<p>Your file type is not supported</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      ./webcontent/includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
+    </div>
+  </div>
+
+  <div id=\'footerpadding\'></div>
+
+  <div id=\'footer\'>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
+  </div>
+
+</div>
+</body>
+</html>
+';
 
 Generating a PDF doc thumbnail
 Sending request = action=regenerateThumb&docid=7

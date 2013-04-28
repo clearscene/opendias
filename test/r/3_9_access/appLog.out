@@ -506,24 +506,23 @@ LOG-OUTPUT
 -date-:-thread-:DBG:-file-:-line- Collected post data: 
       action : getScannerList
 -date-:-thread-:INF:-file-:-line- Processing request for: getScannerList
--date-:-thread-:DBG:-file-:-line- CLIENT: The command structure has been initalised and wants to send the command of: internalGetScannerList:en.
--date-:-thread-:DBG:-file-:-line- SERVER: The sane command port has received an incomming connection.
--date-:-thread-:INF:-file-:-line- SERVER: Sane dispatcher received the command: 'internalGetScannerList' with param of 'en'
+-date-:-thread-:INF:-file-:-line- Child process created [CONFIG_FILE]
+-date-:-thread-:INF:-file-:-line- Just about to start the worker: /tmp/opendias_test/bin/opendias_worker en
+-date-:-thread-:DBG:-file-:-line- database file is /tmp/opendiastest/openDIAS.sqlite3
+-date-:-thread-:DBG:-file-:-line- loading translation file: /tmp/opendias_test/share/opendias/language.resource.en
+-date-:-thread-:INF:-file-:-line- Worker started and ready to process: internalGetScannerList
 -date-:-thread-:DBG:-file-:-line- device(s) found
--date-:-thread-:DBG:-file-:-line- sane_open of "test:0"
--date-:-thread-:DBG:-file-:-line- Resolution setting detected as 'range'
--date-:-thread-:DBG:-file-:-line- Determined max resultion to be 800
--date-:-thread-:DBG:-file-:-line- sane_cancel
--date-:-thread-:DBG:-file-:-line- sane_close
--date-:-thread-:DBG:-file-:-line- SERVER: Going to send the response of: <?xml version='1.0' encoding='utf-8'?>
-<Response><ScannerList%s><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><Formats><format>Grey Scale</format></Formats><max>800</max><min>50</min><default>300</default><host>opendias server</host></Device></Devices></ScannerList></Response>
--date-:-thread-:DBG:-file-:-line- SERVER: Server has closed it's socket.
--date-:-thread-:DBG:-file-:-line- CLIENT: has closed its socket.
+-date-:-thread-:DBG:-file-:-line- resp = <?xml version='1.0' encoding='utf-8'?>
+<Response><ScannerList%s><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><host>opendias server</host></Device></Devices></ScannerList></Response>
+-date-:-thread-:INF:-file-:-line- Worker Finished
+-date-:-thread-:DBG:-file-:-line- Closing database
+-date-:-thread-:DBG:-file-:-line- Worker sent a response of: <?xml version='1.0' encoding='utf-8'?>
+<Response><ScannerList%s><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><host>opendias server</host></Device></Devices></ScannerList></Response>
 -date-:-thread-:DBG:-file-:-line- Caching the response.
 -date-:-thread-:DBG:-file-:-line- RESPONSE WAS: <?xml version='1.0' encoding='utf-8'?>
-<Response><ScannerList><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><Formats><format>Grey Scale</format></Formats><max>800</max><min>50</min><default>300</default><host>opendias server</host></Device></Devices></ScannerList></Response>
+<Response><ScannerList><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><host>opendias server</host></Device></Devices></ScannerList></Response>
 -date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
-<Response><ScannerList><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><Formats><format>Grey Scale</format></Formats><max>800</max><min>50</min><default>300</default><host>opendias server</host></Device></Devices></ScannerList></Response>
+<Response><ScannerList><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><host>opendias server</host></Device></Devices></ScannerList></Response>
 -date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
 -date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
@@ -540,7 +539,7 @@ LOG-OUTPUT
 -date-:-thread-:INF:-file-:-line- Processing request for: getScanning Progress
 -date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
 -date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
-<Response><ScanningProgress><status>(null)</status><value>(null)</value></ScanningProgress></Response>
+<Response><ScanningProgress><status>0</status><value>0</value></ScanningProgress></Response>
 -date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
 -date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
@@ -735,7 +734,6 @@ LOG-OUTPUT
 -date-:-thread-:INF:-file-:-line- Received SIGUSR1 signal.
 -date-:-thread-:INF:-file-:-line- openDias service is shutting down....
 -date-:-thread-:DBG:-file-:-line- ... httpd service [done]
--date-:-thread-:DBG:-file-:-line- ... sane command socket [done]
 -date-:-thread-:DBG:-file-:-line- Deleting session: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 -date-:-thread-:DBG:-file-:-line- Expired 2 sessions
 -date-:-thread-:DBG:-file-:-line- ... session management [done]

@@ -33,15 +33,18 @@ LOG-OUTPUT
 -date-:-thread-:INF Convertion process: Loaded (depth: 8)
 -date-:-thread-:INF Convertion process: Reduced depth to 8
 -date-:-thread-:INF Processed JPG doc
+-date-:-thread-:INF Calculating pHash of image /tmp/pHash_[THREAD].jpg
 -date-:-thread-:INF Processing request for: uploadfile
 -date-:-thread-:ERR Uploaded file looks to be of type: application/vnd.oasis.opendocument.text
 -date-:-thread-:INF Processed ODF doc
+-date-:-thread-:INF Calculating pHash of image /tmp/pHash_[THREAD].jpg
 -date-:-thread-:INF Processing request for: uploadfile
 -date-:-thread-:ERR Uploaded file looks to be of type: application/pdf
 -date-:-thread-:ERR PDF page successfuly parsed
 -date-:-thread-:ERR Image generated from the PDF
 -date-:-thread-:ERR Text Extracted from the PDF
 -date-:-thread-:INF Processed PDF
+-date-:-thread-:INF Calculating pHash of image /tmp/pHash_[THREAD].jpg
 -date-:-thread-:INF Processing request for: uploadfile
 -date-:-thread-:ERR Uploaded file looks to be of type: text/plain
 -date-:-thread-:ERR unknown file type.
