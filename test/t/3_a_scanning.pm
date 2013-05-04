@@ -17,7 +17,7 @@ sub testProfile {
 sub updateStartCommand {
   my $startCommand = shift;
   chomp( my $pwd = `pwd` );
-  my $prefix = "LD_LIBRARY_PATH=$pwd/override_libs/libtesseract:$pwd/override_libs/liblept:$pwd/override_libs/libpoppler ";
+  my $prefix = "LD_LIBRARY_PATH=$pwd/override_libs/libsane:$pwd/override_libs/libtesseract:$pwd/override_libs/liblept:$pwd/override_libs/libpoppler:$pwd/override_libs/libpHash ";
   $$startCommand =~ s/^/$prefix/g;
   o_log("Updated start command to use overidden libs");
 }
@@ -53,13 +53,18 @@ sub test {
   login( "test-user", "password", $cookie_jar );
 
   # Send start scan request
+  system( "touch /tmp/pause.sane.override" );
   my $result = directRequest( \%scan );
   o_log( "startScan = " . Dumper( $result ) );
   my $scan_uuid = $result->{DoScan}->{scanuuid};
   return 1 unless defined $scan_uuid && $scan_uuid ne '';
   $followup{scanprogressid} = $scan_uuid;
-  sleep(1);
 
+
+  # Wait to ensure the scanning processes is in the middle of a scan
+  while( ! -f "/tmp/sane.override.is.paused" ) {
+    sleep(1);
+  }
 
   # SANE is blocked and no cache to give
   o_log( "Total fail on getScannerList = " . Dumper( directRequest( \%list ) ) );
@@ -81,6 +86,8 @@ sub test {
 
 
   # Wait for scanning of the first page to complete
+  unlink( "/tmp/pause.sane.override" );
+
   my $attempt = 0;
   while( 1 ) {
     sleep(1);
@@ -91,6 +98,8 @@ sub test {
       last;
     }
   }
+  $dbh->disconnect();
+  sleep(3);
 
 
   my %getstatus = (
@@ -106,27 +115,19 @@ sub test {
 
 
   # Tell the system, the second page is ready for scanning
+  system( "touch /tmp/pause.sane.override" );
   o_log( "Result of page turn request = " . Dumper( directRequest( \%followup ) ) );
-  sleep(2);
 
+  # Wait to ensure the scanning processes is in the middle of a scan
+  while( ! -f "/tmp/sane.override.is.paused" ) {
+    sleep(1);
+  }
 
   # SANE is blocked, now we have cache to give
   o_log( "cached response on getScannerList = " . Dumper( directRequest( \%list ) ) );
 
+  unlink("/tmp/pause.sane.override");
 
-#  # Wait for the second page to finish scanning
-#  $attempt = 0;
-#  while( 1 ) {
-#    sleep(1);
-#    $attempt++;
-#    last if get_progress( $sth, $scan_uuid ) eq $SCAN_COMPLETE;
-#    if( $attempt > 120 ) {
-#      o_log( "Waiting for the final page to complete never happened!");
-#      last;
-#    }
-#  }
-
-  $dbh->disconnect();
   return 0;
 }
 

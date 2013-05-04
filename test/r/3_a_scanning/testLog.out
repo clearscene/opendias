@@ -38,11 +38,18 @@ a good response on getScannerList = $VAR1 = {
   'ScannerList' => {
     'Devices' => {
       'Device' => {
-        'host' => 'opendias server',
-        'model' => 'Frontend-tester',
-        'name' => 'test:0',
-        'type' => 'Virtual Device',
-        'vendor' => 'Noname'
+        'test:0' => {
+          'host' => 'opendias server',
+          'model' => 'Frontend-tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
+        },
+        'test:1' => {
+          'host' => 'opendias server',
+          'model' => 'Timeout Frontend Tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
+        }
       }
     }
   }
@@ -60,11 +67,18 @@ cached response on getScannerList = $VAR1 = {
   'ScannerList' => {
     'Devices' => {
       'Device' => {
-        'host' => 'opendias server',
-        'model' => 'Frontend-tester',
-        'name' => 'test:0',
-        'type' => 'Virtual Device',
-        'vendor' => 'Noname'
+        'test:0' => {
+          'host' => 'opendias server',
+          'model' => 'Frontend-tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
+        },
+        'test:1' => {
+          'host' => 'opendias server',
+          'model' => 'Timeout Frontend Tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
+        }
       }
     },
     'cached' => 'true'

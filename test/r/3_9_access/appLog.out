@@ -512,17 +512,15 @@ LOG-OUTPUT
 -date-:-thread-:DBG:-file-:-line- loading translation file: /tmp/opendias_test/share/opendias/language.resource.en
 -date-:-thread-:INF:-file-:-line- Worker started and ready to process: internalGetScannerList
 -date-:-thread-:DBG:-file-:-line- device(s) found
--date-:-thread-:DBG:-file-:-line- resp = <?xml version='1.0' encoding='utf-8'?>
-<Response><ScannerList%s><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><host>opendias server</host></Device></Devices></ScannerList></Response>
 -date-:-thread-:INF:-file-:-line- Worker Finished
 -date-:-thread-:DBG:-file-:-line- Closing database
 -date-:-thread-:DBG:-file-:-line- Worker sent a response of: <?xml version='1.0' encoding='utf-8'?>
-<Response><ScannerList%s><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><host>opendias server</host></Device></Devices></ScannerList></Response>
+<Response><ScannerList%s><Devices><Device><vendor>Opendias-overridden-sane-libs</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><host>opendias server</host></Device><Device><vendor>Opendias-overridden-sane-libs</vendor><model>Timeout Frontend Tester</model><type>Virtual Device</type><name>test:1</name><host>opendias server</host></Device></Devices></ScannerList></Response>
 -date-:-thread-:DBG:-file-:-line- Caching the response.
 -date-:-thread-:DBG:-file-:-line- RESPONSE WAS: <?xml version='1.0' encoding='utf-8'?>
-<Response><ScannerList><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><host>opendias server</host></Device></Devices></ScannerList></Response>
+<Response><ScannerList><Devices><Device><vendor>Opendias-overridden-sane-libs</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><host>opendias server</host></Device><Device><vendor>Opendias-overridden-sane-libs</vendor><model>Timeout Frontend Tester</model><type>Virtual Device</type><name>test:1</name><host>opendias server</host></Device></Devices></ScannerList></Response>
 -date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
-<Response><ScannerList><Devices><Device><vendor>Noname</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><host>opendias server</host></Device></Devices></ScannerList></Response>
+<Response><ScannerList><Devices><Device><vendor>Opendias-overridden-sane-libs</vendor><model>Frontend-tester</model><type>Virtual Device</type><name>test:0</name><host>opendias server</host></Device><Device><vendor>Opendias-overridden-sane-libs</vendor><model>Timeout Frontend Tester</model><type>Virtual Device</type><name>test:1</name><host>opendias server</host></Device></Devices></ScannerList></Response>
 -date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
 -date-:-thread-:DBG:-file-:-line- Language setting (from header) is: en
 -date-:-thread-:DBG:-file-:-line- Client provided session cookie: [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]

@@ -11,8 +11,17 @@ sub testProfile {
   return {
     valgrind => 1,
     client => 0,
+    updateStartCommand => 'updateStartCommand',
   }; 
 } 
+
+sub updateStartCommand {
+  my $startCommand = shift;
+  chomp( my $pwd = `pwd` );
+  my $prefix = "LD_LIBRARY_PATH=$pwd/override_libs/libsane:$pwd/override_libs/libtesseract:$pwd/override_libs/liblept:$pwd/override_libs/libpoppler:$pwd/override_libs/libpHash ";
+  $$startCommand =~ s/^/$prefix/g;
+  o_log("Updated start command to use overidden libs");
+}
 
 sub test {
 

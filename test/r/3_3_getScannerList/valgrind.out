@@ -67,7 +67,7 @@
 ==XXXXX==  Memcheck, a memory error detector
 ==XXXXX==  Copyright [details]
 ==XXXXX==  Using Valgrind [version and build info]
-==XXXXX==  Command: /tmp/opendias_test/bin/opendias_worker /tmp/opendiastest /tmp/opendias_test/var/log/opendias 3 internalDoScanningOperation db20482f-67d2-46e5-9894-e7e3cb6a8ee5,en
+==XXXXX==  Command: /tmp/opendias_test/bin/opendias_worker /tmp/opendiastest /tmp/opendias_test/var/log/opendias 3 internalDoScanningOperation [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ],en
 ==XXXXX==  Parent PID: XXXXX.
 ==XXXXX==  
 ==XXXXX==  
