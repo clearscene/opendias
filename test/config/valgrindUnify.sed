@@ -12,3 +12,4 @@ s/Using Valgrind.*/Using Valgrind [version and build info]/
 s/Copyright.*/Copyright [details]/
 s/Warning: invalid file descriptor.*/Warning: invalid file descriptor [system specific]/
 s/Open file descriptor \([0-9]*\): .*/Open file descriptor \1: [FILE PATH]/
+s/\w\{8\}-\w\{4\}-\w\{4\}-\w\{4\}-\w\{12\}/[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]/g
