@@ -92,6 +92,8 @@ for my $requested (@runTests) {
     system("rm -rf /tmp/opendiastest");
     system("mkdir -p $outputDir/$TESTCASENAME");
     system("mkdir -p /tmp/opendiastest");
+    system("rm -rf /tmp/pause.sane.override");
+    system("rm -rf /tmp/sane.override.is.paused");
 
     openlog( "$outputDir/$TESTCASENAME/testLog.out" );
 
