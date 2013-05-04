@@ -225,7 +225,7 @@ if [ "$SKIPMEMORY" == "" ]; then
       done
     fi
   fi
-  VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=${PWD}/results/resultsFiles/valgrind.out.%p --show-below-main=yes --track-origins=yes --track-fds=yes --show-reachable=yes --trace-children=yes "
+  VALGRINDOPTS="--leak-check=full --leak-resolution=high --error-limit=no --tool=memcheck --num-callers=50 --log-file=${PWD}/results/resultsFiles/valgrind.out.%p --track-origins=yes --track-fds=yes --show-reachable=yes --trace-children=yes "
   # --trace-syscalls=yes 
   GENSUPP="--gen-suppressions=all "
   VALGRIND="valgrind "
