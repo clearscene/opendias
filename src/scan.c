@@ -820,7 +820,6 @@ extern char *internalGetScannerList(char *lang) {
     answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
   }
 
-o_log( DEBUGM, "resp = %s", answer);
   return answer;
 
 }
