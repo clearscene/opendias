@@ -38,7 +38,7 @@ LOG-OUTPUT
 -date-:-thread-:INF Just about to start the worker: /tmp/opendias_test/bin/opendias_worker [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ],en
 -date-:-thread-:INF Worker started and ready to process: internalDoScanningOperation
 -date-:-thread-:INF Setting scanner param resolution to 50.000000
--date-:-thread-:INF Scanner Parm : stat=Some ERROR message form=0,lf=1,bpl=787,pixpl=787,lin=787,dep=8
+-date-:-thread-:INF Scanner Parm : stat=SUCCESS form=0,lf=1,bpl=787,pixpl=787,lin=787,dep=8
 -date-:-thread-:INF Processing request for: getScannerList
 -date-:-thread-:INF The SANE sub system is busy, trying to return a cached response.
 -date-:-thread-:INF Received SIGUSR1 signal.

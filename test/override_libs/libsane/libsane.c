@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include <sane/sane.h>
@@ -202,11 +203,32 @@ SANE_Status sane_read(SANE_Handle handle, SANE_Byte *data, SANE_Int max_length, 
   }
   *(data+376) = 'F';
   *length = 787;
+
+  // Tests can block this, to check what happens when the app tries to access sane while it's busy
+  if ( 0 == access( "/tmp/pause.sane.override", F_OK ) ) {
+    // Let the test system know were blocked
+    FILE *f = fopen( "/tmp/sane.override.is.paused", "w+" );
+    fprintf( f, "blocked" );
+    fclose( f );
+    // wait for the green light
+    while ( 0 == access( "/tmp/pause.sane.override", F_OK ) ) {
+      usleep( 5000 );
+    }
+    // cleanup
+    unlink( "/tmp/sane.override.is.paused" );
+  }
+
   usleep( 5000 );
+
   return SANE_STATUS_GOOD;
 }
 SANE_String_Const sane_strstatus(SANE_Status st) {
-  return "Some ERROR message";
+  if( st == SANE_STATUS_GOOD ) {
+    return "SUCCESS";
+  }
+  else {
+    return "SANE ERROR MESSAGE";
+  }
 }
 
 void sane_cancel(SANE_Handle handle) {

@@ -59,6 +59,7 @@ char *send_command( char *command, char *param ) {
   }
   else if( 0 == strcmp(command,"internalDoScanningOperation") ) {
     if( 1 == inLongRunningOperation ) {
+      o_log(INFORMATION, "The SANE sub system is busy, returning a busy signal.");
       return o_strdup("BUSY");
     }
   }
@@ -149,6 +150,7 @@ char *send_command( char *command, char *param ) {
       o_concatf(&response, "%c", buffer);
     }
     o_log( DEBUGM, "Worker sent a response of: %s", response);
+    close( cp[0] );
 
   }
 

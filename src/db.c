@@ -61,7 +61,7 @@ void wait_for_connection_lock() {
   // Get exclusivity in this process
   while( -1 == mkdir("/tmp/opendias.db.lock", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)) {
     if ( errno == EEXIST ) {
-      o_log(SQLDEBUG, "Waiting for db lock...");
+      o_log(INFORMATION, "Waiting for db lock...");
     }
     else {
       o_log(ERROR, "Some directory create error: %d", errno );

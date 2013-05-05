@@ -4,6 +4,7 @@ use lib qw( lib );
 use DBI;
 use standardTests;
 use Data::Dumper;
+use HTTP::Cookies;
 use strict;
 
 sub testProfile {
@@ -49,15 +50,21 @@ sub test {
 
   # Get a scanning process going
   o_log( "Start long running scan" );
+  system( "touch /tmp/pause.sane.override" );
   my $result = directRequest( \%scan );
   o_log( Dumper( $result ) );
   my $scan_uuid =  $result->{DoScan}->{scanuuid};
 
+  # Wait to ensure the scanning processes is in the middle of a scan
+  while( ! -f "/tmp/sane.override.is.paused" ) {
+    sleep(1);
+  }
+
   # Request device list - expect a cached response
-  sleep(3);
   o_log( "Scanner List" );
   o_log( Dumper( directRequest( \%data ) ) );
 
+  unlink( "/tmp/pause.sane.override" );
   return 0;
 }
 
