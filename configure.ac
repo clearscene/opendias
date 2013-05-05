@@ -212,6 +212,7 @@ else
 fi
 
 if test -f ${srcdir}/scripts/build-local-versions.pl; then
+  echo Running build-local-versions.pl "$PACKAGE_STRING" $LOCALISATION_FLAGS
   perl ${srcdir}/scripts/build-local-versions.pl "$PACKAGE_STRING" $LOCALISATION_FLAGS
 fi
 
