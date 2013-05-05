@@ -144,9 +144,10 @@ static int send_page (struct MHD_Connection *connection, char *page, int status_
   struct MHD_Response *response;
 
   response = MHD_create_response_from_data (contentSize, (void *) page, MHD_NO, MHD_YES);
-  free(page);
-  if (!response)
+  if (!response) {
+    free(page);
     return MHD_NO;
+  }
 
   if( con_info && con_info->session_id ) {
     char *cookie2;
@@ -181,6 +182,11 @@ static int send_page (struct MHD_Connection *connection, char *page, int status_
     free( cookie );
     free( cookie2 );
   }
+
+  if( status_code == MHD_HTTP_SEE_OTHER ) {
+    MHD_add_response_header (response, "Location", page);
+  }
+  free(page);
 
   MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE, mimetype);
   ret = MHD_queue_response (connection, (unsigned int)status_code, response);
@@ -694,7 +700,14 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
           action = getPostData(con_info->post_data, "action");
 
-          if ( action && 0 == strcmp(action, "getDocDetail") ) {
+          if ( action && 0 == strcmp(action, "refresh") ) {
+            content = o_printf("/opendias/");
+            status = MHD_HTTP_SEE_OTHER;
+            mimetype = MIMETYPE_HTML;
+            size = strlen(content);
+          }
+
+          else if ( action && 0 == strcmp(action, "getDocDetail") ) {
             o_log(INFORMATION, "Processing request for: document details");
             if ( accessPrivs.view_doc == 0 )
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );

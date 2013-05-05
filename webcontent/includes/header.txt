@@ -38,11 +38,12 @@
 #ifndef OPEN_TO_ALL
         <ul>
           <li>
-            <span id='login'>
-              <input id='username' size=6 placeholder='---LOCAL_username---' />
-              <input id='password' size=6 placeholder='---LOCAL_password---' type='password' />
-              <button id='loginbutton'>Login</button>
-            </span>
+            <span id='login'><form id="loginform" action="/opendias/dynamic" method='post' autocomplete="on">
+              <input name="action" type='hidden' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="---LOCAL_username---" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="---LOCAL_password---" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id='logout'>
               <a id='realname' href='/opendias/accessControls.html'></a>
               <button id='logoutbutton'>---LOCAL_logout---</button>

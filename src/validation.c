@@ -336,6 +336,7 @@ int basicValidation(struct simpleLinkedList *postdata) {
 
   // Check the main request param is sane
   if ( 0 != strcmp(action, "getDocDetail") 
+    && 0 != strcmp(action, "refresh") 
     && 0 != strcmp(action, "getScannerList") 
     && 0 != strcmp(action, "getScannerDetails") 
     && 0 != strcmp(action, "doScan") 
