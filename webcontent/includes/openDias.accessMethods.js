@@ -2,11 +2,13 @@ $(document).ready(function () {
 
   setLoginOutArea();
 
-  $('#loginbutton').click( function() { attemptLogin(); });
-  $('#password').bind('keypress','',function(event) {
-    if (event.which==13) {
-      attemptLogin();
-    }
+  $('#loginform').bind('submit', $('#loginform'), function(e) { 
+    var form = this;
+    e.preventDefault();
+    e.stopPropagation();
+    if (form.submitted) { return; }
+    form.submitted = true;
+    attemptLogin(form);
   });
 
   $('#logoutbutton').click(function () {
@@ -22,9 +24,9 @@ $(document).ready(function () {
       type: "POST",
       error: function (x, t, m) {
         if (t == "timeout") {
-          alert("[s001] " + LOCAL_timeout_talking_to_server);
+          alert("[y001] " + LOCAL_timeout_talking_to_server);
         } else {
-          alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+          alert("[y002] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
         }
       },
       success: function (data) {
@@ -43,7 +45,7 @@ $(document).ready(function () {
 });
 
 
-function attemptLogin() {
+function attemptLogin(form) {
   $('#loginbutton').attr("disabled", true);
   $.ajax({
     url: "/opendias/dynamic",
@@ -58,21 +60,23 @@ function attemptLogin() {
     type: "POST",
     error: function (x, t, m) {
       $('#password').val('');
+      form.submitted = false;
       if (t == "timeout") {
-        alert("[s001] " + LOCAL_timeout_talking_to_server);
+        alert("[y003] " + LOCAL_timeout_talking_to_server);
       } else {
-        alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+        alert("[y004] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
       }
     },
     success: function (data) {
       $('#password').val('');
       if ($(data).find('error').text()) {
         alert($(data).find('error').text());
+        form.submitted = false;
       } else {
         if ($(data).find('result').text() == 'OK') {
           $('#loginbutton').attr("disabled", false);
-          //setLoginOutArea( 1 );
-          document.location.reload(true);
+          form.submitted = false;
+          form.submit(); //invoke the save password in browser - which happily reloads the page.
         } else {
           $('#loginbutton').css({
             display: 'none'
@@ -84,6 +88,7 @@ function attemptLogin() {
             });
           }, parseInt($(data).find('retry_throttle').text()) * 1000);
           alert($(data).find('message').text());
+          form.submitted = false;
         }
       }
     }

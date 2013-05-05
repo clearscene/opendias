@@ -222,7 +222,7 @@ The application is localised using three kinds of file:
  * Create a git branch off the current development branch (eg development_0_9)
     and name it something like "my_new_functionality_0_9".
  * To get better valgrind backtrace resolution, (for memory failed tests) you 
-    may want to include "'CFLAGS=-O0 -g'" as an option to ./configure. 
+    may want to include "'CXXFLAGS=-O0 -g' 'CFLAGS=-O0 -g'" as an option to ./configure. 
     Rebuilding the app after a clean, and re-running tests with the '-b' flag 
     (to stop your specific configured app from being rebuilt).
 
