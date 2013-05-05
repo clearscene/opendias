@@ -22,9 +22,9 @@ $(document).ready(function () {
       type: "POST",
       error: function (x, t, m) {
         if (t == "timeout") {
-          alert("[s001] " + LOCAL_timeout_talking_to_server);
+          alert("[y001] " + LOCAL_timeout_talking_to_server);
         } else {
-          alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+          alert("[y002] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
         }
       },
       success: function (data) {
@@ -59,9 +59,9 @@ function attemptLogin() {
     error: function (x, t, m) {
       $('#password').val('');
       if (t == "timeout") {
-        alert("[s001] " + LOCAL_timeout_talking_to_server);
+        alert("[y003] " + LOCAL_timeout_talking_to_server);
       } else {
-        alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+        alert("[y004] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
       }
     },
     success: function (data) {
