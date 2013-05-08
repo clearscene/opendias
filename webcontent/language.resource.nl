@@ -7,7 +7,7 @@ LOCAL_link_home|Home
 LOCAL_link_doclist|Documentlijst
 LOCAL_link_acquire|Nieuw Document
 LOCAL_link_projecthome|Project Home
-LOCAL_released_under|LOCALISE_ME is released under the
+LOCAL_released_under|is uitgegeven onder de
 LOCAL_app_home|Applicatie Home
 LOCAL_welcome|Welkom
 LOCAL_home_intro|Met openDIAS (Document Imaging Archive System) kunt u documenten -imagen- met OCR. U kunt documenten scannen (met SANE) of ODF-documenten importeren en daarna categoriseren. Al uw brieven, rekeningen, overzichten, etc. kunnen op een makkelijke, veilige en eenvoudig vindbare manier opgeslagen worden.
@@ -67,9 +67,9 @@ LOCAL_docdetail_extractedtext|OCR-Tekst:
 LOCAL_docdetail_assignedtags|Toegewezen Categorieën:
 LOCAL_docdetail_linkeddocs|Gekoppelde Documenten:
 LOCAL_docdetail_defaultdoclink|Koppel aan document
-LOCAL_docdetail_similar_docs_title|LOCALISE_ME Similar Docs
-LOCAL_docdetail_similar_docs_tagline|LOCALISE_ME There are similar document to the one you've just created. Do you want to apply the same title/tags?
-LOCAL_docdetail_no_thanks|LOCALISE_ME No Thanks
+LOCAL_docdetail_similar_docs_title|Vergelijkbare Documenten
+LOCAL_docdetail_similar_docs_tagline|Er zijn vergelijkbare documenten met het zojuist gemaakte document gevonden. Wil je dezelfde titel en categorieën toepassen??
+LOCAL_docdetail_no_thanks|Nee Bedankt
 LOCAL_acquire_title|Nieuw Document Inlezen
 LOCAL_acquire_notcurrent_title|Gegevens zijn niet actueel
 LOCAL_acquire_notcurrent_p1|Toen deze gegevens werden opgevraagd was het SANE-substeem bezig met de uitvoering van een scanopdracht. Jammer genoeg kan SANE slechts een opdracht tegelijkertijd afhandelen. Daarom zijn de gepresenteerde gegevens niet actueel en zijn van de laatst uitgevoerde opdracht.
@@ -88,7 +88,7 @@ LOCAL_acquire_office_upload_file|Bestandsnaam voor upload:
 LOCAL_acquire_office_upload_botton|Upload
 LOCAL_acquire_scanner_pages_alt|Het aantal bladzijden waaruit het gescande document gaat bestaan
 LOCAL_acquire_scanner_pages|Bladzijden:
-LOCAL_acquire_scanscale_alt|LOCALISE_ME The colour depth of the scanned image
+LOCAL_acquire_scanscale_alt|De kleurdiepte van de gescande afbeelding
 LOCAL_acquire_scanscale|Formaat:
 LOCAL_acquire_scanscale_grey|Grijswaarden
 LOCAL_acquire_scanscale_colour|Kleur
@@ -102,8 +102,8 @@ LOCAL_acquire_scanner_best_oct|Het beste resolutiegebied voor OCR.
 LOCAL_acquire_scanner_page_length_alt|Hoeveel van de bladzijde wilt u scannen als u een document scant dat korter is dan de maximale lengte die de scanner ondersteund. Verknoei geen ruimte en tijd.
 LOCAL_acquire_scanner_page_length|Pagina Lengte:
 LOCAL_acquire_scanner_scan_now_button|Scan
-LOCAL_acquire_look_for_similar|LOCALISE_ME Look for similar documents:
-LOCAL_acquire_look_for_similar_alt|LOCALISE_ME After scanning attempt to find other documents that look the same. Then apply the title and tags to matching document to your new document - saving time.
+LOCAL_acquire_look_for_similar|Zoek naar vergelijkbare documenten:
+LOCAL_acquire_look_for_similar_alt|Probeer na het scannen vergelijkbare documenten te vinden. Pas dan dezelfde titel en categorieën toe als het vergelijkbare document - dit spaart tijd.
 LOCAL_admin_title|Gebruiker Admin
 LOCAL_admin_tab_mydetails|Mijn gegevens
 LOCAL_admin_tab_create_user|Maak Gebruikers
