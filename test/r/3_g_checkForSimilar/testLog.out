@@ -1,0 +1,42 @@
+Copying pre defined environment
+Copying default database
+STARTING app...
+Now ready
+No need for a web client for this test.
+Sending request = action=checkLogin&password=password&username=test-user
+Doc Details, one tag
+Sending request = action=checkForSimilar&docid=3
+$VAR1 = {
+  'CheckForSimilar' => {
+    'Docs' => {}
+  }
+};
+
+Doc Details, two tags
+Sending request = action=checkForSimilar&docid=2
+$VAR1 = {
+  'error' => 'Your request could not be processed'
+};
+
+Doc Details, two linked documents
+Sending request = action=checkForSimilar&docid=4
+$VAR1 = {
+  'CheckForSimilar' => {
+    'Docs' => {
+      'Doc' => {
+        'Tags' => {
+          'tag' => [
+            'tag one',
+            'tag two'
+          ]
+        },
+        'distance' => '8',
+        'docid' => '1',
+        'title' => 'Test Titletext'
+      }
+    }
+  }
+};
+
+Stopping service
+Waiting for valgrind to finish.

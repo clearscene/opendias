@@ -77,7 +77,9 @@ function unlockForm(success) {
   changeFormState(false);
   if (success) {
     $('#saveAlert').show();
-    $('#saveAlert').fadeOut(4000);
+    setTimeout(function () {
+      $('#saveAlert').fadeOut(400);
+    }, 1250);
   }
 }
 

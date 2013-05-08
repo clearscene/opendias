@@ -288,15 +288,18 @@
   }
   #saveAlert {
     display: none;
-    color: #fff;
+    color: #000;
     font-weight: bold;
     position: fixed;
     padding: 25px;
+    padding-bottom: 10px;
+    padding-top: 10px;
     top: 0px;
-    left: 10px;
-    margin: 5px;
-    background: #aa7777;
-    border: 1px solid black;
+    margin: 5px 300px;
+    background: #FFDD77;
+    border: 2px solid black;
+    border-radius: 4px;
+    z-index: 2000;
   }
 
   .accessControl h3 {
