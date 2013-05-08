@@ -78,6 +78,7 @@ $(document).ready(function () {
         function (e) {
           window.open("/opendias/scans/" + e.data.docId + ".odt");
         });
+
       } else if ($(data).find('DocDetail').find('type').text() == "2" || $(data).find('DocDetail').find('type').text() == "4") {
         // Set images and default width
         for (x = 1; x <= parseInt($(data).find('DocDetail').find('pages').text()); x++) {
@@ -187,56 +188,7 @@ $(document).ready(function () {
         tags.push($(this).text());
       });
       $("#tags").val(tags.join());
-      $('#tags').tagsInput({
-        defaultText: LOCAL_add_tag_default_text,
-        autocomplete_url: '', // Were going to use the ui.autocomplete (since the plugins autocomplete stuff doesn't seam to work correctly. However, added this here as a hack to handle bluring correctly.
-        onAddTag: function (tag) {
-          moveTag(tag, officialDocId, "addTag");
-        },
-        onRemoveTag: function (tag) {
-          moveTag(tag, officialDocId, "removeTag");
-        },
-      });
-      $('#tags_tag').autocomplete({
-        source: function (request, response) {
-          $.ajax({
-            url: "/opendias/dynamic",
-            dataType: "json",
-            timeout: AJAX_TIMEOUT,
-            type: "POST",
-            data: {
-              action: "tagsAutoComplete",
-              startsWith: request.term,
-              docid: officialDocId
-            },
-            error: function (x, t, m) {
-              if (t == "timeout") {
-                alert("[d003] " + LOCAL_timeout_talking_to_server);
-              } else {
-                alert("[d004] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
-              }
-            },
-            success: function (data) {
-              response($.map(data.results, function (item) {
-                return {
-                  label: item.tag,
-                  value: item.tag
-                }
-              }));
-            }
-          });
-        },
-        minLength: 1, // because most tags are so short - and there are not that many tags,
-        select: function (event, ui) {
-          //  log( ui.item ?  "Selected: " + ui.item.label : "Nothing selected, input was " + this.value);
-        },
-        open: function () {
-          $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
-        },
-        close: function () {
-          $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
-        }
-      });
+      inisaliseTags();
 
 
       //
@@ -304,6 +256,91 @@ $(document).ready(function () {
         }
       });
 
+      // Check for similkar images and give the option to 
+      // apply the same tags and title
+      if ( getUrlVars()['findSimilar'] ) {
+        $.ajax({
+          url: "/opendias/dynamic",
+          dataType: "xml",
+          timeout: 3 * AJAX_TIMEOUT,
+          type: "POST",
+          data: {
+            action: "checkForSimilar",
+            docid: officialDocId
+          },
+          error: function (x, t, m) {
+            if (t == "timeout") {
+              alert("[d009] " + LOCAL_timeout_talking_to_server);
+            } else {
+              alert("[d010] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+            }
+          },
+          success: function (data) {
+            if ($(data).find('error').text()) {
+              alert(LOCAL_error_checking_for_similar + ": " + $(data).find('error').text());
+              return 1;
+            }
+            else if($(data).find('CheckForSimilar')) {
+              var ret = $(data).find('CheckForSimilar');
+              if(ret.find('Docs').find('Doc').text()) {
+                option = 1;
+                ret.find('Docs').find('Doc').each( function() {
+                  // Create the 'do you want to apply these tags' popup
+                  $('#option'+option).html( 
+                    "<h4>" + $(this).find('title').text() + "</h4>"
+                    + "<span id='option"+option+"_tags'></span>"
+                    + "<span><p>" 
+                    + sprintf(LOCAL_confidence_in_doc_match, 
+                        "<strong>" + confidence( parseInt($(this).find('distance').text()) ) + "</strong>" )
+                    + "</p><button id='apply"+option+"'>" 
+                    + LOCAL_apply_title_tags + "</button>"
+                    + "</span><span class='cclear'></span>");
+                  var tagslist = '';
+                  tags = new Array();
+                  $(this).find('Tags').find('tag').each( function() {
+                    tagslist += "<li>" + $(this).text() + "</li>";
+                    tags.push($(this).text());
+                  });
+                  $('#option'+option+'_tags').html( "<ul>" + tagslist + "</ul>" );
+
+                  $('#apply'+option).bind('click', 
+                    { docid: officialDocId, 
+                      tg: tags.join(), 
+                      title: $(this).find('title').text() 
+                    }, 
+                    function(e) {
+                      $('#title').val(e.data.title);
+                      sendUpdate('title', e.data.title);
+                      $.each(e.data.tg.split(','), function (k, v) {
+                        moveTag(v, e.data.docid, "addTag");
+                      });
+                      $('#tags_tagsinput').html("");
+                      $("#tags").val(e.data.tg);
+                      inisaliseTags();
+                      $('#similarDocSelector').css({ display: 'none' });
+                  });
+
+                  option++;
+                });
+                if(option < 4) {
+                  for(x=option; x<4; x++) {
+                    $('#option'+x).css({ display: 'none' });
+                  }
+                }
+                $('#similarDocSelector').css({ display: 'block' });
+                $('#noThanks').click( function() { 
+                  $('#similarDocSelector').css({ display: 'none' });
+                });
+              }
+              else {
+                // No matching docs
+                // do we really want to create a alert box or other pop-up? - prob not
+              }
+            }
+          },
+        });
+       
+      }
     }
   });
 
@@ -350,6 +387,69 @@ $(document).ready(function () {
   });
 
 });
+
+function inisaliseTags() {
+  $('#tags').tagsInput({
+    defaultText: LOCAL_add_tag_default_text,
+    autocomplete_url: '', // Were going to use the ui.autocomplete (since the plugins autocomplete stuff doesn't seam to work correctly. However, added this here as a hack to handle bluring correctly.
+    onAddTag: function (tag) {
+      moveTag(tag, officialDocId, "addTag");
+    },
+    onRemoveTag: function (tag) {
+      moveTag(tag, officialDocId, "removeTag");
+    },
+  });
+  $('#tags_tag').autocomplete({
+    source: function (request, response) {
+      $.ajax({
+        url: "/opendias/dynamic",
+        dataType: "json",
+        timeout: AJAX_TIMEOUT,
+        type: "POST",
+        data: {
+          action: "tagsAutoComplete",
+          startsWith: request.term,
+          docid: officialDocId
+        },
+        error: function (x, t, m) {
+          if (t == "timeout") {
+            alert("[d003] " + LOCAL_timeout_talking_to_server);
+          } else {
+            alert("[d004] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+          }
+        },
+        success: function (data) {
+          response($.map(data.results, function (item) {
+            return {
+              label: item.tag,
+              value: item.tag
+            }
+          }));
+        }
+      });
+    },
+    minLength: 1, // because most tags are so short - and there are not that many tags,
+    select: function (event, ui) {
+      //  log( ui.item ?  "Selected: " + ui.item.label : "Nothing selected, input was " + this.value);
+    },
+    open: function () {
+      $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+    },
+    close: function () {
+      $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+    }
+  });
+}
+
+function confidence(distance) {
+  if( distance < 5 ) {
+    return LOCAL_very_high;
+  }
+  else if( distance < 10 ) {
+    return LOCAL_high;
+  }
+  return LOCAL_good;
+}
 
 function getTypeDescription(iType) {
 

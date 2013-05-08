@@ -2,11 +2,13 @@ $(document).ready(function () {
 
   setLoginOutArea();
 
-  $('#loginbutton').click( function() { attemptLogin(); });
-  $('#password').bind('keypress','',function(event) {
-    if (event.which==13) {
-      attemptLogin();
-    }
+  $('#loginform').bind('submit', $('#loginform'), function(e) { 
+    var form = this;
+    e.preventDefault();
+    e.stopPropagation();
+    if (form.submitted) { return; }
+    form.submitted = true;
+    attemptLogin(form);
   });
 
   $('#logoutbutton').click(function () {
@@ -22,9 +24,9 @@ $(document).ready(function () {
       type: "POST",
       error: function (x, t, m) {
         if (t == "timeout") {
-          alert("[s001] " + LOCAL_timeout_talking_to_server);
+          alert("[y001] " + LOCAL_timeout_talking_to_server);
         } else {
-          alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+          alert("[y002] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
         }
       },
       success: function (data) {
@@ -37,10 +39,13 @@ $(document).ready(function () {
       }
     });
   });
+
+  showBubble();
+
 });
 
 
-function attemptLogin() {
+function attemptLogin(form) {
   $('#loginbutton').attr("disabled", true);
   $.ajax({
     url: "/opendias/dynamic",
@@ -55,20 +60,23 @@ function attemptLogin() {
     type: "POST",
     error: function (x, t, m) {
       $('#password').val('');
+      form.submitted = false;
       if (t == "timeout") {
-        alert("[s001] " + LOCAL_timeout_talking_to_server);
+        alert("[y003] " + LOCAL_timeout_talking_to_server);
       } else {
-        alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+        alert("[y004] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
       }
     },
     success: function (data) {
       $('#password').val('');
       if ($(data).find('error').text()) {
         alert($(data).find('error').text());
+        form.submitted = false;
       } else {
         if ($(data).find('result').text() == 'OK') {
           $('#loginbutton').attr("disabled", false);
-          setLoginOutArea( 1 );
+          form.submitted = false;
+          form.submit(); //invoke the save password in browser - which happily reloads the page.
         } else {
           $('#loginbutton').css({
             display: 'none'
@@ -80,19 +88,25 @@ function attemptLogin() {
             });
           }, parseInt($(data).find('retry_throttle').text()) * 1000);
           alert($(data).find('message').text());
+          form.submitted = false;
         }
       }
     }
   });
 }
 
-function setLoginOutArea( justloggedin ) {
+function setLoginOutArea() {
   // Display or not, the login area
   // If we have a cookie "realname=<anything>"
   // then show the logout only. Otherwise
   // show the login area.
   var realname = getCookie("realname");
   if (realname == null || realname == "") {
+    if ( window.location.pathname != '/opendias/') {
+      // Not logged in and not on the homepage.
+      document.location.href='/opendias/';
+    }
+    // Not logged in, but on the homepage
     $('#logout').css({
       display: 'none'
     });
@@ -100,6 +114,7 @@ function setLoginOutArea( justloggedin ) {
       display: 'block'
     });
   } else {
+    // Logged in
     $('#realname').html(realname);
     $('#login').css({
       display: 'none'
@@ -108,34 +123,19 @@ function setLoginOutArea( justloggedin ) {
       display: 'block'
     });
   }
-  updateMenuLinks( justloggedin );
+  updateMenuLinks();
 }
 
-function updateMenuLinks( justloggedin ) {
-
-  if ( justloggedin && window.location.pathname != '/opendias/') {
-    // We're not on the homepage, so chances are there is some dynamic content
-    // needing adding to this page. So just refresh.
-    document.location.reload(true);
-    return;
-  }
+function updateMenuLinks() {
 
   // Remove links the user can't use
   var role = getCookie("role");
-  if (get_priv_from_role(role, 'view_doc')) {
-    $('#doclistLink').parent().css({
-      display: 'inline-block'
-    });
-  } else {
+  if ( ! get_priv_from_role(role, 'view_doc')) {
     $('#doclistLink').parent().css({
       display: 'none'
     });
   }
-  if (get_priv_from_role(role, 'add_import') || get_priv_from_role(role, 'add_scan')) {
-    $('#acquireLink').parent().css({
-      display: 'inline-block'
-    });
-  } else {
+  if ( ! ( get_priv_from_role(role, 'add_import') || get_priv_from_role(role, 'add_scan') ) ) {
     $('#acquireLink').parent().css({
       display: 'none'
     });
@@ -204,3 +204,40 @@ function get_priv_from_role(user_role, priv) {
 
   return role[user_role][priv];
 }
+
+function showBubble() {
+
+  var newProgress = "";
+  var progress = getCookie("progress");
+
+  if (progress == null && getCookie("realname") != null ) {
+    progress = "shown_login_help";
+    setCookie("progress", progress);
+  }
+
+  if (progress == null) {
+    $('#infoBubble').css({ display: 'block' });
+    $('#message').html("<h3>" + LOCAL_howto_login_title + "</h3>"
+                      + "<p>" + LOCAL_howto_login + "</p>"
+                      + "<p>" + LOCAL_login_firsttime + "</p>");
+    newProgress = "shown_login_help";
+  }
+
+  else if( progress == "shown_login_help" && getCookie("realname") != null ) {
+    $('#infoBubble').css({ display: 'block' });
+    $('#infoBubble').css({ width: '180px' });
+    $('#message').html("<h3>" + LOCAL_user_admin_title + "</h3>"
+                      + "<p>" + LOCAL_user_admin + "</p>");
+    newProgress = "shown_user_admin";
+  }
+
+  $('#infoBubble #dismiss').click( function() {
+    $('#infoBubble').css({ display: 'none' });
+    if( newProgress != "" ) {
+      setCookie("progress", newProgress);
+      showBubble();
+    }
+  });
+
+}
+

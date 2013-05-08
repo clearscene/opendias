@@ -25,10 +25,10 @@
 #include <string.h>
 #ifdef CAN_MAGIC
 #include <magic.h>
-#endif // CAN_MAGIC //
+#endif /* CAN_MAGIC */
 #ifdef CAN_OCR
 #include <leptonica/allheaders.h>
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
 
 #include "main.h"
 #include "dbaccess.h"
@@ -37,13 +37,13 @@
 #include "localisation.h"
 #ifdef CAN_READODF
 #include "odf_plug.h"
-#endif // CAN_READODF //
+#endif /* CAN_READODF */
 #ifdef CAN_PDF
 #include "pdf_plug.h"
-#endif // CAN_PDF //
+#endif /* CAN_PDF */
 #ifdef CAN_OCR
 #include "imageProcessing.h"
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
 
 #include "import_doc.h"
 
@@ -63,22 +63,23 @@ char *extractThumbnail(char *docid) {
 
   return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><RegenerateThumb><result>OK</result></RegenerateThumb></Response>");
 }
-#endif // CAN_PDF //
+#endif /* CAN_PDF */
 
-char *uploadfile(char *filename, char *lang) {
+char *uploadfile(char *filename, char *lookForSimilar, char *lang) {
 
-#ifdef CAN_MAGIC
+#ifndef CAN_MAGIC
+  o_log(ERROR, "Unable to determin the file type, aborting.");
+  return NULL;
+#else
+
   int width = 0, height = 0, itype = PLACE_HOLDER;
-  char *to_name, *ocrText = NULL, *thumbext = NULL, *tmp;
+  char *final_filename, *ocrText = NULL, *thumbext = NULL, *tmp;
   char *docid;
   char *ftype;
   char *datafile;
-#endif // CAN_MAGIC //
+  char *thumbfile = NULL;
+  PIX *pix;
 
-  // Save Record
-  o_log(DEBUGM, "Saving doc import record");
-
-#ifdef CAN_MAGIC
   datafile = o_printf("/tmp/%s.dat", filename);
   magic_t cookie = magic_open(MAGIC_MIME_TYPE);
   magic_load( cookie, NULL );
@@ -91,25 +92,23 @@ char *uploadfile(char *filename, char *lang) {
   if( 0 == strcmp("application/pdf", ftype) ) {
     itype = PDF_FILETYPE;
 #ifdef CAN_PDF
-    char *outfile;
-    outfile = o_printf("/tmp/%s.thumb", filename);
-    ocrText = parse_pdf( datafile, outfile ); // pdf_plug.cc [create thumbnail and return body text] 
-    free(outfile);
+    thumbfile = o_printf("/tmp/%s.thumb", filename);
+    ocrText = parse_pdf( datafile, thumbfile ); // pdf_plug.cc [create thumbnail and return body text] 
     thumbext = o_strdup("jpg");
-#endif // CAN_PDF //
+#endif /* CAN_PDF */
+    o_log( INFORMATION, "Processed PDF");
   }
 
   // --------------------------------------
   else if( 0 == strcmp("application/vnd.oasis.opendocument.text", ftype) ) {
     itype = ODF_FILETYPE;
 #ifdef CAN_READODF
-    char *outfile;
-    outfile = o_printf("/tmp/%s.thumb", filename);
-    get_odf_Thumb( datafile, outfile );
+    thumbfile = o_printf("/tmp/%s.thumb", filename);
+    get_odf_Thumb( datafile, thumbfile );
     ocrText = get_odf_Text( datafile ); // odf_plug.c 
-    free(outfile);
     thumbext = o_strdup("png");
-#endif // CAN_READODF //
+#endif /* CAN_READODF */
+    o_log( INFORMATION, "Processed ODF doc");
   }
 
   // --------------------------------------
@@ -119,70 +118,93 @@ char *uploadfile(char *filename, char *lang) {
     PIX *pix_l;
     if ( ( pix_l = pixRead( datafile ) ) == NULL) {
       o_log(ERROR, "Could not load the image data into a PIX");
+      return NULL;
     }
-    width = pixGetWidth( pix_l );
-    height = pixGetHeight( pix_l );
-    o_log(INFORMATION, "Convertion process: Loaded (depth: %d)", pixGetDepth(pix_l));
-    PIX *pix = pixScaleRGBToGrayFast( pix_l, 1, COLOR_GREEN );
+    int depth;
+    pixGetDimensions( pix_l, &width, &height, &depth );
+    o_log(INFORMATION, "Convertion process: Loaded (depth: %d)", depth );
+    pix = pixScaleRGBToGrayFast( pix_l, 1, COLOR_GREEN );
+    pixDestroy( &pix_l );
     if (pix == NULL ) {
       o_log(ERROR,"Conversion process failed pixScaleRGBToGrayFast! skip ocr");
     }
     else {
       o_log(INFORMATION, "Convertion process: Reduced depth to %d", pixGetDepth(pix));
-      pixDestroy( &pix_l );
       ocrText = getTextFromImage(pix, 0, "eng");
-      pixDestroy( &pix );
     }
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
+    o_log( INFORMATION, "Processed JPG doc");
   }
 
   // --------------------------------------
   else {
     free( ftype );
     free( datafile );
-#endif // CAN_MAGIC //
     o_log(ERROR, "unknown file type.");
     return NULL;
-#ifdef CAN_MAGIC
   }
   free( ftype );
 
+  // Set a default OCR text string
   if( ocrText == NULL ) {
     ocrText = o_strdup( getString("LOCAL_ocr_default_text", lang ) );
   }
-  free(datafile);
 
   // Save the record to the DB
+  o_log(DEBUGM, "Saving doc import record");
   docid = addNewFileDoc(itype, width, height, ocrText); // ocrText get freed in this method
 
-  // Move the datafile to the file store location
-  to_name = o_printf("%s/scans/%s", BASE_DIR, docid); // none image imported docs, are stored with no "_x" postfix.
+  // Move the main datafile to the file store location
+  final_filename = o_printf("%s/scans/%s", BASE_DIR, docid); // none image imported docs, are stored with no "_x" postfix.
   if( itype == JPG_FILETYPE ) {
-    conCat(&to_name, "_1");
+    conCat(&final_filename, "_1");
   }
-  addFileExt(&to_name, itype);
-  tmp = o_printf("/tmp/%s.dat", filename);
-  fcopy(tmp, to_name);
-  free(tmp);
-  free(to_name);
+  addFileExt(&final_filename, itype);
 
-  // Move the datafile to the file store location
-  if( thumbext ) {
-    to_name = o_printf("%s/scans/%s_thumb.%s", BASE_DIR, docid, thumbext); // any thumbnails are postfixed with "_thumb"
-    tmp = o_printf("/tmp/%s.thumb", filename);
-    fcopy(tmp, to_name);
-    unlink(tmp);
-    free(tmp);
-    free(to_name);
+  fcopy(datafile, final_filename);
+  o_log( DEBUGM, "Moved data file");
+  // The original file will be unlinked by the HTTPD process
+  free(datafile);
+
+  // Move any thumbnail image to the file store location
+  if( thumbfile ) {
+    free(final_filename); // This currently holds the main PDG or ODF file.
+    final_filename = o_printf("%s/scans/%s_thumb.%s", BASE_DIR, docid, thumbext); // any thumbnails are postfixed with "_thumb"
+    fcopy(thumbfile, final_filename);
+    o_log( DEBUGM, "Moved thumbnail file");
+    unlink(thumbfile);
+    free(thumbfile);
     free(thumbext);
-  }
 
+#ifdef CAN_PHASH
+    o_log( DEBUGM, "About to perform pHash on file");
+    unsigned long long hash = getImagePhash_fn( final_filename );
+    savePhash( atoi(docid), hash );
+#endif /* CAN_PHASH */
+  }
+  else {
+#ifdef CAN_PHASH
+    o_log( DEBUGM, "About to perform pHash on pix");
+    unsigned long long hash = getImagePhash_px( pix );
+    savePhash( atoi(docid), hash );
+#endif /* CAN_PHASH */
+    pixDestroy( &pix );
+  }
+  free(final_filename);
+
+  // Should we look for a similar doc, on opening?
+  char *findSim = "";
+#ifdef CAN_PHASH
+  if( lookForSimilar != (void *)NULL ) {
+    findSim = "&findSimilar=1";
+  }
+#endif /*  CAN_PHASH */
 
   // Open the document for editing.
-  tmp = o_printf("<html><HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/opendias/docDetail.html?docid=%s\"></HEAD><body></body></html>", docid);
+  tmp = o_printf("<html><HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"0;URL=/opendias/docDetail.html?docid=%s%s\"></HEAD><body></body></html>", docid, findSim);
   free(docid);
 
   return tmp;
-#endif // CAN_MAGIC //
+#endif /* CAN_MAGIC */
 }
 

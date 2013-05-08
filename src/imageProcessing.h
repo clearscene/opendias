@@ -21,10 +21,19 @@
 
 #include "config.h"
 
+#include "simpleLinkedList.h"
+
 #ifdef CAN_OCR
 #include <leptonica/allheaders.h>
 
+int isOCRLanguageAvailable( const char * );
+struct simpleLinkedList *getOCRAvailableLanguages();
 char *getTextFromImage(PIX *, int, char *);
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
+
+#ifdef CAN_PHASH
+unsigned long long getImagePhash_fn( const char * );
+unsigned long long getImagePhash_px( PIX * );
+#endif /* CAN_PHASH */
 
 #endif /* IMAGEPROCESSING */

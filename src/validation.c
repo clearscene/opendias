@@ -23,6 +23,7 @@
 
 #include "debug.h"
 #include "utils.h"
+#include "imageProcessing.h"
 #include "ocr_plug.h"
 
 #include "validation.h"
@@ -183,23 +184,30 @@ static int checkDate(char *val) {
 #ifdef CAN_SCAN
 #ifdef CAN_OCR
 //
-static int checkOCRLanguage(char *val) {
+int checkOCRLanguage(char *val) {
   if( val == NULL ) return 1;
-  if ( 0 == strcmp(val, "-" )                // No OCR
-    || 0 == strcmp(val, OCR_LANG_BRITISH ) 
-    || 0 == strcmp(val, OCR_LANG_GERMAN ) 
-    || 0 == strcmp(val, OCR_LANG_FRENCH ) 
-    || 0 == strcmp(val, OCR_LANG_SPANISH ) 
-    || 0 == strcmp(val, OCR_LANG_ITALIAN ) 
-    || 0 == strcmp(val, OCR_LANG_DUTCH ) 
-    || 0 == strcmp(val, OCR_LANG_BPORTUGUESE ) 
-    || 0 == strcmp(val, OCR_LANG_VIETNAMESE ) ) {
+  if ( 0 == strcmp(val, "-" ) ) {
     return 0;
+  }
+  else if ( 0 == strcmp(val, OCR_LANG_BRITISH ) 
+  || 0 == strcmp(val, OCR_LANG_GERMAN ) 
+  || 0 == strcmp(val, OCR_LANG_FRENCH ) 
+  || 0 == strcmp(val, OCR_LANG_SPANISH ) 
+  || 0 == strcmp(val, OCR_LANG_ITALIAN ) 
+  || 0 == strcmp(val, OCR_LANG_DUTCH ) 
+  || 0 == strcmp(val, OCR_LANG_BPORTUGUESE ) 
+  || 0 == strcmp(val, OCR_LANG_VIETNAMESE ) ) {
+    if( isOCRLanguageAvailable( val ) ) {
+      return 0;
+    }
+    else {
+      o_log(ERROR, "Validation failed: ocr language is not installed");
+    }
   }
   o_log(ERROR, "Validation failed: Unknown ocr language");
   return 1;
 }
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
 
 static int checkDeviceId(char *val) {
   if( val == NULL ) return 1;
@@ -238,7 +246,7 @@ static int checkResolution(char *val) {
   if(checkSaneRange(val, 10, 3000)) return 1;
   return 0;
 }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 static int checkUpdateKey(char *val) {
   if( val == NULL ) return 1;
@@ -259,7 +267,7 @@ static int checkRole(char *role) {
   if(checkSaneRange(role, 1, 10)) return 1;
   return 0;
 }
-#endif // OPEN_TO_ALL //
+#endif /* OPEN_TO_ALL */
 
 // need more here (ie comma delimited)
 static int checkTagList(char *val) {
@@ -328,7 +336,9 @@ int basicValidation(struct simpleLinkedList *postdata) {
 
   // Check the main request param is sane
   if ( 0 != strcmp(action, "getDocDetail") 
+    && 0 != strcmp(action, "refresh") 
     && 0 != strcmp(action, "getScannerList") 
+    && 0 != strcmp(action, "getScannerDetails") 
     && 0 != strcmp(action, "doScan") 
     && 0 != strcmp(action, "getScanningProgress") 
     && 0 != strcmp(action, "nextPageReady") 
@@ -346,6 +356,7 @@ int basicValidation(struct simpleLinkedList *postdata) {
     && 0 != strcmp(action, "createUser")
     && 0 != strcmp(action, "getUserList")
     && 0 != strcmp(action, "deleteUser")
+    && 0 != strcmp(action, "checkForSimilar")
                                         ) {
     o_log(ERROR, "requested 'action' (of '%s') is not available.", action);
     return 1;
@@ -383,16 +394,18 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkKeys(postdata, vars );
   }
 
+  if ( 0 == strcmp(action, "getScannerDetails") ) {
+    sll_insert(vars, "deviceid", "m" );
+    ret += checkKeys(postdata, vars );
+    ret += checkDeviceId(getPostData(postdata, "deviceid"));
+  }
+
   if ( 0 == strcmp(action, "doScan") ) {
     sll_insert(vars, "deviceid", "m" );
     sll_insert(vars, "format", "m" );
     sll_insert(vars, "resolution", "m" );
     sll_insert(vars, "pages", "m" );
-#ifdef CAN_OCR
     sll_insert(vars, "ocr", "m" );
-#else
-    sll_insert(vars, "ocr", "m" );
-#endif // CAN_OCR //
     sll_insert(vars, "pagelength", "m" );
     ret += checkKeys(postdata, vars );
     ret += checkDeviceId(getPostData(postdata, "deviceid"));
@@ -401,7 +414,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkPages(getPostData(postdata, "pages"));
 #ifdef CAN_OCR
     ret += checkOCRLanguage(getPostData(postdata, "ocr"));
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
     ret += checkPageLength(getPostData(postdata, "pagelength"));
   }
 
@@ -416,7 +429,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkKeys(postdata, vars );
     ret += checkUUID(getPostData(postdata, "scanprogressid"));
   }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
   if ( 0 == strcmp(action, "updateDocDetails") ) {
     sll_insert(vars, "docid", "m" );
@@ -435,6 +448,12 @@ int validate(struct simpleLinkedList *postdata, char *action) {
         ret += checkVal(vvalue);
       }
     }
+  }
+
+  if ( 0 == strcmp(action, "checkForSimilar") ) {
+    sll_insert(vars, "docid", "m" );
+    ret += checkKeys(postdata, vars );
+    ret += checkDocId(getPostData(postdata, "docid"));
   }
 
   if ( 0 == strcmp(action, "moveTag") ) {
@@ -494,7 +513,7 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkKeys(postdata, vars );
     ret += checkDocId(getPostData(postdata, "docid"));
   }
-#endif // CAN_PDF //
+#endif /* CAN_PDF */
 
   if ( 0 == strcmp(action, "titleAutoComplete") ) {
     sll_insert(vars, "startsWith", "m" );
@@ -560,12 +579,13 @@ int validate(struct simpleLinkedList *postdata, char *action) {
   if ( 0 == strcmp(action, "getUserList") ) {
     ret += checkKeys(postdata, vars );
   }
-#endif // OPEN_TO_ALL //
+#endif /* OPEN_TO_ALL /*/
 
   // Needs further validation effort
 
   if ( 0 == strcmp(action, "uploadfile") ) {
     sll_insert(vars, "uploadfile", "m" );
+    sll_insert(vars, "lookForSimilar", "o" );
     ret += checkKeys(postdata, vars );
     ret += checkUUID(getPostData(postdata, "uploadfile"));
   }

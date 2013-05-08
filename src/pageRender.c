@@ -20,7 +20,7 @@
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
-#endif
+#endif /* _GNU_SOURCE */
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
@@ -43,8 +43,9 @@
 #ifdef CAN_SCAN
 #include "scan.h"
 #include "saneDispatcher.h"
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 #include "simpleLinkedList.h"
+#include "phash_plug.h"
 
 #include "pageRender.h"
 
@@ -55,24 +56,52 @@
  *
  */
 #ifdef CAN_SCAN
-char *getScannerList(void *lang) {
 
-  char *answer = send_command( o_printf("internalGetScannerList:%s", (char *)lang) ); // scan.c
+struct doScanOpData {
+  char *uuid;
+  char *lang;
+};
+
+char *getScannerList(char *lang) {
+
+  char *answer = send_command( "internalGetScannerList", lang ); // scan.c
   o_log(DEBUGM, "RESPONSE WAS: %s", answer);
 
   if( 0 == strcmp(answer, "BUSY") ) {
     free( answer );
     return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>BUSY</error></Response>");
   }
+  else if( 0 == strcmp(answer, "ERROR") ) {
+    free( answer );
+    return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>ERROR</error></Response>");
+  }
   return answer;
 }
 
+char *getScannerDetails(char *deviceid, char *lang) {
+
+  char *param = o_printf( "%s,%s", deviceid, lang);
+  char *answer = send_command( "internalGetScannerDetails", param ); // scan.c
+  free( param );
+  o_log(DEBUGM, "RESPONSE WAS: %s", answer);
+
+  if( 0 == strcmp(answer, "BUSY") ) {
+    free( answer );
+    return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>BUSY</error></Response>");
+  }
+  else if( 0 == strcmp(answer, "ERROR") ) {
+    free( answer );
+    return o_strdup("<?xml version='1.0' encoding='iso-8859-1'?>\n<Response><error>ERROR</error></Response>");
+  }
+  return answer;
+}
 extern void *doScanningOperation(void *saneOpData) {
 
-  struct doScanOpData *tr = saneOpData;
-  char *command = o_printf("internalDoScanningOperation:%s,%s", tr->uuid, tr->lang);
+  struct doScanOpData *tr = (struct doScanOpData *)saneOpData;
 
-  char *answer = send_command( command ); // scan.c
+  char *param = o_printf( "%s,%s", tr->uuid, tr->lang );
+  char *answer = send_command( "internalDoScanningOperation", param ); // scan.c
+  free(param);
   o_log(DEBUGM, "RESPONSE WAS: %s", answer);
 
   if( 0 == strcmp(answer, "BUSY") ) {
@@ -80,21 +109,20 @@ extern void *doScanningOperation(void *saneOpData) {
   }
   free(answer);
 
-
   // Move:
   //   conver to JPEG 
   //   do OCR
   // to here (or at least the calls to do it are here).
 
-  free(tr->uuid);
-  free(tr->lang);
+  free((char *)tr->uuid);
+  free((char *)tr->lang);
   free(tr);
 
 #ifdef THREAD_JOIN
   pthread_exit(0);
 #else
   return 0;
-#endif
+#endif /* THREAD_JOIN */
 }
 
 // Start the scanning process
@@ -140,7 +168,7 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 #endif /* THREAD_JOIN */
 
-  struct doScanOpData *tr = malloc( sizeof(struct doScanOpData) );
+  struct doScanOpData *tr = (struct doScanOpData *)malloc( sizeof( struct doScanOpData ) );
   tr->uuid = o_strdup(scanUuid);
   tr->lang = o_strdup(lang);
   o_log(DEBUGM,"doScan launching doScanningOperation");
@@ -209,7 +237,7 @@ char *nextPageReady(char *scanid, char *lang) {
     }
 #ifdef THREAD_JOIN
     thr = &thread;
-#endif
+#endif /* THREAD_JOIN */
     updateScanProgress(scanid, SCAN_WAITING_ON_SCANNER, 0);
   } else {
     o_log(WARNING, "scan id indicates a status not waiting for a new page signal.");
@@ -225,7 +253,10 @@ char *nextPageReady(char *scanid, char *lang) {
 char *getScanningProgress(char *scanid) {
 
   struct simpleLinkedList *rSet;
-  char *sql, *status=0, *value=0, *ret;
+  char *sql, *status, *value, *ret;
+
+  status = o_strdup("0");
+  value = o_strdup("0");
 
   sql = o_strdup("SELECT status, value \
                   FROM scan_progress \
@@ -236,6 +267,8 @@ char *getScanningProgress(char *scanid) {
   rSet = runquery_db(sql, vars);
   if( rSet != NULL ) {
     do {
+      free(status);
+      free(value);
       status = o_strdup(readData_db(rSet, "status"));
       value = o_strdup(readData_db(rSet, "value"));
     } while ( nextRow( rSet ) );
@@ -251,7 +284,7 @@ char *getScanningProgress(char *scanid) {
 
   return ret;
 }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder, char *lang ) {
 
@@ -263,6 +296,7 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
     *tagWhere=NULL, *actionWhere=NULL, *page_ret;
   int count = 0;
   char *sqlTextSearch = o_printf( "%%%s%%", textSearch );
+  char *munged_start = NULL, *munged_end = NULL;
 
   if( 0 == strcmp(subaction, "fullList") ) {
     sql = o_strdup("SELECT DISTINCT docs.* FROM docs ");
@@ -291,10 +325,16 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   //
   if( startDate && strlen(startDate) && endDate && strlen(endDate) ) {
     dateWhere = o_strdup("date(docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2)) BETWEEN date(?) AND date(?) ");
+
     sll_append(vars, DB_TEXT );
-    sll_append(vars, startDate );
+    munged_start = o_strdup(startDate);
+    replace(munged_start, "/", "-");
+    sll_append(vars, munged_start );
+
     sll_append(vars, DB_TEXT );
-    sll_append(vars, endDate );
+    munged_end = o_strdup(endDate);
+    replace(munged_end, "/", "-");
+    sll_append(vars, munged_end );
   }
 
   // Filter By Tags
@@ -469,6 +509,12 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   docList = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><DocFilter><count>%i</count>%s<Results>%s</Results></DocFilter></Response>", count, page_ret, rows);
   free(rows);
   free(page_ret);
+  if( munged_start != NULL ) {
+    free( munged_start );
+  }
+  if( munged_end != NULL ) {
+    free( munged_end );
+  }
 
   return docList;
 }
@@ -917,5 +963,125 @@ char *deleteUser( char *username, char *lang ) {
 
   return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><DeleteUser><result>OK</result></DeleteUser></Response>");
 }
-#endif // OPEN_TO_ALL //
+#endif /* OPEN_TO_ALL */
+
+
+#ifdef CAN_PHASH
+char *checkForSimilar(const char *docid) {
+
+  char *sql = o_strdup( "SELECT image_phash FROM docs WHERE docid = ?" );
+  struct simpleLinkedList *vars = sll_init();
+  struct simpleLinkedList *matching = sll_init();
+  int match_count = 0;
+  unsigned long long hash, ref_hash;
+
+  // =================================================
+  // Get the pHash of the image we want to match against.
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, o_strdup(docid) );
+  struct simpleLinkedList *rSet = runquery_db(sql, vars);
+  free( sql );
+  if( rSet == NULL ) {
+    o_log( ERROR, "Doc with id %s, not available.", docid);
+    return NULL;
+  }
+  else {
+    ref_hash = strtoull(readData_db(rSet, "image_phash"), NULL, 10);
+    free_recordset( rSet );
+  }
+
+  // ===================================================
+  // Check over each doc to see if any 'look' the same
+  sql = o_strdup( "SELECT docid, image_phash FROM docs WHERE image_phash != 0 and docid != ?" );
+  vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, o_strdup(docid) );
+  rSet = runquery_db(sql, vars);
+  free( sql );
+
+  if( rSet == NULL ) {
+    // This could be there are no docs in the store - yet
+    o_log( ERROR, "Docs that don't have a doc id %s, not available.", docid);
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><CheckForSimilar><Docs></Docs></CheckForSimilar></Response>");
+  }
+  else {
+    do {
+      char *this_docid = o_strdup(readData_db(rSet, "docid"));
+      hash = strtoull(readData_db(rSet, "image_phash"), NULL, 10);
+      int d = getDistance( ref_hash, hash );
+      // A distance of 15 is the largest difference to be considered 'the same'
+      if( d <= 15 ) { 
+        o_log( DEBUGM, "similar doc %s found, with a distance of %d", this_docid, d);
+        sll_insert( matching, this_docid, o_printf("%d", d) );
+        match_count++;
+      }
+    } while ( nextRow( rSet ) );
+    free_recordset( rSet );
+  }
+
+  if( match_count == 0 ) {
+    o_log( INFORMATION, "No matching documents found.");
+    return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><CheckForSimilar><Docs></Docs></CheckForSimilar></Response>");
+  }
+
+  // ======================================
+  // We have all the matches - get the details for the 3 closest matching docs
+  int x;
+  char *data = o_strdup("");
+  char *tags = o_strdup("");
+  o_log( ERROR, "sorting");
+  sll_sort( matching );
+  matching = sll_findFirstElement( matching );
+  for( x = 0 ; x < 3 ; x++ ) {
+
+    char *this_docid = matching->key;
+    char *distance = matching->data;
+
+    // Get a list of tags
+    tags = o_strdup("");
+    sql = o_strdup(
+      "SELECT tagname \
+      FROM tags JOIN \
+      (SELECT * \
+      FROM doc_tags \
+      WHERE docid = ? ) dt \
+      ON tags.tagid = dt.tagid \
+      ORDER BY tagname");
+
+    vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, o_strdup(this_docid) );
+    rSet = runquery_db(sql, vars);
+    free(sql);
+
+    if( rSet ) {
+      do  {
+        o_concatf(&tags, "<tag>%s</tag>", readData_db(rSet, "tagname") );
+      } while ( nextRow( rSet ) );
+    }
+    free_recordset( rSet );
+  
+    // Get the docs title  
+    char *sql = o_strdup( "SELECT title FROM docs WHERE docid = ?" );
+    vars = sll_init();
+    sll_append(vars, DB_TEXT );
+    sll_append(vars, o_strdup(this_docid) );
+    rSet = runquery_db(sql, vars);
+    free( sql );
+
+    char *title = o_strdup(readData_db(rSet, "title"));
+    free_recordset( rSet );
+
+    o_concatf(&data, "<Doc><docid>%s</docid><distance>%s</distance><title>%s</title><Tags>%s</Tags></Doc>", this_docid, distance, title, tags); 
+    free(tags);
+    free(title);
+
+    matching = sll_getNext( matching );
+    if ( matching == NULL ) {
+      break;
+    }
+  }
+  return o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><CheckForSimilar><Docs>%s</Docs></CheckForSimilar></Response>", data);
+}
+#endif /* CAN_PHASH */
 

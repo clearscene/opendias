@@ -5,6 +5,7 @@
   }
   .cclear {
    clear: both;
+   display: block;
   }
   h1 {
    font-size: 1.15em;
@@ -93,7 +94,6 @@
    position: relative;
    z-index: 20;
    background-color: #111;
-   min-height: 20px;
    border-top: 1px solid #3b0011;
    border-bottom: 2px solid #555;
   }
@@ -160,9 +160,10 @@
    text-align: center;
    background-image: url('/opendias/images/texture.png');
   }
-  #footer p {
-   margin-top: 4px;
-   color: #ccc;
+  #footer p, #footer a {
+   margin-top: 6px;
+   font-size: 12px;
+   color: #999;
   }
 
   .alert {
@@ -529,4 +530,100 @@
   #newuser li {
    list-style-type: none;
    padding-left: 100px;
+  }
+  #similarDocSelector {
+    width: 550px;
+    position: absolute;
+    top: -70px;
+    left: 100px;
+    z-index: 1001;
+    border: 2px solid #333;
+    background-color: #ddddff;
+    padding: 10px;
+    display: none;
+  }
+  #similarDocSelector div {
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #bbbbdd;
+    background-color: #ccccee;
+   -moz-border-radius: 10px;
+   -webkit-border-radius: 10px;
+  }
+  #similarDocSelector h3 {
+    font-size: 18px;
+    text-decoration: underline;
+    margin-top: 3px;
+  }
+  #similarDocSelector span {
+    width: 100%;
+  }
+  #similarDocSelector h4 {
+    font-size: 18px;
+    font-weight: normal;
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+  #similarDocSelector ul {
+    margin-bottom: 5px;
+  }
+  #similarDocSelector li {
+   list-style-type: none;
+   display: inline-block;
+    color: #7777aa;
+    border: 1px solid #7777aa;
+    background-color: #aaddff;
+    padding: 4px;
+    margin: 5px;
+   -moz-border-radius:3px;
+   -webkit-border-radius:3px;
+  }
+  #similarDocSelector button {
+    padding: 3px 5px 3px 5px;
+    font-size: 14px;
+    float: right;
+    width: 170px;
+  }
+  #similarDocSelector div p {
+    float: left;
+    width: 310px;
+    margin: 0px;
+  }
+  #infoBubble {
+    width: 300px;
+    position: absolute;
+    top: 35px;
+    left: 250px;
+    display: none;
+  }
+  #infoBubble h3 {
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  #infoBubble #arrow {
+    position: relative;
+    width: 20px;
+    min-height: 20px;
+    margin: -2px auto;
+    background-image: url('/opendias/images/arrow.png');
+    z-index: 1002;
+  }
+  #infoBubble #message {
+    width: 100%;
+    position: relative;
+    border-radius: 10px;
+    border: 2px solid #000;
+    background-color: #d8d61c;
+    padding: 10px;
+    z-index: 1001;
+  }
+  #infoBubble #dismiss {
+    position: absolute;
+    margin-top: 7px;
+    width: 100%;
+    padding-left: 100%;
+    z-index: 1002;
   }

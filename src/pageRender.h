@@ -26,7 +26,8 @@
 #include "main.h" // for con_info struct
 
 #ifdef CAN_SCAN
-char *getScannerList(void *);  // Command port frontend to the internalGetScannerList function
+char *getScannerList(char *);  // Command port frontend to the internalGetScannerList function
+char *getScannerDetails(char *, char *);  // Command port frontend to the internalGetScannerDetails function
 void *doScanningOperation(void *); //command port frontend to the internalDoScanningOperation function
 char *getScanningProgress(char *);
 #ifdef THREAD_JOIN
@@ -36,7 +37,7 @@ char *nextPageReady(char *, char *, pthread *);
 char *doScan(char *, char *, char *, char *, char *, char *, char *);
 char *nextPageReady(char *, char *);
 #endif /* THREAD_JOIN */
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 char *docFilter(char *, char *, char *, char *, char *, char *, char *, char *, char *, char *, char *);
 char *titleAutoComplete(char *, char *);
 char *tagsAutoComplete(char *, char *);
@@ -46,6 +47,9 @@ char *doLogout( struct simpleLinkedList *);
 char *updateUser( char *, char *, char *, char *, int, struct simpleLinkedList *, char *);
 char *deleteUser( char *, char *);
 char *getUserList();
-#endif // OPEN_TO_ALL //
+#endif /* OPEN_TO_ALL */
+#ifdef CAN_PHASH
+char *checkForSimilar(const char *);
+#endif /* CAN_PHASH */
 
 #endif /* PAGERENDER */

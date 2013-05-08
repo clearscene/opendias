@@ -11,7 +11,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -38,29 +38,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -71,7 +77,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -82,7 +88,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -93,7 +99,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -110,7 +116,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -137,29 +143,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -170,7 +182,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -181,7 +193,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -192,7 +204,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -209,7 +221,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -236,29 +248,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -269,7 +287,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -280,7 +298,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -291,7 +309,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -308,7 +326,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -335,29 +353,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -368,7 +392,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -379,7 +403,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -390,7 +414,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -407,7 +431,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -434,29 +458,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -467,7 +497,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -478,7 +508,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -489,7 +519,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -506,7 +536,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -533,29 +563,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -566,7 +602,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -577,7 +613,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -588,7 +624,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -605,7 +641,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -632,29 +668,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -665,7 +707,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -676,7 +718,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -687,7 +729,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -704,7 +746,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -731,29 +773,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -764,7 +812,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -775,7 +823,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -786,7 +834,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -803,7 +851,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -830,29 +878,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -863,7 +917,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -874,7 +928,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -885,7 +939,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -902,7 +956,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -929,29 +983,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -962,7 +1022,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -973,7 +1033,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -984,7 +1044,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -1001,7 +1061,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1028,29 +1088,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1061,7 +1127,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1072,7 +1138,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1083,7 +1149,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -1100,7 +1166,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1127,29 +1193,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1160,7 +1232,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1171,7 +1243,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1182,7 +1254,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -1199,7 +1271,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1226,29 +1298,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1259,7 +1337,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1270,7 +1348,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1281,7 +1359,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -1298,7 +1376,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1325,29 +1403,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1358,7 +1442,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1369,7 +1453,7 @@ $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      body.tmpl - for the structure, and
+      ./webcontent/body.tmpl - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1479,7 +1563,7 @@ $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1490,7 +1574,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -1507,7 +1591,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1534,29 +1618,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1567,7 +1657,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1578,7 +1668,7 @@ $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      body.tmpl - for the structure, and
+      ./webcontent/body.tmpl - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1688,7 +1778,7 @@ $VAR1 = '<!DOCTYPE html>
 <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1699,7 +1789,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -1716,7 +1806,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1743,29 +1833,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1776,7 +1872,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1784,10 +1880,10 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>An internal server error has occured.</p><!-- ##############################################
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1798,7 +1894,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -1875,7 +1971,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1902,29 +1998,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -1935,7 +2037,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -1946,7 +2048,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -1957,7 +2059,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -1974,7 +2076,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2001,29 +2103,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2034,7 +2142,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2045,7 +2153,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2056,7 +2164,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -2073,7 +2181,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2100,29 +2208,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2133,7 +2247,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2144,7 +2258,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2155,7 +2269,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -2172,7 +2286,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2199,29 +2313,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2232,7 +2352,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2243,7 +2363,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2254,7 +2374,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -2271,7 +2391,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2298,29 +2418,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2331,7 +2457,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2342,7 +2468,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2353,7 +2479,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -2370,7 +2496,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2397,29 +2523,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2430,7 +2562,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2441,7 +2573,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2452,7 +2584,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -2469,7 +2601,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2496,29 +2628,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2529,7 +2667,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2540,7 +2678,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2551,7 +2689,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -2568,7 +2706,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2595,29 +2733,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2628,7 +2772,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2639,7 +2783,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2650,7 +2794,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -2667,7 +2811,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2694,29 +2838,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2727,7 +2877,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2738,7 +2888,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2749,7 +2899,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -2766,7 +2916,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2793,29 +2943,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2826,7 +2982,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2837,7 +2993,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2848,7 +3004,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -2865,7 +3021,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2892,29 +3048,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -2925,7 +3087,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -2936,7 +3098,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2947,7 +3109,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -2964,7 +3126,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -2991,29 +3153,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -3024,7 +3192,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -3035,7 +3203,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -3046,7 +3214,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -3063,7 +3231,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -3090,29 +3258,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -3123,7 +3297,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -3134,7 +3308,7 @@ $VAR1 = '<!DOCTYPE html>
 <p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -3145,7 +3319,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>
@@ -3174,7 +3348,7 @@ $VAR1 = '<!DOCTYPE html>
  <!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/header.txt - for the structure, and
+      ./webcontent/includes/header.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -3201,29 +3375,35 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'header\'>
     <div class="container">
       <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
-    </div>
-    <div id=\'loginout\'>
-      <ul>
-        <li>
-          <span id=\'login\'>
-            <input id=\'username\' size=6 placeholder=\'username\' />
-            <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-            <button id=\'loginbutton\'>Login</button>
-          </span>
-          <span id=\'logout\'>
-            <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
-            <button id=\'logoutbutton\'>Logout</button>
-          </span>
-        </li>
-        <li>
-          <select id=\'language\'>
-            <option value=\'--\'>Browsers Default Language</option>
-            <option value=\'en\'>English</option>
-            <option value=\'de\'>Deutsche</option>
-            <option value=\'hh\'>#### ########</option>
-          <option value="hh">#### ########</option></select>
-        </li>
-      </ul>
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -3234,7 +3414,7 @@ $VAR1 = '<!DOCTYPE html>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
         <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>opendias 0.9a</li>
+        <li class=\'version\'>[VERSION STRING]</li>
       </ul>
     </div>
   </div>
@@ -3242,10 +3422,10 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'body\'>
     <div class="container">
 
-<p>An internal server error has occured.</p><!-- ##############################################
+<p>Your request did not fit the form \'http://&lt;host&gt;(:&lt;port&gt;)/opendias/(&ltrequest&gt;)\'.</p><!-- ##############################################
       Do not update this file directly, it has 
       been auto generated, from:
-      includes/footer.txt - for the structure, and
+      ./webcontent/includes/footer.txt - for the structure, and
       language.resource.en - for the readable text
      ############################################## -->
 
@@ -3256,7 +3436,7 @@ $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>Copyright Clearscene Ltd 2008 - 2013</p>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
   </div>
 
 </div>

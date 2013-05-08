@@ -37,8 +37,8 @@ enum {                                  // Value indicate ...
   SCAN_PERFORMING_OCR,
   SCAN_ERROR_PERFORMING_OCR,            // xxxxxx error code
   SCAN_SANE_BUSY,                       // used to be FIXING_SKEW,
+  SCAN_CALULATING_PHASH,
   SCAN_RESERVED_1,
-  SCAN_RESERVED_2,
   SCAN_FINISHED                         // id of the saved doc
 };
 
@@ -48,7 +48,7 @@ void addScanProgress (char *);
 void updateScanProgress(char *, int, int);
 void updateNewScannedPage (int, char *, int); // Frees both chars
 char *addNewScannedDoc (int, int, int, int);
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 char *addNewFileDoc (int, int, int, char *);
 int updateDocValue_int (char *, char *, int);
 int updateDocValue (char *, char *, char *);
@@ -62,5 +62,6 @@ void removeDoc (char *);
 char *getTagId(char *);
 int countDocsWithTag(char *);
 void deleteTag(char *);
+void savePhash(int, unsigned long long);
 
 #endif /* DBACCESS */

@@ -6,7 +6,7 @@
 cd libtesseract
 echo Building libtesseract
 rm -f libtesseract.so* libtesseract.o
-g++ -fPIC -g -c -Wall libtesseract.cc
+g++ -fPIC -O0 -g -c -Wall libtesseract.cc
 g++ -shared -Wl,-soname,libtesseract.so.3 -o libtesseract.so.3.0.2 libtesseract.o -lc
 ln -s libtesseract.so.3.0.2 libtesseract.so.3
 ln -s libtesseract.so.3 libtesseract.so
@@ -17,7 +17,7 @@ cd ../
 cd libsane
 echo Building libsane
 rm -f libsane.so* libsane.o
-gcc -fPIC -g -c -Wall libsane.c
+gcc -fPIC -O0 -g -c -Wall libsane.c
 g++ -shared -Wl,-soname,libsane.so.1 -o libsane.so.1.0.22 libsane.o -lc
 ln -s libsane.so.1.0.22 libsane.so.1
 ln -s libsane.so.1 libsane.so
@@ -28,10 +28,21 @@ cd ../
 cd liblept
 echo Building liblept
 rm -f liblept.so* liblept.o
-gcc -fPIC -g -c -Wall liblept.c
+gcc -fPIC -O0 -g -c -Wall liblept.c
 g++ -shared -Wl,-soname,liblept.so.3 -o liblept.so.3.0.0 liblept.o -lc
 ln -s liblept.so.3.0.0 liblept.so.3
 ln -s liblept.so.3 liblept.so
+cd ../
+
+
+# pHash
+cd libpHash
+echo Building libpHash
+rm -f libpHash.so* libpHash.o
+g++ -fPIC -O0 -g -c -Wall libpHash.cc
+g++ -shared -Wl,-soname,libpHash.so.0 -o libpHash.so.0.0.0 libpHash.o -lc
+ln -s libpHash.so.0.0.0 libpHash.so.0
+ln -s libpHash.so.0 libpHash.so
 cd ../
 
 
@@ -47,7 +58,7 @@ cd ../
 cd libpoppler
 echo Building libpoppler
 rm -f libpoppler-cpp.so* libpoppler.o
-g++ -fPIC -g -c -Wall libpoppler.cc
+g++ -fPIC -O0 -g -c -Wall libpoppler.cc
 g++ -shared -Wl,-soname,libpoppler-cpp.so.0 -o libpoppler-cpp.so.0.2.0 -Wl,-zmuldefs libpoppler.o -Wl,-whole-archive /usr/lib/i386-linux-gnu/libpoppler-cpp.a -Wl,-no-whole-archive -lc -lpoppler
 ln -s libpoppler-cpp.so.0.2.0 libpoppler-cpp.so.0
 ln -s libpoppler-cpp.so.0 libpoppler-cpp.so

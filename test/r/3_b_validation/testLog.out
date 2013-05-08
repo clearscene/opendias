@@ -1,5 +1,6 @@
 Copying pre defined environment
 Copying default database
+Updated start command to use overidden libs
 STARTING app...
 Now ready
 No need for a web client for this test.
@@ -44,17 +45,18 @@ getScannerList = $VAR1 = {
   'ScannerList' => {
     'Devices' => {
       'Device' => {
-        'Formats' => {
-          'format' => 'Grey Scale'
+        'test:0' => {
+          'host' => 'opendias server',
+          'model' => 'Frontend-tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
         },
-        'default' => '300',
-        'host' => 'opendias server',
-        'max' => '800',
-        'min' => '50',
-        'model' => 'Frontend-tester',
-        'name' => 'test:0',
-        'type' => 'Virtual Device',
-        'vendor' => 'Noname'
+        'test:1' => {
+          'host' => 'opendias server',
+          'model' => 'Timeout Frontend Tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
+        }
       }
     }
   }
@@ -152,7 +154,7 @@ rogue field in actions of deleteDoc = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
 };
 
-Sending request = action=doScan&deviceid=some%20text&format=grey%20scale&ocr=eng&pagelength=100&pages=8&resolution=300&rogue_field=evil
+Sending request = action=doScan&deviceid=some%20text&format=gray&ocr=eng&pagelength=100&pages=8&resolution=300&rogue_field=evil
 rogue field in actions of doScan = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
 };
@@ -247,7 +249,7 @@ field docid with duff data, deleteDoc = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
 };
 
-Sending request = action=doScan&deviceid=&format=grey%20scale&ocr=eng&pagelength=100&pages=8&resolution=300
+Sending request = action=doScan&deviceid=&format=gray&ocr=eng&pagelength=100&pages=8&resolution=300
 field deviceid with duff data, doScan = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
 };
@@ -257,22 +259,22 @@ field format with duff data, doScan = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
 };
 
-Sending request = action=doScan&deviceid=some%20text&format=grey%20scale&ocr=ZZZ&pagelength=100&pages=8&resolution=300
+Sending request = action=doScan&deviceid=some%20text&format=gray&ocr=ZZZ&pagelength=100&pages=8&resolution=300
 field ocr with duff data, doScan = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
 };
 
-Sending request = action=doScan&deviceid=some%20text&format=grey%20scale&ocr=eng&pagelength=&pages=8&resolution=300
+Sending request = action=doScan&deviceid=some%20text&format=gray&ocr=eng&pagelength=&pages=8&resolution=300
 field pagelength with duff data, doScan = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
 };
 
-Sending request = action=doScan&deviceid=some%20text&format=grey%20scale&ocr=eng&pagelength=100&pages=999999&resolution=300
+Sending request = action=doScan&deviceid=some%20text&format=gray&ocr=eng&pagelength=100&pages=999999&resolution=300
 field pages with duff data, doScan = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
 };
 
-Sending request = action=doScan&deviceid=some%20text&format=grey%20scale&ocr=eng&pagelength=100&pages=8&resolution=
+Sending request = action=doScan&deviceid=some%20text&format=gray&ocr=eng&pagelength=100&pages=8&resolution=
 field resolution with duff data, doScan = $VAR1 = {
   'error' => 'You do not have permissions to complete the request'
 };

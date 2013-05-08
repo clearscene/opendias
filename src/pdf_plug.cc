@@ -37,7 +37,7 @@
 
 #ifndef NULL
 #define NULL 0L
-#endif
+#endif /* NULL */
 
 extern "C" char *parse_pdf( const char *pdf_filename, const char *out_filename ) {
 
@@ -99,4 +99,4 @@ extern "C" char *parse_pdf( const char *pdf_filename, const char *out_filename )
   return strdup( ocr_text.c_str() );
 }
 
-#endif // CAN_PDF //
+#endif /* CAN_PDF */

@@ -20,9 +20,9 @@ $(document).ready(function () {
       type: "POST",
       error: function (x, t, m) {
         if (t == "timeout") {
-          alert("[s001] " + LOCAL_timeout_talking_to_server);
+          alert("[q001] " + LOCAL_timeout_talking_to_server);
         } else {
-          alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+          alert("[q002] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
         }
       },
       success: function (data) {
@@ -59,9 +59,9 @@ $(document).ready(function () {
                   type: "POST",
                   error: function (x, t, m) {
                     if (t == "timeout") {
-                      alert("[s001] " + LOCAL_timeout_talking_to_server);
+                      alert("[q003] " + LOCAL_timeout_talking_to_server);
                     } else {
-                      alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+                      alert("[q004] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
                     }
                   },
                   success: function (data) {
@@ -91,9 +91,9 @@ $(document).ready(function () {
                   type: "POST",
                   error: function (x, t, m) {
                     if (t == "timeout") {
-                      alert("[s001] " + LOCAL_timeout_talking_to_server);
+                      alert("[q005] " + LOCAL_timeout_talking_to_server);
                     } else {
-                      alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+                      alert("[q006] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
                     }
                   },
                   success: function (data) {
@@ -122,9 +122,9 @@ $(document).ready(function () {
                   type: "POST",
                   error: function (x, t, m) {
                     if (t == "timeout") {
-                      alert("[s001] " + LOCAL_timeout_talking_to_server);
+                      alert("[q007] " + LOCAL_timeout_talking_to_server);
                     } else {
-                      alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+                      alert("[q008] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
                     }
                   },
                   success: function (data) {
@@ -175,9 +175,9 @@ $(document).ready(function () {
       type: "POST",
       error: function (x, t, m) {
         if (t == "timeout") {
-          alert("[s001] " + LOCAL_timeout_talking_to_server);
+          alert("[q009] " + LOCAL_timeout_talking_to_server);
         } else {
-          alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+          alert("[q010] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
         }
       },
       success: function (data) {
@@ -212,9 +212,9 @@ $(document).ready(function () {
       type: "POST",
       error: function (x, t, m) {
         if (t == "timeout") {
-          alert("[s001] " + LOCAL_timeout_talking_to_server);
+          alert("[q011] " + LOCAL_timeout_talking_to_server);
         } else {
-          alert("[s001] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+          alert("[q012] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
         }
       },
       success: function (data) {

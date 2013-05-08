@@ -38,17 +38,18 @@ a good response on getScannerList = $VAR1 = {
   'ScannerList' => {
     'Devices' => {
       'Device' => {
-        'Formats' => {
-          'format' => 'Grey Scale'
+        'test:0' => {
+          'host' => 'opendias server',
+          'model' => 'Frontend-tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
         },
-        'default' => '300',
-        'host' => 'opendias server',
-        'max' => '800',
-        'min' => '50',
-        'model' => 'Frontend-tester',
-        'name' => 'test:0',
-        'type' => 'Virtual Device',
-        'vendor' => 'Noname'
+        'test:1' => {
+          'host' => 'opendias server',
+          'model' => 'Timeout Frontend Tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
+        }
       }
     }
   }
@@ -66,17 +67,18 @@ cached response on getScannerList = $VAR1 = {
   'ScannerList' => {
     'Devices' => {
       'Device' => {
-        'Formats' => {
-          'format' => 'Grey Scale'
+        'test:0' => {
+          'host' => 'opendias server',
+          'model' => 'Frontend-tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
         },
-        'default' => '300',
-        'host' => 'opendias server',
-        'max' => '800',
-        'min' => '50',
-        'model' => 'Frontend-tester',
-        'name' => 'test:0',
-        'type' => 'Virtual Device',
-        'vendor' => 'Noname'
+        'test:1' => {
+          'host' => 'opendias server',
+          'model' => 'Timeout Frontend Tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
+        }
       }
     },
     'cached' => 'true'

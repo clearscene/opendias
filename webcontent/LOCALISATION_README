@@ -19,12 +19,13 @@ Over and above that, there are a few scripts and pointers to
       This will let us know where effort needs to be spent on 
       getting that phase transalated.
 
- * The script 'generate_new_language_pack.pl' will create a 
-    new local version of each language resource file. Add
-    these to git, but not any generated file, eg *.html.<lang>
+ * The script 'scripts/generate_new_language_pack.pl' will 
+    create a new local version of each language resource file. 
+    Add these to git, but not any generated file, 
+    eg *.html.<lang>
 
- * The script 'build-local-versions.pl' (that is called by
-    ./configure) creates the .html files used by the 
+ * The script 'scripts/build-local-versions.pl' (that is called
+    by ./configure) creates the .html files used by the 
     application, from .tmpl and language resource files.
     However, it also:
     * Prints a warning when a phase contains 'LOCALISE_ME'

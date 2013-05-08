@@ -35,8 +35,10 @@ enum {
   SCAN_PARAM_LENGTH,
 };
 
+char *internalGetScannerList(char *);
+char *internalGetScannerDetails(char *, char *);
 char *internalDoScanningOperation(char *, char *);
-char *internalGetScannerList(char *); // The workhorse for the command port request
-#endif // CAN_SCAN //
+void sane_worker(char *, char *);
+#endif /* CAN_SCAN */
 
 #endif /* SCAN */

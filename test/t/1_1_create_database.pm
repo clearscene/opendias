@@ -32,6 +32,12 @@ sub test {
     }
   }
 
+  # Apply some diffs we know the reference DB will have from the default build
+  # An additional test user, and
+  # Wont try to back populate the pHASH for images.
+  $dbh->do("INSERT INTO user_access VALUES('test-user','63294d4f9a52894e2ef9298d1b8ac455','Test - User','2012-11-22 17:26:00','automatically',2)");
+  $dbh->do("UPDATE config SET config_value='no' WHERE config_option='backpopulate_phash'");
+
   $dbh->disconnect();
 
   # compare the generated database schema

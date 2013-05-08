@@ -81,3 +81,4 @@ LOCAL_access_denied|Access Denied
 LOCAL_no_access|You do not have permissions to complete the request
 LOCAL_processing_error|Your request could not be processed
 LOCAL_missing_support|Support for this feature has not been compiled in
+LOCAL_unsuported_file_type|Your file type is not supported

@@ -117,7 +117,7 @@ void updateScanProgress (char *uuid, int status, int value) {
   free(progressUpdate);
 
 }
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */
 
 static char *addNewDoc (int ftype, int getLines, int ppl, int resolution, int pageCount, char *ocrText) {
 
@@ -356,5 +356,20 @@ void deleteTag( char *tagid ) {
 
   runUpdate_db(sql, vars);
   free(sql);
+}
+
+void savePhash(int docid, unsigned long long hash) {
+  char *sql = o_strdup("UPDATE docs SET image_phash = ? WHERE docid = ?");
+  char *hash_s = o_printf("%llu", hash);
+
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, hash_s );
+  sll_append(vars, DB_INT );
+  sll_append(vars, &docid );
+
+  runUpdate_db(sql, vars);
+  free(sql);
+  free(hash_s);
 }
 

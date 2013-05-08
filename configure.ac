@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(opendias, [0.9b], [wbooth@clearscene.net])
+AC_INIT(opendias, [0.9.3b], [wbooth@clearscene.net])
 AC_DEFINE([DB_VERSION],[7],[Setting DB version])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
@@ -12,40 +12,6 @@ AM_PROG_CC_STDC
 AC_HEADER_STDC
 
 
-
-AC_CHECK_FUNCS([strcspn],[],AC_MSG_ERROR([Missing function strcspn]))
-AC_CHECK_FUNCS([strndup],[],AC_MSG_ERROR([Missing function strndup]))
-AC_CHECK_FUNCS([strdup],[],AC_MSG_ERROR([Missing function strdup]))
-AC_CHECK_FUNCS([strstr],[],AC_MSG_ERROR([Missing function strstr]))
-AC_CHECK_FUNCS([memset],[],AC_MSG_ERROR([Missing function memset])) 
-AC_CHECK_FUNCS([mkdir],[],AC_MSG_ERROR([Missing function mkdir]))
-AC_CHECK_FUNCS([socket],[],AC_MSG_ERROR([Missing function socket]))
-AC_CHECK_FUNCS([strerror],[],AC_MSG_ERROR([Missing function strerror]))
-AC_CHECK_FUNCS([dup2],[],AC_MSG_ERROR([Missing function dup2]))
-AC_CHECK_FUNCS([gettimeofday],[],AC_MSG_ERROR([Missing function gettimeofday]))
-AC_CHECK_HEADERS([arpa/inet.h],[],AC_MSG_ERROR([Missing header arpa/inet.h]))
-AC_CHECK_HEADERS([fcntl.h],[],AC_MSG_ERROR([Missing header fcntl.h]))
-AC_CHECK_HEADERS([netdb.h],[],AC_MSG_ERROR([Missing header netdb.h]))
-AC_CHECK_HEADERS([netinet/in.h],[],AC_MSG_ERROR([Missing header netinet/in.h]))
-AC_CHECK_HEADERS([sys/param.h],[],AC_MSG_ERROR([Missing header sys/param.h]))
-AC_CHECK_HEADERS([sys/socket.h],[],AC_MSG_ERROR([Missing header sys/socket.h]))
-AC_CHECK_HEADERS([sys/time.h],[],AC_MSG_ERROR([Missing header sys/time.h]))
-AC_FUNC_FORK
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
-AC_FUNC_MKTIME
-AC_HEADER_STDBOOL
-AC_TYPE_PID_T
-AC_TYPE_SIZE_T
-AC_TYPE_SSIZE_T
-AC_TYPE_UINT64_T
-AC_TYPE_MODE_T
-AC_PROG_LN_S
-
-
-
-
-
 dnl
 dnl Ensure weve got everything we need to even start!
 dnl
@@ -53,6 +19,8 @@ dnl
 PKG_CHECK_MODULES(OPENDIAS, [sqlite3 libmicrohttpd uuid libssl])
 AC_SUBST(OPENDIAS_CFLAGS)
 AC_SUBST(OPENDIAS_LIBS)
+AC_SUBST(VAR_DIR)
+AC_SUBST(TESSERACT_BASE_DIR)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
 
 
@@ -73,6 +41,11 @@ AC_ENABLE([create_test_language],[
 AC_ENABLE([thread_join],[
 	AC_DEFINE([THREAD_JOIN],[],[The main process will wait for child threads to finish.])
 ])
+AC_ARG_ENABLE([force_var_at_root],
+  [AS_HELP_STRING([--enable-force_var_at_root],[Ignore --prefix for the placement of '/var' and put it at the systems root])],
+  [VAR_DIR="/var"],
+  [VAR_DIR="${localstatedir}"]
+)
 OPENDIAS_LIBS="$OPENDIAS_LIBS -lpthread "
 
 
@@ -149,6 +122,16 @@ AC_CHECK_LIB(magic, magic_open,
   AC_MSG_WARN(You are missing the magic libs) )
 
 
+phash="no"
+AC_LANG_PUSH([C++])
+AC_CHECK_LIB(pHash, ph_hamming_distance, 
+	[AC_CHECK_HEADER(pHash.h,
+    phash="yes",
+    AC_MSG_WARN(You are missing the development headers for the pHash libs))], 
+	AC_MSG_WARN(You are missing the pHash libs) )
+AC_LANG_POP([C++])
+
+
 
 
 dnl
@@ -156,19 +139,52 @@ dnl Determin what service we can provide based on available libs
 dnl
 
 
-if test "x$scanning" = "xyes" && test "x$imageprocessing" = "xyes" ; then
-	AC_DEFINE([CAN_SCAN],[],[Have everything that is needed for scanning documents])
-	OPENDIAS_LIBS="$OPENDIAS_LIBS -lsane -llept"
-else
-	AC_MSG_WARN(You wll not be able to scan in any document.)
-fi
+if test "x$imageprocessing" = "xyes" ; then
+  OPENDIAS_LIBS="$OPENDIAS_LIBS -llept"
+	AC_DEFINE([CAN_IMAGE],[],[Can manipulate images])
+
+  if test "x$scanning" = "xyes" && test "x$imageprocessing" = "xyes" ; then
+	  AC_DEFINE([CAN_SCAN],[],[Have everything that is needed for scanning documents])
+  	OPENDIAS_LIBS="$OPENDIAS_LIBS -lsane"
+  else
+	  AC_MSG_WARN(You will not be able to scan in any document.)
+  fi
 
 
-if test "x$ocr" = "xyes" && test "x$imageprocessing" = "xyes" ; then
- AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
- OPENDIAS_LIBS="$OPENDIAS_LIBS -llept"
+  if test "x$ocr" = "xyes" && test "x$imageprocessing" = "xyes" ; then
+   AC_DEFINE([CAN_OCR],[],[Have everything that is needed to OCR documents])
+   LOCALISATION_FLAGS="$LOCALISATION_FLAGS CAN_OCR"
+   if test -d "/usr/share/tesseract-ocr/tessdata" ; then
+     dnl Debian/Ubuntu location
+     TESSERACT_BASE_DIR="/usr/share/tesseract-ocr"
+   else
+     if test -d "/usr/share/tesseract/tessdata" ; then
+       dnl Redhat/Fedora location
+       TESSERACT_BASE_DIR="/usr/share/tesseract"
+     else
+       if test -d "/usr/share/tessdata" ; then
+         dnl Default/Gentoo location
+         TESSERACT_BASE_DIR="/usr/share"
+       else
+         TESSERACT_BASE_DIR=""
+       fi
+     fi
+   fi
+  else
+   AC_MSG_WARN(You will not be able to OCR any document.)
+  fi
+
+
+  if test "x$phash" = "xyes" ; then
+   AC_DEFINE([CAN_PHASH],[],[Have everything that is needed to PHASH documents])
+   OPENDIAS_LIBS="$OPENDIAS_LIBS -lpHash"
+   LOCALISATION_FLAGS="$LOCALISATION_FLAGS CAN_PHASH"
+  else
+   AC_MSG_WARN(You will not be able to compare document.)
+  fi
+
 else
- AC_MSG_WARN(You wll not be able to OCR any document.)
+  AC_MSG_WARN(You will not be able to scan, OCR or compare any document.)
 fi
 
 
@@ -181,25 +197,24 @@ if test "x$magic" = "xyes" ; then
   	AC_DEFINE([CAN_READODF],[],[Have everything that is needed to read ODF documents])
 	  OPENDIAS_LIBS="$OPENDIAS_LIBS -lxml2 -lzzip"
   else
-	  AC_MSG_WARN(You wll not be able to import any ODF documents.)
+	  AC_MSG_WARN(You will not be able to import any ODF documents.)
   fi
 
   if test "x$pdf" = "xyes"; then
     AC_DEFINE([CAN_PDF],[],[Have everything that is needed to import PDF documents])
     OPENDIAS_LIBS="$OPENDIAS_LIBS -lpoppler-cpp"
   else
-    AC_MSG_WARN(You wll not be able to import any PDF documents.)
+    AC_MSG_WARN(You will not be able to import any PDF documents.)
   fi
 
 else
-	AC_MSG_WARN(You wll not be able to import in any document.)
+	AC_MSG_WARN(You will not be able to import in any document.)
 fi
 
-
-cd webcontent
-perl build-local-versions.pl $LOCALISATION_FLAGS
-cd ../
-
+if test -f ${srcdir}/scripts/build-local-versions.pl; then
+  echo Running build-local-versions.pl "$PACKAGE_STRING" $LOCALISATION_FLAGS
+  perl ${srcdir}/scripts/build-local-versions.pl "$PACKAGE_STRING" $LOCALISATION_FLAGS
+fi
 
 dnl
 dnl Write what we've learnt

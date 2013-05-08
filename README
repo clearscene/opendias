@@ -9,6 +9,7 @@ openDias - Document Imaging Archive System
   3. Building
     3.1 As a user
     3.2 As a developer
+      3.2.1 Configure options
   4. Running
   5. Helping the project
     5.1 Localisation
@@ -73,6 +74,9 @@ Use the application, by visiting:
     magic
     poppler-cpp
 
+  2.2.5 For image comparision
+    pHash
+
 2.3 Short cut
 -------------
 
@@ -80,14 +84,17 @@ On, Debian or Ubuntu, you can do this by running:
 
   sudo apt-get install build-essential libsqlite3-dev libsane-dev \
     libmicrohttpd-dev uuid-dev libleptonica-dev libpoppler-cpp-dev \
-    libtesseract-dev libxml2-dev libzzip-dev libmagic-dev libssl-dev
+    libtesseract-dev libxml2-dev libzzip-dev libmagic-dev libssl-dev \
+    libphash0-dev
 
 On, RedHat or Fedora, you can do this by running:
 
   su - 
-  yum install gcc-c++ make sqlite-devel libmicrohttpd-devel libssl-devel \
+  yum install gcc-c++ make sqlite-devel libmicrohttpd-devel openssl-devel \
     libuuid-devel sane-backends-devel leptonica-devel file-devel \
     tesseract-devel libxml2-devel zziplib-devel poppler-cpp-devel
+
+  # NB: Fedora does not ship pHash libraries, so Fedora uses will not be able to compare document.
 
 -----------------------------------
 
@@ -118,6 +125,28 @@ You need to pre configure the source:
   ./setupRun.sh 
   [run client side tests test/clientSideTesting/README]
   [refer '5. Developing' for details on publishing]
+
+3.2.1 Configure options
+To get a full list of options add "--help" to the configure script.
+Here is an overview of the openDIAS specific options.
+
+  --prefix={path-to-directory}
+    The location files will be deployed to (and the app will look for them)
+
+  --enable-force_var_at_root
+    override "prefix" to put "/var" at the systems root
+
+  --enable-werror
+    upgrade all warnings to errors (useful in development)
+
+  --enable-open_to_all
+    Removes all user access checking code (makes the application fully open)
+
+  --enable-create_test_language
+    Adds a test language (all words show as '####'), useful to ensure you've not hard coded some text
+
+  --enable-thread_join
+    Don't let the main calling thread finish until the child thread is done (useful for debugging)
 
 -----------------------------------
 
@@ -193,7 +222,7 @@ The application is localised using three kinds of file:
  * Create a git branch off the current development branch (eg development_0_9)
     and name it something like "my_new_functionality_0_9".
  * To get better valgrind backtrace resolution, (for memory failed tests) you 
-    may want to include "'CFLAGS=-O0 -g'" as an option to ./configure. 
+    may want to include "'CXXFLAGS=-O0 -g' 'CFLAGS=-O0 -g'" as an option to ./configure. 
     Rebuilding the app after a clean, and re-running tests with the '-b' flag 
     (to stop your specific configured app from being rebuilt).
 
@@ -238,6 +267,6 @@ The application is localised using three kinds of file:
  * Get the api doc and Changelog diffs, and update the website.
  * Bump the configure.ac version number
  * Generate distribution tarball
-    make distcheck
+    make dist
 
 

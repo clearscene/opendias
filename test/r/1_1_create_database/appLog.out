@@ -1,6 +1,7 @@
 STDOUT
 --------------------------------------------------
 LOG-OUTPUT
+-date-:-thread-:INF:-file-:-line- openDIAS version 'opendias [VERSION]' has been invoked.
 -date-:-thread-:INF:-file-:-line- Running in daemon mode.
 -date-:-thread-:INF:-file-:-line- Child process created [CONFIG_FILE]
 -date-:-thread-:DBG:-file-:-line- setup launched
@@ -169,10 +170,10 @@ INSERT INTO tags VALUES(25,'Wages');
 UPDATE tags SET tagname='Morgage' WHERE tagid=13;
 
 INSERT INTO config VALUES ("log_verbosity",3);
-INSERT INTO config VALUES ("scan_directory","/tmp/opendias_test/lib/opendias");
+INSERT INTO config VALUES ("scan_directory","__libdir__/opendias");
 INSERT INTO config VALUES ("show_all_available",1);
 INSERT INTO config VALUES ("port",8988);
-INSERT INTO config VALUES ("log_directory","/tmp/opendias_test/var/log/opendias");
+INSERT INTO config VALUES ("log_directory","__localstatedir__/log/opendias");
 
 CREATE TABLE access_role (
   role INTEGER PRIMARY KEY, 
@@ -288,6 +289,10 @@ BEGIN TRANSACTION;
 
 UPDATE version SET version = 7;
 
+DELETE FROM config WHERE config_option = "scan_directory";
+DELETE FROM config WHERE config_option = "show_all_available";
+DELETE FROM config WHERE config_option = "log_directory";
+
 DROP TABLE user_access;
 
 CREATE TABLE user_access (
@@ -307,21 +312,23 @@ ON user_access(username ASC);
 INSERT INTO user_access 
 VALUES ('admin','6e6a83f742b28434aea09d7e8534647a','Admin User',datetime('now'),'automatically',1); 
 
+ALTER TABLE docs
+ADD COLUMN image_phash TEXT DEFAULT '0';
+
+INSERT INTO config (config_option, config_value) VALUES ("backpopulate_phash", "yes");
+
 COMMIT;
 
 -date-:-thread-:INF:-file-:-line- database opened
 -date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
 -date-:-thread-:INF:-file-:-line- Config setting: log_verbosity = 3
 -date-:-thread-:INF:-file-:-line- Moving log verbosity from 4 to 3
--date-:-thread-:INF Config setting: scan_directory = /tmp/opendiastest
--date-:-thread-:INF Config setting: show_all_available = 1
 -date-:-thread-:INF Config setting: port = 8988
--date-:-thread-:INF Config setting: log_directory = /tmp/opendias_test/var/log/opendias
+-date-:-thread-:INF Config setting: backpopulate_phash = yes
 -date-:-thread-:INF Created directory.
--date-:-thread-:INF Sane backend started
--date-:-thread-:INF Sane command socket is open
 -date-:-thread-:INF ... Starting up the openDias service.
 -date-:-thread-:INF ready to accept connectons
+-date-:-thread-:INF Marking that the backpopulation of pHash is: complete
 -date-:-thread-:INF Received SIGUSR1 signal.
 -date-:-thread-:INF openDias service is shutting down....
 -date-:-thread-:INF openDias service has shutdown.

@@ -144,9 +144,10 @@ static int send_page (struct MHD_Connection *connection, char *page, int status_
   struct MHD_Response *response;
 
   response = MHD_create_response_from_data (contentSize, (void *) page, MHD_NO, MHD_YES);
-  free(page);
-  if (!response)
+  if (!response) {
+    free(page);
     return MHD_NO;
+  }
 
   if( con_info && con_info->session_id ) {
     char *cookie2;
@@ -181,6 +182,11 @@ static int send_page (struct MHD_Connection *connection, char *page, int status_
     free( cookie );
     free( cookie2 );
   }
+
+  if( status_code == MHD_HTTP_SEE_OTHER ) {
+    MHD_add_response_header (response, "Location", page);
+  }
+  free(page);
 
   MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE, mimetype);
   ret = MHD_queue_response (connection, (unsigned int)status_code, response);
@@ -220,6 +226,7 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
     else if(0 != strcmp(key, "uploadfile")) {
       char *t=(char *)post_element->data;
       conCat(&t, trimedData);
+      post_element->data = t;
     }
 
     if(0 == strcmp(key, "uploadfile")) {
@@ -434,7 +441,12 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   // First Validate the request basic fields
   if( 0 != strstr(url, "..") ) {
     o_log(DEBUGM, "request trys to move outside the document root");
-    return send_page_bin (connection, build_page(o_printf("<p>%s</p>", getString("LOCAL_server_error", "en") ), "en"), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
+    return send_page_bin (connection, build_page(o_printf("<p>%s</p>", getString("LOCAL_request_error", "en") ), "en"), MHD_HTTP_BAD_REQUEST, MIMETYPE_HTML);
+  }
+
+  if( 0 != strstr(url, "favicon.ico") ) {
+    o_log(DEBUGM, "favicon shortcut in effect.");
+    return send_page (connection, o_strdup(""), MHD_HTTP_NOT_FOUND, MIMETYPE_HTML, 0, NULL);
   }
 
   // Discover Params
@@ -688,7 +700,14 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
           action = getPostData(con_info->post_data, "action");
 
-          if ( action && 0 == strcmp(action, "getDocDetail") ) {
+          if ( action && 0 == strcmp(action, "refresh") ) {
+            content = o_printf("/opendias/");
+            status = MHD_HTTP_SEE_OTHER;
+            mimetype = MIMETYPE_HTML;
+            size = strlen(content);
+          }
+
+          else if ( action && 0 == strcmp(action, "getDocDetail") ) {
             o_log(INFORMATION, "Processing request for: document details");
             if ( accessPrivs.view_doc == 0 )
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
@@ -720,7 +739,29 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
             content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif
+#endif /* CAN_SCAN */
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
+  
+          else if ( action && 0 == strcmp(action, "getScannerDetails") ) {
+            o_log(INFORMATION, "Processing request for: getScannerDetails");
+#ifdef CAN_SCAN
+            if ( accessPrivs.add_scan == 0 )
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *deviceid = getPostData(con_info->post_data, "deviceid");
+              content = getScannerDetails(deviceid, con_info->lang); // pageRender.c
+              if(content == (void *)NULL) {
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+              }
+            }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
+#endif /* CAN_SCAN */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -751,7 +792,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
             content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif
+#endif /* CAN_SCAN */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -773,7 +814,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
             content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif
+#endif /* CAN_SCAN */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -799,7 +840,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
             content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif
+#endif /* CAN_SCAN */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -901,7 +942,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 #else
             o_log(ERROR, "Support for this request has not been compiled in");
             content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif
+#endif /* CAN_PDF */
             mimetype = MIMETYPE_XML;
             size = strlen(content);
           }
@@ -914,9 +955,11 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             else {
               char *filename = getPostData(con_info->post_data, "uploadfile");
-              content = uploadfile(filename, con_info->lang); // import_doc.c
-              if(content == (void *)NULL)
-                content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
+              char *lookForSimilar = getPostData(con_info->post_data, "lookForSimilar");
+              content = uploadfile(filename, lookForSimilar, con_info->lang); // import_doc.c
+              if(content == (void *)NULL) {
+                content = build_page(o_printf("<p>%s</p>", getString("LOCAL_unsuported_file_type", "en") ), "en");
+              }
             }
             mimetype = MIMETYPE_HTML;
             size = strlen(content);
@@ -1052,7 +1095,29 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             mimetype = MIMETYPE_JSON;
             size = strlen(content);
           } 
-#endif // OPEN_TO_ALL //
+#endif /* OPEN_TO_ALL */
+
+          else if ( action && 0 == strcmp(action, "checkForSimilar") ) {
+            o_log(INFORMATION, "Processing request for: check For Similar");
+#ifdef CAN_PHASH
+            if ( accessPrivs.edit_doc == 0 )
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *docid = getPostData(con_info->post_data, "docid");
+              content = checkForSimilar(docid); //doc_editor.c
+              if(content == (void *)NULL) {
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+              }
+            }
+#else
+            o_log(ERROR, "Support for this request has not been compiled in");
+            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
+#endif /* CAN_PHASH */
+            mimetype = MIMETYPE_XML;
+            size = strlen(content);
+          }
 
           else {
             // should have been picked up by validation! and so never got here

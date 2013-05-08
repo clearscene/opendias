@@ -1,5 +1,6 @@
 Copying pre defined environment
 Copying default database
+Updated start command to use overidden libs
 STARTING app...
 Now ready
 No need for a web client for this test.
@@ -168,17 +169,18 @@ actions of getScannerList = $VAR1 = {
   'ScannerList' => {
     'Devices' => {
       'Device' => {
-        'Formats' => {
-          'format' => 'Grey Scale'
+        'test:0' => {
+          'host' => 'opendias server',
+          'model' => 'Frontend-tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
         },
-        'default' => '300',
-        'host' => 'opendias server',
-        'max' => '800',
-        'min' => '50',
-        'model' => 'Frontend-tester',
-        'name' => 'test:0',
-        'type' => 'Virtual Device',
-        'vendor' => 'Noname'
+        'test:1' => {
+          'host' => 'opendias server',
+          'model' => 'Timeout Frontend Tester',
+          'type' => 'Virtual Device',
+          'vendor' => 'Opendias-overridden-sane-libs'
+        }
       }
     }
   }
@@ -187,8 +189,8 @@ actions of getScannerList = $VAR1 = {
 Sending request = action=getScanningProgress&scanprogressid=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
 actions of getScanningProgress = $VAR1 = {
   'ScanningProgress' => {
-    'status' => '(null)',
-    'value' => '(null)'
+    'status' => '0',
+    'value' => '0'
   }
 };
 

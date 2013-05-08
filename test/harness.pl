@@ -92,6 +92,8 @@ for my $requested (@runTests) {
     system("rm -rf /tmp/opendiastest");
     system("mkdir -p $outputDir/$TESTCASENAME");
     system("mkdir -p /tmp/opendiastest");
+    system("rm -rf /tmp/pause.sane.override");
+    system("rm -rf /tmp/sane.override.is.paused");
 
     openlog( "$outputDir/$TESTCASENAME/testLog.out" );
 
@@ -193,6 +195,8 @@ for my $requested (@runTests) {
       ############
       # memory log - output from valgrind
       unless( length $SKIPMEMORY ) {
+        system("cat `ls -v $outputDir/valgrind.out.*` > $outputDir/valgrind.out");
+        system("rm -f $outputDir/valgrind.out.*");
         if( -f "$outputDir/valgrind.out" ) {
           # copy and parse out changeable content
           system("mv $outputDir/valgrind.out $outputDir/$TESTCASENAME/valgrind.out");

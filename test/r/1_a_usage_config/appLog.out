@@ -1,5 +1,5 @@
 STDOUT
-openDIAS. v0.9a
+[VERSION STRING]
 usage: opendiasconfig [options] <setting> <value>
 
 Where:

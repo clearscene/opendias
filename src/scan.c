@@ -39,6 +39,7 @@
 #include "dbaccess.h"
 #include "main.h"
 #include "utils.h"
+#include "validation.h"
 #include "debug.h"
 #include "localisation.h"
 
@@ -487,8 +488,6 @@ void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix
       o_log(INFORMATION, "Attempting OCR in lang of %s", ocrLang);
       updateScanProgress(uuid, SCAN_PERFORMING_OCR, 10);
 
-      // Even if we have a scanner with three frames, we've already condenced
-      // that down to grey-scale (1 bpp) - hense the hard coded 1
       ocrScanText = getTextFromImage(pix, request_resolution, ocrLang);
 
       ocrText = o_printf( getString("LOCAL_page_delimiter", lang), page, ocrScanText);
@@ -496,11 +495,11 @@ void ocrImage( char *uuid, int docid, int page, int request_resolution, PIX *pix
     }
     else {
       o_log(DEBUGM, "OCR was requested, but the specified resolution means it's not safe to be attempted");
-      ocrText = o_printf( getString("LOCAL_resolution_outside_range_to_attempt", lang) );
+      ocrText = o_printf( getString("LOCAL_resolution_outside_range_to_attempt_ocr", lang) );
     }
   }
   else
-#endif // CAN_OCR //
+#endif /* CAN_OCR */
     ocrText = o_strdup("");
   free(ocrLang);
 
@@ -533,7 +532,7 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
 
   // Open the device
   devName = getScanParam(uuid, SCAN_PARAM_DEVNAME);
-  o_log(DEBUGM,"sane_open of \"%s\"",devName);
+  o_log(DEBUGM, "sane_open of \"%s\"",devName);
   status = sane_open ((SANE_String_Const) devName, (SANE_Handle)&openDeviceHandle);
   if(status != SANE_STATUS_GOOD) {
     handleSaneErrors("Cannot open device ", devName, status, 0);
@@ -656,24 +655,6 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   sane_close(openDeviceHandle);
 
 
-  /*
-   *
-   * Change this whole section for the method call in imageProcessing
-   *
-   */
-/*
-  FILE *ptr_fp;
-  if((ptr_fp = fopen("/tmp/OUTPUT.ppm", "wb")) == NULL) {
-    printf("Unable to open file!\n");
-    exit(1);
-  }
-  if( fwrite( raw_image, (pars.bytes_per_line*pars.lines)+strlen(header), 1, ptr_fp) != 1) {
-    printf("Write error!\n");
-    exit(1);
-  }
-  fclose(ptr_fp);
-*/
-
   // Convert Raw into JPEG
   //
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 0);
@@ -687,7 +668,6 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   free(header);
 
   outFilename = o_printf("%s/scans/%d_%d.jpg", BASE_DIR, docid, current_page);
-  //pixWriteJpeg(outFilename, pix, 95, 0);
   pixWrite(outFilename, pix, IFF_JFIF_JPEG);
   free(outFilename);
   updateScanProgress(uuid, SCAN_CONVERTING_FORMAT, 100);
@@ -699,11 +679,17 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
   // Do OCR - on this page
   // - OCR libs just wants the raw data and not the image header
   ocrImage( uuid, docid, current_page, request_resolution, pix, lang );
-  //free(raw_image);
-  //free(header);
+
+
+#ifdef CAN_PHASH
+  // Calulate the pHash, so we can compare images later
+  if( current_page == 1 ) {
+    updateScanProgress(uuid, SCAN_CALULATING_PHASH, 0);
+    unsigned long long hash = getImagePhash_px( pix );
+    savePhash( docid, hash );
+  }
+#endif /* CAN_PHASH */
   pixDestroy( &pix );
-
-
 
 
   // cleaup && What should we do next
@@ -745,31 +731,18 @@ extern char *internalGetScannerList(char *lang) {
 
     int i = 0;
 
-    replyTemplate = o_strdup("<Device><vendor>%s</vendor><model>%s</model><type>%s</type><name>%s</name><Formats>%s</Formats><max>%s</max><min>%s</min><default>%s</default><host>%s</host></Device>");
+    replyTemplate = o_strdup("<Device><vendor>%s</vendor><model>%s</model><type>%s</type><name>%s</name><host>%s</host></Device>");
     deviceList = o_strdup("");
 
     for (i=0 ; SANE_device_list[i] ; i++) {
 
-      int hlp = 0, resolution = 300, minRes=50, maxRes=50;
-      char *vendor, *model, *type, *name, *format;
-      char *resolution_s, *maxRes_s, *minRes_s;
+      char *vendor, *model, *type, *name;
       char *scannerHost;
-      SANE_Handle *openDeviceHandle;
-
-      o_log(DEBUGM, "sane_open");
-      status = sane_open (SANE_device_list[i]->name, (SANE_Handle)&openDeviceHandle);
-      if(status != SANE_STATUS_GOOD) {
-        o_log(ERROR, "Could not open: %s %s with error: %s", SANE_device_list[i]->vendor, SANE_device_list[i]->model, status);
-        free( replyTemplate );
-        free( deviceList );
-        return NULL;
-      }
 
       vendor = o_strdup(SANE_device_list[i]->vendor);
       model = o_strdup(SANE_device_list[i]->model);
       type = o_strdup(SANE_device_list[i]->type);
       name = o_strdup(SANE_device_list[i]->name);
-      format = o_strdup("<format>Grey Scale</format>");
       propper(vendor);
       propper(model);
       propper(type);
@@ -817,99 +790,33 @@ extern char *internalGetScannerList(char *lang) {
         scannerHost = o_strdup( getString("LOCAL_opendias_server", lang) );
       }
 
-
-      // Find resolution ranges
-      for (hlp = 0; hlp < 9999; hlp++) {
-
-        const SANE_Option_Descriptor *sod;
-
-        sod = sane_get_option_descriptor (openDeviceHandle, hlp);
-        if (sod == NULL)
-          break;
-
-        // Just a placeholder
-        if (sod->type == SANE_TYPE_GROUP
-        || sod->name == NULL
-        || hlp == 0)
-          continue;
-
-        if ( 0 == strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) ) {
-
-          // Some kind of sliding range
-          if (sod->constraint_type == SANE_CONSTRAINT_RANGE) {
-            o_log(DEBUGM, "Resolution setting detected as 'range'");
-
-            // Fixed resolution
-            if (sod->type == SANE_TYPE_FIXED)
-              maxRes = (int)SANE_UNFIX (sod->constraint.range->max);
-            else
-              maxRes = sod->constraint.range->max;
-          }
-
-          // A fixed list of options
-          else if (sod->constraint_type == SANE_CONSTRAINT_WORD_LIST) {
-            int lastIndex = sod->constraint.word_list[0];
-            o_log(DEBUGM, "Resolution setting detected as 'word list': lastIndex = %d",lastIndex);
-
-            // maxRes = sod->constraint.word_list[lastIndex];
-            // resolution list cannot be treated as low to high ordered list 
-            // remark: impl capability to select scan resolution in webInterface
-            int n=0;
-            maxRes = 0;
-            for (n=1; n<=lastIndex; n++ ) {
-              o_log(DEBUGM, "index results %d --> %d", n ,(int)sod->constraint.word_list[n]);
-              if ( maxRes < sod->constraint.word_list[n] ) {
-                maxRes=sod->constraint.word_list[n];
-              }
-            }
-
-          }
-
-          break; // we've found our resolution - no need to search more
-        }
-      }
-      o_log(DEBUGM, "Determined max resultion to be %d", maxRes);
-
-
-      // Define a default
-      if(resolution >= maxRes)
-        resolution = maxRes;
-      if(resolution <= minRes)
-        resolution = minRes;
-
-      o_log(DEBUGM, "sane_cancel");
-      sane_cancel(openDeviceHandle);
-
-      o_log(DEBUGM, "sane_close");
-      sane_close(openDeviceHandle);
-
       // Build Reply
       //
-      resolution_s = itoa(resolution,10);
-      maxRes_s = itoa(maxRes,10);
-      minRes_s = itoa(minRes,10);
-      o_concatf(&deviceList, replyTemplate, 
-                           vendor, model, type, name, format, maxRes_s, minRes_s, resolution_s, scannerHost);
+      o_concatf(&deviceList, replyTemplate, vendor, model, type, name, scannerHost);
 
       free(vendor);
       free(model);
       free(type);
       free(name);
-      free(format);
-      free(maxRes_s);
-      free(minRes_s);
-      free(resolution_s);
       free(scannerHost);
     }
 
     free(replyTemplate);
-    // The escaped string placeholder will be interprited in the sane dispatcher client
-    answer = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s><Devices>%s</Devices></ScannerList></Response>", deviceList);
-    free(deviceList);
+    if(deviceList) {
+      // The escaped string placeholder will be interprited in the sane dispatcher client
+      answer = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s><Devices>%s</Devices></ScannerList></Response>", deviceList);
+      free(deviceList);
+    }
+    else {
+      // No devices
+      // The escaped string placeholder will be interprited in the sane dispatcher client
+      answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
+    }
   }
 
   else {
-    // No devices or sane failed.
+    // sane failed.
+    // The escaped string placeholder will be interprited in the sane dispatcher client
     answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
   }
 
@@ -917,4 +824,176 @@ extern char *internalGetScannerList(char *lang) {
 
 }
 
-#endif // CAN_SCAN //
+extern char *internalGetScannerDetails(char *device, char *lang) {
+
+  char *answer = NULL;
+  SANE_Status status;
+  char *deviceList = o_strdup("");; 
+  int hlp = 0, resolution = 300, minRes=50, maxRes=50, phashAvailable=0;
+  char *resolution_s, *maxRes_s, *minRes_s;
+  SANE_Handle *openDeviceHandle;
+
+  o_log(DEBUGM, "sane_open of \"%s\"", device);
+  status = sane_open (device, (SANE_Handle)&openDeviceHandle);
+  if(status != SANE_STATUS_GOOD) {
+    o_log(ERROR, "Could not open: '%s' with error: %s", device, sane_strstatus(status));
+    free(deviceList);
+    return NULL;
+  }
+
+
+  //
+  // Find resolution ranges
+  //
+  for (hlp = 0; hlp < 9999; hlp++) {
+
+    const SANE_Option_Descriptor *sod;
+
+    sod = sane_get_option_descriptor (openDeviceHandle, hlp);
+    if (sod == NULL)
+      break;
+
+    // Just a placeholder
+    if (sod->type == SANE_TYPE_GROUP
+    || sod->name == NULL
+    || hlp == 0)
+      continue;
+
+    if ( 0 == strcmp(sod->name, SANE_NAME_SCAN_RESOLUTION) ) {
+
+      // Some kind of sliding range
+      if (sod->constraint_type == SANE_CONSTRAINT_RANGE) {
+        o_log(DEBUGM, "Resolution setting detected as 'range'");
+
+        // Fixed resolution
+        if (sod->type == SANE_TYPE_FIXED)
+          maxRes = (int)SANE_UNFIX (sod->constraint.range->max);
+        else
+          maxRes = sod->constraint.range->max;
+      }
+
+      // A fixed list of options
+      else if (sod->constraint_type == SANE_CONSTRAINT_WORD_LIST) {
+        int lastIndex = sod->constraint.word_list[0];
+        o_log(DEBUGM, "Resolution setting detected as 'word list': lastIndex = %d",lastIndex);
+
+        // maxRes = sod->constraint.word_list[lastIndex];
+        // resolution list cannot be treated as low to high ordered list 
+        // remark: impl capability to select scan resolution in webInterface
+        int n=0;
+        maxRes = 0;
+        for (n=1; n<=lastIndex; n++ ) {
+          o_log(DEBUGM, "index results %d --> %d", n ,(int)sod->constraint.word_list[n]);
+          if ( maxRes < sod->constraint.word_list[n] ) {
+            maxRes=sod->constraint.word_list[n];
+          }
+        }
+
+      }
+
+      break; // we've found our resolution - no need to search more
+    }
+  }
+  o_log(DEBUGM, "Determined max resultion to be %d", maxRes);
+
+
+  // Define a default
+  if(resolution >= maxRes)
+    resolution = maxRes;
+  if(resolution <= minRes)
+    resolution = minRes;
+
+  o_log(DEBUGM, "sane_cancel");
+  sane_cancel(openDeviceHandle);
+
+  o_log(DEBUGM, "sane_close");
+  sane_close(openDeviceHandle);
+
+
+
+  //
+  // What languages can we OCR for?
+  //
+  char *availableLangs = o_strdup("");
+#ifdef CAN_OCR
+  struct simpleLinkedList *languages = getOCRAvailableLanguages();
+  while (languages != NULL ) {
+    if ( checkOCRLanguage( languages->data ) == 0 ) {
+      o_concatf(&availableLangs, "<lang>%s</lang>", languages->data);
+    }
+    languages = sll_getNext(languages);
+  }
+  sll_destroy( languages );
+#endif /* CAN_OCR */
+
+
+  //
+  // Can we give the option of doing 'find simmilar'?
+  //
+#ifdef CAN_PHASH
+  phashAvailable = 1;
+#endif /* CAN_PHASH */
+
+  // Build Reply
+  //
+  resolution_s = itoa(resolution,10);
+  maxRes_s = itoa(maxRes,10);
+  minRes_s = itoa(minRes,10);
+
+  o_concatf(&deviceList, "<Resolution><max>%s</max><min>%s</min><default>%s</default></Resolution><OCRLanguages>%s</OCRLanguages><phash>%d</phash>", maxRes_s, minRes_s, resolution_s, availableLangs, phashAvailable);
+
+  free(maxRes_s);
+  free(minRes_s);
+  free(resolution_s);
+  free(availableLangs);
+
+  // The escaped string placeholder will be interprited in the sane dispatcher client
+  answer = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerDetails>%s</ScannerDetails></Response>", deviceList);
+  free(deviceList);
+
+  return answer;
+
+}
+
+void sane_worker( char *command, char *param ) {
+
+  char *response;
+
+  if( SANE_STATUS_GOOD != sane_init(NULL, NULL) ) {
+    o_log( ERROR, "Could not start sane");
+  }
+
+  // Get a list of scanners
+  if ( command && 0 == strcmp(command, "internalGetScannerList") ) {
+    response = internalGetScannerList( param );
+  }
+
+  // Get scanner details (attributes)
+  else if ( command && 0 == strcmp(command, "internalGetScannerDetails") ) {
+    char *deviceid = strtok(o_strdup(param), ","); // device
+    char *lang = strtok( NULL, ","); // lang
+    response = internalGetScannerDetails( deviceid, lang );
+    free( deviceid );
+  }
+
+  // Scan a page
+  else if ( command && 0 == strcmp(command, "internalDoScanningOperation") ) {
+    char *uuid = strtok(o_strdup(param), ","); // uuid
+    char *lang = strtok( NULL, ","); // lang
+    response = internalDoScanningOperation( uuid, lang );
+    free( uuid );
+  }
+
+  else {
+    o_log( ERROR, "Unknown Command");
+    response = o_strdup("ERROR");
+  }
+
+  sane_exit();
+
+  // POST RESPONSE ON STDOUT
+  printf("%s", response);
+  free(response);
+}
+
+#endif /* CAN_SCAN */

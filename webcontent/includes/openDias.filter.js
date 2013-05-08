@@ -8,10 +8,10 @@ $(document).ready(function () {
   });
 
   $('#startDate').datepicker({
-    dateFormat: 'yy-mm-dd'
+    dateFormat: LOCAL_date_format
   });
   $('#endDate').datepicker({
-    dateFormat: 'yy-mm-dd'
+    dateFormat: LOCAL_date_format
   });
 
   $('#doFilter').click(function () {

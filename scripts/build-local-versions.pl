@@ -3,23 +3,30 @@
 use strict;
 use warnings;
 
-my @templates = qw( includes/header.txt includes/footer.txt );
 my %langs = ( 'en' => 1 );
 my $hide = 0;
 my %option;
 my $year = 1900+((gmtime())[5]);
+my $readdir = $0;
+$readdir =~ s/\/[^\/]*$//;
+$readdir =~ s/\/[^\/]*$//;
+$readdir .= '/';
+my @templates = ( $readdir.'webcontent/includes/header.txt', 
+                  $readdir.'webcontent/includes/footer.txt' );
 
 #########################################
 # Collection options from the command line (ie what ./configure sends us)
+my $package_string = shift @ARGV;
 foreach my $opt ( @ARGV ) {
   $option{$opt} = 1;
 }
+$package_string |= 'opendias';
 
 
 #########################################
 # Find all the files that need localising 
 # and the languages that can do it
-opendir( DIR, "./" );
+opendir( DIR, $readdir."webcontent/" );
 while( my $FILE = readdir( DIR ) ) {
 
   if ( my ($lang) = ( $FILE =~ /language\.resource\.(..)/ ) ) {
@@ -27,7 +34,7 @@ while( my $FILE = readdir( DIR ) ) {
   }
 
   elsif ( my ($template) = ( $FILE =~ /^(.*\.tmpl)$/ ) ) {
-    push @templates, $template;
+    push @templates, $readdir.'webcontent/'.$template;
   }
 
 }
@@ -48,7 +55,7 @@ foreach my $lang ( keys %langs ) {
   die $resp if $resp ne '';
 
   # Load the language pack
-  open( LANGPACK, "language.resource.$lang" );
+  open( LANGPACK, $readdir."webcontent/language.resource.$lang" );
   while ( my $line = <LANGPACK> ) {
     chomp( $line );
     my ( $key, $data ) = split( /\|/, $line );
@@ -58,6 +65,7 @@ foreach my $lang ( keys %langs ) {
 
   # Add 'special cases' to the language pack
   $lang_pack{'CURRENT_YEAR'} = $year;
+  $lang_pack{'PACKAGE_STRING'} = $package_string;
 
   # Localise each file
   foreach my $file ( @templates ) {
@@ -138,11 +146,11 @@ sub generate_test_language {
 
   if ( exists $option{'CREATE_TEST_LANGUAGE'} ) {
 
-    my @resource_files = qw( language.resource.en ../i18n/language.resource.en );
-    opendir( DIR, './includes/local/' );
+    my @resource_files = qw( webcontent/language.resource.en i18n/language.resource.en );
+    opendir( DIR, $readdir.'webcontent/includes/local/' );
     while( my $FILE = readdir( DIR ) ) {
       if ( $FILE =~ /\.resource\.en/ ) {
-        push @resource_files, './includes/local/'.$FILE;
+        push @resource_files, 'webcontent/includes/local/'.$FILE;
       }
     }
     closedir( DIR );
@@ -155,7 +163,7 @@ sub generate_test_language {
       my $file_out = $file;
       $file_out =~ s/en$/hh/;
 
-      open( SOURCE, $file );
+      open( SOURCE, $readdir.$file );
       open( TARGET, ">$file_out" );
       while ( my $line = <SOURCE> ) {
         chomp( $line );
@@ -163,13 +171,27 @@ sub generate_test_language {
         if ( $file =~ /includes\/local/ ) {
           # A javascript localise resource file
           my ( $key, $data ) = $line =~ /^(.*) = '(.*)';/;
-          $data =~ s/[^\s]/#/g;
+          $data =~ s/\%s/ß/g;
+          $data =~ s/\%d/ð/g;
+          $data =~ s/\\n/@/g;
+          $data =~ s/[^\sßð@]/#/g;
+          $data =~ s/ß/%s/g;
+          $data =~ s/ð/%d/g;
+          $data =~ s/@/\\n/g;
+          $data =~ s/_/#/g;
           print TARGET "$key = '$data';\n";
         }
         else {
           # An application resource file
           my ( $key, $data ) = split( /\|/, $line );
-          $data =~ s/[^\s]/#/g;
+          $data =~ s/\%s/ß/g;
+          $data =~ s/\%d/ð/g;
+          $data =~ s/\\n/@/g;
+          $data =~ s/[^\sßð@]/#/g;
+          $data =~ s/ß/%s/g;
+          $data =~ s/ð/%d/g;
+          $data =~ s/@/\\n/g;
+          $data =~ s/_/#/g;
           print TARGET "$key|$data\n";
         }
       }
@@ -180,7 +202,7 @@ sub generate_test_language {
 
   }
   else {
-    unlink('language.resource.hh');
+    unlink($readdir.'webcontent/language.resource.hh');
     delete $langs{'hh'};
   }
 
@@ -193,11 +215,11 @@ sub validate_language_pack {
   # English files are the baseline to which everything else is compared
   return $ret if $lang eq 'en';
 
-  my @resource_files = qw( language.resource.en ../i18n/language.resource.en );
-  opendir( DIR, './includes/local/' );
+  my @resource_files = qw( webcontent/language.resource.en i18n/language.resource.en );
+  opendir( DIR, $readdir.'webcontent/includes/local/' );
   while( my $FILE = readdir( DIR ) ) {
     if ( $FILE =~ /\.resource\.en/ ) {
-      push @resource_files, './includes/local/'.$FILE;
+      push @resource_files, 'webcontent/includes/local/'.$FILE;
     }
   }
   closedir( DIR );
@@ -212,7 +234,7 @@ sub validate_language_pack {
     
       $working_file =~ s/en$/$compare_langs/;
 
-      open( SOURCE, $working_file );
+      open( SOURCE, $readdir.$working_file );
       while ( my $line = <SOURCE> ) {
         chomp( $line );
         next if $line =~ /^$/ || $line =~ /^#/ || $line =~ /^\/\//;
@@ -236,7 +258,7 @@ sub validate_language_pack {
 
     foreach my $key ( keys %{$compare{'en'}} ) {
       if ( ! exists $compare{$lang}{$key} ) {
-        $ret .= "The resouce file $file is missing the phrase '$key'.\n";
+        $ret .= "The resouce file $working_file is missing the phrase '$key'.\n";
       }
     }
 

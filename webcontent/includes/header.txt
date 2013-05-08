@@ -29,34 +29,40 @@
   <div id='header'>
     <div class="container">
       <img id='logo' src='/opendias/images/openDIAS_sml.png' />
-    <div id='loginout'>
+      <div id='infoBubble'>
+        <div id='arrow'></div>
+        <div id='dismiss'><img src='/opendias/images/close.png' /></div>
+        <div id='message'></div>
+      </div>
+      <div id='loginout'>
 #ifndef OPEN_TO_ALL
-      <ul>
-        <li>
-          <span id='login'>
-            <input id='username' size=6 placeholder='---LOCAL_username---' />
-            <input id='password' size=6 placeholder='---LOCAL_password---' type='password' />
-            <button id='loginbutton'>Login</button>
-          </span>
-          <span id='logout'>
-            <a id='realname' href='/opendias/accessControls.html'></a>
-            <button id='logoutbutton'>---LOCAL_logout---</button>
-          </span>
-        </li>
+        <ul>
+          <li>
+            <span id='login'><form id="loginform" action="/opendias/dynamic" method='post' autocomplete="on">
+              <input name="action" type='hidden' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="---LOCAL_username---" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="---LOCAL_password---" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
+            <span id='logout'>
+              <a id='realname' href='/opendias/accessControls.html'></a>
+              <button id='logoutbutton'>---LOCAL_logout---</button>
+            </span>
+          </li>
 #endifndef OPEN_TO_ALL
-        <li>
-          <select id='language'>
-            <option value='--'>---LOCAL_default_browser_lang---</option>
-            <option value='en'>English</option>
-            <option value='de'>Deutsche</option>
-            <option value='nl'>Nederlands</option>
+          <li>
+            <select id='language'>
+              <option value='--'>---LOCAL_default_browser_lang---</option>
+              <option value='en'>English</option>
+              <option value='de'>Deutsche</option>
+              <option value='nl'>Nederlands</option>
 #ifdef CREATE_TEST_LANGUAGE
-            <option value='hh'>#### ########</option>
+              <option value='hh'>#### ########</option>
 #endifdef CREATE_TEST_LANGUAGE
-          </select>
-        </li>
-      </ul>
-    </div>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -67,7 +73,7 @@
         <li><a id='doclistLink' href='/opendias/docList.html'>---LOCAL_link_doclist---</a></li>
         <li><a id='acquireLink' href='/opendias/acquire.html'>---LOCAL_link_acquire---</a></li>
         <li><a id='ProjectHome' href='http://opendias.essentialcollections.co.uk/' target='_blank'>---LOCAL_link_projecthome---</a></li>
-        <li class='version'>__package_string__</li>
+        <li class='version'>---PACKAGE_STRING---</li>
       </ul>
     </div>
   </div>

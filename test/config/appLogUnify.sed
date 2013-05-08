@@ -10,4 +10,6 @@ s/file: .*\/test\/config/file: [PATH]\/test\/config/g
 s/\w\{8\}-\w\{4\}-\w\{4\}-\w\{4\}-\w\{12\}/[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]/g
 s/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [+-][0-9][0-9][0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]/YYYY-MM-DD +-UTC HH:MM:SS/g
 s/in [0-9]* ms/in [__TIME__] ms/g
-
+s/openDIAS version 'opendias [0-9a-z\.]*' has been invoked/openDIAS version 'opendias [VERSION]' has been invoked/
+s/openDIAS\. v\([0-9]\(\.[0-9]\)\+\)b\?/[VERSION STRING]/g
+s/\/tmp\/pHash_[A-F0-9]*\.jpg/\/tmp\/pHash_[THREAD].jpg/g

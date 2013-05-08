@@ -1,6 +1,6 @@
 LOCAL_timeout_talking_to_server = 'Timeout tijdens de communicatie met de server';
 LOCAL_error_talking_to_server = 'Fout tijdens de communicatie met de server';
-LOCAL_date_format = 'jj/mm/dd';
+LOCAL_date_format = 'yy/mm/dd';
 LOCAL_odf_doc = 'ODF Document';
 LOCAL_scanned_doc = 'Gescand Document';
 LOCAL_pdf_doc = 'PDF Document';
@@ -10,3 +10,8 @@ LOCAL_role_admin = 'Admin (mag alles)';
 LOCAL_role_user = 'User (mag alles, behalve rechten toekennen)';
 LOCAL_role_view = 'View (mag alleen documenten bekijken)';
 LOCAL_role_add = 'Add (mag alleen documenten toevoegen)';
+LOCAL_howto_login_title = 'LOCALISE_ME Login Help';
+LOCAL_howto_login = 'LOCALISE_ME Enter your username and password and hit \'login\' to access all features.';
+LOCAL_login_firsttime = 'LOCALISE_ME If you&quot;ve just installed openDias, please read <a href=\'http://opendias.essentialcollections.co.uk/support/#AuthenticationSetup\'>Authentication Setup</a> for details in getting started.';
+LOCAL_user_admin_title = 'LOCALISE_ME Admin features';
+LOCAL_user_admin = 'LOCALISE_ME Click your name to change your details.';

@@ -32,12 +32,6 @@
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <microhttpd.h>
-#ifdef CAN_SCAN
-#include <sys/un.h>
-//#include <sane/sane.h>
-
-#include "saneDispatcher.h"
-#endif // CAN_SCAN //
 
 #include "db.h" 
 #include "utils.h"
@@ -45,6 +39,8 @@
 #include "web_handler.h"
 #include "localisation.h"
 #include "sessionmanagement.h"
+#include "backpopulate.h"
+#include "saneDispatcher.h"
 
 #include "main.h"
 
@@ -101,6 +97,7 @@ int setup (char *configFile) {
   o_log(INFORMATION, "Which says the database is at: %s", BASE_DIR);
 
   // Open (& maybe update) the database.
+  rmdir("/tmp/opendias.db.lock");
   if(1 == connect_db(1)) { // 1 = create if required
     free(location);
     return 1;
@@ -115,33 +112,30 @@ int setup (char *configFile) {
       config_option = o_strdup(readData_db(rSet, "config_option"));
       config_value = o_strdup(readData_db(rSet, "config_value"));
       o_log(INFORMATION, "Config setting: %s = %s", config_option, config_value);
+
       if( 0 == strcmp(config_option, "log_verbosity") ) {
         o_log(INFORMATION, "Moving log verbosity from %d to %s", VERBOSITY, config_value);
         VERBOSITY = atoi(config_value);
       }
-      else if ( 0 == strcmp(config_option, "scan_driectory") ) {
-        free(location);
-        free(BASE_DIR);
-        BASE_DIR = o_strdup(config_value);
-        location = o_strdup(BASE_DIR);
-      }
+
       else if ( 0 == strcmp(config_option, "port") ) {
         PORT = (unsigned short) atoi(config_value);
       }
-      else if ( 0 == strcmp(config_option, "log_directory") ) {
-        if ( 0 != strcmp( LOG_DIR, config_value ) ) {
-          o_log(INFORMATION, "Moving log entries from %s to %s", LOG_DIR, config_value);
-          free(LOG_DIR);
-          LOG_DIR = o_strdup(config_value);
-          createDir_ifRequired(LOG_DIR);
-        }
-      }
+
       else if ( 0 == strcmp(config_option, "max_sessions") ) {
         MAX_SESSIONS = (unsigned short) atoi(config_value);
       }
+
       else if ( 0 == strcmp(config_option, "max_session_age") ) {
         MAX_SESSION_AGE = (unsigned int) atoi(config_value);
       }
+
+      else if ( 0 == strcmp(config_option, "backpopulate_phash") ) {
+        if ( 0 == strcmp(config_value, "yes") ) {
+          backpopulate_phash();
+        }
+      }
+
       free(config_option);
       free(config_value);
     } while ( nextRow( rSet ) );
@@ -172,24 +166,13 @@ void server_shutdown() {
     o_log(DEBUGM, "... httpd service [done]");
   }
 
-#ifdef CAN_SCAN
-  if( startedServices.command ) {
-    close( COMMSSOCKET );
-    unlink( ADDRESS );
-    freeSaneCache();
-    o_log(DEBUGM, "... sane command socket [done]");
-  }
-
-//  if( startedServices.sane ) {
-//    o_log(DEBUGM, "... sane backend [done]");
-//    sane_exit();
-//  }
-#endif // CAN_SCAN //
-
   if( startedServices.sessions ) {
     cleanup_session_management();
     o_log(DEBUGM, "... session management [done]");
   }
+
+  // Give sane processes time to finish.
+  waitForSaneProcesses();
 
   if( startedServices.locale ) {
     o_log(DEBUGM, "... locale [done]");
@@ -205,6 +188,8 @@ void server_shutdown() {
     o_log(INFORMATION, "openDias service has shutdown.");
     free(LOG_DIR); // Cannot log anymore
   }
+
+  freeSaneCache();
 
   free(BASE_DIR);
   close(pidFilehandle); 
@@ -264,13 +249,6 @@ void daemonize(char *rundir) {
     char *str;
     size_t size;
  
-    /* Check if parent process id is set */
-    if (getppid() == 1) {
-        /* PPID exists, therefore we are already a daemon */
-        o_log(ERROR, "Code called to make this process a daemon, but we are already such.");
-        return;
-    }
-
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
     close(STDIN_FILENO);
@@ -352,37 +330,6 @@ void daemonize(char *rundir) {
     i = chdir(rundir); /* change running directory */
 }
 
-#ifdef CAN_SCAN
-int createSocket(void) {
-
-  struct sockaddr_un saun; //, fsaun;
-
-  if ((COMMSSOCKET = socket(AF_UNIX, SOCK_STREAM, 0)) < 0) {
-    o_log(ERROR, "Could not create the sane command socket");
-    return 1;
-  }
-
-  saun.sun_family = AF_UNIX;
-  strcpy(saun.sun_path, ADDRESS);
-  unlink(ADDRESS);
-  size_t len = sizeof(saun.sun_family) + strlen(saun.sun_path);
-
-  if (bind(COMMSSOCKET, (struct sockaddr *) &saun, len) < 0) {
-    o_log(ERROR, "Could not bind to the sane command socket");
-    close( COMMSSOCKET );
-    return 1;
-  }
-
-  if (listen(COMMSSOCKET, QUEUE_LENGTH) < 0) {
-    o_log(ERROR, "Could not listen on the sane command socket");
-    close( COMMSSOCKET );
-    return 1;
-  }
-
-  return 0;
-}
-#endif // CAN_SCAN //
-
 void usage(void) {
     fprintf(stdout,"openDIAS. v%s\n", PACKAGE_VERSION);
     fprintf(stdout,"usage: opendias <options>\n");
@@ -409,8 +356,6 @@ int main (int argc, char **argv) {
   startedServices.log = 0;
   startedServices.db = 0;
   startedServices.locale = 0;
-//  startedServices.sane = 0;
-  startedServices.command = 0;
   startedServices.httpd = 0;
   startedServices.sessions = 0;
 
@@ -433,6 +378,7 @@ int main (int argc, char **argv) {
 
   // Set default log verbosity
   VERBOSITY = DEBUGM;
+  o_log(INFORMATION, "openDIAS version '%s' has been invoked.", PACKAGE_STRING);
 
   // Disconnect from the tty
   if( turnToDaemon==1 ) {
@@ -458,28 +404,6 @@ int main (int argc, char **argv) {
   locale_init( "en" );
   startedServices.locale = 1;
 
-#ifdef CAN_SCAN
-  // Start sane
-/*  if( SANE_STATUS_GOOD != sane_init(NULL, NULL) ) {
-    o_log(INFORMATION, "Could not start sane");
-    server_shutdown();
-    exit(EXIT_FAILURE);
-  }
-  startedServices.sane = 1;
-  o_log(INFORMATION, "Sane backend started");
-*/  
-
-  // Create the sane command socket
-  if ( createSocket() || COMMSSOCKET < 0 ) {
-    o_log(INFORMATION, "Could not create a comms port");
-    server_shutdown();
-    exit(EXIT_FAILURE);
-  }
-  startedServices.command = 1;
-  o_log(INFORMATION, "Sane command socket is open");
-#endif // CAN_SCAN //
-
-
   // Start the webservice
   o_log(INFORMATION, "... Starting up the openDias service.");
   httpdaemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, 
@@ -499,39 +423,6 @@ int main (int argc, char **argv) {
   setup_signal_handling();
   o_log(INFORMATION, "ready to accept connectons");
 
-
-#ifdef CAN_SCAN
-  //
-  // Listen for SANE requests
-  //
-  int ns;
-  /*  Main loop - waiting for the threaded httpd connection to ask
-   *              us to do some sane work for them.
-   *  This construct is here for two reasons: Both of which are requirement of the sane libs
-   *    1. It ensure that there is only one sane call at a time
-   *    2. It keeps all sane lib calls in the main process rather than in a thread (http request)
-   */
-  while( ( ns = accept(COMMSSOCKET, NULL, NULL) ) ) { // Client connections loop
-    if( ns < 0 ) {
-      if( errno == EINTR ) {
-        if( 1 != turnToDaemon ) {
-          o_log(INFORMATION, "Something happened? Most likly a 'Ctrl-C'....");
-          server_shutdown();
-          exit(EXIT_FAILURE);
-        }
-      }
-      else {
-        o_log(INFORMATION, "Could not create a client comms socket: %d - %s", errno, strerror(errno));
-        // Just try again.
-      }
-    }
-    else {
-      dispatch_sane_work( ns );
-    }
-  } 
-
-  o_log(ERROR, "should never get here");
-#else
   if( 1 == turnToDaemon ) {
     while(1) {
       sleep(500);
@@ -542,7 +433,7 @@ int main (int argc, char **argv) {
     printf("Hit [enter] to close the service.\n");
     getchar();
   }
-#endif // CAN_SCAN //
+
   server_shutdown();
   exit(EXIT_SUCCESS);
 

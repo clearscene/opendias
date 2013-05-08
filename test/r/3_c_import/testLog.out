@@ -15,7 +15,106 @@ Uploading file of type PDF...
 Response was = $VAR1 = '<html><HEAD><META HTTP-EQUIV="refresh" CONTENT="0;URL=/opendias/docDetail.html?docid=7"></HEAD><body></body></html>';
 
 Uploading file of type UNK...
-Response was = $VAR1 = '<p>An internal server error has occured.</p>';
+Response was = $VAR1 = '<!DOCTYPE html>
+<html lang="en">
+ <!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      ./webcontent/includes/header.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+ <head>
+  <title>openDias</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="shortcut icon" href="/opendias/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="/opendias/style/common.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="/opendias/includes/jquery.js"></script>
+  <script type="text/javascript" src="/opendias/includes/local/generic.resource"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.userdetails.js"></script>
+  <script type="text/javascript" src="/opendias/includes/openDias.accessMethods.js"></script>
+
+  <!--[if lt IE 7]>
+  <meta http-equiv="X-UA-Compatible" content="IE=8" />
+  <link rel="stylesheet" href="/opendias/style/ieFix.css" type="text/css" />
+  <![endif]-->
+
+ </head>
+
+<body>
+<div id=\'getdown\'>
+
+  <div id=\'header\'>
+    <div class="container">
+      <img id=\'logo\' src=\'/opendias/images/openDIAS_sml.png\' />
+      <div id=\'infoBubble\'>
+        <div id=\'arrow\'></div>
+        <div id=\'dismiss\'><img src=\'/opendias/images/close.png\' /></div>
+        <div id=\'message\'></div>
+      </div>
+      <div id=\'loginout\'>
+        <ul>
+          <li>
+            <span id=\'login\'>
+              <input id=\'username\' size=6 placeholder=\'username\' />
+              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
+              <button id=\'loginbutton\'>Login</button>
+            </span>
+            <span id=\'logout\'>
+              <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
+              <button id=\'logoutbutton\'>Logout</button>
+            </span>
+          </li>
+          <li>
+            <select id=\'language\'>
+              <option value=\'--\'>Browsers Default Language</option>
+              <option value=\'en\'>English</option>
+              <option value=\'de\'>Deutsche</option>
+              <option value=\'nl\'>Nederlands</option>
+              <option value=\'hh\'>#### ########</option>
+            </select>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id=\'menu\'>
+    <div class="container">
+      <ul>
+        <li><a id=\'homeLink\' href=\'/opendias/\'>Home</a></li>
+        <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
+        <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
+        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
+        <li class=\'version\'>[VERSION STRING]</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id=\'body\'>
+    <div class="container">
+
+<p>Your file type is not supported</p><!-- ##############################################
+      Do not update this file directly, it has 
+      been auto generated, from:
+      ./webcontent/includes/footer.txt - for the structure, and
+      language.resource.en - for the readable text
+     ############################################## -->
+
+
+    </div>
+  </div>
+
+  <div id=\'footerpadding\'></div>
+
+  <div id=\'footer\'>
+    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
+  </div>
+
+</div>
+</body>
+</html>
+';
 
 Generating a PDF doc thumbnail
 Sending request = action=regenerateThumb&docid=7
@@ -37,6 +136,7 @@ doneocr : 1
 entrydate : 2011-01-02T21:13:04.393946Z
 filetype : 2
 hardcopyKept : 0
+image_phash : 0
 lines : 3509
 ocrtext : This is the OCR text.
 pages : 1
@@ -54,6 +154,7 @@ doneocr : 1
 entrydate : 2011-01-04T21:13:05.393946Z
 filetype : 3
 hardcopyKept : 0
+image_phash : 0
 lines : 3509
 ocrtext : This is final OCR text 3.
 pages : 1
@@ -71,6 +172,7 @@ doneocr : 1
 entrydate : 2011-01-04T21:13:04.393946Z
 filetype : 2
 hardcopyKept : 0
+image_phash : 0
 lines : 3509
 ocrtext : This is OCR text 2.
 pages : 1
@@ -88,6 +190,7 @@ doneocr : 1
 entrydate : 2011-01-03T21:13:04.393946Z
 filetype : 4
 hardcopyKept : 0
+image_phash : 0
 lines : 3509
 ocrtext : This is OCR text 4.
 pages : 1
@@ -105,6 +208,7 @@ doneocr :
 entrydate : [YYYY-MM-DD HH:MM:SS]
 filetype : 4
 hardcopyKept : 1
+image_phash : 50
 lines : 1900
 ocrtext : Example OCR output.
 pages : 1
@@ -122,6 +226,7 @@ doneocr :
 entrydate : [YYYY-MM-DD HH:MM:SS]
 filetype : 1
 hardcopyKept : 1
+image_phash : 50
 lines : 0
 ocrtext : "ODF Alliance" formed to support OpenDocument format  3/3/2006 8:25:36 PM, by  Jeremy Reimer A consortium of companies and organizations have banded together to form the  "ODF Alliance,"  a group dedicated to promoting the office software file format first implemented by OpenOffice.org. The alliance consists of more than 35 members from various countries around the world. It includes companies such as Red Hat, IBM, Novell, Sun Microsystems, and Corel, and governmental organizations such as the American Library Association and the Information and Communications Technology council for the city of Vienna. The  OpenDocument  file format was formed by the industry consortium OASIS, a group headed by Sun Microsystems, and was based on OpenOffice.org's native file format. OpenOffice.org is itself an open-sourced version of Star Office, the proprietary office suite that Sun purchased when it acquired the German company Star Division in 1999. The idea behind OpenDocument was to use a text-based XML format (compressed in a zip file to conserve disk space) in order to make it easy for other products to interoperate with it. The specification was finalized in 2005 and OpenOffice.org was the first software suite to support it. Other projects, such as KOffice, AbiWord, and IBM Workplace are adding support for the ODF format, either natively or through plug-in format translators. In today's highly networked world, it turns out that operability is a very useful thing to have, which is why Microsoft decided that they would also jump on the XML bandwagon, introducing a new XML-based file format (.docx) for Office 2003. Not only that, but the company is planning to make the next version of the Office XML format the default for Office 2007 (formerly known as Office 12). This means that when users of Office 2007 go to save a file, they will automatically save in .docx, not .doc. While most people don't consider file formats to be terribly exciting, the question of which format to adopt led to an increasingly dramatic series of announcements from the government of Massachusetts. In January 2005, the government  approved  Office XML 2003 as an appropriate file format, then in September of that year  reversed  their decision, stating that Office XML was unacceptable and that only OpenDocument and PDF files would be allowed. They went  back again  in November, stating that they were "very pleased" with Microsoft's submission of Office XML to the ECMA standards body, and that they were "optimistic that Office Open XML will meet our new standards for acceptable open formats." The champion of ODF in Massachusetts, CIO Peter Quinn, then suddenly announced his  resignation  in January. This announcement was followed with an assurance from Quinn's former boss that their position on ODF "remained unchanged" and that they were still committed to supporting that format. Confused yet? The so-called "controversy" over the ODF switch has generated an unbelievable amount of press, and various groups are now busy pushing governments worldwide to switch over to the ODF format. This new "alliance" joins the groups SpreadOpenDocument.org, the OpenDocument Fellowship, and the "Friends of OpenDocument" in their quest to promote the format. My own inbox is now slowly filling up with pro-ODF announcements and press releases. The push seems overtly political, as evidenced by the rhetoric used  by the ODF Alliance:  [...] 
 pages : 1
@@ -139,6 +244,7 @@ doneocr :
 entrydate : [YYYY-MM-DD HH:MM:SS]
 filetype : 3
 hardcopyKept : 1
+image_phash : 50
 lines : 0
 ocrtext : placeholder text
 pages : 1

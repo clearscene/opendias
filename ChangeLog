@@ -1,15 +1,26 @@
- 0.9    Applciation and install, now honours GNU autotools --prefix option.
+ 0.9.3  Add some new user help
+        Restrict OCR operation to lanugages that tesseract has installed
+        Increase validation on 'new tag' assignment
+
+ 0.9.2  Isolate SANE operations into their own process (protect against SANE segfaults)
+        Defer scanner detail lookup until they are needed.
+        Update application footer text to be less "copywrite" notice.
+
+ 0.9.1  Auto detect similar documents, offer to 'tag' and 'title' new docs for you.
+        Priverlage assignment by username and password.
+        Added Dutch translations.
+        Can now scan in colour.
+        Detail page now has a print now button (for scans and jpeg imports).
+        Increased the max number of scanning pages to 30 (from 10).
+        Depricated location based priverlage assignments.
+        Cleaned up homepage.
+        Improve scanning performance.
+        Application and install, now honours GNU autotools --prefix option.
         Tests no longer need special permissions to run.
         Web application is now session aware.
-        Priverlage assignment by username and password.
-        Depricated location based priverlage assignments.
-        Implement bind vars for result returning SQL statements
-        Cleaned up homepage
-        Stubbed out many external libs for testing (performance)
-        Detail page now has a print now button (for scans and jpeg imports)
-        Localisation is now much easier
-        Improve scanning performance
-        Can now scan in colour
+        Implement bind vars for result returning SQL statements.
+        Stubbed out many external libs for testing (performance).
+        Localisation is now much easier.
 
  0.8.1  A localisation framework has been put in place (with en and de languages added)
         Remove defunct speak functionality

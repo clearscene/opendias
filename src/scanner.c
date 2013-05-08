@@ -365,4 +365,4 @@ int setDefaultScannerOption(SANE_Handle *devHandle, const SANE_Option_Descriptor
   return 0;
 }
 
-#endif // CAN_SCAN //
+#endif /* CAN_SCAN */

@@ -19,3 +19,5 @@ LOCAL_failed_to_get_list_of_scanners = 'Kann eine Liste der verfügbaren Scanner
 LOCAL_unable_to_start_scanning = 'Kann um den Scanvorgang zu starten';
 LOCAL_on_host = 'auf dem Host';
 LOCAL_x_pages = '%s seiten';
+LOCAL_calculating_image_comparison_vector = 'Berechnung bildvergleich vektor';
+LOCAL_ocr_default = 'deu';

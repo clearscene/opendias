@@ -18,3 +18,4 @@ LOCAL_access_denied|Toegang geweigerd
 LOCAL_no_access|U heeft onvoldoende rechten om deze opdracht uit te voeren
 LOCAL_processing_error|Uw opdracht kon niet uitgevoerd worden
 LOCAL_missing_support|Ondersteuning voor deze feature is niet meegecompileerd
+LOCAL_unsuported_file_type|LOCALISE_ME Your file type is not supported
