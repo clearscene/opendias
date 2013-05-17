@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <string.h>
 #include <leptonica/allheaders.h>
 
@@ -16,7 +17,12 @@ void lept_free( void *ptr ) {
 }
 
 PIX * pixRead ( const char *filename ) {
-  return malloc( sizeof( PIX ) );
+  if( 0 != access( filename, F_OK ) ) {
+    return NULL;
+  }
+  else {
+    return malloc( sizeof( PIX ) );
+  }
 }
 
 PIX * pixReadMem ( const l_uint8 *data, size_t size ) {
