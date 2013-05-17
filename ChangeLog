@@ -1,3 +1,13 @@
+ 0.9.4  Standards on configure.ac and MakeFile.am
+        Use tesseracts actual installed location and only show OCR for installed tesseract langs
+        Completely move sane operations into it's own process.
+        Add missing German and Dutch translations
+        Unify date formats
+        More graceful handeling of unknown file types on file-uploads
+        Added more tests, fixed some others
+        Fixed AJAX error messge codes
+        Browsers can now cache login details
+
  0.9.3  Add some new user help
         Restrict OCR operation to lanugages that tesseract has installed
         Increase validation on 'new tag' assignment
