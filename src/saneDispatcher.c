@@ -129,7 +129,7 @@ char *send_command( char *command, char *param ) {
 
     // Once the worker has finished, the waiting parent will then continue
     while ( waitpid( pid, &status, WNOHANG ) == 0 ) {
-      usleep( 50000 );
+      usleep( 50 * 1000 ); // 50ms or 0.05sec
     }
     if( WIFEXITED(status) ) {
       if( WEXITSTATUS(status) ) {
@@ -193,7 +193,7 @@ extern void waitForSaneProcesses( void ) {
   if( inLongRunningOperation == 1 ) {
     o_log( INFORMATION, "There are running sane processes, waiting on them.");
     while ( inLongRunningOperation == 1 ) {
-      usleep( 500000 );
+      usleep( 500 * 1000 ); // 500ms or 0.5sec
     }
     o_log( INFORMATION, "The running sane processes have finished. Waiting on cleanup");
     sleep( 3 );

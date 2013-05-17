@@ -68,7 +68,7 @@ void *process_doc( void *in ) {
 }
 
 void *stub( void *u ) {
-  usleep(10);
+  usleep(10); // A few CPU ticks
   return NULL;
 }
 
@@ -118,7 +118,7 @@ void *backpopulate_phash_inner( void *u) {
         if( thread_pointer > avail_processors ) {
           thread_pointer = 0;
         }
-        usleep(200);
+        usleep(200 * 1000); // 200ms or 0.2 sec
       }
 
       // Wait for it to join back first
