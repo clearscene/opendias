@@ -68,7 +68,7 @@ void *process_doc( void *in ) {
 }
 
 void *stub( void *u ) {
-  usleep(10);
+  usleep(10); // A few CPU ticks
   return NULL;
 }
 
@@ -89,7 +89,7 @@ void *backpopulate_phash_inner( void *u) {
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-  for( thread_pointer = 0; thread_pointer < MAX_THREADS; thread_pointer++ ) {
+  for( thread_pointer = 0; thread_pointer <= avail_processors ; thread_pointer++ ) {
     pthread_create( &thread[ thread_pointer], &attr, stub, (void *)NULL );
   }
   thread_pointer = 0;
@@ -118,7 +118,7 @@ void *backpopulate_phash_inner( void *u) {
         if( thread_pointer > avail_processors ) {
           thread_pointer = 0;
         }
-        usleep(200);
+        usleep(200 * 1000); // 200ms or 0.2 sec
       }
 
       // Wait for it to join back first
@@ -138,12 +138,12 @@ void *backpopulate_phash_inner( void *u) {
   free(sql);
 
   // Wait for everything t ofinish
-  for( thread_pointer = 0; thread_pointer < MAX_THREADS; thread_pointer++ ) {
+  for( thread_pointer = 0; thread_pointer <= avail_processors; thread_pointer++ ) {
     pthread_join( thread[ thread_pointer ], NULL);
   }
 
   // Set the config flag, so we don't try this again.
-  o_log(INFORMATION, "Marking that the backpopulation of pHash is: complete" );
+  o_log(INFORMATION, "Marking that the backpopulation of pHash as: complete" );
   sql = o_strdup("UPDATE config SET config_value = 'complete' WHERE config_option = 'backpopulate_phash'");
   runUpdate_db(sql, NULL);
   free(sql);
@@ -154,11 +154,15 @@ void *backpopulate_phash_inner( void *u) {
 
 void backpopulate_phash() {
 #ifdef CAN_PHASH
- pthread_t backpopulate_thread;
+  pthread_t backpopulate_thread;
   pthread_attr_t attr;
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
   pthread_create( &backpopulate_thread, &attr, backpopulate_phash_inner, (void *)NULL);
+#else
+  char *sql = o_strdup("UPDATE config SET config_value = 'no' WHERE config_option = 'backpopulate_phash'");
+  runUpdate_db(sql, NULL);
+  free(sql);
 #endif /* CAN_PHASH */
 }
 

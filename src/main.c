@@ -132,7 +132,7 @@ int setup (char *configFile) {
 
       else if ( 0 == strcmp(config_option, "backpopulate_phash") ) {
         if ( 0 == strcmp(config_value, "yes") ) {
-          backpopulate_phash();
+          startedServices.backpopulate = 1;
         }
       }
 
@@ -358,6 +358,7 @@ int main (int argc, char **argv) {
   startedServices.locale = 0;
   startedServices.httpd = 0;
   startedServices.sessions = 0;
+  startedServices.backpopulate = 0;
 
   // Parse out the command line flags
   while ((c = getopt(argc, argv, "dc:ih")) != EOF) {
@@ -422,6 +423,10 @@ int main (int argc, char **argv) {
 
   setup_signal_handling();
   o_log(INFORMATION, "ready to accept connectons");
+
+  if( 1 == startedServices.backpopulate ) {
+    backpopulate_phash();
+  }
 
   if( 1 == turnToDaemon ) {
     while(1) {

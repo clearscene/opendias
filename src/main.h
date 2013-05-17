@@ -41,6 +41,7 @@ struct services {
   int command;
   int httpd;
   int sessions;
+  int backpopulate;;
 };
 
 void server_shutdown(void);

@@ -54,7 +54,7 @@ void wait_for_connection_lock() {
 
   // Get exclusivity for this thread
   while ( connectingInUse != 0 ) {
-    usleep( 1000 );
+    usleep( 1000 ); // 1ms or 0.001sec
   }
   connectingInUse = 1;
 
@@ -66,7 +66,7 @@ void wait_for_connection_lock() {
     else {
       o_log(ERROR, "Some directory create error: %d", errno );
     }
-    usleep( 100 );
+    usleep( 100 ); // 0.1ms or 0.0001sec
   }
 
 }

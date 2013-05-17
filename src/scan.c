@@ -565,7 +565,7 @@ char *internalDoScanningOperation(char *uuid, char *lang) {
         }
         else {
           o_log(WARNING, "Device reports not ready to 'start', waiting 500ms. Will try another %d times", timeout);
-          usleep(500);
+          usleep(500 * 1000); // 500ms or 0.5sec
         }
       }
       else {

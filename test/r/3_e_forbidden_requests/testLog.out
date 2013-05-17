@@ -46,11 +46,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -151,11 +152,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -256,11 +258,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -361,11 +364,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -466,11 +470,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -571,11 +576,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -676,11 +682,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -781,11 +788,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -886,11 +894,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -991,11 +1000,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -1096,11 +1106,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -1201,11 +1212,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -1306,11 +1318,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -1411,11 +1424,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -1626,11 +1640,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -1841,11 +1856,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -2006,11 +2022,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -2111,11 +2128,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -2216,11 +2234,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -2321,11 +2340,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -2426,11 +2446,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -2531,11 +2552,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -2636,11 +2658,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -2741,11 +2764,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -2846,11 +2870,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -2951,11 +2976,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -3056,11 +3082,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -3161,11 +3188,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -3266,11 +3294,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>
@@ -3383,11 +3412,12 @@ $VAR1 = '<!DOCTYPE html>
       <div id=\'loginout\'>
         <ul>
           <li>
-            <span id=\'login\'>
-              <input id=\'username\' size=6 placeholder=\'username\' />
-              <input id=\'password\' size=6 placeholder=\'password\' type=\'password\' />
-              <button id=\'loginbutton\'>Login</button>
-            </span>
+            <span id=\'login\'><form id="loginform" action="/opendias/dynamic" method=\'post\' autocomplete="on">
+              <input name="action" type=\'hidden\' value="refresh" />
+              <input name="username" id="username" size=6 placeholder="username" type="text" autocomplete="on" required="required" />
+              <input name="password" id="password" size=6 placeholder="password" type="password" autocomplete="on" required="required" />
+              <input name="loginButton" id="loginbutton" type="submit" value="Login" />
+            </form></span>
             <span id=\'logout\'>
               <a id=\'realname\' href=\'/opendias/accessControls.html\'></a>
               <button id=\'logoutbutton\'>Logout</button>

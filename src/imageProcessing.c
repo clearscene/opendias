@@ -105,10 +105,17 @@ unsigned long long getImagePhash_fn( const char *filename ) {
 
 #ifdef CAN_IMAGE
   PIX *pix_orig;
-  if ( ( pix_orig = pixRead( filename ) ) == NULL) {
-    o_log(ERROR, "Could not load the image data into a PIX");
+
+  if( 0 != access( filename, F_OK) ) {
+    o_log(ERROR, "Could not find the image data file: %s", filename);
     return 0;
   }
+
+  if ( ( pix_orig = pixRead( filename ) ) == NULL) {
+    o_log(ERROR, "Could not load the image data into a PIX: %s", filename);
+    return 0;
+  }
+
   unsigned long long ret = getImagePhash_px( pix_orig );
   pixDestroy( &pix_orig );
   return ret;
@@ -149,25 +156,30 @@ unsigned long long getImagePhash_px( PIX *pix_orig ) {
     }
     return 0;
   }
-  boxDestroy( &box );
-  if(free_8 == 1) {
-    pixDestroy( &pix8 );
-  }
 
   // Reduce to a 1/5th original size
   PIX *pix1;
   if ( ( pix1 = pixScale(pixc, 0.2, 0.2) ) == NULL) {
     o_log( ERROR, "Error scaling image");
     pixDestroy( &pixc );
+    boxDestroy( &box );
+    if(free_8 == 1) {
+      pixDestroy( &pix8 );
+    }
     return 0;
   }
-  pixDestroy( &pixc );
 
   // Save the file for pHash processnig
   o_log( DEBUGM, "Saving processed image for pHash calc");
   char *filename = o_printf( "/tmp/pHash_%X.jpg", pthread_self() );
-  pixWrite( filename, pix1, IFF_JFIF_JPEG);
+  pixWrite( filename, pix_orig, IFF_JFIF_JPEG);
+
   pixDestroy( &pix1 );
+  pixDestroy( &pixc );
+  boxDestroy( &box );
+  if(free_8 == 1) {
+    pixDestroy( &pix8 );
+  }
 #endif /* CAN_IMAGE */
 
   unsigned long long ret = calculateImagePhash( filename );

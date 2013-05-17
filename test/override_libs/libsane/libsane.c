@@ -8,10 +8,6 @@
 SANE_Device *dev[2];
 SANE_Option_Descriptor *sod;
 
-SANE_Int option_count = 4;
-SANE_Int depth = 8;
-SANE_Fixed resolution = SANE_FIX( 300 );
-
 static SANE_Range resolution_range = {
   SANE_FIX (1.0),
   SANE_FIX (800.0),
@@ -22,11 +18,23 @@ static SANE_Int depth_list[] = {
   3, 1, 8, 16
 };
 
+static SANE_String_Const source_list[] = {
+  "Camera",
+  "Flatbed",
+  0
+};
+
 static SANE_String_Const mode_list[] = {
   SANE_VALUE_SCAN_MODE_GRAY,
   SANE_VALUE_SCAN_MODE_COLOR,
   0
 };
+
+SANE_Int option_count = 4;
+SANE_Int depth = 8;
+SANE_Fixed resolution = SANE_FIX( 300 );
+SANE_String source = "Camera";
+SANE_String mode = SANE_VALUE_SCAN_MODE_COLOR;
 
 static size_t max_string_size (const SANE_String_Const strings[]) {
   size_t size, max_size = 0;
@@ -132,6 +140,18 @@ const SANE_Option_Descriptor *sane_get_option_descriptor (SANE_Handle handle, SA
       break;
     }
     case 4: {
+      sod->name = SANE_NAME_SCAN_SOURCE;
+      sod->title = SANE_TITLE_SCAN_SOURCE;
+      sod->desc = SANE_DESC_SCAN_SOURCE;
+      sod->type = SANE_TYPE_STRING;
+      sod->unit = SANE_UNIT_NONE;
+      sod->size = max_string_size (source_list);
+      sod->cap = SANE_CAP_SOFT_DETECT | SANE_CAP_SOFT_SELECT;
+      sod->constraint_type = SANE_CONSTRAINT_STRING_LIST;
+      sod->constraint.string_list = source_list;
+      break;
+    }
+    case 5: {
       sod->name = SANE_NAME_SCAN_RESOLUTION;
       sod->title = SANE_TITLE_SCAN_RESOLUTION;
       sod->desc = SANE_DESC_SCAN_RESOLUTION;
@@ -141,6 +161,42 @@ const SANE_Option_Descriptor *sane_get_option_descriptor (SANE_Handle handle, SA
       sod->cap = SANE_CAP_SOFT_DETECT | SANE_CAP_SOFT_SELECT;
       sod->constraint_type = SANE_CONSTRAINT_RANGE;
       sod->constraint.range = &resolution_range;
+      break;
+    }
+    case 6: {
+      sod->name = "batch-scan";
+      sod->title = "Batch Scan";
+      sod->desc = "Scan process several scanning in one call";
+      sod->type = SANE_TYPE_BOOL;
+      sod->unit = SANE_UNIT_NONE;
+      sod->size = sizeof (SANE_Word);
+      sod->cap = SANE_CAP_SOFT_DETECT | SANE_CAP_SOFT_SELECT;
+      sod->constraint_type = SANE_CONSTRAINT_NONE;
+      sod->constraint.range = 0;
+      break;
+    }
+    case 7: {
+      sod->name = SANE_NAME_PREVIEW;
+      sod->title = "Preview Mode";
+      sod->desc = "Scan in preview mode";
+      sod->type = SANE_TYPE_BOOL;
+      sod->unit = SANE_UNIT_NONE;
+      sod->size = sizeof (SANE_Word);
+      sod->cap = SANE_CAP_SOFT_DETECT | SANE_CAP_SOFT_SELECT;
+      sod->constraint_type = SANE_CONSTRAINT_NONE;
+      sod->constraint.range = 0;
+      break;
+    }
+    case 8: {
+      sod->name = "made-up";
+      sod->title = "hardware setting";
+      sod->desc = "Made up hardware setting";
+      sod->type = SANE_TYPE_BOOL;
+      sod->unit = SANE_UNIT_NONE;
+      sod->size = sizeof (SANE_Word);
+      sod->cap = SANE_CAP_HARD_SELECT;
+      sod->constraint_type = SANE_CONSTRAINT_NONE;
+      sod->constraint.range = 0;
       break;
     }
     default:
@@ -163,7 +219,7 @@ SANE_Status sane_control_option( SANE_Handle handle, SANE_Int option, SANE_Actio
       }
       case 2: {
         // mode
-        strcpy(value, SANE_VALUE_SCAN_MODE_GRAY);
+        strcpy(value, mode);
         break;
       }
       case 3: {
@@ -172,8 +228,28 @@ SANE_Status sane_control_option( SANE_Handle handle, SANE_Int option, SANE_Actio
         break;
       }
       case 4: {
+        // source
+        strcpy(value, source);
+        break;
+      }
+      case 5: {
         // resolution
         *(SANE_Fixed *)value = resolution;
+        break;
+      }
+      case 6: {
+        // batch-scan
+        *(SANE_Bool *)value = 0;
+        break;
+      }
+      case 7: {
+        // preview mode
+        *(SANE_Bool *)value = 0;
+        break;
+      }
+      case 8: {
+        // made-up
+        *(SANE_Bool *)value = 0;
         break;
       }
       default: {
