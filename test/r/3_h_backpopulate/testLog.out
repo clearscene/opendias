@@ -1,0 +1,8 @@
+Copying pre defined environment
+Copying default database
+Updated start command to use overidden libs
+STARTING app...
+Now ready
+No need for a web client for this test.
+Stopping service
+Waiting for valgrind to finish.
