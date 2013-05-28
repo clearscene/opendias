@@ -37,6 +37,8 @@ LOG-OUTPUT
 -date-:-thread-:INF Child process created [CONFIG_FILE]
 -date-:-thread-:INF Just about to start the worker: /tmp/opendias_test/bin/opendias_worker [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ],en
 -date-:-thread-:INF Worker started and ready to process: internalDoScanningOperation
+-date-:-thread-:INF Setting scanner param mode to "Gray"
+-date-:-thread-:INF Setting scanner param source to "Flatbed"
 -date-:-thread-:INF Setting scanner param resolution to 50.000000
 -date-:-thread-:INF Scanner Parm : stat=SUCCESS form=0,lf=1,bpl=787,pixpl=787,lin=787,dep=8
 -date-:-thread-:INF Processing request for: getScannerList
