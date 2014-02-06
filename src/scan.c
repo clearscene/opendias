@@ -58,6 +58,7 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
   const char *modes_colour[] = { SANE_VALUE_SCAN_MODE_COLOR, "Color", SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
   const char *modes_gray[] = { SANE_VALUE_SCAN_MODE_GRAY, "Grayscale", NULL };
   const char *speeds[] = { "Auto", "Normal", "Fast", NULL };
+  const char *compression[] = { "None", NULL };
   const char *sources[] = { "Auto", SANE_I18N ("Auto"), "Flatbed", SANE_I18N ("Flatbed"), 
                             "FlatBed", "Normal", SANE_I18N ("Normal"), NULL };
 
@@ -166,11 +167,26 @@ int setOptions( char *uuid, SANE_Handle *openDeviceHandle, int *request_resoluti
         }
 
         else if ( strcmp(sod->name, "compression") == 0 ) {
-          if ( !setDefaultScannerOption(openDeviceHandle, sod, option, &paramSetRet) ) {
-            v_c = o_strdup("None");
-            status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
-            free(v_c);
-          }
+            int i, j; 
+            int foundMatch = 0;
+            for (i = 0; compression[i] != NULL; i++) {
+              for (j = 0; sod->constraint.string_list[j]; j++) {
+              o_log(DEBUGM, "n list: %s", sod->constraint.string_list[j]);
+                if (strcmp (compression[i], sod->constraint.string_list[j]) == 0)
+                  break;
+              }
+              if (sod->constraint.string_list[j] != NULL) {
+              o_log(DEBUGM, "Attempting to set compresstion to: %s", compression[i]);
+                v_c = o_strdup(compression[i]);
+                status = control_option (openDeviceHandle, sod, option, SANE_ACTION_SET_VALUE, (void *)v_c, &paramSetRet);
+                free(v_c);
+                foundMatch = 1;
+                break;
+              }
+            }
+            if( foundMatch == 0 ) {
+              o_log(DEBUGM, "Non of the available options are appropriate.");
+            }
         }
 
         // Set scanning depth
