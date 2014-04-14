@@ -1,3 +1,5 @@
+Startup/Showdown
+----------------
 * 1_1_create_database
 * 1_2_failed_to_create_database
 * 1_3_missing_config_file
@@ -8,6 +10,8 @@
 * 1_9_usage_app
 * 1_a_usage_config
 
+API
+----------------
 * 3_1_doclist
 * 3_2_doclist_search
 * 3_3_getScannerList
@@ -22,8 +26,12 @@
 * 3_c_import 
 * 3_d_language_selection
 * 3_e_forbidden_requests
-  3_f_update_user_n_user_permissions
+* 3_f_update_user_n_user_permissions
+* 3_g_checkForSimilar
+* 3_h_backpopulate
 
+Frontend
+----------------
   8_1_basic_pages
   8_2_doc_detail
   8_3_doc_detail_missing

@@ -5,7 +5,7 @@
         Unify date formats
         More graceful handeling of unknown file types on file-uploads
         Added more tests, fixed some others
-        Fixed AJAX error messge codes
+        Fixed AJAX error message codes
         Browsers can now cache login details
 
  0.9.3  Add some new user help
