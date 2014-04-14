@@ -375,12 +375,12 @@ struct simpleLinkedList *runquery_db (char *sql, struct simpleLinkedList *vars) 
 char *readData_db (struct simpleLinkedList *rSet, char *field_db) {
 
   struct simpleLinkedList *row;
-  struct simpleLinkedList *field;
 
   o_log(SQLDEBUG, "Reading row (%x)", rSet);
 
   row = (struct simpleLinkedList *)rSet->data;
   if(row) {
+    struct simpleLinkedList *field;
     field = sll_searchKeys(row->data, field_db);
     o_log(SQLDEBUG, "%s : %s", field_db, (char *)field->data );
     return field->data;
@@ -409,15 +409,16 @@ int nextRow (struct simpleLinkedList *rSet) {
 
 void free_recordset (struct simpleLinkedList *rSet) {
 
-  struct simpleLinkedList *field, *row;
 
   o_log(DEBUGM, "Free recordset (%x)", rSet);
 
   if( rSet && ( rSet != NULL ) ) {
     if( rSet->data != NULL ) {
+      struct simpleLinkedList *row;
       for( row = sll_findFirstElement((struct simpleLinkedList *)rSet->data) ; row != NULL ; row = sll_getNext(row) ) {
         if( row && ( row != NULL ) ) {
           if( row->data != NULL ) {
+            struct simpleLinkedList *field;
             for( field = sll_findFirstElement((struct simpleLinkedList *)row->data) ; field != NULL ; field = sll_getNext(field) ) {
               o_log(SQLDEBUG, "Freeing: %s = %s", field->key, field->data);
               free(field->key);

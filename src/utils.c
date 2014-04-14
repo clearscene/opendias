@@ -212,10 +212,11 @@ char *o_strdup(const char *source) {
 
 void conCat(char **mainStr, const char *addStr) {
 
-  char *tmp, *tmp2;
 
   if(addStr && 0 != strcmp(addStr, "")) {
+    char *tmp2;
     tmp2 = *mainStr;
+    char *tmp;
     tmp = o_printf("%s%s", tmp2, addStr);
     free(tmp2);
     *mainStr = tmp;
@@ -234,6 +235,8 @@ char *getTimeStr() {
   char *strdate = malloc(18);
 
   size = time(&ttime);
+  if( 0 == size )
+    printf("%s", "Count not write entire data/time message.");
   stTime = gmtime(&ttime);
   size = strftime(strdate, (size_t)18, "%Y%m%d%H%M%S", stTime);
   if( 0 == size )
@@ -249,6 +252,8 @@ char *getTimeStr_iso8601() {
   char *strdate = malloc(20);
 
   size = time(&ttime);
+  if( 19 != size )
+    o_log(ERROR, "Count not write entire data block.%s",strdate);
   stTime = gmtime(&ttime);
   size = strftime(strdate, 20, "%Y-%m-%d %H:%M:%S", stTime);
   if( 19 != size )

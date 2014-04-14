@@ -38,7 +38,7 @@
 int setup (char *configFile) {
 
   struct simpleLinkedList *rSet;
-  char *location, *conf, *sql, *config_option, *config_value;
+  char *location, *conf, *sql;
 
   printf("entering setup\n");
 
@@ -85,6 +85,7 @@ int setup (char *configFile) {
 
   rSet = runquery_db(sql, NULL);
   if( rSet != NULL ) {
+    char *config_option, *config_value;
     do {
       config_option = o_strdup(readData_db(rSet, "config_option"));
       config_value = o_strdup(readData_db(rSet, "config_value"));

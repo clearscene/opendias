@@ -39,7 +39,7 @@ cd ../
 cd libpHash
 echo Building libpHash
 rm -f libpHash.so* libpHash.o
-g++ -fPIC -O0 -g -c -Wall libpHash.cc
+g++ -fPIC -O0 -g -c -Wall libpHash.cc > libpHash_override_build.log
 g++ -shared -Wl,-soname,libpHash.so.0 -o libpHash.so.0.0.0 libpHash.o -lc
 ln -s libpHash.so.0.0.0 libpHash.so.0
 ln -s libpHash.so.0 libpHash.so

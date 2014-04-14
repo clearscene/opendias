@@ -35,7 +35,9 @@
 #include <netdb.h>
 
 #include "scanner.h"
+#ifdef CAN_OCR
 #include "imageProcessing.h"
+#endif /* CAN_OCR */
 #include "dbaccess.h"
 #include "main.h"
 #include "utils.h"

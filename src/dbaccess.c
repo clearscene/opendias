@@ -297,7 +297,7 @@ void removeDoc (char *docid) {
 char *getTagId(char *tagname) {
 
   struct simpleLinkedList *vars, *rSet;
-  char *sql2, *ret = NULL;
+  char *ret = NULL;
   char *sql = o_strdup("SELECT tagid FROM tags WHERE tagname = ?");
 
   vars = sll_init();
@@ -309,6 +309,7 @@ char *getTagId(char *tagname) {
   }
   else {
     o_log(DEBUGM, "no tag was found. Adding a new one.");
+    char *sql2;
     sql2 = o_strdup("INSERT INTO tags (tagname) VALUES (?)");
 
     vars = sll_init();

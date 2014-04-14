@@ -52,7 +52,7 @@ int pidFilehandle;
 int setup (char *configFile) {
 
   struct simpleLinkedList *rSet;
-  char *location, *conf, *sql, *config_option, *config_value;
+  char *location, *conf, *sql;
   unsigned short MAX_SESSIONS;
   unsigned int MAX_SESSION_AGE;
 
@@ -108,6 +108,7 @@ int setup (char *configFile) {
   sql = o_strdup("SELECT config_option, config_value FROM config");
   rSet = runquery_db(sql, NULL);
   if( rSet != NULL ) {
+    char *config_option, *config_value;
     do {
       config_option = o_strdup(readData_db(rSet, "config_option"));
       config_value = o_strdup(readData_db(rSet, "config_value"));

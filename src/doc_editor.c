@@ -38,7 +38,7 @@
 char *doDelete (char *documentId) {
 
   int doc_id, pages, i;
-  char *docTemplate, *docPath;
+  char *docTemplate;
 
   doc_id = atoi( documentId );
 
@@ -65,6 +65,7 @@ char *doDelete (char *documentId) {
 
   docTemplate = o_strdup("%s/scans/%s_%i.jpg");
   for(i = 1 ; i <= pages ; i++) {
+    char *docPath;
     docPath = o_printf(docTemplate, BASE_DIR, documentId, i);
     o_log(INFORMATION, "%s", docPath);
     unlink(docPath);

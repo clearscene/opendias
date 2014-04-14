@@ -23,7 +23,7 @@ sub test {
     __uri => '',
   );
 
-  foreach my $method qw( GET POST ) {
+  foreach my $method (qw( GET POST )) {
 
     $data{__method} = $method;
 

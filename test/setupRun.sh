@@ -120,7 +120,7 @@ if [ "$NOBUILD" == "" ]; then
   cd ../
   mv config.h config.h.orig
   mv config.h.for_cppcheck config.h
-  cppcheck --verbose --enable=all --max-configs=999 --platform=unix32 --platform=unix64 --error-exitcode=1 src/ &> test/results/buildLog2.out
+#  cppcheck --verbose --enable=all --max-configs=999 --platform=unix32 --platform=unix64 --error-exitcode=1 src/ &> test/results/buildLog2.out
   if [ "$?" -ne "0" ]; then
     echo "Code analysis found a problem. Check the buildLog.out for details."
     mv config.h config.h.for_cppcheck

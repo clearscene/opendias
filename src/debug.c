@@ -37,15 +37,15 @@ int trigger_log_verbosity( const int verbosity ) {
 
 void i_o_log(const char *file, const int line, const int verbosity, const char *message, va_list inargs) {
 
-  FILE *fp;
-  char *logFile;
-
 	va_list ap;
 	va_copy(ap,inargs);
 
   if( trigger_log_verbosity( verbosity ) ) {
 
+    FILE *fp;
+    char *logFile;
     char *thumb;
+
     if( VERBOSITY >= DEBUGM ) { 
       thumb = o_strdup("%s:%X:%s:%s:%d ");
     }

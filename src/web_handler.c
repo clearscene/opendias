@@ -264,9 +264,7 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
 
 void request_completed (void *cls, struct MHD_Connection *connection, void **con_cls, enum MHD_RequestTerminationCode toe) {
 
-  struct simpleLinkedList *row;
   struct connection_info_struct *con_info = *con_cls;
-  char *uploadedFileName, *filename;
   if (NULL == con_info)
     return;
 
@@ -277,13 +275,16 @@ void request_completed (void *cls, struct MHD_Connection *connection, void **con
       MHD_destroy_post_processor (con_info->postprocessor);
       nr_of_clients--;
     }
+    char *uploadedFileName;
     uploadedFileName = getPostData(con_info->post_data, "uploadfile");
     if(uploadedFileName != NULL) {
+      char *filename;
       filename = o_printf("/tmp/%s.dat", uploadedFileName);
       unlink(filename); // Remove any uploaded files
       free(filename);
     }
 
+    struct simpleLinkedList *row;
     for( row = sll_findFirstElement( con_info->post_data ) ; row != NULL ; row = sll_getNext(row) ) {
       free(row->key);
       row->key = NULL;
@@ -419,7 +420,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               size_t *upload_data_size, void **con_cls) {
 
   struct connection_info_struct *con_info;
-  char *content, *dir, *action, *mimetype = MIMETYPE_HTML;
+  char *content, *mimetype = MIMETYPE_HTML;
   size_t size = 0;
   int status = MHD_HTTP_OK;
   struct priverlage accessPrivs;
@@ -600,7 +601,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
         size = strlen(content);
       }
       else {
-        dir = o_printf("%s%s", BASE_DIR, url);
+        char *dir = o_printf("%s%s", BASE_DIR, url);
         size = getFromFile_fullPath(dir, con_info->lang, &content);
         free(dir);
         if(0!=strstr(url,".jpg")) {
@@ -698,7 +699,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             free( dump );
           }
 
-          action = getPostData(con_info->post_data, "action");
+          char *action = getPostData(con_info->post_data, "action");
 
           if ( action && 0 == strcmp(action, "refresh") ) {
             content = o_printf("/opendias/");
