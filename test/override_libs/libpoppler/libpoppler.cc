@@ -44,7 +44,16 @@ namespace poppler {
       return false;
     }
 
-    fprintf(fp,"test image data\n");
+    char buf[BUFSIZ];
+    size_t size;
+
+    FILE* source = fopen("/tmp/poppler_override_output", "rb");
+    while (size = fread(buf, 1, BUFSIZ, source)) {
+        fwrite(buf, 1, size, fp);
+    }
+
+    fclose(source);
+//    fprintf(fp,"test image data\n");
     fclose(fp);
 
     return true;

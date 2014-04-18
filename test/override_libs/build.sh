@@ -55,11 +55,15 @@ cd ../
 # into our skellinton shared lib, we're setting ignore duplicate defs which will override the
 # method provided by the static lib (with ours), but make all the others available unchanged.
 #
+# Also, the image created when "a PDF is written as an image" is a copy of a file found
+# at "/tmp/poppler_override_output"
+#
 cd libpoppler
 echo Building libpoppler
+cp poppler_override_output /tmp/poppler_override_output
 rm -f libpoppler-cpp.so* libpoppler.o
 g++ -fPIC -O0 -g -c -Wall libpoppler.cc
-g++ -shared -Wl,-soname,libpoppler-cpp.so.0 -o libpoppler-cpp.so.0.2.0 -Wl,-zmuldefs libpoppler.o -Wl,-whole-archive /usr/lib/i386-linux-gnu/libpoppler-cpp.a -Wl,-no-whole-archive -lc -lpoppler
+g++ -shared -Wl,-soname,libpoppler-cpp.so.0 -o libpoppler-cpp.so.0.2.0 -Wl,-zmuldefs libpoppler.o -Wl,-whole-archive /usr/lib/i386-linux-gnu/libpoppler-cpp.a -Wl,-no-whole-archive -lc -lpoppler 2> /dev/null
 ln -s libpoppler-cpp.so.0.2.0 libpoppler-cpp.so.0
 ln -s libpoppler-cpp.so.0 libpoppler-cpp.so
 cd ../

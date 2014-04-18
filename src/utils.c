@@ -251,9 +251,7 @@ char *getTimeStr_iso8601() {
   size_t size;
   char *strdate = malloc(20);
 
-  size = time(&ttime);
-  if( 19 != size )
-    o_log(ERROR, "Count not write entire data block.%s",strdate);
+  time(&ttime);
   stTime = gmtime(&ttime);
   size = strftime(strdate, 20, "%Y-%m-%d %H:%M:%S", stTime);
   if( 19 != size )

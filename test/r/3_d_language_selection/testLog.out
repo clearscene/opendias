@@ -209,7 +209,7 @@ No language indication = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
+    <p>[VERSION STRING] is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> ([DATES])</p>
   </div>
 
 </div>
@@ -422,7 +422,7 @@ header says en = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>opendias 0.9.3b is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
+    <p>[VERSION STRING] is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> ([DATES])</p>
   </div>
 
 </div>
@@ -635,7 +635,7 @@ header says de = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>opendias 0.9.3b wird unter der Freigabe <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a> (2008 - 2013)</p>
+    <p>[VERSION STRING] wird unter der Freigabe <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a> ([DATES])</p>
   </div>
 
 </div>
@@ -848,7 +848,7 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>opendias 0.9.3b wird unter der Freigabe <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a> (2008 - 2013)</p>
+    <p>[VERSION STRING] wird unter der Freigabe <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a> ([DATES])</p>
   </div>
 
 </div>
@@ -1061,7 +1061,7 @@ bad cookie, header says ## = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>opendias 0.9.3b ## ######## ##### ### <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>####### ####</a> (2008 - 2013)</p>
+    <p>[VERSION STRING] ## ######## ##### ### <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>####### ####</a> ([DATES])</p>
   </div>
 
 </div>
