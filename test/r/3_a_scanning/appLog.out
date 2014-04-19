@@ -58,9 +58,6 @@ LOG-OUTPUT
 -date-:-thread-:INF Child process created [CONFIG_FILE]
 -date-:-thread-:INF Just about to start the worker: /tmp/opendias_test/bin/opendias_worker [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ],en
 -date-:-thread-:INF Worker started and ready to process: internalDoScanningOperation
--date-:-thread-:INF Waiting for db lock...
- ----- line duplicated more than three times ----- 
--date-:-thread-:INF Waiting for db lock...
 -date-:-thread-:INF Setting scanner param mode to "Gray"
 -date-:-thread-:INF Setting scanner param source to "Flatbed"
 -date-:-thread-:INF Setting scanner param resolution to 100.000000
