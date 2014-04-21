@@ -108,8 +108,8 @@ int setup (char *configFile) {
   sql = o_strdup("SELECT config_option, config_value FROM config");
   rSet = runquery_db(sql, NULL);
   if( rSet != NULL ) {
-    char *config_option, *config_value;
     do {
+      char *config_option, *config_value;
       config_option = o_strdup(readData_db(rSet, "config_option"));
       config_value = o_strdup(readData_db(rSet, "config_value"));
       o_log(INFORMATION, "Config setting: %s = %s", config_option, config_value);

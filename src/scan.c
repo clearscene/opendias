@@ -729,7 +729,7 @@ extern char *internalGetScannerList(char *lang) {
   SANE_Status status;
   const SANE_Device **SANE_device_list;
   int scanOK = SANE_FALSE;
-  char *replyTemplate, *deviceList; 
+  char *deviceList; 
 
   status = sane_get_devices (&SANE_device_list, SANE_TRUE);
   if(status == SANE_STATUS_GOOD) {
@@ -749,6 +749,7 @@ extern char *internalGetScannerList(char *lang) {
 
     int i = 0;
 
+    char *replyTemplate; 
     replyTemplate = o_strdup("<Device><vendor>%s</vendor><model>%s</model><type>%s</type><name>%s</name><host>%s</host></Device>");
     deviceList = o_strdup("");
 

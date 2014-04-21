@@ -290,9 +290,7 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
 
   struct simpleLinkedList *vars = sll_init();
   struct simpleLinkedList *rSet;
-  const char *type;
-  char *docList, *actionrequired, *title, *docid, *humanReadableDate, 
-    *rows, *token, *olds, *sql, *textWhere=NULL, *dateWhere=NULL, 
+  char *docList, *rows, *sql, *textWhere=NULL, *dateWhere=NULL, 
     *tagWhere=NULL, *actionWhere=NULL, *page_ret;
   int count = 0;
   char *sqlTextSearch = o_printf( "%%%s%%", textSearch );
@@ -343,13 +341,13 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
     char delim, olddelim;
     tagWhere = o_strdup("tags.tagname IN (");
     count = 0;
-    olds = tags;
+    char *olds = tags;
     delim = ',';
     olddelim = delim;
     while(olddelim && *tags) {
       while(*tags && (delim != *tags)) tags++;
       *tags ^= olddelim = *tags; // olddelim = *s; *s = 0;
-      token = o_strdup(olds);
+      char *token = o_strdup(olds);
       o_concatf(&tagWhere, "'%s',", token);
       free(token);
       count++;
@@ -397,9 +395,9 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
       if(prefixAnd == 1) {
         conCat(&sql, "AND ");
       }
-      else {
-        prefixAnd = 1;
-      }
+//      else {
+//        prefixAnd = 1;
+//      }
       conCat(&sql, actionWhere);
     }
   }
@@ -466,6 +464,7 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
 
       if( 0 == strcmp(subaction, "fullList") ) {
         count++;
+        const char *type;
         if( 0 == strcmp(readData_db(rSet, "filetype"), "1") ) {
           type = getString( "LOCAL_file_type_odf", lang );
         }
@@ -478,15 +477,15 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
         else {
           type = getString( "LOCAL_file_type_scanned", lang );
         }
-        actionrequired = o_strdup(readData_db(rSet, "actionrequired"));
-        title = o_strdup(readData_db(rSet, "title"));
-        docid = o_strdup(readData_db(rSet, "docid"));
+        char *actionrequired = o_strdup(readData_db(rSet, "actionrequired"));
+        char *title = o_strdup(readData_db(rSet, "title"));
+        char *docid = o_strdup(readData_db(rSet, "docid"));
         if( 0 == strcmp(title, "NULL") ) {
           free(title);
           title = o_strdup( getString( "LOCAL_default_title", lang ) ); 
         }
         const char *nodate = getString( "LOCAL_no_date_set", lang);
-        humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")), 
+        char *humanReadableDate = dateHuman( o_strdup(readData_db(rSet, "docdatey")), 
                                        o_strdup(readData_db(rSet, "docdatem")), 
                                        o_strdup(readData_db(rSet, "docdated")),
                                        nodate );
@@ -522,7 +521,6 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
 char *titleAutoComplete(char *startsWith, char *notLinkedTo) {
 
   struct simpleLinkedList *vars = sll_init();
-  char *docid, *title, *data;
   char *result = o_strdup("{\"results\":[");
   char *line = o_strdup("{\"docid\":\"%s\",\"title\":\"%s\"}");
 
@@ -558,6 +556,7 @@ char *titleAutoComplete(char *startsWith, char *notLinkedTo) {
       if(notFirst==1) 
         conCat(&result, ",");
       notFirst = 1;
+      char *title, *data, *docid;
       docid = o_strdup(readData_db(rSet, "docid"));
       title = o_strdup(readData_db(rSet, "title"));
       data = o_printf(line, docid, title);
@@ -578,7 +577,6 @@ char *titleAutoComplete(char *startsWith, char *notLinkedTo) {
 char *tagsAutoComplete(char *startsWith, char *docid) {
 
   struct simpleLinkedList *rSet;
-  char *title, *data;
   char *result = o_strdup("{\"results\":[");
   char *line = o_strdup("{\"tag\":\"%s\"}");
   char *sql = o_strdup(
@@ -606,8 +604,8 @@ char *tagsAutoComplete(char *startsWith, char *docid) {
       if(notFirst==1) 
         conCat(&result, ",");
       notFirst = 1;
-      title = o_strdup(readData_db(rSet, "tagname"));
-      data = o_printf(line, title);
+      char *title = o_strdup(readData_db(rSet, "tagname"));
+      char *data = o_printf(line, title);
       conCat(&result, data);
       free(data);
       free(title);
@@ -766,11 +764,11 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
 
 char *doLogout( struct simpleLinkedList *session_data ) {
   
-  struct simpleLinkedList *details;
   const char *elements[] = { "next_login_attempt", "username", "realname", "role", NULL };
   int i;
 
   for (i = 0; elements[i]; i++) {
+    struct simpleLinkedList *details;
     details = sll_searchKeys( session_data, elements[i] );
     if ( details != NULL ) {
       free( details->data );
@@ -974,7 +972,7 @@ char *checkForSimilar(const char *docid) {
   struct simpleLinkedList *matching = sll_init();
   struct simpleLinkedList *matching_orig;
   int match_count = 0;
-  unsigned long long hash, ref_hash;
+  unsigned long long ref_hash;
 
   // =================================================
   // Get the pHash of the image we want to match against.
@@ -1010,6 +1008,7 @@ char *checkForSimilar(const char *docid) {
   else {
     do {
       char *this_docid = o_strdup(readData_db(rSet, "docid"));
+      unsigned long long hash;
       hash = strtoull(readData_db(rSet, "image_phash"), NULL, 10);
       int d = getDistance( ref_hash, hash );
       // A distance of 15 is the largest difference to be considered 'the same'

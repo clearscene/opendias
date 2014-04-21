@@ -77,10 +77,9 @@ void *backpopulate_phash_inner( void *u) {
   pthread_t thread[MAX_THREADS];
   pthread_attr_t attr;
   int thread_pointer = 0;
-  int avail_processors = 1;
 
   // We may have 16 processing cors, but only use what we need
-  avail_processors = get_nprocs() - 1;
+  int avail_processors = get_nprocs() - 1;
   if( avail_processors > MAX_THREADS ) {
     avail_processors = MAX_THREADS;
   }
