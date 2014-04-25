@@ -1,0 +1,22 @@
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:gnutls_pkcs11_init
+   fun:gnutls_global_init
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:call_init.part.0
+   ...
+}
+{
+<insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:magic_load
+   ...
+}

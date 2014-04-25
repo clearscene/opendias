@@ -117,7 +117,7 @@ for my $requested (@runTests) {
         next if ( $filename eq "." || $filename eq ".." );
         my $fullPath = "i/$TESTCASENAME/".$filename;
         if ( -f $fullPath && $fullPath =~ /\.sql$/ ) {
-          system("/usr/bin/sqlite3 /tmp/opendiastest/openDIAS.sqlite3 \".read $fullPath\""); 
+          system("/usr/bin/sqlite3 /tmp/opendiastest/openDIAS.sqlite3 \".read $fullPath\" > /dev/null"); 
         }
       }
       closedir(DIR);
@@ -156,13 +156,15 @@ for my $requested (@runTests) {
 
 
       # Start opendias
-      if( $testProfile->{valgrind} && $testProfile->{valgrind} == 1 ) {
+      if( (! length $SKIPMEMORY) && ( $testProfile->{valgrind} && $testProfile->{valgrind} == 1 ) ) {
         printProgressLine($TEST, "Starting service (valgrind)");
       }
       else {
         printProgressLine($TEST, "Starting service");
         $startCommand =~ s{valgrind.*\s([a-z_\/]*/bin/opendias)}{$1}xms;
-        o_log("No need for valgrind on this test.");
+        if( ! length $SKIPMEMORY ) {
+          o_log("No need for valgrind on this test.");
+        }
       }
       $RES = 1 unless startService( $startCommand, $testProfile->{startTimeout}, $wait );
 

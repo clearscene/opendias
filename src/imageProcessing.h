@@ -27,7 +27,9 @@
 #include <leptonica/allheaders.h>
 
 int isOCRLanguageAvailable( const char * );
+#ifdef CAN_SCAN
 struct simpleLinkedList *getOCRAvailableLanguages();
+#endif /* CAN_SCAN */
 char *getTextFromImage(PIX *, int, char *);
 #endif /* CAN_OCR */
 

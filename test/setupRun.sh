@@ -119,11 +119,11 @@ if [ "$NOBUILD" == "" ]; then
   echo Performing code analysis ...
   cd ../
   mv config.h config.h.orig
-  mv config.h.for_cppcheck config.h
+  cp config.h.for_cppcheck config.h
   cppcheck --verbose --enable=all --max-configs=999 --platform=unix32 --platform=unix64 --suppress=uselessAssignmentPtrArg:src/pageRender.c --error-exitcode=1 src/ &> test/results/buildLog2.out
   if [ "$?" -ne "0" ]; then
     echo "Code analysis found a problem. Check the buildLog.out for details."
-    mv config.h config.h.for_cppcheck
+    rm config.h 
     mv config.h.orig config.h
     cd test
     # unfortunatly bash cannot support "&>>" - yet!

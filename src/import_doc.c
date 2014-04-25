@@ -73,7 +73,14 @@ char *uploadfile(char *filename, char *lookForSimilar, char *lang) {
 #else
 
   int width = 0, height = 0, itype = PLACE_HOLDER;
-  char *final_filename, *ocrText = NULL, *thumbext = NULL, *tmp;
+  char *final_filename, *ocrText = NULL, *tmp;
+#ifdef CAN_PDF
+  char *thumbext = NULL;
+#else
+#ifdef CAN_READODF
+  char *thumbext = NULL;
+#endif /* CAN_READODF */
+#endif /* CAN_PDF */
   char *docid;
   char *ftype;
   char *datafile;

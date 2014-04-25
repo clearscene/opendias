@@ -109,7 +109,7 @@ Response was = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>[VERSION STRING] is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2013)</p>
+    <p>[VERSION STRING] is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> ([DATES])</p>
   </div>
 
 </div>
@@ -210,10 +210,10 @@ entrydate : [YYYY-MM-DD HH:MM:SS]
 filetype : 4
 hardcopyKept : 1
 image_phash : 50
-lines : 1900
+lines : 500
 ocrtext : Example OCR output.
 pages : 1
-ppl : 1500
+ppl : 387
 resolution : 0
 title : 
 ------------------ row 6 ------------------
@@ -258,7 +258,7 @@ File 5_1.jpg has MD5 of a46d421806a9c01169d5c472ea5462a5
 File 6.odt has MD5 of 4bfae85ddae5adacf88b52e8d42dcfaa
 File 6_thumb.png has MD5 of 68294bbeabd83d8220799b5f1a8c6784
 File 7.pdf has MD5 of 0e79ba199e8484ba9e3fc77472a19fb0
-File 7_thumb.jpg has MD5 of 9735115f4e2f7be156c2a549386de787
-File x7_thumb.jpg has MD5 of 9735115f4e2f7be156c2a549386de787
+File 7_thumb.jpg has MD5 of 18d3bde0bc419cacd363242f106f5e71
+File x7_thumb.jpg has MD5 of 18d3bde0bc419cacd363242f106f5e71
 Stopping service
 Waiting for valgrind to finish.

@@ -67,6 +67,7 @@ int isOCRLanguageAvailable( const char *lang ) {
   return 0;
 }
 
+#ifdef CAN_SCAN
 struct simpleLinkedList *getOCRAvailableLanguages() {
 
   struct simpleLinkedList *vars = sll_init();
@@ -97,6 +98,7 @@ struct simpleLinkedList *getOCRAvailableLanguages() {
   }
   return vars;
 }
+#endif /* CAN_SCAN */
 
 #endif /* CAN_OCR */
 

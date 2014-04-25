@@ -27,10 +27,11 @@ LOG-OUTPUT
 -date-:-thread-:INF ... Starting up the openDias service.
 -date-:-thread-:INF ready to accept connectons
 -date-:-thread-:INF [0] Calculating pHash for docid = 1
--date-:-thread-:INF Calculating pHash of image /tmp/pHash_[THREAD].jpg
 -date-:-thread-:INF [1] Calculating pHash for docid = 3
 -date-:-thread-:ERR Could not find the image data file: /tmp/opendiastest/scans/3_1.jpg
--date-:-thread-:INF [0] Calculating pHash for docid = 4
+-date-:-thread-:INF Calculating pHash of image /tmp/pHash_[THREAD].jpg
+-date-:-thread-:INF Waiting for db lock...
+-date-:-thread-:INF [1] Calculating pHash for docid = 4
 -date-:-thread-:INF Calculating pHash of image /tmp/pHash_[THREAD].jpg
 -date-:-thread-:INF Marking that the backpopulation of pHash as: complete
 -date-:-thread-:INF Received SIGUSR1 signal.

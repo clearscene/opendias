@@ -46,7 +46,7 @@ LOG-OUTPUT
 -date-:-thread-:INF Processed PDF
 -date-:-thread-:INF Calculating pHash of image /tmp/pHash_[THREAD].jpg
 -date-:-thread-:INF Processing request for: uploadfile
--date-:-thread-:ERR Uploaded file looks to be of type: text/plain
+-date-:-thread-:ERR Uploaded file looks to be of type: text/x-perl
 -date-:-thread-:ERR unknown file type.
 -date-:-thread-:INF Processing request for: regenerateThumb
 -date-:-thread-:ERR PDF page successfuly parsed
