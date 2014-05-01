@@ -39,7 +39,7 @@ cd ../
 cd libpHash
 echo Building libpHash
 rm -f libpHash.so* libpHash.o
-g++ -fPIC -O0 -g -c -Wall libpHash.cc > libpHash_override_build.log
+g++ -fPIC -O0 -g -c -Wall libpHash.cc &> libpHash_override_build.log
 g++ -shared -Wl,-soname,libpHash.so.0 -o libpHash.so.0.0.0 libpHash.o -lc
 ln -s libpHash.so.0.0.0 libpHash.so.0
 ln -s libpHash.so.0 libpHash.so
@@ -62,7 +62,7 @@ cd libpoppler
 echo Building libpoppler
 cp poppler_override_output /tmp/poppler_override_output
 rm -f libpoppler-cpp.so* libpoppler.o
-g++ -fPIC -O0 -g -c -Wall libpoppler.cc
+g++ -fPIC -O0 -g -c -Wall libpoppler.cc &> libpoppler_override_build.log
 g++ -shared -Wl,-soname,libpoppler-cpp.so.0 -o libpoppler-cpp.so.0.2.0 -Wl,-zmuldefs libpoppler.o -Wl,-whole-archive /usr/lib/i386-linux-gnu/libpoppler-cpp.a -Wl,-no-whole-archive -lc -lpoppler 2> /dev/null
 ln -s libpoppler-cpp.so.0.2.0 libpoppler-cpp.so.0
 ln -s libpoppler-cpp.so.0 libpoppler-cpp.so

@@ -114,10 +114,12 @@ test/override_libs/libpHash/libpHash.o
 test/override_libs/libpHash/libpHash.so
 test/override_libs/libpHash/libpHash.so.0
 test/override_libs/libpHash/libpHash.so.0.0.0
+test/override_libs/libpHash/libpHash_override_build.log
 test/override_libs/libpoppler/libpoppler-cpp.so
 test/override_libs/libpoppler/libpoppler-cpp.so.0
 test/override_libs/libpoppler/libpoppler-cpp.so.0.2.0
 test/override_libs/libpoppler/libpoppler.o
+test/override_libs/libpoppler/libpoppler_override_build.log
 test/override_libs/libsane/libsane.o
 test/override_libs/libsane/libsane.so
 test/override_libs/libsane/libsane.so.1
