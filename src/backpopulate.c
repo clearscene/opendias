@@ -18,8 +18,8 @@
 
 #include "config.h"
 
-#include <string.h>
 #include "db.h"
+#include "utils.h"
 
 #include "backpopulate.h"
 
@@ -27,10 +27,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <string.h>
 #include <sys/sysinfo.h>
 
 #include "debug.h"
-#include "utils.h"
 #include "simpleLinkedList.h"
 #include "imageProcessing.h"
 #include "dbaccess.h"
