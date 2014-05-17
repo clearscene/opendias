@@ -157,6 +157,18 @@ static int checkFullCount(char *val) {
 }
 
 //
+static int validSubFilter(char *val) {
+  if( val == NULL ) return 1;
+  if ( 0 == strcmp(val, "isActionRequired" )
+    || 0 == strcmp(val, "requiresPhysicalShredding" ) 
+    || 0 == strcmp(val, "requiresDataPurging" ) ) {
+    return 0;
+  }
+  o_log(ERROR, "Validation failed: validSubFilter check");
+  return 1;
+}
+
+//
 static int checkDate(char *val) {
   struct dateParts *dp = dateStringToDateParts(val);
   int x=0;
@@ -468,11 +480,11 @@ int validate(struct simpleLinkedList *postdata, char *action) {
 
   if ( 0 == strcmp(action, "docFilter") ) {
     sll_insert(vars, "subaction", "m" );
+    sll_insert(vars, "subFilter", "o" );
     sll_insert(vars, "textSearch", "o" );
     sll_insert(vars, "startDate", "o" );
     sll_insert(vars, "endDate", "o" );
     sll_insert(vars, "tags", "o" );
-    sll_insert(vars, "isActionRequired", "o" );
     sll_insert(vars, "page", "o" );
     sll_insert(vars, "range", "o" );
     sll_insert(vars, "sortfield", "o" );
@@ -481,6 +493,8 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkFullCount(getPostData(postdata, "subaction"));
 
     // Protect against the manditory checking of the validation subs.
+    data = getPostData(postdata, "subFilter");
+    if(data != NULL && strcmp(data,"")) ret += validSubFilter(data);
     data = getPostData(postdata, "textSearch");
     if(data != NULL && strcmp(data,"")) ret += checkVal(data);
     data = getPostData(postdata, "startDate");
@@ -489,8 +503,6 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     if(data != NULL && strcmp(data,"")) ret += checkDate(data);
     data = getPostData(postdata, "tags");
     if(data != NULL && strcmp(data,"")) ret += checkTagList(data);
-    data = getPostData(postdata, "isActionRequired");
-    if(data != NULL && strcmp(data,"")) ret += checkVal(data);
     data = getPostData(postdata, "page");
     if(data != NULL && strcmp(data,"")) ret += checkSaneRange(data,1,9999);
     data = getPostData(postdata, "range");

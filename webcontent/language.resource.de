@@ -42,7 +42,7 @@ LOCAL_home_help_donate_p1|Jede Spende wird dankbar angenommen, und werden verwen
 LOCAL_home_help_donate_p2|Vielen Dank an alle, die dies bereits.
 LOCAL_doclist_filterby|Filter By:
 LOCAL_doclist_title_or_ocr|Titel-oder OCR-Text:
-LOCAL_doclist_has_action|Hat "Erforderliche Aktion":
+LOCAL_doclist_has_action|Hat "Erforderliche Aktion"
 LOCAL_doclist_doc_date|Datum des Dokuments:
 LOCAL_doclist_doc_tag|Dokument Tags:
 LOCAL_doclist_filterbutton|Filter

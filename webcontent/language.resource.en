@@ -42,7 +42,10 @@ LOCAL_home_help_donate_p1|Any donation are gratefully received, and are used to 
 LOCAL_home_help_donate_p2|Thank you to everyone who has done so already.
 LOCAL_doclist_filterby|Filter By:
 LOCAL_doclist_title_or_ocr|Title or OCR Text:
-LOCAL_doclist_has_action|Has 'Action Required':
+LOCAL_doclist_sub_filter|Document attribute:
+LOCAL_doclist_has_action|Falgged as 'Action Required'
+LOCAL_doclist_requires_physical_shredding|Requires 'Physical Shredding'
+LOCAL_doclist_requires_data_purging|Requires 'Purging'
 LOCAL_doclist_doc_date|Document Date:
 LOCAL_doclist_doc_tag|Document Tags:
 LOCAL_doclist_filterbutton|Filter

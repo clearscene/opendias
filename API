@@ -286,12 +286,12 @@ __endjob]]></example>
           <value>Get all details or just the count of matching docs ['count','fullList']</value>
         </Input>
         <Input>
-          <name>textSearch</name>
-          <value>Text that a document must match (title or ocr text)</value>
+          <name>subFilter</name>
+          <value>Optional field to filter atributes of the document ['isActionRequired','requiresPhysicalShredding','requiresDataPurging']</value>
         </Input>
         <Input>
-          <name>isActionRequired</name>
-          <value>If 'true' return only records that are marked as 'action required'.</value>
+          <name>textSearch</name>
+          <value>Text that a document must match (title or ocr text)</value>
         </Input>
         <Input>
           <name>startDate</name>

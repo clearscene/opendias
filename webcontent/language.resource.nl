@@ -42,7 +42,7 @@ LOCAL_home_help_donate_p1|Elke donatie wordt dankbaar ontvangen en wordt gebruik
 LOCAL_home_help_donate_p2|Dank aan iedereen die al een donatie gedaan heeft.
 LOCAL_doclist_filterby|Filter Op:
 LOCAL_doclist_title_or_ocr|Titel or OCR-Tekst:
-LOCAL_doclist_has_action|Heeft 'Actie Benodigd':
+LOCAL_doclist_has_action|Heeft 'Actie Benodigd'
 LOCAL_doclist_doc_date|Documentdatum:
 LOCAL_doclist_doc_tag|Document Categorieën:
 LOCAL_doclist_filterbutton|Filter

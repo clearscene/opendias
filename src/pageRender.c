@@ -286,7 +286,7 @@ char *getScanningProgress(char *scanid) {
 }
 #endif /* CAN_SCAN */
 
-char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder, char *lang ) {
+char *docFilter(char *subaction, char *subFilter, char *textSearch, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder, char *lang ) {
 
   struct simpleLinkedList *vars = sll_init();
   struct simpleLinkedList *rSet;
@@ -313,10 +313,33 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
     sll_append(vars, sqlTextSearch );
   }
 
-  // Filter by ActionRequired
+  // subFilter
   //
-  if( ( isActionRequired!=NULL ) && ( 0 == strcmp(isActionRequired, "true") ) ) {
-    actionWhere = o_strdup("actionrequired=1 ");
+  if( subFilter!=NULL  ) {
+    //isActionRequired','requiresPhysicalShredding','requiresDataPurging'
+
+    // Filter by ActionRequired
+    //
+    if( 0 == strcmp(subFilter, "isActionRequired") ) {
+      actionWhere = o_strdup(" actionrequired=1  ");
+    }
+
+    // Filter by Things that need shredding
+    //
+    if( 0 == strcmp(subFilter, "requiresPhysicalShredding" ) ) {
+      o_concatf(&sql, " JOIN (SELECT docid, max(purgePhysical) expiresafter FROM doc_tags sf_dt JOIN tags sf_t ON sf_t.tagid = sf_dt.tagid AND purgePhysical != 0 GROUP BY docid) longestByTag ON docs.docid = longestByTag.docid ");
+
+      actionWhere = o_strdup( " date( docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2), '+'||expiresafter||' days' ) < datetime('now') AND docs.hardcopyKept = 1 ");
+    }
+
+    // Filter by Things that need purging
+    //
+    if( 0 == strcmp(subFilter, "requiresDataPurging" ) ) {
+      o_concatf(&sql, " JOIN (SELECT docid, max(purgedata) expiresafter FROM doc_tags sf_dt JOIN tags sf_t ON sf_t.tagid = sf_dt.tagid AND purgedata != 0 GROUP BY docid) longestByTag ON docs.docid = longestByTag.docid ");
+
+      actionWhere = o_strdup( " date( docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2), '+'||expiresafter||' days' ) < datetime('now') ");
+    }
+
   }
 
   // Filter by Doc Date
@@ -455,6 +478,7 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   //
   rows = o_strdup("");
   o_log(DEBUGM, "sql=%s", sql);
+  o_log(ERROR, "sql=%s", sql);
 
   rSet = runquery_db(sql, vars);
   count = 0;
