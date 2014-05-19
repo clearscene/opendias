@@ -11,7 +11,7 @@ LOCAL_role_user = 'Benutzer (alles zu tun, außer Zugriffskontrollen)';
 LOCAL_role_view = 'Ansehen (kann Dokument nur anzeigen)';
 LOCAL_role_add = 'Hinzufügen (Dokumente kann nur hinzufügen)';
 LOCAL_howto_login_title = 'Login Hilfe';
-LOCAL_howto_login = 'Geben Sie Ihren Benutzernamen und Ihr Passwort ein und drücken Sie \ 'login \' den Zugriff auf alle Funktionen.';
+LOCAL_howto_login = 'Geben Sie Ihren Benutzernamen und Ihr Passwort ein und drücken Sie \'login\' den Zugriff auf alle Funktionen.';
 LOCAL_login_firsttime = 'Wenn Sie nur openDias installiert haben, lesen Sie bitte <a href=\'http://opendias.essentialcollections.co.uk/support/#AuthenticationSetup\'>Authentisierung</a> details für den Einstieg in.';
 LOCAL_user_admin_title = 'Admin-Funktionen';
 LOCAL_user_admin = 'Klicken Sie auf Ihren Namen, Ihre Daten ändern.';
