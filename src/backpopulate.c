@@ -18,6 +18,11 @@
 
 #include "config.h"
 
+#include "db.h"
+#include "utils.h"
+
+#include "backpopulate.h"
+
 #ifdef CAN_PHASH
 #include <stdlib.h>
 #include <unistd.h>
@@ -26,14 +31,11 @@
 #include <sys/sysinfo.h>
 
 #include "debug.h"
-#include "utils.h"
 #include "simpleLinkedList.h"
 #include "imageProcessing.h"
-#include "db.h"
 #include "dbaccess.h"
 #include "main.h"
 
-#include "backpopulate.h"
 
 // max number of worker threads on a system with infinate available processors. (indexed from 0)
 #define MAX_THREADS 3
