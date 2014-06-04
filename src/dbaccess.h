@@ -56,6 +56,7 @@ int addTagToDoc (char *, char *);
 int removeTagFromDoc (char *, char *);
 int addDocToDoc (char *, char *);
 int removeDocFromDoc (char *, char *);
+int doUpdateTag (char *, char *, char *);
 void removeDocTags (char *);
 void removeDocLinks (char *);
 void removeDoc (char *);

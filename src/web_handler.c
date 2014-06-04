@@ -891,8 +891,8 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
             else {
               char *subaction = getPostData(con_info->post_data, "subaction");
+              char *subFilter = getPostData(con_info->post_data, "subFilter");
               char *textSearch = getPostData(con_info->post_data, "textSearch");
-              char *isActionRequired = getPostData(con_info->post_data, "isActionRequired");
               char *startDate = getPostData(con_info->post_data, "startDate");
               char *endDate = getPostData(con_info->post_data, "endDate");
               char *tags = getPostData(con_info->post_data, "tags");
@@ -900,7 +900,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               char *range = getPostData(con_info->post_data, "range");
               char *sortfield = getPostData(con_info->post_data, "sortfield");
               char *sortorder = getPostData(con_info->post_data, "sortorder");
-              content = docFilter(subaction, textSearch, isActionRequired, startDate, endDate, tags, page, range, sortfield, sortorder, con_info->lang); //pageRender.c
+              content = docFilter(subaction, subFilter, textSearch, startDate, endDate, tags, page, range, sortfield, sortorder, con_info->lang); //pageRender.c
               if(content == (void *)NULL) {
                 content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
               }
@@ -1097,6 +1097,39 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             size = strlen(content);
           } 
 #endif /* OPEN_TO_ALL */
+  
+          else if ( action && 0 == strcmp(action, "getTagsList") ) {
+            o_log(INFORMATION, "Processing request for: getTagsList");
+            if ( accessPrivs.update_access == 0 )
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              content = getTagsList(); // pageRender.c
+              if(content == (void *)NULL) 
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            }
+            mimetype = MIMETYPE_JSON;
+            size = strlen(content);
+          } 
+
+          else if ( action && 0 == strcmp(action, "updateTag") ) {
+            o_log(INFORMATION, "Processing request for: updateTag");
+            if ( accessPrivs.update_access == 0 )
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
+            else if ( validate( con_info->post_data, action ) ) 
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            else {
+              char *subaction = getPostData(con_info->post_data, "subaction");
+              char *tagid = getPostData(con_info->post_data, "tagid");
+              char *newvalue = getPostData(con_info->post_data, "newvalue");
+              content = updateTag(subaction, tagid, newvalue); // pageRender.c
+              if(content == (void *)NULL) 
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            }
+            mimetype = MIMETYPE_JSON;
+            size = strlen(content);
+          } 
 
           else if ( action && 0 == strcmp(action, "checkForSimilar") ) {
             o_log(INFORMATION, "Processing request for: check For Similar");

@@ -1,4 +1,6 @@
- 0.9.5  Final release version
+ 1.0.1  Add purging alerts
+
+*0.9.5  Final release version
 
  0.9.4  Standards on configure.ac and MakeFile.am
         Use tesseracts actual installed location and only show OCR for installed tesseract langs

@@ -95,6 +95,7 @@ char *getScannerDetails(char *deviceid, char *lang) {
   }
   return answer;
 }
+
 extern void *doScanningOperation(void *saneOpData) {
 
   struct doScanOpData *tr = (struct doScanOpData *)saneOpData;
@@ -286,7 +287,7 @@ char *getScanningProgress(char *scanid) {
 }
 #endif /* CAN_SCAN */
 
-char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder, char *lang ) {
+char *docFilter(char *subaction, char *subFilter, char *textSearch, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder, char *lang ) {
 
   struct simpleLinkedList *vars = sll_init();
   struct simpleLinkedList *rSet;
@@ -313,10 +314,33 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
     sll_append(vars, sqlTextSearch );
   }
 
-  // Filter by ActionRequired
+  // subFilter
   //
-  if( ( isActionRequired!=NULL ) && ( 0 == strcmp(isActionRequired, "true") ) ) {
-    actionWhere = o_strdup("actionrequired=1 ");
+  if( subFilter!=NULL  ) {
+    //isActionRequired','requiresPhysicalShredding','requiresDataPurging'
+
+    // Filter by ActionRequired
+    //
+    if( 0 == strcmp(subFilter, "isActionRequired") ) {
+      actionWhere = o_strdup(" actionrequired=1  ");
+    }
+
+    // Filter by Things that need shredding
+    //
+    if( 0 == strcmp(subFilter, "requiresPhysicalShredding" ) ) {
+      o_concatf(&sql, " JOIN (SELECT docid, max(purgePhysical) expiresafter FROM doc_tags sf_dt JOIN tags sf_t ON sf_t.tagid = sf_dt.tagid AND purgePhysical != 0 GROUP BY docid) longestByTag ON docs.docid = longestByTag.docid ");
+
+      actionWhere = o_strdup( " date( docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2), '+'||expiresafter||' days' ) < datetime('now') AND docs.hardcopyKept = 1 ");
+    }
+
+    // Filter by Things that need purging
+    //
+    if( 0 == strcmp(subFilter, "requiresDataPurging" ) ) {
+      o_concatf(&sql, " JOIN (SELECT docid, max(purgedata) expiresafter FROM doc_tags sf_dt JOIN tags sf_t ON sf_t.tagid = sf_dt.tagid AND purgedata != 0 GROUP BY docid) longestByTag ON docs.docid = longestByTag.docid ");
+
+      actionWhere = o_strdup( " date( docdatey || '-' || substr('00'||docdatem, -2) || '-' || substr('00'||docdated, -2), '+'||expiresafter||' days' ) < datetime('now') ");
+    }
+
   }
 
   // Filter by Doc Date
@@ -455,6 +479,7 @@ char *docFilter(char *subaction, char *textSearch, char *isActionRequired, char 
   //
   rows = o_strdup("");
   o_log(DEBUGM, "sql=%s", sql);
+  o_log(ERROR, "sql=%s", sql);
 
   rSet = runquery_db(sql, vars);
   count = 0;
@@ -939,6 +964,51 @@ char *getUserList() {
 o_log( ERROR, "%s", result );
 
   return result;
+}
+
+char *getTagsList( ) {
+
+  struct simpleLinkedList *rSet;
+  char *sql = o_strdup(
+    "SELECT tags.tagid, tagname, COUNT(docid) used_count, purgephysical, purgedata \
+    FROM tags LEFT JOIN doc_tags ON tags.tagid = doc_tags.tagid \
+    GROUP BY tags.tagid" );
+  rSet = runquery_db( sql, NULL );
+  free( sql );
+
+  if( rSet == NULL ) {
+    o_log( ERROR, "Could not get a list of users." );
+    return NULL;
+  }
+
+  char *tagTemplate = o_strdup( "<Tag><tagid>%s</tagid><tagname>%s</tagname><used_count>%s</used_count><purgephysical>%s</purgephysical><purgedata>%s</purgedata></Tag>" );
+  char *tagList = o_strdup("");
+  do {
+    o_concatf(&tagList, tagTemplate,
+                            readData_db(rSet, "tagid"),
+                            readData_db(rSet, "tagname"),
+                            readData_db(rSet, "used_count"),
+                            readData_db(rSet, "purgephysical"),
+                            readData_db(rSet, "purgedata") );
+  } while ( nextRow( rSet ) );
+  free_recordset( rSet );
+
+  char *result = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><GetTagsList><Tags>%s</Tags></GetTagsList></Response>", tagList);
+  free( tagList );
+  free( tagTemplate );
+o_log( ERROR, "%s", result );
+
+  return result;
+
+}
+
+char *updateTag( char *subaction, char *tagid, char *newvalue ) {
+
+  int rc;
+  rc = doUpdateTag( subaction, tagid, newvalue);
+
+  if(rc) return NULL;
+  else return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateTag><result>OK</result></UpdateTag></Response>");
 }
 
 char *deleteUser( char *username, char *lang ) {

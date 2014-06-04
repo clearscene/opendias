@@ -133,6 +133,31 @@ static int checkDocId(char *val) {
 }
 
 //
+static int checkTagId(char *val) {
+  if(checkStringIsInt(val)) return 1;
+  if(checkSaneRange(val, 0, 9999)) return 1;
+  return 0;
+}
+
+//
+static int checkTagUpdateAction(char *val) {
+  if( val == NULL ) return 1;
+  if ( 0 == strcmp(val, "purgephysical" )
+    || 0 == strcmp(val, "purgedata" ) ) {
+    return 0;
+  }
+  o_log(ERROR, "Validation failed: tag update action check");
+  return 1;
+}
+
+//
+static int checkPurgeTime(char *purgein) {
+  if(checkStringIsInt(purgein)) return 1;
+  if(checkSaneRange(purgein, 0, 9999)) return 1;
+  return 0;
+}
+
+//
 static int checkAddRemove(char *val) {
   if( val == NULL ) return 1;
   if ( 0 == strcmp(val, "addTag")
@@ -153,6 +178,18 @@ static int checkFullCount(char *val) {
     return 0;
   }
   o_log(ERROR, "Validation failed: fullList/count check");
+  return 1;
+}
+
+//
+static int validSubFilter(char *val) {
+  if( val == NULL ) return 1;
+  if ( 0 == strcmp(val, "isActionRequired" )
+    || 0 == strcmp(val, "requiresPhysicalShredding" ) 
+    || 0 == strcmp(val, "requiresDataPurging" ) ) {
+    return 0;
+  }
+  o_log(ERROR, "Validation failed: validSubFilter check");
   return 1;
 }
 
@@ -248,6 +285,7 @@ static int checkResolution(char *val) {
 }
 #endif /* CAN_SCAN */
 
+//
 static int checkUpdateKey(char *val) {
   if( val == NULL ) return 1;
   if ( 0 != strcmp(val, "title") 
@@ -355,6 +393,8 @@ int basicValidation(struct simpleLinkedList *postdata) {
     && 0 != strcmp(action, "updateUser")
     && 0 != strcmp(action, "createUser")
     && 0 != strcmp(action, "getUserList")
+    && 0 != strcmp(action, "getTagsList")
+    && 0 != strcmp(action, "updateTag")
     && 0 != strcmp(action, "deleteUser")
     && 0 != strcmp(action, "checkForSimilar")
                                         ) {
@@ -468,11 +508,11 @@ int validate(struct simpleLinkedList *postdata, char *action) {
 
   if ( 0 == strcmp(action, "docFilter") ) {
     sll_insert(vars, "subaction", "m" );
+    sll_insert(vars, "subFilter", "o" );
     sll_insert(vars, "textSearch", "o" );
     sll_insert(vars, "startDate", "o" );
     sll_insert(vars, "endDate", "o" );
     sll_insert(vars, "tags", "o" );
-    sll_insert(vars, "isActionRequired", "o" );
     sll_insert(vars, "page", "o" );
     sll_insert(vars, "range", "o" );
     sll_insert(vars, "sortfield", "o" );
@@ -481,6 +521,8 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkFullCount(getPostData(postdata, "subaction"));
 
     // Protect against the manditory checking of the validation subs.
+    data = getPostData(postdata, "subFilter");
+    if(data != NULL && strcmp(data,"")) ret += validSubFilter(data);
     data = getPostData(postdata, "textSearch");
     if(data != NULL && strcmp(data,"")) ret += checkVal(data);
     data = getPostData(postdata, "startDate");
@@ -489,8 +531,6 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     if(data != NULL && strcmp(data,"")) ret += checkDate(data);
     data = getPostData(postdata, "tags");
     if(data != NULL && strcmp(data,"")) ret += checkTagList(data);
-    data = getPostData(postdata, "isActionRequired");
-    if(data != NULL && strcmp(data,"")) ret += checkVal(data);
     data = getPostData(postdata, "page");
     if(data != NULL && strcmp(data,"")) ret += checkSaneRange(data,1,9999);
     data = getPostData(postdata, "range");
@@ -580,6 +620,20 @@ int validate(struct simpleLinkedList *postdata, char *action) {
     ret += checkKeys(postdata, vars );
   }
 #endif /* OPEN_TO_ALL /*/
+
+  if ( 0 == strcmp(action, "getTagsList") ) {
+    ret += checkKeys(postdata, vars );
+  }
+
+  if ( 0 == strcmp(action, "updateTag") ) {
+    sll_insert(vars, "newvalue", "m" );
+    sll_insert(vars, "tagid", "m" );
+    sll_insert(vars, "subaction", "m" );
+    ret += checkKeys(postdata, vars );
+    ret += checkPurgeTime(getPostData(postdata, "newvalue"));
+    ret += checkTagId(getPostData(postdata, "tagid"));
+    ret += checkTagUpdateAction(getPostData(postdata, "subaction"));
+  }
 
   // Needs further validation effort
 

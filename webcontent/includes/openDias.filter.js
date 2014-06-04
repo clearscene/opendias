@@ -24,7 +24,7 @@ $(document).ready(function () {
   $('#textSearch').change(function () {
     getRecordCount()
   });
-  $('#isActionRequired').change(function () {
+  $('#subFilter').change(function () {
     getRecordCount()
   });
   $('#startDate').change(function () {
@@ -44,8 +44,8 @@ function getRecordCount() {
     data: {
       action: "docFilter",
       subaction: "count",
+      subFilter: $('#subFilter').val(),
       textSearch: $('#textSearch').val(),
-      isActionRequired: $('#isActionRequired').is(':checked'),
       startDate: $('#startDate').val(),
       endDate: $('#endDate').val(),
       tags: $('#tags').val()

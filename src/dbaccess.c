@@ -188,6 +188,25 @@ int doUpdateDocValue (char *kkey, struct simpleLinkedList *vars) {
   return rc;
 }
 
+int doUpdateTag (char *kkey, char *tagid, char *newval) {
+
+  char *sql;
+  int rc = 0;
+
+  sql = o_printf("UPDATE tags SET %s = ? WHERE tagid = ?", kkey);
+
+  struct simpleLinkedList *vars = sll_init();
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, newval );
+  sll_append(vars, DB_TEXT );
+  sll_append(vars, tagid );
+
+  rc = runUpdate_db(sql, vars);
+  free(sql);
+
+  return rc;
+}
+
 int updateDocValue_int (char *docid, char *kkey, int vvalue) {
 
   struct simpleLinkedList *vars = sll_init();

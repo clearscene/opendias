@@ -25,10 +25,15 @@
       </div>
       <div class='row'>
         <div class='label'>
-          ---LOCAL_doclist_has_action---
+          ---LOCAL_doclist_sub_filter---
         </div>
         <div class='data'>
-            <input type='checkbox' id='isActionRequired' />
+          <select id='subFilter'>
+            <option value=''>-</option>
+            <option value='isActionRequired'>---LOCAL_doclist_has_action---</option>
+            <option value='requiresPhysicalShredding'>---LOCAL_doclist_requires_physical_shredding---</option>
+            <option value='requiresDataPurging'>---LOCAL_doclist_requires_data_purging---</option>
+          </select>
         </div>
       </div>
       <div class='row'>

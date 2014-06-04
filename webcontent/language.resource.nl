@@ -42,7 +42,7 @@ LOCAL_home_help_donate_p1|Elke donatie wordt dankbaar ontvangen en wordt gebruik
 LOCAL_home_help_donate_p2|Dank aan iedereen die al een donatie gedaan heeft.
 LOCAL_doclist_filterby|Filter Op:
 LOCAL_doclist_title_or_ocr|Titel or OCR-Tekst:
-LOCAL_doclist_has_action|Heeft 'Actie Benodigd':
+LOCAL_doclist_has_action|Heeft 'Actie Benodigd'
 LOCAL_doclist_doc_date|Documentdatum:
 LOCAL_doclist_doc_tag|Document Categorieën:
 LOCAL_doclist_filterbutton|Filter
@@ -109,6 +109,7 @@ LOCAL_admin_tab_mydetails|Mijn gegevens
 LOCAL_admin_tab_create_user|Maak Gebruikers
 LOCAL_admin_tab_edit_user|Wijzig Gebruikers
 LOCAL_admin_tab_manage_session|Sessie Beheer
+LOCAL_admin_tab_manage_tags|LOCALISE_ME Manage Tags
 LOCAL_admin_mydetails_title|Beheer de huidige gebruiker
 LOCAL_admin_mydetails_changename|Wijzig 'Echte Naam':
 LOCAL_admin_mydetails_changepassword|Wijzig 'Wachtwoord':
@@ -120,3 +121,13 @@ LOCAL_admin_createuser_id|Gebruiker Id:
 LOCAL_admin_createuser_name|Echte Naam:
 LOCAL_admin_createuser_password|Wachtwoord:
 LOCAL_admin_createuser_role|Rol:
+LOCAL_doclist_sub_filter|LOCALISEME doclist sub filter
+LOCAL_doclist_requires_data_purging|LOCALISEME required data purging
+LOCAL_doclist_requires_physical_shredding|LOCALISEME requires physical purging
+LOCAL_admin_managetags_title|LOCALISEME Manage tag shredding and purging profiles
+LOCAL_admin_managetags_intro|LOCALISEME Set the number of days a document will be kept before it's flagged for some action. ie, you may want to shred your original 'phone bills' after a year. To do this, add '365' to shred for 'phone bills'.
+LOCAL_admin_managetags_tagname|LOCALISEME Tag Name
+LOCAL_admin_managetags_usedcount|LOCALISEME Used by # docs
+LOCAL_admin_managetags_flag below|LOCALISEME Flag as below, after # days
+LOCAL_admin_managetags_shred|LOCALISEME Shred Original
+LOCAL_admin_managetags_purge|LOCALISEME Purge Data
