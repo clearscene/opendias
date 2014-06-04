@@ -112,6 +112,7 @@ LOCAL_admin_tab_mydetails|My details
 LOCAL_admin_tab_create_user|Create Users
 LOCAL_admin_tab_edit_user|Edit Users
 LOCAL_admin_tab_manage_session|Session Management
+LOCAL_admin_tab_manage_tags|Manage Tags
 LOCAL_admin_mydetails_title|Manage the current user
 LOCAL_admin_mydetails_changename|Change 'Real Name':
 LOCAL_admin_mydetails_changepassword|Change 'Password':
@@ -123,3 +124,11 @@ LOCAL_admin_createuser_id|User Id:
 LOCAL_admin_createuser_name|Real Name:
 LOCAL_admin_createuser_password|Password:
 LOCAL_admin_createuser_role|Role:
+LOCAL_admin_managetags_title|Manage tag shredding and purging profiles
+LOCAL_admin_managetags_intro|Set the number of days a document will be kept before it's flagged for some action. ie, you may want to shred your original 'phone bills' after a year. To do this, add '365' to shred for 'phone bills'.
+LOCAL_admin_managetags_tagname|Tag Name
+LOCAL_admin_managetags_usedcount|Used by # docs
+LOCAL_admin_managetags_flag below|Flag as below, after # days
+LOCAL_admin_managetags_shred|Shred Original
+LOCAL_admin_managetags_purge|Purge Data
+

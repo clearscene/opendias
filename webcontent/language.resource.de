@@ -109,6 +109,7 @@ LOCAL_admin_tab_mydetails|Meine Details
 LOCAL_admin_tab_create_user|Benutzer erstellen
 LOCAL_admin_tab_edit_user|Benutzer bearbeiten
 LOCAL_admin_tab_manage_session|Session Management
+LOCAL_admin_tab_manage_tags|LOCALISE_ME Manage Tags
 LOCAL_admin_mydetails_title|Verwalten des aktuellen Benutzers
 LOCAL_admin_mydetails_changename|Ändern Richtiger Name:
 LOCAL_admin_mydetails_changepassword|Kennwort ändern:
@@ -120,3 +121,13 @@ LOCAL_admin_createuser_id|Benutzer Id:
 LOCAL_admin_createuser_name|Echter Name:
 LOCAL_admin_createuser_password|Kennwort:
 LOCAL_admin_createuser_role|Rolle:
+LOCAL_doclist_sub_filter|LOCALISEME doclist sub filter
+LOCAL_doclist_requires_data_purging|LOCALISEME required data purging
+LOCAL_doclist_requires_physical_shredding|LOCALISEME requires physical purging
+LOCAL_admin_managetags_title|LOCALISEME Manage tag shredding and purging profiles
+LOCAL_admin_managetags_intro|LOCALISEME Set the number of days a document will be kept before it's flagged for some action. ie, you may want to shred your original 'phone bills' after a year. To do this, add '365' to shred for 'phone bills'.
+LOCAL_admin_managetags_tagname|LOCALISEME Tag Name
+LOCAL_admin_managetags_usedcount|LOCALISEME Used by # docs
+LOCAL_admin_managetags_flag below|LOCALISEME Flag as below, after # days
+LOCAL_admin_managetags_shred|LOCALISEME Shred Original
+LOCAL_admin_managetags_purge|LOCALISEME Purge Data

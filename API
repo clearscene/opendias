@@ -572,7 +572,7 @@ __endjob]]></example>
       <example type='result'><![CDATA[<?xml version='1.0' encoding='utf-8'?>
 <Response>
   <Logout>
-    result - Was login successful ['OK','FAIL']
+    result - Was logout successful ['OK','FAIL']
   </Logout>
 </Response>]]></example>
     </ApiCall>
@@ -609,7 +609,7 @@ __endjob]]></example>
       <example type='result'><![CDATA[<?xml version='1.0' encoding='utf-8'?>
 <Response>
   <UpdateUser>
-    result - Was login successful ['OK','FAIL']
+    result - Was the user update successful ['OK','FAIL']
   </UpdateUser>
 </Response>]]></example>
     </ApiCall>
@@ -646,7 +646,7 @@ __endjob]]></example>
       <example type='result'><![CDATA[<?xml version='1.0' encoding='utf-8'?>
 <Response>
   <CreateUser>
-    result - Was login successful ['OK','FAIL']
+    result - Was the operation successful ['OK','FAIL']
   </CreateUser>
 </Response>]]></example>
     </ApiCall>
@@ -671,7 +671,7 @@ __endjob]]></example>
       <example type='result'><![CDATA[<?xml version='1.0' encoding='utf-8'?>
 <Response>
   <DeleteUser>
-    result - Was login successful ['OK','FAIL']
+    result - Was the operation successful ['OK','FAIL']
   </DeleteUser>
 </Response>]]></example>
     </ApiCall>
@@ -699,8 +699,72 @@ __endjob]]></example>
         last_access - the date the user last logged on
         role - the users assigned role
       </User>
+      ...
     </Users>
   </GetUserList>
+</Response>]]></example>
+    </ApiCall>
+
+    <ApiCall>
+      <call_name>getTagsList</call_name>
+      <calls_method>pageRender::getTagsList</calls_method>
+      <KnownCallers>
+        <caller>openDias.accessControls.js :: anonymous()</caller>
+      </KnownCallers>
+      <purpose>Provides a list of tags on the system.</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'getTagsList'</value>
+        </Input>
+      </Inputs>
+      <example type='result'><![CDATA[<?xml version='1.0' encoding='utf-8'?>
+<Response>
+  <GetTagsList>
+    <Tags>
+      <Tag>
+        tagid - the tags unique reference
+        tagname - the human readable name of the tag
+        used_count - the number of time this tag is used by a document
+        purgephysical - the days after the document date, documents should be shredded
+        purgedata - the days after the document date, documents should be purged
+      </Tag>
+      ...
+    </Tags>
+  </GetTagsList>
+</Response>]]></example>
+    </ApiCall>
+
+    <ApiCall>
+      <call_name>updateTag</call_name>
+      <calls_method>pageRender::updateTag</calls_method>
+      <KnownCallers>
+        <caller>openDias.accessControls.js :: anonymous()</caller>
+      </KnownCallers>
+      <purpose>Update a tag with new details</purpose>
+      <Inputs>
+        <Input>
+          <name>action</name>
+          <value>fixed string 'updateTag'</value>
+        </Input>
+        <Input>
+          <name>subAction</name>
+          <value>The details of what you want to change '[purgephysical,purgedata]'</value>
+        </Input>
+        <Input>
+          <name>tagid</name>
+          <value>The tags id</value>
+        </Input>
+        <Input>
+          <name>newvalue</name>
+          <value>The new value of the param subAction</value>
+        </Input>
+      </Inputs>
+      <example type='result'><![CDATA[<?xml version='1.0' encoding='utf-8'?>
+<Response>
+  <UpdateTag>
+    result - Was the update successful ['OK','FAIL']
+  </UpdateTag>
 </Response>]]></example>
     </ApiCall>
 

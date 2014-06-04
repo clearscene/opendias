@@ -4,6 +4,7 @@ $(document).ready(function () {
   $("#newrealname").val(getCookie("realname"));
   $("#currentrole").html(get_priv_from_role(role, 'name') + " (" + role + ")");
   if (get_priv_from_role(role, 'update_access')) {
+
     $('.onlyadmin').css({
       display: 'block'
     });
@@ -20,9 +21,9 @@ $(document).ready(function () {
       type: "POST",
       error: function (x, t, m) {
         if (t == "timeout") {
-          alert("[q001] " + LOCAL_timeout_talking_to_server);
+          alert("[q013] " + LOCAL_timeout_talking_to_server);
         } else {
-          alert("[q002] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+          alert("[q014] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
         }
       },
       success: function (data) {
@@ -59,9 +60,9 @@ $(document).ready(function () {
                   type: "POST",
                   error: function (x, t, m) {
                     if (t == "timeout") {
-                      alert("[q003] " + LOCAL_timeout_talking_to_server);
+                      alert("[q015] " + LOCAL_timeout_talking_to_server);
                     } else {
-                      alert("[q004] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+                      alert("[q016] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
                     }
                   },
                   success: function (data) {
@@ -91,9 +92,9 @@ $(document).ready(function () {
                   type: "POST",
                   error: function (x, t, m) {
                     if (t == "timeout") {
-                      alert("[q005] " + LOCAL_timeout_talking_to_server);
+                      alert("[q017] " + LOCAL_timeout_talking_to_server);
                     } else {
-                      alert("[q006] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+                      alert("[q018] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
                     }
                   },
                   success: function (data) {
@@ -122,9 +123,9 @@ $(document).ready(function () {
                   type: "POST",
                   error: function (x, t, m) {
                     if (t == "timeout") {
-                      alert("[q007] " + LOCAL_timeout_talking_to_server);
+                      alert("[q019] " + LOCAL_timeout_talking_to_server);
                     } else {
-                      alert("[q008] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+                      alert("[q020] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
                     }
                   },
                   success: function (data) {
@@ -152,6 +153,107 @@ $(document).ready(function () {
         }
       }
     });
+
+
+
+    // Get a list of tags
+    $.ajax({
+      url: "/opendias/dynamic",
+      dataType: "xml",
+      timeout: AJAX_TIMEOUT,
+      data: {
+        action: "getTagsList",
+      },
+      cache: false,
+      type: "POST",
+      error: function (x, t, m) {
+        if (t == "timeout") {
+          alert("[q001] " + LOCAL_timeout_talking_to_server);
+        } else {
+          alert("[q002] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+        }
+      },
+      success: function (data) {
+        if ($(data).find('error').text()) {
+          alert($(data).find('error').text());
+        } else {
+          $(data).find('GetTagsList').find('Tags').find('Tag').each(function () {
+            var tagid = $(this).find('tagid').text();
+            var tagname = $("<td></td>").text($(this).find('tagname').text() + " (" + tagid + ")");
+            var usedcount = $("<td></td>").text($(this).find('used_count').text());
+
+            var purgephysical = $("<td><input size=8 value="+$(this).find('purgephysical').text()+" /></td>");
+            purgephysical.change(function () {
+              $.ajax({
+                url: "/opendias/dynamic",
+                dataType: "xml",
+                timeout: AJAX_TIMEOUT,
+                data: {
+                  action: "updateTag",
+                  subaction: "purgephysical",
+                  tagid: tagid,
+                  newvalue: $(this).val(),
+                },
+                cache: false,
+                type: "POST",
+                error: function (x, t, m) {
+                  if (t == "timeout") {
+                    alert("[q007] " + LOCAL_timeout_talking_to_server);
+                  } else {
+                    alert("[q008] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+                  }
+                },
+                success: function (data) {
+                  if ($(data).find('error').text()) {
+                    alert($(data).find('error').text());
+                  } else {
+                    alert(LOCAL_details_updated);
+                  }
+                }
+              });
+            });
+
+            var purgedata = $("<td><input size=8 value="+$(this).find('purgedata').text()+" /></td>");
+            purgedata.change(function () {
+              $.ajax({
+                url: "/opendias/dynamic",
+                dataType: "xml",
+                timeout: AJAX_TIMEOUT,
+                data: {
+                  action: "updateTag",
+                  subaction: "purgedata",
+                  tagid: tagid,
+                  newvalue: $(this).val(),
+                },
+                cache: false,
+                type: "POST",
+                error: function (x, t, m) {
+                  if (t == "timeout") {
+                    alert("[q007] " + LOCAL_timeout_talking_to_server);
+                  } else {
+                    alert("[q008] " + LOCAL_error_talking_to_server + ": " + t + "\n" + m);
+                  }
+                },
+                success: function (data) {
+                  if ($(data).find('error').text()) {
+                    alert($(data).find('error').text());
+                  } else {
+                    alert(LOCAL_details_updated);
+                  }
+                }
+              });
+            });
+
+            var row = $("<tr></tr>").append(tagname)
+                                    .append(usedcount)
+                                    .append(purgephysical)
+                                    .append(purgedata);
+            $('#managetags table tbody').append(row);
+          });
+        }
+      }
+    });
+
   }
 
   $("#tabs").tabs();

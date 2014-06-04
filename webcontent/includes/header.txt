@@ -72,7 +72,7 @@
         <li><a id='homeLink' href='/opendias/'>---LOCAL_link_home---</a></li>
         <li><a id='doclistLink' href='/opendias/docList.html'>---LOCAL_link_doclist---</a></li>
         <li><a id='acquireLink' href='/opendias/acquire.html'>---LOCAL_link_acquire---</a></li>
-        <li><a id='ProjectHome' href='http://opendias.essentialcollections.co.uk/' target='_blank'>---LOCAL_link_projecthome---</a></li>
+        <li><a id='ProjectHome' href='http://opendias.essentialcollections.co.uk/?---PACKAGE_STRING---' target='_blank'>---LOCAL_link_projecthome---</a></li>
         <li class='version'>---PACKAGE_STRING---</li>
       </ul>
     </div>
