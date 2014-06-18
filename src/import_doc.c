@@ -48,7 +48,9 @@
 #include "import_doc.h"
 
 #ifdef CAN_PDF
-char *extractThumbnail(char *docid) {
+char *extractThumbnail( struct dispatch_params *dp ) {
+
+  char *docid = dp->params[0];
 
   char *source_file, *target_file, *ocrText;
 
@@ -65,7 +67,11 @@ char *extractThumbnail(char *docid) {
 }
 #endif /* CAN_PDF */
 
-char *uploadfile(char *filename, char *lookForSimilar, char *lang) {
+char *uploadfile( struct dispatch_params *dp ) {
+
+  char *filename = dp->params[0];
+  char *lookForSimilar = dp->params[1];
+  char *lang = dp->params[2];
 
 #ifndef CAN_MAGIC
   o_log(ERROR, "Unable to determin the file type, aborting.");

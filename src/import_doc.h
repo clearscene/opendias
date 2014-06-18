@@ -19,7 +19,7 @@
 #ifndef IMPORTDOC
 #define IMPORTDOC
 
-char *extractThumbnail(char *);
-char *uploadfile(char *, char *, char *);
+char *extractThumbnail( struct dispatch_params * );
+char *uploadfile( struct dispatch_params * );
 
 #endif /* IMPORTDOC */

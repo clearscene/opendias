@@ -414,6 +414,15 @@ char *userLanguage( struct MHD_Connection *connection ) {
   return lang;
 }
 
+char *notSupported( struct dispatch_params *dp ) {
+
+  char *lang = dp->params[0];
+  o_log(ERROR, "Support for this request has not been compiled in");
+  return o_printf("<?xml version='1.0' encoding='utf-8'?>\n\
+                      <Response><error>%s</error></Response>", 
+                      getString("LOCAL_missing_support", lang) );
+}
+
 int answer_to_connection (void *cls, struct MHD_Connection *connection,
               const char *url_orig, const char *method,
               const char *version, const char *upload_data,
@@ -708,450 +717,212 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             size = strlen(content);
           }
 
-          else if ( action && 0 == strcmp(action, "getDocDetail") ) {
-            o_log(INFORMATION, "Processing request for: document details");
-            if ( accessPrivs.view_doc == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *docid = getPostData(con_info->post_data, "docid");
-              content = getDocDetail(docid, con_info->lang); //doc_editor.c
-              if(content == (void *)NULL)
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_XML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "getScannerList") ) {
-            o_log(INFORMATION, "Processing request for: getScannerList");
-#ifdef CAN_SCAN
-            if ( accessPrivs.add_scan == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              content = getScannerList(con_info->lang); // pageRender.c
-              if(content == (void *)NULL) {
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-              }
-            }
-#else
-            o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif /* CAN_SCAN */
-            mimetype = MIMETYPE_XML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "getScannerDetails") ) {
-            o_log(INFORMATION, "Processing request for: getScannerDetails");
-#ifdef CAN_SCAN
-            if ( accessPrivs.add_scan == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *deviceid = getPostData(con_info->post_data, "deviceid");
-              content = getScannerDetails(deviceid, con_info->lang); // pageRender.c
-              if(content == (void *)NULL) {
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-              }
-            }
-#else
-            o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif /* CAN_SCAN */
-            mimetype = MIMETYPE_XML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "doScan") ) {
-            o_log(INFORMATION, "Processing request for: doScan");
-#ifdef CAN_SCAN
-            if ( accessPrivs.add_scan == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *deviceid = getPostData(con_info->post_data, "deviceid");
-              char *format = getPostData(con_info->post_data, "format");
-              char *resolution = getPostData(con_info->post_data, "resolution");
-              char *pages = getPostData(con_info->post_data, "pages");
-              char *ocr = getPostData(con_info->post_data, "ocr");
-              char *pagelength = getPostData(con_info->post_data, "pagelength");
-#ifdef THREAD_JOIN
-              content = doScan(deviceid, format, resolution, pages, ocr, pagelength, con_info->lang, &(con_info->thread) ); // pageRender.c
-#else
-              content = doScan(deviceid, format, resolution, pages, ocr, pagelength, con_info->lang); // pageRender.c
-#endif /* THREAD_JOIN */
-              if(content == (void *)NULL) {
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-              }
-            }
-#else
-            o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif /* CAN_SCAN */
-            mimetype = MIMETYPE_XML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "getScanningProgress") ) {
-            o_log(INFORMATION, "Processing request for: getScanning Progress");
-#ifdef CAN_SCAN
-            if ( accessPrivs.add_scan == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
-              content = getScanningProgress(scanprogressid); //pageRender.c
-              if(content == (void *)NULL) {
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-              }
-            }
-#else
-            o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif /* CAN_SCAN */
-            mimetype = MIMETYPE_XML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "nextPageReady") ) {
-            o_log(INFORMATION, "Processing request for: restart scan after page change");
-#ifdef CAN_SCAN
-            if ( accessPrivs.add_scan == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *scanprogressid = getPostData(con_info->post_data, "scanprogressid");
-#ifdef THREAD_JOIN
-              content = nextPageReady(scanprogressid, con_info->lang, &(con_info->thread) ); //pageRender.c
-#else
-              content = nextPageReady(scanprogressid, con_info->lang); //pageRender.c
-#endif /* THREAD_JOIN */
-              if(content == (void *)NULL) {
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-              }
-            }
-#else
-            o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif /* CAN_SCAN */
-            mimetype = MIMETYPE_XML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "updateDocDetails") ) {
-            o_log(INFORMATION, "Processing request for: update doc details");
-            if ( accessPrivs.edit_doc == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *docid = getPostData(con_info->post_data, "docid");
-              char *key = getPostData(con_info->post_data, "kkey");
-              char *value = getPostData(con_info->post_data, "vvalue");
-              content = updateDocDetails(docid, key, value); //doc_editor.c
-              if(content == (void *)NULL) {
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-              }
-            }
-            mimetype = MIMETYPE_XML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "moveTag") ) {
-            o_log(INFORMATION, "Processing request for: Move Tag");
-            if ( accessPrivs.edit_doc == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *docid = getPostData(con_info->post_data, "docid");
-              char *tag = getPostData(con_info->post_data, "tag");
-              char *subaction = getPostData(con_info->post_data, "subaction");
-              content = updateTagLinkage(docid, tag, subaction); //doc_editor.c
-              if(content == (void *)NULL) 
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_XML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "docFilter") ) {
-            o_log(INFORMATION, "Processing request for: Doc List Filter");
-            if ( accessPrivs.view_doc == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *subaction = getPostData(con_info->post_data, "subaction");
-              char *subFilter = getPostData(con_info->post_data, "subFilter");
-              char *textSearch = getPostData(con_info->post_data, "textSearch");
-              char *startDate = getPostData(con_info->post_data, "startDate");
-              char *endDate = getPostData(con_info->post_data, "endDate");
-              char *tags = getPostData(con_info->post_data, "tags");
-              char *page = getPostData(con_info->post_data, "page");
-              char *range = getPostData(con_info->post_data, "range");
-              char *sortfield = getPostData(con_info->post_data, "sortfield");
-              char *sortorder = getPostData(con_info->post_data, "sortorder");
-              content = docFilter(subaction, subFilter, textSearch, startDate, endDate, tags, page, range, sortfield, sortorder, con_info->lang); //pageRender.c
-              if(content == (void *)NULL) {
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-              }
-            }
-            mimetype = MIMETYPE_XML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "deleteDoc") ) {
-            o_log(INFORMATION, "Processing request for: delete document");
-            if ( accessPrivs.delete_doc == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *docid = getPostData(con_info->post_data, "docid");
-              content = doDelete(docid); // doc_editor.c
-              if(content == (void *)NULL) {
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-              }
-            }
-            mimetype = MIMETYPE_XML;
-            size = strlen(content);
-          }
+          struct {
+            const char *action;
+            const char *description;
+            int permission;
+            char *return_type;
+            char *(*dispatch_method)(struct dispatch_params *);
+            char *params[MAX_PARAMS];
+          } dispatcher[] = {
 
-          else if ( action && 0 == strcmp(action, "regenerateThumb") ) {
-            o_log(INFORMATION, "Processing request for: regenerateThumb");
-#ifdef CAN_PDF
-            if ( accessPrivs.edit_doc == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *docid = getPostData(con_info->post_data, "docid");
-              content = extractThumbnail( docid ); //import_doc.c
-              if(content == (void *)NULL) {
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-              }
-            }
+            { "getDocDetail", "document details", 
+              accessPrivs.view_doc, MIMETYPE_XML, 
+              &getDocDetail, {"docid", "_lang", NULL }
+            },
+#ifdef CAN_SCAN
+            { "getScannerList", "getScannerList", 
+              accessPrivs.add_scan, MIMETYPE_XML, 
+              &getScannerList, {"_lang", NULL }
+            },
+            { "getScannerDetails", "getScannerDetails", 
+              accessPrivs.add_scan, MIMETYPE_XML, 
+              &getScannerDetails, {"deviceid", "_lang", NULL }
+            },
+#ifdef THREAD_JOIN
+            { "doScan", "doScan", 
+              accessPrivs.add_scan, MIMETYPE_XML, 
+              &doScan, {"deviceid", "format", "resolution", "pages", "ocr", "pagelength", "_lang", "_thread", NULL }
+            },
+            { "nextPageReady", "restart scan after page change", 
+              accessPrivs.add_scan, MIMETYPE_XML, 
+              &nextPageReady, {"scanprogressid", "_lang", "_thread", NULL }
+            },
 #else
-            o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif /* CAN_PDF */
-            mimetype = MIMETYPE_XML;
-            size = strlen(content);
-          }
-
-          else if ( action && 0 == strcmp(action, "uploadfile") ) {
-            o_log(INFORMATION, "Processing request for: uploadfile");
-            if ( accessPrivs.add_import == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *filename = getPostData(con_info->post_data, "uploadfile");
-              char *lookForSimilar = getPostData(con_info->post_data, "lookForSimilar");
-              content = uploadfile(filename, lookForSimilar, con_info->lang); // import_doc.c
-              if(content == (void *)NULL) {
-                content = build_page(o_printf("<p>%s</p>", getString("LOCAL_unsuported_file_type", "en") ), "en");
-              }
-            }
-            mimetype = MIMETYPE_HTML;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "titleAutoComplete") ) {
-            o_log(INFORMATION, "Processing request for: titleAutoComplete");
-            if ( accessPrivs.view_doc == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *startsWith = getPostData(con_info->post_data, "startsWith");
-              char *notLinkedTo = getPostData(con_info->post_data, "notLinkedTo");
-              content = titleAutoComplete(startsWith, notLinkedTo); // pageRender.c
-              if(content == (void *)NULL)
-                content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_JSON;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "tagsAutoComplete") ) {
-            o_log(INFORMATION, "Processing request for: tagsAutoComplete");
-            if ( accessPrivs.view_doc == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *startsWith = getPostData(con_info->post_data, "startsWith");
-              char *docid = getPostData(con_info->post_data, "docid");
-              content = tagsAutoComplete(startsWith, docid); // pageRender.c
-              if(content == (void *)NULL)
-                content = o_printf("<p>%s</p>", getString("LOCAL_server_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_JSON;
-            size = strlen(content);
-          }
-  
+            { "doScan", "doScan", 
+              accessPrivs.add_scan, MIMETYPE_XML, 
+              &doScan, {"deviceid", "format", "resolution", "pages", "ocr", "pagelength", "_lang", NULL }
+            },
+            { "nextPageReady", "restart scan after page change", 
+              accessPrivs.add_scan, MIMETYPE_XML, 
+              &nextPageReady, {"scanprogressid", "_lang", NULL }
+            },
+#endif /* THREAD_JOIN */
+            { "getScanningProgress", "getScanningProgress", 
+              accessPrivs.add_scan, MIMETYPE_XML, 
+              &getScanningProgress, {"scanprogressid", NULL }
+            },
+#else
+            { "getScannerList", "getScannerList", 
+              accessPrivs.add_scan, MIMETYPE_XML, 
+              &notSupported, { "_lang" } 
+            },
+            { "getScannerDetails", "getScannerDetails", 
+              accessPrivs.add_scan, MIMETYPE_XML, 
+              &notSupported, { "_lang" } 
+            },
+            { "doScan", "doScan", accessPrivs.add_scan, 
+              accessPrivs.add_scan, MIMETYPE_XML, 
+              &notSupported, { "_lang" } 
+            },
+            { "getScanningProgress", "getScanningProgress", 
+              accessPrivs.add_scan, MIMETYPE_XML, 
+              &notSupported, { "_lang" } 
+            },
+            { "nextPageReady", "restart scan after page change", 
+              accessPrivs.add_scan, MIMETYPE_XML, 
+              &notSupported, { "_lang", "_thread" } 
+            },
+#endif /* CAN_SCAN */
+            { "updateDocDetails", "update doc details", 
+              accessPrivs.edit_doc, MIMETYPE_XML, 
+              &updateDocDetails, {"docid", "kkey", "vvalue", NULL} 
+            },
+            { "moveTag", "Move Tag", 
+              accessPrivs.edit_doc, MIMETYPE_XML, 
+              &updateTagLinkage, {"docid", "tag", "subaction", NULL }
+            },
+            { "docFilter", "Doc List Filter", 
+              accessPrivs.view_doc, MIMETYPE_XML, 
+              &docFilter, {"subaction", "subfilter", "textSearch", "startDate", "endDate", "tags", "page", "range", "sortfield", "sortorder", "_lang", NULL }
+            },
+            { "deleteDoc", "delete document", 
+              accessPrivs.delete_doc, MIMETYPE_XML, 
+              &doDelete, {"docid", NULL }
+            },
+            { "regenerateThumb", "regenerateThumb", 
+              accessPrivs.edit_doc, MIMETYPE_XML, 
+              &extractThumbnail, {"docid", NULL }
+            },
+            { "uploadfile", "uploadfile", 
+              accessPrivs.add_import, MIMETYPE_HTML, 
+              &uploadfile, {"uploadfile", "lookForSimilar", "_lang", NULL }
+            },
+            { "titleAutoComplete", "titleAutoComplete", 
+              accessPrivs.add_import, MIMETYPE_JSON,
+              &titleAutoComplete, {"startsWith", "notLinkedTo", NULL }
+            },
 #ifndef OPEN_TO_ALL
-          else if ( action && 0 == strcmp(action, "checkLogin") ) {
-            o_log(INFORMATION, "Processing request for: checkLogin");
-            if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *username = getPostData(con_info->post_data, "username");
-              char *password = getPostData(con_info->post_data, "password");
-              content = checkLogin(username, password, con_info->lang, con_info->session_data); // pageRender.c
-              if(content == (void *)NULL) 
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_JSON;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "logout") ) {
-            o_log(INFORMATION, "Processing request for: logout");
-            if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              content = doLogout( con_info->session_data ); // pageRender.c
-              if(content == (void *)NULL) 
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_JSON;
-            size = strlen(content);
-          }
-  
-          else if ( action && 0 == strcmp(action, "updateUser") ) {
-            o_log(INFORMATION, "Processing request for: updateUser");
-            if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *username = getPostData(con_info->post_data, "username");
-              char *realname = getPostData(con_info->post_data, "realname");
-              char *password = getPostData(con_info->post_data, "password");
-              char *role = getPostData(con_info->post_data, "role");
-              content = updateUser(username, realname, password, role, accessPrivs.update_access, con_info->session_data, con_info->lang); // pageRender.c
-              if(content == (void *)NULL) 
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_JSON;
-            size = strlen(content);
-          }
- 
-          else if ( action && 0 == strcmp(action, "createUser") ) {
-            o_log(INFORMATION, "Processing request for: createUser");
-            if ( accessPrivs.update_access == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *username = getPostData(con_info->post_data, "username");
-              char *realname = getPostData(con_info->post_data, "realname");
-              char *password = getPostData(con_info->post_data, "password");
-              char *role = getPostData(con_info->post_data, "role");
-              // re-use the updateUser function for creating a user.
-              content = updateUser(username, realname, password, role, accessPrivs.update_access, con_info->session_data, con_info->lang); // pageRender.c
-              if(content == (void *)NULL) 
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_JSON;
-            size = strlen(content);
-          } 
- 
-          else if ( action && 0 == strcmp(action, "deleteUser") ) {
-            o_log(INFORMATION, "Processing request for: deleteUser");
-            if ( accessPrivs.update_access == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *username = getPostData(con_info->post_data, "username");
-              content = deleteUser(username, con_info->lang); // pageRender.c
-              if(content == (void *)NULL) 
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_JSON;
-            size = strlen(content);
-          } 
- 
-          else if ( action && 0 == strcmp(action, "getUserList") ) {
-            o_log(INFORMATION, "Processing request for: getUserList");
-            if ( accessPrivs.update_access == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              content = getUserList(); // pageRender.c
-              if(content == (void *)NULL) 
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_JSON;
-            size = strlen(content);
-          } 
+            { "checkLogin", "checkLogin", 
+              1, MIMETYPE_XML, 
+              &checkLogin, {"username", "password", "_lang", "_session_data", NULL }
+            },
+            { "logout", "logout", 
+              1, MIMETYPE_XML, 
+              &doLogout, {"_session_data", NULL }
+            },
+            { "updateUser", "updateUser", 
+              1, MIMETYPE_XML, 
+              &updateUser, {"username", "realname", "password", "role", "_access", NULL }
+            },
+            { "createUser", "createUser", 
+              accessPrivs.update_access, MIMETYPE_XML, 
+              &updateUser, {"username", "realname", "password", "role", "_access", NULL }
+            },
+            { "deleteUser", "deleteUser", 
+              accessPrivs.update_access, MIMETYPE_XML, 
+              &deleteUser,{ "username", "_lang", NULL }
+            },
+            { "getUserList", "getUserList", 
+              accessPrivs.update_access, MIMETYPE_XML, 
+              &getUserList, {NULL}
+            },
 #endif /* OPEN_TO_ALL */
-  
-          else if ( action && 0 == strcmp(action, "getTagsList") ) {
-            o_log(INFORMATION, "Processing request for: getTagsList");
-            if ( accessPrivs.update_access == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              content = getTagsList(); // pageRender.c
-              if(content == (void *)NULL) 
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_JSON;
-            size = strlen(content);
-          } 
-
-          else if ( action && 0 == strcmp(action, "updateTag") ) {
-            o_log(INFORMATION, "Processing request for: updateTag");
-            if ( accessPrivs.update_access == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            else {
-              char *subaction = getPostData(con_info->post_data, "subaction");
-              char *tagid = getPostData(con_info->post_data, "tagid");
-              char *newvalue = getPostData(con_info->post_data, "newvalue");
-              content = updateTag(subaction, tagid, newvalue); // pageRender.c
-              if(content == (void *)NULL) 
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
-            }
-            mimetype = MIMETYPE_JSON;
-            size = strlen(content);
-          } 
-
-          else if ( action && 0 == strcmp(action, "checkForSimilar") ) {
-            o_log(INFORMATION, "Processing request for: check For Similar");
+            { "getTagsList", "getTagsList", 
+              accessPrivs.update_access, MIMETYPE_XML, 
+              &getTagsList, {NULL}
+            },
+            { "updateTag", "updateTag", 
+              accessPrivs.update_access, MIMETYPE_XML, 
+              &getTagsList, {"subaction", "tagid", "newvalue", NULL }
+            },
 #ifdef CAN_PHASH
-            if ( accessPrivs.edit_doc == 0 )
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_no_access", con_info->lang) );
-            else if ( validate( con_info->post_data, action ) ) 
-              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+            { "checkForSimilar", "check For Similar", 
+              accessPrivs.edit_doc, MIMETYPE_XML, 
+              &checkForSimilar, {"docid", NULL }
+            },
+#else
+            { "checkForSimilar", "check For Similar", 
+              accessPrivs.edit_doc, MIMETYPE_XML, 
+              &notSupported, { "_lang" }
+            },
+#endif /* CAN_PHASH */
+            { NULL, NULL,
+              0, NULL, 
+              &notSupported, { "_lang" }
+            },
+          };
+
+
+          int i = 0;
+          for ( i = 0; 
+                dispatcher[i].action != NULL && dispatcher[i].action != action; 
+                i++ ); 
+
+          if( dispatcher[i].action == NULL ) {
+
+            o_log(INFORMATION, "Processing request for: %s", dispatcher[i].description);
+
+            if ( dispatcher[i].permission == 0 ) {
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n\
+                                  <Response><error>%s</error></Response>", 
+                                  getString("LOCAL_no_access", con_info->lang) );
+            }
+ 
+            else if ( validate( con_info->post_data, action ) ) {
+              content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n\
+                                  <Response><error>%s</error></Response>", 
+                                  getString("LOCAL_processing_error", con_info->lang) );
+            } 
+
             else {
-              char *docid = getPostData(con_info->post_data, "docid");
-              content = checkForSimilar(docid); //doc_editor.c
+
+              struct dispatch_params *dp = malloc(sizeof(struct dispatch_params));
+
+              int j = 0;
+              for (j = 0 ; dispatcher[i].params[j] != NULL; j++) {
+                if ( 0 == strcmp(action, "_lang") ) {
+                  dp->params[j] = con_info->lang;
+                }
+                else if ( 0 == strcmp(action, "_access") ) {
+                  dp->accessPrivs = accessPrivs.update_access;
+                }
+                else if ( 0 == strcmp(action, "_session_data") ) {
+                  dp->session_data = con_info->session_data;
+                }
+#ifdef THREAD_JOIN
+                else if ( 0 == strcmp(action, "_thread") ) {
+                  dp->thread = &(con_info->thread);
+                }
+#endif /* THREAD_JOIN */
+                else {
+                  dp->params[j] = getPostData( con_info->post_data, dispatcher[i].params[j] );
+                }
+              }
+
+              content = dispatcher[i].dispatch_method( dp );
+
               if(content == (void *)NULL) {
-                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_processing_error", con_info->lang) );
+                content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n\
+                                    <Response><error>%s</error></Response>", 
+                                    getString("LOCAL_processing_error", con_info->lang) );
               }
             }
-#else
-            o_log(ERROR, "Support for this request has not been compiled in");
-            content = o_printf("<?xml version='1.0' encoding='utf-8'?>\n<Response><error>%s</error></Response>", getString("LOCAL_missing_support", con_info->lang) );
-#endif /* CAN_PHASH */
-            mimetype = MIMETYPE_XML;
+
+            mimetype = dispatcher[i].return_type;
             size = strlen(content);
-          }
+ 
+          } 
 
           else {
             // should have been picked up by validation! and so never got here

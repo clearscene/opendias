@@ -62,7 +62,9 @@ struct doScanOpData {
   char *lang;
 };
 
-char *getScannerList(char *lang) {
+char *getScannerList( struct dispatch_params *dp ) {
+
+  char *lang = dp->params[0];
 
   char *answer = send_command( "internalGetScannerList", lang ); // scan.c
   o_log(DEBUGM, "RESPONSE WAS: %s", answer);
@@ -78,7 +80,10 @@ char *getScannerList(char *lang) {
   return answer;
 }
 
-char *getScannerDetails(char *deviceid, char *lang) {
+char *getScannerDetails( struct dispatch_params *dp ) {
+
+  char *deviceid = dp->params[0];
+  char *lang = dp->params[1];
 
   char *param = o_printf( "%s,%s", deviceid, lang);
   char *answer = send_command( "internalGetScannerDetails", param ); // scan.c
@@ -128,10 +133,16 @@ extern void *doScanningOperation(void *saneOpData) {
 
 // Start the scanning process
 //
+char *doScan( struct dispatch_params *dp ) {
+  char *deviceid = dp->params[0];
+  char *format = dp->params[1];
+  char *resolution = dp->params[2];
+  char *pages = dp->params[3];
+  char *ocr = dp->params[4];
+  char *pagelength = dp->params[5];
+  char *lang = dp->params[6];
 #ifdef THREAD_JOIN
-char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *ocr, char *pagelength, char *lang, pthread_t *thr) {
-#else
-char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *ocr, char *pagelength, char *lang ) {
+  pthread_t *thr = dp->thread;
 #endif /* THREAD_JOIN */
 
   char *ret = NULL;
@@ -191,10 +202,11 @@ char *doScan(char *deviceid, char *format, char *resolution, char *pages, char *
   return ret;
 }
 
+char *nextPageReady( struct dispatch_params *dp ) {
+  char *scanid = dp->params[0];
+  char *lang = dp->params[1];
 #ifdef THREAD_JOIN
-char *nextPageReady(char *scanid, char *lang, pthread_t *thr) {
-#else
-char *nextPageReady(char *scanid, char *lang) {
+  pthread_t *thr = dp->thread;
 #endif /* THREAD_JOIN */
 
   pthread_t thread;
@@ -251,7 +263,9 @@ char *nextPageReady(char *scanid, char *lang) {
 }
 
 
-char *getScanningProgress(char *scanid) {
+char *getScanningProgress( struct dispatch_params *dp ) {
+
+  char *scanid = dp->params[0];
 
   struct simpleLinkedList *rSet;
   char *sql, *status, *value, *ret;
@@ -287,7 +301,19 @@ char *getScanningProgress(char *scanid) {
 }
 #endif /* CAN_SCAN */
 
-char *docFilter(char *subaction, char *subFilter, char *textSearch, char *startDate, char *endDate, char *tags, char *page, char *range, char *sortfield, char *sortorder, char *lang ) {
+char *docFilter( struct dispatch_params *dp ) {
+
+  char *subaction = dp->params[0];
+  char *subFilter = dp->params[1];
+  char *textSearch = dp->params[2];
+  char *startDate = dp->params[3];
+  char *endDate = dp->params[4];
+  char *tags = dp->params[5];
+  char *page = dp->params[6];
+  char *range = dp->params[7];
+  char *sortfield = dp->params[8];
+  char *sortorder = dp->params[9];
+  char *lang = dp->params[10];
 
   struct simpleLinkedList *vars = sll_init();
   struct simpleLinkedList *rSet;
@@ -543,7 +569,10 @@ char *docFilter(char *subaction, char *subFilter, char *textSearch, char *startD
   return docList;
 }
 
-char *titleAutoComplete(char *startsWith, char *notLinkedTo) {
+char *titleAutoComplete( struct dispatch_params *dp ) {
+
+  char *startsWith = dp->params[0];
+  char *notLinkedTo = dp->params[1];
 
   struct simpleLinkedList *vars = sll_init();
   char *result = o_strdup("{\"results\":[");
@@ -645,7 +674,13 @@ char *tagsAutoComplete(char *startsWith, char *docid) {
 }
 
 #ifndef OPEN_TO_ALL
-char *checkLogin( char *username, char *password, char *lang, struct simpleLinkedList *session_data ) {
+char *checkLogin( struct dispatch_params *dp ) {
+
+  char *username = dp->params[0];
+  char *password = dp->params[1];
+  char *lang = dp->params[2];
+  struct simpleLinkedList *session_data = dp->session_data;
+
   struct simpleLinkedList *rSet;
   int retry_throttle = 5;
 
@@ -787,7 +822,9 @@ char *checkLogin( char *username, char *password, char *lang, struct simpleLinke
   return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Login><result>OK</result></Login></Response>");
 }
 
-char *doLogout( struct simpleLinkedList *session_data ) {
+char *doLogout( struct dispatch_params *dp ) {
+
+  struct simpleLinkedList *session_data = dp->session_data;
   
   const char *elements[] = { "next_login_attempt", "username", "realname", "role", NULL };
   int i;
@@ -805,7 +842,16 @@ char *doLogout( struct simpleLinkedList *session_data ) {
   return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><Logout><result>OK</result></Logout></Response>");
 }
 
-char *updateUser( char *username, char *realname, char *password, char *role, int can_edit_access, struct simpleLinkedList *session_data, char *lang) {
+char *updateUser( struct dispatch_params *dp ) {
+
+  char *username = dp->params[0];
+  char *realname = dp->params[1];
+  char *password = dp->params[2];
+  char *role = dp->params[3];
+  char *lang = dp->params[4];
+  int can_edit_access = dp->accessPrivs;
+  struct simpleLinkedList *session_data = dp->session_data;
+
   struct simpleLinkedList *rSet;
   char *useUsername = NULL;
   char *created = NULL;
@@ -1011,7 +1057,11 @@ char *updateTag( char *subaction, char *tagid, char *newvalue ) {
   else return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateTag><result>OK</result></UpdateTag></Response>");
 }
 
-char *deleteUser( char *username, char *lang ) {
+char *deleteUser( struct dispatch_params *dp ) {
+
+  char *username = dp->params[0];
+  char *lang = dp->params[1];
+
   char *sql;
 
   if ( 0 == strcmp(username, "admin") ) {
@@ -1035,7 +1085,9 @@ char *deleteUser( char *username, char *lang ) {
 
 
 #ifdef CAN_PHASH
-char *checkForSimilar(const char *docid) {
+char *checkForSimilar(struct dispatch_params *dp) {
+
+  const char *docid = dp->params[0];
 
   char *sql = o_strdup( "SELECT image_phash FROM docs WHERE docid = ?" );
   struct simpleLinkedList *vars = sll_init();

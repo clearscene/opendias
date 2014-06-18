@@ -1,7 +1,7 @@
 /*
  * doc_editor.c
  * Copyright (C) Clearscene Ltd 2008 <wbooth@essentialcollections.co.uk>
- * 
+
  * doc_editor.c is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation, either version 3 of the License, or
@@ -35,7 +35,9 @@
  
 #include "doc_editor.h"
 
-char *doDelete (char *documentId) {
+char *doDelete ( struct dispatch_params *dp ) {
+
+  char *documentId = dp->params[0];
 
   int doc_id, pages, i;
   char *docTemplate;
@@ -84,7 +86,10 @@ char *doDelete (char *documentId) {
 
 
 
-char *getDocDetail (char *documentId, char *lang ) {
+char *getDocDetail ( struct dispatch_params *dp ) {
+
+  char *documentId = dp->params[0];
+  char *lang = dp->params[1];
 
   int doc_id;
   struct simpleLinkedList *rSet;
@@ -243,7 +248,11 @@ char *getDocDetail (char *documentId, char *lang ) {
 
 
 
-char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
+char *updateDocDetails( struct dispatch_params *dp ) {
+
+  char *docid = dp->params[0];
+  char *kkey = dp->params[1];
+  char *vvalue = dp->params[2];
 
   int rc = 0;
 
@@ -293,7 +302,11 @@ char *updateDocDetails(char *docid, char *kkey, char *vvalue) {
   else return o_strdup("<?xml version='1.0' encoding='utf-8'?>\n<Response><UpdateDocDetails><status>OK</status></UpdateDocDetails></Response>");
 }
 
-char *updateTagLinkage(char *docid, char *link, char *subaction) {
+char *updateTagLinkage( struct dispatch_params *dp ) {
+
+  char *docid = dp->params[0];
+  char *link = dp->params[1];
+  char *subaction = dp->params[2];
 
   int rc = 0;
 
