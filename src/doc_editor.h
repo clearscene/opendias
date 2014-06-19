@@ -19,9 +19,9 @@
 #ifndef DOCEDITOR
 #define DOCEDITOR
 
-char *getDocDetail (char *, char *);
-char *updateDocDetails(char *, char *, char *);
-char *updateTagLinkage(char *, char *, char *);
-char *doDelete (char *);
+char *getDocDetail ( struct dispatch_params * );
+char *updateDocDetails( struct dispatch_params * );
+char *updateTagLinkage( struct dispatch_params * );
+char *doDelete ( struct dispatch_params * );
 
 #endif /* DOCEDITOR */

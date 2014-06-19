@@ -27,6 +27,13 @@ struct dateParts {
   char *day;
 };
 
+#define MAX_PARAMS 12 // maximum number of elements in message array
+struct dispatch_params {
+  char *params[MAX_PARAMS];
+  struct simpleLinkedList *session_data;
+  int accessPrivs;
+};
+
 char *o_strdup(const char *);
 char *itoa(long int, int);
 size_t load_file_to_memory(const char *, char **);

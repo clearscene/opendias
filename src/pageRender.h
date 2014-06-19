@@ -26,32 +26,27 @@
 #include "main.h" // for con_info struct
 
 #ifdef CAN_SCAN
-char *getScannerList(char *);  // Command port frontend to the internalGetScannerList function
-char *getScannerDetails(char *, char *);  // Command port frontend to the internalGetScannerDetails function
+char *getScannerList( struct dispatch_params * );  // Command port frontend to the internalGetScannerList function
+char *getScannerDetails( struct dispatch_params * );  // Command port frontend to the internalGetScannerDetails function
 void *doScanningOperation(void *); //command port frontend to the internalDoScanningOperation function
-char *getScanningProgress(char *);
-#ifdef THREAD_JOIN
-char *doScan(char *, char *, char *, char *, char *, char *, char *, pthread *);
-char *nextPageReady(char *, char *, pthread *);
-#else
-char *doScan(char *, char *, char *, char *, char *, char *, char *);
-char *nextPageReady(char *, char *);
-#endif /* THREAD_JOIN */
+char *getScanningProgress( struct dispatch_params * );
+char *doScan( struct dispatch_params * );
+char *nextPageReady( struct dispatch_params * );
 #endif /* CAN_SCAN */
-char *docFilter(char *, char *, char *, char *, char *, char *, char *, char *, char *, char *, char *);
-char *titleAutoComplete(char *, char *);
-char *tagsAutoComplete(char *, char *);
+char *docFilter( struct dispatch_params * );
+char *titleAutoComplete( struct dispatch_params * );
+char *tagsAutoComplete( struct dispatch_params * );
 #ifndef OPEN_TO_ALL
-char *checkLogin(char *, char *, char *, struct simpleLinkedList *);
-char *doLogout( struct simpleLinkedList *);
-char *updateUser( char *, char *, char *, char *, int, struct simpleLinkedList *, char *);
-char *deleteUser( char *, char *);
+char *checkLogin( struct dispatch_params * );
+char *doLogout( struct dispatch_params * );
+char *updateUser( struct dispatch_params * );
+char *deleteUser( struct dispatch_params * );
 char *getUserList();
 #endif /* OPEN_TO_ALL */
 char *getTagsList();
-char *updateTag( char *, char *, char *);
+char *updateTag( struct dispatch_params * );
 #ifdef CAN_PHASH
-char *checkForSimilar(const char *);
+char *checkForSimilar( struct dispatch_params * );
 #endif /* CAN_PHASH */
 
 #endif /* PAGERENDER */

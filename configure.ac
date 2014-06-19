@@ -38,9 +38,6 @@ AC_ENABLE([open_to_all],[
 AC_ENABLE([create_test_language],[
   LOCALISATION_FLAGS="$LOCALISATION_FLAGS CREATE_TEST_LANGUAGE"
 ])
-AC_ENABLE([thread_join],[
-	AC_DEFINE([THREAD_JOIN],[],[The main process will wait for child threads to finish.])
-])
 AC_ARG_ENABLE([force_var_at_root],
   [AS_HELP_STRING([--enable-force_var_at_root],[Ignore --prefix for the placement of '/var' and put it at the systems root])],
   [VAR_DIR="/var"],
