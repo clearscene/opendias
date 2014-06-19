@@ -124,11 +124,7 @@ extern void *doScanningOperation(void *saneOpData) {
   free((char *)tr->lang);
   free(tr);
 
-#ifdef THREAD_JOIN
-  pthread_exit(0);
-#else
   return 0;
-#endif /* THREAD_JOIN */
 }
 
 // Start the scanning process
@@ -141,9 +137,6 @@ char *doScan( struct dispatch_params *dp ) {
   char *ocr = dp->params[4];
   char *pagelength = dp->params[5];
   char *lang = dp->params[6];
-#ifdef THREAD_JOIN
-  pthread_t *thr = dp->thread;
-#endif /* THREAD_JOIN */
 
   char *ret = NULL;
 
@@ -174,11 +167,7 @@ char *doScan( struct dispatch_params *dp ) {
 
   // Create a new thread to start the scan process
   pthread_attr_init(&attr);
-#ifdef THREAD_JOIN
-  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-#else
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-#endif /* THREAD_JOIN */
 
   struct doScanOpData *tr = (struct doScanOpData *)malloc( sizeof( struct doScanOpData ) );
   tr->uuid = o_strdup(scanUuid);
@@ -189,9 +178,6 @@ char *doScan( struct dispatch_params *dp ) {
     o_log(ERROR, "Failed to create a new thread - for scanning operation.");
     return NULL;
   }
-#ifdef THREAD_JOIN
-  thr = &thread;
-#endif /* THREAD_JOIN */
 
   // Build a response, to tell the client about the uuid (so they can query the progress)
   //
@@ -205,9 +191,6 @@ char *doScan( struct dispatch_params *dp ) {
 char *nextPageReady( struct dispatch_params *dp ) {
   char *scanid = dp->params[0];
   char *lang = dp->params[1];
-#ifdef THREAD_JOIN
-  pthread_t *thr = dp->thread;
-#endif /* THREAD_JOIN */
 
   pthread_t thread;
   pthread_attr_t attr;
@@ -235,11 +218,8 @@ char *nextPageReady( struct dispatch_params *dp ) {
     int rc;
     // Create a new thread to start the scan process
     pthread_attr_init(&attr);
-#ifdef THREAD_JOIN
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-#else
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-#endif /* THREAD_JOIN */
+
     struct doScanOpData *tr = malloc( sizeof(struct doScanOpData) );
     tr->uuid = o_strdup(scanid);
     tr->lang = o_strdup(lang);
@@ -248,11 +228,9 @@ char *nextPageReady( struct dispatch_params *dp ) {
       o_log(ERROR, "Failed to create a new thread - for scanning operation.");
       return NULL;
     }
-#ifdef THREAD_JOIN
-    thr = &thread;
-#endif /* THREAD_JOIN */
     updateScanProgress(scanid, SCAN_WAITING_ON_SCANNER, 0);
-  } else {
+  } 
+  else {
     o_log(WARNING, "scan id indicates a status not waiting for a new page signal.");
     return NULL;
   }
@@ -628,7 +606,10 @@ char *titleAutoComplete( struct dispatch_params *dp ) {
   return result;
 }
 
-char *tagsAutoComplete(char *startsWith, char *docid) {
+char *tagsAutoComplete( struct dispatch_params *dp ) {
+
+  char *startsWith = dp->params[0];
+  char *docid = dp->params[1];
 
   struct simpleLinkedList *rSet;
   char *result = o_strdup("{\"results\":[");
@@ -1048,7 +1029,11 @@ o_log( ERROR, "%s", result );
 
 }
 
-char *updateTag( char *subaction, char *tagid, char *newvalue ) {
+char *updateTag( struct dispatch_params *dp ) {
+
+  char *subaction = dp->params[0];
+  char *tagid = dp->params[1];
+  char *newvalue = dp->params[2];
 
   int rc;
   rc = doUpdateTag( subaction, tagid, newvalue);

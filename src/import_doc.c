@@ -69,14 +69,16 @@ char *extractThumbnail( struct dispatch_params *dp ) {
 
 char *uploadfile( struct dispatch_params *dp ) {
 
-  char *filename = dp->params[0];
-  char *lookForSimilar = dp->params[1];
-  char *lang = dp->params[2];
-
 #ifndef CAN_MAGIC
   o_log(ERROR, "Unable to determin the file type, aborting.");
   return NULL;
 #else
+
+  char *filename = dp->params[0];
+#ifdef CAN_PHASH
+  char *lookForSimilar = dp->params[1];
+#endif /*  CAN_PHASH */
+  char *lang = dp->params[2];
 
   int width = 0, height = 0, itype = PLACE_HOLDER;
   char *final_filename, *ocrText = NULL, *tmp;

@@ -35,7 +35,7 @@ char *nextPageReady( struct dispatch_params * );
 #endif /* CAN_SCAN */
 char *docFilter( struct dispatch_params * );
 char *titleAutoComplete( struct dispatch_params * );
-char *tagsAutoComplete(char *, char *);
+char *tagsAutoComplete( struct dispatch_params * );
 #ifndef OPEN_TO_ALL
 char *checkLogin( struct dispatch_params * );
 char *doLogout( struct dispatch_params * );
@@ -44,7 +44,7 @@ char *deleteUser( struct dispatch_params * );
 char *getUserList();
 #endif /* OPEN_TO_ALL */
 char *getTagsList();
-char *updateTag( char *, char *, char *);
+char *updateTag( struct dispatch_params * );
 #ifdef CAN_PHASH
 char *checkForSimilar( struct dispatch_params * );
 #endif /* CAN_PHASH */

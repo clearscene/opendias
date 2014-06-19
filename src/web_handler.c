@@ -26,9 +26,6 @@
 #include <stdarg.h>
 #include <microhttpd.h>
 #include <uuid/uuid.h>
-#ifdef THREAD_JOIN
-#include <pthread.h>
-#endif /* THREAD_JOIN */
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -297,19 +294,8 @@ void request_completed (void *cls, struct MHD_Connection *connection, void **con
     sll_destroy( sll_findFirstElement( con_info->post_data ) );
   }
 
-#ifdef THREAD_JOIN
-  pthread_t t = con_info->thread;
-#endif /* THREAD_JOIN */
   free (con_info);
   *con_cls = NULL;
-#ifdef THREAD_JOIN
-  if(t != NULL) {
-    o_log(ERROR, "Waiting for child thread %X to finish", t);
-    pthread_join(t, NULL);
-    o_log(ERROR, "finish waiting for the child to come home");
-  }
-  o_log(DEBUGM, "end of REQUEST COMPLETE");
-#endif /* THREAD_JOIN */
 }
 
 #ifdef OPEN_TO_ALL
@@ -506,9 +492,6 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     if (NULL == con_info)
       return MHD_NO;
 
-#ifdef THREAD_JOIN
-    con_info->thread = NULL;
-#endif /* THREAD_JOIN */
     con_info->lang = lang;
     con_info->session_data = session_data;
     con_info->session_id = session_id;
@@ -739,16 +722,6 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               accessPrivs.add_scan, MIMETYPE_XML, 
               &getScannerDetails, {"deviceid", "_lang", NULL }
             },
-#ifdef THREAD_JOIN
-            { "doScan", "doScan", 
-              accessPrivs.add_scan, MIMETYPE_XML, 
-              &doScan, {"deviceid", "format", "resolution", "pages", "ocr", "pagelength", "_lang", "_thread", NULL }
-            },
-            { "nextPageReady", "restart scan after page change", 
-              accessPrivs.add_scan, MIMETYPE_XML, 
-              &nextPageReady, {"scanprogressid", "_lang", "_thread", NULL }
-            },
-#else
             { "doScan", "doScan", 
               accessPrivs.add_scan, MIMETYPE_XML, 
               &doScan, {"deviceid", "format", "resolution", "pages", "ocr", "pagelength", "_lang", NULL }
@@ -757,7 +730,6 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               accessPrivs.add_scan, MIMETYPE_XML, 
               &nextPageReady, {"scanprogressid", "_lang", NULL }
             },
-#endif /* THREAD_JOIN */
             { "getScanningProgress", "getScanningProgress", 
               accessPrivs.add_scan, MIMETYPE_XML, 
               &getScanningProgress, {"scanprogressid", NULL }
@@ -812,6 +784,10 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
               accessPrivs.add_import, MIMETYPE_JSON,
               &titleAutoComplete, {"startsWith", "notLinkedTo", NULL }
             },
+            { "tagsAutoComplete", "tagsAutoComplete", 
+              accessPrivs.view_doc, MIMETYPE_JSON,
+              &tagsAutoComplete, {"startsWith", "docid", NULL }
+            },
 #ifndef OPEN_TO_ALL
             { "checkLogin", "checkLogin", 
               1, MIMETYPE_XML, 
@@ -844,7 +820,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             },
             { "updateTag", "updateTag", 
               accessPrivs.update_access, MIMETYPE_XML, 
-              &getTagsList, {"subaction", "tagid", "newvalue", NULL }
+              &updateTag, {"subaction", "tagid", "newvalue", NULL }
             },
 #ifdef CAN_PHASH
             { "checkForSimilar", "check For Similar", 
@@ -900,11 +876,6 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
                 else if ( 0 == strcmp(action, "_session_data") ) {
                   dp->session_data = con_info->session_data;
                 }
-#ifdef THREAD_JOIN
-                else if ( 0 == strcmp(action, "_thread") ) {
-                  dp->thread = &(con_info->thread);
-                }
-#endif /* THREAD_JOIN */
                 else {
                   dp->params[j] = getPostData( con_info->post_data, dispatcher[i].params[j] );
                 }

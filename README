@@ -144,9 +144,6 @@ Here is an overview of the openDIAS specific options.
   --enable-create_test_language
     Adds a test language (all words show as '####'), useful to ensure you've not hard coded some text
 
-  --enable-thread_join
-    Don't let the main calling thread finish until the child thread is done (useful for debugging)
-
 -----------------------------------
 
 4. Running

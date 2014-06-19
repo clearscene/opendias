@@ -31,7 +31,6 @@ struct dateParts {
 struct dispatch_params {
   char *params[MAX_PARAMS];
   struct simpleLinkedList *session_data;
-  pthread_t *thread;
   int accessPrivs;
 };
 
