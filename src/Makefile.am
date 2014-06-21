@@ -16,20 +16,25 @@ libutils_la_LDFLAGS = -lssl
 
 bin_PROGRAMS = opendias opendias_worker opendiasconfig
 
+opendiasconfig_LDFLAGS = 
+opendiasconfig_LDADD = $(OPENDIAS_LIBS)
+opendiasconfig_CFLAGS = $(AM_CFLAGS)
 opendiasconfig_SOURCES = \
   db.c    \
   db.h    \
   debug.c    \
   debug.h    \
+  utils.h \
+  utils.c \
   main.h \
   opendiasconfig.c \
   simpleLinkedList.c    \
   simpleLinkedList.h
 
-opendiasconfig_LDFLAGS = 
 
-opendiasconfig_LDADD = libutils.la $(OPENDIAS_LIBS)
-
+opendias_worker_LDFLAGS = 
+opendias_worker_LDADD = $(OPENDIAS_LIBS)
+opendias_worker_CFLAGS = $(AM_CFLAGS)
 opendias_worker_SOURCES = \
   db.c    \
   db.h    \
@@ -49,6 +54,8 @@ opendias_worker_SOURCES = \
   phash_plug.h \
   imageProcessing.h    \
   imageProcessing.c    \
+  utils.h \
+  utils.c \
   main.h \
   opendias_worker.c \
   validation.c    \
@@ -58,10 +65,10 @@ opendias_worker_SOURCES = \
   simpleLinkedList.c    \
   simpleLinkedList.h
 
-opendias_worker_LDFLAGS = 
 
-opendias_worker_LDADD = libutils.la $(OPENDIAS_LIBS)
-
+opendias_LDFLAGS = 
+opendias_LDADD = $(OPENDIAS_LIBS)
+opendias_CFLAGS = $(AM_CFLAGS)
 opendias_SOURCES = \
   db.c    \
   db.h    \
@@ -73,6 +80,8 @@ opendias_SOURCES = \
   web_handler.h    \
   pageRender.c    \
   pageRender.h    \
+  utils.h \
+  utils.c \
   main.h    \
   ocr_plug.cc    \
   ocr_plug.h    \
@@ -102,7 +111,4 @@ opendias_SOURCES = \
   sessionmanagement.c \
   sessionmanagement.h
 
-opendias_LDFLAGS = 
-
-opendias_LDADD = libutils.la $(OPENDIAS_LIBS)
 
