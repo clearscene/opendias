@@ -10,6 +10,9 @@ AM_MAINTAINER_MODE
 AC_PROG_CXX
 AM_PROG_CC_STDC
 AC_HEADER_STDC
+AM_PROG_AR
+LT_INIT
+AC_PROG_LIBTOOL
 
 
 dnl
@@ -222,6 +225,7 @@ Makefile
 src/Makefile
 sql/Makefile
 i18n/Makefile
+unittests/Makefile
 webcontent/Makefile
 webcontent/style/Makefile
 webcontent/includes/Makefile

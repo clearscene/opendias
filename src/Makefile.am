@@ -10,6 +10,10 @@ AM_CPPFLAGS = \
 AM_CFLAGS =\
 	 -Wall
 
+lib_LTLIBRARIES = libutils.la 
+libutils_la_SOURCES = utils.c utils.h
+libutils_la_LDFLAGS = -lssl
+
 bin_PROGRAMS = opendias opendias_worker opendiasconfig
 
 opendiasconfig_SOURCES = \
@@ -17,8 +21,6 @@ opendiasconfig_SOURCES = \
   db.h    \
   debug.c    \
   debug.h    \
-  utils.c    \
-  utils.h    \
   main.h \
   opendiasconfig.c \
   simpleLinkedList.c    \
@@ -26,15 +28,13 @@ opendiasconfig_SOURCES = \
 
 opendiasconfig_LDFLAGS = 
 
-opendiasconfig_LDADD = $(OPENDIAS_LIBS)
+opendiasconfig_LDADD = libutils.la $(OPENDIAS_LIBS)
 
 opendias_worker_SOURCES = \
   db.c    \
   db.h    \
   debug.c    \
   debug.h    \
-  utils.c    \
-  utils.h    \
   scan.c    \
   scan.h    \
   scanner.c    \
@@ -60,7 +60,7 @@ opendias_worker_SOURCES = \
 
 opendias_worker_LDFLAGS = 
 
-opendias_worker_LDADD = $(OPENDIAS_LIBS)
+opendias_worker_LDADD = libutils.la $(OPENDIAS_LIBS)
 
 opendias_SOURCES = \
   db.c    \
@@ -82,8 +82,6 @@ opendias_SOURCES = \
   phash_plug.h \
   backpopulate.c \
   backpopulate.h \
-  utils.c    \
-  utils.h    \
   main.c    \
   odf_plug.c    \
   odf_plug.h    \
@@ -106,5 +104,5 @@ opendias_SOURCES = \
 
 opendias_LDFLAGS = 
 
-opendias_LDADD = $(OPENDIAS_LIBS)
+opendias_LDADD = libutils.la $(OPENDIAS_LIBS)
 

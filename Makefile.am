@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = src sql webcontent i18n 
+SUBDIRS = src sql webcontent i18n unittests
 
 dist_doc_DATA = ChangeLog README TODO
 
