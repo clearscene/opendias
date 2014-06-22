@@ -6,6 +6,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AM_CONFIG_HEADER([config.h])
 AM_MAINTAINER_MODE
+dnl  AC_CONFIG_MACRO_DIR([/usr/share/aclocal/])
 
 AC_PROG_CXX
 AM_PROG_CC_STDC
@@ -27,7 +28,7 @@ AC_SUBST(TESSERACT_BASE_DIR)
 AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
 
 
-
+PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
 
 dnl 
 dnl Special config options
