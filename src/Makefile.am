@@ -12,7 +12,7 @@ AM_CFLAGS =\
 
 lib_LTLIBRARIES = libutils.la 
 libutils_la_SOURCES = utils.c utils.h
-libutils_la_LDFLAGS = -lssl
+libutils_la_LDFLAGS = $(OPENDIAS_LIBS)
 
 bin_PROGRAMS = opendias opendias_worker opendiasconfig
 
