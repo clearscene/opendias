@@ -203,6 +203,9 @@ char *dateHuman(char *a, char *b, char *c, const char *LOCAL_no_date_set) {
 
 char *o_strdup(const char *source) {
 
+  if( source == NULL ) {
+    return o_printf("");
+  }
   size_t size = strlen(source);
   char *newArea = malloc(size + 1);
   (void) strcpy(newArea, source);
