@@ -10,14 +10,50 @@ void fcopy(char *, char *);
 char *dateHuman(char *, char *, char *, const char *);
 void propper(char *);
 void lower(char *);
-void chop(char *);
 struct dateParts *dateStringToDateParts(char *);
 void addFileExt(char **, int);
-void replace(char *, char*, char*);
 char *o_printf(const char *, ...);
 void o_concatf(char **, const char *, ...);
 char *str2md5(const char *, int );
 */
+
+// ------------------------------------------------------
+
+START_TEST (replace_findReplaceSameSize_stringReplaced) {
+  char *outString = malloc( 15 * sizeof( char ) );
+  sprintf(outString, "First z String");
+  replace(outString, "z", "X");
+  ck_assert_str_eq ("First X String", outString);
+  free(outString);
+}
+END_TEST
+
+START_TEST (replace_replaceSmallerSize_truncateOriginal) {
+  char *outString = malloc( 15 * sizeof( char ) );
+  sprintf(outString, "First z String");
+  replace(outString, "z", "");
+  ck_assert_str_eq ("First ", outString);
+  free(outString);
+}
+END_TEST
+
+START_TEST (replace_missingFindString_getOriginalString) {
+  char *outString = malloc( 14 * sizeof( char ) );
+  sprintf(outString, "First String");
+  replace(outString, "z", "X");
+  ck_assert_str_eq ("First String", outString);
+  free(outString);
+}
+END_TEST
+
+START_TEST (replace_emptyFindString_getOriginalString) {
+  char *outString = malloc( 17 * sizeof( char ) );
+  sprintf(outString, "First the String");
+  replace(outString, "", "X");
+  ck_assert_str_eq ("First the String", outString);
+  free(outString);
+}
+END_TEST
 
 // ------------------------------------------------------
 
@@ -194,11 +230,22 @@ END_TEST
 Suite *utils_suite (void) {
   Suite *s = suite_create ("Utils");
 
-  TCase *tc_comp = tcase_create ("conCat");
-  tcase_add_test (tc_comp, chop_StringWithBreak_onlyBeforeBreak);
-  tcase_add_test (tc_comp, chop_StringWithNoBreak_allOfOriginalString);
-  tcase_add_test (tc_comp, chop_blankString_blankOut);
-  suite_add_tcase (s, tc_comp);
+//  TCase *tc_core = tcase_create ("Core");
+//  tcase_add_test (tc_core, ck_assert_int_eq (1, 1) );
+//  suite_add_tcase (s, tc_core);
+
+  TCase *tc_replace = tcase_create ("replace");
+  tcase_add_test (tc_replace, replace_findReplaceSameSize_stringReplaced);
+  tcase_add_test (tc_replace, replace_replaceSmallerSize_truncateOriginal);
+  tcase_add_test (tc_replace, replace_missingFindString_getOriginalString);
+  tcase_add_test (tc_replace, replace_emptyFindString_getOriginalString);
+  suite_add_tcase (s, tc_replace);
+
+  TCase *tc_chop = tcase_create ("conCat");
+  tcase_add_test (tc_chop, chop_StringWithBreak_onlyBeforeBreak);
+  tcase_add_test (tc_chop, chop_StringWithNoBreak_allOfOriginalString);
+  tcase_add_test (tc_chop, chop_blankString_blankOut);
+  suite_add_tcase (s, tc_chop);
 
   TCase *tc_concat = tcase_create ("conCat");
   tcase_add_test (tc_concat, conCat_twoStrongs_becomeOne);

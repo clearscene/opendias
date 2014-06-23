@@ -291,7 +291,13 @@ void lower(char *inStr) {
   }
 }
 
+// Replace single characters only.
+// If the replace clause is blank (""), truncate the original string from the find clause.
 void replace(char *inStr, char *findStr, char *replaceStr) {
+
+  if( 0 != strstr("", findStr) ) {
+    return;
+  }
 
   char *ptr = inStr;
 
