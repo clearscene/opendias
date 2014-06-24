@@ -8,14 +8,92 @@ size_t load_file_to_memory(const char *, char **);
 void createDir_ifRequired(char *);
 void fcopy(char *, char *);
 char *dateHuman(char *, char *, char *, const char *);
-void propper(char *);
-void lower(char *);
 struct dateParts *dateStringToDateParts(char *);
 void addFileExt(char **, int);
 char *o_printf(const char *, ...);
 void o_concatf(char **, const char *, ...);
-char *str2md5(const char *, int );
 */
+
+// ------------------------------------------------------
+
+START_TEST (propper_multipleStrings_allCapitalised) {
+  char *inString = malloc( 15 * sizeof( char ) );
+  sprintf(inString, "first x string");
+  propper( inString );
+  ck_assert_str_eq ("First X String", inString);
+  free(inString);
+}
+END_TEST
+
+START_TEST (propper_capitalisedStrings_outTheSame) {
+  char *inString = malloc( 15 * sizeof( char ) );
+  sprintf(inString, "First X String");
+  propper( inString );
+  ck_assert_str_eq ("First X String", inString);
+  free(inString);
+}
+END_TEST
+
+START_TEST (propper_emptyString_emptyOut) {
+  char *inString = malloc( 1 * sizeof( char ) );
+  sprintf(inString, "%s", "");
+  propper( inString );
+  ck_assert_str_eq ("", inString);
+  free(inString);
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (str2md5_shortString_Hashed) {
+  char *inString = malloc( 13 * sizeof( char ) );
+  sprintf(inString, "First String");
+  char *outString = str2md5(inString, 12);
+  ck_assert_str_eq ("91617d13e51cfd7395da2ef7d3e95e3a", outString);
+  free(inString);
+  free(outString);
+}
+END_TEST
+
+START_TEST (str2md5_longString_Hashed) {
+  char *inString = malloc( 470 * sizeof( char ) );
+  sprintf(inString, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc congue porta purus non laoreet. Aenean tempor, ligula nec lobortis porttitor, velit lectus volutpat felis, id tempus elit libero in felis. Integer euismod purus porta laoreet ornare. Fusce pellentesque facilisis ornare. Sed et quam sit amet elit feugiat mattis. Suspendisse sodales tempor feugiat. Donec venenatis nisl magna, et consectetur erat elementum et. Maecenas fermentum nunc non iaculis adipiscing.");
+  char *outString = str2md5(inString, 469);
+  ck_assert_str_eq ("70cbdd2ed398be4e551b2f45c0096a12", outString);
+  free(inString);
+  free(outString);
+}
+END_TEST
+
+START_TEST (str2md5_emptyString_Hashed) {
+  char *inString = malloc( 1 * sizeof( char ) );
+  sprintf(inString, "%s", "");
+  char *outString = str2md5(inString, 0);
+  ck_assert_str_eq ("d41d8cd98f00b204e9800998ecf8427e", outString);
+  free(inString);
+  free(outString);
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (lower_multiWordString_allLowerCase) {
+  char *outString = malloc( 16 * sizeof( char ) );
+  sprintf(outString, "First Z STR-iNg");
+  lower(outString);
+  ck_assert_str_eq ("first z str-ing", outString);
+  free(outString);
+}
+END_TEST
+
+START_TEST (lower_emptyStringIn_emptyStringOut) {
+  char *outString = malloc( 16 * sizeof( char ) );
+  sprintf(outString, "%s", "");
+  lower(outString);
+  ck_assert_str_eq ("", outString);
+  free(outString);
+}
+END_TEST
 
 // ------------------------------------------------------
 
@@ -233,6 +311,23 @@ Suite *utils_suite (void) {
 //  TCase *tc_core = tcase_create ("Core");
 //  tcase_add_test (tc_core, ck_assert_int_eq (1, 1) );
 //  suite_add_tcase (s, tc_core);
+
+  TCase *tc_propper = tcase_create ("propper");
+  tcase_add_test (tc_propper, propper_multipleStrings_allCapitalised);
+  tcase_add_test (tc_propper, propper_capitalisedStrings_outTheSame);
+  tcase_add_test (tc_propper, propper_emptyString_emptyOut);
+  suite_add_tcase (s, tc_propper);
+
+  TCase *tc_str2md5 = tcase_create ("str2md5");
+  tcase_add_test (tc_str2md5, str2md5_shortString_Hashed);
+  tcase_add_test (tc_str2md5, str2md5_longString_Hashed);
+  tcase_add_test (tc_str2md5, str2md5_emptyString_Hashed);
+  suite_add_tcase (s, tc_str2md5);
+
+  TCase *tc_lower = tcase_create ("lower");
+  tcase_add_test (tc_lower, lower_multiWordString_allLowerCase);
+  tcase_add_test (tc_lower, lower_emptyStringIn_emptyStringOut);
+  suite_add_tcase (s, tc_lower);
 
   TCase *tc_replace = tcase_create ("replace");
   tcase_add_test (tc_replace, replace_findReplaceSameSize_stringReplaced);

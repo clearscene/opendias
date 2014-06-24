@@ -62,7 +62,7 @@ char * itoa(long int val, int base) {
   for (len=2; t; t /= base) len++ ; // quickie log_base
 
   if((buf = (char *) malloc((size_t)len)) == NULL) {
-    //o_log(ERROR, "out of memory in itoa\n");
+    o_log(ERROR, "out of memory in itoa\n");
     return "";
   }
   s = buf;
@@ -84,7 +84,7 @@ size_t load_file_to_memory(const char *p_filename, char **result) {
 
   if (p_f == NULL) {
     *result = NULL;
-    //o_log(ERROR, "Could not open file: %s", p_filename);
+    o_log(ERROR, "Could not open file: %s", p_filename);
     return (size_t)0; // means file opening fail
   }
 
@@ -93,14 +93,14 @@ size_t load_file_to_memory(const char *p_filename, char **result) {
   fseek(p_f, 0, SEEK_SET);
 
   if((*result = (char *)malloc(size+1)) == NULL) {
-    //o_log(ERROR, "Out of memory while reading file information");
+    o_log(ERROR, "Out of memory while reading file information");
     fclose(p_f);
     return (size_t)0;
   }
 
   if (size != fread(*result, sizeof(char), size, p_f)) {
     free(*result);
-    //o_log(ERROR, "Error reading from file");
+    o_log(ERROR, "Error reading from file");
     fclose(p_f);
     return (size_t)0; // means file reading fail
   }
@@ -116,11 +116,11 @@ void createDir_ifRequired(char *dir) {
 
   if ( 0 != access(dir, F_OK) ) {
     // Create the directory
-    //o_log(INFORMATION, "Created directory.");
+    o_log(INFORMATION, "Created directory.");
     mkdir( dir, 5570 );
     if ( 0 != access(dir, F_OK) ) {
       // Major error - do something!
-      //o_log(ERROR, "Could not get to new directory.");
+      o_log(ERROR, "Could not get to new directory.");
       exit(1);
     }
   }
@@ -258,7 +258,7 @@ char *getTimeStr_iso8601() {
   stTime = gmtime(&ttime);
   size = strftime(strdate, 20, "%Y-%m-%d %H:%M:%S", stTime);
   if( 19 != size ){
-    //o_log(ERROR, "Count not write entire data block.%s",strdate);
+    o_log(ERROR, "Count not write entire data block.%s",strdate);
   }
   return strdate;
 }
