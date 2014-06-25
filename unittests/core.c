@@ -17,13 +17,10 @@ Suite *core_suite (void) {
   return s;
 }
 
-Suite *utils_suite (void);
-
 int main (void) {
   int number_failed; //number_run
 
   SRunner *sr = srunner_create( core_suite() );
-  srunner_add_suite( sr, utils_suite() );
 
   srunner_run_all (sr, CK_VERBOSE);
   //srunner_print(sr, CK_VERBOSE);
