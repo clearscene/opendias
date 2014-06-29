@@ -3,7 +3,7 @@
 #include <check.h>
 
 START_TEST (check_core) {
-  ck_assert_int_eq (1, 1 );
+  fail_unless(1==1, "core test" );
 }
 END_TEST
 

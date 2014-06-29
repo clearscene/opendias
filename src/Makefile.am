@@ -10,9 +10,15 @@ AM_CPPFLAGS = \
 AM_CFLAGS =\
 	 -Wall
 
-lib_LTLIBRARIES = libutils.la 
+lib_LTLIBRARIES = libutils.la libdb.la libsimpleLinkedList.la
 libutils_la_SOURCES = utils.c utils.h
 libutils_la_LDFLAGS = $(OPENDIAS_LIBS)
+
+libdb_la_SOURCES = db.c db.h
+libdb_la_LDFLAGS = $(OPENDIAS_LIBS)
+
+libsimpleLinkedList_la_SOURCES = simpleLinkedList.c simpleLinkedList.h
+libsimpleLinkedList_la_LDFLAGS = $(OPENDIAS_LIBS)
 
 bin_PROGRAMS = opendias opendias_worker opendiasconfig
 
