@@ -1,5 +1,5 @@
  /*
- * sessionmanagement.h
+ * sessionManagement.h
  * Copyright (C) Clearscene Ltd 2008 <wbooth@essentialcollections.co.uk>
  * 
  * localisation.h is free software: you can redistribute it and/or modify it

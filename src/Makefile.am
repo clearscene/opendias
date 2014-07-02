@@ -114,7 +114,7 @@ opendias_SOURCES = \
   saneDispatcher.h    \
   simpleLinkedList.c    \
   simpleLinkedList.h \
-  sessionmanagement.c \
-  sessionmanagement.h
+  sessionManagement.c \
+  sessionManagement.h
 
 

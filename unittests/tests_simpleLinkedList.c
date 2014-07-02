@@ -223,8 +223,8 @@ END_TEST
 // ------------------------------------------------------
 // ------------------------------------------------------
 
-Suite *db_suite (void) {
-  Suite *s = suite_create ("db");
+Suite *sll_suite (void) {
+  Suite *s = suite_create ("sll");
 
   TCase *tc_sllinit = tcase_create ("sllinit");
   tcase_add_test (tc_sllinit, sllInit_createStructure_structureCreated);
@@ -280,7 +280,7 @@ Suite *db_suite (void) {
 int main(void) {
   int number_failed; //number_run
 
-  SRunner *sr = srunner_create( db_suite() );
+  SRunner *sr = srunner_create( sll_suite() );
 
   srunner_run_all (sr, CK_VERBOSE);
   //srunner_print(sr, CK_VERBOSE);

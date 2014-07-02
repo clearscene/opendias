@@ -1,5 +1,5 @@
  /*
- * sessionmanagement.c
+ * sessionManagement.c
  * Copyright (C) Clearscene Ltd 2008 <wbooth@essentialcollections.co.uk>
  * 
  * localisation.c is free software: you can redistribute it and/or modify it
@@ -25,7 +25,7 @@
 #include "debug.h"
 #include "simpleLinkedList.h"
 
-#include "sessionmanagement.h"
+#include "sessionManagement.h"
 
 struct simpleLinkedList *sessions = NULL;
 
