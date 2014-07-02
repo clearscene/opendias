@@ -3,15 +3,6 @@
 #include <check.h>
 #include "../src/simpleLinkedList.h"
 
-/*
-struct simpleLinkedList *sll_findLastElement( struct simpleLinkedList * );
-struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList * );
-struct simpleLinkedList *sll_getNext( struct simpleLinkedList * );
-struct simpleLinkedList *sll_searchKeys( struct simpleLinkedList *, const char * );
-void sll_insert( struct simpleLinkedList *, char *, void * );
-void sll_destroy( struct simpleLinkedList * );
-void sll_sort( struct simpleLinkedList * );
-*/
 
 // ------------------------------------------------------
 
@@ -120,6 +111,112 @@ START_TEST (slldelete_fromNew_noChange) {
 }
 END_TEST
 
+// ------------------------------------------------------
+
+START_TEST (sllFindFirstElement_atEndOfList_goToBeginning) {
+  struct simpleLinkedList *sll = sll_init();
+  sll_append( sll, "const char *" );
+  sll_append( sll, "some more data" );
+  sll_append( sll, "final data" );
+  sll = sll_findFirstElement( sll );
+  ck_assert_str_eq ( "const char *", (char *)sll->data );
+  sll_destroy( sll );
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (sllFindLastElement_atBeginningOfList_goToEnd) {
+  struct simpleLinkedList *sll = sll_init();
+  sll_append( sll, "const char *" );
+  sll_append( sll, "some more data" );
+  sll_append( sll, "final data" );
+  sll = sll_findFirstElement( sll );
+  sll = sll_findLastElement( sll );
+  ck_assert_str_eq ( "final data", (char *)sll->data );
+  sll_destroy( sll );
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (sllgetnext_moveToNext_findNext) {
+  struct simpleLinkedList *sll = sll_init();
+  sll_append( sll, "const char *" );
+  sll_append( sll, "some more data" );
+  sll_append( sll, "final data" );
+  sll = sll_findFirstElement( sll );
+  sll = sll_getNext( sll );
+  ck_assert_str_eq ( "some more data", (char *)sll->data );
+  sll_destroy( sll );
+}
+END_TEST
+
+START_TEST (sllgetnext_moveNextAtEnd_noChange) {
+  struct simpleLinkedList *sll = sll_init();
+  sll_append( sll, "const char *" );
+  sll_append( sll, "some more data" );
+  sll_append( sll, "final data" );
+  sll = sll_findLastElement( sll );
+  sll = sll_getNext( sll );
+  ck_assert_ptr_eq( sll, NULL );
+  sll_destroy( sll );
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (sllsort_randomStringOfInts_storedDumpedCorrectly) {
+  struct simpleLinkedList *sll = sll_init();
+  sll_append( sll, "123" );
+  sll_append( sll, "500" );
+  sll_append( sll, "-1" );
+  sll_append( sll, "124" );
+  sll_append( sll, "123" );
+  sll_append( sll, "0" );
+  sll = sll_findFirstElement( sll );
+  sll_sort( sll );
+  ck_assert_str_eq ( "\n      (null) : -1\n      (null) : 0\n      (null) : 123\n      (null) : 123\n      (null) : 124\n      (null) : 500", sll_dumper( sll ) );
+  sll_destroy( sll );
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (sllinsert_addElements_storedOK) {
+  struct simpleLinkedList *sll = sll_init();
+  sll_insert( sll, "one", "const char *" );
+  sll_insert( sll, "two", "some more data" );
+  sll_insert( sll, "three", "final data" );
+  ck_assert_str_eq ( "\n      one : const char *\n      two : some more data\n      three : final data", sll_dumper( sll ) );
+  sll_destroy( sll );
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (sllsearchkeys_availableInMiddle_found) {
+  struct simpleLinkedList *sll = sll_init();
+  sll_insert( sll, "one", "const char *" );
+  sll_insert( sll, "two", "some more data" );
+  sll_insert( sll, "three", "final data" );
+  sll = sll_searchKeys( sll, "two" );
+  ck_assert_str_eq ( "some more data", (char *)sll->data );
+  sll_destroy( sll );
+}
+END_TEST
+
+START_TEST (sllsearchkeys_noneToFind_returnsNull) {
+  struct simpleLinkedList *sll = sll_init();
+  sll_insert( sll, "one", "const char *" );
+  sll_insert( sll, "two", "some more data" );
+  sll_insert( sll, "three", "final data" );
+  sll = sll_searchKeys( sll, "zzz" );
+  ck_assert_ptr_eq( sll, NULL );
+  sll_destroy( sll );
+}
+END_TEST
+
 
 
 // ------------------------------------------------------
@@ -150,6 +247,32 @@ Suite *db_suite (void) {
   tcase_add_test (tc_slldelete, slldelete_fromMiddle_everythingShufflesUp);
   tcase_add_test (tc_slldelete, slldelete_fromNew_noChange);
   suite_add_tcase (s, tc_slldelete);
+
+  TCase *tc_sllfindFirstElement = tcase_create ("sllfindFirstElement");
+  tcase_add_test (tc_sllfindFirstElement, sllFindFirstElement_atEndOfList_goToBeginning);
+  suite_add_tcase (s, tc_sllfindFirstElement);
+
+  TCase *tc_sllfindLastElement = tcase_create ("sllfindLastElement");
+  tcase_add_test (tc_sllfindLastElement, sllFindLastElement_atBeginningOfList_goToEnd);
+  suite_add_tcase (s, tc_sllfindLastElement);
+
+  TCase *tc_sllgetNext = tcase_create ("sllgetNext");
+  tcase_add_test (tc_sllgetNext, sllgetnext_moveToNext_findNext);
+  tcase_add_test (tc_sllgetNext, sllgetnext_moveNextAtEnd_noChange);
+  suite_add_tcase (s, tc_sllgetNext);
+
+  TCase *tc_sllSort = tcase_create ("sllSort");
+  tcase_add_test (tc_sllSort, sllsort_randomStringOfInts_storedDumpedCorrectly);
+  suite_add_tcase (s, tc_sllSort);
+
+  TCase *tc_sllInsert = tcase_create ("sllInsert");
+  tcase_add_test (tc_sllInsert, sllinsert_addElements_storedOK);
+  suite_add_tcase (s, tc_sllInsert);
+
+  TCase *tc_sllsearchkeys = tcase_create ("sllsearchkeys");
+  tcase_add_test (tc_sllsearchkeys, sllsearchkeys_availableInMiddle_found);
+  tcase_add_test (tc_sllsearchkeys, sllsearchkeys_noneToFind_returnsNull);
+  suite_add_tcase (s, tc_sllsearchkeys);
 
   return s;
 }
