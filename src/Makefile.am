@@ -10,7 +10,11 @@ AM_CPPFLAGS = \
 AM_CFLAGS =\
 	 -Wall
 
-lib_LTLIBRARIES = libutils.la libdb.la libsimpleLinkedList.la
+lib_LTLIBRARIES = libutils.la \
+                  libdb.la \
+                  libsimpleLinkedList.la \
+                  libsessionManagement.la
+
 libutils_la_SOURCES = utils.c utils.h
 libutils_la_LDFLAGS = $(OPENDIAS_LIBS)
 
@@ -20,7 +24,14 @@ libdb_la_LDFLAGS = $(OPENDIAS_LIBS)
 libsimpleLinkedList_la_SOURCES = simpleLinkedList.c simpleLinkedList.h
 libsimpleLinkedList_la_LDFLAGS = $(OPENDIAS_LIBS)
 
-bin_PROGRAMS = opendias opendias_worker opendiasconfig
+libsessionManagement_la_SOURCES = sessionManagement.c sessionManagement.h
+libsessionManagement_la_LDFLAGS = $(OPENDIAS_LIBS)
+
+# --------------------------------------------------------
+
+bin_PROGRAMS =  opendias \
+                opendias_worker \
+                opendiasconfig
 
 opendiasconfig_LDFLAGS = 
 opendiasconfig_LDADD = $(OPENDIAS_LIBS)

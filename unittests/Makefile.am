@@ -42,13 +42,13 @@ tests_simpleLinkedList_LDADD = \
 
 
 #--- sessionManagement ----------------------------------
-tests_simpleLinkedList_SOURCES = \
-  $(top_builddir)/src/simpleLinkedList.h \
-  tests_simpleLinkedList.c \
+tests_sessionManagement_SOURCES = \
+  $(top_builddir)/src/sessionManagement.h \
+  tests_sessionManagement.c \
   $(top_builddir)/src/debug.h \
   stubbed_debug.c 
-tests_simpleLinkedList_CFLAGS = @CHECK_CFLAGS@
-tests_simpleLinkedList_LDADD = \
+tests_sessionManagement_CFLAGS = @CHECK_CFLAGS@
+tests_sessionManagement_LDADD = \
   $(top_builddir)/src/libsimpleLinkedList.la \
   $(top_builddir)/src/libutils.la \
   @CHECK_LIBS@ 
