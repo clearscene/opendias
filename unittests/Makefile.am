@@ -49,6 +49,7 @@ tests_sessionManagement_SOURCES = \
   stubbed_debug.c 
 tests_sessionManagement_CFLAGS = @CHECK_CFLAGS@
 tests_sessionManagement_LDADD = \
+  $(top_builddir)/src/libsessionManagement.la \
   $(top_builddir)/src/libsimpleLinkedList.la \
   $(top_builddir)/src/libutils.la \
   @CHECK_LIBS@ 

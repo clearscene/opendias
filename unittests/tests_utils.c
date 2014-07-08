@@ -1,15 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <check.h>
+#include "../src/main.h"
 #include "../src/utils.h"
 
 /*
 size_t load_file_to_memory(const char *, char **);
 void createDir_ifRequired(char *);
 void fcopy(char *, char *);
-char *dateHuman(char *, char *, char *, const char *);
-struct dateParts *dateStringToDateParts(char *);
-void addFileExt(char **, int);
 char *o_printf(const char *, ...);
 void o_concatf(char **, const char *, ...);
 */
@@ -302,6 +300,95 @@ START_TEST (min_oneParamNegative_secondParamWins) {
 END_TEST
 
 // ------------------------------------------------------
+
+START_TEST (addFileExt_addPDF_correctlyAdd) {
+  char *filename = o_strdup("file");
+  addFileExt( &filename, PDF_FILETYPE );
+  ck_assert_str_eq ( filename, "file.pdf" );
+  free(filename);
+}
+END_TEST
+
+START_TEST (addFileExt_addJPG_correctlyAdd) {
+  char *filename = o_strdup("file");
+  addFileExt( &filename, JPG_FILETYPE );
+  ck_assert_str_eq ( filename, "file.jpg" );
+  free(filename);
+}
+END_TEST
+
+START_TEST (addFileExt_addODF_correctlyAdd) {
+  char *filename = o_strdup("file");
+  addFileExt( &filename, ODF_FILETYPE );
+  ck_assert_str_eq ( filename, "file.odt" );
+  free(filename);
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (dateStringToDateParts_validDate_dayCorrect) {
+  char *dateString = o_strdup("2014-10-15");
+  struct dateParts *dp = dateStringToDateParts( dateString );
+  ck_assert_str_eq ( dp->day, "15" );
+  free(dateString);
+  free(dp->year);
+  free(dp->month);
+  free(dp->day);
+  free(dp);
+}
+END_TEST
+
+START_TEST (dateStringToDateParts_validDate_monthCorrect) {
+  char *dateString = o_strdup("2014-10-15");
+  struct dateParts *dp = dateStringToDateParts( dateString );
+  ck_assert_str_eq ( dp->month, "10" );
+  free(dateString);
+  free(dp->year);
+  free(dp->month);
+  free(dp->day);
+  free(dp);
+}
+END_TEST
+
+
+START_TEST (dateStringToDateParts_validDate_yearCorrect) {
+  char *dateString = o_strdup("2014-10-15");
+  struct dateParts *dp = dateStringToDateParts( dateString );
+  ck_assert_str_eq ( dp->year, "2014" );
+  free(dateString);
+  free(dp->year);
+  free(dp->month);
+  free(dp->day);
+  free(dp);
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (dateString_validDate_correctCreated) {
+  char *dateString = dateHuman( o_strdup("2014"), o_strdup("10"), o_strdup("15"), "No date set" );
+  ck_assert_str_eq ( dateString, "2014/10/15" );
+  free(dateString);
+}
+END_TEST
+
+START_TEST (dateString_lowDayMonth_correctCreated) {
+  char *dateString = dateHuman( o_strdup("2014"), o_strdup("2"), o_strdup("1"), "No date set" );
+  ck_assert_str_eq ( dateString, "2014/02/01" );
+  free(dateString);
+}
+END_TEST
+
+START_TEST (dateString_logicalNulls_returnsDefault) {
+  char *dateString = dateHuman( o_strdup("NULL"), o_strdup("NULL"), o_strdup("NULL"), "No date set" );
+  ck_assert_str_eq ( dateString, "No date set" );
+  free(dateString);
+}
+END_TEST
+
+// ------------------------------------------------------
+// ------------------------------------------------------
 // ------------------------------------------------------
 // ------------------------------------------------------
 
@@ -370,6 +457,24 @@ Suite *utils_suite (void) {
   tcase_add_test (tc_min, min_oneParamNegative_firstParamWins);
   tcase_add_test (tc_min, min_oneParamNegative_secondParamWins);
   suite_add_tcase (s, tc_min);
+
+  TCase *tc_addFileExt = tcase_create ("addFileExt");
+  tcase_add_test (tc_addFileExt, addFileExt_addPDF_correctlyAdd);
+  tcase_add_test (tc_addFileExt, addFileExt_addJPG_correctlyAdd);
+  tcase_add_test (tc_addFileExt, addFileExt_addODF_correctlyAdd);
+  suite_add_tcase (s, tc_addFileExt);
+
+  TCase *tc_dateStringToDateParts = tcase_create ("dateStringToDateParts");
+  tcase_add_test (tc_dateStringToDateParts, dateStringToDateParts_validDate_dayCorrect);
+  tcase_add_test (tc_dateStringToDateParts, dateStringToDateParts_validDate_monthCorrect);
+  tcase_add_test (tc_dateStringToDateParts, dateStringToDateParts_validDate_yearCorrect);
+  suite_add_tcase (s, tc_dateStringToDateParts);
+
+  TCase *tc_dateString = tcase_create ("dateString");
+  tcase_add_test (tc_dateString, dateString_validDate_correctCreated);
+  tcase_add_test (tc_dateString, dateString_lowDayMonth_correctCreated);
+  tcase_add_test (tc_dateString, dateString_logicalNulls_returnsDefault);
+  suite_add_tcase (s, tc_dateString);
 
   return s;
 }

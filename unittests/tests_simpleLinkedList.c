@@ -217,7 +217,17 @@ START_TEST (sllsearchkeys_noneToFind_returnsNull) {
 }
 END_TEST
 
+// ------------------------------------------------------
 
+START_TEST (slldumper_listContainsSenertive_obscuresSensertive) {
+  struct simpleLinkedList *sll = sll_init();
+  sll_insert( sll, "one", "const char *" );
+  sll_insert( sll, "password", "some more data" );
+  sll_insert( sll, "three", "final data" );
+  ck_assert_str_eq ( "\n      one : const char *\n      password : ###############\n      three : final data", sll_dumper( sll ) );
+  sll_destroy( sll );
+}
+END_TEST
 
 // ------------------------------------------------------
 // ------------------------------------------------------
@@ -273,6 +283,10 @@ Suite *sll_suite (void) {
   tcase_add_test (tc_sllsearchkeys, sllsearchkeys_availableInMiddle_found);
   tcase_add_test (tc_sllsearchkeys, sllsearchkeys_noneToFind_returnsNull);
   suite_add_tcase (s, tc_sllsearchkeys);
+
+  TCase *tc_sllDumper = tcase_create ("sllDumper");
+  tcase_add_test (tc_sllDumper, slldumper_listContainsSenertive_obscuresSensertive);
+  suite_add_tcase (s, tc_sllDumper);
 
   return s;
 }
