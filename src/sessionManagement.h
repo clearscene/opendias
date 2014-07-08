@@ -34,7 +34,7 @@ struct session_data {
 void init_session_management(int, int);
 void clear_old_sessions();
 char *create_session();
-struct simpleLinkedList *get_session();
+struct simpleLinkedList *get_session( char * );
 void cleanup_session_management();
 
 #endif /* SESSION */
