@@ -731,7 +731,7 @@ extern char *internalGetScannerList(char *lang) {
   int scanOK = SANE_FALSE;
   char *deviceList; 
 
-  status = sane_get_devices (&SANE_device_list, SANE_TRUE);
+  status = sane_get_devices (&SANE_device_list, SANE_FALSE);
   if(status == SANE_STATUS_GOOD) {
     if (SANE_device_list && SANE_device_list[0]) {
       scanOK = SANE_TRUE;
@@ -818,6 +818,7 @@ extern char *internalGetScannerList(char *lang) {
       free(type);
       free(name);
       free(scannerHost);
+
     }
 
     free(replyTemplate);
@@ -829,14 +830,14 @@ extern char *internalGetScannerList(char *lang) {
     else {
       // No devices
       // The escaped string placeholder will be interprited in the sane dispatcher client
-      answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
+      answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s></ScannerList></Response>");
     }
   }
 
   else {
     // sane failed.
     // The escaped string placeholder will be interprited in the sane dispatcher client
-    answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%s></ScannerList></Response>");
+    answer = o_strdup( "<?xml version='1.0' encoding='utf-8'?>\n<Response><ScannerList%%s></ScannerList></Response>");
   }
 
   return answer;
@@ -1011,7 +1012,7 @@ void sane_worker( char *command, char *param ) {
   sane_exit();
 
   // POST RESPONSE ON STDOUT
-  printf("%s", response);
+  printf("%s\n", response);
   free(response);
 }
 

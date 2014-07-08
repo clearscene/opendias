@@ -33,6 +33,8 @@ void close_all() {
   locale_cleanup();
   close_db();
 
+  sleep(3);
+
   int i;
   // close handles to files opened by libs, who 'forgot' to close them themselves
   for (i = getdtablesize()-1; i > 1; --i) { // leaving stdout open
