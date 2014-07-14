@@ -50,7 +50,7 @@ int open_db (char *db) {
   return 0;
 }
 
-void wait_for_connection_lock() {
+void _wait_for_connection_lock() {
 
   // Get exclusivity for this thread
   while ( connectingInUse != 0 ) {
@@ -76,7 +76,7 @@ void free_connection_lock() {
   rmdir("/tmp/opendias.db.lock");
 }
 
-int get_db_version() {
+int _get_db_version() {
 
   int version = 0;
   struct simpleLinkedList *rSet;
@@ -135,7 +135,7 @@ int connect_db (int createIfRequired) {
       free(db);
       return 1;
     }
-    version = get_db_version();
+    version = _get_db_version();
   }
 
   if( !version && createIfRequired ) {
@@ -146,7 +146,7 @@ int connect_db (int createIfRequired) {
       free(db);
       return 1;
     }
-    version = get_db_version();
+    version = _get_db_version();
   }
 
   if( !version && !createIfRequired ) {
@@ -203,7 +203,7 @@ int connect_db (int createIfRequired) {
  *                          sll hash of field names and their data
  */ 
 
-static int callback(void *rSetIn, int argc, char **argv, char **azColName){
+static int _callback(void *rSetIn, int argc, char **argv, char **azColName){
 
   int i;
   struct simpleLinkedList *row, *rSet, *field = NULL;
@@ -234,7 +234,7 @@ int last_insert() {
   return (int)sqlite3_last_insert_rowid(DBH);
 }
 
-void bind_vars( sqlite3_stmt *stmt, struct simpleLinkedList *vars ) {
+void _bind_vars( sqlite3_stmt *stmt, struct simpleLinkedList *vars ) {
   int col = 0;
   struct simpleLinkedList *tmpList = vars;
   if ( tmpList == NULL || tmpList->data == NULL ) {
@@ -265,12 +265,12 @@ int runUpdate_db (char *sql, struct simpleLinkedList *vars) {
 
   o_log(SQLDEBUG, "Starting: %s", sql);
 
-  wait_for_connection_lock();
+  _wait_for_connection_lock();
 
   if(vars != NULL) {
 
     sqlite3_prepare_v2(DBH, sql, (int)strlen(sql), &stmt, NULL);
-    bind_vars( stmt, vars );
+    _bind_vars( stmt, vars );
  
     rc = sqlite3_step(stmt);
     if( rc != SQLITE_DONE ) {
@@ -310,14 +310,14 @@ struct simpleLinkedList *runquery_db (char *sql, struct simpleLinkedList *vars) 
   o_log(DEBUGM, "Run Query (%x)", rSet);
   o_log(SQLDEBUG, "Starting: %s", sql);
 
-  wait_for_connection_lock();
+  _wait_for_connection_lock();
 
   if(vars != NULL) {
 
     sqlite3_stmt *stmt;
 
     sqlite3_prepare_v2(DBH, sql, (int)strlen(sql), &stmt, NULL);
-    bind_vars( stmt, vars );
+    _bind_vars( stmt, vars );
     sll_destroy(vars);
  
     while( SQLITE_ROW == ( rc = sqlite3_step( stmt ) ) ) {
@@ -330,7 +330,7 @@ struct simpleLinkedList *runquery_db (char *sql, struct simpleLinkedList *vars) 
         azColName[i] = sqlite3_column_name( stmt, i );
       }
 
-      callback(rSet, columns, (char **)argv, (char **)azColName);
+      _callback(rSet, columns, (char **)argv, (char **)azColName);
 
       free( argv );
       free( azColName );
@@ -347,7 +347,7 @@ struct simpleLinkedList *runquery_db (char *sql, struct simpleLinkedList *vars) 
 
   else {
     // Execute the query - with no bind vars
-    rc = sqlite3_exec(DBH, sql, callback, rSet, &zErrMsg);
+    rc = sqlite3_exec(DBH, sql, _callback, rSet, &zErrMsg);
 
     // Dump out on error
     if( rc != SQLITE_OK ) {
@@ -442,7 +442,7 @@ void free_recordset (struct simpleLinkedList *rSet) {
 void close_db () {
 
   o_log(DEBUGM, "Closing database");
-  wait_for_connection_lock();
+  _wait_for_connection_lock();
   sqlite3_close(DBH);
   free_connection_lock();
 }
