@@ -234,7 +234,6 @@ src/ocr_plug.lo
 src/phash_plug.lo
 src/validation.lo
 src/validation.o
-unittests/runForCoverage.sh
 unittests/tests_validation
 unittests/tests_validation-stubbed_debug.gcda
 unittests/tests_validation-stubbed_debug.gcno
@@ -242,7 +241,6 @@ unittests/tests_validation-stubbed_debug.o
 unittests/tests_validation-tests_validation.gcda
 unittests/tests_validation-tests_validation.gcno
 unittests/tests_validation-tests_validation.o
-unittests/tests_validation.c
 unittests/tests_validation.log
 unittests/tests_validation.trs
 
