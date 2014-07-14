@@ -4,12 +4,14 @@ TESTS = core \
         tests_utils \
         tests_simpleLinkedList \
         tests_sessionManagement \
+        tests_validation \
         tests_db 
 
 check_PROGRAMS = core \
         tests_utils \
         tests_simpleLinkedList \
         tests_sessionManagement \
+        tests_validation \
         tests_db 
 
 #--- core ----------------------------------
@@ -52,6 +54,24 @@ tests_sessionManagement_LDADD = \
   $(top_builddir)/src/libsessionManagement.la \
   $(top_builddir)/src/libsimpleLinkedList.la \
   $(top_builddir)/src/libutils.la \
+  @CHECK_LIBS@ 
+
+
+#--- validation ----------------------------------
+tests_validation_SOURCES = \
+  $(top_builddir)/src/validation.h \
+  tests_validation.c \
+  $(top_builddir)/src/debug.h \
+  stubbed_debug.c \
+  $(top_builddir)/src/imageProcessing.h \
+  $(top_builddir)/src/ocr_plug.h 
+tests_validation_CFLAGS = @CHECK_CFLAGS@
+tests_validation_LDADD = \
+  $(top_builddir)/src/libvalidation.la \
+  $(top_builddir)/src/libsimpleLinkedList.la \
+  $(top_builddir)/src/libutils.la \
+  $(top_builddir)/src/libocrplug.la \
+  $(top_builddir)/src/libimageProcessing.la \
   @CHECK_LIBS@ 
 
 #--- db ----------------------------------
