@@ -310,6 +310,10 @@ void replace(char *inStr, char *findStr, char *replaceStr) {
 
 struct dateParts *dateStringToDateParts(char *dateString) {
 
+  if( dateString == NULL ) {
+    return NULL;
+  }
+
   struct dateParts *dp = malloc(sizeof(struct dateParts));
 
   // Get Year

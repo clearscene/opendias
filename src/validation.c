@@ -41,7 +41,7 @@ char *getPostData(struct simpleLinkedList *post_hash, char *key) {
  * Generic Checks
  */
 
-static int checkVitals(char *vvalue) {
+int checkVitals(char *vvalue) {
 
   // We actually have a value
   if ( vvalue == NULL ) {
@@ -59,7 +59,7 @@ static int checkVitals(char *vvalue) {
 }
 
 // Check trhe hashtable to ensure it only contains the specified keys
-static int checkKeys(struct simpleLinkedList *postdata, struct simpleLinkedList *keyList) {
+int checkKeys(struct simpleLinkedList *postdata, struct simpleLinkedList *keyList) {
 
   int ret = 0;
   struct simpleLinkedList *row = NULL;
@@ -88,7 +88,7 @@ static int checkKeys(struct simpleLinkedList *postdata, struct simpleLinkedList 
 }
 
 // Ensure the value is effectivly an int
-static int checkStringIsInt(char *StrInt) {
+int checkStringIsInt(char *StrInt) {
   char *ptr;
   if( StrInt == NULL ) return 1;
 
@@ -107,7 +107,7 @@ static int checkStringIsInt(char *StrInt) {
   return 0;  
 }
 
-static int checkSaneRange(char *StrInt, int low, int high) {
+int checkSaneRange(char *StrInt, int low, int high) {
   int i = atoi(StrInt);
   if(i >= low && i <= high) return 0;
   o_log(ERROR, "Validation failed: not a sane range");
@@ -115,7 +115,7 @@ static int checkSaneRange(char *StrInt, int low, int high) {
 }
 
 // Remove SSI attacks
-static int checkVal(char *val) {
+int checkVal(char *val) {
   return 0;
 }
 
@@ -126,21 +126,21 @@ static int checkVal(char *val) {
  */
 
 //
-static int checkDocId(char *val) {
+int checkDocId(char *val) {
   if(checkStringIsInt(val)) return 1;
   if(checkSaneRange(val, 0, 9999999)) return 1;
   return 0;
 }
 
 //
-static int checkTagId(char *val) {
+int checkTagId(char *val) {
   if(checkStringIsInt(val)) return 1;
   if(checkSaneRange(val, 0, 9999)) return 1;
   return 0;
 }
 
 //
-static int checkTagUpdateAction(char *val) {
+int checkTagUpdateAction(char *val) {
   if( val == NULL ) return 1;
   if ( 0 == strcmp(val, "purgephysical" )
     || 0 == strcmp(val, "purgedata" ) ) {
@@ -151,14 +151,14 @@ static int checkTagUpdateAction(char *val) {
 }
 
 //
-static int checkPurgeTime(char *purgein) {
+int checkPurgeTime(char *purgein) {
   if(checkStringIsInt(purgein)) return 1;
   if(checkSaneRange(purgein, 0, 9999)) return 1;
   return 0;
 }
 
 //
-static int checkAddRemove(char *val) {
+int checkAddRemove(char *val) {
   if( val == NULL ) return 1;
   if ( 0 == strcmp(val, "addTag")
     || 0 == strcmp(val, "removeTag" ) 
@@ -171,7 +171,7 @@ static int checkAddRemove(char *val) {
 }
 
 //
-static int checkFullCount(char *val) {
+int checkFullCount(char *val) {
   if( val == NULL ) return 1;
   if ( 0 == strcmp(val, "fullList" )
     || 0 == strcmp(val, "count" ) ) {
@@ -182,7 +182,7 @@ static int checkFullCount(char *val) {
 }
 
 //
-static int validSubFilter(char *val) {
+int validSubFilter(char *val) {
   if( val == NULL ) return 1;
   if ( 0 == strcmp(val, "isActionRequired" )
     || 0 == strcmp(val, "requiresPhysicalShredding" ) 
@@ -194,26 +194,32 @@ static int validSubFilter(char *val) {
 }
 
 //
-static int checkDate(char *val) {
+int checkDate(char *val) {
   struct dateParts *dp = dateStringToDateParts(val);
   int x=0;
 
-  if(checkStringIsInt(dp->year)) x++;
-  else
-    if(checkSaneRange(dp->year, 1850, 2038)) x++;
-  free(dp->year);
+  if( dp == NULL ) {
+    x++;
+  }
+  else {
 
-  if(checkStringIsInt(dp->month)) x++;
-  else
-    if(checkSaneRange(dp->month, 1, 12)) x++;
-  free(dp->month);
+    if(checkStringIsInt(dp->year)) x++;
+    else
+      if(checkSaneRange(dp->year, 1850, 2038)) x++;
+    free(dp->year);
 
-  if(checkStringIsInt(dp->day)) x++;
-  else
-    if(checkSaneRange(dp->day, 1, 31)) x++;
-  free(dp->day);
+    if(checkStringIsInt(dp->month)) x++;
+    else
+      if(checkSaneRange(dp->month, 1, 12)) x++;
+    free(dp->month);
 
-  free(dp);
+    if(checkStringIsInt(dp->day)) x++;
+    else
+      if(checkSaneRange(dp->day, 1, 31)) x++;
+    free(dp->day);
+
+    free(dp);
+  }
   if( x > 0 ) o_log(ERROR, "Validation failed: date check");
   return x;
 }
@@ -246,13 +252,13 @@ int checkOCRLanguage(char *val) {
 }
 #endif /* CAN_OCR */
 
-static int checkDeviceId(char *val) {
+int checkDeviceId(char *val) {
   if( val == NULL ) return 1;
   return checkVal(val);
 }
 
 //
-static int checkFormat(char *val) {
+int checkFormat(char *val) {
   if( val == NULL ) return 1;
   lower(val); // convert the whole string to lower case
   if ( 0 == strcmp(val, "gray")
@@ -264,21 +270,21 @@ static int checkFormat(char *val) {
 }
 
 //
-static int checkPageLength(char *val) {
+int checkPageLength(char *val) {
   if(checkStringIsInt(val)) return 1;
   if(checkSaneRange(val, 20, 100)) return 1;
   return 0;
 }
 
 //
-static int checkPages(char *val) {
+int checkPages(char *val) {
   if(checkStringIsInt(val)) return 1;
   if(checkSaneRange(val, 1, 20)) return 1;
   return 0;
 }
 
 //
-static int checkResolution(char *val) {
+int checkResolution(char *val) {
   if(checkStringIsInt(val)) return 1;
   if(checkSaneRange(val, 10, 3000)) return 1;
   return 0;
@@ -286,7 +292,7 @@ static int checkResolution(char *val) {
 #endif /* CAN_SCAN */
 
 //
-static int checkUpdateKey(char *val) {
+int checkUpdateKey(char *val) {
   if( val == NULL ) return 1;
   if ( 0 != strcmp(val, "title") 
     && 0 != strcmp(val, "actionrequired") 
@@ -300,7 +306,7 @@ static int checkUpdateKey(char *val) {
 }
 
 #ifndef OPEN_TO_ALL
-static int checkRole(char *role) {
+int checkRole(char *role) {
   if(checkStringIsInt(role)) return 1;
   if(checkSaneRange(role, 1, 10)) return 1;
   return 0;
@@ -308,18 +314,18 @@ static int checkRole(char *role) {
 #endif /* OPEN_TO_ALL */
 
 // need more here (ie comma delimited)
-static int checkTagList(char *val) {
+int checkTagList(char *val) {
   if( val == NULL ) return 1;
   return checkVal(val);
 }
 
 //
-static int checkTag(char *val) {
+int checkTag(char *val) {
   if( val == NULL ) return 1;
   return checkVal(val);
 }
 
-static int checkUUID(char *val) {
+int checkUUID(char *val) {
   char *in = val;
   char *hex = "abcdefABCDEF0123456789";
   char *template = "hhhhhhhh-hhhh-hhhh-hhhh-hhhhhhhhhhhh";
@@ -651,6 +657,11 @@ int validate(struct simpleLinkedList *postdata, char *action) {
 }
 
 int validateLanguage( const char *requestedLang ) {
+
+  if ( requestedLang == NULL ) {
+    o_log(ERROR, "validateLanguage found a NULL input string");
+    return 0;
+  }
 
   // Must always have "en" - the default lang.
   // "hh" is the test lang (hash-hash).
