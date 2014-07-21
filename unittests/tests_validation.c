@@ -2,15 +2,9 @@
 #include <stdio.h>
 #include <check.h>
 #include "../src/validation.h"
+#include "../src/utils.h"
 
 /*
-int checkDeviceId(char *val) {
-int checkFormat(char *val) {
-int checkPageLength(char *val) {
-int checkPages(char *val) {
-int checkResolution(char *val) {
-int checkUpdateKey(char *val) {
-int checkRole(char *role) {
 int checkTagList(char *val) {
 int checkTag(char *val) {
 int checkUUID(char *val) {
@@ -392,6 +386,284 @@ START_TEST (checkDate_validDate_returnsPass) {
 END_TEST
 
 // ------------------------------------------------------
+
+START_TEST (checkVal_anything_returnsPass) {
+  int ret = checkVal("garbage");
+  ck_assert_int_eq (0, ret);
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (checkDeviceId_sendNull_returnsFail) {
+  int ret = checkDeviceId( NULL );
+  ck_assert_int_ne (0, ret);
+}
+END_TEST
+
+START_TEST (checkDeviceId_anything_returnsPass) {
+  int ret = checkDeviceId("garbage");
+  ck_assert_int_eq (0, ret);
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (checkFormat_nullIn_returnsFail) {
+  int ret = checkFormat( NULL );
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+START_TEST (checkFormat_unknownString_returnsFail) {
+  char *inStr = o_strdup("what is this");
+  int ret = checkFormat( inStr );
+  ck_assert_int_eq (1, ret);
+  free(inStr);
+}
+END_TEST
+
+START_TEST (checkFormat_knownIn1_returnsPass) {
+  char *inStr = o_strdup("gray");
+  int ret = checkFormat( inStr );
+  ck_assert_int_eq (0, ret);
+  free(inStr);
+}
+END_TEST
+
+START_TEST (checkFormat_knownIn2_returnsPass) {
+  char *inStr = o_strdup("colour");
+  int ret = checkFormat( inStr );
+  ck_assert_int_eq (0, ret);
+  free(inStr);
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (checkPageLength_NotaStringIntIn_returnsFail) {
+  int ret = checkPageLength("ten");
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+START_TEST (checkPageLength_lowBoundaryIn_returnsPass) {
+  int ret = checkPageLength("20");
+  ck_assert_int_eq (0, ret);
+}
+END_TEST
+
+START_TEST (checkPageLength_highBoundaryIn_returnsPass) {
+  int ret = checkPageLength("100");
+  ck_assert_int_eq (0, ret);
+}
+END_TEST
+
+START_TEST (checkPageLength_lowBoundaryOut_returnsFail) {
+  int ret = checkPageLength("19");
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+START_TEST (checkPageLength_highBoundaryOut_returnsFail) {
+  int ret = checkPageLength("101");
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (checkPages_NotaStringIntIn_returnsFail) {
+  int ret = checkPages("ten");
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+START_TEST (checkPages_lowBoundaryIn_returnsPass) {
+  int ret = checkPages("1");
+  ck_assert_int_eq (0, ret);
+}
+END_TEST
+
+START_TEST (checkPages_highBoundaryIn_returnsPass) {
+  int ret = checkPages("20");
+  ck_assert_int_eq (0, ret);
+}
+END_TEST
+
+START_TEST (checkPages_lowBoundaryOut_returnsFail) {
+  int ret = checkPages("0");
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+START_TEST (checkPages_highBoundaryOut_returnsFail) {
+  int ret = checkPages("21");
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (checkResolution_NotaStringIntIn_returnsFail) {
+  int ret = checkResolution("ten");
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+START_TEST (checkResolution_lowBoundaryIn_returnsPass) {
+  int ret = checkResolution("10");
+  ck_assert_int_eq (0, ret);
+}
+END_TEST
+
+START_TEST (checkResolution_highBoundaryIn_returnsPass) {
+  int ret = checkResolution("3000");
+  ck_assert_int_eq (0, ret);
+}
+END_TEST
+
+START_TEST (checkResolution_lowBoundaryOut_returnsFail) {
+  int ret = checkResolution("9");
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+START_TEST (checkResolution_highBoundaryOut_returnsFail) {
+  int ret = checkResolution("3001");
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (checkRole_NotaStringIntIn_returnsFail) {
+  int ret = checkRole("ten");
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+START_TEST (checkRole_lowBoundaryIn_returnsPass) {
+  int ret = checkRole("1");
+  ck_assert_int_eq (0, ret);
+}
+END_TEST
+
+START_TEST (checkRole_highBoundaryIn_returnsPass) {
+  int ret = checkRole("10");
+  ck_assert_int_eq (0, ret);
+}
+END_TEST
+
+START_TEST (checkRole_lowBoundaryOut_returnsFail) {
+  int ret = checkRole("0");
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+START_TEST (checkRole_highBoundaryOut_returnsFail) {
+  int ret = checkRole("11");
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (checkUpdateKey_nullIn_returnsFail) {
+  int ret = checkUpdateKey( NULL );
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+START_TEST (checkUpdateKey_unknownString_returnsFail) {
+  char *inStr = o_strdup("what is this");
+  int ret = checkUpdateKey( inStr );
+  ck_assert_int_eq (1, ret);
+  free(inStr);
+}
+END_TEST
+
+START_TEST (checkUpdateKey_knownIn1_returnsPass) {
+  char *inStr = o_strdup("title");
+  int ret = checkUpdateKey( inStr );
+  ck_assert_int_eq (0, ret);
+  free(inStr);
+}
+END_TEST
+
+START_TEST (checkUpdateKey_knownIn2_returnsPass) {
+  char *inStr = o_strdup("actionrequired");
+  int ret = checkUpdateKey( inStr );
+  ck_assert_int_eq (0, ret);
+  free(inStr);
+}
+END_TEST
+
+START_TEST (checkUpdateKey_knownIn3_returnsPass) {
+  char *inStr = o_strdup("hardcopyKept");
+  int ret = checkUpdateKey( inStr );
+  ck_assert_int_eq (0, ret);
+  free(inStr);
+}
+END_TEST
+
+START_TEST (checkUpdateKey_knownIn4_returnsPass) {
+  char *inStr = o_strdup("ocrtext");
+  int ret = checkUpdateKey( inStr );
+  ck_assert_int_eq (0, ret);
+  free(inStr);
+}
+END_TEST
+
+START_TEST (checkUpdateKey_knownIn5_returnsPass) {
+  char *inStr = o_strdup("docDate");
+  int ret = checkUpdateKey( inStr );
+  ck_assert_int_eq (0, ret);
+  free(inStr);
+}
+END_TEST
+
+// ------------------------------------------------------
+
+START_TEST (checkUUID_nullIn_returnsFail) {
+  int ret = checkUUID( NULL );
+  ck_assert_int_eq (1, ret);
+}
+END_TEST
+
+START_TEST (checkUUID_unknownString_returnsFail) {
+  char *inStr = o_strdup("obviously not a uuid");
+  int ret = checkUUID( inStr );
+  ck_assert_int_eq (1, ret);
+  free(inStr);
+}
+END_TEST
+
+START_TEST (checkUUID_oneDigitWronge_returnsFail) {
+  char *inStr = o_strdup("abcdeg12-3456-7890-ABCD-EF0123456789");
+  int ret = checkUUID( inStr );
+  ck_assert_int_eq (1, ret);
+  free(inStr);
+}
+END_TEST
+
+START_TEST (checkUUID_incorrectLength_returnsFail) {
+  char *inStr = o_strdup("abcdef12-3456-7890-ABCD-EF012345678");
+  int ret = checkUUID( inStr );
+  ck_assert_int_eq (1, ret);
+  free(inStr);
+}
+END_TEST
+
+START_TEST (checkUUID_validUUID_returnsPass) {
+  char *inStr = o_strdup("abcdef12-3456-7890-ABCD-EF0123456789");
+  int ret = checkUUID( inStr );
+  ck_assert_int_eq (0, ret);
+  free(inStr);
+}
+END_TEST
+
+// ------------------------------------------------------
 // ------------------------------------------------------
 // ------------------------------------------------------
 
@@ -492,6 +764,72 @@ Suite *db_suite (void) {
   tcase_add_test (tc_checkDate, checkDate_unknownString_returnsFail);
   tcase_add_test (tc_checkDate, checkDate_validDate_returnsPass);
   suite_add_tcase (s, tc_checkDate);
+
+  TCase *tc_checkVal = tcase_create ("checkVal");
+  tcase_add_test (tc_checkVal, checkVal_anything_returnsPass);
+  suite_add_tcase (s, tc_checkVal);
+
+  TCase *tc_checkDeviceId = tcase_create ("checkDeviceId");
+  tcase_add_test (tc_checkDeviceId, checkDeviceId_sendNull_returnsFail);
+  tcase_add_test (tc_checkDeviceId, checkDeviceId_anything_returnsPass);
+  suite_add_tcase (s, tc_checkDeviceId);
+ 
+  TCase *tc_checkFormat = tcase_create ("checkFormat");
+  tcase_add_test (tc_checkFormat, checkFormat_nullIn_returnsFail);
+  tcase_add_test (tc_checkFormat, checkFormat_unknownString_returnsFail);
+  tcase_add_test (tc_checkFormat, checkFormat_knownIn1_returnsPass);
+  tcase_add_test (tc_checkFormat, checkFormat_knownIn2_returnsPass);
+  suite_add_tcase (s, tc_checkFormat);
+
+  TCase *tc_checkPageLength = tcase_create ("checkPageLength");
+  tcase_add_test (tc_checkPageLength, checkPageLength_NotaStringIntIn_returnsFail);
+  tcase_add_test (tc_checkPageLength, checkPageLength_lowBoundaryIn_returnsPass);
+  tcase_add_test (tc_checkPageLength, checkPageLength_highBoundaryIn_returnsPass);
+  tcase_add_test (tc_checkPageLength, checkPageLength_lowBoundaryOut_returnsFail);
+  tcase_add_test (tc_checkPageLength, checkPageLength_highBoundaryOut_returnsFail);
+  suite_add_tcase (s, tc_checkPageLength);
+
+  TCase *tc_checkPages = tcase_create ("checkPages");
+  tcase_add_test (tc_checkPages, checkPages_NotaStringIntIn_returnsFail);
+  tcase_add_test (tc_checkPages, checkPages_lowBoundaryIn_returnsPass);
+  tcase_add_test (tc_checkPages, checkPages_highBoundaryIn_returnsPass);
+  tcase_add_test (tc_checkPages, checkPages_lowBoundaryOut_returnsFail);
+  tcase_add_test (tc_checkPages, checkPages_highBoundaryOut_returnsFail);
+  suite_add_tcase (s, tc_checkPages);
+
+  TCase *tc_checkResolution = tcase_create ("checkResolution");
+  tcase_add_test (tc_checkResolution, checkResolution_NotaStringIntIn_returnsFail);
+  tcase_add_test (tc_checkResolution, checkResolution_lowBoundaryIn_returnsPass);
+  tcase_add_test (tc_checkResolution, checkResolution_highBoundaryIn_returnsPass);
+  tcase_add_test (tc_checkResolution, checkResolution_lowBoundaryOut_returnsFail);
+  tcase_add_test (tc_checkResolution, checkResolution_highBoundaryOut_returnsFail);
+  suite_add_tcase (s, tc_checkResolution);
+
+  TCase *tc_checkRole = tcase_create ("checkRole");
+  tcase_add_test (tc_checkRole, checkRole_NotaStringIntIn_returnsFail);
+  tcase_add_test (tc_checkRole, checkRole_lowBoundaryIn_returnsPass);
+  tcase_add_test (tc_checkRole, checkRole_highBoundaryIn_returnsPass);
+  tcase_add_test (tc_checkRole, checkRole_lowBoundaryOut_returnsFail);
+  tcase_add_test (tc_checkRole, checkRole_highBoundaryOut_returnsFail);
+  suite_add_tcase (s, tc_checkRole);
+
+  TCase *tc_checkUpdateKey = tcase_create ("checkUpdateKey");
+  tcase_add_test (tc_checkUpdateKey, checkUpdateKey_nullIn_returnsFail);
+  tcase_add_test (tc_checkUpdateKey, checkUpdateKey_unknownString_returnsFail);
+  tcase_add_test (tc_checkUpdateKey, checkUpdateKey_knownIn1_returnsPass);
+  tcase_add_test (tc_checkUpdateKey, checkUpdateKey_knownIn2_returnsPass);
+  tcase_add_test (tc_checkUpdateKey, checkUpdateKey_knownIn3_returnsPass);
+  tcase_add_test (tc_checkUpdateKey, checkUpdateKey_knownIn4_returnsPass);
+  tcase_add_test (tc_checkUpdateKey, checkUpdateKey_knownIn5_returnsPass);
+  suite_add_tcase (s, tc_checkUpdateKey);
+
+  TCase *tc_checkUUID = tcase_create ("checkUUID");
+  tcase_add_test (tc_checkUUID, checkUUID_nullIn_returnsFail);
+  tcase_add_test (tc_checkUUID, checkUUID_unknownString_returnsFail);
+  tcase_add_test (tc_checkUUID, checkUUID_oneDigitWronge_returnsFail);
+  tcase_add_test (tc_checkUUID, checkUUID_incorrectLength_returnsFail);
+  tcase_add_test (tc_checkUUID, checkUUID_validUUID_returnsPass);
+  suite_add_tcase (s, tc_checkUUID);
 
   return s;
 }
