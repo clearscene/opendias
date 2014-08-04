@@ -1,6 +1,7 @@
 
 rm -rf test/results/coverage/*
 rm -rf src/*.gcda src/*.gcno
+rm -rf unittests/*.gcda unittests/*.gcno
 lcov -c -i -d src -o test/results/coverage/app_base.info
 make check
 lcov -c -d src -o test/results/coverage/app_test.info
