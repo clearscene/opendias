@@ -172,6 +172,15 @@ unittests/tests_sessionManagement-tests_sessionManagement.gcda
 unittests/tests_sessionManagement-tests_sessionManagement.gcno
 unittests/tests_sessionManagement-tests_sessionManagement.o
 unittests/tests_sessionManagement.trs
+unittests/tests_localisation
+unittests/tests_localisation.log
+unittests/tests_localisation-stubbed_debug.gcda
+unittests/tests_localisation-stubbed_debug.gcno
+unittests/tests_localisation-stubbed_debug.o
+unittests/tests_localisation-tests_localisation.gcda
+unittests/tests_localisation-tests_localisation.gcno
+unittests/tests_localisation-tests_localisation.o
+unittests/tests_localisation.trs
 unittests/tests_simpleLinkedList
 unittests/tests_simpleLinkedList.log
 unittests/tests_simpleLinkedList-stubbed_debug.gcda

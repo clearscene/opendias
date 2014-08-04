@@ -17,7 +17,8 @@ lib_LTLIBRARIES = libutils.la \
                   libphashplug.la \
                   libimageProcessing.la \
                   libvalidation.la \
-                  libsessionManagement.la
+                  libsessionManagement.la \
+                  liblocalisation.la
 
 libutils_la_SOURCES = utils.c utils.h
 libutils_la_LDFLAGS = $(OPENDIAS_LIBS)
@@ -33,6 +34,9 @@ libphashplug_la_LDFLAGS = $(OPENDIAS_LIBS)
 
 libocrplug_la_SOURCES = ocr_plug.cc ocr_plug.h
 libocrplug_la_LDFLAGS = $(OPENDIAS_LIBS)
+
+liblocalisation_la_SOURCES = localisation.c localisation.h
+liblocalisation_la_LDFLAGS = $(OPENDIAS_LIBS)
 
 libimageProcessing_la_SOURCES = imageProcessing.c imageProcessing.h
 libimageProcessing_la_LIBADD = libocrplug.la libphashplug.la
@@ -52,7 +56,11 @@ bin_PROGRAMS =  opendias \
                 opendiasconfig
 
 opendiasconfig_LDFLAGS = 
-opendiasconfig_LDADD = libsimpleLinkedList.la libdb.la libutils.la $(OPENDIAS_LIBS)
+opendiasconfig_LDADD = \
+  libsimpleLinkedList.la \
+  libdb.la \
+  libutils.la \
+  $(OPENDIAS_LIBS)
 opendiasconfig_CFLAGS = $(AM_CFLAGS)
 opendiasconfig_SOURCES = \
   db.h    \
@@ -65,7 +73,16 @@ opendiasconfig_SOURCES = \
 
 
 opendias_worker_LDFLAGS = 
-opendias_worker_LDADD = libphashplug.la libimageProcessing.la libvalidation.la libsimpleLinkedList.la libdb.la libutils.la libocrplug.la $(OPENDIAS_LIBS)
+opendias_worker_LDADD = \
+  liblocalisation.la \
+  libphashplug.la \
+  libimageProcessing.la \
+  libvalidation.la \
+  libsimpleLinkedList.la \
+  libdb.la \
+  libutils.la \
+  libocrplug.la \
+  $(OPENDIAS_LIBS)
 opendias_worker_CFLAGS = $(AM_CFLAGS)
 opendias_worker_SOURCES = \
   db.h    \
@@ -87,12 +104,21 @@ opendias_worker_SOURCES = \
   opendias_worker.c \
   validation.h    \
   localisation.h    \
-  localisation.c    \
   simpleLinkedList.h
 
 
 opendias_LDFLAGS = 
-opendias_LDADD = libphashplug.la libimageProcessing.la libsessionManagement.la libvalidation.la libsimpleLinkedList.la libdb.la libutils.la libocrplug.la $(OPENDIAS_LIBS)
+opendias_LDADD = \
+  liblocalisation.la \
+  libphashplug.la \
+  libimageProcessing.la \
+  libsessionManagement.la \
+  libvalidation.la \
+  libsimpleLinkedList.la \
+  libdb.la \
+  libutils.la \
+  libocrplug.la \
+  $(OPENDIAS_LIBS)
 opendias_CFLAGS = $(AM_CFLAGS)
 opendias_SOURCES = \
   db.h    \
@@ -119,7 +145,6 @@ opendias_SOURCES = \
   dbaccess.h    \
   imageProcessing.h    \
   localisation.h    \
-  localisation.c    \
   validation.h    \
   import_doc.c    \
   import_doc.h    \

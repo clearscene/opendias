@@ -5,6 +5,7 @@ TESTS = core \
         tests_simpleLinkedList \
         tests_sessionManagement \
         tests_validation \
+        tests_localisation \
         tests_db 
 
 check_PROGRAMS = core \
@@ -12,6 +13,7 @@ check_PROGRAMS = core \
         tests_simpleLinkedList \
         tests_sessionManagement \
         tests_validation \
+        tests_localisation \
         tests_db 
 
 #--- core ----------------------------------
@@ -72,6 +74,19 @@ tests_validation_LDADD = \
   $(top_builddir)/src/libutils.la \
   $(top_builddir)/src/libocrplug.la \
   $(top_builddir)/src/libimageProcessing.la \
+  @CHECK_LIBS@ 
+
+#---localisation ----------------------------------
+tests_localisation_SOURCES = \
+  $(top_builddir)/src/localisation.h \
+  tests_localisation.c \
+  $(top_builddir)/src/debug.h \
+  stubbed_debug.c 
+tests_localisation_CFLAGS = @CHECK_CFLAGS@
+tests_localisation_LDADD = \
+  $(top_builddir)/src/liblocalisation.la \
+  $(top_builddir)/src/libsimpleLinkedList.la \
+  $(top_builddir)/src/libutils.la \
   @CHECK_LIBS@ 
 
 #--- db ----------------------------------
