@@ -15,16 +15,16 @@ int nextRow (struct simpleLinkedList *);
 
 // ------------------------------------------------------
 
-START_TEST (opendb_sqliteFails_returnsFalse) {
+START_TEST (opendb_sqliteSuccess_returnsTrue) {
   set_ret( 0 );
   int ret = open_db ( "database/location.sqlite" );
   ck_assert_int_eq (0, ret);
 }
 END_TEST
 
-START_TEST (opendb_sqliteSuccess_returnsTrue) {
+START_TEST (opendb_sqliteFails_returnsFalse) {
   set_ret( 1 );
-  int ret = open_db ( "database/location.sqlite" );
+  int ret = open_db ( "database/UNKNOWN.sqlite" );
   ck_assert_int_eq (1, ret);
 }
 END_TEST
@@ -39,8 +39,8 @@ Suite *db_suite (void) {
   Suite *s = suite_create ("db");
 
   TCase *tc_opendb = tcase_create ("opendb");
-  tcase_add_test (tc_opendb, opendb_sqliteFails_returnsFalse);
   tcase_add_test (tc_opendb, opendb_sqliteSuccess_returnsTrue);
+  tcase_add_test (tc_opendb, opendb_sqliteFails_returnsFalse);
   suite_add_tcase (s, tc_opendb);
 
   return s;
