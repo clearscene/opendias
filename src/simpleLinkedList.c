@@ -106,7 +106,7 @@ struct simpleLinkedList *sll_findLastElement( struct simpleLinkedList *element )
 }
 
 struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList *element ) {
-  if( !element || element->prev == NULL ) {
+  if( element == NULL || element->prev == NULL ) {
     return element;
   }
   return sll_findFirstElement( element->prev );
