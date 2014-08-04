@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <check.h>
+#include "../src/debug.h"
 #include "../src/simpleLinkedList.h"
 
 
@@ -90,13 +91,17 @@ END_TEST
 // ------------------------------------------------------
 
 START_TEST (slldelete_fromMiddle_everythingShufflesUp) {
+  o_log(3, "Start slldelete_fromMiddle_everythingShufflesUp");
+
   struct simpleLinkedList *sll = sll_init();
   sll_append( sll, "const char *" );
   sll_append( sll, "some more data" );
   sll_append( sll, "final data" );
+
   sll = sll_findFirstElement( sll );
-  sll = sll_getNext( sll );
-  sll_delete( sll );
+  struct simpleLinkedList *sll_target = sll_getNext( sll );
+  sll_delete( sll_target );
+
   ck_assert_str_eq ( "\n      (null) : const char *\n      (null) : final data", sll_dumper( sll ) );
   sll_destroy( sll );
 }
@@ -104,6 +109,7 @@ END_TEST
 
 
 START_TEST (slldelete_fromNew_noChange) {
+  o_log(3, "Start slldelete_fromNew_noChange");
   struct simpleLinkedList *sll = sll_init();
   sll_delete( sll );
   ck_assert_str_eq ( "\n      (null) : (null)", sll_dumper( sll ) );
@@ -118,6 +124,8 @@ START_TEST (sllFindFirstElement_atEndOfList_goToBeginning) {
   sll_append( sll, "const char *" );
   sll_append( sll, "some more data" );
   sll_append( sll, "final data" );
+  sll = sll_findLastElement( sll );
+  ck_assert_str_eq ( "final data", (char *)sll->data );
   sll = sll_findFirstElement( sll );
   ck_assert_str_eq ( "const char *", (char *)sll->data );
   sll_destroy( sll );
