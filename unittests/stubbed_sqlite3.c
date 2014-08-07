@@ -30,3 +30,7 @@ int sqlite3_open_v2( const char *c, sqlite3 **sb, int i, const char *z ) {
 void close_db () {
 }
 
+sqlite3_int64 sqlite3_last_insert_rowid( sqlite3 *db ) {
+  return ret;
+}
+
