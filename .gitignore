@@ -243,6 +243,9 @@ src/ocr_plug.lo
 src/phash_plug.lo
 src/validation.lo
 src/validation.o
+src/liblocalisation.la
+src/localisation.lo
+src/localisation.o
 unittests/tests_validation
 unittests/tests_validation-stubbed_debug.gcda
 unittests/tests_validation-stubbed_debug.gcno
