@@ -1,5 +1,5 @@
  /*
- * sessionmanagement.c
+ * sessionManagement.c
  * Copyright (C) Clearscene Ltd 2008 <wbooth@essentialcollections.co.uk>
  * 
  * localisation.c is free software: you can redistribute it and/or modify it
@@ -25,7 +25,7 @@
 #include "debug.h"
 #include "simpleLinkedList.h"
 
-#include "sessionmanagement.h"
+#include "sessionManagement.h"
 
 struct simpleLinkedList *sessions = NULL;
 
@@ -45,6 +45,8 @@ char *create_session() {
   // Check upper session count limit
   int current_session_count = sll_count( sll_findFirstElement( sessions ) );
   o_log( DEBUGM, "There are currently %d active sessions", current_session_count);
+  // sll_count will return the number of elements in the session list, but we have one
+  // at the beginning which contains a placeholder. Hence the ">" below.
   if( current_session_count > MAX_SESSIONS ) {
     return NULL;
   }
@@ -83,7 +85,7 @@ struct simpleLinkedList *get_session( char *session_id ) {
 }
 
 // Delete session that have not been accessed since 'oldest_allowed'
-void clear_sessions_older_than( time_t oldest_allowed ) {
+void _clear_sessions_older_than( time_t oldest_allowed ) {
   struct simpleLinkedList *session = NULL;
   struct simpleLinkedList *sess_data = NULL;
   int session_expiration_count = 0;
@@ -126,12 +128,12 @@ void clear_sessions_older_than( time_t oldest_allowed ) {
 
 // Delete all sessions
 void cleanup_session_management() {
-  clear_sessions_older_than( time(NULL) + 999 ); // 999 to ensure no race conditions.
+  _clear_sessions_older_than( time(NULL) + 999 ); // 999 to ensure no race conditions.
   sll_destroy( sessions );
 }
 
 // Remove expired sessions
 void clear_old_sessions() {
-  clear_sessions_older_than( time(NULL) - MAX_AGE );
+  _clear_sessions_older_than( time(NULL) - MAX_AGE );
 }
 

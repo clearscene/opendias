@@ -31,7 +31,6 @@ struct simpleLinkedList {
 };
 
 struct simpleLinkedList *sll_init();
-struct simpleLinkedList *sll_createNewElement( void * );
 struct simpleLinkedList *sll_findLastElement( struct simpleLinkedList * );
 struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList * );
 struct simpleLinkedList *sll_getNext( struct simpleLinkedList * );
@@ -42,6 +41,7 @@ void sll_destroy( struct simpleLinkedList * );
 void sll_delete( struct simpleLinkedList * );
 int sll_count( struct simpleLinkedList * );
 char *sll_dumper( struct simpleLinkedList * );
+char *sll_dumper_type( struct simpleLinkedList *, const char * );
 void sll_sort( struct simpleLinkedList * );
 
 #endif /* SIMPLELINKEDLIST */

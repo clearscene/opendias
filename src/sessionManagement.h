@@ -1,5 +1,5 @@
  /*
- * sessionmanagement.h
+ * sessionManagement.h
  * Copyright (C) Clearscene Ltd 2008 <wbooth@essentialcollections.co.uk>
  * 
  * localisation.h is free software: you can redistribute it and/or modify it
@@ -34,7 +34,7 @@ struct session_data {
 void init_session_management(int, int);
 void clear_old_sessions();
 char *create_session();
-struct simpleLinkedList *get_session();
+struct simpleLinkedList *get_session( char * );
 void cleanup_session_management();
 
 #endif /* SESSION */

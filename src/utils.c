@@ -203,6 +203,9 @@ char *dateHuman(char *a, char *b, char *c, const char *LOCAL_no_date_set) {
 
 char *o_strdup(const char *source) {
 
+  if( source == NULL ) {
+    return o_printf("");
+  }
   size_t size = strlen(source);
   char *newArea = malloc(size + 1);
   (void) strcpy(newArea, source);
@@ -254,9 +257,9 @@ char *getTimeStr_iso8601() {
   time(&ttime);
   stTime = gmtime(&ttime);
   size = strftime(strdate, 20, "%Y-%m-%d %H:%M:%S", stTime);
-  if( 19 != size )
+  if( 19 != size ){
     o_log(ERROR, "Count not write entire data block.%s",strdate);
-
+  }
   return strdate;
 }
 
@@ -288,7 +291,13 @@ void lower(char *inStr) {
   }
 }
 
+// Replace single characters only.
+// If the replace clause is blank (""), truncate the original string from the find clause.
 void replace(char *inStr, char *findStr, char *replaceStr) {
+
+  if( 0 != strstr("", findStr) ) {
+    return;
+  }
 
   char *ptr = inStr;
 
@@ -300,6 +309,10 @@ void replace(char *inStr, char *findStr, char *replaceStr) {
 }
 
 struct dateParts *dateStringToDateParts(char *dateString) {
+
+  if( dateString == NULL ) {
+    return NULL;
+  }
 
   struct dateParts *dp = malloc(sizeof(struct dateParts));
 

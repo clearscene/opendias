@@ -106,7 +106,7 @@ struct simpleLinkedList *sll_findLastElement( struct simpleLinkedList *element )
 }
 
 struct simpleLinkedList *sll_findFirstElement( struct simpleLinkedList *element ) {
-  if( !element || element->prev == NULL ) {
+  if( element == NULL || element->prev == NULL ) {
     return element;
   }
   return sll_findFirstElement( element->prev );
@@ -163,7 +163,10 @@ void sll_delete( struct simpleLinkedList *element ) {
 
 int _sll_count( struct simpleLinkedList *element, int current_count ) {
   if( element->next == NULL ) {
-    return current_count;
+    if( element->data == NULL ) {
+      return current_count;
+    }
+    return ++current_count;
   }
   return _sll_count( element->next, ++current_count );
 }
@@ -173,12 +176,24 @@ int sll_count( struct simpleLinkedList *element ) {
 }
 
 char *sll_dumper( struct simpleLinkedList *container ) {
+  return sll_dumper_type( container, "char" );
+}
+
+char *sll_dumper_type( struct simpleLinkedList *container, const char *type ) {
   struct simpleLinkedList *row;
   char *ret = o_strdup("");
   for( row = sll_findFirstElement( container ) ; row != NULL ; row = sll_getNext(row) ) {
     conCat( &ret, "\n" );
+
     char *data;
-    data = row->data;
+    if( 0 == strcmp( type, "int" ) ) {
+      int *i = row->data;
+      // MEMEORY LEAK !!!
+      data = itoa( *i, 10 );
+    }
+    else {
+      data = row->data;
+    }
 
     // Obscure sensitive data
     if( row->key != NULL && 0 == strcmp( row->key, "password" ) ) {

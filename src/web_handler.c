@@ -40,7 +40,7 @@
 #include "import_doc.h"
 #include "simpleLinkedList.h"
 #include "localisation.h"
-#include "sessionmanagement.h"
+#include "sessionManagement.h"
 
 #include "web_handler.h"
 

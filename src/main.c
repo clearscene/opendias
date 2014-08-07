@@ -38,7 +38,7 @@
 #include "debug.h"
 #include "web_handler.h"
 #include "localisation.h"
-#include "sessionmanagement.h"
+#include "sessionManagement.h"
 #include "backpopulate.h"
 #include "saneDispatcher.h"
 

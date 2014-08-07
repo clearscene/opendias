@@ -1,6 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = src sql webcontent i18n 
+dnl ACLOCAL_AMFLAGS = -I/usr/share/aclocal/
+
+SUBDIRS = src sql webcontent i18n unittests
 
 dist_doc_DATA = ChangeLog README TODO
 
