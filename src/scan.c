@@ -731,7 +731,7 @@ extern char *internalGetScannerList(char *lang) {
   int scanOK = SANE_FALSE;
   char *deviceList; 
 
-  status = sane_get_devices (&SANE_device_list, SANE_TRUE);
+  status = sane_get_devices (&SANE_device_list, SANE_FALSE);
   if(status == SANE_STATUS_GOOD) {
     if (SANE_device_list && SANE_device_list[0]) {
       scanOK = SANE_TRUE;
