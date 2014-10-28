@@ -18,7 +18,8 @@ lib_LTLIBRARIES = libutils.la \
                   libimageProcessing.la \
                   libvalidation.la \
                   libsessionManagement.la \
-                  liblocalisation.la
+                  liblocalisation.la \
+                  libscanner.la 
 
 libutils_la_SOURCES = utils.c utils.h
 libutils_la_LDFLAGS = $(OPENDIAS_LIBS)
@@ -48,6 +49,9 @@ libvalidation_la_LDFLAGS = $(OPENDIAS_LIBS)
 
 libsessionManagement_la_SOURCES = sessionManagement.c sessionManagement.h
 libsessionManagement_la_LDFLAGS = $(OPENDIAS_LIBS)
+
+libscanner_la_SOURCES = scanner.c scanner.h
+libscanner_la_LDFLAGS = $(OPENDIAS_LIBS)
 
 # --------------------------------------------------------
 
@@ -82,6 +86,7 @@ opendias_worker_LDADD = \
   libdb.la \
   libutils.la \
   libocrplug.la \
+  libscanner.la \
   $(OPENDIAS_LIBS)
 opendias_worker_CFLAGS = $(AM_CFLAGS)
 opendias_worker_SOURCES = \
@@ -90,7 +95,6 @@ opendias_worker_SOURCES = \
   debug.h    \
   scan.c    \
   scan.h    \
-  scanner.c    \
   scanner.h    \
   dbaccess.c    \
   dbaccess.h    \

@@ -6,7 +6,8 @@ TESTS = core \
         tests_sessionManagement \
         tests_validation \
         tests_localisation \
-        tests_db 
+        tests_db \
+        tests_scanner
 
 check_PROGRAMS = core \
         tests_utils \
@@ -14,7 +15,8 @@ check_PROGRAMS = core \
         tests_sessionManagement \
         tests_validation \
         tests_localisation \
-        tests_db 
+        tests_db \
+        tests_scanner
 
 #--- core ----------------------------------
 core_SOURCES = core.c
@@ -57,7 +59,6 @@ tests_sessionManagement_LDADD = \
   $(top_builddir)/src/libsimpleLinkedList.la \
   $(top_builddir)/src/libutils.la \
   @CHECK_LIBS@ 
-
 
 #--- validation ----------------------------------
 tests_validation_SOURCES = \
@@ -103,6 +104,17 @@ tests_db_LDADD = \
   $(top_builddir)/src/libdb.la \
   $(top_builddir)/src/libutils.la \
   $(top_builddir)/src/libsimpleLinkedList.la \
+  @CHECK_LIBS@ 
+
+#--- scanner ----------------------------------
+tests_scanner_SOURCES = \
+  $(top_builddir)/src/scanner.h \
+  tests_scanner.c \
+  $(top_builddir)/src/debug.h \
+  stubbed_debug.c 
+tests_scanner_CFLAGS = @CHECK_CFLAGS@
+tests_scanner_LDADD = \
+  $(top_builddir)/src/libscanner.la \
   @CHECK_LIBS@ 
 
 
