@@ -107,6 +107,7 @@ You can build and install by issuing the following commands:
 
   ./configure
   make
+  make check [OPTIONAL STEP]
   make install
 
 3.2 As a developer
@@ -118,6 +119,7 @@ You need to pre configure the source:
   autoreconf -iv
   ./configure -C
   make
+  make check
   make install
   cd test
   [get setup by following the local README file]
