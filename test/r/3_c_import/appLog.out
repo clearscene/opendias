@@ -15,7 +15,7 @@ LOG-OUTPUT
 -date-:-thread-:DBG:-file-:-line- We have one. So will check to see what version it is.
 -date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
 -date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
--date-:-thread-:DBG:-file-:-line- Database reports that it is version: 7
+-date-:-thread-:DBG:-file-:-line- Database reports that it is version: 8
 -date-:-thread-:DBG:-file-:-line- Free recordset [RECORDSET]
 -date-:-thread-:INF:-file-:-line- Connected to database
 -date-:-thread-:INF:-file-:-line- database opened
