@@ -115,6 +115,7 @@ tests_scanner_SOURCES = \
 tests_scanner_CFLAGS = @CHECK_CFLAGS@
 tests_scanner_LDADD = \
   $(top_builddir)/src/libscanner.la \
+  $(top_builddir)/src/libutils.la \
   @CHECK_LIBS@ 
 
 

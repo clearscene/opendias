@@ -27,6 +27,7 @@
 #include "localisation.h"
 
 struct simpleLinkedList *langList = NULL;
+const char *LOCAL_SHARE_DIR = SHARE_DIR;
 
 void locale_init( char *lang ) {
   langList = sll_init();
@@ -87,9 +88,13 @@ const char *getString( const char *phrase, const char *lang) {
   return (char *)tmp->data; // the translation we found
 }
 
+void setShare( const char *share ) {
+  LOCAL_SHARE_DIR = share;
+}
+
 struct simpleLinkedList *loadLangList( const char *lang ) {
   struct simpleLinkedList *trList = NULL;
-  char *resourceFile = o_printf("%s/opendias/language.resource.%s", SHARE_DIR, lang);
+  char *resourceFile = o_printf("%s/opendias/language.resource.%s", LOCAL_SHARE_DIR, lang);
 
   o_log(DEBUGM, "loading translation file: %s", resourceFile);
   FILE *translations = fopen(resourceFile, "r");

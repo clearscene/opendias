@@ -5,12 +5,13 @@
 #include "../src/localisation.h"
 #include "../src/simpleLinkedList.h"
 
+void setShare (const char * );
 
 // ------------------------------------------------------
 
 START_TEST (loadLangList_knownLanguage_loadsKeysWithGoodValue) {
   o_log(3, "Start loadLangList_knownLanguage_loadsKeysWithGoodValue");
-  char *SHARE_DIR = "../webcontent/";
+  setShare( "i18n" );
   struct simpleLinkedList *out = loadLangList( "en" );
   out = sll_searchKeys( out, "LOCAL_access_denied" );
   ck_assert_str_eq( out->data, "Access Denied" );
@@ -20,7 +21,7 @@ END_TEST
 
 START_TEST (loadLangList_knownLanguage_unknownKey) {
   o_log(3, "Start loadLangList_knownLanguage_loadsKeysWithGoodValue");
-  char *SHARE_DIR = "../webcontent/";
+  setShare( "i18n" );
   struct simpleLinkedList *langPack = loadLangList( "en" );
   struct simpleLinkedList *out = sll_searchKeys( langPack, "LOCAL_unknownKEY" );
   ck_assert_ptr_eq( out, NULL );
@@ -30,7 +31,7 @@ END_TEST
 
 START_TEST (loadLangList_unknownLanguage_noStructureCreated) {
   o_log(3, "Start loadLangList_unknownLanguage_noStructureCreated");
-  char *SHARE_DIR = "../webcontent/";
+  setShare( "i18n" );
   struct simpleLinkedList *out = loadLangList( "BB" );
   ck_assert_ptr_eq( out, NULL );
   sll_destroy( out );
@@ -41,7 +42,7 @@ END_TEST
 
 START_TEST (getString_retreiveFromPopulated_getCorrectTranslation) {
   o_log(3, "Start getString_retreiveFromPopulated_getCorrectTranslation");
-  char *SHARE_DIR = "../webcontent/";
+  setShare( "i18n" );
   locale_init( "en" );
   ck_assert_str_eq( getString("LOCAL_access_denied", "en"), "Access Denied" );
   locale_cleanup();
@@ -50,7 +51,7 @@ END_TEST
 
 START_TEST (getString_retreiveFromNonePopulated_getCorrectTranslation) {
   o_log(3, "Start getString_retreiveFromNonePopulated_getCorrectTranslation");
-  char *SHARE_DIR = "../webcontent/";
+  setShare( "i18n" );
   ck_assert_str_eq( getString("LOCAL_access_denied", "en"), "Access Denied" );
   locale_cleanup();
 }
@@ -58,7 +59,7 @@ END_TEST
 
 START_TEST (getString_fallbackToEnglishKnownString_getCorrectTranslation) {
   o_log(3, "Start getString_fallbackToEnglishKnownString_getCorrectTranslation");
-  char *SHARE_DIR = "../webcontent/";
+  setShare( "i18n" );
   ck_assert_str_eq( getString("LOCAL_access_denied", "QQ"), "Access Denied" );
   locale_cleanup();
 }
@@ -66,7 +67,7 @@ END_TEST
 
 START_TEST (getString_fallbackToEnglishunKnownString_returnKey) {
   o_log(3, "Start getString_fallbackToEnglishunKnownString_returnKey");
-  char *SHARE_DIR = "../webcontent/";
+  setShare( "i18n" );
   ck_assert_str_eq( getString("LOCAL_UNKNOWN_KEY", "QQ"), "LOCAL_UNKNOWN_KEY" );
   locale_cleanup();
 }
