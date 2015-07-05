@@ -20,7 +20,7 @@ sub test {
     __cookiejar => $cookie_jar,
     action => 'docFilter',
     subaction => 'fullList',
-    isActionRequired => 'false',
+    subFilter => undef,
     page => '1',
     range => '3',
     sortfield => '3', # date

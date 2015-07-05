@@ -839,13 +839,12 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
             },
           };
 
-
           int i = 0;
           for ( i = 0; 
-                dispatcher[i].action != NULL && dispatcher[i].action != action; 
+                dispatcher[i].action != NULL && 0 != strcmp(dispatcher[i].action, action) ;
                 i++ ); 
 
-          if( dispatcher[i].action == NULL ) {
+          if( dispatcher[i].action != NULL ) {
 
             o_log(INFORMATION, "Processing request for: %s", dispatcher[i].description);
 
@@ -867,13 +866,13 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 
               int j = 0;
               for (j = 0 ; dispatcher[i].params[j] != NULL; j++) {
-                if ( 0 == strcmp(action, "_lang") ) {
+                if ( 0 == strcmp(dispatcher[i].params[j], "_lang") ) {
                   dp->params[j] = con_info->lang;
                 }
-                else if ( 0 == strcmp(action, "_access") ) {
+                else if ( 0 == strcmp(dispatcher[i].params[j], "_access") ) {
                   dp->accessPrivs = accessPrivs.update_access;
                 }
-                else if ( 0 == strcmp(action, "_session_data") ) {
+                else if ( 0 == strcmp(dispatcher[i].params[j], "_session_data") ) {
                   dp->session_data = con_info->session_data;
                 }
                 else {

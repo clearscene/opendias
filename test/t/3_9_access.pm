@@ -60,7 +60,7 @@ sub test {
     docFilter => { 
           subaction => [ 'count', 'fullList' ],
           textSearch => 'text',
-          isActionRequired => 'boolean',
+          subFilter => [ 'isActionRequired', 'requiresPhysicalShredding', 'requiresDataPurging' ],
           startDate => 'date',
           endDate => 'date',
           tags => 'text',

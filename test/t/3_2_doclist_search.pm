@@ -25,7 +25,7 @@ sub test {
     range => '4',
     sortfield => '3', # date
     sortorder => '1',
-    isActionRequired => 'false',
+    subFilter => undef,
     textSearch => undef,
     startDate => undef,
     endDate => undef,
@@ -44,12 +44,12 @@ sub test {
 
   # Action Required
   o_log( "With Action Required" );
-  $data{isActionRequired} = 'true';
+  $data{subFilter} = 'isActionRequired';
   $data{subaction} = 'count';
   o_log( Dumper( directRequest( \%data ) ) );
   $data{subaction} = 'fullList';
   o_log( Dumper( directRequest( \%data ) ) );
-  $data{isActionRequired} = 'false';
+  $data{subFilter} = undef;
 
 
   # Text search - no hits
@@ -117,12 +117,12 @@ sub test {
   o_log( "Date Filter date/action" );
   $data{startDate} = '2010-12-31';
   $data{endDate} = '2011-01-01';
-  $data{isActionRequired} = 'true';
+  $data{subFilter} = 'isActionRequired';
   $data{subaction} = 'count';
   o_log( Dumper( directRequest( \%data ) ) );
   $data{subaction} = 'fullList';
   o_log( Dumper( directRequest( \%data ) ) );
-  $data{isActionRequired} = 'false';
+  $data{isActionRequired} = undef;
   $data{startDate} = undef;
   $data{endDate} = undef;
 

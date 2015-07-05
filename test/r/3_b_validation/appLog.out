@@ -51,7 +51,7 @@ LOG-OUTPUT
 -date-:-thread-:INF Just about to start the worker: /tmp/opendias_test/bin/opendias_worker en
 -date-:-thread-:INF Worker started and ready to process: internalGetScannerList
 -date-:-thread-:INF Worker Finished
--date-:-thread-:INF Processing request for: getScanning Progress
+-date-:-thread-:INF Processing request for: getScanningProgress
 -date-:-thread-:ERR Missing manditory post data with key of scanprogressid
 -date-:-thread-:INF Processing request for: logout
 -date-:-thread-:INF Processing request for: Move Tag
@@ -72,7 +72,7 @@ LOG-OUTPUT
 -date-:-thread-:INF Processing request for: Doc List Filter
 -date-:-thread-:INF Processing request for: document details
 -date-:-thread-:INF Processing request for: getScannerList
--date-:-thread-:INF Processing request for: getScanning Progress
+-date-:-thread-:INF Processing request for: getScanningProgress
 -date-:-thread-:INF Processing request for: logout
 -date-:-thread-:ERR Unexpected post data with key of rogue_field
 -date-:-thread-:INF Processing request for: Move Tag
@@ -94,7 +94,7 @@ LOG-OUTPUT
  ----- line duplicated more than three times ----- 
 -date-:-thread-:INF Processing request for: Doc List Filter
 -date-:-thread-:INF Processing request for: document details
--date-:-thread-:INF Processing request for: getScanning Progress
+-date-:-thread-:INF Processing request for: getScanningProgress
 -date-:-thread-:INF Processing request for: Move Tag
  ----- line duplicated more than three times ----- 
 -date-:-thread-:INF Processing request for: Move Tag

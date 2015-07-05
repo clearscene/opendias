@@ -129,7 +129,7 @@ if [ "$NOBUILD" == "" ]; then
     # unfortunatly bash cannot support "&>>" - yet!
     cat results/buildLog2.out >> results/buildLog.out
     rm results/buildLog2.out
-    exit
+    #exit
   fi
   mv config.h config.h.for_cppcheck
   mv config.h.orig config.h

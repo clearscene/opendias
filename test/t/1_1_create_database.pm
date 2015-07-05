@@ -22,7 +22,7 @@ sub test {
   $sth->execute();
 
   while( my $hashRef = $sth->fetchrow_hashref() ) {
-    if ( $hashRef->{version} eq "7" ) {
+    if ( $hashRef->{version} eq "8" ) {
       o_log("Correct DB version.");
     }
     else {
@@ -35,6 +35,7 @@ sub test {
   # Apply some diffs we know the reference DB will have from the default build
   # An additional test user, and
   # Wont try to back populate the pHASH for images.
+  $dbh->do("INSERT INTO user_access VALUES('admin','6e6a83f742b28434aea09d7e8534647a','Admin User','2012-11-22 17:25:54','automatically',1);");
   $dbh->do("INSERT INTO user_access VALUES('test-user','63294d4f9a52894e2ef9298d1b8ac455','Test - User','2012-11-22 17:26:00','automatically',2)");
   $dbh->do("UPDATE config SET config_value='no' WHERE config_option='backpopulate_phash'");
 

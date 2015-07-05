@@ -59,7 +59,7 @@ bin_PROGRAMS =  opendias \
                 opendias_worker \
                 opendiasconfig
 
-opendiasconfig_LDFLAGS = 
+opendiasconfig_LDFLAGS = -static
 opendiasconfig_LDADD = \
   libsimpleLinkedList.la \
   libdb.la \
@@ -76,7 +76,7 @@ opendiasconfig_SOURCES = \
   simpleLinkedList.h
 
 
-opendias_worker_LDFLAGS = 
+opendias_worker_LDFLAGS = -static
 opendias_worker_LDADD = \
   liblocalisation.la \
   libphashplug.la \
@@ -111,7 +111,7 @@ opendias_worker_SOURCES = \
   simpleLinkedList.h
 
 
-opendias_LDFLAGS = 
+opendias_LDFLAGS = -static
 opendias_LDADD = \
   liblocalisation.la \
   libphashplug.la \

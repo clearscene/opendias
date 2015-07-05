@@ -483,7 +483,6 @@ char *docFilter( struct dispatch_params *dp ) {
   //
   rows = o_strdup("");
   o_log(DEBUGM, "sql=%s", sql);
-  o_log(ERROR, "sql=%s", sql);
 
   rSet = runquery_db(sql, vars);
   count = 0;
@@ -679,7 +678,7 @@ char *checkLogin( struct dispatch_params *dp ) {
   //
   // Check that a login attemp was not made earlier than retry_throttle seconds ago.
   //
-  struct simpleLinkedList *last_attempt = sll_searchKeys( session_data, "next_login_attempt" );
+  struct simpleLinkedList *last_attempt = sll_searchKeys( dp->session_data, "next_login_attempt" );
   if( last_attempt != NULL ) {
     struct tm last_attempt_date_struct;
     time_t last_attempt_time;

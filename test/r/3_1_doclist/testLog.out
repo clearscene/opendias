@@ -4,7 +4,7 @@ STARTING app...
 Now ready
 No need for a web client for this test.
 Sending request = action=checkLogin&password=password&username=test-user
-Sending request = action=docFilter&isActionRequired=false&page=1&range=3&sortfield=3&sortorder=1&subaction=fullList
+Sending request = action=docFilter&page=1&range=3&sortfield=3&sortorder=1&subFilter=&subaction=fullList
 No Rows = $VAR1 = {
   'DocFilter' => {
     'Results' => {},
@@ -13,7 +13,7 @@ No Rows = $VAR1 = {
   }
 };
 
-Sending request = action=docFilter&isActionRequired=false&page=1&range=3&sortfield=3&sortorder=1&subaction=fullList
+Sending request = action=docFilter&page=1&range=3&sortfield=3&sortorder=1&subFilter=&subaction=fullList
 One Row = $VAR1 = {
   'DocFilter' => {
     'Results' => {
@@ -30,7 +30,7 @@ One Row = $VAR1 = {
   }
 };
 
-Sending request = action=docFilter&isActionRequired=false&page=1&range=3&sortfield=3&sortorder=1&subaction=fullList
+Sending request = action=docFilter&page=1&range=3&sortfield=3&sortorder=1&subFilter=&subaction=fullList
 Date Order = $VAR1 = {
   'DocFilter' => {
     'Results' => {
@@ -63,7 +63,7 @@ Date Order = $VAR1 = {
   }
 };
 
-Sending request = action=docFilter&isActionRequired=false&page=1&range=3&sortfield=3&sortorder=0&subaction=fullList
+Sending request = action=docFilter&page=1&range=3&sortfield=3&sortorder=0&subFilter=&subaction=fullList
 Date Order reverse = $VAR1 = {
   'DocFilter' => {
     'Results' => {
@@ -96,7 +96,7 @@ Date Order reverse = $VAR1 = {
   }
 };
 
-Sending request = action=docFilter&isActionRequired=false&page=2&range=3&sortfield=3&sortorder=0&subaction=fullList
+Sending request = action=docFilter&page=2&range=3&sortfield=3&sortorder=0&subFilter=&subaction=fullList
 Second Page = $VAR1 = {
   'DocFilter' => {
     'Results' => {
@@ -113,7 +113,7 @@ Second Page = $VAR1 = {
   }
 };
 
-Sending request = action=docFilter&isActionRequired=false&page=1&range=5&sortfield=2&sortorder=1&subaction=fullList
+Sending request = action=docFilter&page=1&range=5&sortfield=2&sortorder=1&subFilter=&subaction=fullList
 Sort by type, all records = $VAR1 = {
   'DocFilter' => {
     'Results' => {
@@ -153,7 +153,7 @@ Sort by type, all records = $VAR1 = {
   }
 };
 
-Sending request = action=docFilter&isActionRequired=false&page=1&range=5&sortfield=1&sortorder=1&subaction=fullList
+Sending request = action=docFilter&page=1&range=5&sortfield=1&sortorder=1&subFilter=&subaction=fullList
 Sort by title, all records = $VAR1 = {
   'DocFilter' => {
     'Results' => {
@@ -193,7 +193,7 @@ Sort by title, all records = $VAR1 = {
   }
 };
 
-Sending request = action=docFilter&isActionRequired=false&page=1&range=5&sortfield=0&sortorder=1&subaction=fullList
+Sending request = action=docFilter&page=1&range=5&sortfield=0&sortorder=1&subFilter=&subaction=fullList
 Sort by docid, all records = $VAR1 = {
   'DocFilter' => {
     'Results' => {
@@ -233,7 +233,7 @@ Sort by docid, all records = $VAR1 = {
   }
 };
 
-Sending request = action=docFilter&isActionRequired=false&page=1&range=5&sortfield=0&sortorder=0&subaction=fullList
+Sending request = action=docFilter&page=1&range=5&sortfield=0&sortorder=0&subFilter=&subaction=fullList
 Sort by reverse-docid, all records = $VAR1 = {
   'DocFilter' => {
     'Results' => {

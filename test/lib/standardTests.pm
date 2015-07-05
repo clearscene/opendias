@@ -115,7 +115,7 @@ sub removeDuplicateLines {
       $givenDupWarn++;
     }
     else {
-      unless ( $lastline =~ /doScan/ && $thisLine =~ /getScanning Progress/ ) {
+      unless ( $lastline =~ /doScan/ && $thisLine =~ /getScanningProgress/ ) {
         print OUTFILE $thisLine;
       }
       $givenDupWarn = 0;

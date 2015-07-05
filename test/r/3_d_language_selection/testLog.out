@@ -76,8 +76,8 @@ No language indication = $VAR1 = '<!DOCTYPE html>
         <li><a id=\'homeLink\' href=\'/opendias/\'>Home</a></li>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
-        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>[VERSION STRING]</li>
+        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/?opendias 1.0.1\' target=\'_blank\'>Project Home</a></li>
+        <li class=\'version\'>opendias 1.0.1</li>
       </ul>
     </div>
   </div>
@@ -209,7 +209,7 @@ No language indication = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>[VERSION STRING] is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> ([DATES])</p>
+    <p>opendias 1.0.1 is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2015)</p>
   </div>
 
 </div>
@@ -289,8 +289,8 @@ header says en = $VAR1 = '<!DOCTYPE html>
         <li><a id=\'homeLink\' href=\'/opendias/\'>Home</a></li>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Document List</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Acquire New</a></li>
-        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a></li>
-        <li class=\'version\'>[VERSION STRING]</li>
+        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/?opendias 1.0.1\' target=\'_blank\'>Project Home</a></li>
+        <li class=\'version\'>opendias 1.0.1</li>
       </ul>
     </div>
   </div>
@@ -422,7 +422,7 @@ header says en = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>[VERSION STRING] is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> ([DATES])</p>
+    <p>opendias 1.0.1 is released under the <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Project Home</a> (2008 - 2015)</p>
   </div>
 
 </div>
@@ -502,8 +502,8 @@ header says de = $VAR1 = '<!DOCTYPE html>
         <li><a id=\'homeLink\' href=\'/opendias/\'>Zuhause</a></li>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Dokumentenliste</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Akquirieren</a></li>
-        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a></li>
-        <li class=\'version\'>[VERSION STRING]</li>
+        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/?opendias 1.0.1\' target=\'_blank\'>Projekt zuhause</a></li>
+        <li class=\'version\'>opendias 1.0.1</li>
       </ul>
     </div>
   </div>
@@ -635,7 +635,7 @@ header says de = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>[VERSION STRING] wird unter der Freigabe <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a> ([DATES])</p>
+    <p>opendias 1.0.1 wird unter der Freigabe <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a> (2008 - 2015)</p>
   </div>
 
 </div>
@@ -715,8 +715,8 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
         <li><a id=\'homeLink\' href=\'/opendias/\'>Zuhause</a></li>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>Dokumentenliste</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>Akquirieren</a></li>
-        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a></li>
-        <li class=\'version\'>[VERSION STRING]</li>
+        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/?opendias 1.0.1\' target=\'_blank\'>Projekt zuhause</a></li>
+        <li class=\'version\'>opendias 1.0.1</li>
       </ul>
     </div>
   </div>
@@ -848,7 +848,7 @@ bad cookie, header says de = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>[VERSION STRING] wird unter der Freigabe <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a> ([DATES])</p>
+    <p>opendias 1.0.1 wird unter der Freigabe <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>Projekt zuhause</a> (2008 - 2015)</p>
   </div>
 
 </div>
@@ -928,8 +928,8 @@ bad cookie, header says ## = $VAR1 = '<!DOCTYPE html>
         <li><a id=\'homeLink\' href=\'/opendias/\'>####</a></li>
         <li><a id=\'doclistLink\' href=\'/opendias/docList.html\'>######## ####</a></li>
         <li><a id=\'acquireLink\' href=\'/opendias/acquire.html\'>####### ###</a></li>
-        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>####### ####</a></li>
-        <li class=\'version\'>[VERSION STRING]</li>
+        <li><a id=\'ProjectHome\' href=\'http://opendias.essentialcollections.co.uk/?opendias 1.0.1\' target=\'_blank\'>####### ####</a></li>
+        <li class=\'version\'>opendias 1.0.1</li>
       </ul>
     </div>
   </div>
@@ -1061,7 +1061,7 @@ bad cookie, header says ## = $VAR1 = '<!DOCTYPE html>
   <div id=\'footerpadding\'></div>
 
   <div id=\'footer\'>
-    <p>[VERSION STRING] ## ######## ##### ### <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>####### ####</a> ([DATES])</p>
+    <p>opendias 1.0.1 ## ######## ##### ### <a href=\'http://www.gnu.org/licenses/\'>GPL v3</a>. OpenDias <a href=\'http://opendias.essentialcollections.co.uk/\' target=\'_blank\'>####### ####</a> (2008 - 2015)</p>
   </div>
 
 </div>

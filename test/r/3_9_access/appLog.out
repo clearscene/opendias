@@ -224,7 +224,7 @@ LOG-OUTPUT
 -date-:-thread-:DBG:-file-:-line- Collected post data: 
       action : getScanningProgress
       scanprogressid : [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
--date-:-thread-:INF:-file-:-line- Processing request for: getScanning Progress
+-date-:-thread-:INF:-file-:-line- Processing request for: getScanningProgress
 -date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
 <Response><error>You do not have permissions to complete the request</error></Response>
 -date-:-thread-:DBG:-file-:-line- setting cookie 'o_session_id=[ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]; path=/; max-age=3595'
@@ -534,7 +534,7 @@ LOG-OUTPUT
 -date-:-thread-:DBG:-file-:-line- Collected post data: 
       action : getScanningProgress
       scanprogressid : [ZZZZZZZZ-UUID-ZZZZ-ZZZZ-ZZZZZZZZZZZZ]
--date-:-thread-:INF:-file-:-line- Processing request for: getScanning Progress
+-date-:-thread-:INF:-file-:-line- Processing request for: getScanningProgress
 -date-:-thread-:DBG:-file-:-line- Run Query [RECORDSET]
 -date-:-thread-:DBG:-file-:-line- Serving the following content: <?xml version='1.0' encoding='utf-8'?>
 <Response><ScanningProgress><status>0</status><value>0</value></ScanningProgress></Response>

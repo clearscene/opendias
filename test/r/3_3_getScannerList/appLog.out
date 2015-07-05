@@ -51,7 +51,6 @@ LOG-OUTPUT
 -date-:-thread-:INF Scanning done.
 -date-:-thread-:INF Convertion process: Loaded (depth: 8)
 -date-:-thread-:INF Conversion process: Complete
--date-:-thread-:INF Calculating pHash of image /tmp/pHash_[THREAD].jpg
 -date-:-thread-:INF Worker Finished
 -date-:-thread-:INF The running sane processes have finished. Waiting on cleanup
 -date-:-thread-:INF Waiting [done].
